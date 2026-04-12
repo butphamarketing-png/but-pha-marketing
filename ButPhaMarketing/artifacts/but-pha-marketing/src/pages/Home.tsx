@@ -1,0 +1,262 @@
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
+import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
+import { Phone, X, Calendar } from "lucide-react";
+import { LoginModal } from "@/components/shared/LoginModal";
+import { RoadmapModal } from "@/components/shared/RoadmapModal";
+import { DecisionTreeQuiz } from "@/components/shared/DecisionTreeQuiz";
+import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
+import { useAuth } from "@/lib/AuthContext";
+import { useAdmin } from "@/lib/AdminContext";
+import { db } from "@/lib/useData";
+import { playClickSound } from "@/lib/utils";
+
+export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [showInfoForm, setShowInfoForm] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showRoadmap, setShowRoadmap] = useState(false);
+  const [infoName, setInfoName] = useState("");
+  const [infoPhone, setInfoPhone] = useState("");
+  const [infoLoading, setInfoLoading] = useState(false);
+  const { user } = useAuth();
+  const { settings } = useAdmin();
+
+  const [stats, setStats] = useState({ clients: 0, projects: 0, years: 0 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStats(prev => ({
+        clients: prev.clients < 500 ? prev.clients + 5 : 500,
+        projects: prev.projects < 1200 ? prev.projects + 12 : 1200,
+        years: prev.years < 10 ? prev.years + 1 : 10
+      }));
+    }, 50);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          setTimeout(() => {
+            setLoading(false);
+            setTimeout(() => setShowInfoForm(true), 2000);
+          }, 500);
+          return 100;
+        }
+        return prev + 2;
+      });
+    }, 60);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+        <div className="relative mb-8 flex h-32 w-32 items-center justify-center">
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            className="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary"
+          />
+          <img src="/logo.jpg" alt="Logo" className="h-20 w-20 rounded-full object-cover" />
+        </div>
+        <div className="w-64 text-center">
+          <p className="mb-2 text-sm font-medium text-purple-200">Đang tải... {progress}%</p>
+          <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="h-full bg-primary transition-all duration-75 ease-linear" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const platforms = [
+    { id: "facebook", name: "Facebook", icon: SiFacebook, color: settings.colors.facebook, to: "/facebook" },
+    { id: "tiktok", name: "TikTok", icon: SiTiktok, color: settings.colors.tiktok, to: "/tiktok" },
+    { id: "instagram", name: "Instagram", icon: SiInstagram, color: settings.colors.instagram, to: "/instagram" },
+    { id: "zalo", name: "Zalo", icon: SiZalo, color: settings.colors.zalo, to: "/zalo" },
+    { id: "googlemaps", name: "Google Maps", icon: SiGooglemaps, color: settings.colors.googlemaps, to: "/google-maps" },
+    { id: "website", name: "Website", icon: SiWebflow, color: settings.colors.website, to: "/website" },
+  ];
+
+  const handleInfoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setInfoLoading(true);
+    try {
+      await db.leads.add({ type: "contact", name: infoName, phone: infoPhone });
+      alert("Đã gửi thông tin! Chúng tôi sẽ liên hệ sớm nhất.");
+      setShowInfoForm(false);
+    } catch (err) {
+      alert("Có lỗi xảy ra!");
+    } finally {
+      setInfoLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
+      <DynamicGreeting color="#7C3AED" />
+      <header className="flex items-center justify-between p-6">
+        <div className="flex items-center gap-3">
+          <img src="/logo.jpg" alt={settings.title} className="h-10 w-10 rounded-full object-cover shadow-lg" />
+          <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings.title}</span>
+        </div>
+        {!settings.presentationMode && (
+          <div>
+            {user ? (
+              <Link href="/dashboard" className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
+                Trang thành viên
+              </Link>
+            ) : (
+              <button onClick={() => setShowLogin(true)} className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
+                Đăng nhập / Thành viên
+              </button>
+            )}
+          </div>
+        )}
+      </header>
+
+      <main className="container mx-auto px-4 py-12 md:py-24">
+        <div className="mb-16 text-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600 md:text-7xl lg:text-8xl"
+            style={{ backgroundImage: `linear-gradient(to right, ${settings.colors.primary}, #fff)` }}
+          >
+            {settings.heroTitle}
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mx-auto max-w-2xl text-lg text-purple-200 md:text-xl"
+          >
+            {settings.heroSubtitle}
+          </motion.p>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
+              <p className="mb-1 text-3xl font-black text-primary">{stats.clients}+</p>
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Khách hàng</p>
+            </div>
+            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
+              <p className="mb-1 text-3xl font-black text-primary">{stats.projects}+</p>
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Dự án hoàn tất</p>
+            </div>
+            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
+              <p className="mb-1 text-3xl font-black text-primary">{stats.years}+</p>
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Năm kinh nghiệm</p>
+            </div>
+            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
+              <p className="mb-1 text-3xl font-black text-primary">24/7</p>
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Hỗ trợ kỹ thuật</p>
+            </div>
+          </div>
+        </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+        >
+          {platforms.map((platform, index) => (
+            <Link key={platform.id} href={platform.to} onClick={playClickSound} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-xl transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-white/20">
+              <div className="absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ backgroundImage: `linear-gradient(to bottom right, transparent, ${platform.color}40)` }} />
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="mb-4 rounded-full p-4 transition-transform group-hover:scale-110" style={{ backgroundColor: `${platform.color}20`, color: platform.color }}>
+                  <platform.icon className="text-4xl" />
+                </div>
+                <h3 className="mb-2 text-lg font-bold text-white">{platform.name}</h3>
+                <span className="text-sm font-medium text-gray-400 transition-colors group-hover:text-white">Xem dịch vụ →</span>
+              </div>
+              <div className="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 transform bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-all duration-1000 ease-in-out group-hover:animate-[shimmer_1.5s_infinite]" />
+            </Link>
+          ))}
+        </motion.div>
+
+        {/* Roadmap Section removed as per user request */}
+
+        <div className="mt-20 flex flex-col items-center gap-6">
+          <a href="tel:0937417982" className="flex items-center gap-3 rounded-full border border-primary/50 bg-primary/20 px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-primary/40">
+            <Phone className="animate-pulse" />
+            Hotline: 0937 417 982
+          </a>
+          <button onClick={() => setShowQuiz(true)} className="text-sm font-medium text-purple-300 hover:text-white underline underline-offset-4">
+            Chưa biết chọn gói nào? Tìm Gói Phù Hợp
+          </button>
+        </div>
+      </main>
+
+      <AnimatePresence>
+        {showInfoForm && (
+          <motion.div 
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-4 left-1/2 z-40 w-[90%] max-w-sm -translate-x-1/2 rounded-2xl border border-white/10 bg-black/80 p-6 shadow-2xl backdrop-blur-xl md:bottom-8"
+          >
+            <button onClick={() => setShowInfoForm(false)} className="absolute right-4 top-4 text-gray-400 hover:text-white">
+              <X size={16} />
+            </button>
+            <h4 className="mb-4 text-lg font-bold text-white">Nhận báo giá nhanh</h4>
+            <form className="flex flex-col gap-3" onSubmit={handleInfoSubmit}>
+              <input 
+                required 
+                type="text" 
+                placeholder="Tên của bạn" 
+                value={infoName}
+                onChange={e => setInfoName(e.target.value)}
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-primary" 
+              />
+              <input 
+                required 
+                type="tel" 
+                placeholder="Số điện thoại" 
+                value={infoPhone}
+                onChange={e => setInfoPhone(e.target.value)}
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-primary" 
+              />
+              <button 
+                disabled={infoLoading}
+                type="submit" 
+                className="mt-2 rounded-lg bg-primary py-2 text-sm font-bold text-white hover:bg-primary/90 disabled:opacity-50"
+              >
+                {infoLoading ? "Đang gửi..." : "Gửi Yêu Cầu"}
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
+      <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
+
+      {/* Floating Roadmap Button */}
+      <motion.button
+        initial={{ x: 100 }}
+        animate={{ x: 0 }}
+        onClick={() => setShowRoadmap(true)}
+        className="fixed right-0 top-1/2 z-40 flex -translate-y-1/2 flex-col items-center gap-2 rounded-l-2xl bg-primary px-3 py-6 font-bold text-white shadow-2xl transition-all hover:bg-primary/90 hover:pr-5"
+      >
+        <span className="[writing-mode:vertical-rl]">LỘ TRÌNH DỰ ÁN</span>
+      </motion.button>
+      
+      <style>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-150%) skewX(-12deg); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateX(300%) skewX(-12deg); opacity: 0; }
+        }
+      `}</style>
+    </div>
+  );
+}
