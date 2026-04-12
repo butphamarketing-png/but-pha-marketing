@@ -18,12 +18,6 @@ const DOCS = [
   { name: "Bộ ảnh template Zalo OA", type: "ZIP", date: "10/04/2026" },
 ];
 
-const NOTIFICATIONS = [
-  { msg: "Chiến dịch Facebook Ads tháng 4 đã được kích hoạt", time: "2 giờ trước", unread: true },
-  { msg: "Báo cáo tuần 14 đã sẵn sàng để tải xuống", time: "1 ngày trước", unread: true },
-  { msg: "Fanpage đạt 500 Like mới trong tuần", time: "3 ngày trước", unread: false },
-];
-
 const NAV = [
   { id: "overview", label: "Tổng quan", icon: LayoutDashboard },
   { id: "projects", label: "Dự án", icon: FolderOpen },

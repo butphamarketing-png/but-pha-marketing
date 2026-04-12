@@ -1,18 +1,17 @@
 {
-  "name": "but-pha-marketing-next",
+  "name": "but-pha-marketing",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
+    "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.0",
     "lucide-react": "^0.468.0",
     "recharts": "^2.15.0",
     "framer-motion": "^11.15.0",
@@ -28,10 +27,6 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "eslint": "^9",
-    "eslint-config-next": "15.1.0",
-    "@rollup/rollup-win32-x64-msvc": "^4.60.1",
-    "@tailwindcss/oxide-win32-x64-msvc": "^4.2.2",
-    "lightningcss-win32-x64-msvc": "^1.32.0",
-    "prettier": "^3.8.1"
+    "eslint-config-next": "15.1.0"
   }
 }
