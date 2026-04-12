@@ -25,9 +25,9 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [orders, setOrders] = useState<Order[]>([]);
 
-  const SIN_DATA = Array.from({ length: 12 }, (_, i) => ({
-    time: `T${i + 1}`,
-    views: Math.floor(300 + 150 * Math.sin((i / 12) * 2 * Math.PI) + Math.random() * 100)
+  const SIN_DATA = Array.from({ length: 24 }, (_, i) => ({
+    time: `${i}h`,
+    views: Math.floor(300 + 150 * Math.sin((i / 24) * 2 * Math.PI) + Math.random() * 50)
   }));
 
   useEffect(() => {
@@ -176,7 +176,8 @@ export default function Dashboard() {
                       stroke="#A855F7" 
                       strokeWidth={3}
                       fillOpacity={1} 
-                      fill="url(#colorViews)" 
+                      fill="url(#colorViews)"
+                      animationDuration={2000}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
