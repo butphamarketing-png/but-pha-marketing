@@ -5,6 +5,7 @@ import { ConsultModal } from "./ConsultModal";
 import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 import { CursorEffect } from "./CursorEffect";
 import { ChatbotWidget } from "./ChatbotWidget";
+import { PresentationButton } from "./PresentationButton";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
@@ -167,7 +168,12 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
         )}
       </main>
 
-      {!settings.presentationMode && <ChatbotWidget color={primaryColor} />}
+      {!settings.presentationMode && (
+        <>
+          <ChatbotWidget color={primaryColor} />
+          <PresentationButton />
+        </>
+      )}
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
       <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
     </div>

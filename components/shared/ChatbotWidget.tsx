@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageCircle, Send, Bot, Play } from "lucide-react";
-import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
+import { X, MessageCircle, Send, Bot } from "lucide-react";
 
 interface Message {
   id: number;
@@ -46,7 +45,6 @@ let msgId = 0;
 
 export function ChatbotWidget({ color }: { color: string }) {
   const [open, setOpen] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { id: msgId++, role: "bot", text: "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing 🤖\nTôi có thể tư vấn về dịch vụ, bảng giá và hỗ trợ bạn 24/7. Bạn cần hỗ trợ gì?" },
   ]);
@@ -107,15 +105,6 @@ export function ChatbotWidget({ color }: { color: string }) {
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-3 p-4" style={{ maxHeight: "300px" }}>
-              <div className="mb-4">
-                <button 
-                  onClick={() => setShowQuiz(true)}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-3 text-xs font-bold text-white transition-all hover:bg-white/10 hover:border-white/20"
-                >
-                  <Play size={14} className="fill-white" />
-                  THUYẾT TRÌNH: CHUẨN ĐOÁN MARKETING
-                </button>
-              </div>
               {messages.map(m => (
                 <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   {m.role === "bot" && (
@@ -166,8 +155,6 @@ export function ChatbotWidget({ color }: { color: string }) {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
 
       <motion.button
         onClick={() => setOpen(o => !o)}
