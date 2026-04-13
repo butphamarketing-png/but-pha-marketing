@@ -62,7 +62,7 @@ export function BeforeAfterSlider({ cases = [], beforeImage, afterImage }: Befor
   };
 
   return (
-    <section data-section id="before-after" className="py-20 px-4 overflow-hidden">
+    <section data-section="before-after" id="before-after" className="py-20 px-4 overflow-hidden">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <div className="relative mb-12 flex flex-col items-center">
           <AnimatePresence mode="wait">

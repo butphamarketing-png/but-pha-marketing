@@ -180,7 +180,7 @@ export function FanpageAudit({ primaryColor, platform = "facebook", presentation
 
   return (
     <>
-      <section data-section id="audit" className="py-16 px-4">
+      <section data-section="audit" id="audit" className="py-16 px-4">
         {presentationMode && showQuiz ? (
           <motion.div
             initial={{ opacity: 0, y: 30 }}

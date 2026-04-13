@@ -194,7 +194,7 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
   }, [slides.length]);
 
   return (
-    <section data-section id="slideshow" className="relative overflow-hidden" style={{ height: "420px" }}>
+    <section data-section="slideshow" id="slideshow" className="relative overflow-hidden" style={{ height: "420px" }}>
       {slides.map((slide, i) => (
         <div 
           key={i} 
@@ -234,7 +234,7 @@ function Accordion({ title, content }: { title: string; content: string }) {
 
 function Stats({ stats, color }: { stats: { label: string; value: string }[]; color: string }) {
   return (
-    <section data-section id="stats" className="py-16 px-4">
+    <section data-section="stats" id="stats" className="py-16 px-4">
       <div className="mx-auto grid max-w-4xl grid-cols-2 gap-6 md:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="rounded-2xl border border-white/10 bg-card p-6 text-center">
@@ -253,7 +253,7 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
   const tab = tabs[activeTab];
 
   return (
-    <section data-section id="pricing" className="py-20 px-4">
+    <section data-section="pricing" id="pricing" className="py-20 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-5xl">
         <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">Bảng Giá Dịch Vụ</h2>
         <p className="mb-10 text-center text-gray-400">Đa dạng lựa chọn phù hợp với mọi nhu cầu</p>
@@ -294,7 +294,7 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
   const [activeTab, setActiveTab] = useState(0);
   const tab = processTabs[activeTab];
   return (
-    <section data-section id="process" className="py-20 px-4">
+    <section data-section="process" id="process" className="py-20 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <h2 className="mb-8 text-center text-3xl font-black text-white md:text-4xl">Quy Trình Triển Khai</h2>
         {processTabs.length > 1 && (
@@ -341,7 +341,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
-    <section data-section id="faq" className="py-20 px-4">
+    <section data-section="faq" id="faq" className="py-20 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
         <h2 className="mb-12 text-center text-3xl font-black text-white md:text-4xl">Câu Hỏi Thường Gặp</h2>
         <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-card px-6">
@@ -359,7 +359,7 @@ function ContactForm({ color }: { color: string }) {
   const [service, setService] = useState("");
   const [note, setNote] = useState("");
   return (
-    <section data-section id="contact" className="py-20 px-4">
+    <section data-section="contact" id="contact" className="py-20 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-xl">
         <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">Liên Hệ Tư Vấn</h2>
         <p className="mb-10 text-center text-gray-400">Đội ngũ chuyên gia sẵn sàng hỗ trợ bạn 24/7</p>
@@ -457,7 +457,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       <Slideshow color={settings.colors[platformKey] || content.color} platformKey={platformKey} />
 
       {settings.visibility.intro !== false && (
-        <section data-section id="intro" className="py-20 px-4">
+        <section data-section="intro" id="intro" className="py-20 px-4">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
             <h2 className="mb-10 text-center text-3xl font-black text-white md:text-4xl">Giới Thiệu Về Dịch Vụ {content.name}</h2>
             <div className="rounded-2xl border border-white/10 bg-card divide-y divide-white/10 px-6">

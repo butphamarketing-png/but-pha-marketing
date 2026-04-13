@@ -40,7 +40,7 @@ export function ComparisonTable({ tabs, primaryColor, onCheckout }: ComparisonTa
   };
 
   return (
-    <section data-section id="compare" className="py-20 px-4">
+    <section data-section="compare" id="compare" className="py-20 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-5xl">
         <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">So Sánh Các Gói Dịch Vụ</h2>
         <p className="mb-8 text-center text-gray-400">Chọn gói phù hợp nhất với nhu cầu của bạn</p>

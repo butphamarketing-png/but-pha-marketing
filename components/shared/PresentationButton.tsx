@@ -4,15 +4,13 @@ import { Play, Power } from "lucide-react";
 
 export function PresentationButton() {
   const [isActive, setIsActive] = useState(false);
-  const [showOffButton, setShowOffButton] = useState(false);
 
   const startPresentation = () => {
     setIsActive(true);
-    setShowOffButton(true);
     window.dispatchEvent(new Event('presentationStart'));
     
     // Scroll to audit section
-    const auditSection = document.querySelector('[data-section="audit"]');
+    const auditSection = document.getElementById('audit');
     if (auditSection) {
       auditSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -20,7 +18,6 @@ export function PresentationButton() {
 
   const stopPresentation = () => {
     setIsActive(false);
-    setShowOffButton(false);
     window.dispatchEvent(new Event('presentationEnd'));
     
     // Scroll back to top
@@ -32,7 +29,7 @@ export function PresentationButton() {
     const handleQuizComplete = () => {
       if (isActive) {
         setTimeout(() => {
-          const pricingSection = document.querySelector('[data-section="pricing"]');
+          const pricingSection = document.getElementById('pricing');
           if (pricingSection) {
             pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
@@ -46,16 +43,17 @@ export function PresentationButton() {
 
   return (
     <>
-      <motion.button
-        onClick={startPresentation}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="fixed bottom-24 right-4 z-[79] flex h-12 w-12 items-center justify-center rounded-full shadow-lg bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transition-all group"
-        title="Thuyết trình: Chuẩn đoán marketing"
-      >
+      {!isActive && (
+        <motion.button
+          onClick={startPresentation}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="fixed bottom-24 right-4 z-[79] flex h-12 w-12 items-center justify-center rounded-full shadow-lg bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transition-all group"
+          title="Thuyết trình: Chuẩn đoán marketing"
+        >
         <div className="relative">
           <Play size={20} className="text-white fill-white" />
           {/* Pulse animation */}
@@ -83,10 +81,11 @@ export function PresentationButton() {
           Thuyết trình
         </motion.div>
       </motion.button>
+      )}
 
-      {/* Off Button - appears when presentation is active */}
+      {/* Stop button appears only when presentation is active */}
       <AnimatePresence>
-        {showOffButton && (
+        {isActive && (
           <motion.button
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

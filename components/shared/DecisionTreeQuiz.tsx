@@ -22,7 +22,7 @@ export function DecisionTreeQuiz({ isOpen = false, onClose, isInline = false, pl
   // Auto-scroll to this section when inline mode starts
   useEffect(() => {
     if (isInline && isOpen) {
-      const element = document.querySelector('[data-section="audit"]');
+      const element = document.getElementById('audit');
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }

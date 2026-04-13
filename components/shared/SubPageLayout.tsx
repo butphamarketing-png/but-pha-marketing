@@ -47,12 +47,10 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   useEffect(() => {
     const handlePresentationStart = () => {
       setPresentationMode(true);
-      setShowQuiz(true);
     };
 
     const handlePresentationEnd = () => {
       setPresentationMode(false);
-      setShowQuiz(false);
     };
 
     window.addEventListener('presentationStart', handlePresentationStart);
@@ -174,7 +172,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
 
       <main className="pb-24">
         {children}
-        {!settings.presentationMode && (
+        {!presentationMode && (
           <div className="mt-12 flex justify-center pb-12">
             <button
               onClick={() => setShowQuiz(true)}
@@ -186,12 +184,8 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
         )}
       </main>
 
-      {!settings.presentationMode && (
-        <>
-          <ChatbotWidget color={primaryColor} />
-          <PresentationButton />
-        </>
-      )}
+      {!presentationMode && <ChatbotWidget color={primaryColor} />}
+      <PresentationButton />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
       <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
     </div>
