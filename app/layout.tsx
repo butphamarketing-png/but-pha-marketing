@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
+import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
 
 export const metadata: Metadata = {
   title: "Bứt Phá Marketing - Dashboard",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <AuthProvider>
           <AdminProvider>
             {children}
+            <VideoIntroButton />
           </AdminProvider>
         </AuthProvider>
       </body>

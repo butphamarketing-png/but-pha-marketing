@@ -68,7 +68,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { settings, updateSettings, updateColor, updatePlatformName, toggleVisibility, updateCMS, addSlideshowImage, removeSlideshowImage, addCase, removeCase } = useAdmin();
+  const { settings, updateSettings, updateColor, updatePlatformName, toggleVisibility, updateCMS, addSlideshowImage, removeSlideshowImage, addCase, removeCase, updateMediaVideo } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
     { key: "facebook", label: settings.platformNames?.facebook || "Facebook", path: "/facebook", color: settings.colors?.facebook || "#1877F2" },
@@ -324,6 +324,15 @@ export default function AdminPage() {
                   <div className="flex gap-2">
                     <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} placeholder="URL ảnh..." className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                     <button onClick={() => { if (mediaUrl) { addSlideshowImage(selectedPlatform, mediaUrl); setMediaUrl(""); } }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Thêm</button>
+                  </div>
+                  <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold text-white">Video gắn kèm</label>
+                      <input value={settings.media[selectedPlatform]?.videoUrl || ""} onChange={e => updateMediaVideo(selectedPlatform, e.target.value)} placeholder="URL YouTube hoặc video" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                    </div>
+                    {settings.media[selectedPlatform]?.videoUrl && (
+                      <a href={settings.media[selectedPlatform]?.videoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Xem link video</a>
+                    )}
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     {(settings.media[selectedPlatform]?.slideshow || []).map((url, i) => (

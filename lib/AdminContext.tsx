@@ -45,7 +45,8 @@ interface SiteSettings {
   cms: Record<string, PlatformCMS>;
   media: Record<string, { 
     slideshow: string[]; 
-    cases: { id: string; title: string; before: string; after: string }[] 
+    cases: { id: string; title: string; before: string; after: string }[];
+    videoUrl?: string;
   }>;
   roadmap: {
     title: string;
@@ -68,6 +69,7 @@ interface AdminContextType {
   removeSlideshowImage: (platform: string, index: number) => void;
   addCase: (platform: string, c: { title: string; before: string; after: string }) => void;
   removeCase: (platform: string, id: string) => void;
+  updateMediaVideo: (platform: string, url: string) => void;
   updateRoadmap: (steps: SiteSettings["roadmap"]) => void;
   togglePresentationMode: () => void;
 }
@@ -123,13 +125,13 @@ const defaultSettings: SiteSettings = {
     website: { vision: "", mission: "", packages: {} },
   },
   media: {
-    facebook: { slideshow: [], cases: [] },
-    tiktok: { slideshow: [], cases: [] },
-    instagram: { slideshow: [], cases: [] },
-    zalo: { slideshow: [], cases: [] },
-    googlemaps: { slideshow: [], cases: [] },
-    website: { slideshow: [], cases: [] },
-    home: { slideshow: [], cases: [] },
+    facebook: { slideshow: [], cases: [], videoUrl: "" },
+    tiktok: { slideshow: [], cases: [], videoUrl: "" },
+    instagram: { slideshow: [], cases: [], videoUrl: "" },
+    zalo: { slideshow: [], cases: [], videoUrl: "" },
+    googlemaps: { slideshow: [], cases: [], videoUrl: "" },
+    website: { slideshow: [], cases: [], videoUrl: "" },
+    home: { slideshow: [], cases: [], videoUrl: "" },
   },
   roadmap: [
     { title: "Khởi tạo & Nghiên cứu", time: "Ngày 1 - 3", desc: "Phân tích đối thủ, xác định tệp khách hàng mục tiêu và lập kế hoạch nội dung chi tiết.", status: "completed" },
@@ -262,7 +264,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       media: {
         ...prev.media,
         [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [] }),
+          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
           cases: [...(prev.media[platform]?.cases || []), { ...c, id: Math.random().toString(36).slice(2, 9) }]
         }
       }
@@ -275,8 +277,21 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       media: {
         ...prev.media,
         [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [] }),
+          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
           cases: (prev.media[platform]?.cases || []).filter(c => c.id !== id)
+        }
+      }
+    }));
+  };
+
+  const updateMediaVideo = (platform: string, url: string) => {
+    setSettings(prev => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
+          videoUrl: url
         }
       }
     }));
@@ -303,6 +318,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       removeSlideshowImage,
       addCase,
       removeCase,
+      updateMediaVideo,
       updateRoadmap,
       togglePresentationMode
     }}>
