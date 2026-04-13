@@ -396,11 +396,6 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const cms = settings.cms[platformKey];
 
   useEffect(() => {
-    const presMode = sessionStorage.getItem('presentationMode') === 'true';
-    const quizMode = sessionStorage.getItem('showQuiz') === 'true';
-    setPresentationMode(presMode);
-    setShowQuiz(quizMode);
-
     const handlePresentationStart = () => {
       setPresentationMode(true);
       setShowQuiz(true);

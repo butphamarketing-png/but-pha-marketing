@@ -9,8 +9,6 @@ export function PresentationButton() {
   const startPresentation = () => {
     setIsActive(true);
     setShowOffButton(true);
-    sessionStorage.setItem('presentationMode', 'true');
-    sessionStorage.setItem('showQuiz', 'true');
     window.dispatchEvent(new Event('presentationStart'));
     
     // Scroll to audit section
@@ -23,8 +21,6 @@ export function PresentationButton() {
   const stopPresentation = () => {
     setIsActive(false);
     setShowOffButton(false);
-    sessionStorage.removeItem('presentationMode');
-    sessionStorage.removeItem('showQuiz');
     window.dispatchEvent(new Event('presentationEnd'));
     
     // Scroll back to top
