@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Activity, BarChart2, ShieldCheck, Zap, Target, Search, Loader2, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import { db } from "@/lib/useData";
-import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 
 interface FanpageAuditProps {
   primaryColor: string;

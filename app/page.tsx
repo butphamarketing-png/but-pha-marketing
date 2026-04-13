@@ -7,7 +7,6 @@ import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } fr
 import { Phone, X } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
-import { DecisionTreeQuiz } from "@/components/shared/DecisionTreeQuiz";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
@@ -19,7 +18,6 @@ function HomeContent() {
   const [progress, setProgress] = useState(0);
   const [showInfoForm, setShowInfoForm] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
@@ -181,9 +179,6 @@ function HomeContent() {
             <Phone className="animate-pulse" />
             Hotline: 0937 417 982
           </a>
-          <button onClick={() => setShowQuiz(true)} className="text-sm font-medium text-purple-300 hover:text-white underline underline-offset-4">
-            Chưa biết chọn gói nào? Tìm Gói Phù Hợp
-          </button>
         </div>
       </main>
 
@@ -230,7 +225,6 @@ function HomeContent() {
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
-      <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
 
       <motion.button
         initial={{ x: 100 }}
