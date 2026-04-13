@@ -19,19 +19,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("auth_user");
-    if (saved) {
-      try {
-        setUser(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse auth user", e);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("auth_user");
+      if (saved) {
+        try {
+          setUser(JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to parse auth user", e);
+        }
       }
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && typeof window !== "undefined") {
       if (user) {
         localStorage.setItem("auth_user", JSON.stringify(user));
       } else {

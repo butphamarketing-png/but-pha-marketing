@@ -111,27 +111,29 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("admin_settings");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setSettings({
-          ...defaultSettings,
-          ...parsed,
-          cms: { ...defaultSettings.cms, ...(parsed.cms || {}) },
-          media: { ...defaultSettings.media, ...(parsed.media || {}) },
-          colors: { ...defaultSettings.colors, ...(parsed.colors || {}) },
-          presentationMode: false,
-        });
-      } catch (e) {
-        console.error("Failed to parse admin settings", e);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("admin_settings");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setSettings({
+            ...defaultSettings,
+            ...parsed,
+            cms: { ...defaultSettings.cms, ...(parsed.cms || {}) },
+            media: { ...defaultSettings.media, ...(parsed.media || {}) },
+            colors: { ...defaultSettings.colors, ...(parsed.colors || {}) },
+            presentationMode: false,
+          });
+        } catch (e) {
+          console.error("Failed to parse admin settings", e);
+        }
       }
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && typeof window !== "undefined") {
       localStorage.setItem("admin_settings", JSON.stringify({ ...settings, presentationMode: false }));
     }
   }, [settings, isLoaded]);
