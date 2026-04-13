@@ -396,11 +396,28 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const cms = settings.cms[platformKey];
 
   useEffect(() => {
-    // Check sessionStorage for presentation mode
     const presMode = sessionStorage.getItem('presentationMode') === 'true';
     const quizMode = sessionStorage.getItem('showQuiz') === 'true';
     setPresentationMode(presMode);
     setShowQuiz(quizMode);
+
+    const handlePresentationStart = () => {
+      setPresentationMode(true);
+      setShowQuiz(true);
+    };
+
+    const handlePresentationEnd = () => {
+      setPresentationMode(false);
+      setShowQuiz(false);
+    };
+
+    window.addEventListener('presentationStart', handlePresentationStart);
+    window.addEventListener('presentationEnd', handlePresentationEnd);
+
+    return () => {
+      window.removeEventListener('presentationStart', handlePresentationStart);
+      window.removeEventListener('presentationEnd', handlePresentationEnd);
+    };
   }, []);
 
   useEffect(() => {

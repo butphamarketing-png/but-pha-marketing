@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, Power } from "lucide-react";
-import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
+import { Play, Power } from "lucide-react";
 
 export function PresentationButton() {
   const [isActive, setIsActive] = useState(false);
@@ -12,6 +11,7 @@ export function PresentationButton() {
     setShowOffButton(true);
     sessionStorage.setItem('presentationMode', 'true');
     sessionStorage.setItem('showQuiz', 'true');
+    window.dispatchEvent(new Event('presentationStart'));
     
     // Scroll to audit section
     const auditSection = document.querySelector('[data-section="audit"]');
@@ -25,6 +25,7 @@ export function PresentationButton() {
     setShowOffButton(false);
     sessionStorage.removeItem('presentationMode');
     sessionStorage.removeItem('showQuiz');
+    window.dispatchEvent(new Event('presentationEnd'));
     
     // Scroll back to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
