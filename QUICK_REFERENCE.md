@@ -41,7 +41,10 @@ Platforms: Facebook | Google Ads | TikTok | Instagram | Zalo | Website
 
 ## 🔍 CHẨN ĐOÁN SỨC KHOẼ (Diagnostic Wizard)
 
-**Trigger**: Nút "Thuyết Trình" trên Chatbot
+**Trigger**: Nút "Thuyết Trình" 
+- 🟦 **Nút riêng biệt** nằm ngoài Chatbot Widget (bên cạnh chat icon)
+- Floating/Fixed button ở phía bên phải màn hình
+- Chỉ hiển thị trên trang con (Platform Pages)
 
 **5 Bước:**
 1. **Intro** - Giới thiệu wizard

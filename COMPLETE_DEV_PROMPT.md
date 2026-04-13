@@ -135,8 +135,9 @@ Xây dựng nền tảng marketing toàn diện với:
 #### 4. CHẨN ĐOÁN SỨC KHOẼ (Health Diagnostic Wizard)
 
 **Vị Trí:**
-- Nút "Thuyết Trình" xuất hiện trên Chatbot Widget
+- Nút "Thuyết Trình" là một **nút riêng biệt** nằm **ngoài chat widget** (thường ở bên cạnh)
 - Chỉ hiển thị khi khách vào một trang con (Platform Page)
+- Position: Fixed hoặc Floating button ở phía bên phải màn hình
 
 **Giao Diện & Quy Trình:**
 
@@ -1214,7 +1215,7 @@ Xây dựng nền tảng marketing toàn diện với:
 - [ ] Build client portal (Personal Dashboard)
 - [ ] Build diagnostic wizard (5 steps)
 - [ ] Build order form
-- [ ] Tích hợp Chatbot widget với nút "Thuyết Trình"
+- [ ] Thêm nút "Thuyết Trình" (riêng biệt, ngoài chatbot widget)
 
 ### Backend
 - [ ] Setup database + migrations

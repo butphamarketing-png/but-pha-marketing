@@ -60,7 +60,9 @@
 ## 🚀 CHẨN ĐOÁN SỨC KHOẺ (Health Diagnosis)
 
 ### Vị Trí Trigger:
-- **Nút "Thuyết Trình"** trên Chatbot Widget → xuất hiện khi khách vào một trang con (Platform Page)
+- **Nút "Thuyết Trình"** là một **nút riêng biệt** nằm **ngoài Chatbot Widget** (thường ở bên cạnh chat icon)
+- Xuất hiện khi khách vào một trang con (Platform Page)
+- Position: Fixed hoặc Floating button ở phía bên phải màn hình
 
 ### Quy Trình:
 1. **Bước 1 - Quiz/Diagnostic:**
