@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
-import { Phone, X } from "lucide-react";
+import { Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
@@ -16,12 +16,10 @@ import { playClickSound } from "@/lib/utils";
 function HomeContent() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [showInfoForm, setShowInfoForm] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
-  const [infoLoading, setInfoLoading] = useState(false);
   const { user } = useAuth();
   const { settings } = useAdmin();
 
@@ -45,7 +43,6 @@ function HomeContent() {
           clearInterval(timer);
           setTimeout(() => {
             setLoading(false);
-            setTimeout(() => setShowInfoForm(true), 2000);
           }, 500);
           return 100;
         }
@@ -84,20 +81,6 @@ function HomeContent() {
     { id: "googlemaps", name: "Google Maps", icon: SiGooglemaps, color: settings.colors.googlemaps, to: "/google-maps" },
     { id: "website", name: "Website", icon: SiWebflow, color: settings.colors.website, to: "/website" },
   ];
-
-  const handleInfoSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setInfoLoading(true);
-    try {
-      await db.leads.add({ type: "contact", name: infoName, phone: infoPhone });
-      alert("Đã gửi thông tin! Chúng tôi sẽ liên hệ sớm nhất.");
-      setShowInfoForm(false);
-    } catch (err) {
-      alert("Có lỗi xảy ra!");
-    } finally {
-      setInfoLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
@@ -181,47 +164,6 @@ function HomeContent() {
           </a>
         </div>
       </main>
-
-      <AnimatePresence>
-        {showInfoForm && (
-          <motion.div 
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-4 left-1/2 z-40 w-[90%] max-w-sm -translate-x-1/2 rounded-2xl border border-white/10 bg-black/80 p-6 shadow-2xl backdrop-blur-xl md:bottom-8"
-          >
-            <button onClick={() => setShowInfoForm(false)} className="absolute right-4 top-4 text-gray-400 hover:text-white">
-              <X size={16} />
-            </button>
-            <h4 className="mb-4 text-lg font-bold text-white">Nhận báo giá nhanh</h4>
-            <form className="flex flex-col gap-3" onSubmit={handleInfoSubmit}>
-              <input 
-                required 
-                type="text" 
-                placeholder="Tên của bạn" 
-                value={infoName}
-                onChange={e => setInfoName(e.target.value)}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-primary" 
-              />
-              <input 
-                required 
-                type="tel" 
-                placeholder="Số điện thoại" 
-                value={infoPhone}
-                onChange={e => setInfoPhone(e.target.value)}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-primary" 
-              />
-              <button 
-                disabled={infoLoading}
-                type="submit" 
-                className="mt-2 rounded-lg bg-primary py-2 text-sm font-bold text-white hover:bg-primary/90 disabled:opacity-50"
-              >
-                {infoLoading ? "Đang gửi..." : "Gửi Yêu Cầu"}
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
