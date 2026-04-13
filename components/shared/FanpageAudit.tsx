@@ -7,8 +7,6 @@ import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 interface FanpageAuditProps {
   primaryColor: string;
   platform: string;
-  presentationMode?: boolean;
-  showQuiz?: boolean;
 }
 
 const AUDIT_STEPS = [
@@ -113,7 +111,7 @@ const AUDIT_CONFIGS: Record<string, {
   },
 };
 
-export function FanpageAudit({ primaryColor, platform = "facebook", presentationMode = false, showQuiz = false }: FanpageAuditProps) {
+export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAuditProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<"form" | "loading" | "result">("form");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
@@ -181,23 +179,6 @@ export function FanpageAudit({ primaryColor, platform = "facebook", presentation
   return (
     <>
       <section data-section="audit" id="audit" className="py-16 px-4">
-        {presentationMode && showQuiz ? (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mx-auto max-w-4xl"
-          >
-            <div className="mb-8 text-center">
-              <h2 className="text-4xl font-black text-white mb-4">🎯 CHUẨN ĐOÁN SỨC KHỎE MARKETING</h2>
-              <p className="text-xl text-gray-300">Hãy trả lời các câu hỏi để nhận chuẩn đoán chính xác và gói dịch vụ phù hợp nhất</p>
-            </div>
-            <DecisionTreeQuiz 
-              isOpen={true} 
-              isInline={true} 
-              platform={platform}
-            />
-          </motion.div>
-        ) : (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

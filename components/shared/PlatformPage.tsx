@@ -387,33 +387,11 @@ function ContactForm({ color }: { color: string }) {
 
 export function PlatformPage({ config }: { config: PlatformConfig }) {
   const { settings } = useAdmin();
-  const [presentationMode, setPresentationMode] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   const [content, setContent] = useState(config);
 
   const platformKey = (config.auditPlatform || config.name).toLowerCase();
   const cms = settings.cms[platformKey];
-
-  useEffect(() => {
-    const handlePresentationStart = () => {
-      setPresentationMode(true);
-      setShowQuiz(true);
-    };
-
-    const handlePresentationEnd = () => {
-      setPresentationMode(false);
-      setShowQuiz(false);
-    };
-
-    window.addEventListener('presentationStart', handlePresentationStart);
-    window.addEventListener('presentationEnd', handlePresentationEnd);
-
-    return () => {
-      window.removeEventListener('presentationStart', handlePresentationStart);
-      window.removeEventListener('presentationEnd', handlePresentationEnd);
-    };
-  }, []);
 
   useEffect(() => {
     const override = getContent(platformKey);
@@ -482,8 +460,6 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
         <FanpageAudit 
           primaryColor={settings.colors[platformKey] || content.color} 
           platform={content.auditPlatform ?? "facebook"}
-          presentationMode={presentationMode}
-          showQuiz={showQuiz}
         />
       )}
       

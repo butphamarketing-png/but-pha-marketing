@@ -5,7 +5,6 @@ import { ConsultModal } from "./ConsultModal";
 import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 import { CursorEffect } from "./CursorEffect";
 import { ChatbotWidget } from "./ChatbotWidget";
-import { PresentationButton } from "./PresentationButton";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
@@ -39,41 +38,10 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   const { settings } = useAdmin();
   const [showConsult, setShowConsult] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
-  const [presentationMode, setPresentationMode] = useState(false);
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
   const playClick = useClickSound();
 
-  useEffect(() => {
-    const handlePresentationStart = () => {
-      setPresentationMode(true);
-    };
-
-    const handlePresentationEnd = () => {
-      setPresentationMode(false);
-    };
-
-    window.addEventListener('presentationStart', handlePresentationStart);
-    window.addEventListener('presentationEnd', handlePresentationEnd);
-
-    return () => {
-      window.removeEventListener('presentationStart', handlePresentationStart);
-      window.removeEventListener('presentationEnd', handlePresentationEnd);
-    };
-  }, []);
-
-  // Disable scroll when in presentation mode
-  useEffect(() => {
-    if (presentationMode) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [presentationMode]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -172,20 +140,17 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
 
       <main className="pb-24">
         {children}
-        {!presentationMode && (
-          <div className="mt-12 flex justify-center pb-12">
-            <button
-              onClick={() => setShowQuiz(true)}
-              className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-medium text-white transition-colors hover:bg-white/10"
-            >
-              🎯 Tìm Gói Dịch Vụ Phù Hợp
-            </button>
-          </div>
-        )}
+        <div className="mt-12 flex justify-center pb-12">
+          <button
+            onClick={() => setShowQuiz(true)}
+            className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-medium text-white transition-colors hover:bg-white/10"
+          >
+            🎯 Tìm Gói Dịch Vụ Phù Hợp
+          </button>
+        </div>
       </main>
 
-      {!presentationMode && <ChatbotWidget color={primaryColor} />}
-      <PresentationButton />
+      <ChatbotWidget color={primaryColor} />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
       <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
     </div>
