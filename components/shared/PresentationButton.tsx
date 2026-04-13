@@ -1,15 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X } from "lucide-react";
+import { Play, X, Power } from "lucide-react";
 import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 
 export function PresentationButton() {
-  const [showQuiz, setShowQuiz] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [showOffButton, setShowOffButton] = useState(false);
+
+  const startPresentation = () => {
+    setIsActive(true);
+    setShowOffButton(true);
+    sessionStorage.setItem('presentationMode', 'true');
+    sessionStorage.setItem('showQuiz', 'true');
+    
+    // Scroll to audit section
+    const auditSection = document.querySelector('[data-section="audit"]');
+    if (auditSection) {
+      auditSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const stopPresentation = () => {
+    setIsActive(false);
+    setShowOffButton(false);
+    sessionStorage.removeItem('presentationMode');
+    sessionStorage.removeItem('showQuiz');
+    
+    // Scroll back to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Auto-scroll to pricing section when quiz is completed
+  useEffect(() => {
+    const handleQuizComplete = () => {
+      if (isActive) {
+        setTimeout(() => {
+          const pricingSection = document.querySelector('[data-section="pricing"]');
+          if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 1000);
+      }
+    };
+
+    window.addEventListener('quizCompleted', handleQuizComplete);
+    return () => window.removeEventListener('quizCompleted', handleQuizComplete);
+  }, [isActive]);
 
   return (
     <>
       <motion.button
-        onClick={() => setShowQuiz(true)}
+        onClick={startPresentation}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 20 }}
@@ -46,7 +87,21 @@ export function PresentationButton() {
         </motion.div>
       </motion.button>
 
-      <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
+      {/* Off Button - appears when presentation is active */}
+      <AnimatePresence>
+        {showOffButton && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            onClick={stopPresentation}
+            className="fixed bottom-24 right-20 z-[79] flex h-10 w-10 items-center justify-center rounded-full shadow-lg bg-red-600 hover:bg-red-700 transition-all"
+            title="Dừng thuyết trình"
+          >
+            <Power size={16} className="text-white" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </>
   );
 }

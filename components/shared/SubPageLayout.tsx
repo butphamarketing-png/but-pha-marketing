@@ -39,25 +39,43 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   const { settings } = useAdmin();
   const [showConsult, setShowConsult] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [presentationMode, setPresentationMode] = useState(false);
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
   const playClick = useClickSound();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll("[data-section]");
-      const scrollPosition = window.scrollY + 200;
-      sections.forEach((section, index) => {
-        const top = (section as HTMLElement).offsetTop;
-        const height = (section as HTMLElement).offsetHeight;
-        if (scrollPosition >= top && scrollPosition < top + height) {
-          setActiveSection(index);
-        }
-      });
+    const handlePresentationStart = () => {
+      setPresentationMode(true);
+      setShowQuiz(true);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const handlePresentationEnd = () => {
+      setPresentationMode(false);
+      setShowQuiz(false);
+    };
+
+    window.addEventListener('presentationStart', handlePresentationStart);
+    window.addEventListener('presentationEnd', handlePresentationEnd);
+
+    return () => {
+      window.removeEventListener('presentationStart', handlePresentationStart);
+      window.removeEventListener('presentationEnd', handlePresentationEnd);
+    };
   }, []);
+
+  // Disable scroll when in presentation mode
+  useEffect(() => {
+    if (presentationMode) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [presentationMode]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {

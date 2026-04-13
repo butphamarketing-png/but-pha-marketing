@@ -387,11 +387,21 @@ function ContactForm({ color }: { color: string }) {
 
 export function PlatformPage({ config }: { config: PlatformConfig }) {
   const { settings } = useAdmin();
+  const [presentationMode, setPresentationMode] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   const [content, setContent] = useState(config);
 
   const platformKey = (config.auditPlatform || config.name).toLowerCase();
   const cms = settings.cms[platformKey];
+
+  useEffect(() => {
+    // Check sessionStorage for presentation mode
+    const presMode = sessionStorage.getItem('presentationMode') === 'true';
+    const quizMode = sessionStorage.getItem('showQuiz') === 'true';
+    setPresentationMode(presMode);
+    setShowQuiz(quizMode);
+  }, []);
 
   useEffect(() => {
     const override = getContent(platformKey);
@@ -457,7 +467,12 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
       
       {settings.visibility.audit !== false && (
-        <FanpageAudit primaryColor={settings.colors[platformKey] || content.color} platform={content.auditPlatform ?? "facebook"} />
+        <FanpageAudit 
+          primaryColor={settings.colors[platformKey] || content.color} 
+          platform={content.auditPlatform ?? "facebook"}
+          presentationMode={presentationMode}
+          showQuiz={showQuiz}
+        />
       )}
       
       {settings.visibility.stats !== false && (

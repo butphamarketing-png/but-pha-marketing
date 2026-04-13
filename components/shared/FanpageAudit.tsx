@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Activity, BarChart2, ShieldCheck, Zap, Target, Search, Loader2, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import { db } from "@/lib/useData";
+import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
+
+interface FanpageAuditProps {
+  primaryColor: string;
+  platform: string;
+  presentationMode?: boolean;
+  showQuiz?: boolean;
+}
 
 const AUDIT_STEPS = [
   { id: "metadata", label: "Kiểm tra Metadata & SEO", icon: Search },
@@ -105,7 +113,7 @@ const AUDIT_CONFIGS: Record<string, {
   },
 };
 
-export function FanpageAudit({ primaryColor, platform = "facebook" }: { primaryColor: string; platform?: string }) {
+export function FanpageAudit({ primaryColor, platform = "facebook", presentationMode = false, showQuiz = false }: FanpageAuditProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<"form" | "loading" | "result">("form");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
@@ -173,35 +181,53 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: { primaryC
   return (
     <>
       <section data-section id="audit" className="py-16 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mx-auto max-w-2xl rounded-2xl border border-white/10 bg-card p-10 text-center relative overflow-hidden group"
-        >
-          {/* Decorative background elements */}
-          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-20 blur-3xl transition-all group-hover:opacity-40" style={{ backgroundColor: primaryColor }} />
-          <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full opacity-20 blur-3xl transition-all group-hover:opacity-40" style={{ backgroundColor: primaryColor }} />
-          
-          <div className="relative z-10">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl shadow-xl transition-transform group-hover:scale-110" style={{ backgroundColor: `${primaryColor}20`, border: `1px solid ${primaryColor}30` }}>
-              <Activity className="h-8 w-8" style={{ color: primaryColor }} />
+        {presentationMode && showQuiz ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-auto max-w-4xl"
+          >
+            <div className="mb-8 text-center">
+              <h2 className="text-4xl font-black text-white mb-4">🎯 CHUẨN ĐOÁN SỨC KHỎE MARKETING</h2>
+              <p className="text-xl text-gray-300">Hãy trả lời các câu hỏi để nhận chuẩn đoán chính xác và gói dịch vụ phù hợp nhất</p>
             </div>
-            <h3 className="mb-3 text-3xl font-black text-white">{cfg.title}</h3>
-            <p className="mb-8 text-lg text-gray-400">
-              Hệ thống AI chuyên sâu sẽ phân tích và đưa ra giải pháp bứt phá doanh thu cho bạn.
-            </p>
-            <button
-              onClick={() => setIsOpen(true)}
-              className="group relative flex items-center gap-3 mx-auto rounded-2xl px-10 py-5 text-lg font-black text-white shadow-2xl transition-all hover:scale-105 active:scale-95"
-              style={{ backgroundColor: primaryColor }}
-            >
-              <Zap className="h-5 w-5 animate-pulse" />
-              {cfg.cta}
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
-        </motion.div>
+            <DecisionTreeQuiz 
+              isOpen={true} 
+              isInline={true} 
+              platform={platform}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mx-auto max-w-2xl rounded-2xl border border-white/10 bg-card p-10 text-center relative overflow-hidden group"
+          >
+            {/* Decorative background elements */}
+            <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-20 blur-3xl transition-all group-hover:opacity-40" style={{ backgroundColor: primaryColor }} />
+            <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full opacity-20 blur-3xl transition-all group-hover:opacity-40" style={{ backgroundColor: primaryColor }} />
+            
+            <div className="relative z-10">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl shadow-xl transition-transform group-hover:scale-110" style={{ backgroundColor: `${primaryColor}20`, border: `1px solid ${primaryColor}30` }}>
+                <Activity className="h-8 w-8" style={{ color: primaryColor }} />
+              </div>
+              <h3 className="mb-3 text-3xl font-black text-white">{cfg.title}</h3>
+              <p className="mb-8 text-lg text-gray-400">
+                Hệ thống AI chuyên sâu sẽ phân tích và đưa ra giải pháp bứt phá doanh thu cho bạn.
+              </p>
+              <button
+                onClick={() => setIsOpen(true)}
+                className="group relative flex items-center gap-3 mx-auto rounded-2xl px-10 py-5 text-lg font-black text-white shadow-2xl transition-all hover:scale-105 active:scale-95"
+                style={{ backgroundColor: primaryColor }}
+              >
+                <Zap className="h-5 w-5 animate-pulse" />
+                {cfg.cta}
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </button>
+            </div>
+          </motion.div>
+        )}
       </section>
 
       <AnimatePresence>
