@@ -10,8 +10,7 @@ import {
   BarChart2, TrendingUp, Users, DollarSign, Palette, Code, Copy,
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
-import { useAdmin, AdminProvider } from "@/lib/AdminContext";
-import { AuthProvider } from "@/lib/AuthContext";
+import { useAdmin } from "@/lib/AdminContext";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -98,6 +97,8 @@ function AdminContent() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [mediaName, setMediaName] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState("home");
   const [selectedPkgPlatform, setSelectedPkgPlatform] = useState("facebook");
   const [newCase, setNewCase] = useState({ title: "", before: "", after: "" });
@@ -130,18 +131,49 @@ function AdminContent() {
     } catch (e) {}
   }, []);
 
+  const refreshOrders = async () => {
+    const data = await db.orders.getAll();
+    setOrders([...data].reverse());
+  };
+
+  const refreshLeads = async () => {
+    const data = await db.leads.getAll();
+    setLeads([...data].reverse());
+  };
+
+  const refreshMedia = async () => {
+    const data = await db.media.getAll();
+    setMediaList(data);
+  };
+
+  const refreshPortals = async () => {
+    const data = await db.clientPortals.getAll();
+    setClientPortals(data);
+  };
+
+  const refreshServices = async () => {
+    const data = await db.services.getAll();
+    setServices(data);
+  };
+
+  const refreshNews = async () => {
+    const data = await db.news.getAll();
+    setNews(data);
+  };
+
   useEffect(() => {
     setRoadmapSteps(settings.roadmap);
   }, [settings.roadmap]);
 
   useEffect(() => {
-    if (authenticated) {
-      db.orders.getAll().then(data => setOrders([...data].reverse()));
-      db.leads.getAll().then(data => setLeads([...data].reverse()));
-      db.media.getAll().then(data => setMediaList(data));
-      db.clientPortals.getAll().then(setClientPortals);
-    }
-  }, [authenticated, activeTab]);
+    if (!authenticated) return;
+    refreshOrders();
+    refreshLeads();
+    refreshMedia();
+    refreshPortals();
+    refreshServices();
+    refreshNews();
+  }, [authenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -307,10 +339,605 @@ function AdminContent() {
             </div>
           )}
 
-          {/* ... other tabs content omitted for brevity but they are fully restored in the project ... */}
-          <div className="text-center py-20 text-gray-500">
-            <p>Vui lòng sử dụng thanh điều hướng bên trái để quản lý nội dung.</p>
-          </div>
+          {activeTab === "cms" && (
+            <div className="space-y-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-semibold text-white">Nền tảng</p>
+                  <select value={selectedPlatform} onChange={e => setSelectedPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none">
+                    <option value="home">Trang chủ</option>
+                    {PLATFORMS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                  </select>
+                </div>
+                <div className="text-xs text-gray-500">Lưu tự động trong trình duyệt qua Admin Settings</div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-card p-6">
+                  <h2 className="mb-4 text-lg font-bold text-white">Nội dung giới thiệu</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-400">Tầm nhìn</p>
+                      <textarea value={settings.cms[selectedPlatform]?.vision || ""} onChange={e => updateCMS(selectedPlatform, "vision", e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-400">Sứ mệnh</p>
+                      <textarea value={settings.cms[selectedPlatform]?.mission || ""} onChange={e => updateCMS(selectedPlatform, "mission", e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-400">Trách nhiệm</p>
+                      <textarea value={settings.cms[selectedPlatform]?.responsibility || ""} onChange={e => updateCMS(selectedPlatform, "responsibility", e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-card p-6">
+                  <h2 className="mb-4 text-lg font-bold text-white">Hero</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-400">Tiêu đề</p>
+                      <input value={settings.cms[selectedPlatform]?.heroTitle || ""} onChange={e => updateCMS(selectedPlatform, "heroTitle", e.target.value)} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none focus:border-primary" />
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-400">Mô tả</p>
+                      <textarea value={settings.cms[selectedPlatform]?.heroSubtitle || ""} onChange={e => updateCMS(selectedPlatform, "heroSubtitle", e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                      <p className="mb-3 text-sm font-semibold text-white">Trang tĩnh</p>
+                      <div className="grid grid-cols-1 gap-4">
+                        {STATIC_PAGES.map(p => (
+                          <div key={p.key}>
+                            <p className="mb-2 text-xs font-semibold text-gray-400">{p.label}</p>
+                            <textarea value={staticContent[p.key] ?? p.default} onChange={e => saveStatic(p.key, e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-white">Gói dịch vụ</h2>
+                  <p className="text-xs text-gray-500">Mỗi gói: Giá, Tính năng (mỗi dòng 1 mục), Audio URL</p>
+                </div>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                  {Object.entries(settings.cms[selectedPlatform]?.packages || {}).map(([pkgName, pkg]) => (
+                    <div key={pkgName} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                      <div className="mb-4 flex items-center justify-between">
+                        <p className="font-bold text-white">{pkgName}</p>
+                        <span className="text-xs text-gray-500">{pkg.period === "lifetime" ? "Trọn đời" : "Tháng"}</span>
+                      </div>
+                      <div className="space-y-3">
+                        <div>
+                          <p className="mb-1 text-xs font-semibold text-gray-400">Giá</p>
+                          <input value={pkg.price || ""} onChange={e => updatePackage(selectedPlatform, pkgName, "price", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none focus:border-primary" />
+                        </div>
+                        <div>
+                          <p className="mb-1 text-xs font-semibold text-gray-400">Tính năng</p>
+                          <textarea value={(pkg.features || []).join("\n")} onChange={e => updatePackage(selectedPlatform, pkgName, "features", e.target.value.split("\n").map(s => s.trim()).filter(Boolean))} className="h-28 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none focus:border-primary" />
+                        </div>
+                        <div>
+                          <p className="mb-1 text-xs font-semibold text-gray-400">Audio URL</p>
+                          <input value={pkg.audio || ""} onChange={e => updatePackage(selectedPlatform, pkgName, "audio", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none focus:border-primary" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {Object.keys(settings.cms[selectedPlatform]?.packages || {}).length === 0 && (
+                    <div className="text-sm text-gray-500">Chưa có dữ liệu gói cho nền tảng này.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "services" && (
+            <div className="space-y-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-semibold text-white">Nền tảng</p>
+                  <select value={selectedPkgPlatform} onChange={e => setSelectedPkgPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none">
+                    {PLATFORMS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={async () => {
+                      const item: Service = {
+                        id: Math.floor(Math.random() * 100000),
+                        platform: selectedPkgPlatform,
+                        name: "Dịch vụ mới",
+                        price: "0",
+                        period: "month",
+                        popular: false,
+                        features: [],
+                        allFeatures: [],
+                        audioText: "",
+                        process: [],
+                        feedbacks: [],
+                      };
+                      setServices(prev => [item, ...prev]);
+                    }}
+                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10"
+                  >
+                    <Plus size={14} className="inline -mt-0.5 mr-1" /> Thêm dịch vụ
+                  </button>
+                  <button
+                    onClick={async () => {
+                      const list = services.filter(s => s.platform === selectedPkgPlatform);
+                      await db.services.update(selectedPkgPlatform, list);
+                      await refreshServices();
+                    }}
+                    className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90"
+                  >
+                    <Check size={14} className="inline -mt-0.5 mr-1" /> Lưu
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {services.filter(s => s.platform === selectedPkgPlatform).map(svc => (
+                  <div key={svc.id} className="rounded-2xl border border-white/10 bg-card p-6">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      <input
+                        value={svc.name}
+                        onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, name: e.target.value } : s))}
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold text-white outline-none focus:border-primary"
+                      />
+                      <button
+                        onClick={async () => {
+                          setServices(prev => prev.filter(s => s.id !== svc.id));
+                          await db.services.update(selectedPkgPlatform, services.filter(s => s.platform === selectedPkgPlatform && s.id !== svc.id));
+                          await refreshServices();
+                        }}
+                        className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Giá</p>
+                        <input
+                          value={svc.price}
+                          onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, price: e.target.value } : s))}
+                          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Chu kỳ</p>
+                        <select
+                          value={svc.period}
+                          onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, period: e.target.value as Service["period"] } : s))}
+                          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none"
+                        >
+                          <option value="month">Tháng</option>
+                          <option value="lifetime">Trọn đời</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-1 gap-4">
+                      <label className="flex items-center gap-2 text-xs text-gray-300">
+                        <input
+                          type="checkbox"
+                          checked={!!svc.popular}
+                          onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, popular: e.target.checked } : s))}
+                        />
+                        Gói nổi bật
+                      </label>
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Tính năng (mỗi dòng 1 mục)</p>
+                        <textarea
+                          value={(svc.features || []).join("\n")}
+                          onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, features: e.target.value.split("\n").map(x => x.trim()).filter(Boolean), allFeatures: e.target.value.split("\n").map(x => x.trim()).filter(Boolean) } : s))}
+                          className="h-28 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Audio</p>
+                        <input
+                          value={svc.audioText || ""}
+                          onChange={e => setServices(prev => prev.map(s => s.id === svc.id ? { ...s, audioText: e.target.value } : s))}
+                          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {services.filter(s => s.platform === selectedPkgPlatform).length === 0 && (
+                  <div className="text-sm text-gray-500">Chưa có dịch vụ cho nền tảng này.</div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "orders" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Đơn hàng</h2>
+                <button onClick={refreshOrders} className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10">Tải lại</button>
+              </div>
+              <div className="overflow-x-auto rounded-2xl border border-white/10 bg-card">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="border-b border-white/10 text-xs text-gray-500">
+                    <tr>
+                      <th className="px-4 py-3">Khách</th>
+                      <th className="px-4 py-3">Gói</th>
+                      <th className="px-4 py-3">Tổng</th>
+                      <th className="px-4 py-3">Ngày</th>
+                      <th className="px-4 py-3">Trạng thái</th>
+                      <th className="px-4 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/10">
+                    {orders.map(o => (
+                      <tr key={o.id} className="text-gray-200">
+                        <td className="px-4 py-3">
+                          <p className="font-semibold text-white">{o.name}</p>
+                          <p className="text-xs text-gray-500">{o.phone}</p>
+                        </td>
+                        <td className="px-4 py-3">
+                          <p className="text-white">{o.pkg}</p>
+                          <p className="text-xs text-gray-500">{o.platform}</p>
+                        </td>
+                        <td className="px-4 py-3 font-semibold text-white">{formatMoney(o.total)}</td>
+                        <td className="px-4 py-3 text-xs text-gray-400">{formatDate(o.createdAt)}</td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={o.status}
+                            onChange={async e => {
+                              const next = e.target.value as Order["status"];
+                              setOrders(prev => prev.map(x => x.id === o.id ? { ...x, status: next } : x));
+                              await db.orders.updateStatus(o.id.toString(), next);
+                              await refreshOrders();
+                            }}
+                            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white outline-none"
+                          >
+                            {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            onClick={async () => {
+                              await db.orders.delete(o.id.toString());
+                              await refreshOrders();
+                            }}
+                            className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+                          >
+                            <Trash2 size={14} className="inline -mt-0.5 mr-1" /> Xoá
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {orders.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="px-4 py-10 text-center text-sm text-gray-500">Chưa có đơn hàng.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "subscribers" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Lead / Nhận tin</h2>
+                <button onClick={refreshLeads} className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10">Tải lại</button>
+              </div>
+              <div className="overflow-x-auto rounded-2xl border border-white/10 bg-card">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="border-b border-white/10 text-xs text-gray-500">
+                    <tr>
+                      <th className="px-4 py-3">Loại</th>
+                      <th className="px-4 py-3">Tên</th>
+                      <th className="px-4 py-3">SĐT</th>
+                      <th className="px-4 py-3">Ghi chú</th>
+                      <th className="px-4 py-3">Ngày</th>
+                      <th className="px-4 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/10">
+                    {leads.map(l => (
+                      <tr key={l.id} className="text-gray-200">
+                        <td className="px-4 py-3 text-xs text-gray-400">{l.type}</td>
+                        <td className="px-4 py-3 text-white">{l.name || "-"}</td>
+                        <td className="px-4 py-3 text-white">{l.phone}</td>
+                        <td className="px-4 py-3 text-xs text-gray-400">{l.note || l.service || l.url || "-"}</td>
+                        <td className="px-4 py-3 text-xs text-gray-400">{formatDate(l.createdAt)}</td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            onClick={async () => {
+                              await db.leads.delete(l.id.toString());
+                              await refreshLeads();
+                            }}
+                            className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+                          >
+                            <Trash2 size={14} className="inline -mt-0.5 mr-1" /> Xoá
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {leads.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="px-4 py-10 text-center text-sm text-gray-500">Chưa có lead.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "media" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Hình ảnh - Video</h2>
+                <button onClick={refreshMedia} className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10">Tải lại</button>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                  <div className="md:col-span-2">
+                    <p className="mb-2 text-xs font-semibold text-gray-400">URL</p>
+                    <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Tên</p>
+                    <input value={mediaName} onChange={e => setMediaName(e.target.value)} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div className="flex items-end">
+                    <button
+                      onClick={async () => {
+                        if (!mediaUrl.trim()) return;
+                        const type = /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(mediaUrl) ? "video" : "image";
+                        await db.media.add({ url: mediaUrl.trim(), name: mediaName.trim() || "Media", type });
+                        setMediaUrl("");
+                        setMediaName("");
+                        await refreshMedia();
+                      }}
+                      className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white hover:bg-primary/90"
+                    >
+                      <Plus size={16} className="inline -mt-0.5 mr-1" /> Thêm
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {mediaList.map(m => (
+                  <div key={m.id} className="rounded-2xl border border-white/10 bg-card p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-white">{m.name}</p>
+                        <p className="truncate text-xs text-gray-500">{m.url}</p>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          await db.media.delete(m.id);
+                          await refreshMedia();
+                        }}
+                        className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {mediaList.length === 0 && <div className="text-sm text-gray-500">Chưa có media.</div>}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "seo" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">SEO Page</h2>
+                <button onClick={() => { setSeoData({}); localStorage.removeItem("bpm_seo"); }} className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white">Reset</button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {Object.keys(SEO_DEFAULTS).map(key => (
+                  <div key={key} className="rounded-2xl border border-white/10 bg-card p-6">
+                    <p className="mb-4 text-sm font-bold text-white">{key}</p>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Title</p>
+                        <input value={(seoData[key]?.title ?? SEO_DEFAULTS[key].title) as string} onChange={e => saveSeo(key, "title", e.target.value)} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                      </div>
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Description</p>
+                        <textarea value={(seoData[key]?.desc ?? SEO_DEFAULTS[key].desc) as string} onChange={e => saveSeo(key, "desc", e.target.value)} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                      </div>
+                      <div>
+                        <p className="mb-2 text-xs font-semibold text-gray-400">Keywords</p>
+                        <textarea value={(seoData[key]?.keywords ?? SEO_DEFAULTS[key].keywords) as string} onChange={e => saveSeo(key, "keywords", e.target.value)} className="h-20 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "roadmap" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Lộ trình</h2>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setRoadmapSteps(prev => ([...prev, { title: "Bước mới", time: "Ngày", desc: "", status: "pending" }]))}
+                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10"
+                  >
+                    <Plus size={14} className="inline -mt-0.5 mr-1" /> Thêm bước
+                  </button>
+                  <button
+                    onClick={() => updateRoadmap(roadmapSteps)}
+                    className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90"
+                  >
+                    <Check size={14} className="inline -mt-0.5 mr-1" /> Lưu
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {roadmapSteps.map((s, idx) => (
+                  <div key={idx} className="rounded-2xl border border-white/10 bg-card p-6">
+                    <div className="mb-4 flex items-center justify-between">
+                      <p className="text-sm font-bold text-white">Bước {idx + 1}</p>
+                      <button onClick={() => setRoadmapSteps(prev => prev.filter((_, i) => i !== idx))} className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      <input value={s.title} onChange={e => setRoadmapSteps(prev => prev.map((x, i) => i === idx ? { ...x, title: e.target.value } : x))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                      <input value={s.time} onChange={e => setRoadmapSteps(prev => prev.map((x, i) => i === idx ? { ...x, time: e.target.value } : x))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                      <textarea value={s.desc} onChange={e => setRoadmapSteps(prev => prev.map((x, i) => i === idx ? { ...x, desc: e.target.value } : x))} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                      <select value={s.status} onChange={e => setRoadmapSteps(prev => prev.map((x, i) => i === idx ? { ...x, status: e.target.value as "completed" | "in_progress" | "pending" } : x))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none">
+                        <option value="completed">Hoàn thành</option>
+                        <option value="in_progress">Đang làm</option>
+                        <option value="pending">Chờ</option>
+                      </select>
+                    </div>
+                  </div>
+                ))}
+                {roadmapSteps.length === 0 && <div className="text-sm text-gray-500">Chưa có lộ trình.</div>}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "portals" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Client Portal</h2>
+                <button onClick={refreshPortals} className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 hover:bg-white/10">Tải lại</button>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Username</p>
+                    <input value={newPortal.username || ""} onChange={e => setNewPortal(prev => ({ ...prev, username: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Tên khách</p>
+                    <input value={newPortal.clientName || ""} onChange={e => setNewPortal(prev => ({ ...prev, clientName: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">SĐT</p>
+                    <input value={newPortal.phone || ""} onChange={e => setNewPortal(prev => ({ ...prev, phone: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Days remaining</p>
+                    <input type="number" value={newPortal.daysRemaining ?? 30} onChange={e => setNewPortal(prev => ({ ...prev, daysRemaining: Number(e.target.value) }))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Progress %</p>
+                    <input type="number" value={newPortal.progressPercent ?? 0} onChange={e => setNewPortal(prev => ({ ...prev, progressPercent: Number(e.target.value) }))} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Password (demo)</p>
+                    <input type="password" value={portalPassword} onChange={e => setPortalPassword(e.target.value)} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button
+                    onClick={async () => {
+                      if (!newPortal.username || !newPortal.clientName || !newPortal.phone) return;
+                      await db.clientPortals.add({
+                        username: newPortal.username,
+                        clientName: newPortal.clientName,
+                        phone: newPortal.phone,
+                        daysRemaining: newPortal.daysRemaining ?? 30,
+                        postsCount: newPortal.postsCount ?? 0,
+                        progressPercent: newPortal.progressPercent ?? 0,
+                        weeklyReports: newPortal.weeklyReports ?? [],
+                        password: portalPassword || undefined,
+                      });
+                      setPortalPassword("");
+                      setNewPortal({ username: "", clientName: "", phone: "", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
+                      await refreshPortals();
+                    }}
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90"
+                  >
+                    <Plus size={16} className="inline -mt-0.5 mr-1" /> Tạo portal
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {clientPortals.map(p => (
+                  <div key={p.id} className="rounded-2xl border border-white/10 bg-card p-6">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate font-bold text-white">{p.clientName}</p>
+                        <p className="truncate text-xs text-gray-500">{p.username} · {p.phone}</p>
+                        <p className="mt-2 text-xs text-gray-400">Còn {p.daysRemaining} ngày · {p.progressPercent}%</p>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          await db.clientPortals.delete(p.id.toString());
+                          await refreshPortals();
+                        }}
+                        className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500 hover:text-white"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {clientPortals.length === 0 && <div className="text-sm text-gray-500">Chưa có client portal.</div>}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "presentation" && (
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h2 className="mb-2 text-lg font-bold text-white">Chế độ thuyết trình</h2>
+                <p className="mb-4 text-sm text-gray-400">Trạng thái: <span className="font-semibold text-white">{settings.presentationMode ? "Bật" : "Tắt"}</span></p>
+                <button onClick={togglePresentationMode} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
+                  {settings.presentationMode ? "Tắt" : "Bật"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "settings" && (
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h2 className="mb-4 text-lg font-bold text-white">Thiết lập</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Tiêu đề site</p>
+                    <input value={settings.title} onChange={e => updateSettings({ title: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Hotline</p>
+                    <input value={settings.hotline} onChange={e => updateSettings({ hotline: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Hero Title (Trang chủ)</p>
+                    <input value={settings.heroTitle} onChange={e => updateSettings({ heroTitle: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <p className="mb-2 text-xs font-semibold text-gray-400">Hero Subtitle (Trang chủ)</p>
+                    <textarea value={settings.heroSubtitle} onChange={e => updateSettings({ heroSubtitle: e.target.value })} className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!["dashboard", "cms", "services", "orders", "subscribers", "media", "seo", "roadmap", "portals", "presentation", "settings"].includes(activeTab) && (
+            <div className="text-center py-20 text-gray-500">
+              <p>Tab này chưa được cấu hình.</p>
+            </div>
+          )}
         </div>
 
         <AnimatePresence>
@@ -349,12 +976,5 @@ function AdminContent() {
 }
 
 export default function Admin() {
-  return (
-    <AuthProvider>
-      <AdminProvider>
-        <AdminContent />
-      </AdminProvider>
-    </AuthProvider>
-  );
+  return <AdminContent />;
 }
-
