@@ -69,12 +69,6 @@
     "@tanstack/react-query": "^5.0.0",
     "drizzle-kit": "^0.31.9"
   },
-  "pnpm": {
-    "overrides": {
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0"
-    }
-  },
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "@types/node": "^20",
