@@ -51,6 +51,7 @@ export function buildDefaultProcessTabs(tabLabels: string[]): ProcessTab[] {
 }
 
 export function getContent(platform: string): ContentOverride | null {
+  if (typeof window === "undefined") return null;
   try {
     const stored = localStorage.getItem(`bpm_content_${platform}`);
     return stored ? JSON.parse(stored) : null;
@@ -58,7 +59,9 @@ export function getContent(platform: string): ContentOverride | null {
 }
 
 export function saveContent(platform: string, content: ContentOverride) {
-  localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
+  }
 }
 
 export function mergeContent<T extends object>(defaults: T, overrides: Partial<T>): T {

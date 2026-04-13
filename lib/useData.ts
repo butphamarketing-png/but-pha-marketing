@@ -83,12 +83,15 @@ async function apiFetch(path: string, options?: RequestInit) {
 }
 
 function getLocal<T>(key: string, def: T): T {
+  if (typeof window === "undefined") return def;
   try { return JSON.parse(localStorage.getItem(`bpm_${key}`) || "null") || def; }
   catch { return def; }
 }
 
 function setLocal<T>(key: string, val: T) {
-  localStorage.setItem(`bpm_${key}`, JSON.stringify(val));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(`bpm_${key}`, JSON.stringify(val));
+  }
 }
 
 export const db = {

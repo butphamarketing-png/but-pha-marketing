@@ -4,10 +4,15 @@ import * as schema from "./schema";
 
 const { Pool } = pg;
 
-// Dummy connection string for build time if DATABASE_URL is not set
-const connectionString = process.env.DATABASE_URL || "postgresql://dummy:dummy@localhost:5432/dummy";
+const connectionString = process.env.DATABASE_URL;
 
-export const pool = new Pool({ connectionString });
+if (!connectionString) {
+  console.warn("⚠️ DATABASE_URL is not set. Database connection will fail if queried.");
+}
+
+export const pool = new Pool({ 
+  connectionString: connectionString || "" 
+});
 export const db = drizzle(pool, { schema });
 
 export * from "./schema";
