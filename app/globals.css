@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 270 20% 8%;
+  --foreground: 0 0% 95%;
+  --primary: 270 72% 47%;
+  --primary-foreground: 0 0% 100%;
+  --card: 270 20% 12%;
+  --card-foreground: 0 0% 95%;
+  --border: 270 20% 20%;
+  --muted: 270 20% 15%;
+  --muted-foreground: 270 10% 60%;
+  --accent: 270 60% 35%;
+  --accent-foreground: 0 0% 100%;
+  --secondary: 270 30% 18%;
+  --secondary-foreground: 0 0% 90%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 270 20% 20%;
+  --ring: 270 72% 47%;
+  --popover: 270 20% 10%;
+  --popover-foreground: 0 0% 95%;
+  --radius: 1.5rem;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    @apply bg-[#0a0510] text-foreground antialiased;
+    font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.4);
+}

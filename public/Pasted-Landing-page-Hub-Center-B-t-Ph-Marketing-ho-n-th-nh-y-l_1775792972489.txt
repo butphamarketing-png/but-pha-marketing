@@ -1,0 +1,77 @@
+Landing page Hub Center - Bứt Phá Marketing đã hoàn thành! Đây là những gì đã được xây dựng:
+
+Trang Chủ (Home Hub):
+
+Hiệu ứng loading logo với thanh tiến trình và vòng xoay
+Form điền thông tin tự động hiện lên sau khi tải xong
+Logo Bứt Phá Marketing nằm giữa, nổi bật trên nền tím đậm
+Tiêu đề hero lớn với gradient màu tím
+6 nút nền tảng lớn bo góc (Facebook, TikTok, Instagram, Zalo, Google Maps, Website) với hiệu ứng hover shimmer
+Hotline 0937 417 982 phía dưới
+6 Trang Con (đầy đủ theo yêu cầu):
+
+Facebook: Màu xanh FB + tím, gói Xây dựng/Chăm sóc/Quảng cáo đầy đủ
+TikTok: Màu đỏ TikTok + tím/đen
+Instagram: Màu hồng/đỏ Instagram + tím
+Zalo: Màu xanh Zalo + tím
+Google Maps: Màu đỏ Google + tím
+Website: Màu xanh lá + tím
+Mỗi trang con có:
+
+Header: nút về Hub Center (trái), Logo (giữa), nút Tư vấn ngay (phải)
+Slideshow 3 ảnh tự động
+Phần giới thiệu với 3 accordion Tầm nhìn/Sứ mệnh/Trách nhiệm
+Tabs dịch vụ với đầy đủ gói giá và nút đăng ký
+Form thanh toán có giảm giá theo tháng cho gói Chăm sóc
+Thống kê, quy trình, FAQ, form liên hệ cuối trang
+Chấm điều hướng cuộn trang bên phải
+Hiệu ứng scroll animation
+
+Tính năng "Thông báo đơn hàng ảo" (Social Proof - Bằng chứng xã hội)
+các trang web con hiện cái thông báo nhỏ ở góc dưới ví dụ "Anh Minh vừa đăng ký dịch vụ Facebook Ads cách đây 5 phút" không? cách 3p thì hiện 1 lần
+Cập nhật thêm tính năng cao cấp cho trang con Facebook:
+
+Bổ sung Section "Chứng thực năng lực" (Before & After):
+Thiết kế một thanh trượt so sánh hình ảnh: Phía bên trái là Fanpage chưa tối ưu, phía bên phải là Fanpage sau khi Bứt Phá Marketing thiết kế lại.
+Chèn tiêu đề: "Sự Thay Đổi Kỳ Diệu Trước Và Sau Khi Đồng Hành Cùng Chúng Tôi".
+Bảng so sánh quyền lợi (Comparison Table):
+Thiết kế một bảng tổng hợp so sánh 3 gói của từng tab
+Sử dụng icon tích xanh cho các tính năng hiện có và dấu gạch ngang cho các tính năng thiếu để khách dễ nhận diện sự khác biệt về giá trị.
+Tính năng "Tư vấn qua âm thanh" (Audio Guide/Podcast)
+Một tính năng rất mới và tạo sự gần gũi.
+
+Cách hoạt động: Ở mỗi bảng giá, có một nút nhỏ "Nghe tư vấn gói này". Khi bấm vào, một đoạn audio ngắn (30s) giọng nam/nữ chuyên nghiệp sẽ giới thiệu ưu điểm của gói đó.
+
+Cảm giác: Giúp khách hàng lười đọc vẫn hiểu được giá trị dịch vụ, tạo sự khác biệt hoàn toàn so với đối thủ.
+
+Vào trang con ví dụ như fb bấm tư vấn ngay
+Tính năng "Định hướng nhu cầu" (Decision Tree Quiz)
+Thay vì bắt khách hàng tự đi tìm dịch vụ, hãy hỏi họ.
+
+Cách hoạt động: Một khung nhỏ hiện ra với câu hỏi: "Bạn muốn bứt phá doanh số trên nền tảng nào?". Khách chọn Facebook -> Câu hỏi tiếp: "Bạn đã có Fanpage chưa?".
+
+Kết quả: Sau 3 câu trắc nghiệm, hệ thống sẽ tự đưa ra gói dịch vụ phù hợp nhất (Ví dụ: Gói Phát Triển 2.3tr).
+
+Tại sao nên làm: Giúp khách hàng bớt rối và bạn thu thập được chính xác nhu cầu của họ trước khi gọi điện tư vấn.
+Tính năng "Chẩn đoán sức khỏe Fanpage" (Instant Audit Tool) có 1 nút
+
+Tính năng "Nhạc nền thư giãn" (Ambient Background Music)
+Thay vì tự động phát nhạc (dễ làm khách giật mình), bạn hãy để một biểu tượng "Loa/Nốt nhạc" nhỏ xinh ở góc màn hình.
+Cách hoạt động: Khi khách bấm vào, nhạc nền (dạng Lo-fi hoặc Deep House sang trọng) sẽ nổi lên nhẹ nhàng.
+
+Hiệu ứng: Biểu tượng nốt nhạc sẽ nhảy theo nhịp (Music Visualizer).
+
+Tác dụng: Giữ chân khách hàng ở lại đọc nội dung lâu hơn vì cảm giác dễ chịu.
+Luồng trải nghiệm khách hàng (Customer Journey)
+Trang chủ: Khách xem dịch vụ. Góc phải Header có nút "Đăng nhập/Thành viên".
+
+Khi click vào: Hiện Popup đăng nhập bằng Số điện thoại/Email hoặc Google.
+
+Sau khi vào: Trang web đổi giao diện, hiện mục "Dashboard cá nhân" gồm:
+
+Tiến độ dự án đang chạy (Ví dụ: Đang lên bài viết ngày 5/30).
+
+Kho tài liệu dành riêng cho khách hàng (Mẫu kịch bản, báo cáo Ads tháng).
+
+Tạo 1 bảng quản trị website để có thể theo dõi lượt truy cập, quản lý nội dung, hình ảnh trong từng trang, tối ưu có thể tắt bật hoặc chỉnh màu sắc
+bên trái có 3 nút bấm để liên hệ nhanh
