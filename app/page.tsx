@@ -110,16 +110,27 @@ function HomeContent() {
           <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings.title}</span>
         </div>
         {!settings.presentationMode && (
-          <div>
-            {user ? (
-              <Link href="/dashboard" className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
-                Trang thành viên
-              </Link>
-            ) : (
-              <button onClick={() => setShowLogin(true)} className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
-                Đăng nhập / Thành viên
-              </button>
-            )}
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex items-center gap-3">
+              {user ? (
+                <Link href="/dashboard" className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
+                  Trang thành viên
+                </Link>
+              ) : (
+                <>
+                  <button onClick={() => setShowLogin(true)} className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
+                    Đăng nhập / Đăng ký
+                  </button>
+                </>
+              )}
+            </div>
+            <button 
+              onClick={() => setShowRoadmap(true)} 
+              className="group flex items-center gap-2 text-xs font-bold text-primary transition-all hover:text-white"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse group-hover:bg-white" />
+              LỘ TRÌNH DỰ ÁN (CLIENT PORTAL)
+            </button>
           </div>
         )}
       </header>
@@ -142,25 +153,6 @@ function HomeContent() {
           >
             {settings.heroSubtitle}
           </motion.p>
-
-          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
-              <p className="mb-1 text-3xl font-black text-primary">{stats.clients}+</p>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Khách hàng</p>
-            </div>
-            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
-              <p className="mb-1 text-3xl font-black text-primary">{stats.projects}+</p>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Dự án hoàn tất</p>
-            </div>
-            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
-              <p className="mb-1 text-3xl font-black text-primary">{stats.years}+</p>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Năm kinh nghiệm</p>
-            </div>
-            <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm">
-              <p className="mb-1 text-3xl font-black text-primary">24/7</p>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Hỗ trợ kỹ thuật</p>
-            </div>
-          </div>
         </div>
 
         <motion.div 

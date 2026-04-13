@@ -60,6 +60,7 @@ export interface ClientPortal {
   username: string;
   clientName: string;
   phone: string;
+  platform: string;
   daysRemaining: number;
   postsCount: number;
   progressPercent: number;
@@ -92,6 +93,23 @@ function setLocal<T>(key: string, val: T) {
   if (typeof window !== "undefined") {
     localStorage.setItem(`bpm_${key}`, JSON.stringify(val));
   }
+}
+
+export interface ProgressArticle {
+  id: number;
+  clientId: number;
+  title: string;
+  content: string;
+  image?: string;
+  createdAt: string;
+}
+
+export interface PlatformConfig {
+  id: number;
+  key: string;
+  name: string;
+  color: string;
+  isVisible: boolean;
 }
 
 export const db = {
@@ -226,6 +244,41 @@ export const db = {
       catch {
         const list = await db.clientPortals.getAll();
         return list.find(p => p.username === username) || null;
+      }
+    },
+  },
+  progressArticles: {
+    getByClient: async (clientId: number): Promise<ProgressArticle[]> => {
+      try { return await apiFetch(`/progress-articles?clientId=${clientId}`); }
+      catch { return getLocal<ProgressArticle[]>(`progress_articles_${clientId}`, []); }
+    },
+    add: async (a: Omit<ProgressArticle, "id" | "createdAt">) => {
+      try { return await apiFetch("/progress-articles", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(a) }); }
+      catch {
+        const list = await db.progressArticles.getByClient(a.clientId);
+        const item: ProgressArticle = { ...a, id: Math.floor(Math.random() * 10000), createdAt: new Date().toISOString() };
+        setLocal(`progress_articles_${a.clientId}`, [...list, item]);
+        return item;
+      }
+    },
+    delete: async (id: number, clientId: number) => {
+      try { await apiFetch(`/progress-articles/${id}`, { method: "DELETE" }); }
+      catch {
+        const list = await db.progressArticles.getByClient(clientId);
+        setLocal(`progress_articles_${clientId}`, list.filter(a => a.id !== id));
+      }
+    },
+  },
+  platformConfigs: {
+    getAll: async (): Promise<PlatformConfig[]> => {
+      try { return await apiFetch("/platform-configs"); }
+      catch { return getLocal<PlatformConfig[]>("platform_configs", []); }
+    },
+    update: async (key: string, data: Partial<PlatformConfig>) => {
+      try { await apiFetch(`/platform-configs/${key}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); }
+      catch {
+        const list = await db.platformConfigs.getAll();
+        setLocal("platform_configs", list.map(c => c.key === key ? { ...c, ...data } : c));
       }
     },
   },

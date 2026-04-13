@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageCircle, Send, Bot } from "lucide-react";
+import { X, MessageCircle, Send, Bot, Play } from "lucide-react";
+import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 
 interface Message {
   id: number;
@@ -20,8 +21,8 @@ const QUICK_REPLIES = [
 const BOT_RESPONSES: { pattern: RegExp; reply: string }[] = [
   { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi bao gồm: Xây dựng Fanpage chuyên nghiệp từ 2.000.000đ/tháng, Chăm sóc nội dung từ 3.500.000đ/tháng, và Quảng cáo Facebook Ads từ 5.000.000đ/tháng. Bạn muốn tư vấn gói nào?" },
   { pattern: /tiktok/i, reply: "Dịch vụ TikTok Marketing gồm: Xây dựng kênh từ 3.000.000đ/tháng, Sản xuất content TikTok từ 5.000.000đ/tháng, TikTok Ads từ 7.000.000đ/tháng. TikTok đang là kênh viral mạnh nhất 2024!" },
-  { pattern: /instagram/i, reply: "Instagram Marketing: Xây dựng profile từ 2.500.000đ, Chăm sóc content từ 4.000.000đ/tháng, Ads từ 6.000.000đ/tháng. Phù hợp cho thương hiệu thời trang, làm đẹp, F&B!" },
-  { pattern: /zalo/i, reply: "Zalo Marketing: Xây dựng OA từ 1.500.000đ, Quản lý chăm sóc từ 2.500.000đ/tháng, Zalo Ads từ 4.000.000đ/tháng. Zalo có 75 triệu người dùng tại Việt Nam!" },
+  { pattern: /instagram/i, reply: "Instagram Marketing: Xây dựng profile từ 2.500.000đ, Chăm sóc content từ 4.000.000đ/tháng, Ads from 6.000.000đ/tháng. Phù hợp cho thương hiệu thời trang, làm đẹp, F&B!" },
+  { pattern: /zalo/i, reply: "Zalo Marketing: Xây dựng OA từ 1.500.000đ, Quản lý chăm sóc từ 2.500.000đ/tháng, Zalo Ads from 4.000.000đ/tháng. Zalo có 75 triệu người dùng tại Việt Nam!" },
   { pattern: /google|maps|local|seo/i, reply: "Google Maps/Local SEO: Tạo & tối ưu Google Business từ 2.000.000đ, SEO Local từ 4.000.000đ/tháng. Giúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm!" },
   { pattern: /website|web/i, reply: "Dịch vụ Website: Thiết kế Landing Page từ 3.500.000đ, Website doanh nghiệp từ 7.000.000đ, E-commerce từ 15.000.000đ. SEO website từ 3.000.000đ/tháng!" },
   { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dịch vụ dao động từ 1.500.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng trở lên giảm 5-20%. Bạn muốn tư vấn cụ thể gói nào?" },
@@ -45,6 +46,7 @@ let msgId = 0;
 
 export function ChatbotWidget({ color }: { color: string }) {
   const [open, setOpen] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { id: msgId++, role: "bot", text: "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing 🤖\nTôi có thể tư vấn về dịch vụ, bảng giá và hỗ trợ bạn 24/7. Bạn cần hỗ trợ gì?" },
   ]);
@@ -105,6 +107,15 @@ export function ChatbotWidget({ color }: { color: string }) {
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-3 p-4" style={{ maxHeight: "300px" }}>
+              <div className="mb-4">
+                <button 
+                  onClick={() => setShowQuiz(true)}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-3 text-xs font-bold text-white transition-all hover:bg-white/10 hover:border-white/20"
+                >
+                  <Play size={14} className="fill-white" />
+                  THUYẾT TRÌNH: CHUẨN ĐOÁN MARKETING
+                </button>
+              </div>
               {messages.map(m => (
                 <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   {m.role === "bot" && (
@@ -155,6 +166,8 @@ export function ChatbotWidget({ color }: { color: string }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DecisionTreeQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
 
       <motion.button
         onClick={() => setOpen(o => !o)}

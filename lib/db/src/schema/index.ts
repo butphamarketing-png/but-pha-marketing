@@ -76,13 +76,40 @@ export const clientPortals = pgTable("client_portals", {
   password: text("password").notNull(),
   clientName: text("client_name").notNull(),
   phone: text("phone").notNull(),
+  platform: text("platform").notNull(), // Added platform
   daysRemaining: integer("days_remaining").default(0).notNull(),
   postsCount: integer("posts_count").default(0).notNull(),
   progressPercent: integer("progress_percent").default(0).notNull(),
-  weeklyReports: jsonb("weekly_reports").$type<{ date: string; content: string }[]>().default([]).notNull(),
+  weeklyReports: jsonb("weekly_reports").$type<{ date: string; content: string; image?: string }[]>().default([]).notNull(), // Added image to reports
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const insertClientPortalSchema = (createInsertSchema(clientPortals) as any).omit({ id: true, createdAt: true }) as z.ZodType<Omit<ClientPortal, "id" | "createdAt">>;
 export type InsertClientPortal = z.infer<typeof insertClientPortalSchema>;
 export type ClientPortal = typeof clientPortals.$inferSelect;
+
+// Progress Articles Table
+export const progressArticles = pgTable("progress_articles", {
+  id: serial("id").primaryKey(),
+  clientId: integer("client_id").references(() => clientPortals.id).notNull(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertProgressArticleSchema = (createInsertSchema(progressArticles) as any).omit({ id: true, createdAt: true });
+export type InsertProgressArticle = z.infer<typeof insertProgressArticleSchema>;
+export type ProgressArticle = typeof progressArticles.$inferSelect;
+
+// Platform Config Table
+export const platformConfigs = pgTable("platform_configs", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(), // e.g., facebook, tiktok
+  name: text("name").notNull(),
+  color: text("color").notNull(),
+  isVisible: boolean("is_visible").default(true).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type PlatformConfig = typeof platformConfigs.$inferSelect;

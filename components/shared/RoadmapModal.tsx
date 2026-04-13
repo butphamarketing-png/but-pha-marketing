@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, CheckCircle2, Clock, ArrowRight, Lock, User, Key, BarChart2, FileText, Send } from "lucide-react";
+import { X, Calendar, CheckCircle2, Clock, ArrowRight, Lock, User, Key, BarChart2, FileText, Send, Image as ImageIcon } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
-import { db, type ClientPortal } from "@/lib/useData";
+import { db, type ClientPortal, type ProgressArticle } from "@/lib/useData";
 
 export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { settings } = useAdmin();
   const [client, setClient] = useState<ClientPortal | null>(null);
-  const [authForm, setAuthForm] = useState({ username: "", password: "", service: "" });
+  const [articles, setArticles] = useState<ProgressArticle[]>([]);
+  const [authForm, setAuthForm] = useState({ username: "", password: "", platform: "facebook" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const PLATFORMS = [
-    { key: "facebook", label: "Facebook" },
-    { key: "instagram", label: "Instagram" },
-    { key: "tiktok", label: "TikTok" },
-    { key: "google", label: "Google Maps" },
-    { key: "shopee", label: "Shopee" },
-    { key: "website", label: "Website" },
+  const PLATFORMS_DYNAMIC = [
+    { key: "facebook", label: settings.platformNames?.facebook || "Facebook" },
+    { key: "tiktok", label: settings.platformNames?.tiktok || "TikTok" },
+    { key: "instagram", label: settings.platformNames?.instagram || "Instagram" },
+    { key: "zalo", label: settings.platformNames?.zalo || "Zalo" },
+    { key: "googlemaps", label: settings.platformNames?.googlemaps || "Google Maps" },
+    { key: "website", label: settings.platformNames?.website || "Website" },
   ];
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -28,6 +29,8 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       const res = await db.clientPortals.login(authForm.username, authForm.password);
       if (res) {
         setClient(res);
+        const arts = await db.progressArticles.getByClient(res.id);
+        setArticles(arts);
       } else {
         setError("Sai tên đăng nhập hoặc mật khẩu");
       }
@@ -67,12 +70,11 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 <BarChart2 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <select
                   required
-                  value={authForm.service}
-                  onChange={e => setAuthForm({...authForm, service: e.target.value})}
+                  value={authForm.platform}
+                  onChange={e => setAuthForm({...authForm, platform: e.target.value})}
                   className="w-full appearance-none rounded-xl border border-white/10 bg-white/5 py-4 pl-12 pr-4 text-white outline-none focus:border-primary"
                 >
-                  <option value="" disabled className="bg-card">Chọn dịch vụ muốn tư vấn</option>
-                  {PLATFORMS.map(p => (
+                  {PLATFORMS_DYNAMIC.map(p => (
                     <option key={p.key} value={p.key} className="bg-card">{p.label}</option>
                   ))}
                 </select>
@@ -122,57 +124,29 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </div>
 
             <div className="flex-1 overflow-y-auto p-8 scrollbar-hide">
-              {/* Stats Grid */}
-              <div className="mb-8 grid grid-cols-3 gap-4">
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-                  <Clock className="mx-auto mb-2 text-primary" size={20} />
-                  <p className="text-lg font-black text-white">{client.daysRemaining}</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase">Ngày còn lại</p>
-                </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-                  <FileText className="mx-auto mb-2 text-green-400" size={20} />
-                  <p className="text-lg font-black text-white">{client.postsCount}</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase">Bài đã đăng</p>
-                </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-                  <BarChart2 className="mx-auto mb-2 text-blue-400" size={20} />
-                  <p className="text-lg font-black text-white">{client.progressPercent}%</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase">Hoàn thành</p>
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="mb-10">
-                <div className="mb-2 flex justify-between text-xs font-bold uppercase tracking-widest">
-                  <span className="text-gray-500">Tiến độ tổng thể</span>
-                  <span className="text-primary">{client.progressPercent}%</span>
-                </div>
-                <div className="h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/5">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${client.progressPercent}%` }}
-                    className="h-full bg-gradient-to-r from-primary to-violet-400 shadow-[0_0_15px_rgba(124,58,237,0.4)]" 
-                  />
-                </div>
-              </div>
-
-              {/* Weekly Reports */}
-              <div>
-                <h3 className="mb-4 text-lg font-black text-white flex items-center gap-2">
-                  <Send size={18} className="text-primary" /> Báo cáo hằng tuần
+              {/* Articles (Project Progress) */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-black text-white flex items-center gap-2">
+                  <FileText size={18} className="text-primary" /> Tiến độ dự án
                 </h3>
-                <div className="space-y-4">
-                  {client.weeklyReports.length === 0 ? (
-                    <p className="text-sm text-gray-500 italic">Chưa có báo cáo tuần nào.</p>
-                  ) : (
-                    client.weeklyReports.map((report, idx) => (
-                      <div key={idx} className="rounded-2xl border border-white/5 bg-white/5 p-5">
-                        <p className="mb-2 text-xs font-bold text-primary">{report.date}</p>
-                        <p className="text-sm text-gray-300 leading-relaxed">{report.content}</p>
+                {articles.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed border-white/10 p-10 text-center text-gray-500">
+                    Chưa có bài cập nhật tiến độ nào.
+                  </div>
+                ) : (
+                  articles.map((art) => (
+                    <div key={art.id} className="rounded-2xl border border-white/5 bg-white/5 p-6 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-bold text-white">{art.title}</h4>
+                        <span className="text-[10px] text-gray-500 font-bold uppercase">{new Date(art.createdAt).toLocaleDateString("vi-VN")}</span>
                       </div>
-                    ))
-                  )}
-                </div>
+                      <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{art.content}</p>
+                      {art.image && (
+                        <img src={art.image} alt="Progress" className="w-full rounded-xl border border-white/10 object-cover max-h-80" />
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 

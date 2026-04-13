@@ -25,10 +25,23 @@ interface PlatformCMS {
 interface SiteSettings {
   title: string;
   hotline: string;
+  logo?: string;
+  content?: string;
+  address?: string;
+  email?: string;
+  zalo?: string;
+  website?: string;
+  fanpage?: string;
+  googleAnalytics?: string;
+  googleWebmaster?: string;
+  headJs?: string;
+  bodyJs?: string;
+  pluginScripts?: string;
   heroTitle: string;
   heroSubtitle: string;
   colors: Record<string, string>;
   visibility: Record<string, boolean>;
+  platformNames?: Record<string, string>;
   cms: Record<string, PlatformCMS>;
   media: Record<string, { 
     slideshow: string[]; 
@@ -47,6 +60,7 @@ interface AdminContextType {
   settings: SiteSettings;
   updateSettings: (newSettings: Partial<SiteSettings>) => void;
   updateColor: (platform: string, color: string) => void;
+  updatePlatformName: (platform: string, name: string) => void;
   toggleVisibility: (section: string, isVisible: boolean) => void;
   updateCMS: (platform: string, field: keyof PlatformCMS, value: any) => void;
   updatePackage: (platform: string, pkgName: string, field: keyof PackageConfig, value: any) => void;
@@ -61,6 +75,13 @@ interface AdminContextType {
 const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   hotline: "0937 417 982",
+  logo: "/logo.jpg",
+  content: "Agency marketing toàn diện tại Việt Nam",
+  address: "TP. Hồ Chí Minh",
+  email: "contact@butphamarketing.vn",
+  zalo: "0937417982",
+  website: "https://butphamarketing.vn",
+  fanpage: "https://facebook.com/butphamarketing",
   heroTitle: "BỨT PHÁ MARKETING",
   heroSubtitle: "Tăng trưởng doanh thu và thương hiệu của bạn trên mọi nền tảng mạng xã hội",
   colors: {
@@ -72,12 +93,26 @@ const defaultSettings: SiteSettings = {
     website: "#34A853",
     primary: "#7C3AED",
   },
+  platformNames: {
+    facebook: "Facebook",
+    tiktok: "TikTok",
+    instagram: "Instagram",
+    zalo: "Zalo",
+    googlemaps: "Google Maps",
+    website: "Website",
+  },
   visibility: {
     "slideshow": true,
     "intro": true,
     "pricing": true,
     "audit": true,
     "stats": true,
+    "facebook": true,
+    "tiktok": true,
+    "instagram": true,
+    "zalo": true,
+    "googlemaps": true,
+    "website": true,
   },
   cms: {
     facebook: { vision: "", mission: "", packages: {} },
@@ -148,6 +183,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setSettings(prev => ({
       ...prev,
       colors: { ...prev.colors, [platform]: color }
+    }));
+  };
+
+  const updatePlatformName = (platform: string, name: string) => {
+    setSettings(prev => ({
+      ...prev,
+      platformNames: { ...(prev.platformNames || {}), [platform]: name }
     }));
   };
 
@@ -253,6 +295,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       settings,
       updateSettings,
       updateColor,
+      updatePlatformName,
       toggleVisibility,
       updateCMS,
       updatePackage,
