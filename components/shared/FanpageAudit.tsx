@@ -208,7 +208,6 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
               </button>
             </div>
           </motion.div>
-        )}
       </section>
 
       <AnimatePresence>
