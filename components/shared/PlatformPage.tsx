@@ -398,14 +398,14 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
     if (!override) return;
     setContent(prev => ({
       ...prev,
-      vision: cms?.vision || override.vision || prev.vision,
-      mission: cms?.mission || override.mission || prev.mission,
-      responsibility: override.responsibility || prev.responsibility,
-      tabs: override.tabs || prev.tabs,
-      stats: override.stats || prev.stats,
-      faqs: override.faqs || prev.faqs,
+      vision: override?.vision || prev.vision,
+      mission: override?.mission || prev.mission,
+      responsibility: override?.responsibility || prev.responsibility,
+      tabs: override?.tabs || prev.tabs,
+      stats: override?.stats || prev.stats,
+      faqs: override?.faqs || prev.faqs,
     }));
-  }, [cms, platformKey]);
+  }, [platformKey]);
 
   // Update tabs packages with dynamic audio, price, and features if available
   const updatedTabs = content.tabs.map(tab => ({
