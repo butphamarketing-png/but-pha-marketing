@@ -5,6 +5,8 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
 import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
 import { SocialProofToast } from "@/components/shared/SocialProofToast";
+import { AnimatedMascot } from "@/components/shared/AnimatedMascot";
+import { SoftUISounds } from "@/components/shared/SoftUISounds";
 
 export const metadata: Metadata = {
   title: "Bứt Phá Marketing - Dashboard",
@@ -22,6 +24,8 @@ export default function RootLayout({
         <AuthProvider>
           <AdminProvider>
             {children}
+            <SoftUISounds />
+            <AnimatedMascot />
             <SocialProofToast />
             <ThemeToggleButton />
             <VideoIntroButton />

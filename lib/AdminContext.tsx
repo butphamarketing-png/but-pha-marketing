@@ -55,6 +55,10 @@ interface SiteSettings {
     status: "completed" | "in_progress" | "pending";
   }[];
   presentationMode: boolean;
+  softSoundsEnabled?: boolean;
+  softSoundsVolume?: number;
+  mascotEnabled?: boolean;
+  mascotMessages?: Record<string, string>;
 }
 
 interface AdminContextType {
@@ -141,6 +145,18 @@ const defaultSettings: SiteSettings = {
     { title: "Báo cáo & Tổng kết", time: "Ngày 30", desc: "Gửi báo cáo hiệu quả chi tiết và đề xuất kế hoạch cho giai đoạn tiếp theo.", status: "pending" }
   ],
   presentationMode: false,
+  softSoundsEnabled: true,
+  softSoundsVolume: 0.05,
+  mascotEnabled: true,
+  mascotMessages: {
+    home: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    facebook: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    tiktok: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    instagram: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    zalo: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    googlemaps: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+    website: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+  },
 };
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);

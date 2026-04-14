@@ -8,6 +8,7 @@ import { Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
+import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
 import { db } from "@/lib/useData";
@@ -83,7 +84,10 @@ function HomeContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
+    <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] overflow-hidden">
+        <ParticleBackground />
+      </div>
       <DynamicGreeting color="#7C3AED" />
       <header className="flex items-center justify-between p-6">
         <div className="flex items-center gap-3">

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ChevronDown, X, ShoppingCart, Check, CreditCard, Building2, Smartphone } from "lucide-react";
 import { SubPageLayout } from "./SubPageLayout";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
+import { FeaturedProjectsFlip } from "./FeaturedProjectsFlip";
 import { ComparisonTable } from "./ComparisonTable";
 import { FanpageAudit } from "./FanpageAudit";
 import { AudioGuide } from "./AudioGuide";
@@ -483,6 +484,8 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
           <ComparisonTable tabs={tabsForRender} comparisonTabs={comparisonTabs} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
         </>
       )}
+
+      <FeaturedProjectsFlip cases={cases} />
       
       <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
       

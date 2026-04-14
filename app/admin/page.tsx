@@ -96,6 +96,7 @@ export default function AdminPage() {
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState(0);
   const [selectedCompareTab, setSelectedCompareTab] = useState(0);
+  const [selectedMascotPlatform, setSelectedMascotPlatform] = useState("home");
   const [serviceContent, setServiceContent] = useState<ContentOverride>({ tabs: [] });
   const [comparisonTabs, setComparisonTabs] = useState<ComparisonTabOverride[]>([]);
   const [pageContent, setPageContent] = useState<ContentOverride>({
@@ -114,6 +115,10 @@ export default function AdminPage() {
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
   const [selectedClientProjectId, setSelectedClientProjectId] = useState("");
+  const [showSourceViewer, setShowSourceViewer] = useState(false);
+  const [sourceFiles, setSourceFiles] = useState<string[]>([]);
+  const [selectedSourceFile, setSelectedSourceFile] = useState("");
+  const [selectedSourceContent, setSelectedSourceContent] = useState("");
 
   const createDefaultPackage = (index: number): PackageOverride => ({
     name: index === 0 ? "Gói Cơ Bản" : index === 1 ? "Gói Nâng Cao" : "Gói VIP",
@@ -174,6 +179,14 @@ export default function AdminPage() {
       progressDoc: "<p></p>",
       resultDoc: "<p></p>",
     };
+  };
+
+  const toDateTimeLocalValue = (value?: string) => {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value.slice(0, 16);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
 
   const normalizeProjects = (portal: ClientPortal | null): ClientProject[] => {
@@ -556,6 +569,19 @@ export default function AdminPage() {
     const safe = next.length > 0 ? next : [createEmptyProject(1)];
     setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: safe as any }) : prev);
     setSelectedClientProjectId(safe[0].id);
+  };
+
+  const loadSourceFiles = async () => {
+    const res = await fetch("/api/source");
+    const data = await res.json();
+    setSourceFiles(data.files || []);
+  };
+
+  const openSourceFile = async (file: string) => {
+    const res = await fetch(`/api/source?file=${encodeURIComponent(file)}`);
+    const data = await res.json();
+    setSelectedSourceFile(file);
+    setSelectedSourceContent(data.content || "");
   };
 
   useEffect(() => {
@@ -1241,8 +1267,8 @@ export default function AdminPage() {
                             <button onClick={() => removeProjectForSelectedClient(selectedProject.id)} className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200">Xóa dự án</button>
                           </div>
                           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                            <input type="datetime-local" value={selectedProject.registeredAt?.slice(0, 16)} onChange={e => updateSelectedProject(selectedProject.id, { registeredAt: new Date(e.target.value).toISOString() })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                            <input type="datetime-local" value={selectedProject.deadlineAt?.slice(0, 16)} onChange={e => updateSelectedProject(selectedProject.id, { deadlineAt: new Date(e.target.value).toISOString() })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <input type="datetime-local" value={toDateTimeLocalValue(selectedProject.registeredAt)} onChange={e => updateSelectedProject(selectedProject.id, { registeredAt: e.target.value })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <input type="datetime-local" value={toDateTimeLocalValue(selectedProject.deadlineAt)} onChange={e => updateSelectedProject(selectedProject.id, { deadlineAt: e.target.value })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                             <input value={selectedProject.budgetVnd} onChange={e => updateSelectedProject(selectedProject.id, { budgetVnd: Number((e.target.value || "0").replace(/\D/g, "")) })} placeholder="Chi phí dự án (VNĐ)" className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                           </div>
 
@@ -1282,12 +1308,89 @@ export default function AdminPage() {
                 <input value={settings.email || ""} onChange={e => updateSettings({ email: e.target.value })} placeholder="Email" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={settings.zalo || ""} onChange={e => updateSettings({ zalo: e.target.value })} placeholder="Zalo" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={settings.fanpage || ""} onChange={e => updateSettings({ fanpage: e.target.value })} placeholder="Fanpage URL" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
+                  <h4 className="text-sm font-semibold text-white">Soft UI Sounds</h4>
+                  <label className="flex items-center justify-between text-sm text-gray-300">
+                    Bật âm thanh tương tác
+                    <input type="checkbox" checked={settings.softSoundsEnabled !== false} onChange={e => updateSettings({ softSoundsEnabled: e.target.checked })} />
+                  </label>
+                  <label className="text-xs text-gray-400">Âm lượng: {Math.round((settings.softSoundsVolume ?? 0.05) * 100)}%</label>
+                  <input
+                    type="range"
+                    min={0}
+                    max={0.2}
+                    step={0.01}
+                    value={settings.softSoundsVolume ?? 0.05}
+                    onChange={e => updateSettings({ softSoundsVolume: Number(e.target.value) })}
+                    className="w-full"
+                  />
+                </div>
+                <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
+                  <h4 className="text-sm font-semibold text-white">Linh vật AI</h4>
+                  <label className="flex items-center justify-between text-sm text-gray-300">
+                    Bật linh vật
+                    <input type="checkbox" checked={settings.mascotEnabled !== false} onChange={e => updateSettings({ mascotEnabled: e.target.checked })} />
+                  </label>
+                  <select value={selectedMascotPlatform} onChange={e => setSelectedMascotPlatform(e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white">
+                    <option value="home">Trang chủ</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="zalo">Zalo</option>
+                    <option value="googlemaps">Google Maps</option>
+                    <option value="website">Website</option>
+                  </select>
+                  <textarea
+                    value={settings.mascotMessages?.[selectedMascotPlatform] || ""}
+                    onChange={e =>
+                      updateSettings({
+                        mascotMessages: {
+                          ...(settings.mascotMessages || {}),
+                          [selectedMascotPlatform]: e.target.value,
+                        },
+                      })
+                    }
+                    placeholder="Nội dung bong bóng chat linh vật"
+                    className="h-24 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                  />
+                </div>
                 <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                 <h3 className="font-bold text-white">Tracking & Scripts</h3>
                 <input value={settings.googleAnalytics || ""} onChange={e => updateSettings({ googleAnalytics: e.target.value })} placeholder="GA4 ID" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <textarea value={settings.headJs || ""} onChange={e => updateSettings({ headJs: e.target.value })} placeholder="Head Scripts" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-white" />
+                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-white">Xem mã nguồn (chỉ đọc)</h4>
+                    <button
+                      onClick={async () => {
+                        const next = !showSourceViewer;
+                        setShowSourceViewer(next);
+                        if (next && sourceFiles.length === 0) await loadSourceFiles();
+                      }}
+                      className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white"
+                    >
+                      {showSourceViewer ? "Ẩn" : "Mở"}
+                    </button>
+                  </div>
+                  {showSourceViewer && (
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                      <div className="max-h-72 overflow-auto rounded-lg border border-white/10 bg-black/30 p-2 text-xs text-gray-300">
+                        {sourceFiles.map(file => (
+                          <button key={file} onClick={() => openSourceFile(file)} className="block w-full rounded px-2 py-1 text-left hover:bg-white/10">
+                            {file}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="space-y-2">
+                        <p className="truncate text-xs text-gray-400">{selectedSourceFile || "Chọn file để xem"}</p>
+                        <textarea readOnly value={selectedSourceContent} className="h-72 w-full rounded-lg border border-white/10 bg-black/40 p-2 font-mono text-xs text-gray-200" />
+                        <button onClick={() => navigator.clipboard.writeText(selectedSourceContent)} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Copy nội dung</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
