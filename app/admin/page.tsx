@@ -11,6 +11,7 @@ import {
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
+import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type PortalReport } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -93,6 +94,14 @@ export default function AdminPage() {
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
+  const [pageContent, setPageContent] = useState<ContentOverride>({
+    vision: "",
+    mission: "",
+    responsibility: "",
+    stats: [{ label: "", value: "" }],
+    processTabs: [{ label: "Quy trình", steps: [{ step: 1, title: "", desc: "" }] }],
+    faqs: [{ q: "", a: "" }],
+  });
 
   const visitorChartData = Array.from({ length: 12 }, (_, i) => ({
     name: `Tuần ${i + 1}`,
@@ -108,6 +117,102 @@ export default function AdminPage() {
     if (auth === "1") setAuthenticated(true);
     try { setSeoData(JSON.parse(localStorage.getItem("bpm_seo") || "{}")); } catch (e) {}
   }, []);
+
+  useEffect(() => {
+    if (selectedPlatform === "home") return;
+    const stored = getContent(selectedPlatform);
+    if (stored) {
+      setPageContent(stored);
+    } else {
+      setPageContent({
+        vision: "",
+        mission: "",
+        responsibility: "",
+        stats: [{ label: "", value: "" }],
+        processTabs: [{ label: "Quy trình", steps: [{ step: 1, title: "", desc: "" }] }],
+        faqs: [{ q: "", a: "" }],
+      });
+    }
+  }, [selectedPlatform]);
+
+  const savePageContent = () => {
+    if (selectedPlatform !== "home") {
+      saveContent(selectedPlatform, pageContent);
+      alert("Đã lưu nội dung trang con");
+    }
+  };
+
+  const updatePageContentField = (field: keyof ContentOverride, value: any) => {
+    setPageContent(prev => ({ ...prev, [field]: value }));
+  };
+
+  const updateStat = (index: number, field: "label" | "value", value: string) => {
+    setPageContent(prev => {
+      const stats = [...(prev.stats || [])];
+      stats[index] = { ...(stats[index] || { label: "", value: "" }), [field]: value };
+      return { ...prev, stats };
+    });
+  };
+
+  const addStat = () => {
+    setPageContent(prev => ({ ...prev, stats: [...(prev.stats || []), { label: "", value: "" }] }));
+  };
+
+  const removeStat = (index: number) => {
+    setPageContent(prev => ({ ...prev, stats: (prev.stats || []).filter((_, i) => i !== index) }));
+  };
+
+  const updateProcessStep = (index: number, field: "title" | "desc", value: string) => {
+    setPageContent(prev => {
+      const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
+      const tab = { ...tabs[0] };
+      const steps = [...(tab.steps || [])];
+      steps[index] = { ...(steps[index] || { step: index + 1, title: "", desc: "" }), [field]: value };
+      steps[index].step = index + 1;
+      tab.steps = steps;
+      tabs[0] = tab;
+      return { ...prev, processTabs: tabs };
+    });
+  };
+
+  const addProcessStep = () => {
+    setPageContent(prev => {
+      const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
+      const tab = { ...tabs[0] };
+      const steps = [...(tab.steps || [])];
+      steps.push({ step: steps.length + 1, title: "", desc: "" });
+      tab.steps = steps;
+      tabs[0] = tab;
+      return { ...prev, processTabs: tabs };
+    });
+  };
+
+  const removeProcessStep = (index: number) => {
+    setPageContent(prev => {
+      const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
+      const tab = { ...tabs[0] };
+      const steps = (tab.steps || []).filter((_, i) => i !== index).map((step, i) => ({ ...step, step: i + 1 }));
+      tab.steps = steps;
+      tabs[0] = tab;
+      return { ...prev, processTabs: tabs };
+    });
+  };
+
+  const updateFaq = (index: number, field: "q" | "a", value: string) => {
+    setPageContent(prev => {
+      const faqs = [...(prev.faqs || [])];
+      faqs[index] = { ...(faqs[index] || { q: "", a: "" }), [field]: value };
+      return { ...prev, faqs };
+    });
+  };
+
+  const addFaq = () => {
+    setPageContent(prev => ({ ...prev, faqs: [...(prev.faqs || []), { q: "", a: "" }] }));
+  };
+
+  const removeFaq = (index: number) => {
+    setPageContent(prev => ({ ...prev, faqs: (prev.faqs || []).filter((_, i) => i !== index) }));
+  };
 
   const refreshOrders = async () => setOrders([...(await db.orders.getAll())].reverse());
   const refreshLeads = async () => setLeads([...(await db.leads.getAll())].reverse());
@@ -255,10 +360,73 @@ export default function AdminPage() {
                   </div>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Nội dung {selectedPlatform}</h3>
-                  <textarea value={settings.cms[selectedPlatform]?.vision || ""} onChange={e => updateCMS(selectedPlatform, "vision", e.target.value)} placeholder="Tầm nhìn" className="w-full h-24 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                  <textarea value={settings.cms[selectedPlatform]?.mission || ""} onChange={e => updateCMS(selectedPlatform, "mission", e.target.value)} placeholder="Sứ mệnh" className="w-full h-24 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-bold text-white">Nội dung {selectedPlatform}</h3>
+                      <p className="text-sm text-gray-400">Chỉnh sửa tầm nhìn, sứ mệnh, thống kê, quy trình và FAQ của dịch vụ.</p>
+                    </div>
+                    <button onClick={savePageContent} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu nội dung trang con</button>
+                  </div>
+
+                  <div className="grid gap-6 lg:grid-cols-2">
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <h4 className="text-sm font-bold text-white">Giới thiệu về dịch vụ</h4>
+                      <textarea value={pageContent.vision || ""} onChange={e => updatePageContentField("vision", e.target.value)} placeholder="Tầm nhìn" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
+                      <textarea value={pageContent.mission || ""} onChange={e => updatePageContentField("mission", e.target.value)} placeholder="Sứ mệnh" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
+                      <textarea value={pageContent.responsibility || ""} onChange={e => updatePageContentField("responsibility", e.target.value)} placeholder="Trách nhiệm" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
+                    </div>
+
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-bold text-white">Statistics</h4>
+                        <button onClick={addStat} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">Thêm số</button>
+                      </div>
+                      {(pageContent.stats || []).map((stat, index) => (
+                        <div key={index} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+                          <input value={stat.label || ""} onChange={e => updateStat(index, "label", e.target.value)} placeholder="Nhãn" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          <input value={stat.value || ""} onChange={e => updateStat(index, "value", e.target.value)} placeholder="Giá trị" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          <button onClick={() => removeStat(index)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-6 lg:grid-cols-2">
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-bold text-white">Quy trình triển khai</h4>
+                        <button onClick={addProcessStep} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">Thêm bước</button>
+                      </div>
+                      {(pageContent.processTabs?.[0]?.steps || []).map((step, index) => (
+                        <div key={index} className="space-y-2 rounded-2xl border border-white/10 bg-black/10 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="text-xs text-gray-400">Bước {index + 1}</span>
+                            <button onClick={() => removeProcessStep(index)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa</button>
+                          </div>
+                          <input value={step.title || ""} onChange={e => updateProcessStep(index, "title", e.target.value)} placeholder="Tiêu đề bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          <textarea value={step.desc || ""} onChange={e => updateProcessStep(index, "desc", e.target.value)} placeholder="Mô tả bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" rows={3} />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-bold text-white">Câu hỏi thường gặp</h4>
+                        <button onClick={addFaq} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">Thêm FAQ</button>
+                      </div>
+                      {(pageContent.faqs || []).map((faq, index) => (
+                        <div key={index} className="space-y-2 rounded-2xl border border-white/10 bg-black/10 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="text-xs text-gray-400">Câu hỏi {index + 1}</span>
+                            <button onClick={() => removeFaq(index)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa</button>
+                          </div>
+                          <input value={faq.q || ""} onChange={e => updateFaq(index, "q", e.target.value)} placeholder="Câu hỏi" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          <textarea value={faq.a || ""} onChange={e => updateFaq(index, "a", e.target.value)} placeholder="Câu trả lời" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" rows={3} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
