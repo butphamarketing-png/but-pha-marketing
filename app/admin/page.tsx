@@ -168,12 +168,12 @@ export default function AdminPage() {
   const updateProcessStep = (index: number, field: "title" | "desc", value: string) => {
     setPageContent(prev => {
       const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
-      const tab = { ...tabs[0] };
+      const tab = { ...tabs[selectedProcessTab] };
       const steps = [...(tab.steps || [])];
       steps[index] = { ...(steps[index] || { step: index + 1, title: "", desc: "" }), [field]: value };
       steps[index].step = index + 1;
       tab.steps = steps;
-      tabs[0] = tab;
+      tabs[selectedProcessTab] = tab;
       return { ...prev, processTabs: tabs };
     });
   };
