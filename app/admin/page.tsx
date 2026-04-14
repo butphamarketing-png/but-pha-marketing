@@ -93,6 +93,11 @@ export default function AdminPage() {
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
+
+  const visitorChartData = Array.from({ length: 12 }, (_, i) => ({
+    name: `Tuần ${i + 1}`,
+    visits: Math.round(90 + Math.sin((i / 11) * Math.PI * 2) * 30),
+  }));
   const [newReport, setNewReport] = useState<PortalReport>({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
@@ -190,6 +195,26 @@ export default function AdminPage() {
                 <StatCard value={orders.length} label="Đơn hàng" icon={ShoppingCart} color="#3B82F6" />
                 <StatCard value="2.4k" label="Truy cập" icon={BarChart2} color="#10B981" />
                 <StatCard value="15.2M" label="Doanh thu" icon={DollarSign} color="#F59E0B" />
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h2 className="mb-4 text-lg font-bold text-white">Khách truy cập website</h2>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={visitorChartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="visitsGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid stroke="#ffffff15" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fill: "#9CA3AF", fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fill: "#9CA3AF", fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: "#111827", borderRadius: 12, border: "1px solid #374151" }} labelStyle={{ color: "#f8fafc" }} itemStyle={{ color: "#10B981" }} />
+                      <Area type="monotone" dataKey="visits" stroke="#10B981" fill="url(#visitsGradient)" strokeWidth={3} dot={false} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6">
                 <h2 className="mb-4 text-lg font-bold text-white">Quản lý nền tảng</h2>
