@@ -7,6 +7,7 @@ import { ChatbotWidget } from "./ChatbotWidget";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
+import { usePathname } from "next/navigation";
 
 interface SubPageLayoutProps {
   platformName: string;
@@ -35,6 +36,7 @@ function useClickSound() {
 
 export function SubPageLayout({ platformName, primaryColor, children }: SubPageLayoutProps) {
   const { settings } = useAdmin();
+  const pathname = usePathname();
   const [showConsult, setShowConsult] = useState(false);
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
@@ -81,6 +83,40 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
     { id: "faq", label: "FAQ" },
     { id: "contact", label: "Liên hệ" },
   ];
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    const seen = new Set<string>();
+
+    sections.forEach((section, idx) => {
+      const target = document.getElementById(section.id);
+      if (!target) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            setActiveSection(idx);
+            if (seen.has(section.id)) return;
+            seen.add(section.id);
+            window.dispatchEvent(
+              new CustomEvent("mascot-section-change", {
+                detail: {
+                  sectionId: section.id,
+                  sectionLabel: section.label,
+                  platform: pathname.replace("/", "") || "home",
+                },
+              }),
+            );
+          });
+        },
+        { threshold: 0.45 },
+      );
+      observer.observe(target);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-background text-foreground" style={{ "--platform-color": primaryColor } as React.CSSProperties}>

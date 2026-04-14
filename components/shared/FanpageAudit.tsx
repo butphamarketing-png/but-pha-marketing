@@ -178,28 +178,31 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
     return true;
   };
 
-  const triggerMascotInvalid = () => {
-    window.dispatchEvent(
-      new CustomEvent("mascot-alert", {
-        detail: {
-          message: settings.mascotErrorMessages?.[platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
-          durationMs: 5000,
-        },
-      }),
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
     if (!isValidVNPhone(form.phone)) {
       setFormError("Số điện thoại chưa đúng định dạng Việt Nam.");
-      triggerMascotInvalid();
+      window.dispatchEvent(
+        new CustomEvent("mascot-alert", {
+          detail: {
+            message: settings.mascotErrorMessages?.[platform]?.phone || "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!",
+            durationMs: 5000,
+          },
+        }),
+      );
       return;
     }
     if (!isValidPlatformLink(form.url)) {
       setFormError("Link/tên nền tảng chưa đúng chuẩn, vui lòng nhập lại.");
-      triggerMascotInvalid();
+      window.dispatchEvent(
+        new CustomEvent("mascot-alert", {
+          detail: {
+            message: settings.mascotErrorMessages?.[platform]?.link || "Link chưa đúng chuẩn rồi, bạn nhập lại giúp mình nhé!",
+            durationMs: 5000,
+          },
+        }),
+      );
       return;
     }
     await db.leads.add({ type: "audit", phone: form.phone, url: form.url, platform });

@@ -6,15 +6,18 @@ export function AudioGuide({ text, color }: { text: string; color?: string }) {
 
   const toggleSpeak = () => {
     if (isPlaying) {
-      window.speechSynthesis.cancel();
       setIsPlaying(false);
     } else {
-      window.speechSynthesis.cancel(); // clear previous
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "vi-VN";
-      utterance.onend = () => setIsPlaying(false);
-      window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
+      window.dispatchEvent(
+        new CustomEvent("mascot-alert", {
+          detail: {
+            message: text,
+            durationMs: 5000,
+          },
+        }),
+      );
+      window.setTimeout(() => setIsPlaying(false), 5000);
     }
   };
 

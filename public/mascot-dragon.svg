@@ -1,30 +1,36 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(54 36) rotate(51) scale(78 72)">
-      <stop stop-color="#FFB347"/>
-      <stop offset="0.6" stop-color="#FF6A00"/>
-      <stop offset="1" stop-color="#E54900"/>
+    <radialGradient id="body" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(54 33) rotate(48) scale(82 78)">
+      <stop stop-color="#FFC57A"/>
+      <stop offset="0.55" stop-color="#FF8A47"/>
+      <stop offset="1" stop-color="#FF5B3D"/>
     </radialGradient>
+    <linearGradient id="belly" x1="64" y1="78" x2="64" y2="111" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2D8"/>
+      <stop offset="1" stop-color="#FFE3BD"/>
+    </linearGradient>
   </defs>
-  <ellipse cx="64" cy="118" rx="32" ry="7" fill="#000" fill-opacity="0.25"/>
-  <path d="M28 76C28 55 44 36 64 36C84 36 100 55 100 76C100 97 84 114 64 114C44 114 28 97 28 76Z" fill="url(#g1)"/>
-  <path d="M42 60C42 46 52 34 64 34C76 34 86 46 86 60V67H42V60Z" fill="#FF7C1A"/>
-  <circle cx="51" cy="68" r="12" fill="#2B1200"/>
-  <circle cx="77" cy="68" r="12" fill="#2B1200"/>
-  <circle cx="53" cy="66" r="6" fill="white"/>
-  <circle cx="79" cy="66" r="6" fill="white"/>
-  <circle cx="55" cy="67" r="2.2" fill="#2B1200"/>
-  <circle cx="81" cy="67" r="2.2" fill="#2B1200"/>
-  <path d="M52 82C55 86 73 86 76 82" stroke="#7A2C00" stroke-width="3" stroke-linecap="round"/>
-  <path d="M42 98C44 89 50 84 56 84H72C78 84 84 89 86 98L82 104H46L42 98Z" fill="#FFE2B5"/>
-  <path d="M39 56L29 47L37 44L44 51L39 56Z" fill="#C74600"/>
-  <path d="M89 56L99 47L91 44L84 51L89 56Z" fill="#C74600"/>
-  <path d="M33 92C24 88 17 80 16 72C24 76 30 80 35 86L33 92Z" fill="#D45200"/>
-  <path d="M95 92C104 88 111 80 112 72C104 76 98 80 93 86L95 92Z" fill="#D45200"/>
-  <path d="M40 108L26 116" stroke="#C74600" stroke-width="6" stroke-linecap="round"/>
-  <path d="M88 108L102 116" stroke="#C74600" stroke-width="6" stroke-linecap="round"/>
-  <circle cx="47" cy="50" r="2" fill="#FFD38C"/>
-  <circle cx="58" cy="46" r="2" fill="#FFD38C"/>
-  <circle cx="69" cy="46" r="2" fill="#FFD38C"/>
-  <circle cx="80" cy="50" r="2" fill="#FFD38C"/>
+  <ellipse cx="64" cy="117" rx="30" ry="7" fill="#000" fill-opacity="0.22"/>
+  <path d="M26 78C26 55 43 36 64 36C85 36 102 55 102 78C102 99 85 116 64 116C43 116 26 99 26 78Z" fill="url(#body)"/>
+  <path d="M44 61C44 47 53 34 64 34C75 34 84 47 84 61V68H44V61Z" fill="#FF9A54"/>
+  <ellipse cx="51.5" cy="69" rx="11.5" ry="12" fill="#3A1808"/>
+  <ellipse cx="76.5" cy="69" rx="11.5" ry="12" fill="#3A1808"/>
+  <ellipse cx="53.5" cy="67" rx="5.8" ry="6.2" fill="#FFF"/>
+  <ellipse cx="78.5" cy="67" rx="5.8" ry="6.2" fill="#FFF"/>
+  <circle cx="55.4" cy="68.2" r="2.3" fill="#3A1808"/>
+  <circle cx="80.4" cy="68.2" r="2.3" fill="#3A1808"/>
+  <path d="M58 80C60.4 83.1 67.6 83.1 70 80" stroke="#8A3515" stroke-width="3" stroke-linecap="round"/>
+  <path d="M43 96C45 88 51 82.6 57.8 82.6H70.2C77 82.6 83 88 85 96L81.5 103.5H46.5L43 96Z" fill="url(#belly)"/>
+  <path d="M37 58L26.5 48L35.3 44.5L43.5 52L37 58Z" fill="#D5532C"/>
+  <path d="M91 58L101.5 48L92.7 44.5L84.5 52L91 58Z" fill="#D5532C"/>
+  <path d="M33 91C25 87 19 80 18 73.5C24.8 76.8 30.5 80.8 35 86L33 91Z" fill="#DE6237"/>
+  <path d="M95 91C103 87 109 80 110 73.5C103.2 76.8 97.5 80.8 93 86L95 91Z" fill="#DE6237"/>
+  <path d="M42 108L29 115" stroke="#D5532C" stroke-width="6" stroke-linecap="round"/>
+  <path d="M86 108L99 115" stroke="#D5532C" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="46.8" cy="51.5" r="1.8" fill="#FFDDB6"/>
+  <circle cx="57.8" cy="47" r="1.8" fill="#FFDDB6"/>
+  <circle cx="69.8" cy="47" r="1.8" fill="#FFDDB6"/>
+  <circle cx="80.8" cy="51.5" r="1.8" fill="#FFDDB6"/>
+  <ellipse cx="45" cy="78.5" rx="3.6" ry="2.2" fill="#FFA989" fill-opacity="0.75"/>
+  <ellipse cx="83" cy="78.5" rx="3.6" ry="2.2" fill="#FFA989" fill-opacity="0.75"/>
 </svg>

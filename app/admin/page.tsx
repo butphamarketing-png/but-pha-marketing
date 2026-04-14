@@ -120,6 +120,79 @@ export default function AdminPage() {
   const [selectedSourceFile, setSelectedSourceFile] = useState("");
   const [selectedSourceContent, setSelectedSourceContent] = useState("");
 
+  const sectionMessageText =
+    Object.entries(settings.mascotSectionMessages?.[selectedMascotPlatform] || {})
+      .map(([section, text]) => `${section}|${text}`)
+      .join("\n");
+  const mascotErrorPack = settings.mascotErrorMessages?.[selectedMascotPlatform] || {
+    login: "",
+    phone: "",
+    link: "",
+  };
+  const mascotClickMessages = settings.mascotClickMessages?.[selectedMascotPlatform] || [];
+
+  const updateMascotSectionMessages = (raw: string) => {
+    const rows = raw
+      .split("\n")
+      .map(line => line.trim())
+      .filter(Boolean);
+    const map: Record<string, string> = {};
+    rows.forEach((line) => {
+      const [section, ...rest] = line.split("|");
+      if (!section || rest.length === 0) return;
+      map[section.trim()] = rest.join("|").trim();
+    });
+    updateSettings({
+      mascotSectionMessages: {
+        ...(settings.mascotSectionMessages || {}),
+        [selectedMascotPlatform]: map,
+      },
+    });
+  };
+
+  const updateMascotErrorPack = (field: "login" | "phone" | "link", value: string) => {
+    updateSettings({
+      mascotErrorMessages: {
+        ...(settings.mascotErrorMessages || {}),
+        [selectedMascotPlatform]: {
+          ...(settings.mascotErrorMessages?.[selectedMascotPlatform] || { login: "", phone: "", link: "" }),
+          [field]: value,
+        },
+      },
+    });
+  };
+
+  const updateClickMessage = (idx: number, value: string) => {
+    const next = [...mascotClickMessages];
+    next[idx] = value;
+    updateSettings({
+      mascotClickMessages: {
+        ...(settings.mascotClickMessages || {}),
+        [selectedMascotPlatform]: next,
+      },
+    });
+  };
+
+  const addClickMessage = () => {
+    const next = [...mascotClickMessages, `Câu click ${mascotClickMessages.length + 1}`];
+    updateSettings({
+      mascotClickMessages: {
+        ...(settings.mascotClickMessages || {}),
+        [selectedMascotPlatform]: next,
+      },
+    });
+  };
+
+  const removeClickMessage = (idx: number) => {
+    const next = mascotClickMessages.filter((_, i) => i !== idx);
+    updateSettings({
+      mascotClickMessages: {
+        ...(settings.mascotClickMessages || {}),
+        [selectedMascotPlatform]: next,
+      },
+    });
+  };
+
   const createDefaultPackage = (index: number): PackageOverride => ({
     name: index === 0 ? "Gói Cơ Bản" : index === 1 ? "Gói Nâng Cao" : "Gói VIP",
     price: index === 0 ? "1.000.000đ" : index === 1 ? "2.000.000đ" : "3.500.000đ",
@@ -1366,19 +1439,54 @@ export default function AdminPage() {
                     placeholder="Link âm thanh (.mp3/.wav) cho linh vật trang này"
                     className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
                   />
-                  <input
-                    value={settings.mascotErrorMessages?.[selectedMascotPlatform] || ""}
-                    onChange={e =>
-                      updateSettings({
-                        mascotErrorMessages: {
-                          ...(settings.mascotErrorMessages || {}),
-                          [selectedMascotPlatform]: e.target.value,
-                        },
-                      })
-                    }
-                    placeholder="Câu khi khách nhập sai (rồng sẽ nói)"
-                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                  />
+                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
+                    <p className="text-xs font-bold text-white">1) Câu lỗi nhập sai (chỉnh được)</p>
+                    <input
+                      value={mascotErrorPack.login}
+                      onChange={e => updateMascotErrorPack("login", e.target.value)}
+                      placeholder="Sai tài khoản / mật khẩu"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                    />
+                    <input
+                      value={mascotErrorPack.phone}
+                      onChange={e => updateMascotErrorPack("phone", e.target.value)}
+                      placeholder="Sai số điện thoại"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                    />
+                    <input
+                      value={mascotErrorPack.link}
+                      onChange={e => updateMascotErrorPack("link", e.target.value)}
+                      placeholder="Sai link chuẩn đoán"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
+                    <p className="text-xs font-bold text-white">2) Câu khi lướt section (chỉnh được)</p>
+                    <textarea
+                      value={sectionMessageText}
+                      onChange={e => updateMascotSectionMessages(e.target.value)}
+                      placeholder={"Mỗi dòng: sectionId|nội dung\nVí dụ:\nslideshow|Đây là menu tổng quan\npricing|Đây là dịch vụ và bảng giá"}
+                      className="h-28 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-bold text-white">3) Câu theo số lần click (chỉnh + thêm)</p>
+                      <button type="button" onClick={addClickMessage} className="rounded-lg border border-white/20 px-2 py-1 text-[11px] text-white">Thêm lần click</button>
+                    </div>
+                    {mascotClickMessages.map((line, idx) => (
+                      <div key={`click-msg-${idx}`} className="flex items-center gap-2">
+                        <span className="w-16 text-[11px] text-gray-300">Lần {idx + 1}</span>
+                        <input
+                          value={line}
+                          onChange={e => updateClickMessage(idx, e.target.value)}
+                          placeholder={`Câu nói lần ${idx + 1}`}
+                          className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                        />
+                        <button type="button" onClick={() => removeClickMessage(idx)} className="rounded-lg border border-red-400/30 px-2 py-1 text-[11px] text-red-200">Xóa</button>
+                      </div>
+                    ))}
+                  </div>
                   <label className="block rounded-lg border border-dashed border-white/20 px-3 py-2 text-xs text-gray-300">
                     Tải file âm thanh từ máy
                     <input

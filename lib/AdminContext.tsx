@@ -60,7 +60,13 @@ interface SiteSettings {
   mascotEnabled?: boolean;
   mascotMessages?: Record<string, string>;
   mascotAudioUrls?: Record<string, string>;
-  mascotErrorMessages?: Record<string, string>;
+  mascotErrorMessages?: Record<string, {
+    login: string;
+    phone: string;
+    link: string;
+  }>;
+  mascotSectionMessages?: Record<string, Record<string, string>>;
+  mascotClickMessages?: Record<string, string[]>;
 }
 
 interface AdminContextType {
@@ -169,13 +175,43 @@ const defaultSettings: SiteSettings = {
     website: "",
   },
   mascotErrorMessages: {
-    home: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    facebook: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    tiktok: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    instagram: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    zalo: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    googlemaps: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
-    website: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    home: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link chưa đúng chuẩn rồi, bạn nhập lại giúp mình nhé!" },
+    facebook: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link Facebook chưa đúng chuẩn rồi nhé!" },
+    tiktok: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link TikTok chưa đúng chuẩn rồi nhé!" },
+    instagram: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link Instagram chưa đúng chuẩn rồi nhé!" },
+    zalo: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link Zalo chưa đúng chuẩn rồi nhé!" },
+    googlemaps: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link Google Maps chưa đúng chuẩn rồi nhé!" },
+    website: { login: "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!", phone: "Số điện thoại chưa đúng, bạn kiểm tra lại nhé!", link: "Link website chưa đúng chuẩn rồi nhé!" },
+  },
+  mascotSectionMessages: {
+    home: {},
+    facebook: {
+      slideshow: "Đây là menu tổng quan dịch vụ.",
+      intro: "Đây là phần giới thiệu dịch vụ.",
+      pricing: "Đây là các gói dịch vụ bạn có thể chọn.",
+      audit: "Đây là phần chuẩn đoán sức khỏe kênh.",
+      process: "Đây là quy trình triển khai cho bạn.",
+      faq: "Đây là các câu hỏi thường gặp.",
+      contact: "Đây là phần liên hệ để được tư vấn.",
+    },
+    tiktok: {},
+    instagram: {},
+    zalo: {},
+    googlemaps: {},
+    website: {},
+  },
+  mascotClickMessages: {
+    home: [
+      "Xin chào, mình là rồng trợ lý đây!",
+      "Bạn cần mình giới thiệu dịch vụ nào nè?",
+      "Mình tạm ẩn nhé, bấm nút bên trái để gọi lại mình nha!",
+    ],
+    facebook: [],
+    tiktok: [],
+    instagram: [],
+    zalo: [],
+    googlemaps: [],
+    website: [],
   },
 };
 

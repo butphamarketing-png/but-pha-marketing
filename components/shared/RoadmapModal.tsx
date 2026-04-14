@@ -43,7 +43,7 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         setError("Sai tên đăng nhập hoặc mật khẩu");
         window.dispatchEvent(new CustomEvent("mascot-alert", {
           detail: {
-            message: settings.mascotErrorMessages?.[authForm.platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
+            message: settings.mascotErrorMessages?.[authForm.platform]?.login || "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!",
             durationMs: 5000,
           },
         }));
@@ -52,7 +52,7 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       setError("Có lỗi xảy ra, vui lòng thử lại");
       window.dispatchEvent(new CustomEvent("mascot-alert", {
         detail: {
-          message: settings.mascotErrorMessages?.[authForm.platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
+          message: settings.mascotErrorMessages?.[authForm.platform]?.login || "Bạn nhập sai tài khoản hoặc mật khẩu rồi nhé!",
           durationMs: 5000,
         },
       }));
