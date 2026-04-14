@@ -11,6 +11,7 @@ import {
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
+import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type ClientProject } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -555,13 +556,6 @@ export default function AdminPage() {
     const safe = next.length > 0 ? next : [createEmptyProject(1)];
     setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: safe as any }) : prev);
     setSelectedClientProjectId(safe[0].id);
-  };
-
-  const runEditorCommand = (editorId: string, command: string, value?: string) => {
-    const editor = document.getElementById(editorId);
-    if (!editor) return;
-    (editor as HTMLElement).focus();
-    document.execCommand(command, false, value);
   };
 
   useEffect(() => {
@@ -1254,38 +1248,19 @@ export default function AdminPage() {
 
                           <div className="space-y-2">
                             <p className="text-xs font-semibold text-gray-300">Nội dung quản lý dự án</p>
-                            <div className="flex flex-wrap gap-2">
-                              <button onClick={() => runEditorCommand("project-progress-editor", "bold")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">B</button>
-                              <button onClick={() => runEditorCommand("project-progress-editor", "italic")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">I</button>
-                              <button onClick={() => runEditorCommand("project-progress-editor", "foreColor", "#ef4444")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Đỏ</button>
-                              <button onClick={() => runEditorCommand("project-progress-editor", "foreColor", "#22c55e")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Xanh</button>
-                              <button onClick={() => runEditorCommand("project-progress-editor", "fontSize", "4")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">A+</button>
-                            </div>
-                            <div
-                              id="project-progress-editor"
-                              contentEditable
-                              suppressContentEditableWarning
-                              onInput={e => updateSelectedProject(selectedProject.id, { progressDoc: (e.currentTarget as HTMLDivElement).innerHTML })}
-                              dangerouslySetInnerHTML={{ __html: selectedProject.progressDoc || "<p></p>" }}
-                              className="min-h-[150px] rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none"
+                            <RichTextEditor
+                              value={selectedProject.progressDoc || "<p></p>"}
+                              onChange={(html) => updateSelectedProject(selectedProject.id, { progressDoc: html })}
+                              minHeight={180}
                             />
                           </div>
 
                           <div className="space-y-2">
                             <p className="text-xs font-semibold text-gray-300">Báo cáo dự án</p>
-                            <div className="flex flex-wrap gap-2">
-                              <button onClick={() => runEditorCommand("project-result-editor", "bold")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">B</button>
-                              <button onClick={() => runEditorCommand("project-result-editor", "italic")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">I</button>
-                              <button onClick={() => runEditorCommand("project-result-editor", "foreColor", "#a855f7")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Tím</button>
-                              <button onClick={() => runEditorCommand("project-result-editor", "fontSize", "5")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">A++</button>
-                            </div>
-                            <div
-                              id="project-result-editor"
-                              contentEditable
-                              suppressContentEditableWarning
-                              onInput={e => updateSelectedProject(selectedProject.id, { resultDoc: (e.currentTarget as HTMLDivElement).innerHTML })}
-                              dangerouslySetInnerHTML={{ __html: selectedProject.resultDoc || "<p></p>" }}
-                              className="min-h-[150px] rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none"
+                            <RichTextEditor
+                              value={selectedProject.resultDoc || "<p></p>"}
+                              onChange={(html) => updateSelectedProject(selectedProject.id, { resultDoc: html })}
+                              minHeight={180}
                             />
                           </div>
 
