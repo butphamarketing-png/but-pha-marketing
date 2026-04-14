@@ -14,6 +14,7 @@ import { getContent, buildDefaultProcessTabs } from "@/lib/pageContent";
 export interface PricingPackage {
   name: string;
   price: string;
+  period?: "month" | "lifetime";
   popular?: boolean;
   features: string[];
   allFeatures: string[];
@@ -250,7 +251,13 @@ function Stats({ stats, color }: { stats: { label: string; value: string }[]; co
 function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color: string; onCheckout: (pkg: CheckoutPkg) => void }) {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
   const tab = tabs[activeTab];
+  const showPager = tab.packages.length > 3;
+  const pageSize = 3;
+  const maxPage = Math.max(0, Math.ceil(tab.packages.length / pageSize) - 1);
+  const start = page * pageSize;
+  const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
 
   return (
     <section data-section="pricing" id="pricing" className="py-20 px-4">
@@ -259,21 +266,43 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
         <p className="mb-10 text-center text-gray-400">Đa dạng lựa chọn phù hợp với mọi nhu cầu</p>
         <div className="mb-10 flex flex-wrap justify-center gap-3">
           {tabs.map((t, i) => (
-            <button key={i} onClick={() => { setActiveTab(i); setHoveredIdx(null); }} className="rounded-full px-5 py-2 text-sm font-semibold transition-all" style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.07)", color: "#ccc" }}>
+            <button key={i} onClick={() => { setActiveTab(i); setHoveredIdx(null); setPage(0); }} className="rounded-full px-5 py-2 text-sm font-semibold transition-all" style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.07)", color: "#ccc" }}>
               {t.label}
             </button>
           ))}
         </div>
+        {showPager && (
+          <div className="mb-6 flex items-center justify-center gap-3">
+            <button
+              onClick={() => setPage(prev => Math.max(0, prev - 1))}
+              disabled={page === 0}
+              className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Lướt trái"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="text-xs text-gray-400">Trang {page + 1}/{maxPage + 1}</span>
+            <button
+              onClick={() => setPage(prev => Math.min(maxPage, prev + 1))}
+              disabled={page === maxPage}
+              className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Lướt phải"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
         <div className="grid gap-6 md:grid-cols-3">
-          {tab.packages.map((pkg, i) => {
+          {visiblePackages.map((pkg, i) => {
+            const originalIndex = showPager ? start + i : i;
             const isHovered = hoveredIdx === i;
             const isPopular = !!pkg.popular;
             return (
-              <motion.div key={`${activeTab}-${i}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="relative flex flex-col rounded-2xl border p-6 cursor-pointer" style={{ borderColor: isHovered || isPopular ? color : "rgba(255,255,255,0.1)", backgroundColor: isHovered ? `${color}15` : isPopular ? "rgba(109,40,217,0.12)" : "var(--card)", boxShadow: isHovered ? `0 0 30px ${color}30, 0 8px 32px rgba(0,0,0,0.4)` : isPopular ? "0 8px 32px rgba(109,40,217,0.2)" : "none", transform: isHovered ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease" }}>
+              <motion.div key={`${activeTab}-${originalIndex}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="relative flex flex-col rounded-2xl border p-6 cursor-pointer" style={{ borderColor: isHovered || isPopular ? color : "rgba(255,255,255,0.1)", backgroundColor: isHovered ? `${color}15` : isPopular ? "rgba(109,40,217,0.12)" : "var(--card)", boxShadow: isHovered ? `0 0 30px ${color}30, 0 8px 32px rgba(0,0,0,0.4)` : isPopular ? "0 8px 32px rgba(109,40,217,0.2)" : "none", transform: isHovered ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease" }}>
                 {isPopular && <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold text-white" style={{ backgroundColor: color }}>Phổ biến nhất</span>}
                 <h3 className="mb-2 text-lg font-bold text-white">{pkg.name}</h3>
                 <p className="mb-1 text-3xl font-black" style={{ color }}>{pkg.price}</p>
-                <p className="mb-4 text-xs text-gray-500">/tháng</p>
+                <p className="mb-4 text-xs text-gray-500">{pkg.period === "lifetime" ? "/vĩnh viễn" : "/tháng"}</p>
                 <ul className="mb-6 flex-1 space-y-2">
                   {pkg.features.map((f, fi) => <li key={fi} className="flex items-start gap-2 text-sm text-gray-300"><span className="mt-0.5 text-green-400">✓</span>{f}</li>)}
                 </ul>
@@ -421,9 +450,9 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       };
     })
   }));
-
   const override = getContent(platformKey);
-  const processTabs = override?.processTabs ?? buildDefaultProcessTabs(updatedTabs.map(t => t.label));
+  const tabsForRender = override?.tabs || updatedTabs;
+  const processTabs = override?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map(t => t.label));
   const cases = settings.media[platformKey]?.cases || [];
   const beforeAfterBefore = override?.beforeAfterBefore;
   const beforeAfterAfter = override?.beforeAfterAfter;
@@ -449,8 +478,8 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
 
       {settings.visibility.pricing !== false && (
         <>
-          <PricingSection tabs={updatedTabs} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
-          <ComparisonTable tabs={updatedTabs} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
+          <PricingSection tabs={tabsForRender} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
+          <ComparisonTable tabs={tabsForRender} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
         </>
       )}
       

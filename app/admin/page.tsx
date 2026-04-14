@@ -11,7 +11,7 @@ import {
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
-import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
+import { getContent, saveContent, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type PortalReport } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -95,6 +95,8 @@ export default function AdminPage() {
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
+  const [selectedServiceTab, setSelectedServiceTab] = useState(0);
+  const [serviceContent, setServiceContent] = useState<ContentOverride>({ tabs: [] });
   const [pageContent, setPageContent] = useState<ContentOverride>({
     vision: "",
     mission: "",
@@ -112,6 +114,22 @@ export default function AdminPage() {
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
   const [editingReports, setEditingReports] = useState<PortalReport[]>([]);
+
+  const createDefaultPackage = (index: number): PackageOverride => ({
+    name: index === 0 ? "Gói Cơ Bản" : index === 1 ? "Gói Nâng Cao" : "Gói VIP",
+    price: index === 0 ? "1.000.000đ" : index === 1 ? "2.000.000đ" : "3.500.000đ",
+    period: "month",
+    popular: index === 1,
+    features: [],
+    allFeatures: [],
+    audioText: "",
+  });
+
+  const createDefaultServiceTabs = (): TabOverride[] => ([
+    { label: "Xây Dựng", packages: [createDefaultPackage(0), createDefaultPackage(1), createDefaultPackage(2)] },
+    { label: "Chăm Sóc", packages: [createDefaultPackage(0), createDefaultPackage(1), createDefaultPackage(2)] },
+    { label: "Quảng Cáo", packages: [createDefaultPackage(0), createDefaultPackage(1), createDefaultPackage(2)] },
+  ]);
 
   useEffect(() => {
     const auth = localStorage.getItem("admin_auth");
@@ -137,6 +155,74 @@ export default function AdminPage() {
       setSelectedProcessTab(0);
     }
   }, [selectedPlatform]);
+
+  useEffect(() => {
+    const saved = getContent(selectedPkgPlatform);
+    const tabs = saved?.tabs && saved.tabs.length > 0 ? saved.tabs : createDefaultServiceTabs();
+    setServiceContent(prev => ({ ...prev, ...(saved || {}), tabs }));
+    setSelectedServiceTab(0);
+  }, [selectedPkgPlatform]);
+
+  const updateServiceTabs = (tabs: TabOverride[]) => {
+    setServiceContent(prev => ({ ...prev, tabs }));
+  };
+
+  const saveServiceConfig = () => {
+    saveContent(selectedPkgPlatform, serviceContent);
+    alert("Đã lưu quản lý dịch vụ");
+  };
+
+  const updateServiceLabel = (tabIndex: number, label: string) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    if (!tabs[tabIndex]) return;
+    tabs[tabIndex] = { ...tabs[tabIndex], label };
+    updateServiceTabs(tabs);
+  };
+
+  const addServiceTab = () => {
+    const tabs = [...(serviceContent.tabs || []), { label: `Dịch vụ ${(serviceContent.tabs || []).length + 1}`, packages: [createDefaultPackage(0)] }];
+    updateServiceTabs(tabs);
+    setSelectedServiceTab(tabs.length - 1);
+  };
+
+  const removeServiceTab = (tabIndex: number) => {
+    const tabs = (serviceContent.tabs || []).filter((_, idx) => idx !== tabIndex);
+    updateServiceTabs(tabs.length > 0 ? tabs : createDefaultServiceTabs());
+    setSelectedServiceTab(0);
+  };
+
+  const addPackageToService = (tabIndex: number) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target) return;
+    tabs[tabIndex] = {
+      ...target,
+      packages: [...target.packages, createDefaultPackage(target.packages.length)],
+    };
+    updateServiceTabs(tabs);
+  };
+
+  const updatePackageField = (tabIndex: number, pkgIndex: number, patch: Partial<PackageOverride>) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target || !target.packages[pkgIndex]) return;
+    const nextPackages = [...target.packages];
+    nextPackages[pkgIndex] = {
+      ...nextPackages[pkgIndex],
+      ...patch,
+    };
+    tabs[tabIndex] = { ...target, packages: nextPackages };
+    updateServiceTabs(tabs);
+  };
+
+  const removePackage = (tabIndex: number, pkgIndex: number) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target) return;
+    const next = target.packages.filter((_, idx) => idx !== pkgIndex);
+    tabs[tabIndex] = { ...target, packages: next };
+    updateServiceTabs(tabs);
+  };
 
   const savePageContent = () => {
     if (selectedPlatform !== "home") {
@@ -493,25 +579,75 @@ export default function AdminPage() {
                 <select value={selectedPkgPlatform} onChange={e => setSelectedPkgPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={async () => {
-                  const list = services.filter(s => s.platform === selectedPkgPlatform);
-                  await db.services.update(selectedPkgPlatform, list);
-                  alert("Đã lưu!");
-                }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu bảng giá</button>
-                <button onClick={() => setServices([{ id: Date.now(), platform: selectedPkgPlatform, name: "Gói mới", price: "0", period: "month", popular: false, features: [], allFeatures: [], audioText: "", process: [], feedbacks: [] }, ...services])} className="rounded-lg bg-white/5 px-4 py-2 text-sm text-white border border-white/10">Thêm gói</button>
+                <button onClick={saveServiceConfig} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu quản lý dịch vụ</button>
+                <button onClick={addServiceTab} className="rounded-lg bg-white/5 px-4 py-2 text-sm text-white border border-white/10">Thêm dịch vụ</button>
               </div>
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {services.filter(s => s.platform === selectedPkgPlatform).map(svc => (
-                  <div key={svc.id} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <input value={svc.name} onChange={e => setServices(services.map(s => s.id === svc.id ? { ...s, name: e.target.value } : s))} className="bg-transparent font-bold text-white outline-none" />
-                      <button onClick={() => setServices(services.filter(s => s.id !== svc.id))} className="text-red-400"><Trash2 size={16} /></button>
+              <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
+                <div className="flex flex-wrap gap-2">
+                  {(serviceContent.tabs || []).map((tab, idx) => (
+                    <button
+                      key={`${tab.label}-${idx}`}
+                      onClick={() => setSelectedServiceTab(idx)}
+                      className={`rounded-full px-4 py-2 text-xs font-semibold transition ${selectedServiceTab === idx ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}
+                    >
+                      {tab.label || `Dịch vụ ${idx + 1}`}
+                    </button>
+                  ))}
+                </div>
+
+                {!!serviceContent.tabs?.[selectedServiceTab] && (
+                  <div className="space-y-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <input
+                        value={serviceContent.tabs[selectedServiceTab].label}
+                        onChange={e => updateServiceLabel(selectedServiceTab, e.target.value)}
+                        placeholder="Tên dịch vụ (Ví dụ: Xây dựng Fanpage)"
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                      <div className="flex gap-2">
+                        <button onClick={() => addPackageToService(selectedServiceTab)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm gói</button>
+                        <button onClick={() => removeServiceTab(selectedServiceTab)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200">Xóa dịch vụ</button>
+                      </div>
                     </div>
-                    <input value={svc.price} onChange={e => setServices(services.map(s => s.id === svc.id ? { ...s, price: e.target.value } : s))} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white" />
-                    <textarea value={svc.features.join("\n")} onChange={e => setServices(services.map(s => s.id === svc.id ? { ...s, features: e.target.value.split("\n") } : s))} className="w-full h-24 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white" placeholder="Tính năng (mỗi dòng 1 mục)" />
-                    <input value={svc.audioText} onChange={e => setServices(services.map(s => s.id === svc.id ? { ...s, audioText: e.target.value } : s))} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white" placeholder="Nội dung Audio" />
+
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      {serviceContent.tabs[selectedServiceTab].packages.map((pkg, pkgIdx) => (
+                        <div key={`${pkg.name}-${pkgIdx}`} className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-xs text-gray-400">Gói {pkgIdx + 1}</p>
+                            <button onClick={() => removePackage(selectedServiceTab, pkgIdx)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200">Xóa gói</button>
+                          </div>
+                          <input value={pkg.name} onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { name: e.target.value })} placeholder="Tên gói" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            <input value={pkg.price} onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { price: e.target.value })} placeholder="Giá (VD: 2.500.000đ)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <select value={pkg.period || "month"} onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { period: e.target.value as "month" | "lifetime" })} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white">
+                              <option value="month">Theo tháng</option>
+                              <option value="lifetime">Vĩnh viễn</option>
+                            </select>
+                          </div>
+                          <label className="flex items-center gap-2 text-xs text-gray-300">
+                            <input type="checkbox" checked={!!pkg.popular} onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { popular: e.target.checked })} />
+                            Gói phổ biến nhất
+                          </label>
+                          <textarea
+                            value={(pkg.features || []).join("\n")}
+                            onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { features: e.target.value.split("\n").map(line => line.trim()).filter(Boolean), allFeatures: e.target.value.split("\n").map(line => line.trim()).filter(Boolean) })}
+                            placeholder="Nội dung gói (mỗi dòng 1 ý)"
+                            rows={6}
+                            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                          />
+                          <textarea
+                            value={pkg.audioText || ""}
+                            onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { audioText: e.target.value })}
+                            placeholder="Text tư vấn bằng âm thanh cho gói này"
+                            rows={3}
+                            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}

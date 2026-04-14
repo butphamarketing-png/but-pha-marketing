@@ -1,6 +1,7 @@
 export interface PackageOverride {
   name: string;
   price: string;
+  period?: "month" | "lifetime";
   popular?: boolean;
   features: string[];
   allFeatures: string[];
