@@ -59,6 +59,8 @@ interface SiteSettings {
   softSoundsVolume?: number;
   mascotEnabled?: boolean;
   mascotMessages?: Record<string, string>;
+  mascotAudioUrls?: Record<string, string>;
+  mascotErrorMessages?: Record<string, string>;
 }
 
 interface AdminContextType {
@@ -156,6 +158,24 @@ const defaultSettings: SiteSettings = {
     zalo: "Chào bạn, hôm nay bứt phá doanh số nhé!",
     googlemaps: "Chào bạn, hôm nay bứt phá doanh số nhé!",
     website: "Chào bạn, hôm nay bứt phá doanh số nhé!",
+  },
+  mascotAudioUrls: {
+    home: "",
+    facebook: "",
+    tiktok: "",
+    instagram: "",
+    zalo: "",
+    googlemaps: "",
+    website: "",
+  },
+  mascotErrorMessages: {
+    home: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    facebook: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    tiktok: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    instagram: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    zalo: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    googlemaps: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
+    website: "Bạn nhập sai rồi, nhập lại giúp mình nhé!",
   },
 };
 

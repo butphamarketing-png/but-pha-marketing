@@ -20,11 +20,15 @@ export function AnimatedMascot() {
   const { settings } = useAdmin();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ x: 220, y: 260 });
-  const velocityRef = useRef({ x: 2.3, y: 2.1 });
+  const velocityRef = useRef({ x: 1.05, y: 0.95 });
+  const lastVelocityRef = useRef({ x: 1.05, y: 0.95 });
   const frameRef = useRef<number | null>(null);
+  const holdingRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const platform = getPlatformFromPath(pathname);
   const message = settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
+  const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
   const hidden = useMemo(() => pathname.startsWith("/admin"), [pathname]);
   const enabled = settings.mascotEnabled !== false && !hidden;
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
@@ -47,6 +51,10 @@ export function AnimatedMascot() {
     setPos({ x, y });
 
     const tick = () => {
+      if (holdingRef.current) {
+        frameRef.current = requestAnimationFrame(tick);
+        return;
+      }
       const v = velocityRef.current;
       x += v.x;
       y += v.y;
@@ -62,6 +70,11 @@ export function AnimatedMascot() {
         v.y *= -1;
         y = Math.max(minY, Math.min(maxY, y));
       }
+      const elem = document.elementFromPoint(x + width / 2, y + height / 2) as HTMLElement | null;
+      if (elem && !elem.closest("[data-mascot='dragon']") && !["HTML", "BODY"].includes(elem.tagName)) {
+        v.x = -v.x * 0.95 + (Math.random() - 0.5) * 0.6;
+        v.y = -v.y * 0.95 + (Math.random() - 0.5) * 0.6;
+      }
       setPos({ x, y });
       frameRef.current = requestAnimationFrame(tick);
     };
@@ -72,9 +85,9 @@ export function AnimatedMascot() {
       const dx = cx - px;
       const dy = cy - py;
       const dist = Math.hypot(dx, dy) || 1;
-      if (dist < 120) {
-        velocityRef.current.x += (dx / dist) * 0.9;
-        velocityRef.current.y += (dy / dist) * 0.9;
+      if (dist < 120 && !holdingRef.current) {
+        velocityRef.current.x += (dx / dist) * 0.35;
+        velocityRef.current.y += (dy / dist) * 0.35;
       }
     };
 
@@ -83,23 +96,60 @@ export function AnimatedMascot() {
       const t = e.touches[0];
       if (t) repelFromPoint(t.clientX, t.clientY);
     };
-    const onScroll = () => {
-      const elem = document.elementFromPoint(x + width / 2, y + height / 2);
-      if (elem && !elem.closest("[data-mascot='dragon']")) {
-        velocityRef.current.x += (Math.random() - 0.5) * 3;
-        velocityRef.current.y += (Math.random() - 0.5) * 3;
+    const stopSpeaking = () => {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
       }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+    const onPointerUp = () => {
+      holdingRef.current = false;
+      velocityRef.current = { ...lastVelocityRef.current };
+      stopSpeaking();
+    };
+    const onMascotAlert = (event: Event) => {
+      const custom = event as CustomEvent<{ message?: string; durationMs?: number }>;
+      const alertMessage = custom.detail?.message || "Bạn nhập sai rồi, nhập lại giúp mình nhé!";
+      const durationMs = custom.detail?.durationMs ?? 5000;
+      holdingRef.current = true;
+      setOpen(true);
+      lastVelocityRef.current = { ...velocityRef.current };
+      velocityRef.current = { x: 0, y: 0 };
+
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(alertMessage);
+        utter.lang = "vi-VN";
+        utter.rate = 1;
+        utter.pitch = 1.08;
+        window.speechSynthesis.speak(utter);
+      }
+      window.setTimeout(() => {
+        holdingRef.current = false;
+        velocityRef.current = { ...lastVelocityRef.current };
+        if ("speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+        }
+      }, durationMs);
     };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+    window.addEventListener("mascot-alert", onMascotAlert as EventListener);
     frameRef.current = requestAnimationFrame(tick);
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+      window.removeEventListener("mascot-alert", onMascotAlert as EventListener);
+      stopSpeaking();
     };
   }, [pathname, enabled]);
 
@@ -115,26 +165,37 @@ export function AnimatedMascot() {
       <motion.button
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
-        onClick={() => {
+        onPointerDown={() => {
           setOpen(true);
-          if ("speechSynthesis" in window) {
+          holdingRef.current = true;
+          lastVelocityRef.current = { ...velocityRef.current };
+          velocityRef.current = { x: 0, y: 0 };
+          if (audioUrl) {
+            if (!audioRef.current) {
+              audioRef.current = new Audio(audioUrl);
+            } else {
+              audioRef.current.src = audioUrl;
+            }
+            audioRef.current.loop = true;
+            audioRef.current.play().catch(() => {});
+          } else if ("speechSynthesis" in window) {
             window.speechSynthesis.cancel();
             const utter = new SpeechSynthesisUtterance(message);
             utter.lang = "vi-VN";
             utter.rate = 1;
-            utter.pitch = 1.1;
+            utter.pitch = 1.08;
             window.speechSynthesis.speak(utter);
           }
         }}
         animate={{ y: [0, -7, 0], rotate: [0, 4, -4, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
-        className="flex h-[76px] w-[76px] items-center justify-center rounded-full border border-white/20 bg-black/20 shadow-xl backdrop-blur-sm"
+        transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+        className="flex h-[78px] w-[78px] items-center justify-center rounded-full border border-pink-200/40 bg-gradient-to-br from-white/30 via-orange-100/20 to-pink-200/15 shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur-sm"
         aria-label="AI Mascot"
       >
         <img
           src="/mascot-dragon.svg"
           alt="Linh vật rồng"
-          className="h-[68px] w-[68px] object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.5)]"
+          className="h-[70px] w-[70px] object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.45)]"
           style={{ filter: dragonStyle.filter, transform: `scale(${dragonStyle.scale})` }}
         />
       </motion.button>

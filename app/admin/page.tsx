@@ -1353,6 +1353,55 @@ export default function AdminPage() {
                     placeholder="Nội dung bong bóng chat linh vật"
                     className="h-24 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
                   />
+                  <input
+                    value={settings.mascotAudioUrls?.[selectedMascotPlatform] || ""}
+                    onChange={e =>
+                      updateSettings({
+                        mascotAudioUrls: {
+                          ...(settings.mascotAudioUrls || {}),
+                          [selectedMascotPlatform]: e.target.value,
+                        },
+                      })
+                    }
+                    placeholder="Link âm thanh (.mp3/.wav) cho linh vật trang này"
+                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                  />
+                  <input
+                    value={settings.mascotErrorMessages?.[selectedMascotPlatform] || ""}
+                    onChange={e =>
+                      updateSettings({
+                        mascotErrorMessages: {
+                          ...(settings.mascotErrorMessages || {}),
+                          [selectedMascotPlatform]: e.target.value,
+                        },
+                      })
+                    }
+                    placeholder="Câu khi khách nhập sai (rồng sẽ nói)"
+                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                  />
+                  <label className="block rounded-lg border border-dashed border-white/20 px-3 py-2 text-xs text-gray-300">
+                    Tải file âm thanh từ máy
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      className="mt-2 block w-full text-xs text-gray-300"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          const result = typeof reader.result === "string" ? reader.result : "";
+                          updateSettings({
+                            mascotAudioUrls: {
+                              ...(settings.mascotAudioUrls || {}),
+                              [selectedMascotPlatform]: result,
+                            },
+                          });
+                        };
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                  </label>
                 </div>
                 <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
               </div>

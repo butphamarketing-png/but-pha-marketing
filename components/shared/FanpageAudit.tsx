@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Activity, BarChart2, ShieldCheck, Zap, Target, Search, Loader2, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 import { db } from "@/lib/useData";
+import { useAdmin } from "@/lib/AdminContext";
 
 interface FanpageAuditProps {
   primaryColor: string;
@@ -112,10 +113,12 @@ const AUDIT_CONFIGS: Record<string, {
 };
 
 export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAuditProps) {
+  const { settings } = useAdmin();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<"form" | "loading" | "result">("form");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
   const [form, setForm] = useState({ url: "", phone: "" });
+  const [formError, setFormError] = useState("");
   const [presentationMode, setPresentationMode] = useState(false);
 
   const cfg = AUDIT_CONFIGS[platform] ?? AUDIT_CONFIGS.facebook;
@@ -162,8 +165,43 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
     };
   }, [step]);
 
+  const isValidVNPhone = (value: string) => /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
+  const isValidPlatformLink = (value: string) => {
+    const input = value.trim();
+    if (!input) return false;
+    if (platform === "website") return /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(input);
+    if (platform === "facebook") return /(facebook\.com|fb\.com)/i.test(input);
+    if (platform === "tiktok") return /(tiktok\.com|vt\.tiktok\.com)/i.test(input);
+    if (platform === "instagram") return /(instagram\.com)/i.test(input);
+    if (platform === "zalo") return /(zalo\.me|zaloapp\.com)/i.test(input);
+    if (platform === "googlemaps") return /(google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(input);
+    return true;
+  };
+
+  const triggerMascotInvalid = () => {
+    window.dispatchEvent(
+      new CustomEvent("mascot-alert", {
+        detail: {
+          message: settings.mascotErrorMessages?.[platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
+          durationMs: 5000,
+        },
+      }),
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
+    if (!isValidVNPhone(form.phone)) {
+      setFormError("Số điện thoại chưa đúng định dạng Việt Nam.");
+      triggerMascotInvalid();
+      return;
+    }
+    if (!isValidPlatformLink(form.url)) {
+      setFormError("Link/tên nền tảng chưa đúng chuẩn, vui lòng nhập lại.");
+      triggerMascotInvalid();
+      return;
+    }
     await db.leads.add({ type: "audit", phone: form.phone, url: form.url, platform });
     setStep("loading");
     setCurrentAuditStep(0);
@@ -274,7 +312,10 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
                         <input
                           required
                           value={form.url}
-                          onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
+                          onChange={e => {
+                            setForm(f => ({ ...f, url: e.target.value }));
+                            if (formError) setFormError("");
+                          }}
                           placeholder={cfg.inputPlaceholder}
                           className="w-full rounded-2xl border border-white/10 bg-white/5 pl-12 pr-4 py-4 text-sm text-white outline-none focus:border-primary transition-all focus:bg-white/10"
                         />
@@ -289,12 +330,16 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
                         <input
                           required
                           value={form.phone}
-                          onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                          onChange={e => {
+                            setForm(f => ({ ...f, phone: e.target.value }));
+                            if (formError) setFormError("");
+                          }}
                           placeholder="Số điện thoại của bạn"
                           className="w-full rounded-2xl border border-white/10 bg-white/5 pl-12 pr-4 py-4 text-sm text-white outline-none focus:border-primary transition-all focus:bg-white/10"
                         />
                       </div>
                     </div>
+                    {formError && <p className="text-center text-xs font-bold text-red-400">{formError}</p>}
                     <button
                       type="submit"
                       className="mt-4 flex items-center justify-center gap-3 rounded-2xl py-5 text-base font-black text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"

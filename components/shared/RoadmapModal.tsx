@@ -41,9 +41,21 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         router.push("/dashboard");
       } else {
         setError("Sai tên đăng nhập hoặc mật khẩu");
+        window.dispatchEvent(new CustomEvent("mascot-alert", {
+          detail: {
+            message: settings.mascotErrorMessages?.[authForm.platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
+            durationMs: 5000,
+          },
+        }));
       }
     } catch (err) {
       setError("Có lỗi xảy ra, vui lòng thử lại");
+      window.dispatchEvent(new CustomEvent("mascot-alert", {
+        detail: {
+          message: settings.mascotErrorMessages?.[authForm.platform] || "Bạn nhập sai rồi, nhập lại đi nhé!",
+          durationMs: 5000,
+        },
+      }));
     } finally {
       setLoading(false);
     }
