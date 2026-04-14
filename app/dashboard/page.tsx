@@ -9,18 +9,17 @@ import { useRouter } from "next/navigation";
 import { db, type ClientPortal, type ProgressArticle } from "@/lib/useData";
 
 const NAV = [
-  { id: "projects", label: "Dự án hợp tác", icon: FolderOpen },
-  { id: "progress", label: "Tiến độ dự án", icon: Clock },
-  { id: "reports", label: "Báo cáo hiệu quả", icon: BarChart2 },
+  { id: "projects", label: "Quản lý dự án", icon: FolderOpen },
 ];
 
 function DashboardContent() {
   const { user, isLoaded, logout } = useAuth();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("projects");
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [portal, setPortal] = useState<ClientPortal | null>(null);
   const [progressArticles, setProgressArticles] = useState<ProgressArticle[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState(1);
+  const [projectDrafts, setProjectDrafts] = useState<Record<number, string>>({});
 
   useEffect(() => {
     if (!user?.portalId) return;
@@ -44,9 +43,32 @@ function DashboardContent() {
     }
   }, [isLoaded, user, router]);
 
-  const projectItems = portal?.weeklyReports.filter((item) => item.category === "Dự án hợp tác") || [];
-  const progressItems = portal?.weeklyReports.filter((item) => item.category === "Tiến độ dự án") || [];
-  const performanceItems = portal?.weeklyReports.filter((item) => item.category === "Báo cáo hiệu quả") || [];
+  const projectList = portal?.weeklyReports?.length
+    ? portal.weeklyReports.map((report, index) => ({
+        id: index + 1,
+        title: report.title || `Dự án ${index + 1}`,
+        description: report.content.slice(0, 120),
+        progress: portal.progressPercent,
+        posts: portal.postsCount,
+        remaining: portal.daysRemaining,
+      }))
+    : Array.from({ length: 4 }, (_, i) => ({
+        id: i + 1,
+        title: `Dự án ${i + 1}`,
+        description: `Mô tả ngắn dự án ${i + 1}`,
+        progress: portal?.progressPercent ?? 0,
+        posts: portal?.postsCount ?? 0,
+        remaining: portal?.daysRemaining ?? 0,
+      }));
+
+  const selectedProject = projectList.find((project) => project.id === selectedProjectId) || projectList[0] || {
+    id: 1,
+    title: "Dự án 1",
+    description: "Mô tả ngắn dự án 1",
+    progress: portal?.progressPercent ?? 0,
+    posts: portal?.postsCount ?? 0,
+    remaining: portal?.daysRemaining ?? 0,
+  };
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -172,125 +194,65 @@ function DashboardContent() {
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
               <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-5">
-                <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">Chuyên mục</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">Dự án</p>
                 <div className="space-y-3">
-                  {NAV.map((item) => (
+                  {projectList.map((project) => (
                     <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${activeTab === item.id ? "bg-primary text-white" : "text-gray-300 hover:bg-white/5 hover:text-white"}`}>
-                      {item.label}
+                      key={project.id}
+                      onClick={() => setSelectedProjectId(project.id)}
+                      className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${selectedProjectId === project.id ? "bg-primary text-white" : "text-gray-300 hover:bg-white/5 hover:text-white"}`}>
+                      <p>{project.title}</p>
+                      <p className="mt-1 text-[11px] text-gray-500">{project.description}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div className="space-y-6">
-                {activeTab === "projects" && (
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                      <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                        <p className="text-sm text-gray-400">Quá trình hợp tác</p>
-                        <p className="mt-3 text-3xl font-black text-white">{projectItems.length || 0}</p>
-                        <p className="mt-2 text-xs text-gray-500">mục lộ trình</p>
+                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <h2 className="text-2xl font-black text-white">{selectedProject.title}</h2>
+                      <p className="mt-2 text-sm text-gray-400">{selectedProject.description}</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 text-center">
+                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Tiến độ</p>
+                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.progress}%</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                        <p className="text-sm text-gray-400">Báo cáo hiệu quả</p>
-                        <p className="mt-3 text-3xl font-black text-white">{performanceItems.length || 0}</p>
-                        <p className="mt-2 text-xs text-gray-500">mục báo cáo</p>
+                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Bài đăng</p>
+                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.posts}</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                        <p className="text-sm text-gray-400">Tiến độ</p>
-                        <p className="mt-3 text-3xl font-black text-white">{progressArticles.length || progressItems.length || 0}</p>
-                        <p className="mt-2 text-xs text-gray-500">cập nhật mới</p>
+                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Còn lại</p>
+                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.remaining} ngày</p>
                       </div>
                     </div>
-
-                    {projectItems.length === 0 ? (
-                      <div className="rounded-3xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-gray-400">
-                        Không có dữ liệu mục "Dự án hợp tác". Vui lòng liên hệ quản trị viên để cập nhật.
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {projectItems.map((item, index) => (
-                          <div key={index} className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                            <div className="flex items-center justify-between gap-4">
-                              <div>
-                                <p className="text-sm text-gray-400">{item.date}</p>
-                                <p className="mt-2 text-lg font-bold text-white">{item.title || "Tiêu đề lộ trình"}</p>
-                              </div>
-                              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{item.category}</span>
-                            </div>
-                            <p className="mt-4 text-sm text-gray-300 whitespace-pre-wrap">{item.content}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
-                )}
+                </div>
 
-                {activeTab === "progress" && (
-                  <div className="space-y-6">
-                    <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                      <h2 className="text-xl font-bold text-white">Cập nhật tiến độ</h2>
-                      <p className="mt-2 text-sm text-gray-400">Theo dõi các bước triển khai và nội dung đang thực hiện.</p>
-                    </div>
-
-                    {(progressArticles.length === 0 && progressItems.length === 0) ? (
-                      <div className="rounded-3xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-gray-400">
-                        Chưa có cập nhật tiến độ nào.
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {progressArticles.map((art) => (
-                          <div key={art.id} className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                            <div className="flex items-center justify-between gap-4">
-                              <h3 className="text-lg font-bold text-white">{art.title}</h3>
-                              <span className="text-xs text-gray-500">{new Date(art.createdAt).toLocaleDateString("vi-VN")}</span>
-                            </div>
-                            <p className="mt-3 text-sm text-gray-300 whitespace-pre-wrap">{art.content}</p>
-                          </div>
-                        ))}
-                        {progressItems.map((item, index) => (
-                          <div key={`item-${index}`} className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                            <div className="flex items-center justify-between gap-4">
-                              <h3 className="text-lg font-bold text-white">{item.title || "Cập nhật"}</h3>
-                              <span className="text-xs text-gray-500">{item.date}</span>
-                            </div>
-                            <p className="mt-3 text-sm text-gray-300 whitespace-pre-wrap">{item.content}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
+                  <h3 className="text-lg font-bold text-white">Nội dung bài đăng</h3>
+                  <textarea
+                    value={projectDrafts[selectedProject.id] || ""}
+                    onChange={(e) => setProjectDrafts({ ...projectDrafts, [selectedProject.id]: e.target.value })}
+                    placeholder="Nhập nội dung bài đăng của bạn ở đây..."
+                    className="mt-4 w-full min-h-[220px] rounded-3xl border border-white/10 bg-black/20 px-4 py-4 text-sm text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="text-sm text-gray-400">Nội dung bài đăng sẽ được lưu tạm vào phiên hiện tại.</div>
+                    <button
+                      onClick={() => {
+                        const current = projectDrafts[selectedProject.id] || "";
+                        setProjectDrafts({ ...projectDrafts, [selectedProject.id]: current });
+                      }}
+                      className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary/90"
+                    >
+                      Lưu nội dung
+                    </button>
                   </div>
-                )}
-
-                {activeTab === "reports" && (
-                  <div className="space-y-6">
-                    <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                      <h2 className="text-xl font-bold text-white">Báo cáo hiệu quả</h2>
-                      <p className="mt-2 text-sm text-gray-400">Xem lại hiệu quả chiến dịch và các kết quả đã đạt được.</p>
-                    </div>
-
-                    {performanceItems.length === 0 ? (
-                      <div className="rounded-3xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-gray-400">
-                        Chưa có báo cáo hiệu quả nào. Vui lòng yêu cầu quản trị viên cập nhật.
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {performanceItems.map((item, index) => (
-                          <div key={index} className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                            <div className="flex items-center justify-between gap-4">
-                              <h3 className="text-lg font-bold text-white">{item.title || "Báo cáo"}</h3>
-                              <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase text-emerald-300">{item.category}</span>
-                            </div>
-                            <p className="mt-3 text-sm text-gray-300 whitespace-pre-wrap">{item.content}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           </motion.div>

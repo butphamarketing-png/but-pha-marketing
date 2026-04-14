@@ -96,6 +96,7 @@ export default function AdminPage() {
   const [newReport, setNewReport] = useState<PortalReport>({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
+  const [editingReports, setEditingReports] = useState<PortalReport[]>([]);
 
   useEffect(() => {
     const auth = localStorage.getItem("admin_auth");
@@ -129,7 +130,14 @@ export default function AdminPage() {
     refreshOrders(); refreshLeads(); refreshPortals(); refreshServices();
   }, [authenticated]);
 
-  useEffect(() => { if (selectedClient) refreshArticles(selectedClient.id); }, [selectedClient]);
+  useEffect(() => {
+    if (selectedClient) {
+      refreshArticles(selectedClient.id);
+      setEditingReports(selectedClient.weeklyReports || []);
+    } else {
+      setEditingReports([]);
+    }
+  }, [selectedClient]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -452,48 +460,94 @@ export default function AdminPage() {
                       </div>
 
                       <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                        <h3 className="font-bold text-white">Quản lý danh mục</h3>
-                        <select value={newReport.category} onChange={e => setNewReport({ ...newReport, category: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                          {REPORT_CATEGORIES.map(category => (
-                            <option key={category} value={category}>{category}</option>
-                          ))}
-                        </select>
-                        <input value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} placeholder="Tiêu đề" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                        <textarea value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} placeholder="Nội dung báo cáo" className="w-full h-28 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                        <button onClick={async () => {
-                          if (newReport.title && newReport.content) {
-                            const nextReports = [...(selectedClient.weeklyReports || []), { ...newReport, date: new Date().toLocaleDateString("vi-VN") }];
-                            await saveClientReports(selectedClient.id, nextReports);
-                            setNewReport({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
-                          }
-                        }} className="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white">Thêm danh mục</button>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <h3 className="font-bold text-white">Bảng lộ trình dự án</h3>
+                            <p className="text-sm text-gray-400">Nhập dữ liệu và chỉnh sửa trực tiếp từng mục lộ trình cho khách hàng.</p>
+                          </div>
+                          <button
+                            onClick={() => setEditingReports([...editingReports, { date: new Date().toLocaleDateString("vi-VN"), category: REPORT_CATEGORIES[0], title: "", content: "" }])}
+                            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white"
+                          >
+                            Thêm mục lộ trình
+                          </button>
+                        </div>
 
-                        <div className="space-y-3">
-                          {REPORT_CATEGORIES.map(category => {
-                            const reports = selectedClient.weeklyReports?.filter((report) => report.category === category) || [];
-                            return reports.length > 0 ? (
-                              <div key={category} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gray-400">{category}</p>
-                                <div className="space-y-3">
-                                  {reports.map((report, idx) => (
-                                    <div key={`${category}-${idx}`} className="rounded-2xl border border-white/10 bg-[#120a1d]/80 p-3">
-                                      <div className="flex items-start justify-between gap-3">
-                                        <div>
-                                          <p className="font-semibold text-white">{report.title || "Không có tiêu đề"}</p>
-                                          <p className="mt-1 text-xs text-gray-500">{report.date}</p>
-                                        </div>
-                                        <button onClick={async () => {
-                                          const nextReports = selectedClient.weeklyReports.filter((_, currentIndex) => currentIndex !== idx);
-                                          await saveClientReports(selectedClient.id, nextReports);
-                                        }} className="text-red-400"><Trash2 size={16} /></button>
-                                      </div>
-                                      <p className="mt-3 text-sm text-gray-400 whitespace-pre-wrap">{report.content}</p>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : null;
-                          })}
+                        <div className="overflow-x-auto rounded-3xl border border-white/10 bg-[#0f0919]/90">
+                          <table className="min-w-full text-left text-sm">
+                            <thead className="bg-white/5 text-gray-400">
+                              <tr>
+                                <th className="px-3 py-3">Ngày</th>
+                                <th className="px-3 py-3">Danh mục</th>
+                                <th className="px-3 py-3">Tiêu đề</th>
+                                <th className="px-3 py-3">Nội dung</th>
+                                <th className="px-3 py-3">Hành động</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/10">
+                              {editingReports.length === 0 ? (
+                                <tr>
+                                  <td colSpan={5} className="px-3 py-8 text-center text-gray-500">Chưa có mục lộ trình nào. Nhấn Thêm mục lộ trình để bắt đầu.</td>
+                                </tr>
+                              ) : (
+                                editingReports.map((report, idx) => (
+                                  <tr key={`${report.date}-${idx}`} className="text-gray-200">
+                                    <td className="px-3 py-3 align-top">
+                                      <input
+                                        type="text"
+                                        value={report.date}
+                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, date: e.target.value } : item))}
+                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+                                      />
+                                    </td>
+                                    <td className="px-3 py-3 align-top">
+                                      <select
+                                        value={report.category}
+                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, category: e.target.value } : item))}
+                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+                                      >
+                                        {REPORT_CATEGORIES.map(category => (
+                                          <option key={category} value={category}>{category}</option>
+                                        ))}
+                                      </select>
+                                    </td>
+                                    <td className="px-3 py-3 align-top">
+                                      <input
+                                        type="text"
+                                        value={report.title}
+                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, title: e.target.value } : item))}
+                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+                                      />
+                                    </td>
+                                    <td className="px-3 py-3 align-top">
+                                      <textarea
+                                        value={report.content}
+                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, content: e.target.value } : item))}
+                                        className="w-full min-h-[96px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+                                      />
+                                    </td>
+                                    <td className="px-3 py-3 align-top">
+                                      <button
+                                        onClick={() => setEditingReports(editingReports.filter((_, i) => i !== idx))}
+                                        className="rounded-xl bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/20"
+                                      >
+                                        Xóa
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                          <button
+                            onClick={async () => { await saveClientReports(selectedClient.id, editingReports); }}
+                            className="rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white"
+                          >
+                            Lưu bảng lộ trình
+                          </button>
                         </div>
                       </div>
                     </div>
