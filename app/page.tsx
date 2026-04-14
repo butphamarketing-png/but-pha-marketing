@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
 import { Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
+import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
@@ -16,6 +17,7 @@ function HomeContent() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [showRoadmap, setShowRoadmap] = useState(false);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
   const { user } = useAuth();
@@ -97,8 +99,8 @@ function HomeContent() {
                 </Link>
               ) : (
                 <>
-                  <button onClick={() => setShowLogin(true)} className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
-                    Đăng nhập / Đăng ký
+                  <button onClick={() => setShowRoadmap(true)} className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10">
+                    Đăng nhập
                   </button>
                 </>
               )}
@@ -157,6 +159,7 @@ function HomeContent() {
       </main>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
       
       <style>{`
         @keyframes shimmer {

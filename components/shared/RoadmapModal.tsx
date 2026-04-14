@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, CheckCircle2, Clock, ArrowRight, Lock, User, Key, BarChart2, FileText, Send, Image as ImageIcon } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
+import { useAuth } from "@/lib/AuthContext";
+import { useRouter } from "next/navigation";
 import { db, type ClientPortal, type ProgressArticle } from "@/lib/useData";
 
 export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { settings } = useAdmin();
+  const { login } = useAuth();
+  const router = useRouter();
   const [client, setClient] = useState<ClientPortal | null>(null);
   const [articles, setArticles] = useState<ProgressArticle[]>([]);
   const [authForm, setAuthForm] = useState({ username: "", password: "", platform: "facebook" });
@@ -31,6 +35,11 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         setClient(res);
         const arts = await db.progressArticles.getByClient(res.id);
         setArticles(arts);
+        // Update global auth state
+        login({ name: res.clientName, email: res.username });
+        // Close modal and redirect to dashboard
+        onClose();
+        router.push("/dashboard");
       } else {
         setError("Sai tên đăng nhập hoặc mật khẩu");
       }
@@ -61,8 +70,8 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/20 text-primary">
                 <Lock size={32} />
               </div>
-              <h2 className="text-3xl font-black text-white">Tra Cứu Lộ Trình</h2>
-              <p className="mt-2 text-gray-400 text-sm">Vui lòng nhập tài khoản do Bứt Phá Marketing cấp để xem tiến độ dự án của bạn.</p>
+              <h2 className="text-3xl font-black text-white">Đăng Nhập Tài Khoản</h2>
+              <p className="mt-2 text-gray-400 text-sm">Vui lòng nhập tài khoản do Bứt Phá Marketing cấp để truy cập hệ thống.</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -105,7 +114,7 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 disabled={loading}
                 className="w-full rounded-xl bg-primary py-4 font-black text-white shadow-lg shadow-primary/25 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
               >
-                {loading ? "ĐANG KIỂM TRA..." : "XÁC NHẬN TRUY CẬP"}
+                {loading ? "ĐANG KIỂM TRA..." : "ĐĂNG NHẬP"}
               </button>
             </form>
             
