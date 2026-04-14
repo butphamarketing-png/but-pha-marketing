@@ -12,7 +12,7 @@ export default function NotFound() {
         className="mb-6"
       >
         <img
-          src="/api/mascot-image"
+          src="/mascot-dragon.svg"
           alt="Rồng mascot"
           className="h-36 w-36 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.5)]"
         />

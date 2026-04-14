@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAdmin } from "@/lib/AdminContext";
 
@@ -19,11 +19,14 @@ export function AnimatedMascot() {
   const pathname = usePathname();
   const { settings } = useAdmin();
   const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState({ x: 220, y: 260 });
+  const velocityRef = useRef({ x: 2.3, y: 2.1 });
+  const frameRef = useRef<number | null>(null);
 
   const platform = getPlatformFromPath(pathname);
-  const color = settings.colors?.[platform] || settings.colors?.primary || "#7C3AED";
   const message = settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const hidden = useMemo(() => pathname.startsWith("/admin"), [pathname]);
+  const enabled = settings.mascotEnabled !== false && !hidden;
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(190deg) saturate(1.05)", scale: 0.98 },
@@ -35,29 +38,103 @@ export function AnimatedMascot() {
   };
   const dragonStyle = dragonStyleMap[platform] || dragonStyleMap.home;
 
-  if (!settings.mascotEnabled || hidden) return null;
+  useEffect(() => {
+    if (!enabled) return;
+    const width = 76;
+    const height = 76;
+    let x = Math.max(20, window.innerWidth - 200);
+    let y = Math.max(140, window.innerHeight - 300);
+    setPos({ x, y });
+
+    const tick = () => {
+      const v = velocityRef.current;
+      x += v.x;
+      y += v.y;
+      const minX = 6;
+      const minY = 88;
+      const maxX = window.innerWidth - width - 6;
+      const maxY = window.innerHeight - height - 6;
+      if (x <= minX || x >= maxX) {
+        v.x *= -1;
+        x = Math.max(minX, Math.min(maxX, x));
+      }
+      if (y <= minY || y >= maxY) {
+        v.y *= -1;
+        y = Math.max(minY, Math.min(maxY, y));
+      }
+      setPos({ x, y });
+      frameRef.current = requestAnimationFrame(tick);
+    };
+
+    const repelFromPoint = (px: number, py: number) => {
+      const cx = x + width / 2;
+      const cy = y + height / 2;
+      const dx = cx - px;
+      const dy = cy - py;
+      const dist = Math.hypot(dx, dy) || 1;
+      if (dist < 120) {
+        velocityRef.current.x += (dx / dist) * 0.9;
+        velocityRef.current.y += (dy / dist) * 0.9;
+      }
+    };
+
+    const onMouseMove = (e: MouseEvent) => repelFromPoint(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) repelFromPoint(t.clientX, t.clientY);
+    };
+    const onScroll = () => {
+      const elem = document.elementFromPoint(x + width / 2, y + height / 2);
+      if (elem && !elem.closest("[data-mascot='dragon']")) {
+        velocityRef.current.x += (Math.random() - 0.5) * 3;
+        velocityRef.current.y += (Math.random() - 0.5) * 3;
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    frameRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [pathname, enabled]);
+
+  if (!enabled) return null;
 
   return (
-    <div className="fixed bottom-40 right-4 z-[93]">
+    <div className="fixed z-[93]" style={{ left: pos.x, top: pos.y }} data-mascot="dragon">
       {open && (
-        <div className="mb-2 max-w-[230px] rounded-xl border border-white/15 bg-black/75 px-3 py-2 text-xs text-white backdrop-blur-sm">
+        <div className="absolute -top-14 left-1/2 mb-2 w-max max-w-[230px] -translate-x-1/2 rounded-xl border border-white/15 bg-black/75 px-3 py-2 text-xs text-white backdrop-blur-sm">
           {message}
         </div>
       )}
       <motion.button
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
-        onClick={() => setOpen(prev => !prev)}
-        animate={{ x: [0, 6, -6, 0], y: [0, -9, 0, -4, 0], rotate: [0, 2, -2, 0] }}
-        transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
-        className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 shadow-xl"
-        style={{ background: `radial-gradient(circle at 30% 30%, ${color}, #1f1238)` }}
+        onClick={() => {
+          setOpen(true);
+          if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(message);
+            utter.lang = "vi-VN";
+            utter.rate = 1;
+            utter.pitch = 1.1;
+            window.speechSynthesis.speak(utter);
+          }
+        }}
+        animate={{ y: [0, -7, 0], rotate: [0, 4, -4, 0] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+        className="flex h-[76px] w-[76px] items-center justify-center rounded-full border border-white/20 bg-black/20 shadow-xl backdrop-blur-sm"
         aria-label="AI Mascot"
       >
         <img
-          src="/api/mascot-image"
+          src="/mascot-dragon.svg"
           alt="Linh vật rồng"
-          className="h-14 w-14 object-contain drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]"
+          className="h-[68px] w-[68px] object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.5)]"
           style={{ filter: dragonStyle.filter, transform: `scale(${dragonStyle.scale})` }}
         />
       </motion.button>
