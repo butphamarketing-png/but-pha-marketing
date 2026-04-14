@@ -94,12 +94,13 @@ export default function AdminPage() {
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
+  const [selectedProcessTab, setSelectedProcessTab] = useState(0);
   const [pageContent, setPageContent] = useState<ContentOverride>({
     vision: "",
     mission: "",
     responsibility: "",
     stats: [{ label: "", value: "" }],
-    processTabs: [{ label: "Quy trình", steps: [{ step: 1, title: "", desc: "" }] }],
+    processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
     faqs: [{ q: "", a: "" }],
   });
 
@@ -123,15 +124,17 @@ export default function AdminPage() {
     const stored = getContent(selectedPlatform);
     if (stored) {
       setPageContent(stored);
+      setSelectedProcessTab(0);
     } else {
       setPageContent({
         vision: "",
         mission: "",
         responsibility: "",
         stats: [{ label: "", value: "" }],
-        processTabs: [{ label: "Quy trình", steps: [{ step: 1, title: "", desc: "" }] }],
+        processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
         faqs: [{ q: "", a: "" }],
       });
+      setSelectedProcessTab(0);
     }
   }, [selectedPlatform]);
 
@@ -175,25 +178,51 @@ export default function AdminPage() {
     });
   };
 
+  const updateProcessTabLabel = (index: number, label: string) => {
+    setPageContent(prev => {
+      const tabs = [...(prev.processTabs || [{ label: "Xây dựng", steps: [] }])];
+      if (!tabs[index]) return prev;
+      tabs[index] = { ...tabs[index], label };
+      return { ...prev, processTabs: tabs };
+    });
+  };
+
+  const addProcessTab = () => {
+    setPageContent(prev => ({
+      ...prev,
+      processTabs: [...(prev.processTabs || []), { label: `Dịch vụ ${prev.processTabs?.length ? prev.processTabs.length + 1 : 1}`, steps: [{ step: 1, title: "", desc: "" }] }],
+    }));
+    setSelectedProcessTab((prev) => (prev + 1));
+  };
+
+  const removeProcessTab = (index: number) => {
+    setPageContent(prev => {
+      const tabs = (prev.processTabs || []).filter((_, i) => i !== index);
+      const nextIndex = Math.max(0, Math.min(selectedProcessTab === index ? 0 : selectedProcessTab, tabs.length - 1));
+      setSelectedProcessTab(nextIndex);
+      return { ...prev, processTabs: tabs };
+    });
+  };
+
   const addProcessStep = () => {
     setPageContent(prev => {
-      const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
-      const tab = { ...tabs[0] };
+      const tabs = [...(prev.processTabs || [{ label: "Xây dựng", steps: [] }])];
+      const tab = { ...tabs[selectedProcessTab] };
       const steps = [...(tab.steps || [])];
       steps.push({ step: steps.length + 1, title: "", desc: "" });
       tab.steps = steps;
-      tabs[0] = tab;
+      tabs[selectedProcessTab] = tab;
       return { ...prev, processTabs: tabs };
     });
   };
 
   const removeProcessStep = (index: number) => {
     setPageContent(prev => {
-      const tabs = [...(prev.processTabs || [{ label: "Quy trình", steps: [] }])];
-      const tab = { ...tabs[0] };
+      const tabs = [...(prev.processTabs || [{ label: "Xây dựng", steps: [] }])];
+      const tab = { ...tabs[selectedProcessTab] };
       const steps = (tab.steps || []).filter((_, i) => i !== index).map((step, i) => ({ ...step, step: i + 1 }));
       tab.steps = steps;
-      tabs[0] = tab;
+      tabs[selectedProcessTab] = tab;
       return { ...prev, processTabs: tabs };
     });
   };
@@ -394,20 +423,46 @@ export default function AdminPage() {
 
                   <div className="grid gap-6 lg:grid-cols-2">
                     <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-bold text-white">Quy trình triển khai</h4>
-                        <button onClick={addProcessStep} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">Thêm bước</button>
-                      </div>
-                      {(pageContent.processTabs?.[0]?.steps || []).map((step, index) => (
-                        <div key={index} className="space-y-2 rounded-2xl border border-white/10 bg-black/10 p-3">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="text-xs text-gray-400">Bước {index + 1}</span>
-                            <button onClick={() => removeProcessStep(index)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa</button>
-                          </div>
-                          <input value={step.title || ""} onChange={e => updateProcessStep(index, "title", e.target.value)} placeholder="Tiêu đề bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                          <textarea value={step.desc || ""} onChange={e => updateProcessStep(index, "desc", e.target.value)} placeholder="Mô tả bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" rows={3} />
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <h4 className="text-sm font-bold text-white">Quy trình triển khai</h4>
+                          <p className="text-xs text-gray-400">Chọn dịch vụ rồi chỉnh từng bước cho dịch vụ đó.</p>
                         </div>
-                      ))}
+                        <button onClick={addProcessTab} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">Thêm dịch vụ</button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {(pageContent.processTabs || []).map((tab, tabIndex) => (
+                          <button
+                            key={tabIndex}
+                            onClick={() => setSelectedProcessTab(tabIndex)}
+                            className={`rounded-full px-4 py-2 text-xs font-semibold transition ${selectedProcessTab === tabIndex ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}
+                          >
+                            {tab.label || `Dịch vụ ${tabIndex + 1}`}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="space-y-3 rounded-2xl border border-white/10 bg-black/10 p-3">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <input
+                            value={pageContent.processTabs?.[selectedProcessTab]?.label || ""}
+                            onChange={e => updateProcessTabLabel(selectedProcessTab, e.target.value)}
+                            placeholder="Tên dịch vụ (ví dụ: Dịch vụ xây dựng)"
+                            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                          />
+                          <button onClick={() => removeProcessTab(selectedProcessTab)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa dịch vụ</button>
+                        </div>
+                        {(pageContent.processTabs?.[selectedProcessTab]?.steps || []).map((step, index) => (
+                          <div key={index} className="space-y-2 rounded-2xl border border-white/10 bg-black/10 p-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="text-xs text-gray-400">Bước {index + 1}</span>
+                              <button onClick={() => removeProcessStep(index)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200 hover:bg-red-500/20">Xóa</button>
+                            </div>
+                            <input value={step.title || ""} onChange={e => updateProcessStep(index, "title", e.target.value)} placeholder="Tiêu đề bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <textarea value={step.desc || ""} onChange={e => updateProcessStep(index, "desc", e.target.value)} placeholder="Mô tả bước" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" rows={3} />
+                          </div>
+                        ))}
+                        <button onClick={addProcessStep} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white">Thêm bước</button>
+                      </div>
                     </div>
 
                     <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
