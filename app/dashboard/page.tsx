@@ -112,10 +112,10 @@ function DashboardContent() {
           {NAV.map((n) => (
             <button
               key={n.id}
-              onClick={() => { setActiveTab(n.id); setSidebarOpen(false); }}
-              className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 ${activeTab === n.id ? "bg-primary text-white shadow-lg shadow-primary/25" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}>
+              onClick={() => setSidebarOpen(false)}
+              className="group flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold text-white transition-all duration-300 bg-primary shadow-lg shadow-primary/25">
               <div className="flex items-center gap-3">
-                <n.icon size={18} className={activeTab === n.id ? "text-white" : "group-hover:text-primary transition-colors"} />
+                <n.icon size={18} className="text-white" />
                 {n.label}
               </div>
             </button>
