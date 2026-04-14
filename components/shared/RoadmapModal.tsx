@@ -70,7 +70,7 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/20 text-primary">
                 <Lock size={32} />
               </div>
-              <h2 className="text-3xl font-black text-white">Đăng Nhập Tài Khoản</h2>
+              <h2 className="text-3xl font-black text-white">Đăng Nhập</h2>
               <p className="mt-2 text-gray-400 text-sm">Vui lòng nhập tài khoản do Bứt Phá Marketing cấp để truy cập hệ thống.</p>
             </div>
 
