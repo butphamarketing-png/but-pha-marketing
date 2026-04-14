@@ -612,7 +612,7 @@ export default function AdminPage() {
 
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                       {serviceContent.tabs[selectedServiceTab].packages.map((pkg, pkgIdx) => (
-                        <div key={`${pkg.name}-${pkgIdx}`} className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                        <div key={`pkg-${selectedServiceTab}-${pkgIdx}`} className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                           <div className="flex items-center justify-between gap-3">
                             <p className="text-xs text-gray-400">Gói {pkgIdx + 1}</p>
                             <button onClick={() => removePackage(selectedServiceTab, pkgIdx)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200">Xóa gói</button>
@@ -631,7 +631,7 @@ export default function AdminPage() {
                           </label>
                           <textarea
                             value={(pkg.features || []).join("\n")}
-                            onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { features: e.target.value.split("\n").map(line => line.trim()).filter(Boolean), allFeatures: e.target.value.split("\n").map(line => line.trim()).filter(Boolean) })}
+                            onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { features: e.target.value.split("\n"), allFeatures: e.target.value.split("\n") })}
                             placeholder="Nội dung gói (mỗi dòng 1 ý)"
                             rows={6}
                             className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
