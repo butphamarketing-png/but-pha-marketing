@@ -55,6 +55,14 @@ export interface Service {
   feedbacks: { clientName: string; avatar: string; content: string }[];
 }
 
+export interface PortalReport {
+  date: string;
+  title?: string;
+  content: string;
+  category?: string;
+  image?: string;
+}
+
 export interface ClientPortal {
   id: number;
   username: string;
@@ -64,8 +72,9 @@ export interface ClientPortal {
   daysRemaining: number;
   postsCount: number;
   progressPercent: number;
-  weeklyReports: { date: string; content: string }[];
+  weeklyReports: PortalReport[];
   createdAt: string;
+  password?: string;
 }
 
 const API_URL = "/api";
@@ -243,7 +252,7 @@ export const db = {
       try { return await apiFetch("/client-portals/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username, password }) }); }
       catch {
         const list = await db.clientPortals.getAll();
-        return list.find(p => p.username === username) || null;
+        return list.find(p => p.username === username && p.password === password) || null;
       }
     },
   },

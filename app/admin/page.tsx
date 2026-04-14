@@ -11,7 +11,7 @@ import {
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
-import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type PortalReport } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const ADMIN_PASSWORD = "admin123";
@@ -35,6 +35,8 @@ const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
   completed: { label: "Hoàn thành", cls: "bg-green-500/20 text-green-400" },
   cancelled: { label: "Đã huỷ", cls: "bg-red-500/20 text-red-400" },
 };
+
+const REPORT_CATEGORIES = ["Dự án hợp tác", "Tiến độ dự án", "Báo cáo hiệu quả"];
 
 function formatMoney(num: number) { return num.toLocaleString("vi-VN") + "đ"; }
 function formatDate(date: string | number) { return new Date(date).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
@@ -91,6 +93,7 @@ export default function AdminPage() {
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
+  const [newReport, setNewReport] = useState<PortalReport>({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
 
@@ -107,6 +110,18 @@ export default function AdminPage() {
   const refreshArticles = async (clientId: number) => {
     const data = await db.progressArticles.getByClient(clientId);
     setProgressArticles(prev => ({ ...prev, [clientId]: data }));
+  };
+
+  const refreshClientPortal = async (clientId: number) => {
+    const portals = await db.clientPortals.getAll();
+    const client = portals.find((p) => p.id === clientId) || null;
+    setSelectedClient(client);
+    setClientPortals(portals);
+  };
+
+  const saveClientReports = async (clientId: number, reports: PortalReport[]) => {
+    await db.clientPortals.update(clientId.toString(), { weeklyReports: reports });
+    await refreshClientPortal(clientId);
   };
 
   useEffect(() => {
@@ -411,14 +426,76 @@ export default function AdminPage() {
                       <input value={newArticle.image} onChange={e => setNewArticle({ ...newArticle, image: e.target.value })} placeholder="URL hình ảnh" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                       <button onClick={async () => { if (newArticle.title && newArticle.content) { await db.progressArticles.add({ ...newArticle, clientId: selectedClient.id }); setNewArticle({ title: "", content: "", image: "" }); refreshArticles(selectedClient.id); } }} className="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white">Đăng bài</button>
                     </div>
-                    <div className="space-y-4">
-                      {(progressArticles[selectedClient.id] || []).map(art => (
-                        <div key={art.id} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                          <div className="flex justify-between items-center"><p className="font-bold text-white">{art.title}</p><button onClick={async () => { await db.progressArticles.delete(art.id, selectedClient.id); refreshArticles(selectedClient.id); }} className="text-red-400"><Trash2 size={16} /></button></div>
-                          <p className="text-sm text-gray-400 whitespace-pre-wrap">{art.content}</p>
-                          {art.image && <img src={art.image} className="w-full rounded-xl border border-white/10" />}
+
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                        <h3 className="font-bold text-white">Cập nhật tiến độ</h3>
+                        {(progressArticles[selectedClient.id] || []).length === 0 ? (
+                          <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-6 text-center text-gray-400">Chưa có bài cập nhật tiến độ.</div>
+                        ) : (
+                          <div className="space-y-4">
+                            {(progressArticles[selectedClient.id] || []).map(art => (
+                              <div key={art.id} className="rounded-2xl border border-white/10 bg-card p-5">
+                                <div className="flex justify-between items-start gap-4">
+                                  <div>
+                                    <p className="font-bold text-white">{art.title}</p>
+                                    <p className="text-xs text-gray-500">{new Date(art.createdAt).toLocaleDateString("vi-VN")}</p>
+                                  </div>
+                                  <button onClick={async () => { await db.progressArticles.delete(art.id, selectedClient.id); refreshArticles(selectedClient.id); }} className="text-red-400"><Trash2 size={16} /></button>
+                                </div>
+                                <p className="mt-3 text-sm text-gray-400 whitespace-pre-wrap">{art.content}</p>
+                                {art.image && <img src={art.image} className="mt-4 w-full rounded-xl border border-white/10" />}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                        <h3 className="font-bold text-white">Quản lý danh mục</h3>
+                        <select value={newReport.category} onChange={e => setNewReport({ ...newReport, category: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+                          {REPORT_CATEGORIES.map(category => (
+                            <option key={category} value={category}>{category}</option>
+                          ))}
+                        </select>
+                        <input value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} placeholder="Tiêu đề" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <textarea value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} placeholder="Nội dung báo cáo" className="w-full h-28 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <button onClick={async () => {
+                          if (newReport.title && newReport.content) {
+                            const nextReports = [...(selectedClient.weeklyReports || []), { ...newReport, date: new Date().toLocaleDateString("vi-VN") }];
+                            await saveClientReports(selectedClient.id, nextReports);
+                            setNewReport({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
+                          }
+                        }} className="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white">Thêm danh mục</button>
+
+                        <div className="space-y-3">
+                          {REPORT_CATEGORIES.map(category => {
+                            const reports = selectedClient.weeklyReports?.filter((report) => report.category === category) || [];
+                            return reports.length > 0 ? (
+                              <div key={category} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gray-400">{category}</p>
+                                <div className="space-y-3">
+                                  {reports.map((report, idx) => (
+                                    <div key={`${category}-${idx}`} className="rounded-2xl border border-white/10 bg-[#120a1d]/80 p-3">
+                                      <div className="flex items-start justify-between gap-3">
+                                        <div>
+                                          <p className="font-semibold text-white">{report.title || "Không có tiêu đề"}</p>
+                                          <p className="mt-1 text-xs text-gray-500">{report.date}</p>
+                                        </div>
+                                        <button onClick={async () => {
+                                          const nextReports = selectedClient.weeklyReports.filter((_, currentIndex) => currentIndex !== idx);
+                                          await saveClientReports(selectedClient.id, nextReports);
+                                        }} className="text-red-400"><Trash2 size={16} /></button>
+                                      </div>
+                                      <p className="mt-3 text-sm text-gray-400 whitespace-pre-wrap">{report.content}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : null;
+                          })}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 ) : <div className="h-64 flex items-center justify-center rounded-2xl border border-dashed border-white/10 text-gray-500">Chọn khách hàng để quản lý tiến độ</div>}

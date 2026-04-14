@@ -6,10 +6,13 @@ interface User {
   name: string;
   phone?: string;
   email?: string;
+  portalId?: number;
+  platform?: string;
 }
 
 interface AuthContextType {
   user: User | null;
+  isLoaded: boolean;
   login: (userData: User) => void;
   logout: () => void;
 }
@@ -53,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoaded, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
