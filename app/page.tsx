@@ -135,7 +135,7 @@ function HomeContent() {
           transition={{ delay: 0.4 }}
           className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
         >
-          {platforms.map((platform, index) => (
+          {platforms.filter(platform => settings.visibility[platform.id] !== false).map((platform, index) => (
             <Link key={platform.id} href={platform.to} onClick={playClickSound} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-xl transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-white/20">
               <div className="absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ backgroundImage: `linear-gradient(to bottom right, transparent, ${platform.color}40)` }} />
               <div className="relative z-10 flex flex-col items-center text-center">
