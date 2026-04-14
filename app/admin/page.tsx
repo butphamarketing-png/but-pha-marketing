@@ -11,7 +11,7 @@ import {
   Calendar, Clock, CheckCircle2, Lock, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
-import { getContent, saveContent, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
+import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type PortalReport } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -96,7 +96,9 @@ export default function AdminPage() {
   const [seoData, setSeoData] = useState<any>({});
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState(0);
+  const [selectedCompareTab, setSelectedCompareTab] = useState(0);
   const [serviceContent, setServiceContent] = useState<ContentOverride>({ tabs: [] });
+  const [comparisonTabs, setComparisonTabs] = useState<ComparisonTabOverride[]>([]);
   const [pageContent, setPageContent] = useState<ContentOverride>({
     vision: "",
     mission: "",
@@ -160,7 +162,9 @@ export default function AdminPage() {
     const saved = getContent(selectedPkgPlatform);
     const tabs = saved?.tabs && saved.tabs.length > 0 ? saved.tabs : createDefaultServiceTabs();
     setServiceContent(prev => ({ ...prev, ...(saved || {}), tabs }));
+    setComparisonTabs(saved?.comparisonTabs && saved.comparisonTabs.length > 0 ? saved.comparisonTabs : buildDefaultComparisonTabs(tabs));
     setSelectedServiceTab(0);
+    setSelectedCompareTab(0);
   }, [selectedPkgPlatform]);
 
   const updateServiceTabs = (tabs: TabOverride[]) => {
@@ -222,6 +226,106 @@ export default function AdminPage() {
     const next = target.packages.filter((_, idx) => idx !== pkgIndex);
     tabs[tabIndex] = { ...target, packages: next };
     updateServiceTabs(tabs);
+  };
+
+  const updateComparisonTabs = (tabs: ComparisonTabOverride[]) => {
+    setComparisonTabs(tabs);
+    setServiceContent(prev => ({ ...prev, comparisonTabs: tabs }));
+  };
+
+  const saveComparisonConfig = () => {
+    const current = getContent(selectedPkgPlatform) || {};
+    saveContent(selectedPkgPlatform, { ...current, comparisonTabs });
+    alert("Đã lưu bảng so sánh");
+  };
+
+  const addComparisonTab = () => {
+    const next = [...comparisonTabs, { label: `Bảng ${(comparisonTabs.length + 1)}`, columns: ["Gói 1", "Gói 2", "Gói 3"], rows: [{ label: "Tính năng", cells: ["✓", "—", "—"] }] }];
+    updateComparisonTabs(next);
+    setSelectedCompareTab(next.length - 1);
+  };
+
+  const removeComparisonTab = (tabIndex: number) => {
+    const next = comparisonTabs.filter((_, idx) => idx !== tabIndex);
+    updateComparisonTabs(next.length > 0 ? next : [{ label: "Bảng 1", columns: ["Gói 1"], rows: [{ label: "Tính năng", cells: ["✓"] }] }]);
+    setSelectedCompareTab(0);
+  };
+
+  const updateComparisonTabLabel = (tabIndex: number, label: string) => {
+    const next = [...comparisonTabs];
+    if (!next[tabIndex]) return;
+    next[tabIndex] = { ...next[tabIndex], label };
+    updateComparisonTabs(next);
+  };
+
+  const updateComparisonColumn = (tabIndex: number, colIndex: number, value: string) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab) return;
+    const cols = [...tab.columns];
+    cols[colIndex] = value;
+    next[tabIndex] = { ...tab, columns: cols };
+    updateComparisonTabs(next);
+  };
+
+  const addComparisonColumn = (tabIndex: number) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab) return;
+    const cols = [...tab.columns, `Gói ${tab.columns.length + 1}`];
+    const rows = tab.rows.map(row => ({ ...row, cells: [...row.cells, ""] }));
+    next[tabIndex] = { ...tab, columns: cols, rows };
+    updateComparisonTabs(next);
+  };
+
+  const removeComparisonColumn = (tabIndex: number, colIndex: number) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab || tab.columns.length <= 1) return;
+    const cols = tab.columns.filter((_, idx) => idx !== colIndex);
+    const rows = tab.rows.map(row => ({ ...row, cells: row.cells.filter((_, idx) => idx !== colIndex) }));
+    next[tabIndex] = { ...tab, columns: cols, rows };
+    updateComparisonTabs(next);
+  };
+
+  const updateComparisonRowLabel = (tabIndex: number, rowIndex: number, label: string) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab || !tab.rows[rowIndex]) return;
+    const rows = [...tab.rows];
+    rows[rowIndex] = { ...rows[rowIndex], label };
+    next[tabIndex] = { ...tab, rows };
+    updateComparisonTabs(next);
+  };
+
+  const updateComparisonCell = (tabIndex: number, rowIndex: number, colIndex: number, value: string) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab || !tab.rows[rowIndex]) return;
+    const rows = [...tab.rows];
+    const cells = [...rows[rowIndex].cells];
+    cells[colIndex] = value;
+    rows[rowIndex] = { ...rows[rowIndex], cells };
+    next[tabIndex] = { ...tab, rows };
+    updateComparisonTabs(next);
+  };
+
+  const addComparisonRow = (tabIndex: number) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab) return;
+    const rows = [...tab.rows, { label: `Dòng ${tab.rows.length + 1}`, cells: Array(tab.columns.length).fill("") }];
+    next[tabIndex] = { ...tab, rows };
+    updateComparisonTabs(next);
+  };
+
+  const removeComparisonRow = (tabIndex: number, rowIndex: number) => {
+    const next = [...comparisonTabs];
+    const tab = next[tabIndex];
+    if (!tab || tab.rows.length <= 1) return;
+    const rows = tab.rows.filter((_, idx) => idx !== rowIndex);
+    next[tabIndex] = { ...tab, rows };
+    updateComparisonTabs(next);
   };
 
   const savePageContent = () => {
@@ -658,15 +762,91 @@ export default function AdminPage() {
                 <select value={selectedPkgPlatform} onChange={e => setSelectedPkgPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={saveComparisonConfig} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu bảng so sánh</button>
+                <button onClick={addComparisonTab} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white">Thêm bảng</button>
               </div>
-              <div className="space-y-4">
-                {services.filter(s => s.platform === selectedPkgPlatform).map(svc => (
-                  <div key={svc.id} className="rounded-2xl border border-white/10 bg-card p-6">
-                    <p className="font-bold text-white mb-2">{svc.name}</p>
-                    <textarea value={(svc.allFeatures || []).join("\n")} onChange={e => setServices(services.map(s => s.id === svc.id ? { ...s, allFeatures: e.target.value.split("\n") } : s))} className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" placeholder="Tất cả tính năng so sánh..." />
+              <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  {comparisonTabs.map((tab, idx) => (
+                    <button
+                      key={`${tab.label}-${idx}`}
+                      onClick={() => setSelectedCompareTab(idx)}
+                      className={`rounded-full px-4 py-2 text-xs font-semibold transition ${selectedCompareTab === idx ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}
+                    >
+                      {tab.label || `Bảng ${idx + 1}`}
+                    </button>
+                  ))}
+                </div>
+
+                {!!comparisonTabs[selectedCompareTab] && (
+                  <div className="space-y-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <input
+                        value={comparisonTabs[selectedCompareTab].label}
+                        onChange={e => updateComparisonTabLabel(selectedCompareTab, e.target.value)}
+                        placeholder="Tên bảng (ví dụ: Xây dựng)"
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                      <button onClick={() => removeComparisonTab(selectedCompareTab)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200">Xóa bảng</button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={() => addComparisonColumn(selectedCompareTab)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm cột</button>
+                      <button onClick={() => addComparisonRow(selectedCompareTab)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm dòng</button>
+                    </div>
+
+                    <div className="overflow-auto rounded-2xl border border-white/10">
+                      <table className="min-w-full text-left text-sm">
+                        <thead className="bg-white/5">
+                          <tr>
+                            <th className="px-3 py-3 text-gray-300">Tên dòng</th>
+                            {comparisonTabs[selectedCompareTab].columns.map((col, colIdx) => (
+                              <th key={`col-${colIdx}`} className="px-3 py-3">
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    value={col}
+                                    onChange={e => updateComparisonColumn(selectedCompareTab, colIdx, e.target.value)}
+                                    placeholder={`Cột ${colIdx + 1}`}
+                                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                                  />
+                                  <button onClick={() => removeComparisonColumn(selectedCompareTab, colIdx)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-2 py-1 text-[10px] font-semibold text-red-200">Xóa</button>
+                                </div>
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {comparisonTabs[selectedCompareTab].rows.map((row, rowIdx) => (
+                            <tr key={`row-${rowIdx}`} className="align-top">
+                              <td className="px-3 py-3">
+                                <div className="flex items-start gap-2">
+                                  <textarea
+                                    value={row.label}
+                                    onChange={e => updateComparisonRowLabel(selectedCompareTab, rowIdx, e.target.value)}
+                                    rows={2}
+                                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                                  />
+                                  <button onClick={() => removeComparisonRow(selectedCompareTab, rowIdx)} className="rounded-lg border border-red-500/20 bg-red-500/10 px-2 py-1 text-[10px] font-semibold text-red-200">Xóa</button>
+                                </div>
+                              </td>
+                              {comparisonTabs[selectedCompareTab].columns.map((_, colIdx) => (
+                                <td key={`cell-${rowIdx}-${colIdx}`} className="px-3 py-3">
+                                  <textarea
+                                    value={row.cells[colIdx] || ""}
+                                    onChange={e => updateComparisonCell(selectedCompareTab, rowIdx, colIdx, e.target.value)}
+                                    rows={2}
+                                    placeholder="Text / icon / emoji"
+                                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                                  />
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}

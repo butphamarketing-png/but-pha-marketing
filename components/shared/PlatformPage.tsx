@@ -9,7 +9,7 @@ import { AudioGuide } from "./AudioGuide";
 import { CountUp } from "./CountUp";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
-import { getContent, buildDefaultProcessTabs } from "@/lib/pageContent";
+import { getContent, buildDefaultComparisonTabs, buildDefaultProcessTabs } from "@/lib/pageContent";
 
 export interface PricingPackage {
   name: string;
@@ -453,6 +453,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const override = getContent(platformKey);
   const tabsForRender = override?.tabs || updatedTabs;
   const processTabs = override?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map(t => t.label));
+  const comparisonTabs = override?.comparisonTabs ?? buildDefaultComparisonTabs(tabsForRender);
   const cases = settings.media[platformKey]?.cases || [];
   const beforeAfterBefore = override?.beforeAfterBefore;
   const beforeAfterAfter = override?.beforeAfterAfter;
@@ -479,7 +480,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       {settings.visibility.pricing !== false && (
         <>
           <PricingSection tabs={tabsForRender} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
-          <ComparisonTable tabs={tabsForRender} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
+          <ComparisonTable tabs={tabsForRender} comparisonTabs={comparisonTabs} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
         </>
       )}
       

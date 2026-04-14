@@ -13,6 +13,17 @@ export interface TabOverride {
   packages: PackageOverride[];
 }
 
+export interface ComparisonRowOverride {
+  label: string;
+  cells: string[];
+}
+
+export interface ComparisonTabOverride {
+  label: string;
+  columns: string[];
+  rows: ComparisonRowOverride[];
+}
+
 export interface ProcessStep {
   step: number;
   title: string;
@@ -32,6 +43,7 @@ export interface ContentOverride {
   stats?: { label: string; value: string }[];
   processTabs?: ProcessTab[];
   faqs?: { q: string; a: string }[];
+  comparisonTabs?: ComparisonTabOverride[];
   beforeAfterBefore?: string;
   beforeAfterAfter?: string;
 }
@@ -49,6 +61,18 @@ export function buildDefaultProcessTabs(tabLabels: string[]): ProcessTab[] {
     label,
     steps: DEFAULT_PROCESS_STEPS.map(s => ({ ...s })),
   }));
+}
+
+export function buildDefaultComparisonTabs(tabs: TabOverride[]): ComparisonTabOverride[] {
+  return tabs.map(tab => {
+    const columns = tab.packages.map(pkg => pkg.name);
+    const labels = Array.from(new Set(tab.packages.flatMap(pkg => pkg.allFeatures || pkg.features || [])));
+    const rows: ComparisonRowOverride[] = labels.map(label => ({
+      label,
+      cells: tab.packages.map(pkg => (pkg.features || []).includes(label) ? "✓" : "—"),
+    }));
+    return { label: tab.label, columns, rows };
+  });
 }
 
 export function getContent(platform: string): ContentOverride | null {
