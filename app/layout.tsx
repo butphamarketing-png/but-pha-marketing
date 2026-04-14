@@ -4,6 +4,7 @@ import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
 import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
 import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
+import { SocialProofToast } from "@/components/shared/SocialProofToast";
 
 export const metadata: Metadata = {
   title: "Bứt Phá Marketing - Dashboard",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <AuthProvider>
           <AdminProvider>
             {children}
+            <SocialProofToast />
             <ThemeToggleButton />
             <VideoIntroButton />
           </AdminProvider>

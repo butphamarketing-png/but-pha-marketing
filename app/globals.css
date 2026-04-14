@@ -27,25 +27,69 @@
 }
 
 .light {
-  --background: 0 0% 98%;
-  --foreground: 240 10% 10%;
-  --primary: 258 90% 56%;
+  --background: 36 30% 97%;
+  --foreground: 235 12% 20%;
+  --primary: 262 72% 58%;
   --primary-foreground: 0 0% 100%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 10%;
-  --border: 240 12% 85%;
-  --muted: 240 10% 94%;
-  --muted-foreground: 240 8% 40%;
-  --accent: 258 90% 92%;
-  --accent-foreground: 240 10% 10%;
-  --secondary: 240 12% 92%;
-  --secondary-foreground: 240 10% 20%;
+  --card: 36 25% 99%;
+  --card-foreground: 235 12% 20%;
+  --border: 235 18% 86%;
+  --muted: 36 18% 93%;
+  --muted-foreground: 235 10% 44%;
+  --accent: 265 70% 93%;
+  --accent-foreground: 235 12% 22%;
+  --secondary: 36 20% 92%;
+  --secondary-foreground: 235 12% 26%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
-  --input: 240 12% 90%;
-  --ring: 258 90% 56%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 10%;
+  --input: 235 16% 89%;
+  --ring: 262 72% 58%;
+  --popover: 36 25% 99%;
+  --popover-foreground: 235 12% 20%;
+}
+
+/* Improve contrast for existing hard-coded dark theme classes */
+.light .text-white {
+  color: hsl(235 14% 24%) !important;
+}
+
+.light .text-gray-200 {
+  color: hsl(235 12% 28%) !important;
+}
+
+.light .text-gray-300 {
+  color: hsl(235 11% 36%) !important;
+}
+
+.light .text-gray-400 {
+  color: hsl(235 10% 46%) !important;
+}
+
+.light .text-gray-500 {
+  color: hsl(235 8% 55%) !important;
+}
+
+.light .border-white\/10 {
+  border-color: hsl(235 18% 82%) !important;
+}
+
+.light .border-white\/20 {
+  border-color: hsl(235 18% 76%) !important;
+}
+
+.light .bg-white\/5 {
+  background-color: hsla(265, 22%, 70%, 0.16) !important;
+}
+
+.light .bg-white\/10 {
+  background-color: hsla(265, 22%, 62%, 0.2) !important;
+}
+
+.light .bg-black\/30,
+.light .bg-black\/60,
+.light .bg-black\/70,
+.light .bg-black\/80 {
+  background-color: hsla(235, 14%, 24%, 0.38) !important;
 }
 
 @layer base {
