@@ -7,7 +7,6 @@ import { ComparisonTable } from "./ComparisonTable";
 import { FanpageAudit } from "./FanpageAudit";
 import { AudioGuide } from "./AudioGuide";
 import { CountUp } from "./CountUp";
-import { PresentationButton } from "./PresentationButton";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
 import { getContent, buildDefaultProcessTabs } from "@/lib/pageContent";
@@ -476,7 +475,6 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
         {checkoutPkg && <CheckoutModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}
       </AnimatePresence>
 
-      <PresentationButton />
     </SubPageLayout>
   );
 }
