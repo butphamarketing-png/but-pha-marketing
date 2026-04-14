@@ -33,3 +33,20 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    const payload = await req.json();
+    const [updated] = await db
+      .update(clientPortals)
+      .set(payload)
+      .where(eq(clientPortals.id, parseInt(id, 10)))
+      .returning();
+    return NextResponse.json(updated);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+  }
+}

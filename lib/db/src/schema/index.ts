@@ -24,7 +24,7 @@ export type Order = typeof orders.$inferSelect;
 // Leads Table
 export const leads = pgTable("leads", {
   id: serial("id").primaryKey(),
-  type: text("type").$type<"contact" | "audit">().notNull(),
+  type: text("type").$type<"contact" | "audit" | "request">().notNull(),
   name: text("name"),
   phone: text("phone").notNull(),
   service: text("service"),
@@ -80,7 +80,18 @@ export const clientPortals = pgTable("client_portals", {
   daysRemaining: integer("days_remaining").default(0).notNull(),
   postsCount: integer("posts_count").default(0).notNull(),
   progressPercent: integer("progress_percent").default(0).notNull(),
-  weeklyReports: jsonb("weekly_reports").$type<{ date: string; content: string; image?: string }[]>().default([]).notNull(), // Added image to reports
+  weeklyReports: jsonb("weekly_reports").$type<{
+    id?: string;
+    title?: string;
+    registeredAt?: string;
+    deadlineAt?: string;
+    budgetVnd?: number;
+    progressDoc?: string;
+    resultDoc?: string;
+    date?: string;
+    content?: string;
+    image?: string;
+  }[]>().default([]).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

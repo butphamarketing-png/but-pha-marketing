@@ -2,24 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, FolderOpen, Clock, BarChart2, Bell, Search, Menu, X } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Copy, LogOut, Menu, Send, User, X } from "lucide-react";
 import { useAuth, AuthProvider } from "@/lib/AuthContext";
 import { useRouter } from "next/navigation";
-import { db, type ClientPortal, type ProgressArticle } from "@/lib/useData";
+import { db, type ClientPortal, type ClientProject } from "@/lib/useData";
 
 const NAV = [
-  { id: "projects", label: "Quản lý dự án", icon: FolderOpen },
+  { id: "profile", label: "Thông tin tài khoản", icon: User },
+  { id: "projects", label: "Quản lý dự án", icon: Menu },
+  { id: "results", label: "Kết quả dự án", icon: Copy },
+  { id: "request", label: "Gửi yêu cầu", icon: Send },
 ];
 
 function DashboardContent() {
   const { user, isLoaded, logout } = useAuth();
   const router = useRouter();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState("profile");
   const [portal, setPortal] = useState<ClientPortal | null>(null);
-  const [progressArticles, setProgressArticles] = useState<ProgressArticle[]>([]);
-  const [selectedProjectId, setSelectedProjectId] = useState(1);
-  const [projectDrafts, setProjectDrafts] = useState<Record<number, string>>({});
+  const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+  const [themeColor, setThemeColor] = useState("#7C3AED");
+  const [profilePhone, setProfilePhone] = useState("");
 
   useEffect(() => {
     if (!user?.portalId) return;
@@ -28,10 +32,7 @@ function DashboardContent() {
       const portals = await db.clientPortals.getAll();
       const found = portals.find((p) => p.id === user.portalId) || null;
       setPortal(found);
-      if (found) {
-        const articles = await db.progressArticles.getByClient(found.id);
-        setProgressArticles(articles);
-      }
+      setProfilePhone(found?.phone || "");
     };
 
     loadPortal();
@@ -43,31 +44,34 @@ function DashboardContent() {
     }
   }, [isLoaded, user, router]);
 
-  const projectList = portal?.weeklyReports?.length
-    ? portal.weeklyReports.map((report, index) => ({
-        id: index + 1,
-        title: report.title || `Dự án ${index + 1}`,
-        description: report.content.slice(0, 120),
-        progress: portal.progressPercent,
-        posts: portal.postsCount,
-        remaining: portal.daysRemaining,
-      }))
-    : Array.from({ length: 4 }, (_, i) => ({
-        id: i + 1,
-        title: `Dự án ${i + 1}`,
-        description: `Mô tả ngắn dự án ${i + 1}`,
-        progress: portal?.progressPercent ?? 0,
-        posts: portal?.postsCount ?? 0,
-        remaining: portal?.daysRemaining ?? 0,
-      }));
+  useEffect(() => {
+    const savedColor = localStorage.getItem("client_theme_color");
+    if (savedColor) setThemeColor(savedColor);
+  }, []);
 
-  const selectedProject = projectList.find((project) => project.id === selectedProjectId) || projectList[0] || {
-    id: 1,
-    title: "Dự án 1",
-    description: "Mô tả ngắn dự án 1",
-    progress: portal?.progressPercent ?? 0,
-    posts: portal?.postsCount ?? 0,
-    remaining: portal?.daysRemaining ?? 0,
+  const projects: ClientProject[] = (portal?.weeklyReports || []) as any[];
+  useEffect(() => {
+    if (projects.length > 0 && !selectedProjectId) {
+      setSelectedProjectId(projects[0].id || "");
+    }
+  }, [projects, selectedProjectId]);
+
+  const selectedProject = projects.find(project => project.id === selectedProjectId) || projects[0] || null;
+
+  const getCountdownText = (deadlineAt?: string) => {
+    if (!deadlineAt) return "--";
+    const now = new Date();
+    const end = new Date(deadlineAt);
+    const diff = end.getTime() - now.getTime();
+    if (diff <= 0) return "Đã hết hạn";
+    const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+    const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+    return `${days} ngày ${hours} giờ`;
+  };
+
+  const copyText = async (value: string) => {
+    await navigator.clipboard.writeText(value || "");
+    alert("Đã copy");
   };
 
   const containerVariants = {
@@ -80,7 +84,7 @@ function DashboardContent() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0a0510] text-foreground font-sans selection:bg-primary/30">
+    <div className="flex min-h-screen bg-[#0a0510] text-foreground font-sans selection:bg-primary/30" style={{ ["--client-color" as any]: themeColor }}>
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -93,7 +97,7 @@ function DashboardContent() {
         )}
       </AnimatePresence>
 
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 flex-col border-r border-white/5 bg-[#120a1d]/80 backdrop-blur-xl p-6 transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 flex-col border-r border-white/5 bg-[#120a1d]/80 backdrop-blur-xl p-6 transition-transform duration-300 md:relative md:flex md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="mb-10 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center font-black text-white shadow-lg shadow-primary/20">BPM</div>
@@ -112,8 +116,10 @@ function DashboardContent() {
           {NAV.map((n) => (
             <button
               key={n.id}
-              onClick={() => setSidebarOpen(false)}
-              className="group flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold text-white transition-all duration-300 bg-primary shadow-lg shadow-primary/25">
+              onClick={() => { setActiveNav(n.id); setSidebarOpen(false); }}
+              className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 ${activeNav === n.id ? "text-white shadow-lg" : "text-gray-300 hover:bg-white/5"}`}
+              style={activeNav === n.id ? { backgroundColor: themeColor } : {}}
+            >
               <div className="flex items-center gap-3">
                 <n.icon size={18} className="text-white" />
                 {n.label}
@@ -144,14 +150,7 @@ function DashboardContent() {
             <button onClick={() => setSidebarOpen(true)} className="text-gray-400 hover:text-white md:hidden">
               <Menu size={24} />
             </button>
-            <div className="relative hidden sm:block">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-              <input
-                type="text"
-                placeholder="Tìm kiếm dự án, tài liệu..."
-                className="w-64 rounded-xl bg-white/5 py-2 pl-10 pr-4 text-xs font-medium text-white outline-none focus:ring-2 focus:ring-primary/50 transition-all border border-transparent focus:border-primary/20"
-              />
-            </div>
+            <p className="text-sm font-semibold text-white">Cổng quản lý dự án khách hàng</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="h-8 w-px bg-white/5 mx-1"></div>
@@ -171,90 +170,116 @@ function DashboardContent() {
 
         <div className="p-6 md:p-10 max-w-7xl mx-auto w-full">
           <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-8">
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]">
-              <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6 shadow-xl shadow-primary/10">
-                <h1 className="text-2xl font-black text-white">Xin chào, {user?.name || "Khách hàng"}</h1>
-                <p className="mt-2 text-sm text-gray-400">Dashboard lộ trình dự án được tùy chỉnh theo tài khoản bạn đã đăng nhập.</p>
+            {activeNav === "profile" && (
+              <div className="space-y-6 rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
+                <h2 className="text-2xl font-black text-white">Thông tin tài khoản</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <input value={portal?.clientName || ""} readOnly className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-gray-300" />
+                  <input value={portal?.username || ""} readOnly className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-gray-300" />
+                  <input value={profilePhone} onChange={e => setProfilePhone(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" placeholder="Số điện thoại liên hệ" />
+                  <select value={themeColor} onChange={e => setThemeColor(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
+                    <option value="#7C3AED">Tím</option>
+                    <option value="#2563EB">Xanh dương</option>
+                    <option value="#059669">Xanh lá</option>
+                    <option value="#DC2626">Đỏ</option>
+                  </select>
+                </div>
+                <button
+                  onClick={async () => {
+                    if (!portal) return;
+                    await db.clientPortals.update(portal.id.toString(), { phone: profilePhone });
+                    localStorage.setItem("client_theme_color", themeColor);
+                    alert("Đã lưu thông tin cá nhân");
+                  }}
+                  className="rounded-xl px-5 py-2 text-sm font-bold text-white"
+                  style={{ backgroundColor: themeColor }}
+                >
+                  Lưu thông tin
+                </button>
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
-                  <p className="text-sm text-gray-400">Tiến độ</p>
-                  <p className="mt-3 text-3xl font-black text-white">{portal?.progressPercent ?? "--"}%</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
-                  <p className="text-sm text-gray-400">Bài đăng</p>
-                  <p className="mt-3 text-3xl font-black text-white">{portal?.postsCount ?? "--"}</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
-                  <p className="text-sm text-gray-400">Còn lại</p>
-                  <p className="mt-3 text-3xl font-black text-white">{portal?.daysRemaining ?? "--"} ngày</p>
-                </div>
-              </div>
-            </div>
+            )}
 
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
-              <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-5">
-                <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">Dự án</p>
-                <div className="space-y-3">
-                  {projectList.map((project) => (
-                    <button
-                      key={project.id}
-                      onClick={() => setSelectedProjectId(project.id)}
-                      className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${selectedProjectId === project.id ? "bg-primary text-white" : "text-gray-300 hover:bg-white/5 hover:text-white"}`}>
-                      <p>{project.title}</p>
-                      <p className="mt-1 text-[11px] text-gray-500">{project.description}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                      <h2 className="text-2xl font-black text-white">{selectedProject.title}</h2>
-                      <p className="mt-2 text-sm text-gray-400">{selectedProject.description}</p>
-                    </div>
-                    <div className="grid grid-cols-3 gap-3 text-center">
-                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
-                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Tiến độ</p>
-                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.progress}%</p>
-                      </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
-                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Bài đăng</p>
-                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.posts}</p>
-                      </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0f0919]/80 p-4">
-                        <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Còn lại</p>
-                        <p className="mt-3 text-3xl font-black text-white">{selectedProject.remaining} ngày</p>
-                      </div>
-                    </div>
+            {(activeNav === "projects" || activeNav === "results") && (
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
+                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-5">
+                  <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gray-500">Dự án</p>
+                  <div className="space-y-2">
+                    {projects.map(project => (
+                      <button
+                        key={project.id}
+                        onClick={() => setSelectedProjectId(project.id)}
+                        className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${selectedProject?.id === project.id ? "text-white" : "text-gray-300 hover:bg-white/5"}`}
+                        style={selectedProject?.id === project.id ? { backgroundColor: themeColor } : {}}
+                      >
+                        {project.title}
+                      </button>
+                    ))}
                   </div>
                 </div>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Ngày đăng ký</p>
+                      <p className="mt-2 text-sm font-bold text-white">{selectedProject?.registeredAt ? new Date(selectedProject.registeredAt).toLocaleDateString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }) : "--"}</p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Tiến độ còn lại</p>
+                      <p className="mt-2 text-sm font-bold text-white">{getCountdownText(selectedProject?.deadlineAt)}</p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Chi phí</p>
+                      <p className="mt-2 text-sm font-bold text-white">{Number(selectedProject?.budgetVnd || 0).toLocaleString("vi-VN")}đ</p>
+                    </div>
+                  </div>
 
-                <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-                  <h3 className="text-lg font-bold text-white">Nội dung bài đăng</h3>
-                  <textarea
-                    value={projectDrafts[selectedProject.id] || ""}
-                    onChange={(e) => setProjectDrafts({ ...projectDrafts, [selectedProject.id]: e.target.value })}
-                    placeholder="Nhập nội dung bài đăng của bạn ở đây..."
-                    className="mt-4 w-full min-h-[220px] rounded-3xl border border-white/10 bg-black/20 px-4 py-4 text-sm text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="text-sm text-gray-400">Nội dung bài đăng sẽ được lưu tạm vào phiên hiện tại.</div>
-                    <button
-                      onClick={() => {
-                        const current = projectDrafts[selectedProject.id] || "";
-                        setProjectDrafts({ ...projectDrafts, [selectedProject.id]: current });
-                      }}
-                      className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary/90"
-                    >
-                      Lưu nội dung
-                    </button>
+                  <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
+                    <div className="mb-3 flex items-center justify-between">
+                      <h3 className="text-lg font-bold text-white">{activeNav === "projects" ? "Quản lý dự án" : "Kết quả dự án"}</h3>
+                      <button
+                        onClick={() => copyText((activeNav === "projects" ? selectedProject?.progressDoc : selectedProject?.resultDoc) || "")}
+                        className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold text-white"
+                      >
+                        Copy nội dung
+                      </button>
+                    </div>
+                    <div
+                      className="min-h-[280px] rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white [&_img]:max-w-full [&_img]:rounded-xl"
+                      dangerouslySetInnerHTML={{ __html: activeNav === "projects" ? (selectedProject?.progressDoc || "<p>Chưa có nội dung</p>") : (selectedProject?.resultDoc || "<p>Chưa có nội dung</p>") }}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {activeNav === "request" && (
+              <div className="space-y-4 rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
+                <h3 className="text-lg font-bold text-white">Gửi yêu cầu cho quản trị viên</h3>
+                <textarea
+                  value={requestMessage}
+                  onChange={e => setRequestMessage(e.target.value)}
+                  placeholder="Nhập yêu cầu của bạn..."
+                  className="min-h-[220px] w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none"
+                />
+                <button
+                  onClick={async () => {
+                    if (!requestMessage.trim()) return;
+                    await db.leads.add({
+                      type: "request",
+                      name: portal?.clientName || user?.name || "Khách hàng",
+                      phone: portal?.phone || user?.phone || "",
+                      platform: portal?.platform,
+                      note: requestMessage,
+                    });
+                    setRequestMessage("");
+                    alert("Đã gửi yêu cầu");
+                  }}
+                  className="rounded-xl px-5 py-2 text-sm font-bold text-white"
+                  style={{ backgroundColor: themeColor }}
+                >
+                  Gửi yêu cầu
+                </button>
+              </div>
+            )}
           </motion.div>
         </div>
       </main>

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
-import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type PortalReport } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type ClientProject } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const ADMIN_PASSWORD = "admin123";
@@ -36,8 +36,6 @@ const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
   completed: { label: "Hoàn thành", cls: "bg-green-500/20 text-green-400" },
   cancelled: { label: "Đã huỷ", cls: "bg-red-500/20 text-red-400" },
 };
-
-const REPORT_CATEGORIES = ["Dự án hợp tác", "Tiến độ dự án", "Báo cáo hiệu quả"];
 
 function formatMoney(num: number) { return num.toLocaleString("vi-VN") + "đ"; }
 function formatDate(date: string | number) { return new Date(date).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
@@ -112,10 +110,9 @@ export default function AdminPage() {
     name: `Tuần ${i + 1}`,
     visits: Math.round(90 + Math.sin((i / 11) * Math.PI * 2) * 30),
   }));
-  const [newReport, setNewReport] = useState<PortalReport>({ title: "", content: "", category: REPORT_CATEGORIES[0], date: new Date().toLocaleDateString("vi-VN") });
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
-  const [editingReports, setEditingReports] = useState<PortalReport[]>([]);
+  const [selectedClientProjectId, setSelectedClientProjectId] = useState("");
 
   const createDefaultPackage = (index: number): PackageOverride => ({
     name: index === 0 ? "Gói Cơ Bản" : index === 1 ? "Gói Nâng Cao" : "Gói VIP",
@@ -132,6 +129,84 @@ export default function AdminPage() {
     { label: "Chăm Sóc", packages: [createDefaultPackage(0), createDefaultPackage(1), createDefaultPackage(2)] },
     { label: "Quảng Cáo", packages: [createDefaultPackage(0), createDefaultPackage(1), createDefaultPackage(2)] },
   ]);
+
+  const fileToDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("Không thể đọc file ảnh"));
+      reader.readAsDataURL(file);
+    });
+
+  const getYoutubeEmbedUrl = (url: string) => {
+    if (!url) return "";
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname.includes("youtu.be")) {
+        const id = parsed.pathname.replace(/^\//, "");
+        return `https://www.youtube.com/embed/${id}`;
+      }
+      if (parsed.hostname.includes("youtube.com")) {
+        const v = parsed.searchParams.get("v");
+        if (v) return `https://www.youtube.com/embed/${v}`;
+        if (parsed.pathname.startsWith("/shorts/")) {
+          const id = parsed.pathname.split("/")[2];
+          return `https://www.youtube.com/embed/${id}`;
+        }
+        if (parsed.pathname.startsWith("/embed/")) return `${parsed.origin}${parsed.pathname}`;
+      }
+    } catch {
+      return "";
+    }
+    return "";
+  };
+
+  const createEmptyProject = (index: number): ClientProject => {
+    const now = new Date();
+    const deadline = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+    return {
+      id: `${Date.now()}-${index}`,
+      title: `Dự án ${index}`,
+      registeredAt: now.toISOString(),
+      deadlineAt: deadline.toISOString(),
+      budgetVnd: 0,
+      progressDoc: "<p></p>",
+      resultDoc: "<p></p>",
+    };
+  };
+
+  const normalizeProjects = (portal: ClientPortal | null): ClientProject[] => {
+    if (!portal) return [];
+    const raw = (portal.weeklyReports || []) as any[];
+    if (raw.length === 0) return [createEmptyProject(1)];
+
+    const first = raw[0];
+    const isLegacy = typeof first?.content === "string" && !("progressDoc" in first);
+    if (isLegacy) {
+      return raw.map((item, idx) => ({
+        id: `${portal.id}-${idx + 1}`,
+        title: item.title || `Dự án ${idx + 1}`,
+        registeredAt: new Date().toISOString(),
+        deadlineAt: new Date(Date.now() + (portal.daysRemaining || 30) * 24 * 60 * 60 * 1000).toISOString(),
+        budgetVnd: 0,
+        progressDoc: `<p>${item.content || ""}</p>`,
+        resultDoc: item.image ? `<p><img src="${item.image}" alt="report-image" /></p>` : "<p></p>",
+      }));
+    }
+
+    return raw.map((item, idx) => ({
+      id: item.id || `${portal.id}-${idx + 1}`,
+      title: item.title || `Dự án ${idx + 1}`,
+      registeredAt: item.registeredAt || new Date().toISOString(),
+      deadlineAt: item.deadlineAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      budgetVnd: Number(item.budgetVnd || 0),
+      progressDoc: item.progressDoc || "<p></p>",
+      resultDoc: item.resultDoc || "<p></p>",
+    }));
+  };
+
+  const selectedProjects = normalizeProjects(selectedClient);
+  const selectedProject = selectedProjects.find(p => p.id === selectedClientProjectId) || selectedProjects[0] || null;
 
   useEffect(() => {
     const auth = localStorage.getItem("admin_auth");
@@ -449,9 +524,44 @@ export default function AdminPage() {
     setClientPortals(portals);
   };
 
-  const saveClientReports = async (clientId: number, reports: PortalReport[]) => {
-    await db.clientPortals.update(clientId.toString(), { weeklyReports: reports });
-    await refreshClientPortal(clientId);
+  const saveSelectedClient = async (patch: Partial<ClientPortal>) => {
+    if (!selectedClient) return;
+    await db.clientPortals.update(selectedClient.id.toString(), patch);
+    await refreshClientPortal(selectedClient.id);
+    alert("Đã lưu thông tin khách hàng");
+  };
+
+  const saveSelectedProjects = async (projects: ClientProject[]) => {
+    if (!selectedClient) return;
+    await db.clientPortals.update(selectedClient.id.toString(), { weeklyReports: projects as any });
+    await refreshClientPortal(selectedClient.id);
+  };
+
+  const updateSelectedProject = (projectId: string, patch: Partial<ClientProject>) => {
+    const next = selectedProjects.map(project => project.id === projectId ? { ...project, ...patch } : project);
+    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: next as any }) : prev);
+  };
+
+  const addProjectForSelectedClient = () => {
+    if (!selectedClient) return;
+    const next = [...selectedProjects, createEmptyProject(selectedProjects.length + 1)];
+    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: next as any }) : prev);
+    setSelectedClientProjectId(next[next.length - 1].id);
+  };
+
+  const removeProjectForSelectedClient = (projectId: string) => {
+    if (!selectedClient) return;
+    const next = selectedProjects.filter(project => project.id !== projectId);
+    const safe = next.length > 0 ? next : [createEmptyProject(1)];
+    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: safe as any }) : prev);
+    setSelectedClientProjectId(safe[0].id);
+  };
+
+  const runEditorCommand = (editorId: string, command: string, value?: string) => {
+    const editor = document.getElementById(editorId);
+    if (!editor) return;
+    (editor as HTMLElement).focus();
+    document.execCommand(command, false, value);
   };
 
   useEffect(() => {
@@ -462,9 +572,10 @@ export default function AdminPage() {
   useEffect(() => {
     if (selectedClient) {
       refreshArticles(selectedClient.id);
-      setEditingReports(selectedClient.weeklyReports || []);
+      const projects = normalizeProjects(selectedClient);
+      setSelectedClientProjectId(projects[0]?.id || "");
     } else {
-      setEditingReports([]);
+      setSelectedClientProjectId("");
     }
   }, [selectedClient]);
 
@@ -884,7 +995,7 @@ export default function AdminPage() {
                 <tbody className="divide-y divide-white/10">
                   {leads.map(l => (
                     <tr key={l.id} className="text-gray-200">
-                      <td className="px-4 py-3 text-xs uppercase font-bold">{l.type === "audit" ? "Chuẩn đoán" : "Tư vấn"}</td>
+                      <td className="px-4 py-3 text-xs uppercase font-bold">{l.type === "audit" ? "Chuẩn đoán" : l.type === "request" ? "Yêu cầu" : "Tư vấn"}</td>
                       <td className="px-4 py-3 font-bold">{l.name}</td>
                       <td className="px-4 py-3">{l.phone}</td>
                       <td className="px-4 py-3 text-xs text-gray-400">{l.note || l.service || "-"}</td>
@@ -908,9 +1019,26 @@ export default function AdminPage() {
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white">Slideshow</h3>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} placeholder="URL ảnh..." className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                     <button onClick={() => { if (mediaUrl) { addSlideshowImage(selectedPlatform, mediaUrl); setMediaUrl(""); } }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Thêm</button>
+                    <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white">
+                      Tải ảnh
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={async e => {
+                          const files = Array.from(e.target.files || []);
+                          for (const file of files) {
+                            const imageUrl = await fileToDataUrl(file);
+                            addSlideshowImage(selectedPlatform, imageUrl);
+                          }
+                          e.currentTarget.value = "";
+                        }}
+                      />
+                    </label>
                   </div>
                   <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                     <div className="space-y-2">
@@ -918,7 +1046,20 @@ export default function AdminPage() {
                       <input value={settings.media[selectedPlatform]?.videoUrl || ""} onChange={e => updateMediaVideo(selectedPlatform, e.target.value)} placeholder="URL YouTube hoặc video" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                     </div>
                     {settings.media[selectedPlatform]?.videoUrl && (
-                      <a href={settings.media[selectedPlatform]?.videoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Xem link video</a>
+                      <>
+                        <a href={settings.media[selectedPlatform]?.videoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Xem link video</a>
+                        {getYoutubeEmbedUrl(settings.media[selectedPlatform]?.videoUrl || "") && (
+                          <div className="overflow-hidden rounded-xl border border-white/10">
+                            <iframe
+                              src={getYoutubeEmbedUrl(settings.media[selectedPlatform]?.videoUrl || "")}
+                              title="Video preview"
+                              className="aspect-video w-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                   <div className="grid grid-cols-3 gap-2">
@@ -935,9 +1076,55 @@ export default function AdminPage() {
                   <div className="space-y-2">
                     <input value={newCase.title} onChange={e => setNewCase({ ...newCase, title: e.target.value })} placeholder="Tên Case Study" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                     <div className="grid grid-cols-2 gap-2">
-                      <input value={newCase.before} onChange={e => setNewCase({ ...newCase, before: e.target.value })} placeholder="URL Trước" className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                      <input value={newCase.after} onChange={e => setNewCase({ ...newCase, after: e.target.value })} placeholder="URL Sau" className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                      <div className="space-y-2">
+                        <input value={newCase.before} onChange={e => setNewCase({ ...newCase, before: e.target.value })} placeholder="URL Trước" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <label className="inline-block cursor-pointer rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">
+                          Tải ảnh Trước
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              setNewCase(prev => ({ ...prev, before: imageUrl }));
+                              e.currentTarget.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+                      <div className="space-y-2">
+                        <input value={newCase.after} onChange={e => setNewCase({ ...newCase, after: e.target.value })} placeholder="URL Sau" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <label className="inline-block cursor-pointer rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">
+                          Tải ảnh Sau
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              setNewCase(prev => ({ ...prev, after: imageUrl }));
+                              e.currentTarget.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
                     </div>
+                    {(newCase.before || newCase.after) && (
+                      <div className="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-white/5 p-2">
+                        <div>
+                          <p className="mb-1 text-[10px] uppercase tracking-wide text-gray-400">Preview Trước</p>
+                          {newCase.before ? <img src={newCase.before} className="aspect-video w-full rounded-lg object-cover" /> : <div className="aspect-video w-full rounded-lg bg-black/20" />}
+                        </div>
+                        <div>
+                          <p className="mb-1 text-[10px] uppercase tracking-wide text-gray-400">Preview Sau</p>
+                          {newCase.after ? <img src={newCase.after} className="aspect-video w-full rounded-lg object-cover" /> : <div className="aspect-video w-full rounded-lg bg-black/20" />}
+                        </div>
+                      </div>
+                    )}
                     <button onClick={() => { if (newCase.title) { addCase(selectedPlatform, { title: newCase.title, before: newCase.before, after: newCase.after }); setNewCase({ id: 0, title: "", before: "", after: "" }); } }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Thêm Case</button>
                   </div>
                   <div className="space-y-2">
@@ -967,156 +1154,147 @@ export default function AdminPage() {
 
           {activeTab === "portals" && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="lg:col-span-1 space-y-6">
-                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Khách hàng mới</h3>
-                  <input value={newPortal.clientName} onChange={e => setNewPortal({ ...newPortal, clientName: e.target.value })} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={newPortal.username} onChange={e => setNewPortal({ ...newPortal, username: e.target.value })} placeholder="Username" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+              <div className="space-y-6 lg:col-span-1">
+                <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
+                  <h3 className="font-bold text-white">Tạo tài khoản khách hàng</h3>
+                  <input value={newPortal.clientName || ""} onChange={e => setNewPortal({ ...newPortal, clientName: e.target.value })} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <input value={newPortal.username || ""} onChange={e => setNewPortal({ ...newPortal, username: e.target.value })} placeholder="Tài khoản" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                   <input value={portalPassword} onChange={e => setPortalPassword(e.target.value)} type="password" placeholder="Mật khẩu" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <select value={newPortal.platform} onChange={e => setNewPortal({ ...newPortal, platform: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+                  <input value={newPortal.phone || ""} onChange={e => setNewPortal({ ...newPortal, phone: e.target.value })} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <select value={newPortal.platform || "facebook"} onChange={e => setNewPortal({ ...newPortal, platform: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                     {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                   </select>
-                  <button onClick={async () => { if (newPortal.username && portalPassword) { await db.clientPortals.add({ ...newPortal, password: portalPassword } as any); refreshPortals(); setPortalPassword(""); setNewPortal({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] }); } }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Tạo tài khoản</button>
+                  <button
+                    onClick={async () => {
+                      if (!newPortal.username || !portalPassword || !newPortal.clientName) return;
+                      const initialProject = createEmptyProject(1);
+                      await db.clientPortals.add({
+                        username: newPortal.username,
+                        password: portalPassword,
+                        clientName: newPortal.clientName,
+                        phone: newPortal.phone || "",
+                        platform: newPortal.platform || "facebook",
+                        daysRemaining: 30,
+                        postsCount: 0,
+                        progressPercent: 0,
+                        weeklyReports: [initialProject],
+                      } as any);
+                      refreshPortals();
+                      setPortalPassword("");
+                      setNewPortal({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
+                    }}
+                    className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white"
+                  >
+                    Tạo tài khoản
+                  </button>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-2">
-                  <h3 className="font-bold text-white mb-4">Danh sách khách</h3>
-                  {clientPortals.map(p => (
-                    <button key={p.id} onClick={() => setSelectedClient(p)} className={`w-full text-left p-3 rounded-xl border transition-all ${selectedClient?.id === p.id ? "border-primary bg-primary/10" : "border-white/5 bg-white/5 hover:bg-white/10"}`}>
-                      <p className="text-sm font-bold text-white">{p.clientName}</p>
-                      <p className="text-[10px] text-gray-500 uppercase">{p.username} - {p.platform}</p>
+
+                <div className="space-y-2 rounded-2xl border border-white/10 bg-card p-6">
+                  <h3 className="mb-3 font-bold text-white">Danh sách khách hàng</h3>
+                  {clientPortals.map(client => (
+                    <button
+                      key={client.id}
+                      onClick={() => setSelectedClient(client)}
+                      className={`w-full rounded-xl border p-3 text-left transition-all ${selectedClient?.id === client.id ? "border-primary bg-primary/10" : "border-white/5 bg-white/5 hover:bg-white/10"}`}
+                    >
+                      <p className="text-sm font-bold text-white">{client.clientName}</p>
+                      <p className="text-[10px] uppercase text-gray-500">{client.username} · {client.platform}</p>
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="lg:col-span-2 space-y-6">
-                {selectedClient ? (
-                  <div className="space-y-6">
-                    <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                      <h3 className="font-bold text-white">Tiến độ: {selectedClient.clientName}</h3>
-                      <input value={newArticle.title} onChange={e => setNewArticle({ ...newArticle, title: e.target.value })} placeholder="Tiêu đề bài viết" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                      <textarea value={newArticle.content} onChange={e => setNewArticle({ ...newArticle, content: e.target.value })} placeholder="Nội dung chi tiết..." className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                      <input value={newArticle.image} onChange={e => setNewArticle({ ...newArticle, image: e.target.value })} placeholder="URL hình ảnh" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                      <button onClick={async () => { if (newArticle.title && newArticle.content) { await db.progressArticles.add({ ...newArticle, clientId: selectedClient.id }); setNewArticle({ title: "", content: "", image: "" }); refreshArticles(selectedClient.id); } }} className="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white">Đăng bài</button>
-                    </div>
 
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                        <h3 className="font-bold text-white">Cập nhật tiến độ</h3>
-                        {(progressArticles[selectedClient.id] || []).length === 0 ? (
-                          <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-6 text-center text-gray-400">Chưa có bài cập nhật tiến độ.</div>
-                        ) : (
-                          <div className="space-y-4">
-                            {(progressArticles[selectedClient.id] || []).map(art => (
-                              <div key={art.id} className="rounded-2xl border border-white/10 bg-card p-5">
-                                <div className="flex justify-between items-start gap-4">
-                                  <div>
-                                    <p className="font-bold text-white">{art.title}</p>
-                                    <p className="text-xs text-gray-500">{new Date(art.createdAt).toLocaleDateString("vi-VN")}</p>
-                                  </div>
-                                  <button onClick={async () => { await db.progressArticles.delete(art.id, selectedClient.id); refreshArticles(selectedClient.id); }} className="text-red-400"><Trash2 size={16} /></button>
-                                </div>
-                                <p className="mt-3 text-sm text-gray-400 whitespace-pre-wrap">{art.content}</p>
-                                {art.image && <img src={art.image} className="mt-4 w-full rounded-xl border border-white/10" />}
-                              </div>
-                            ))}
-                          </div>
-                        )}
+              <div className="space-y-6 lg:col-span-2">
+                {!selectedClient ? (
+                  <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-white/10 text-gray-500">Chọn khách hàng để quản lý dự án</div>
+                ) : (
+                  <>
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
+                      <h3 className="font-bold text-white">Thông tin tài khoản khách hàng</h3>
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <input value={selectedClient.clientName} onChange={e => setSelectedClient({ ...selectedClient, clientName: e.target.value })} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <input value={selectedClient.phone || ""} onChange={e => setSelectedClient({ ...selectedClient, phone: e.target.value })} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                        <input value={selectedClient.username} readOnly className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-400" />
+                        <select value={selectedClient.platform} onChange={e => setSelectedClient({ ...selectedClient, platform: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+                          {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                        </select>
+                        <input value={selectedClient.password || ""} onChange={e => setSelectedClient({ ...selectedClient, password: e.target.value })} type="text" placeholder="Mật khẩu mới" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white md:col-span-2" />
                       </div>
-
-                      <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div>
-                            <h3 className="font-bold text-white">Bảng lộ trình dự án</h3>
-                            <p className="text-sm text-gray-400">Nhập dữ liệu và chỉnh sửa trực tiếp từng mục lộ trình cho khách hàng.</p>
-                          </div>
-                          <button
-                            onClick={() => setEditingReports([...editingReports, { date: new Date().toLocaleDateString("vi-VN"), category: REPORT_CATEGORIES[0], title: "", content: "" }])}
-                            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white"
-                          >
-                            Thêm mục lộ trình
-                          </button>
-                        </div>
-
-                        <div className="overflow-x-auto rounded-3xl border border-white/10 bg-[#0f0919]/90">
-                          <table className="min-w-full text-left text-sm">
-                            <thead className="bg-white/5 text-gray-400">
-                              <tr>
-                                <th className="px-3 py-3">Ngày</th>
-                                <th className="px-3 py-3">Danh mục</th>
-                                <th className="px-3 py-3">Tiêu đề</th>
-                                <th className="px-3 py-3">Nội dung</th>
-                                <th className="px-3 py-3">Hành động</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/10">
-                              {editingReports.length === 0 ? (
-                                <tr>
-                                  <td colSpan={5} className="px-3 py-8 text-center text-gray-500">Chưa có mục lộ trình nào. Nhấn Thêm mục lộ trình để bắt đầu.</td>
-                                </tr>
-                              ) : (
-                                editingReports.map((report, idx) => (
-                                  <tr key={`${report.date}-${idx}`} className="text-gray-200">
-                                    <td className="px-3 py-3 align-top">
-                                      <input
-                                        type="text"
-                                        value={report.date}
-                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, date: e.target.value } : item))}
-                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-                                      />
-                                    </td>
-                                    <td className="px-3 py-3 align-top">
-                                      <select
-                                        value={report.category}
-                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, category: e.target.value } : item))}
-                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-                                      >
-                                        {REPORT_CATEGORIES.map(category => (
-                                          <option key={category} value={category}>{category}</option>
-                                        ))}
-                                      </select>
-                                    </td>
-                                    <td className="px-3 py-3 align-top">
-                                      <input
-                                        type="text"
-                                        value={report.title}
-                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, title: e.target.value } : item))}
-                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-                                      />
-                                    </td>
-                                    <td className="px-3 py-3 align-top">
-                                      <textarea
-                                        value={report.content}
-                                        onChange={e => setEditingReports(editingReports.map((item, i) => i === idx ? { ...item, content: e.target.value } : item))}
-                                        className="w-full min-h-[96px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-                                      />
-                                    </td>
-                                    <td className="px-3 py-3 align-top">
-                                      <button
-                                        onClick={() => setEditingReports(editingReports.filter((_, i) => i !== idx))}
-                                        className="rounded-xl bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/20"
-                                      >
-                                        Xóa
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-
-                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-                          <button
-                            onClick={async () => { await saveClientReports(selectedClient.id, editingReports); }}
-                            className="rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white"
-                          >
-                            Lưu bảng lộ trình
-                          </button>
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button onClick={() => saveSelectedClient({ clientName: selectedClient.clientName, phone: selectedClient.phone, platform: selectedClient.platform, password: selectedClient.password })} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu tài khoản</button>
+                        <button onClick={async () => { await db.clientPortals.delete(selectedClient.id.toString()); setSelectedClient(null); refreshPortals(); }} className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200">Xóa tài khoản</button>
                       </div>
                     </div>
-                  </div>
-                ) : <div className="h-64 flex items-center justify-center rounded-2xl border border-dashed border-white/10 text-gray-500">Chọn khách hàng để quản lý tiến độ</div>}
+
+                    <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h3 className="font-bold text-white">Quản lý dự án</h3>
+                        <button onClick={addProjectForSelectedClient} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm dự án</button>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProjects.map(project => (
+                          <button key={project.id} onClick={() => setSelectedClientProjectId(project.id)} className={`rounded-full px-4 py-2 text-xs font-semibold transition ${selectedProject?.id === project.id ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}>
+                            {project.title}
+                          </button>
+                        ))}
+                      </div>
+
+                      {selectedProject && (
+                        <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <input value={selectedProject.title} onChange={e => updateSelectedProject(selectedProject.id, { title: e.target.value })} placeholder="Tên tiêu đề dự án" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <button onClick={() => removeProjectForSelectedClient(selectedProject.id)} className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200">Xóa dự án</button>
+                          </div>
+                          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            <input type="datetime-local" value={selectedProject.registeredAt?.slice(0, 16)} onChange={e => updateSelectedProject(selectedProject.id, { registeredAt: new Date(e.target.value).toISOString() })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <input type="datetime-local" value={selectedProject.deadlineAt?.slice(0, 16)} onChange={e => updateSelectedProject(selectedProject.id, { deadlineAt: new Date(e.target.value).toISOString() })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                            <input value={selectedProject.budgetVnd} onChange={e => updateSelectedProject(selectedProject.id, { budgetVnd: Number((e.target.value || "0").replace(/\D/g, "")) })} placeholder="Chi phí dự án (VNĐ)" className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-gray-300">Nội dung quản lý dự án</p>
+                            <div className="flex flex-wrap gap-2">
+                              <button onClick={() => runEditorCommand("project-progress-editor", "bold")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">B</button>
+                              <button onClick={() => runEditorCommand("project-progress-editor", "italic")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">I</button>
+                              <button onClick={() => runEditorCommand("project-progress-editor", "foreColor", "#ef4444")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Đỏ</button>
+                              <button onClick={() => runEditorCommand("project-progress-editor", "foreColor", "#22c55e")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Xanh</button>
+                              <button onClick={() => runEditorCommand("project-progress-editor", "fontSize", "4")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">A+</button>
+                            </div>
+                            <div
+                              id="project-progress-editor"
+                              contentEditable
+                              suppressContentEditableWarning
+                              onInput={e => updateSelectedProject(selectedProject.id, { progressDoc: (e.currentTarget as HTMLDivElement).innerHTML })}
+                              dangerouslySetInnerHTML={{ __html: selectedProject.progressDoc || "<p></p>" }}
+                              className="min-h-[150px] rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-gray-300">Báo cáo dự án</p>
+                            <div className="flex flex-wrap gap-2">
+                              <button onClick={() => runEditorCommand("project-result-editor", "bold")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">B</button>
+                              <button onClick={() => runEditorCommand("project-result-editor", "italic")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">I</button>
+                              <button onClick={() => runEditorCommand("project-result-editor", "foreColor", "#a855f7")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">Tím</button>
+                              <button onClick={() => runEditorCommand("project-result-editor", "fontSize", "5")} className="rounded border border-white/20 px-2 py-1 text-xs text-white">A++</button>
+                            </div>
+                            <div
+                              id="project-result-editor"
+                              contentEditable
+                              suppressContentEditableWarning
+                              onInput={e => updateSelectedProject(selectedProject.id, { resultDoc: (e.currentTarget as HTMLDivElement).innerHTML })}
+                              dangerouslySetInnerHTML={{ __html: selectedProject.resultDoc || "<p></p>" }}
+                              className="min-h-[150px] rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none"
+                            />
+                          </div>
+
+                          <button onClick={async () => { await saveSelectedProjects(selectedProjects); alert("Đã lưu dự án"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu dự án</button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}

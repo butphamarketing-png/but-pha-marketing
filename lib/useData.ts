@@ -14,7 +14,7 @@ export interface Order {
 
 export interface Lead {
   id: number;
-  type: "contact" | "audit";
+  type: "contact" | "audit" | "request";
   name?: string;
   phone: string;
   service?: string;
@@ -63,6 +63,16 @@ export interface PortalReport {
   image?: string;
 }
 
+export interface ClientProject {
+  id: string;
+  title: string;
+  registeredAt: string;
+  deadlineAt: string;
+  budgetVnd: number;
+  progressDoc: string;
+  resultDoc: string;
+}
+
 export interface ClientPortal {
   id: number;
   username: string;
@@ -72,7 +82,7 @@ export interface ClientPortal {
   daysRemaining: number;
   postsCount: number;
   progressPercent: number;
-  weeklyReports: PortalReport[];
+  weeklyReports: ClientProject[];
   createdAt: string;
   password?: string;
 }
@@ -235,14 +245,14 @@ export const db = {
       }
     },
     update: async (id: string, data: Partial<ClientPortal>) => {
-      try { return await apiFetch(`/client-portals/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); }
+      try { return await apiFetch(`/client-portals?id=${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); }
       catch {
         const list = await db.clientPortals.getAll();
         setLocal("client_portals", list.map(p => p.id.toString() === id ? { ...p, ...data } : p));
       }
     },
     delete: async (id: string) => {
-      try { await apiFetch(`/client-portals/${id}`, { method: "DELETE" }); }
+      try { await apiFetch(`/client-portals?id=${id}`, { method: "DELETE" }); }
       catch {
         const list = await db.clientPortals.getAll();
         setLocal("client_portals", list.filter(p => p.id.toString() !== id));
