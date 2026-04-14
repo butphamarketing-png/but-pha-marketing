@@ -6,7 +6,6 @@ import Link from "next/link";
 import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
 import { Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
-import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
@@ -17,7 +16,6 @@ function HomeContent() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
-  const [showRoadmap, setShowRoadmap] = useState(false);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
   const { user } = useAuth();
@@ -105,13 +103,6 @@ function HomeContent() {
                 </>
               )}
             </div>
-            <button 
-              onClick={() => setShowRoadmap(true)} 
-              className="group flex items-center gap-2 text-xs font-bold text-primary transition-all hover:text-white"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse group-hover:bg-white" />
-              LỘ TRÌNH DỰ ÁN (CLIENT PORTAL)
-            </button>
           </div>
         )}
       </header>
@@ -166,16 +157,6 @@ function HomeContent() {
       </main>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
-      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
-
-      <motion.button
-        initial={{ x: 100 }}
-        animate={{ x: 0 }}
-        onClick={() => setShowRoadmap(true)}
-        className="fixed right-0 top-1/2 z-40 flex -translate-y-1/2 flex-col items-center gap-2 rounded-l-2xl bg-primary px-3 py-6 font-bold text-white shadow-2xl transition-all hover:bg-primary/90 hover:pr-5"
-      >
-        <span className="[writing-mode:vertical-rl]">LỘ TRÌNH DỰ ÁN</span>
-      </motion.button>
       
       <style>{`
         @keyframes shimmer {
