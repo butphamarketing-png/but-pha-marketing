@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Activity, BarChart2, ShieldCheck, Zap, Target, Search, Loader2, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
+import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 import { db } from "@/lib/useData";
 
 interface FanpageAuditProps {
@@ -115,8 +116,31 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
   const [step, setStep] = useState<"form" | "loading" | "result">("form");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
   const [form, setForm] = useState({ url: "", phone: "" });
+  const [presentationMode, setPresentationMode] = useState(false);
 
   const cfg = AUDIT_CONFIGS[platform] ?? AUDIT_CONFIGS.facebook;
+
+  useEffect(() => {
+    const handlePresentationStart = () => {
+      setPresentationMode(true);
+      setIsOpen(true);
+    };
+
+    const handlePresentationEnd = () => {
+      setPresentationMode(false);
+      setIsOpen(false);
+      setStep("form");
+      setCurrentAuditStep(0);
+    };
+
+    window.addEventListener('presentationStart', handlePresentationStart);
+    window.addEventListener('presentationEnd', handlePresentationEnd);
+
+    return () => {
+      window.removeEventListener('presentationStart', handlePresentationStart);
+      window.removeEventListener('presentationEnd', handlePresentationEnd);
+    };
+  }, []);
 
   useEffect(() => {
     let interval: any;
@@ -178,6 +202,17 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
   return (
     <>
       <section data-section="audit" id="audit" className="py-16 px-4">
+        {presentationMode && isOpen ? (
+          <DecisionTreeQuiz
+            isOpen={true}
+            isInline={true}
+            platform={platform}
+            onClose={() => {
+              setPresentationMode(false);
+              setIsOpen(false);
+            }}
+          />
+        ) : (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -207,10 +242,11 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
               </button>
             </div>
           </motion.div>
+        )}
       </section>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && !presentationMode && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4 backdrop-blur-xl">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
