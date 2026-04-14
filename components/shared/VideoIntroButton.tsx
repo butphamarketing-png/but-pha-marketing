@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
@@ -32,9 +32,29 @@ function getYoutubeEmbedUrl(url: string) {
 
 export function VideoIntroButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [shake, setShake] = useState(false);
   const { settings } = useAdmin();
   const videoUrl = settings.media.home?.videoUrl?.trim();
   const iframeSrc = videoUrl ? getYoutubeEmbedUrl(videoUrl) : "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&rel=0";
+
+  useEffect(() => {
+    let intervalId: number | undefined;
+    const timeout = window.setTimeout(() => {
+      setShake(true);
+      intervalId = window.setInterval(() => setShake(true), 8000);
+    }, 30000);
+
+    return () => {
+      window.clearTimeout(timeout);
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!shake) return;
+    const t = window.setTimeout(() => setShake(false), 700);
+    return () => window.clearTimeout(t);
+  }, [shake]);
 
   return (
     <>
@@ -68,7 +88,7 @@ export function VideoIntroButton() {
                   title="Video giới thiệu Bứt Phá Marketing"
                   width="100%"
                   height="100%"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&rel=0"
+                  src={iframeSrc}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="h-full w-full"
@@ -88,9 +108,14 @@ export function VideoIntroButton() {
 
       <motion.button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          setShake(false);
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        animate={shake ? { rotate: [0, -8, 8, -6, 6, 0] } : { rotate: 0 }}
+        transition={{ duration: 0.6 }}
         className="fixed bottom-24 right-4 z-[90] flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 text-white shadow-2xl shadow-purple-500/30 ring-1 ring-white/10"
       >
         <Play size={24} className="drop-shadow-lg" />
