@@ -9,6 +9,7 @@ import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
+import { FanpageAudit } from "@/components/shared/FanpageAudit";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
 import { db } from "@/lib/useData";
@@ -131,6 +132,10 @@ function HomeContent() {
           >
             {settings.heroSubtitle}
           </motion.p>
+        </div>
+
+        <div className="mb-16">
+          <FanpageAudit primaryColor={settings.colors.facebook || settings.colors.primary} platform="facebook" />
         </div>
 
         <motion.div 

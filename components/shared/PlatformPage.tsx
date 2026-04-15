@@ -4,13 +4,12 @@ import { ChevronLeft, ChevronRight, ChevronDown, X, ShoppingCart, Check, CreditC
 import { SubPageLayout } from "./SubPageLayout";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { FeaturedProjectsFlip } from "./FeaturedProjectsFlip";
-import { ComparisonTable } from "./ComparisonTable";
 import { FanpageAudit } from "./FanpageAudit";
 import { AudioGuide } from "./AudioGuide";
 import { CountUp } from "./CountUp";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
-import { getContent, buildDefaultComparisonTabs, buildDefaultProcessTabs } from "@/lib/pageContent";
+import { getContent, buildDefaultProcessTabs } from "@/lib/pageContent";
 
 export interface PricingPackage {
   name: string;
@@ -66,6 +65,44 @@ interface CheckoutPkg {
   price: string;
   color: string;
   tabLabel: string;
+}
+
+interface ParsedFeatureItem {
+  title: string;
+  details: string[];
+}
+
+function parseFeatureItem(raw: string): ParsedFeatureItem {
+  const [titlePart, detailsPart] = raw.split("::");
+  const title = (titlePart || "").trim();
+  const details = detailsPart
+    ? detailsPart
+      .split("|")
+      .map((item) => item.trim())
+      .filter(Boolean)
+    : [];
+  return { title, details };
+}
+
+function parseResponsibility(raw: string) {
+  const lines = raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const intro: string[] = [];
+  const bullets: string[] = [];
+  lines.forEach((line) => {
+    if (line.startsWith("- ") || line.startsWith("• ")) {
+      bullets.push(line.replace(/^(-|•)\s+/, "").trim());
+      return;
+    }
+    if (line.includes(":")) {
+      bullets.push(line);
+      return;
+    }
+    intro.push(line);
+  });
+  return { intro: intro.join("\n"), bullets };
 }
 
 function CheckoutModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platformKey: string; onClose: () => void }) {
@@ -227,18 +264,33 @@ function Accordion({
   content,
   open,
   onToggle,
+  asBullets = false,
 }: {
   title: string;
   content: string;
   open: boolean;
   onToggle: () => void;
+  asBullets?: boolean;
 }) {
+  const parsedResponsibility = asBullets ? parseResponsibility(content) : null;
   return (
     <div className="border-b border-white/10">
       <button onClick={onToggle} className="flex w-full items-center justify-between py-4 text-left font-semibold text-white hover:text-gray-300">
         {title}<ChevronDown size={18} className={`transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <p className="whitespace-pre-line pb-4 text-sm leading-relaxed text-gray-400">{content}</p>}
+      {open && !asBullets && <p className="whitespace-pre-line pb-4 text-sm leading-relaxed text-gray-400">{content}</p>}
+      {open && asBullets && parsedResponsibility && (
+        <div className="space-y-3 pb-4 text-sm text-gray-400">
+          {parsedResponsibility.intro && <p className="whitespace-pre-line leading-relaxed">{parsedResponsibility.intro}</p>}
+          {parsedResponsibility.bullets.length > 0 && (
+            <ul className="list-disc space-y-1 pl-5 leading-relaxed">
+              {parsedResponsibility.bullets.map((item, idx) => (
+                <li key={`resp-bullet-${idx}`}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -261,6 +313,7 @@ function Stats({ stats, color }: { stats: { label: string; value: string }[]; co
 function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color: string; onCheckout: (pkg: CheckoutPkg) => void }) {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
   const [page, setPage] = useState(0);
   const tab = tabs[activeTab];
   const showPager = tab.packages.length > 3;
@@ -314,7 +367,36 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
                 <p className="mb-1 text-3xl font-black" style={{ color }}>{pkg.price}</p>
                 <p className="mb-4 text-xs text-gray-500">{pkg.period === "lifetime" ? "/vĩnh viễn" : "/tháng"}</p>
                 <ul className="mb-6 flex-1 space-y-2">
-                  {pkg.features.map((f, fi) => <li key={fi} className="flex items-start gap-2 text-sm text-gray-300"><span className="mt-0.5 text-green-400">✓</span>{f}</li>)}
+                  {(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).map((rawFeature, fi) => {
+                    const parsed = parseFeatureItem(rawFeature);
+                    if (!parsed.title) return null;
+                    const featureKey = `${activeTab}-${originalIndex}-${fi}`;
+                    const isExpanded = expandedFeature === featureKey;
+                    return (
+                      <li key={featureKey} className="rounded-lg border border-white/10 bg-black/15 px-3 py-2">
+                        <button
+                          type="button"
+                          onClick={() => setExpandedFeature(isExpanded ? null : featureKey)}
+                          className="flex w-full items-start justify-between gap-3 text-left text-sm text-gray-200"
+                        >
+                          <span className="flex items-start gap-2">
+                            <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/70" />
+                            <span>{parsed.title}</span>
+                          </span>
+                          {parsed.details.length > 0 && (
+                            <ChevronDown size={16} className={`mt-0.5 flex-shrink-0 text-gray-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                          )}
+                        </button>
+                        {isExpanded && parsed.details.length > 0 && (
+                          <ul className="mt-2 list-disc space-y-1 pl-8 text-xs text-gray-400">
+                            {parsed.details.map((detail, detailIdx) => (
+                              <li key={`${featureKey}-detail-${detailIdx}`}>{detail}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
                 <AudioGuide text={pkg.audioText} color={color} />
                 <button onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} className="mt-3 w-full rounded-xl py-3 text-sm font-bold text-white transition-all" style={{ backgroundColor: isHovered ? color : isPopular ? color : "rgba(255,255,255,0.1)", transform: isHovered ? "scale(1.02)" : "scale(1)" }}>
@@ -334,7 +416,7 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
   const tab = processTabs[activeTab];
   return (
     <section data-section="process" id="process" className="py-20 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-5xl">
         <h2 className="mb-8 text-center text-3xl font-black text-white md:text-4xl">Quy Trình Triển Khai</h2>
         {processTabs.length > 1 && (
           <div className="mb-8 flex flex-wrap justify-center gap-2">
@@ -346,17 +428,14 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
           </div>
         )}
         <AnimatePresence mode="wait">
-          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="grid gap-4 md:grid-cols-2">
             {tab.steps.map((p, i) => (
-              <div key={i} className="flex gap-6">
-                <div className="flex flex-col items-center">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-black text-white" style={{ backgroundColor: color }}>{p.step}</div>
-                  {i < tab.steps.length - 1 && <div className="mt-1 w-px flex-1 bg-white/10" />}
+              <div key={i} className="rounded-2xl border border-white/10 bg-card/80 p-5">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-black text-white" style={{ backgroundColor: color }}>{p.step}</div>
+                  <h4 className="font-bold text-white">{p.title}</h4>
                 </div>
-                <div className="pb-8">
-                  <h4 className="mb-1 font-bold text-white">{p.title}</h4>
-                  <p className="text-sm text-gray-400">{p.desc}</p>
-                </div>
+                <p className="text-sm leading-relaxed text-gray-400">{p.desc}</p>
               </div>
             ))}
           </motion.div>
@@ -381,9 +460,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
     <section data-section="faq" id="faq" className="py-20 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <h2 className="mb-12 text-center text-3xl font-black text-white md:text-4xl">Câu Hỏi Thường Gặp</h2>
-        <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-card px-6">
+        <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-card px-6 shadow-[0_20px_45px_rgba(0,0,0,0.25)]">
           {faqs.map((faq, i) => <FAQItem key={i} q={faq.q} a={faq.a} />)}
         </div>
       </motion.div>
@@ -457,6 +536,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
         ...pkg,
         price: override?.price || pkg.price,
         features: override?.features && override.features.length > 0 && override.features[0] !== "" ? override.features : pkg.features,
+        allFeatures: override?.allFeatures && override.allFeatures.length > 0 ? override.allFeatures : (pkg.allFeatures || pkg.features),
         audioText: override?.audio || pkg.audioText
       };
     })
@@ -464,7 +544,6 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const override = getContent(platformKey);
   const tabsForRender = override?.tabs || updatedTabs;
   const processTabs = override?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map(t => t.label));
-  const comparisonTabs = override?.comparisonTabs ?? buildDefaultComparisonTabs(tabsForRender);
   const cases = settings.media[platformKey]?.cases || [];
   const beforeAfterBefore = override?.beforeAfterBefore;
   const beforeAfterAfter = override?.beforeAfterAfter;
@@ -497,29 +576,27 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
                 content={content.responsibility}
                 open={openIntro === "responsibility"}
                 onToggle={() => setOpenIntro("responsibility")}
+                asBullets
               />
             </div>
           </motion.div>
         </section>
       )}
 
+      {settings.visibility.audit !== false && (
+        <FanpageAudit
+          primaryColor={settings.colors[platformKey] || content.color}
+          platform={content.auditPlatform ?? "facebook"}
+        />
+      )}
+
       {settings.visibility.pricing !== false && (
-        <>
-          <PricingSection tabs={tabsForRender} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
-          <ComparisonTable tabs={tabsForRender} comparisonTabs={comparisonTabs} primaryColor={settings.colors[platformKey] || content.color} onCheckout={pkg => handleCheckout({ ...pkg, color: settings.colors[platformKey] || content.color })} />
-        </>
+        <PricingSection tabs={tabsForRender} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
       )}
 
       <FeaturedProjectsFlip cases={cases} />
       
       <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
-      
-      {settings.visibility.audit !== false && (
-        <FanpageAudit 
-          primaryColor={settings.colors[platformKey] || content.color} 
-          platform={content.auditPlatform ?? "facebook"}
-        />
-      )}
       
       {settings.visibility.stats !== false && (
         <Stats stats={content.stats} color={settings.colors[platformKey] || content.color} />

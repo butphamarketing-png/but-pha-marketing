@@ -22,7 +22,6 @@ const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
   { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
-  { id: "comparison", label: "So sánh các gói", icon: BarChart2 },
   { id: "orders", label: "Quản lý Đơn hàng", icon: ShoppingCart },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
@@ -40,6 +39,51 @@ const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
 
 function formatMoney(num: number) { return num.toLocaleString("vi-VN") + "đ"; }
 function formatDate(date: string | number) { return new Date(date).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
+function parseFeatureLine(line: string) {
+  const [titlePart, detailPart] = line.split("::");
+  return {
+    title: (titlePart || "").trim(),
+    details: detailPart ? detailPart.split("|").map(item => item.trim()).filter(Boolean) : [],
+  };
+}
+
+function serializeFeatureLine(title: string, details: string[]) {
+  const cleanTitle = title.trim();
+  const cleanDetails = details.map(item => item.trim()).filter(Boolean);
+  if (!cleanTitle) return "";
+  return cleanDetails.length > 0 ? `${cleanTitle}::${cleanDetails.join("|")}` : cleanTitle;
+}
+
+function parseResponsibilityEditor(raw: string) {
+  const lines = raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const intro: string[] = [];
+  const bullets: string[] = [];
+  lines.forEach((line) => {
+    if (line.startsWith("- ") || line.startsWith("• ")) {
+      bullets.push(line.replace(/^(-|•)\s+/, "").trim());
+      return;
+    }
+    if (line.includes(":")) {
+      bullets.push(line);
+      return;
+    }
+    intro.push(line);
+  });
+  return { intro: intro.join("\n"), bullets };
+}
+
+function serializeResponsibilityEditor(intro: string, bullets: string[]) {
+  const parts: string[] = [];
+  if (intro.trim()) parts.push(intro.trim());
+  bullets
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .forEach((item) => parts.push(`- ${item}`));
+  return parts.join("\n");
+}
 
 function StatCard({ value, label, icon: Icon, color }: { value: string | number; label: string; icon: LucideIcon; color: string }) {
   return (
@@ -107,6 +151,7 @@ export default function AdminPage() {
     processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
     faqs: [{ q: "", a: "" }],
   });
+  const responsibilityEditor = parseResponsibilityEditor(pageContent.responsibility || "");
 
   const visitorChartData = Array.from({ length: 12 }, (_, i) => ({
     name: `Tuần ${i + 1}`,
@@ -390,6 +435,57 @@ export default function AdminPage() {
     updateServiceTabs(tabs);
   };
 
+  const updatePackageFeatureItem = (
+    tabIndex: number,
+    pkgIndex: number,
+    featureIndex: number,
+    patch: { title?: string; details?: string[] },
+  ) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target || !target.packages[pkgIndex]) return;
+    const pkg = target.packages[pkgIndex];
+    const serialized = (pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).filter(Boolean);
+    const rows = serialized.map((line) => parseFeatureLine(line));
+    if (!rows[featureIndex]) return;
+    rows[featureIndex] = {
+      title: patch.title ?? rows[featureIndex].title,
+      details: patch.details ?? rows[featureIndex].details,
+    };
+    const nextAll = rows
+      .map((row) => serializeFeatureLine(row.title, row.details))
+      .filter(Boolean);
+    updatePackageField(tabIndex, pkgIndex, {
+      features: nextAll.map((line) => parseFeatureLine(line).title).filter(Boolean),
+      allFeatures: nextAll,
+    });
+  };
+
+  const addPackageFeatureItem = (tabIndex: number, pkgIndex: number) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target || !target.packages[pkgIndex]) return;
+    const pkg = target.packages[pkgIndex];
+    const nextAll = [...(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features), "Nội dung mới::Chi tiết 1|Chi tiết 2"];
+    updatePackageField(tabIndex, pkgIndex, {
+      features: nextAll.map((line) => parseFeatureLine(line).title).filter(Boolean),
+      allFeatures: nextAll,
+    });
+  };
+
+  const removePackageFeatureItem = (tabIndex: number, pkgIndex: number, featureIndex: number) => {
+    const tabs = [...(serviceContent.tabs || [])];
+    const target = tabs[tabIndex];
+    if (!target || !target.packages[pkgIndex]) return;
+    const pkg = target.packages[pkgIndex];
+    const rows = (pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).filter(Boolean);
+    const nextAll = rows.filter((_, idx) => idx !== featureIndex);
+    updatePackageField(tabIndex, pkgIndex, {
+      features: nextAll.map((line) => parseFeatureLine(line).title).filter(Boolean),
+      allFeatures: nextAll,
+    });
+  };
+
   const updateComparisonTabs = (tabs: ComparisonTabOverride[]) => {
     setComparisonTabs(tabs);
     setServiceContent(prev => ({ ...prev, comparisonTabs: tabs }));
@@ -499,6 +595,26 @@ export default function AdminPage() {
 
   const updatePageContentField = (field: keyof ContentOverride, value: any) => {
     setPageContent(prev => ({ ...prev, [field]: value }));
+  };
+
+  const updateResponsibilityIntro = (value: string) => {
+    updatePageContentField("responsibility", serializeResponsibilityEditor(value, responsibilityEditor.bullets));
+  };
+
+  const updateResponsibilityBullet = (index: number, value: string) => {
+    const next = [...responsibilityEditor.bullets];
+    next[index] = value;
+    updatePageContentField("responsibility", serializeResponsibilityEditor(responsibilityEditor.intro, next));
+  };
+
+  const addResponsibilityBullet = () => {
+    const next = [...responsibilityEditor.bullets, "Giá trị mới"];
+    updatePageContentField("responsibility", serializeResponsibilityEditor(responsibilityEditor.intro, next));
+  };
+
+  const removeResponsibilityBullet = (index: number) => {
+    const next = responsibilityEditor.bullets.filter((_, i) => i !== index);
+    updatePageContentField("responsibility", serializeResponsibilityEditor(responsibilityEditor.intro, next));
   };
 
   const updateStat = (index: number, field: "label" | "value", value: string) => {
@@ -814,7 +930,30 @@ export default function AdminPage() {
                       <h4 className="text-sm font-bold text-white">Giới thiệu về dịch vụ</h4>
                       <textarea value={pageContent.vision || ""} onChange={e => updatePageContentField("vision", e.target.value)} placeholder="Tầm nhìn" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
                       <textarea value={pageContent.mission || ""} onChange={e => updatePageContentField("mission", e.target.value)} placeholder="Sứ mệnh" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
-                      <textarea value={pageContent.responsibility || ""} onChange={e => updatePageContentField("responsibility", e.target.value)} placeholder="Trách nhiệm" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-white" />
+                      <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-gray-300">Trách nhiệm (hỗ trợ dấu chấm tròn)</p>
+                          <button type="button" onClick={addResponsibilityBullet} className="rounded-lg border border-white/20 px-2 py-1 text-[11px] text-white">Thêm ý</button>
+                        </div>
+                        <textarea
+                          value={responsibilityEditor.intro}
+                          onChange={e => updateResponsibilityIntro(e.target.value)}
+                          placeholder="Dòng mở đầu (ví dụ: Chúng tôi cam kết 3 giá trị cốt lõi)"
+                          className="h-20 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                        />
+                        {responsibilityEditor.bullets.map((bullet, idx) => (
+                          <div key={`resp-bullet-${idx}`} className="flex items-center gap-2">
+                            <span className="text-lg leading-none text-gray-400">•</span>
+                            <input
+                              value={bullet}
+                              onChange={e => updateResponsibilityBullet(idx, e.target.value)}
+                              placeholder={`Ý ${idx + 1}`}
+                              className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                            />
+                            <button type="button" onClick={() => removeResponsibilityBullet(idx)} className="rounded-lg border border-red-500/30 px-2 py-1 text-[11px] text-red-200">Xóa</button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -954,13 +1093,47 @@ export default function AdminPage() {
                             <input type="checkbox" checked={!!pkg.popular} onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { popular: e.target.checked })} />
                             Gói phổ biến nhất
                           </label>
-                          <textarea
-                            value={(pkg.features || []).join("\n")}
-                            onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { features: e.target.value.split("\n"), allFeatures: e.target.value.split("\n") })}
-                            placeholder="Nội dung gói (mỗi dòng 1 ý)"
-                            rows={6}
-                            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                          />
+                          <div className="space-y-2 rounded-lg border border-white/10 bg-black/20 p-3">
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-semibold text-gray-300">Nội dung thiết kế (click để xổ chi tiết)</p>
+                              <button
+                                type="button"
+                                onClick={() => addPackageFeatureItem(selectedServiceTab, pkgIdx)}
+                                className="rounded-lg border border-white/20 px-2 py-1 text-[11px] text-white"
+                              >
+                                Thêm dòng
+                              </button>
+                            </div>
+                            {(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).map((line, featureIdx) => {
+                              const parsed = parseFeatureLine(line);
+                              return (
+                                <div key={`feature-${pkgIdx}-${featureIdx}`} className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-2">
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      value={parsed.title}
+                                      onChange={e => updatePackageFeatureItem(selectedServiceTab, pkgIdx, featureIdx, { title: e.target.value })}
+                                      placeholder={`Dòng ${featureIdx + 1}`}
+                                      className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => removePackageFeatureItem(selectedServiceTab, pkgIdx, featureIdx)}
+                                      className="rounded-lg border border-red-500/20 bg-red-500/10 px-2 py-1 text-[11px] text-red-200"
+                                    >
+                                      Xóa
+                                    </button>
+                                  </div>
+                                  <textarea
+                                    value={parsed.details.join("\n")}
+                                    onChange={e => updatePackageFeatureItem(selectedServiceTab, pkgIdx, featureIdx, { details: e.target.value.split("\n") })}
+                                    placeholder="Chi tiết con (mỗi dòng là 1 dấu chấm tròn)"
+                                    rows={3}
+                                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
                           <textarea
                             value={pkg.audioText || ""}
                             onChange={e => updatePackageField(selectedServiceTab, pkgIdx, { audioText: e.target.value })}
