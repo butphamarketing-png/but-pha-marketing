@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
 import { Phone, ChevronLeft, ChevronRight, Flame } from "lucide-react";
@@ -22,7 +22,6 @@ function HomeContent() {
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [blogPage, setBlogPage] = useState(0);
-  const [selectedBlog, setSelectedBlog] = useState<NewsItem | null>(null);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
   const { user } = useAuth();
@@ -97,6 +96,15 @@ function HomeContent() {
   ];
   const visibleBlogs = blogs.slice(blogPage * 4, blogPage * 4 + 4);
   const blogMaxPage = Math.max(0, Math.ceil(blogs.length / 4) - 1);
+  const blogSlug = (item: NewsItem) =>
+    item.slug ||
+    item.title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
 
   return (
     <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
@@ -203,10 +211,9 @@ function HomeContent() {
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               {visibleBlogs.map((blog) => (
-                <button
+                <Link
                   key={blog.id}
-                  type="button"
-                  onClick={() => setSelectedBlog(blog)}
+                  href={`/blog/${blogSlug(blog) || blog.id}`}
                   className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card text-left shadow-xl"
                   style={{ perspective: "1200px" }}
                 >
@@ -230,7 +237,7 @@ function HomeContent() {
                     {blog.hot && <Flame size={16} className="text-orange-400" />}
                   </div>
                   {blog.hot && <div className="pointer-events-none absolute inset-0 animate-pulse rounded-2xl ring-1 ring-orange-500/70" />}
-                </button>
+                </Link>
               ))}
             </div>
           </section>
@@ -246,41 +253,6 @@ function HomeContent() {
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
-      <AnimatePresence>
-        {selectedBlog && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.98 }}
-              className="max-h-[85vh] w-full max-w-4xl overflow-auto rounded-2xl border border-white/10 bg-card p-6"
-            >
-              <div className="mb-4 flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-2xl font-black text-white">{selectedBlog.title}</h3>
-                  <p className="mt-1 text-xs text-gray-400">
-                    Ngày viết: {new Date(selectedBlog.publishedAt || selectedBlog.timestamp).toLocaleDateString("vi-VN")}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedBlog(null)}
-                  className="rounded-lg border border-white/20 px-3 py-1 text-xs text-white"
-                >
-                  Đóng
-                </button>
-              </div>
-              {selectedBlog.imageUrl && (
-                <img src={selectedBlog.imageUrl} alt={selectedBlog.title} className="mb-4 h-64 w-full rounded-xl object-cover" />
-              )}
-              <div
-                className="prose prose-invert max-w-none text-sm leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
-              />
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
       
       <style>{`
         @keyframes shimmer {

@@ -122,6 +122,29 @@ function setLocal<T>(key: string, val: T) {
   }
 }
 
+function normalizeNewsItem(item: NewsItem): NewsItem {
+  const safeSlug =
+    item.slug ||
+    item.title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+  return {
+    ...item,
+    description: item.description || "",
+    imageUrl: item.imageUrl || "",
+    slug: safeSlug || item.id,
+    hot: item.hot || false,
+    metaDescription: item.metaDescription || "",
+    keywordsMain: item.keywordsMain || "",
+    keywordsSecondary: item.keywordsSecondary || "",
+    publishedAt: item.publishedAt || "",
+  };
+}
+
 export interface ProgressArticle {
   id: number;
   clientId: number;
@@ -193,32 +216,39 @@ export const db = {
   },
   news: {
     getAll: async (): Promise<NewsItem[]> => {
-      const list = getLocal<NewsItem[]>("news", []);
-      return list.map((item) => ({
-        ...item,
-        description: item.description || "",
-        imageUrl: item.imageUrl || "",
-        slug: item.slug || "",
-        hot: item.hot || false,
-        metaDescription: item.metaDescription || "",
-        keywordsMain: item.keywordsMain || "",
-        keywordsSecondary: item.keywordsSecondary || "",
-        publishedAt: item.publishedAt || "",
-      }));
+      try {
+        const list = await apiFetch("/news");
+        return (list || []).map((item: NewsItem) => normalizeNewsItem(item));
+      } catch {
+        const list = getLocal<NewsItem[]>("news", []);
+        return list.map((item) => normalizeNewsItem(item));
+      }
     },
     add: async (n: Omit<NewsItem, "id" | "timestamp">) => {
-      const list = await db.news.getAll();
-      const item: NewsItem = { ...n, id: uid(), timestamp: Date.now() };
-      setLocal("news", [...list, item]);
-      return item;
+      try {
+        return await apiFetch("/news", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(n) });
+      } catch {
+        const list = await db.news.getAll();
+        const item: NewsItem = normalizeNewsItem({ ...n, id: uid(), timestamp: Date.now() });
+        setLocal("news", [...list, item]);
+        return item;
+      }
     },
     update: async (id: string, data: Partial<NewsItem>) => {
-      const list = await db.news.getAll();
-      setLocal("news", list.map(n => n.id === id ? { ...n, ...data } : n));
+      try {
+        await apiFetch(`/news?id=${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      } catch {
+        const list = await db.news.getAll();
+        setLocal("news", list.map(n => n.id === id ? normalizeNewsItem({ ...n, ...data }) : n));
+      }
     },
     delete: async (id: string) => {
-      const list = await db.news.getAll();
-      setLocal("news", list.filter(n => n.id !== id));
+      try {
+        await apiFetch(`/news?id=${id}`, { method: "DELETE" });
+      } catch {
+        const list = await db.news.getAll();
+        setLocal("news", list.filter(n => n.id !== id));
+      }
     },
   },
   media: {
