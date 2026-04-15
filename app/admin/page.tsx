@@ -786,7 +786,7 @@ export default function AdminPage() {
                   <option value="home">Trang chủ</option>
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
               </div>
               {selectedPlatform === "home" ? (
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1128,7 +1128,7 @@ export default function AdminPage() {
                   <option value="home">Trang chủ</option>
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
               </div>
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
@@ -1532,7 +1532,7 @@ export default function AdminPage() {
                     />
                   </label>
                 </div>
-                <button onClick={() => { localStorage.setItem("admin_settings", JSON.stringify(settings)); alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
+                <button onClick={() => { alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                 <h3 className="font-bold text-white">Tracking & Scripts</h3>

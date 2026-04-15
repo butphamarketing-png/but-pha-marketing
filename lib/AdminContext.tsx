@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
 
 interface PackageConfig {
   price: string;
@@ -231,6 +231,8 @@ function mergeWithDefaults(parsed: Partial<SiteSettings>): SiteSettings {
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoaded, setIsLoaded] = useState(false);
+  const persistTimerRef = useRef<number | null>(null);
+  const lastSavedRef = useRef("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -249,8 +251,28 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isLoaded && typeof window !== "undefined") {
-      localStorage.setItem("admin_settings", JSON.stringify({ ...settings, presentationMode: false }));
+      const payload = JSON.stringify({ ...settings, presentationMode: false });
+      if (payload === lastSavedRef.current) return;
+
+      if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
+      persistTimerRef.current = window.setTimeout(() => {
+        const persist = () => {
+          localStorage.setItem("admin_settings", payload);
+          lastSavedRef.current = payload;
+        };
+        if ("requestIdleCallback" in window) {
+          (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
+            persist,
+            { timeout: 800 },
+          );
+        } else {
+          persist();
+        }
+      }, 220);
     }
+    return () => {
+      if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
+    };
   }, [settings, isLoaded]);
 
   useEffect(() => {
