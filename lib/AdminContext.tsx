@@ -216,6 +216,7 @@ const defaultSettings: SiteSettings = {
 };
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
+const SETTINGS_KEY = "admin_settings";
 
 function mergeWithDefaults(parsed: Partial<SiteSettings>): SiteSettings {
   return {
@@ -235,18 +236,40 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const lastSavedRef = useRef("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("admin_settings");
+    if (typeof window === "undefined") return;
+    let mounted = true;
+    const loadSettings = async () => {
+      try {
+        const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (mounted && data?.value) {
+            const merged = mergeWithDefaults(data.value as Partial<SiteSettings>);
+            setSettings(merged);
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
+            setIsLoaded(true);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Remote settings unavailable, fallback local", e);
+      }
+
+      const saved = localStorage.getItem(SETTINGS_KEY);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          setSettings(mergeWithDefaults(parsed));
+          if (mounted) setSettings(mergeWithDefaults(parsed));
         } catch (e) {
           console.error("Failed to parse admin settings", e);
         }
       }
-      setIsLoaded(true);
-    }
+      if (mounted) setIsLoaded(true);
+    };
+    loadSettings();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -257,8 +280,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
       persistTimerRef.current = window.setTimeout(() => {
         const persist = () => {
-          localStorage.setItem("admin_settings", payload);
+          localStorage.setItem(SETTINGS_KEY, payload);
           lastSavedRef.current = payload;
+          fetch("/api/settings", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key: SETTINGS_KEY, value: JSON.parse(payload) }),
+          }).catch(() => {});
         };
         if ("requestIdleCallback" in window) {
           (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
@@ -278,7 +306,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onStorage = (event: StorageEvent) => {
-      if (event.key !== "admin_settings" || !event.newValue) return;
+      if (event.key !== SETTINGS_KEY || !event.newValue) return;
       try {
         const parsed = JSON.parse(event.newValue);
         setSettings(mergeWithDefaults(parsed));

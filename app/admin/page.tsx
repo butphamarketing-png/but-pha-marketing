@@ -22,6 +22,7 @@ const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
   { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
+  { id: "news", label: "Danh mục tin tức", icon: Newspaper },
   { id: "orders", label: "Quản lý Đơn hàng", icon: ShoppingCart },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
@@ -1553,114 +1554,114 @@ export default function AdminPage() {
           )}
 
           {activeTab === "seo" && (
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {Object.keys(SEO_DEFAULTS).map(key => (
-                  <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                    <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
-                    <input value={seoData[key]?.title || SEO_DEFAULTS[key].title} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                    <textarea value={seoData[key]?.desc || SEO_DEFAULTS[key].desc} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Description" className="w-full h-20 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                  </div>
-                ))}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {Object.keys(SEO_DEFAULTS).map(key => (
+                <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                  <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
+                  <input value={seoData[key]?.title || SEO_DEFAULTS[key].title} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                  <textarea value={seoData[key]?.desc || SEO_DEFAULTS[key].desc} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Description" className="w-full h-20 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "news" && (
+            <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="text-lg font-bold text-white">Quản lý Blog Trang Chủ</h3>
+                <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo blog mới</button>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="text-lg font-bold text-white">Quản lý Blog Trang Chủ</h3>
-                  <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo blog mới</button>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">Tiêu đề</label>
-                    <div className="flex gap-2">
-                      <input
-                        value={blogForm.title}
-                        onChange={e => setBlogForm(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="Nhập tiêu đề blog"
-                        className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                      />
-                      <button type="button" onClick={generateBlogDraftByAI} className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">
-                        AI viết
-                      </button>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">URL slug</label>
-                    <input value={blogForm.slug} onChange={e => setBlogForm(prev => ({ ...prev, slug: e.target.value }))} placeholder="duong-dan-bai-viet" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">Từ khóa chính</label>
-                    <input value={blogForm.keywordsMain} onChange={e => setBlogForm(prev => ({ ...prev, keywordsMain: e.target.value }))} placeholder="dịch vụ sửa đường nhựa TP.HCM" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">Từ khóa phụ</label>
-                    <input value={blogForm.keywordsSecondary} onChange={e => setBlogForm(prev => ({ ...prev, keywordsSecondary: e.target.value }))} placeholder="từ khóa phụ" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2 lg:col-span-2">
-                    <label className="text-xs text-gray-300">Mô tả ngắn (hiển thị khi rê chuột)</label>
-                    <textarea value={blogForm.description} onChange={e => setBlogForm(prev => ({ ...prev, description: e.target.value }))} rows={3} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2 lg:col-span-2">
-                    <label className="text-xs text-gray-300">Meta Description</label>
-                    <textarea value={blogForm.metaDescription} onChange={e => setBlogForm(prev => ({ ...prev, metaDescription: e.target.value }))} rows={2} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">Ngày viết</label>
-                    <input type="date" value={blogForm.publishedAt} onChange={e => setBlogForm(prev => ({ ...prev, publishedAt: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-300">Ảnh đại diện</label>
-                    <input value={blogForm.imageUrl} onChange={e => setBlogForm(prev => ({ ...prev, imageUrl: e.target.value }))} placeholder="URL ảnh hoặc upload bên dưới" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="block w-full text-xs text-gray-300"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = () => setBlogForm(prev => ({ ...prev, imageUrl: String(reader.result || "") }));
-                        reader.readAsDataURL(file);
-                      }}
-                    />
-                  </div>
-                </div>
-
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Nội dung bài viết (word nâng cao)</label>
-                  <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm(prev => ({ ...prev, content: html }))} minHeight={260} />
+                  <label className="text-xs text-gray-300">Tiêu đề</label>
+                  <div className="flex gap-2">
+                    <input
+                      value={blogForm.title}
+                      onChange={e => setBlogForm(prev => ({ ...prev, title: e.target.value }))}
+                      placeholder="Nhập tiêu đề blog"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                    />
+                    <button type="button" onClick={generateBlogDraftByAI} className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">
+                      AI viết
+                    </button>
+                  </div>
                 </div>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <label className="flex items-center gap-2 text-sm text-gray-300">
-                    <input type="checkbox" checked={blogForm.published} onChange={e => setBlogForm(prev => ({ ...prev, published: e.target.checked }))} />
-                    Hiện blog
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-orange-300">
-                    <input type="checkbox" checked={blogForm.hot} onChange={e => setBlogForm(prev => ({ ...prev, hot: e.target.checked }))} />
-                    Blog hot (hiệu ứng lửa)
-                  </label>
-                  <button type="button" onClick={saveBlog} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">
-                    {editingBlogId ? "Cập nhật blog" : "Lưu blog"}
-                  </button>
+                <div className="space-y-2">
+                  <label className="text-xs text-gray-300">URL slug</label>
+                  <input value={blogForm.slug} onChange={e => setBlogForm(prev => ({ ...prev, slug: e.target.value }))} placeholder="duong-dan-bai-viet" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                 </div>
+                <div className="space-y-2">
+                  <label className="text-xs text-gray-300">Từ khóa chính</label>
+                  <input value={blogForm.keywordsMain} onChange={e => setBlogForm(prev => ({ ...prev, keywordsMain: e.target.value }))} placeholder="dịch vụ sửa đường nhựa TP.HCM" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs text-gray-300">Từ khóa phụ</label>
+                  <input value={blogForm.keywordsSecondary} onChange={e => setBlogForm(prev => ({ ...prev, keywordsSecondary: e.target.value }))} placeholder="từ khóa phụ" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                </div>
+                <div className="space-y-2 lg:col-span-2">
+                  <label className="text-xs text-gray-300">Mô tả ngắn (hiển thị khi rê chuột)</label>
+                  <textarea value={blogForm.description} onChange={e => setBlogForm(prev => ({ ...prev, description: e.target.value }))} rows={3} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                </div>
+                <div className="space-y-2 lg:col-span-2">
+                  <label className="text-xs text-gray-300">Meta Description</label>
+                  <textarea value={blogForm.metaDescription} onChange={e => setBlogForm(prev => ({ ...prev, metaDescription: e.target.value }))} rows={2} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs text-gray-300">Ngày viết</label>
+                  <input type="date" value={blogForm.publishedAt} onChange={e => setBlogForm(prev => ({ ...prev, publishedAt: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs text-gray-300">Ảnh đại diện</label>
+                  <input value={blogForm.imageUrl} onChange={e => setBlogForm(prev => ({ ...prev, imageUrl: e.target.value }))} placeholder="URL ảnh hoặc upload bên dưới" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="block w-full text-xs text-gray-300"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => setBlogForm(prev => ({ ...prev, imageUrl: String(reader.result || "") }));
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                </div>
+              </div>
 
-                <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
-                  <p className="text-sm font-semibold text-white">Danh sách blog</p>
-                  {blogs.map((item) => (
-                    <div key={item.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm text-white">{item.title}</p>
-                        <p className="text-[11px] text-gray-400">{new Date(item.publishedAt || item.timestamp).toLocaleDateString("vi-VN")} · {item.published ? "Hiện" : "Ẩn"} {item.hot ? "· HOT" : ""}</p>
-                      </div>
-                      <button type="button" onClick={() => editBlog(item)} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">Sửa</button>
-                      <button type="button" onClick={async () => { await db.news.update(item.id, { published: !item.published }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">{item.published ? "Ẩn" : "Hiện"}</button>
-                      <button type="button" onClick={async () => { await db.news.update(item.id, { hot: !item.hot }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-orange-400/40 px-2 py-1 text-xs text-orange-300">{item.hot ? "Bỏ hot" : "Hot"}</button>
-                      <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); setBlogs(await db.news.getAll()); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
+              <div className="space-y-2">
+                <label className="text-xs text-gray-300">Nội dung bài viết (word nâng cao)</label>
+                <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm(prev => ({ ...prev, content: html }))} minHeight={260} />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <label className="flex items-center gap-2 text-sm text-gray-300">
+                  <input type="checkbox" checked={blogForm.published} onChange={e => setBlogForm(prev => ({ ...prev, published: e.target.checked }))} />
+                  Hiện blog
+                </label>
+                <label className="flex items-center gap-2 text-sm text-orange-300">
+                  <input type="checkbox" checked={blogForm.hot} onChange={e => setBlogForm(prev => ({ ...prev, hot: e.target.checked }))} />
+                  Blog hot (hiệu ứng lửa)
+                </label>
+                <button type="button" onClick={saveBlog} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">
+                  {editingBlogId ? "Cập nhật blog" : "Lưu blog"}
+                </button>
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
+                <p className="text-sm font-semibold text-white">Danh sách blog</p>
+                {blogs.map((item) => (
+                  <div key={item.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-white">{item.title}</p>
+                      <p className="text-[11px] text-gray-400">{new Date(item.publishedAt || item.timestamp).toLocaleDateString("vi-VN")} · {item.published ? "Hiện" : "Ẩn"} {item.hot ? "· HOT" : ""}</p>
                     </div>
-                  ))}
-                </div>
+                    <button type="button" onClick={() => editBlog(item)} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">Sửa</button>
+                    <button type="button" onClick={async () => { await db.news.update(item.id, { published: !item.published }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">{item.published ? "Ẩn" : "Hiện"}</button>
+                    <button type="button" onClick={async () => { await db.news.update(item.id, { hot: !item.hot }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-orange-400/40 px-2 py-1 text-xs text-orange-300">{item.hot ? "Bỏ hot" : "Hot"}</button>
+                    <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); setBlogs(await db.news.getAll()); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
+                  </div>
+                ))}
               </div>
             </div>
           )}
