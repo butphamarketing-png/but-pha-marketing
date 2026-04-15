@@ -56,16 +56,34 @@ export function AnimatedMascot() {
     [platform, settings.mascotClickMessages],
   );
 
+  const estimateSpeechDurationMs = (text: string) => {
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1300, Math.min(9000, words * 430 + 450));
+  };
+
   const speakCute = (text: string) => {
-    if (!("speechSynthesis" in window)) return;
+    if (!("speechSynthesis" in window)) return Promise.resolve();
+    if (!text.trim()) return Promise.resolve();
+    const estimatedDuration = estimateSpeechDurationMs(text);
     window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "vi-VN";
-    utter.rate = 0.96;
-    utter.pitch = 1.35;
-    const viVoice = window.speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith("vi"));
-    if (viVoice) utter.voice = viVoice;
-    window.speechSynthesis.speak(utter);
+    return new Promise<void>((resolve) => {
+      const utter = new SpeechSynthesisUtterance(text);
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        resolve();
+      };
+      utter.lang = "vi-VN";
+      utter.rate = 0.96;
+      utter.pitch = 1.35;
+      utter.onend = finish;
+      utter.onerror = finish;
+      const viVoice = window.speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith("vi"));
+      if (viVoice) utter.voice = viVoice;
+      window.speechSynthesis.speak(utter);
+      window.setTimeout(finish, estimatedDuration + 1200);
+    });
   };
 
   const stopSpeaking = () => {
@@ -246,28 +264,35 @@ export function AnimatedMascot() {
               const idx = clickCountRef.current - 1;
               const clickLine = clickMessages[idx];
               const lineToSpeak = clickLine || message;
-              speakCute(lineToSpeak);
-              if (audioUrl && idx === 0) {
+              const speechDone = speakCute(lineToSpeak);
+              const audioDone = new Promise<void>((resolve) => {
+                if (!audioUrl || idx !== 0) {
+                  resolve();
+                  return;
+                }
                 if (!audioRef.current) audioRef.current = new Audio(audioUrl);
                 else audioRef.current.src = audioUrl;
                 audioRef.current.loop = false;
-                audioRef.current.play().catch(() => {});
-              }
-              window.setTimeout(() => {
+                audioRef.current.onended = () => resolve();
+                audioRef.current.onerror = () => resolve();
+                audioRef.current.play().catch(() => resolve());
+              });
+
+              Promise.all([speechDone, audioDone]).then(() => {
                 holdingRef.current = false;
                 velocityRef.current = { ...lastVelocityRef.current };
                 stopSpeaking();
-              }, 1400);
+              });
 
               if (clickMessages.length > 0 && clickCountRef.current >= clickMessages.length) {
-                window.setTimeout(() => {
+                Promise.all([speechDone, audioDone]).then(() => {
                   setBursting(true);
                   window.setTimeout(() => {
                     setIsShown(false);
                     setBursting(false);
                     clickCountRef.current = 0;
                   }, 420);
-                }, 1200);
+                });
               }
             }}
             animate={{ y: [0, -4, 0], rotate: [0, 2, -2, 0] }}

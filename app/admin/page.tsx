@@ -716,6 +716,21 @@ export default function AdminPage() {
 
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-6xl mx-auto space-y-8">
+          <div className="md:hidden">
+            <div className="rounded-2xl border border-white/10 bg-card p-3">
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-400">Chuyển mục quản trị</label>
+              <select
+                value={activeTab}
+                onChange={e => setActiveTab(e.target.value)}
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+              >
+                {NAV.map(item => (
+                  <option key={item.id} value={item.id}>{item.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {activeTab === "dashboard" && (
             <div className="space-y-8">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -778,6 +793,8 @@ export default function AdminPage() {
                   <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                     <h3 className="font-bold text-white">Thông tin chung</h3>
                     <input value={settings.title || ""} onChange={e => updateSettings({ title: e.target.value })} placeholder="Tiêu đề website" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    <input value={settings.heroTitle || ""} onChange={e => updateSettings({ heroTitle: e.target.value })} placeholder="Tiêu đề Hero trang chủ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    <textarea value={settings.heroSubtitle || ""} onChange={e => updateSettings({ heroSubtitle: e.target.value })} placeholder="Mô tả Hero trang chủ (ví dụ: Tăng trưởng doanh thu...)" className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <textarea value={settings.content || ""} onChange={e => updateSettings({ content: e.target.value })} placeholder="Giới thiệu" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <input value={settings.hotline || ""} onChange={e => updateSettings({ hotline: e.target.value })} placeholder="Hotline" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                   </div>
@@ -999,8 +1016,8 @@ export default function AdminPage() {
                       <button onClick={() => addComparisonRow(selectedCompareTab)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm dòng</button>
                     </div>
 
-                    <div className="overflow-auto rounded-2xl border border-white/10">
-                      <table className="min-w-full text-left text-sm">
+                    <div className="overflow-x-auto rounded-2xl border border-white/10">
+                      <table className="min-w-[780px] text-left text-sm">
                         <thead className="bg-white/5">
                           <tr>
                             <th className="px-3 py-3 text-gray-300">Tên dòng</th>
@@ -1057,7 +1074,8 @@ export default function AdminPage() {
 
           {activeTab === "orders" && (
             <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
-              <table className="w-full text-left text-sm">
+              <div className="overflow-x-auto">
+              <table className="min-w-[640px] w-full text-left text-sm">
                 <thead className="bg-white/5 text-gray-400">
                   <tr><th className="px-4 py-3">Khách</th><th className="px-4 py-3">Gói</th><th className="px-4 py-3">Trạng thái</th><th className="px-4 py-3"></th></tr>
                 </thead>
@@ -1076,12 +1094,14 @@ export default function AdminPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
           {activeTab === "leads" && (
             <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
-              <table className="w-full text-left text-sm">
+              <div className="overflow-x-auto">
+              <table className="min-w-[720px] w-full text-left text-sm">
                 <thead className="bg-white/5 text-gray-400">
                   <tr><th className="px-4 py-3">Loại</th><th className="px-4 py-3">Khách</th><th className="px-4 py-3">SĐT</th><th className="px-4 py-3">Ghi chú</th><th className="px-4 py-3"></th></tr>
                 </thead>
@@ -1097,6 +1117,7 @@ export default function AdminPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
