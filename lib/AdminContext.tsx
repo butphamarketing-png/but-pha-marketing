@@ -217,6 +217,17 @@ const defaultSettings: SiteSettings = {
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
+function mergeWithDefaults(parsed: Partial<SiteSettings>): SiteSettings {
+  return {
+    ...defaultSettings,
+    ...parsed,
+    cms: { ...defaultSettings.cms, ...(parsed.cms || {}) },
+    media: { ...defaultSettings.media, ...(parsed.media || {}) },
+    colors: { ...defaultSettings.colors, ...(parsed.colors || {}) },
+    presentationMode: false,
+  };
+}
+
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -227,14 +238,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          setSettings({
-            ...defaultSettings,
-            ...parsed,
-            cms: { ...defaultSettings.cms, ...(parsed.cms || {}) },
-            media: { ...defaultSettings.media, ...(parsed.media || {}) },
-            colors: { ...defaultSettings.colors, ...(parsed.colors || {}) },
-            presentationMode: false,
-          });
+          setSettings(mergeWithDefaults(parsed));
         } catch (e) {
           console.error("Failed to parse admin settings", e);
         }
@@ -248,6 +252,21 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("admin_settings", JSON.stringify({ ...settings, presentationMode: false }));
     }
   }, [settings, isLoaded]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== "admin_settings" || !event.newValue) return;
+      try {
+        const parsed = JSON.parse(event.newValue);
+        setSettings(mergeWithDefaults(parsed));
+      } catch (e) {
+        console.error("Failed to sync admin settings across tabs", e);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   const updateSettings = (newSettings: Partial<SiteSettings>) => {
     setSettings(prev => ({ ...prev, ...newSettings }));
