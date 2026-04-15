@@ -9,7 +9,6 @@ import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
-import { FanpageAudit } from "@/components/shared/FanpageAudit";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
 import { db, type NewsItem } from "@/lib/useData";
@@ -156,10 +155,6 @@ function HomeContent() {
           </motion.p>
         </div>
 
-        <div className="mb-16">
-          <FanpageAudit primaryColor={settings.colors.facebook || settings.colors.primary} platform="facebook" />
-        </div>
-
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,34 +176,41 @@ function HomeContent() {
           ))}
         </motion.div>
 
-        {blogs.length > 0 && (
-          <section className="mx-auto mt-20 max-w-6xl">
-            <div className="mb-8 flex items-center justify-between gap-4">
-              <div>
-                <h2 className="text-3xl font-black text-white md:text-4xl">Blog</h2>
-                <p className="mt-1 text-sm text-gray-400">Kiến thức marketing cập nhật và tối ưu SEO thực chiến.</p>
-              </div>
-              {blogs.length > 4 && (
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBlogPage((p) => Math.max(0, p - 1))}
-                    disabled={blogPage === 0}
-                    className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBlogPage((p) => Math.min(blogMaxPage, p + 1))}
-                    disabled={blogPage === blogMaxPage}
-                    className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              )}
+        <section className="mx-auto mt-20 max-w-6xl">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-black text-white md:text-4xl">Blog</h2>
+              <p className="mt-1 text-sm text-gray-400">Kiến thức marketing cập nhật và tối ưu SEO thực chiến.</p>
             </div>
+            {blogs.length > 4 && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBlogPage((p) => Math.max(0, p - 1))}
+                  disabled={blogPage === 0}
+                  className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBlogPage((p) => Math.min(blogMaxPage, p + 1))}
+                  disabled={blogPage === blogMaxPage}
+                  className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+          {blogs.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-white/20 bg-card/40 p-8 text-center">
+              <p className="text-sm text-gray-300">Chưa có bài viết nào. Bạn vào Admin `Danh mục tin tức` để tạo bài đầu tiên.</p>
+              <Link href="/blog" className="mt-3 inline-block text-sm font-semibold text-primary underline">
+                Xem trang Blog
+              </Link>
+            </div>
+          ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               {visibleBlogs.map((blog) => (
                 <Link
@@ -240,8 +242,8 @@ function HomeContent() {
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          )}
+        </section>
 
         <div className="mt-20 flex flex-col items-center gap-6">
           <a href="tel:0937417982" className="flex items-center gap-3 rounded-full border border-primary/50 bg-primary/20 px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-primary/40">
