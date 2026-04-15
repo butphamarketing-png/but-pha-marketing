@@ -5,6 +5,7 @@ import { createContext, useContext, useState, useEffect, useRef, ReactNode } fro
 interface PackageConfig {
   price: string;
   features: string[];
+  allFeatures?: string[];
   audio: string;
   popular?: boolean;
   period?: "month" | "lifetime";
