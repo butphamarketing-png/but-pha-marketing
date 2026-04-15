@@ -28,6 +28,14 @@ export interface NewsItem {
   id: string;
   title: string;
   content: string;
+  description?: string;
+  imageUrl?: string;
+  slug?: string;
+  hot?: boolean;
+  metaDescription?: string;
+  keywordsMain?: string;
+  keywordsSecondary?: string;
+  publishedAt?: string;
   category: string;
   published: boolean;
   timestamp: number;
@@ -185,7 +193,18 @@ export const db = {
   },
   news: {
     getAll: async (): Promise<NewsItem[]> => {
-      return getLocal<NewsItem[]>("news", []);
+      const list = getLocal<NewsItem[]>("news", []);
+      return list.map((item) => ({
+        ...item,
+        description: item.description || "",
+        imageUrl: item.imageUrl || "",
+        slug: item.slug || "",
+        hot: item.hot || false,
+        metaDescription: item.metaDescription || "",
+        keywordsMain: item.keywordsMain || "",
+        keywordsSecondary: item.keywordsSecondary || "",
+        publishedAt: item.publishedAt || "",
+      }));
     },
     add: async (n: Omit<NewsItem, "id" | "timestamp">) => {
       const list = await db.news.getAll();

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { SiFacebook, SiTiktok, SiInstagram, SiZalo, SiGooglemaps, SiWebflow } from "react-icons/si";
-import { Phone } from "lucide-react";
+import { Phone, ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
@@ -12,7 +12,7 @@ import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { FanpageAudit } from "@/components/shared/FanpageAudit";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { AdminProvider, useAdmin } from "@/lib/AdminContext";
-import { db } from "@/lib/useData";
+import { db, type NewsItem } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
 function HomeContent() {
@@ -20,6 +20,9 @@ function HomeContent() {
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
   const [showRoadmap, setShowRoadmap] = useState(false);
+  const [blogs, setBlogs] = useState<NewsItem[]>([]);
+  const [blogPage, setBlogPage] = useState(0);
+  const [selectedBlog, setSelectedBlog] = useState<NewsItem | null>(null);
   const [infoName, setInfoName] = useState("");
   const [infoPhone, setInfoPhone] = useState("");
   const { user } = useAuth();
@@ -36,6 +39,15 @@ function HomeContent() {
       }));
     }, 50);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    db.news.getAll().then((items) => {
+      const sorted = [...items]
+        .filter((item) => item.published !== false)
+        .sort((a, b) => (b.publishedAt ? Date.parse(b.publishedAt) : b.timestamp) - (a.publishedAt ? Date.parse(a.publishedAt) : a.timestamp));
+      setBlogs(sorted);
+    });
   }, []);
 
   useEffect(() => {
@@ -83,6 +95,8 @@ function HomeContent() {
     { id: "googlemaps", name: "Google Maps", icon: SiGooglemaps, color: settings.colors.googlemaps, to: "/google-maps" },
     { id: "website", name: "Website", icon: SiWebflow, color: settings.colors.website, to: "/website" },
   ];
+  const visibleBlogs = blogs.slice(blogPage * 4, blogPage * 4 + 4);
+  const blogMaxPage = Math.max(0, Math.ceil(blogs.length / 4) - 1);
 
   return (
     <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
@@ -159,6 +173,69 @@ function HomeContent() {
           ))}
         </motion.div>
 
+        {blogs.length > 0 && (
+          <section className="mx-auto mt-20 max-w-6xl">
+            <div className="mb-8 flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-black text-white md:text-4xl">Blog</h2>
+                <p className="mt-1 text-sm text-gray-400">Kiến thức marketing cập nhật và tối ưu SEO thực chiến.</p>
+              </div>
+              {blogs.length > 4 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setBlogPage((p) => Math.max(0, p - 1))}
+                    disabled={blogPage === 0}
+                    className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBlogPage((p) => Math.min(blogMaxPage, p + 1))}
+                    disabled={blogPage === blogMaxPage}
+                    className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {visibleBlogs.map((blog) => (
+                <button
+                  key={blog.id}
+                  type="button"
+                  onClick={() => setSelectedBlog(blog)}
+                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card text-left shadow-xl"
+                  style={{ perspective: "1200px" }}
+                >
+                  <div className="relative h-[220px] w-full [transform-style:preserve-3d] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
+                    <div className="absolute inset-0 [backface-visibility:hidden]">
+                      <img
+                        src={blog.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80"}
+                        alt={blog.title}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-b from-black/20 to-black/85 p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                      <p className="mb-2 text-[11px] text-gray-300">
+                        {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
+                      </p>
+                      <p className="line-clamp-4 text-xs leading-relaxed text-gray-200">{blog.description || "Bấm để xem bài viết chi tiết."}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-3">
+                    <p className="line-clamp-2 flex-1 text-sm font-bold text-white">{blog.title}</p>
+                    {blog.hot && <Flame size={16} className="text-orange-400" />}
+                  </div>
+                  {blog.hot && <div className="pointer-events-none absolute inset-0 animate-pulse rounded-2xl ring-1 ring-orange-500/70" />}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         <div className="mt-20 flex flex-col items-center gap-6">
           <a href="tel:0937417982" className="flex items-center gap-3 rounded-full border border-primary/50 bg-primary/20 px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-primary/40">
             <Phone className="animate-pulse" />
@@ -169,6 +246,41 @@ function HomeContent() {
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
+      <AnimatePresence>
+        {selectedBlog && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
+              className="max-h-[85vh] w-full max-w-4xl overflow-auto rounded-2xl border border-white/10 bg-card p-6"
+            >
+              <div className="mb-4 flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-2xl font-black text-white">{selectedBlog.title}</h3>
+                  <p className="mt-1 text-xs text-gray-400">
+                    Ngày viết: {new Date(selectedBlog.publishedAt || selectedBlog.timestamp).toLocaleDateString("vi-VN")}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedBlog(null)}
+                  className="rounded-lg border border-white/20 px-3 py-1 text-xs text-white"
+                >
+                  Đóng
+                </button>
+              </div>
+              {selectedBlog.imageUrl && (
+                <img src={selectedBlog.imageUrl} alt={selectedBlog.title} className="mb-4 h-64 w-full rounded-xl object-cover" />
+              )}
+              <div
+                className="prose prose-invert max-w-none text-sm leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       
       <style>{`
         @keyframes shimmer {
