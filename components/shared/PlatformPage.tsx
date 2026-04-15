@@ -222,14 +222,23 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
   );
 }
 
-function Accordion({ title, content }: { title: string; content: string }) {
-  const [open, setOpen] = useState(false);
+function Accordion({
+  title,
+  content,
+  open,
+  onToggle,
+}: {
+  title: string;
+  content: string;
+  open: boolean;
+  onToggle: () => void;
+}) {
   return (
     <div className="border-b border-white/10">
-      <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between py-4 text-left font-semibold text-white hover:text-gray-300">
+      <button onClick={onToggle} className="flex w-full items-center justify-between py-4 text-left font-semibold text-white hover:text-gray-300">
         {title}<ChevronDown size={18} className={`transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <p className="pb-4 text-sm text-gray-400 leading-relaxed">{content}</p>}
+      {open && <p className="whitespace-pre-line pb-4 text-sm leading-relaxed text-gray-400">{content}</p>}
     </div>
   );
 }
@@ -419,6 +428,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const { settings } = useAdmin();
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   const [content, setContent] = useState(config);
+  const [openIntro, setOpenIntro] = useState<"vision" | "mission" | "responsibility">("vision");
 
   const platformKey = (config.auditPlatform || config.name).toLowerCase();
   const cms = settings.cms[platformKey];
@@ -470,9 +480,24 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
             <h2 className="mb-10 text-center text-3xl font-black text-white md:text-4xl">Giới Thiệu Về Dịch Vụ {content.name}</h2>
             <div className="rounded-2xl border border-white/10 bg-card divide-y divide-white/10 px-6">
-              <Accordion title="Tầm Nhìn" content={content.vision} />
-              <Accordion title="Sứ Mệnh" content={content.mission} />
-              <Accordion title="Trách Nhiệm" content={content.responsibility} />
+              <Accordion
+                title="Tầm Nhìn"
+                content={content.vision}
+                open={openIntro === "vision"}
+                onToggle={() => setOpenIntro("vision")}
+              />
+              <Accordion
+                title="Sứ Mệnh"
+                content={content.mission}
+                open={openIntro === "mission"}
+                onToggle={() => setOpenIntro("mission")}
+              />
+              <Accordion
+                title="Trách Nhiệm"
+                content={content.responsibility}
+                open={openIntro === "responsibility"}
+                onToggle={() => setOpenIntro("responsibility")}
+              />
             </div>
           </motion.div>
         </section>
