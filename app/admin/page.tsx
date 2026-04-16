@@ -432,9 +432,19 @@ export default function AdminPage() {
   const selectedProject = selectedProjects.find(p => p.id === selectedClientProjectId) || selectedProjects[0] || null;
 
   useEffect(() => {
-    const auth = localStorage.getItem("admin_auth");
-    if (auth === "1") setAuthenticated(true);
-    try { setSeoData(JSON.parse(localStorage.getItem("bpm_seo") || "{}")); } catch (e) {}
+    // Load SEO data from Supabase API
+    const loadSeoData = async () => {
+      try {
+        const res = await fetch("/api/seo");
+        if (res.ok) {
+          const data = await res.json();
+          setSeoData(data || {});
+        }
+      } catch (e) {
+        console.warn("Failed to load SEO data from Supabase", e);
+      }
+    };
+    loadSeoData();
   }, []);
 
   useEffect(() => {
@@ -1587,8 +1597,8 @@ export default function AdminPage() {
               {Object.keys(SEO_DEFAULTS).map(key => (
                 <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
-                  <input value={seoData[key]?.title || SEO_DEFAULTS[key].title} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                  <textarea value={seoData[key]?.desc || SEO_DEFAULTS[key].desc} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } }; setSeoData(next); localStorage.setItem("bpm_seo", JSON.stringify(next)); }} placeholder="Description" className="w-full h-20 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                  <input value={seoData[key]?.title || SEO_DEFAULTS[key].title} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } }; setSeoData(next); }} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                  <textarea value={seoData[key]?.desc || SEO_DEFAULTS[key].desc} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } }; setSeoData(next); }} placeholder="Description" className="w-full h-20 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 </div>
               ))}
             </div>

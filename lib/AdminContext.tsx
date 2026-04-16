@@ -241,31 +241,29 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     let mounted = true;
     const loadSettings = async () => {
       try {
+        // Always fetch from Supabase API as single source of truth
         const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`);
         if (res.ok) {
           const data = await res.json();
           if (mounted && data?.value) {
             const merged = mergeWithDefaults(data.value as Partial<SiteSettings>);
             setSettings(merged);
-            localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
             setIsLoaded(true);
             return;
           }
         }
+        // If API fails, use default settings
+        if (mounted) {
+          setSettings(defaultSettings);
+          setIsLoaded(true);
+        }
       } catch (e) {
-        console.warn("Remote settings unavailable, fallback local", e);
-      }
-
-      const saved = localStorage.getItem(SETTINGS_KEY);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (mounted) setSettings(mergeWithDefaults(parsed));
-        } catch (e) {
-          console.error("Failed to parse admin settings", e);
+        console.warn("Settings API unavailable, using defaults", e);
+        if (mounted) {
+          setSettings(defaultSettings);
+          setIsLoaded(true);
         }
       }
-      if (mounted) setIsLoaded(true);
     };
     loadSettings();
     return () => {
@@ -280,14 +278,17 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
       if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
       persistTimerRef.current = window.setTimeout(() => {
-        const persist = () => {
-          localStorage.setItem(SETTINGS_KEY, payload);
+        const persist = async () => {
           lastSavedRef.current = payload;
-          fetch("/api/settings", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ key: SETTINGS_KEY, value: JSON.parse(payload) }),
-          }).catch(() => {});
+          try {
+            await fetch("/api/settings", {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ key: SETTINGS_KEY, value: JSON.parse(payload) }),
+            });
+          } catch (e) {
+            console.error("Failed to persist settings to Supabase", e);
+          }
         };
         if ("requestIdleCallback" in window) {
           (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
@@ -304,61 +305,100 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     };
   }, [settings, isLoaded]);
 
+  // Cross-tab sync using BroadcastChannel API (modern approach)
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const onStorage = (event: StorageEvent) => {
-      if (event.key !== SETTINGS_KEY || !event.newValue) return;
-      try {
-        const parsed = JSON.parse(event.newValue);
-        setSettings(mergeWithDefaults(parsed));
-      } catch (e) {
-        console.error("Failed to sync admin settings across tabs", e);
+    
+    // Use BroadcastChannel for cross-tab communication
+    const channel = new BroadcastChannel("admin_settings_channel");
+    
+    channel.onmessage = (event) => {
+      if (event.data && event.data.type === "settings_update" && event.data.value) {
+        try {
+          const parsed = JSON.parse(event.data.value);
+          setSettings(mergeWithDefaults(parsed));
+        } catch (e) {
+          console.error("Failed to sync admin settings across tabs", e);
+        }
       }
     };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    
+    return () => {
+      channel.close();
+    };
   }, []);
 
+  // Broadcast settings changes to other tabs
+  const broadcastSettings = (newSettings: SiteSettings) => {
+    if (typeof window === "undefined") return;
+    const channel = new BroadcastChannel("admin_settings_channel");
+    channel.postMessage({
+      type: "settings_update",
+      value: JSON.stringify(newSettings)
+    });
+    channel.close();
+  };
+
   const updateSettings = (newSettings: Partial<SiteSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings(prev => {
+      const updated = { ...prev, ...newSettings };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updateColor = (platform: string, color: string) => {
-    setSettings(prev => ({
-      ...prev,
-      colors: { ...prev.colors, [platform]: color }
-    }));
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        colors: { ...prev.colors, [platform]: color }
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updatePlatformName = (platform: string, name: string) => {
-    setSettings(prev => ({
-      ...prev,
-      platformNames: { ...(prev.platformNames || {}), [platform]: name }
-    }));
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        platformNames: { ...(prev.platformNames || {}), [platform]: name }
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const toggleVisibility = (section: string, isVisible: boolean) => {
-    setSettings(prev => ({
-      ...prev,
-      visibility: { ...prev.visibility, [section]: isVisible }
-    }));
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        visibility: { ...prev.visibility, [section]: isVisible }
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updateCMS = (platform: string, field: keyof PlatformCMS, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      cms: {
-        ...prev.cms,
-        [platform]: { ...prev.cms[platform], [field]: value }
-      }
-    }));
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        cms: {
+          ...prev.cms,
+          [platform]: { ...prev.cms[platform], [field]: value }
+        }
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updatePackage = (platform: string, pkgName: string, field: keyof PackageConfig, value: any) => {
     setSettings(prev => {
       const platformCMS = prev.cms[platform] || { vision: "", mission: "", packages: {} };
       const pkg = (platformCMS.packages && platformCMS.packages[pkgName]) || { price: "", features: [], audio: "" };
-      return {
+      const updated = {
         ...prev,
         cms: {
           ...prev.cms,
@@ -371,80 +411,110 @@ export function AdminProvider({ children }: { children: ReactNode }) {
           }
         }
       };
+      broadcastSettings(updated);
+      return updated;
     });
   };
 
   const addSlideshowImage = (platform: string, url: string) => {
-    setSettings(prev => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [] }),
-          slideshow: [...(prev.media[platform]?.slideshow || []), url]
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...(prev.media[platform] || { slideshow: [], cases: [] }),
+            slideshow: [...(prev.media[platform]?.slideshow || []), url]
+          }
         }
-      }
-    }));
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const removeSlideshowImage = (platform: string, index: number) => {
-    setSettings(prev => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [] }),
-          slideshow: (prev.media[platform]?.slideshow || []).filter((_, i) => i !== index)
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...(prev.media[platform] || { slideshow: [], cases: [] }),
+            slideshow: (prev.media[platform]?.slideshow || []).filter((_, i) => i !== index)
+          }
         }
-      }
-    }));
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const addCase = (platform: string, c: { title: string; before: string; after: string }) => {
-    setSettings(prev => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
-          cases: [...(prev.media[platform]?.cases || []), { ...c, id: Math.random().toString(36).slice(2, 9) }]
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
+            cases: [...(prev.media[platform]?.cases || []), { ...c, id: Math.random().toString(36).slice(2, 9) }]
+          }
         }
-      }
-    }));
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const removeCase = (platform: string, id: string) => {
-    setSettings(prev => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
-          cases: (prev.media[platform]?.cases || []).filter(c => c.id !== id)
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
+            cases: (prev.media[platform]?.cases || []).filter(c => c.id !== id)
+          }
         }
-      }
-    }));
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updateMediaVideo = (platform: string, url: string) => {
-    setSettings(prev => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
-          videoUrl: url
+    setSettings(prev => {
+      const updated = {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...(prev.media[platform] || { slideshow: [], cases: [], videoUrl: "" }),
+            videoUrl: url
+          }
         }
-      }
-    }));
+      };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const updateRoadmap = (steps: SiteSettings["roadmap"]) => {
-    setSettings(prev => ({ ...prev, roadmap: steps }));
+    setSettings(prev => {
+      const updated = { ...prev, roadmap: steps };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   const togglePresentationMode = () => {
-    setSettings(prev => ({ ...prev, presentationMode: !prev.presentationMode }));
+    setSettings(prev => {
+      const updated = { ...prev, presentationMode: !prev.presentationMode };
+      broadcastSettings(updated);
+      return updated;
+    });
   };
 
   return (
@@ -476,4 +546,3 @@ export function useAdmin() {
   }
   return context;
 }
-

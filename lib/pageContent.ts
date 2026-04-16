@@ -79,6 +79,10 @@ export function buildDefaultComparisonTabs(tabs: TabOverride[]): ComparisonTabOv
 const contentCache = new Map<string, { data: ContentOverride | null; timestamp: number }>();
 const CACHE_TTL = 30000; // 30 seconds cache
 
+/**
+ * Get content for a platform from Supabase via API
+ * No localStorage fallback - uses Supabase as single source of truth
+ */
 export async function getContent(platform: string): Promise<ContentOverride | null> {
   if (typeof window === "undefined") return null;
   
@@ -90,7 +94,10 @@ export async function getContent(platform: string): Promise<ContentOverride | nu
   
   try {
     const res = await fetch(`/api/content?platform=${encodeURIComponent(platform)}`);
-    if (!res.ok) throw new Error("Failed to fetch content");
+    if (!res.ok) {
+      console.warn(`Failed to fetch content for ${platform}: ${res.status}`);
+      return null;
+    }
     
     const data = await res.json();
     const content = data.content as ContentOverride | null;
@@ -100,18 +107,15 @@ export async function getContent(platform: string): Promise<ContentOverride | nu
     
     return content;
   } catch (error) {
-    console.warn("API content fetch failed, falling back to localStorage", error);
-    
-    // Fallback to localStorage
-    try {
-      const stored = localStorage.getItem(`bpm_content_${platform}`);
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
+    console.error("API content fetch failed", error);
+    return null;
   }
 }
 
+/**
+ * Save content for a platform to Supabase via API
+ * No localStorage fallback - uses Supabase as single source of truth
+ */
 export async function saveContent(platform: string, content: ContentOverride): Promise<boolean> {
   if (typeof window === "undefined") return false;
   
@@ -122,35 +126,29 @@ export async function saveContent(platform: string, content: ContentOverride): P
       body: JSON.stringify({ platform, content }),
     });
     
-    if (!res.ok) throw new Error("Failed to save content");
+    if (!res.ok) {
+      console.error(`Failed to save content for ${platform}: ${res.status}`);
+      return false;
+    }
     
     // Update cache
     contentCache.set(platform, { data: content, timestamp: Date.now() });
     
-    // Also save to localStorage as backup
-    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
-    
     return true;
   } catch (error) {
-    console.error("API save failed, falling back to localStorage", error);
-    
-    // Fallback to localStorage
-    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
-    return true;
+    console.error("API save failed", error);
+    return false;
   }
 }
 
-export function getContentSync(platform: string): ContentOverride | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const stored = localStorage.getItem(`bpm_content_${platform}`);
-    return stored ? JSON.parse(stored) : null;
-  } catch { return null; }
-}
-
-export function saveContentSync(platform: string, content: ContentOverride) {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
+/**
+ * Clear the content cache for a platform
+ */
+export function clearContentCache(platform?: string) {
+  if (platform) {
+    contentCache.delete(platform);
+  } else {
+    contentCache.clear();
   }
 }
 
