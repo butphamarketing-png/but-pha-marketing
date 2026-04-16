@@ -1,0 +1,9 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+url = "postgresql://neondb_owner:npg_1lAYLCB7Gx@ep-shy-brook-a1agi3f3-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+}
+// Giữ lại các Model của bạn ở dưới này (ví dụ: model Setting...)

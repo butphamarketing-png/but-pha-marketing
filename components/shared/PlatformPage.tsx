@@ -9,7 +9,7 @@ import { AudioGuide } from "./AudioGuide";
 import { CountUp } from "./CountUp";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
-import { getContent, buildDefaultProcessTabs } from "@/lib/pageContent";
+import { getContent, buildDefaultProcessTabs, type ContentOverride } from "@/lib/pageContent";
 
 export interface PricingPackage {
   name: string;
@@ -508,22 +508,27 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   const [content, setContent] = useState(config);
   const [openIntro, setOpenIntro] = useState<"vision" | "mission" | "responsibility">("vision");
+  const [loadedOverride, setLoadedOverride] = useState<ContentOverride | null>(null);
 
   const platformKey = (config.auditPlatform || config.name).toLowerCase();
   const cms = settings.cms[platformKey];
 
   useEffect(() => {
-    const override = getContent(platformKey);
-    if (!override) return;
-    setContent(prev => ({
-      ...prev,
-      vision: override?.vision || prev.vision,
-      mission: override?.mission || prev.mission,
-      responsibility: override?.responsibility || prev.responsibility,
-      tabs: override?.tabs || prev.tabs,
-      stats: override?.stats || prev.stats,
-      faqs: override?.faqs || prev.faqs,
-    }));
+    const loadOverride = async () => {
+      const override = await getContent(platformKey);
+      if (!override) return;
+      setLoadedOverride(override);
+      setContent(prev => ({
+        ...prev,
+        vision: override?.vision || prev.vision,
+        mission: override?.mission || prev.mission,
+        responsibility: override?.responsibility || prev.responsibility,
+        tabs: override?.tabs || prev.tabs,
+        stats: override?.stats || prev.stats,
+        faqs: override?.faqs || prev.faqs,
+      }));
+    };
+    loadOverride();
   }, [platformKey]);
 
   // Update tabs packages with dynamic audio, price, and features if available
@@ -541,12 +546,11 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       };
     })
   }));
-  const override = getContent(platformKey);
-  const tabsForRender = override?.tabs || updatedTabs;
-  const processTabs = override?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map(t => t.label));
+  const tabsForRender = loadedOverride?.tabs || updatedTabs;
+  const processTabs = loadedOverride?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map((t: { label: string }) => t.label));
   const cases = settings.media[platformKey]?.cases || [];
-  const beforeAfterBefore = override?.beforeAfterBefore;
-  const beforeAfterAfter = override?.beforeAfterAfter;
+  const beforeAfterBefore = loadedOverride?.beforeAfterBefore;
+  const beforeAfterAfter = loadedOverride?.beforeAfterAfter;
 
   const handleCheckout = (pkg: CheckoutPkg) => setCheckoutPkg(pkg);
 

@@ -13,7 +13,7 @@ import {
 import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
-import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal, type ClientProject } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const ADMIN_PASSWORD = "admin123";
@@ -152,7 +152,19 @@ export default function AdminPage() {
     processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
     faqs: [{ q: "", a: "" }],
   });
+  const [isLoadingContent, setIsLoadingContent] = useState(false);
   const responsibilityEditor = parseResponsibilityEditor(pageContent.responsibility || "");
+
+  // ClientProject type definition (moved from useData to here)
+  type ClientProject = {
+    id: string;
+    title: string;
+    registeredAt: string;
+    deadlineAt: string;
+    budgetVnd: number;
+    progressDoc: string;
+    resultDoc: string;
+  };
 
   const visitorChartData = Array.from({ length: 12 }, (_, i) => ({
     name: `Tuần ${i + 1}`,
@@ -427,30 +439,47 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (selectedPlatform === "home") return;
-    const stored = getContent(selectedPlatform);
-    if (stored) {
-      setPageContent(stored);
-      setSelectedProcessTab(0);
-    } else {
-      setPageContent({
-        vision: "",
-        mission: "",
-        responsibility: "",
-        stats: [{ label: "", value: "" }],
-        processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
-        faqs: [{ q: "", a: "" }],
-      });
-      setSelectedProcessTab(0);
-    }
+    const loadContent = async () => {
+      setIsLoadingContent(true);
+      try {
+        const stored = await getContent(selectedPlatform);
+        if (stored) {
+          setPageContent(stored);
+          setSelectedProcessTab(0);
+        } else {
+          setPageContent({
+            vision: "",
+            mission: "",
+            responsibility: "",
+            stats: [{ label: "", value: "" }],
+            processTabs: [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }],
+            faqs: [{ q: "", a: "" }],
+          });
+          setSelectedProcessTab(0);
+        }
+      } catch (error) {
+        console.error("Failed to load content:", error);
+      } finally {
+        setIsLoadingContent(false);
+      }
+    };
+    loadContent();
   }, [selectedPlatform]);
 
   useEffect(() => {
-    const saved = getContent(selectedPkgPlatform);
-    const tabs = saved?.tabs && saved.tabs.length > 0 ? saved.tabs : createDefaultServiceTabs();
-    setServiceContent(prev => ({ ...prev, ...(saved || {}), tabs }));
-    setComparisonTabs(saved?.comparisonTabs && saved.comparisonTabs.length > 0 ? saved.comparisonTabs : buildDefaultComparisonTabs(tabs));
-    setSelectedServiceTab(0);
-    setSelectedCompareTab(0);
+    const loadServiceContent = async () => {
+      try {
+        const saved = await getContent(selectedPkgPlatform);
+        const tabs = saved?.tabs && saved.tabs.length > 0 ? saved.tabs : createDefaultServiceTabs();
+        setServiceContent(prev => ({ ...prev, ...(saved || {}), tabs }));
+        setComparisonTabs(saved?.comparisonTabs && saved.comparisonTabs.length > 0 ? saved.comparisonTabs : buildDefaultComparisonTabs(tabs));
+        setSelectedServiceTab(0);
+        setSelectedCompareTab(0);
+      } catch (error) {
+        console.error("Failed to load service content:", error);
+      }
+    };
+    loadServiceContent();
   }, [selectedPkgPlatform]);
 
   const updateServiceTabs = (tabs: TabOverride[]) => {
@@ -1407,7 +1436,7 @@ export default function AdminPage() {
                 <tbody className="divide-y divide-white/10">
                   {leads.map(l => (
                     <tr key={l.id} className="text-gray-200">
-                      <td className="px-4 py-3 text-xs uppercase font-bold">{l.type === "audit" ? "Chuẩn đoán" : l.type === "request" ? "Yêu cầu" : "Tư vấn"}</td>
+                      <td className="px-4 py-3 text-xs uppercase font-bold">{l.type === "audit" ? "Chuẩn đoán" : "Tư vấn"}</td>
                       <td className="px-4 py-3 font-bold">{l.name}</td>
                       <td className="px-4 py-3">{l.phone}</td>
                       <td className="px-4 py-3 text-xs text-gray-400">{l.note || l.service || "-"}</td>

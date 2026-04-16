@@ -124,3 +124,51 @@ export const platformConfigs = pgTable("platform_configs", {
 });
 
 export type PlatformConfig = typeof platformConfigs.$inferSelect;
+
+// Page Content Table
+export const pageContent = pgTable("page_content", {
+  id: serial("id").primaryKey(),
+  platform: text("platform").notNull(),
+  content: jsonb("content").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPageContentSchema = (createInsertSchema(pageContent) as any).omit({ id: true, updatedAt: true }) as z.ZodType<Omit<PageContent, "id" | "updatedAt">>;
+export type InsertPageContent = z.infer<typeof insertPageContentSchema>;
+export type PageContent = typeof pageContent.$inferSelect;
+
+// Media Items Table
+export const mediaItems = pgTable("media_items", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  name: text("name").notNull(),
+  type: text("type").$type<"image" | "video">().notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const insertMediaItemSchema = (createInsertSchema(mediaItems) as any).omit({ id: true, timestamp: true }) as z.ZodType<Omit<MediaItem, "id" | "timestamp">>;
+export type InsertMediaItem = z.infer<typeof insertMediaItemSchema>;
+export type MediaItem = typeof mediaItems.$inferSelect;
+
+// News Table
+export const news = pgTable("news", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  category: text("category").notNull(),
+  published: boolean("published").default(true).notNull(),
+  description: text("description"),
+  imageUrl: text("image_url"),
+  slug: text("slug"),
+  hot: boolean("hot").default(false).notNull(),
+  metaDescription: text("meta_description"),
+  keywordsMain: text("keywords_main"),
+  keywordsSecondary: text("keywords_secondary"),
+  timestamp: integer("timestamp").notNull(),
+  publishedAt: text("published_at"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertNewsSchema = (createInsertSchema(news) as any).omit({ id: true, updatedAt: true }) as z.ZodType<Omit<NewsItem, "id" | "updatedAt">>;
+export type InsertNews = z.infer<typeof insertNewsSchema>;
+export type NewsItem = typeof news.$inferSelect;

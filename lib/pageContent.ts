@@ -75,7 +75,72 @@ export function buildDefaultComparisonTabs(tabs: TabOverride[]): ComparisonTabOv
   });
 }
 
-export function getContent(platform: string): ContentOverride | null {
+// Cache for content to reduce API calls
+const contentCache = new Map<string, { data: ContentOverride | null; timestamp: number }>();
+const CACHE_TTL = 30000; // 30 seconds cache
+
+export async function getContent(platform: string): Promise<ContentOverride | null> {
+  if (typeof window === "undefined") return null;
+  
+  // Check cache first
+  const cached = contentCache.get(platform);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  
+  try {
+    const res = await fetch(`/api/content?platform=${encodeURIComponent(platform)}`);
+    if (!res.ok) throw new Error("Failed to fetch content");
+    
+    const data = await res.json();
+    const content = data.content as ContentOverride | null;
+    
+    // Update cache
+    contentCache.set(platform, { data: content, timestamp: Date.now() });
+    
+    return content;
+  } catch (error) {
+    console.warn("API content fetch failed, falling back to localStorage", error);
+    
+    // Fallback to localStorage
+    try {
+      const stored = localStorage.getItem(`bpm_content_${platform}`);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }
+}
+
+export async function saveContent(platform: string, content: ContentOverride): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  
+  try {
+    const res = await fetch("/api/content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ platform, content }),
+    });
+    
+    if (!res.ok) throw new Error("Failed to save content");
+    
+    // Update cache
+    contentCache.set(platform, { data: content, timestamp: Date.now() });
+    
+    // Also save to localStorage as backup
+    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
+    
+    return true;
+  } catch (error) {
+    console.error("API save failed, falling back to localStorage", error);
+    
+    // Fallback to localStorage
+    localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
+    return true;
+  }
+}
+
+export function getContentSync(platform: string): ContentOverride | null {
   if (typeof window === "undefined") return null;
   try {
     const stored = localStorage.getItem(`bpm_content_${platform}`);
@@ -83,7 +148,7 @@ export function getContent(platform: string): ContentOverride | null {
   } catch { return null; }
 }
 
-export function saveContent(platform: string, content: ContentOverride) {
+export function saveContentSync(platform: string, content: ContentOverride) {
   if (typeof window !== "undefined") {
     localStorage.setItem(`bpm_content_${platform}`, JSON.stringify(content));
   }
@@ -98,4 +163,3 @@ export function mergeContent<T extends object>(defaults: T, overrides: Partial<T
   }
   return result;
 }
-
