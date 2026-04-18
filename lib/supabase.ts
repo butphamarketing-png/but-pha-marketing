@@ -2,17 +2,18 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 function getEnv(name: string): string {
   const value = process.env[name];
-
   if (!value || !value.trim()) {
+    if (name === "SUPABASE_SERVICE_ROLE_KEY") {
+      console.warn(`[Supabase] Missing SUPABASE_SERVICE_ROLE_KEY env var. API requests will fail gracefully with JSON error.`);
+      return "";
+    }
     throw new Error(`Missing required environment variable: ${name}`);
   }
-
   return value;
 }
 
 function getSupabaseUrl(): string {
   const url = getEnv("NEXT_PUBLIC_SUPABASE_URL");
-
   try {
     new URL(url);
     return url;
@@ -46,11 +47,9 @@ export function getSupabaseBrowserClient(): SupabaseClient {
   if (typeof window === "undefined") {
     throw new Error("getSupabaseBrowserClient() can only be used in the browser.");
   }
-
   if (!browserClient) {
     browserClient = createSupabaseClient(getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"), true);
   }
-
   return browserClient;
 }
 
@@ -59,7 +58,11 @@ export function createBrowserClient(): SupabaseClient {
 }
 
 export function createServerClient(): SupabaseClient {
-  return createSupabaseClient(getEnv("SUPABASE_SERVICE_ROLE_KEY"), false);
+  const key = getEnv("SUPABASE_SERVICE_ROLE_KEY");
+  if (!key) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY required but missing - check Vercel dashboard.");
+  }
+  return createSupabaseClient(key, false);
 }
 
 export const supabase: SupabaseClient | null =
