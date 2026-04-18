@@ -1,3 +1,4 @@
+import { useRealtime } from "./useRealtime";
 export interface Order {
   id: number;
   name: string;
@@ -86,55 +87,64 @@ export interface ClientPortal {
 }
 
 const API_URL = "/api";
-function uid() { return Math.random().toString(36).slice(2, 10); }
 
-async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API Error ${res.status}: ${text}`);
-  }
-  return res.json();
+interface ApiResult<T> {
+  data: T | null;
+  error: string | null;
+  loading?: boolean;
 }
 
-function getLocal<T>(key: string, def: T): T {
-  if (typeof window === "undefined") return def;
-  try { return JSON.parse(localStorage.getItem(`bpm_${key}`) || "null") || def; }
-  catch { return def; }
-}
-
-function setLocal<T>(key: string, val: T) {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(`bpm_${key}`, JSON.stringify(val));
+async function apiFetch<T>(path: string, options?: RequestInit): Promise<ApiResult<T>> {
+  try {
+    const res = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      return { data: null, error: `API Error ${res.status}: ${text}` };
+    }
+    const data = await res.json();
+    return { data, error: null };
+  } catch (e: any) {
+    return { data: null, error: e.message || "Network error" };
   }
 }
 
-// Cache for reducing API calls
-const cache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 10000; // 10 seconds cache
 
-async function cachedFetch<T>(key: string, fetchFn: () => Promise<T>): Promise<T> {
-  // Check cache first
+
+
+
+// Cache for reducing API calls - kept for perf, but with error handling
+const cache = new Map<string, { data: unknown; timestamp: number; error?: string }>();
+const CACHE_TTL = 10000;
+
+async function cachedFetch<T>(key: string, fetchFn: () => Promise<T>): Promise<ApiResult<T>> {
   const cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    return cached.data as T;
+    if ('error' in cached) {
+      return { data: null, loading: false, error: cached.error! };
+    }
+    return { data: cached.data as T, loading: false, error: null };
   }
-  
+
   try {
     const data = await fetchFn();
+    const result: ApiResult<T> = { data, loading: false, error: null };
     cache.set(key, { data, timestamp: Date.now() });
-    return data;
+    return result;
   } catch (error) {
-    console.warn(`API fetch failed for ${key}, falling back to localStorage.`, error);
-    throw error;
+    const err = error as Error;
+    const result: ApiResult<T> = { data: null, loading: false, error: err.message };
+    cache.set(key, { error: err.message, timestamp: Date.now(), data: null });
+    return result;
   }
 }
+
+
 
 export interface ProgressArticle {
   id: number;
@@ -155,307 +165,213 @@ export interface PlatformConfig {
 
 export const db = {
   orders: {
-    getAll: async (): Promise<Order[]> => {
-      try {
-        return await cachedFetch<Order[]>("orders", () => apiFetch<Order[]>("/orders"));
-      }
-      catch { return getLocal<Order[]>("orders", []); }
-    },
-    add: async (o: Omit<Order, "id" | "createdAt" | "status">) => {
+    getAll: async (): Promise<ApiResult<Order[]>> => cachedFetch<Order[]>("orders", () => apiFetch<Order[]>("/orders")),
+    add: async (o: Omit<Order, "id" | "createdAt" | "status">): Promise<ApiResult<Order>> => {
       try {
         const result = await apiFetch<Order>("/orders", {
           method: "POST",
           body: JSON.stringify(o),
         });
         cache.delete("orders");
-        return result;
-      }
-      catch {
-        const list = await db.orders.getAll();
-        const item: Order = { ...o, id: Math.floor(Math.random() * 10000), status: "pending", createdAt: new Date().toISOString() };
-        setLocal("orders", [...list, item]);
-        return item;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
-    updateStatus: async (id: string, status: Order["status"]) => {
+    updateStatus: async (id: string, status: Order["status"]): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/orders/${id}`, {
           method: "PATCH",
           body: JSON.stringify({ status }),
         });
         cache.delete("orders");
-      }
-      catch {
-        const list = await db.orders.getAll();
-        setLocal("orders", list.map(o => o.id.toString() === id ? { ...o, status } : o));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
-    delete: async (id: string) => {
+    delete: async (id: string): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/orders/${id}`, { method: "DELETE" });
         cache.delete("orders");
-      }
-      catch {
-        const list = await db.orders.getAll();
-        setLocal("orders", list.filter(o => o.id.toString() !== id));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
   },
   leads: {
-    getAll: async (): Promise<Lead[]> => {
-      try {
-        return await cachedFetch<Lead[]>("leads", () => apiFetch<Lead[]>("/leads"));
-      }
-      catch { return getLocal<Lead[]>("leads", []); }
-    },
-    add: async (l: Omit<Lead, "id" | "createdAt">) => {
+    getAll: async (): Promise<ApiResult<Lead[]>> => cachedFetch<Lead[]>("leads", () => apiFetch<Lead[]>("/leads")),
+    add: async (l: Omit<Lead, "id" | "createdAt">): Promise<ApiResult<Lead>> => {
       try {
         const result = await apiFetch<Lead>("/leads", {
           method: "POST",
           body: JSON.stringify(l),
         });
         cache.delete("leads");
-        return result;
-      }
-      catch {
-        const list = await db.leads.getAll();
-        const item: Lead = { ...l, id: Math.floor(Math.random() * 10000), createdAt: new Date().toISOString() };
-        setLocal("leads", [...list, item]);
-        return item;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
-    delete: async (id: string) => {
+    delete: async (id: string): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/leads/${id}`, { method: "DELETE" });
         cache.delete("leads");
-      }
-      catch {
-        const list = await db.leads.getAll();
-        setLocal("leads", list.filter(l => l.id.toString() !== id));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
   },
   news: {
-    getAll: async (): Promise<NewsItem[]> => {
-      try {
-        return await cachedFetch<NewsItem[]>("news", () => apiFetch<NewsItem[]>("/news"));
-      }
-      catch {
-        return getLocal<NewsItem[]>("news", []);
-      }
+    getAll: async (): Promise<ApiResult<NewsItem[]>> => cachedFetch<NewsItem[]>("news", () => apiFetch<NewsItem[]>("/news")),
+    add: async (n: Omit<NewsItem, "id" | "timestamp">): Promise<ApiResult<NewsItem>> => {
+      const result = await apiFetch<NewsItem>("/news", {
+        method: "POST",
+        body: JSON.stringify(n),
+      });
+      if (!result.error) cache.delete("news");
+      return result;
     },
-    add: async (n: Omit<NewsItem, "id" | "timestamp">) => {
-      try {
-        const result = await apiFetch<NewsItem>("/news", {
-          method: "POST",
-          body: JSON.stringify(n),
-        });
-        cache.delete("news");
-        return result;
-      }
-      catch {
-        const list = await db.news.getAll();
-        const item: NewsItem = { ...n, id: uid(), timestamp: Date.now() };
-        setLocal("news", [...list, item]);
-        return item;
-      }
+    update: async (id: string, data: Partial<NewsItem>): Promise<ApiResult<void>> => {
+      const result = await apiFetch(`/news/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
+      if (!result.error) cache.delete("news");
+      return result;
     },
-    update: async (id: string, data: Partial<NewsItem>) => {
-      try {
-        await apiFetch(`/news/${id}`, {
-          method: "PATCH",
-          body: JSON.stringify(data),
-        });
-        cache.delete("news");
-      }
-      catch {
-        const list = await db.news.getAll();
-        setLocal("news", list.map(n => n.id === id ? { ...n, ...data } : n));
-      }
-    },
-    delete: async (id: string) => {
-      try {
-        await apiFetch(`/news/${id}`, { method: "DELETE" });
-        cache.delete("news");
-      }
-      catch {
-        const list = await db.news.getAll();
-        setLocal("news", list.filter(n => n.id !== id));
-      }
+    delete: async (id: string): Promise<ApiResult<void>> => {
+      const result = await apiFetch(`/news/${id}`, { method: "DELETE" });
+      if (!result.error) cache.delete("news");
+      return result;
     },
   },
   media: {
-    getAll: async (): Promise<MediaItem[]> => {
-      try {
-        return await cachedFetch<MediaItem[]>("media", () => apiFetch<MediaItem[]>("/media"));
-      }
-      catch {
-        return getLocal<MediaItem[]>("media", []);
-      }
-    },
-    add: async (m: Omit<MediaItem, "id" | "timestamp">) => {
+    getAll: async (): Promise<ApiResult<MediaItem[]>> => cachedFetch<MediaItem[]>("media", () => apiFetch<MediaItem[]>("/media")),
+    add: async (m: Omit<MediaItem, "id" | "timestamp">): Promise<ApiResult<MediaItem>> => {
       try {
         const result = await apiFetch<MediaItem>("/media", {
           method: "POST",
           body: JSON.stringify(m),
         });
         cache.delete("media");
-        return result;
-      }
-      catch {
-        const list = await db.media.getAll();
-        const item: MediaItem = { ...m, id: Math.floor(Math.random() * 10000), timestamp: Date.now() };
-        setLocal("media", [...list, item]);
-        return item;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
-    delete: async (id: number) => {
+    delete: async (id: number): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/media/${id}`, { method: "DELETE" });
         cache.delete("media");
-      }
-      catch {
-        const list = await db.media.getAll();
-        setLocal("media", list.filter(m => m.id !== id));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
   },
   services: {
-    getAll: async (): Promise<Service[]> => {
-      try {
-        return await cachedFetch<Service[]>("services", () => apiFetch<Service[]>("/services"));
-      }
-      catch { return getLocal<Service[]>("services", []); }
-    },
-    update: async (platform: string, data: Partial<Service>[]) => {
+    getAll: async (): Promise<ApiResult<Service[]>> => cachedFetch<Service[]>("services", () => apiFetch<Service[]>("/services")),
+    update: async (platform: string, data: Partial<Service>[]): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/services/${platform}`, {
           method: "PATCH",
           body: JSON.stringify(data),
         });
         cache.delete("services");
-      }
-      catch {
-        const list = await db.services.getAll();
-        setLocal("services", [...list.filter(s => s.platform !== platform), ...data]);
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
   },
   clientPortals: {
-    getAll: async (): Promise<ClientPortal[]> => {
-      try {
-        return await cachedFetch<ClientPortal[]>("client_portals", () => apiFetch<ClientPortal[]>("/client-portals"));
-      }
-      catch { return getLocal<ClientPortal[]>("client_portals", []); }
-    },
-    add: async (p: Omit<ClientPortal, "id" | "createdAt"> & { password?: string }) => {
+    getAll: async (): Promise<ApiResult<ClientPortal[]>> => cachedFetch<ClientPortal[]>("client_portals", () => apiFetch<ClientPortal[]>("/client-portals")),
+    add: async (p: Omit<ClientPortal, "id" | "createdAt"> & { password?: string }): Promise<ApiResult<ClientPortal>> => {
       try {
         const result = await apiFetch<ClientPortal>("/client-portals", {
           method: "POST",
           body: JSON.stringify(p),
         });
         cache.delete("client_portals");
-        return result;
-      }
-      catch {
-        const list = await db.clientPortals.getAll();
-        const item: ClientPortal = { ...p, id: Math.floor(Math.random() * 10000), createdAt: new Date().toISOString() };
-        setLocal("client_portals", [...list, item]);
-        return item;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
-    update: async (id: string, data: Partial<ClientPortal>) => {
+    update: async (id: string, data: Partial<ClientPortal>): Promise<ApiResult<ClientPortal>> => {
       try {
         const result = await apiFetch<ClientPortal>(`/client-portals/${id}`, {
           method: "PATCH",
           body: JSON.stringify(data),
         });
         cache.delete("client_portals");
-        return result;
-      }
-      catch {
-        const list = await db.clientPortals.getAll();
-        setLocal("client_portals", list.map(p => p.id.toString() === id ? { ...p, ...data } : p));
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
-    delete: async (id: string) => {
+    delete: async (id: string): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/client-portals/${id}`, { method: "DELETE" });
         cache.delete("client_portals");
-      }
-      catch {
-        const list = await db.clientPortals.getAll();
-        setLocal("client_portals", list.filter(p => p.id.toString() !== id));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return resultFrom(error as Error);
       }
     },
-    login: async (username: string, password: string): Promise<ClientPortal | null> => {
+    login: async (username: string, password: string): Promise<ApiResult<ClientPortal | null>> => {
       try {
-        return await apiFetch<ClientPortal>("/client-portals/login", {
+        const result = await apiFetch<ClientPortal>("/client-portals/login", {
           method: "POST",
           body: JSON.stringify({ username, password }),
         });
-      }
-      catch {
-        const list = await db.clientPortals.getAll();
-        return list.find(p => p.username === username && p.password === password) || null;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return { data: null, loading: false, error: (error as Error).message };
       }
     },
   },
   progressArticles: {
-    getByClient: async (clientId: number): Promise<ProgressArticle[]> => {
-      try {
-        return await cachedFetch<ProgressArticle[]>(`progress_articles_${clientId}`, () => 
-          apiFetch<ProgressArticle[]>(`/progress-articles?clientId=${clientId}`)
-        );
-      }
-      catch { return getLocal<ProgressArticle[]>(`progress_articles_${clientId}`, []); }
-    },
-    add: async (a: Omit<ProgressArticle, "id" | "createdAt">) => {
+    getByClient: async (clientId: number): Promise<ApiResult<ProgressArticle[]>> => cachedFetch<ProgressArticle[]>(`progress_articles_${clientId}`, () => apiFetch<ProgressArticle[]>(`/progress-articles?clientId=${clientId}`)),
+    add: async (a: Omit<ProgressArticle, "id" | "createdAt">): Promise<ApiResult<ProgressArticle>> => {
       try {
         const result = await apiFetch<ProgressArticle>("/progress-articles", {
           method: "POST",
           body: JSON.stringify(a),
         });
         cache.delete(`progress_articles_${a.clientId}`);
-        return result;
-      }
-      catch {
-        const list = await db.progressArticles.getByClient(a.clientId);
-        const item: ProgressArticle = { ...a, id: Math.floor(Math.random() * 10000), createdAt: new Date().toISOString() };
-        setLocal(`progress_articles_${a.clientId}`, [...list, item]);
-        return item;
+        return { data: result, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
-    delete: async (id: number, clientId: number) => {
+    delete: async (id: number, clientId: number): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/progress-articles/${id}`, { method: "DELETE" });
         cache.delete(`progress_articles_${clientId}`);
-      }
-      catch {
-        const list = await db.progressArticles.getByClient(clientId);
-        setLocal(`progress_articles_${clientId}`, list.filter(a => a.id !== id));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
   },
   platformConfigs: {
-    getAll: async (): Promise<PlatformConfig[]> => {
-      try {
-        return await cachedFetch<PlatformConfig[]>("platform_configs", () => apiFetch<PlatformConfig[]>("/platform-configs"));
-      }
-      catch { return getLocal<PlatformConfig[]>("platform_configs", []); }
-    },
-    update: async (key: string, data: Partial<PlatformConfig>) => {
+    getAll: async (): Promise<ApiResult<PlatformConfig[]>> => cachedFetch<PlatformConfig[]>("platform_configs", () => apiFetch<PlatformConfig[]>("/platform-configs")),
+    update: async (key: string, data: Partial<PlatformConfig>): Promise<ApiResult<void>> => {
       try {
         await apiFetch(`/platform-configs/${key}`, {
           method: "PATCH",
           body: JSON.stringify(data),
         });
         cache.delete("platform_configs");
-      }
-      catch {
-        const list = await db.platformConfigs.getAll();
-        setLocal("platform_configs", list.map(c => c.key === key ? { ...c, ...data } : c));
+        return { data: null, loading: false, error: null };
+      } catch (error) {
+        return makeErrorResult(error as Error);
       }
     },
   },
 };
+

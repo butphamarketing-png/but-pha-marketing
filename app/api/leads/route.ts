@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db/src";
-import { leads, insertLeadSchema } from "@/lib/db/src/schema";
+import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const allLeads = await db.select().from(leads).execute();
-    return NextResponse.json(allLeads);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("leads")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("GET /api/leads Supabase error", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
+    return NextResponse.json(data ?? []);
   } catch (error) {
     console.error("GET /api/leads failed", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -15,9 +24,25 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const validated = insertLeadSchema.parse(body);
-    const [newLead] = await db.insert(leads).values(validated).returning().execute();
-    return NextResponse.json(newLead);
+    const { type, name, phone, service, note, platform, url } = body;
+
+    if (!type || !phone) {
+      return NextResponse.json({ error: "Missing required fields: type, phone" }, { status: 400 });
+    }
+
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("leads")
+      .insert({ type, name, phone, service, note, platform, url })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("POST /api/leads Supabase error", error);
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("POST /api/leads failed", error);
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });

@@ -829,13 +829,30 @@ export default function AdminPage() {
     setPageContent(prev => ({ ...prev, faqs: (prev.faqs || []).filter((_, i) => i !== index) }));
   };
 
-  const refreshOrders = async () => setOrders([...(await db.orders.getAll())].reverse());
-  const refreshLeads = async () => setLeads([...(await db.leads.getAll())].reverse());
-  const refreshPortals = async () => setClientPortals(await db.clientPortals.getAll());
-  const refreshServices = async () => setServices(await db.services.getAll());
+  const refreshOrders = async () => {
+    const result = await db.orders.getAll();
+    if (result.error) console.error('Orders error:', result.error);
+    else setOrders([...(result.data || [])].reverse());
+  };
+  const refreshLeads = async () => {
+    const result = await db.leads.getAll();
+    if (result.error) console.error('Leads error:', result.error);
+    else setLeads([...(result.data || [])].reverse());
+  };
+  const refreshPortals = async () => {
+    const result = await db.clientPortals.getAll();
+    if (result.error) console.error('Portals error:', result.error);
+    else setClientPortals(result.data || []);
+  };
+  const refreshServices = async () => {
+    const result = await db.services.getAll();
+    if (result.error) console.error('Services error:', result.error);
+    else setServices(result.data || []);
+  };
   const refreshArticles = async (clientId: number) => {
-    const data = await db.progressArticles.getByClient(clientId);
-    setProgressArticles(prev => ({ ...prev, [clientId]: data }));
+    const result = await db.progressArticles.getByClient(clientId);
+    if (result.error) console.error('Articles error:', result.error);
+    else setProgressArticles(prev => ({ ...prev, [clientId]: result.data || [] }));
   };
 
   const refreshClientPortal = async (clientId: number) => {

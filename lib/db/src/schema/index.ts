@@ -1,86 +1,74 @@
-import { pgTable, text, serial, integer, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+// Drizzle schema has been removed. All database operations use Supabase.
+// Plain TypeScript types are kept here for reference only.
 import { z } from "zod";
 
-// Orders Table
-export const orders = pgTable("orders", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  phone: text("phone").notNull(),
-  pkg: text("pkg").notNull(),
-  tabLabel: text("tabLabel").notNull(),
-  platform: text("platform").notNull(),
-  duration: integer("duration").notNull(),
-  total: integer("total").notNull(),
-  payMethod: text("payMethod").notNull(),
-  status: text("status").$type<"pending" | "confirmed" | "completed" | "cancelled">().default("pending").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+// Orders
+export interface Order {
+  id: number;
+  name: string;
+  phone: string;
+  pkg: string;
+  tabLabel: string;
+  platform: string;
+  duration: number;
+  total: number;
+  payMethod: string;
+  status: "pending" | "confirmed" | "completed" | "cancelled";
+  createdAt: string;
+}
+export type InsertOrder = Omit<Order, "id" | "createdAt">;
 
-export const insertOrderSchema = (createInsertSchema(orders) as any).omit({ id: true, createdAt: true }) as z.ZodType<Omit<Order, "id" | "createdAt">>;
-export type InsertOrder = z.infer<typeof insertOrderSchema>;
-export type Order = typeof orders.$inferSelect;
+// Leads
+export interface Lead {
+  id: number;
+  type: "contact" | "audit" | "request";
+  name?: string;
+  phone: string;
+  service?: string;
+  note?: string;
+  platform?: string;
+  url?: string;
+  createdAt: string;
+}
+export type InsertLead = Omit<Lead, "id" | "createdAt">;
 
-// Leads Table
-export const leads = pgTable("leads", {
-  id: serial("id").primaryKey(),
-  type: text("type").$type<"contact" | "audit" | "request">().notNull(),
-  name: text("name"),
-  phone: text("phone").notNull(),
-  service: text("service"),
-  note: text("note"),
-  platform: text("platform"),
-  url: text("url"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+// Site Settings
+export interface SiteSettings {
+  id: number;
+  key: string;
+  value: unknown;
+  updatedAt: string;
+}
+export type InsertSiteSettings = Omit<SiteSettings, "id" | "updatedAt">;
 
-export const insertLeadSchema = (createInsertSchema(leads) as any).omit({ id: true, createdAt: true }) as z.ZodType<Omit<Lead, "id" | "createdAt">>;
-export type InsertLead = z.infer<typeof insertLeadSchema>;
-export type Lead = typeof leads.$inferSelect;
+// Services
+export interface Service {
+  id: number;
+  platform: string;
+  name: string;
+  price: string;
+  period: "month" | "lifetime";
+  popular: boolean;
+  features: string[];
+  allFeatures: string[];
+  audioText: string;
+  process: { step: number; title: string; desc: string }[];
+  feedbacks: { clientName: string; avatar: string; content: string }[];
+}
+export type InsertService = Omit<Service, "id">;
 
-// Site Settings Table
-export const siteSettings = pgTable("site_settings", {
-  id: serial("id").primaryKey(),
-  key: text("key").notNull().unique(),
-  value: jsonb("value").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const insertSiteSettingsSchema = (createInsertSchema(siteSettings) as any).omit({ id: true, updatedAt: true }) as z.ZodType<Omit<SiteSettings, "id" | "updatedAt">>;
-export type InsertSiteSettings = z.infer<typeof insertSiteSettingsSchema>;
-export type SiteSettings = typeof siteSettings.$inferSelect;
-
-// Services Table (Packages)
-export const services = pgTable("services", {
-  id: serial("id").primaryKey(),
-  platform: text("platform").notNull(),
-  name: text("name").notNull(),
-  price: text("price").notNull(),
-  period: text("period").$type<"month" | "lifetime">().default("month").notNull(),
-  popular: boolean("popular").default(false).notNull(),
-  features: jsonb("features").$type<string[]>().notNull(),
-  allFeatures: jsonb("all_features").$type<string[]>().notNull(),
-  audioText: text("audio_text").notNull(),
-  process: jsonb("process").$type<{ step: number; title: string; desc: string }[]>().default([]).notNull(),
-  feedbacks: jsonb("feedbacks").$type<{ clientName: string; avatar: string; content: string }[]>().default([]).notNull(),
-});
-
-export const insertServiceSchema = (createInsertSchema(services) as any).omit({ id: true }) as z.ZodType<Omit<Service, "id">>;
-export type InsertService = z.infer<typeof insertServiceSchema>;
-export type Service = typeof services.$inferSelect;
-
-// Client Portals Table
-export const clientPortals = pgTable("client_portals", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-  clientName: text("client_name").notNull(),
-  phone: text("phone").notNull(),
-  platform: text("platform").notNull(), // Added platform
-  daysRemaining: integer("days_remaining").default(0).notNull(),
-  postsCount: integer("posts_count").default(0).notNull(),
-  progressPercent: integer("progress_percent").default(0).notNull(),
-  weeklyReports: jsonb("weekly_reports").$type<{
+// Client Portals
+export interface ClientPortal {
+  id: number;
+  username: string;
+  password: string;
+  clientName: string;
+  phone: string;
+  platform: string;
+  daysRemaining: number;
+  postsCount: number;
+  progressPercent: number;
+  weeklyReports: {
     id?: string;
     title?: string;
     registeredAt?: string;
@@ -91,84 +79,122 @@ export const clientPortals = pgTable("client_portals", {
     date?: string;
     content?: string;
     image?: string;
-  }[]>().default([]).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  }[];
+  createdAt: string;
+}
+export type InsertClientPortal = Omit<ClientPortal, "id" | "createdAt">;
+
+// Progress Articles
+export interface ProgressArticle {
+  id: number;
+  clientId: number;
+  title: string;
+  content: string;
+  image?: string;
+  createdAt: string;
+}
+export type InsertProgressArticle = Omit<ProgressArticle, "id" | "createdAt">;
+
+// Platform Config
+export interface PlatformConfig {
+  id: number;
+  key: string;
+  name: string;
+  color: string;
+  isVisible: boolean;
+  updatedAt: string;
+}
+
+// Page Content
+export interface PageContent {
+  id: number;
+  platform: string;
+  content: unknown;
+  updatedAt: string;
+}
+export type InsertPageContent = Omit<PageContent, "id" | "updatedAt">;
+
+// Media Items
+export interface MediaItem {
+  id: number;
+  url: string;
+  name: string;
+  type: "image" | "video";
+  timestamp: string;
+}
+export type InsertMediaItem = Omit<MediaItem, "id" | "timestamp">;
+
+// News
+export interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  published: boolean;
+  description?: string;
+  imageUrl?: string;
+  slug?: string;
+  hot: boolean;
+  metaDescription?: string;
+  keywordsMain?: string;
+  keywordsSecondary?: string;
+  timestamp: number;
+  publishedAt?: string;
+  updatedAt: string;
+}
+export type InsertNews = Omit<NewsItem, "id" | "updatedAt">;
+
+// Zod schemas (plain, no drizzle-zod)
+export const insertOrderSchema = z.object({
+  name: z.string(),
+  phone: z.string(),
+  pkg: z.string(),
+  tabLabel: z.string(),
+  platform: z.string(),
+  duration: z.number(),
+  total: z.number(),
+  payMethod: z.string(),
+  status: z.enum(["pending", "confirmed", "completed", "cancelled"]).default("pending"),
 });
 
-export const insertClientPortalSchema = (createInsertSchema(clientPortals) as any).omit({ id: true, createdAt: true }) as z.ZodType<Omit<ClientPortal, "id" | "createdAt">>;
-export type InsertClientPortal = z.infer<typeof insertClientPortalSchema>;
-export type ClientPortal = typeof clientPortals.$inferSelect;
-
-// Progress Articles Table
-export const progressArticles = pgTable("progress_articles", {
-  id: serial("id").primaryKey(),
-  clientId: integer("client_id").references(() => clientPortals.id).notNull(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  image: text("image"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+export const insertLeadSchema = z.object({
+  type: z.enum(["contact", "audit", "request"]),
+  name: z.string().optional(),
+  phone: z.string(),
+  service: z.string().optional(),
+  note: z.string().optional(),
+  platform: z.string().optional(),
+  url: z.string().optional(),
 });
 
-export const insertProgressArticleSchema = (createInsertSchema(progressArticles) as any).omit({ id: true, createdAt: true });
-export type InsertProgressArticle = z.infer<typeof insertProgressArticleSchema>;
-export type ProgressArticle = typeof progressArticles.$inferSelect;
-
-// Platform Config Table
-export const platformConfigs = pgTable("platform_configs", {
-  id: serial("id").primaryKey(),
-  key: text("key").notNull().unique(), // e.g., facebook, tiktok
-  name: text("name").notNull(),
-  color: text("color").notNull(),
-  isVisible: boolean("is_visible").default(true).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export const insertSiteSettingsSchema = z.object({
+  key: z.string(),
+  value: z.unknown(),
 });
 
-export type PlatformConfig = typeof platformConfigs.$inferSelect;
-
-// Page Content Table
-export const pageContent = pgTable("page_content", {
-  id: serial("id").primaryKey(),
-  platform: text("platform").notNull(),
-  content: jsonb("content").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export const insertPageContentSchema = z.object({
+  platform: z.string(),
+  content: z.unknown(),
 });
 
-export const insertPageContentSchema = (createInsertSchema(pageContent) as any).omit({ id: true, updatedAt: true }) as z.ZodType<Omit<PageContent, "id" | "updatedAt">>;
-export type InsertPageContent = z.infer<typeof insertPageContentSchema>;
-export type PageContent = typeof pageContent.$inferSelect;
-
-// Media Items Table
-export const mediaItems = pgTable("media_items", {
-  id: serial("id").primaryKey(),
-  url: text("url").notNull(),
-  name: text("name").notNull(),
-  type: text("type").$type<"image" | "video">().notNull(),
-  timestamp: timestamp("timestamp").defaultNow().notNull(),
+export const insertMediaItemSchema = z.object({
+  url: z.string(),
+  name: z.string(),
+  type: z.enum(["image", "video"]),
 });
 
-export const insertMediaItemSchema = (createInsertSchema(mediaItems) as any).omit({ id: true, timestamp: true }) as z.ZodType<Omit<MediaItem, "id" | "timestamp">>;
-export type InsertMediaItem = z.infer<typeof insertMediaItemSchema>;
-export type MediaItem = typeof mediaItems.$inferSelect;
-
-// News Table
-export const news = pgTable("news", {
-  id: text("id").primaryKey(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  category: text("category").notNull(),
-  published: boolean("published").default(true).notNull(),
-  description: text("description"),
-  imageUrl: text("image_url"),
-  slug: text("slug"),
-  hot: boolean("hot").default(false).notNull(),
-  metaDescription: text("meta_description"),
-  keywordsMain: text("keywords_main"),
-  keywordsSecondary: text("keywords_secondary"),
-  timestamp: integer("timestamp").notNull(),
-  publishedAt: text("published_at"),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export const insertNewsSchema = z.object({
+  title: z.string(),
+  content: z.string(),
+  category: z.string(),
+  published: z.boolean().default(true),
+  description: z.string().optional(),
+  imageUrl: z.string().optional(),
+  slug: z.string().optional(),
+  hot: z.boolean().default(false),
+  metaDescription: z.string().optional(),
+  keywordsMain: z.string().optional(),
+  keywordsSecondary: z.string().optional(),
+  timestamp: z.number(),
+  publishedAt: z.string().optional(),
 });
-
-export const insertNewsSchema = (createInsertSchema(news) as any).omit({ id: true, updatedAt: true }) as z.ZodType<Omit<NewsItem, "id" | "updatedAt">>;
-export type InsertNews = z.infer<typeof insertNewsSchema>;
-export type NewsItem = typeof news.$inferSelect;

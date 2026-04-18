@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db/src";
-import { mediaItems } from "@/lib/db/src/schema";
+import { createServerClient } from "@/lib/supabase";
 
 export async function DELETE(
   request: Request,
@@ -10,13 +8,22 @@ export async function DELETE(
   try {
     const { id } = await params;
     const idNum = parseInt(id);
-    
+
     if (isNaN(idNum)) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    await db.delete(mediaItems).where(eq(mediaItems.id, idNum)).execute();
-    
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .from("media_items")
+      .delete()
+      .eq("id", idNum);
+
+    if (error) {
+      console.error("DELETE /api/media/[id] Supabase error", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("DELETE /api/media/[id] failed", error);

@@ -24,27 +24,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("auth_user");
-      if (saved) {
-        try {
-          setUser(JSON.parse(saved));
-        } catch (e) {
-          console.error("Failed to parse auth user", e);
-        }
-      }
-      setIsLoaded(true);
-    }
+    // Supabase session-based auth - no localStorage fallback
+    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
-    if (isLoaded && typeof window !== "undefined") {
-      if (user) {
-        localStorage.setItem("auth_user", JSON.stringify(user));
-      } else {
-        localStorage.removeItem("auth_user");
-      }
-    }
+    // No localStorage persistence - session expires on page reload
   }, [user, isLoaded]);
 
   const login = (userData: User) => {

@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db/src";
-import { news } from "@/lib/db/src/schema";
-import { eq } from "drizzle-orm";
+import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const items = await db.select().from(news).orderBy(news.timestamp);
-    return NextResponse.json(items);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .order("timestamp", { ascending: true });
+
+    if (error) {
+      console.error("GET /api/news Supabase error", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
+    return NextResponse.json(data ?? []);
   } catch (error) {
     console.error("GET /api/news failed", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -16,31 +24,45 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, content, category, published, description, imageUrl, slug, hot, metaDescription, keywordsMain, keywordsSecondary, publishedAt } = body;
+    const {
+      title, content, category, published, description,
+      imageUrl, slug, hot, metaDescription, keywordsMain,
+      keywordsSecondary, publishedAt,
+    } = body;
 
     if (!title || !content) {
       return NextResponse.json({ error: "Missing required fields: title, content" }, { status: 400 });
     }
 
     const id = slug || crypto.randomUUID();
-    const [item] = await db.insert(news).values({
-      id,
-      title,
-      content,
-      category: category || "blog",
-      published: published !== false,
-      description: description || "",
-      imageUrl: imageUrl || "",
-      slug: slug || "",
-      hot: !!hot,
-      metaDescription: metaDescription || "",
-      keywordsMain: keywordsMain || "",
-      keywordsSecondary: keywordsSecondary || "",
-      timestamp: Date.now(),
-      publishedAt: publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString(),
-    }).returning();
-    
-    return NextResponse.json(item);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("news")
+      .insert({
+        id,
+        title,
+        content,
+        category: category || "blog",
+        published: published !== false,
+        description: description || "",
+        image_url: imageUrl || "",
+        slug: slug || "",
+        hot: !!hot,
+        meta_description: metaDescription || "",
+        keywords_main: keywordsMain || "",
+        keywords_secondary: keywordsSecondary || "",
+        timestamp: Date.now(),
+        published_at: publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("POST /api/news Supabase error", error);
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("POST /api/news failed", error);
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
@@ -56,18 +78,30 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Missing required field: id" }, { status: 400 });
     }
 
-    // Convert timestamp to number if it exists
-    if (updates.timestamp && typeof updates.timestamp === "string") {
-      updates.timestamp = parseInt(updates.timestamp);
+    // Normalize field names to snake_case for Supabase
+    const normalized: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(updates)) {
+      if (k === "imageUrl") normalized["image_url"] = v;
+      else if (k === "metaDescription") normalized["meta_description"] = v;
+      else if (k === "keywordsMain") normalized["keywords_main"] = v;
+      else if (k === "keywordsSecondary") normalized["keywords_secondary"] = v;
+      else if (k === "publishedAt") normalized["published_at"] = v ? new Date(v as string).toISOString() : v;
+      else if (k === "timestamp") normalized["timestamp"] = typeof v === "string" ? parseInt(v) : v;
+      else normalized[k] = v;
+    }
+    normalized["updated_at"] = new Date().toISOString();
+
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .from("news")
+      .update(normalized)
+      .eq("id", id);
+
+    if (error) {
+      console.error("PATCH /api/news Supabase error", error);
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
 
-    // Convert publishedAt to ISO string if it exists
-    if (updates.publishedAt && typeof updates.publishedAt === "string") {
-      updates.publishedAt = new Date(updates.publishedAt).toISOString();
-    }
-
-    await db.update(news).set({ ...updates, updatedAt: new Date() }).where(eq(news.id, id)).execute();
-    
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("PATCH /api/news failed", error);
@@ -79,13 +113,22 @@ export async function DELETE(request: Request) {
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
-    
+
     if (!id) {
       return NextResponse.json({ error: "Missing required parameter: id" }, { status: 400 });
     }
 
-    await db.delete(news).where(eq(news.id, id)).execute();
-    
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .from("news")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("DELETE /api/news Supabase error", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("DELETE /api/news failed", error);

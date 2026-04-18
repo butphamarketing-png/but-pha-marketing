@@ -1,7 +1,4 @@
-import "server-only";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db/src";
-import { siteSettings } from "@/lib/db/src/schema";
+import { createServerClient } from "@/lib/supabase";
 
 export interface ServerBlogItem {
   id: string;
@@ -20,7 +17,23 @@ export interface ServerBlogItem {
   timestamp: number;
 }
 
-const BLOG_KEY = "blogs";
+// Raw row shape returned from Supabase (snake_case columns)
+interface RawNewsRow {
+  id: string;
+  title: string;
+  content: string;
+  description?: string;
+  image_url?: string;
+  slug?: string;
+  hot?: boolean;
+  meta_description?: string;
+  keywords_main?: string;
+  keywords_secondary?: string;
+  published_at?: string;
+  category: string;
+  published: boolean;
+  timestamp: number;
+}
 
 function slugify(text: string) {
   return text
@@ -32,27 +45,41 @@ function slugify(text: string) {
     .replace(/\s+/g, "-");
 }
 
-function normalize(item: ServerBlogItem): ServerBlogItem {
-  return {
-    ...item,
-    slug: item.slug || slugify(item.title) || item.id,
-    description: item.description || "",
-    imageUrl: item.imageUrl || "",
-    hot: !!item.hot,
-    metaDescription: item.metaDescription || "",
-    keywordsMain: item.keywordsMain || "",
-    keywordsSecondary: item.keywordsSecondary || "",
-    publishedAt: item.publishedAt || "",
+function normalize(row: RawNewsRow): ServerBlogItem {
+  const item: ServerBlogItem = {
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    description: row.description || "",
+    imageUrl: row.image_url || "",
+    slug: row.slug || slugify(row.title) || row.id,
+    hot: !!row.hot,
+    metaDescription: row.meta_description || "",
+    keywordsMain: row.keywords_main || "",
+    keywordsSecondary: row.keywords_secondary || "",
+    publishedAt: row.published_at || "",
+    category: row.category,
+    published: row.published,
+    timestamp: row.timestamp,
   };
+  return item;
 }
 
 export async function getPublishedBlogs(): Promise<ServerBlogItem[]> {
   try {
-    const [record] = await db.select().from(siteSettings).where(eq(siteSettings.key, BLOG_KEY)).limit(1);
-    const raw = ((record?.value as ServerBlogItem[]) || []).map(normalize);
-    return raw
-      .filter((item) => item.published !== false)
-      .sort((a, b) => (b.publishedAt ? Date.parse(b.publishedAt) : b.timestamp) - (a.publishedAt ? Date.parse(a.publishedAt) : a.timestamp));
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .eq("published", true)
+      .order("timestamp", { ascending: false });
+
+    if (error) {
+      console.error("getPublishedBlogs Supabase error", error);
+      return [];
+    }
+
+    return (data ?? []).map((row) => normalize(row as RawNewsRow));
   } catch {
     return [];
   }
@@ -62,4 +89,3 @@ export async function getBlogBySlug(slug: string) {
   const blogs = await getPublishedBlogs();
   return blogs.find((item) => item.slug === slug) || null;
 }
-

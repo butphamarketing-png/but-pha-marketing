@@ -1,51 +1,66 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+function getEnv(name: string): string {
+  const value = process.env[name];
 
-// Use the existing PostgreSQL database (Neon) instead of Supabase
-// This is a Supabase-compatible client that connects to our existing database
-export const supabase = supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+  if (!value || !value.trim()) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
 
-// Since we already have a PostgreSQL database (Neon), we'll use direct API calls
-// to that database instead of setting up a separate Supabase instance.
-// This keeps things simple and uses the existing infrastructure.
+  return value;
+}
 
-export async function fetchFromDB<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`/api${endpoint}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
+function getSupabaseUrl(): string {
+  const url = getEnv("NEXT_PUBLIC_SUPABASE_URL");
+
+  try {
+    new URL(url);
+    return url;
+  } catch {
+    throw new Error("Invalid NEXT_PUBLIC_SUPABASE_URL. Expected a valid URL.");
+  }
+}
+
+function createSupabaseClient(key: string, isBrowser: boolean): SupabaseClient {
+  return createClient(getSupabaseUrl(), key, {
+    auth: {
+      persistSession: isBrowser,
+      autoRefreshToken: isBrowser,
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+      },
+    },
+    global: {
+      headers: {
+        "X-Client-Info": "but-pha-marketing-nextjs",
+      },
     },
   });
-  
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Database error: ${error}`);
+}
+
+let browserClient: SupabaseClient | undefined;
+
+export function getSupabaseBrowserClient(): SupabaseClient {
+  if (typeof window === "undefined") {
+    throw new Error("getSupabaseBrowserClient() can only be used in the browser.");
   }
-  
-  return res.json();
+
+  if (!browserClient) {
+    browserClient = createSupabaseClient(getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"), true);
+  }
+
+  return browserClient;
 }
 
-export async function postToDB<T>(endpoint: string, data: unknown): Promise<T> {
-  return fetchFromDB<T>(endpoint, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+export function createBrowserClient(): SupabaseClient {
+  return getSupabaseBrowserClient();
 }
 
-export async function patchToDB<T>(endpoint: string, data: unknown): Promise<T> {
-  return fetchFromDB<T>(endpoint, {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-  });
+export function createServerClient(): SupabaseClient {
+  return createSupabaseClient(getEnv("SUPABASE_SERVICE_ROLE_KEY"), false);
 }
 
-export async function deleteFromDB<T>(endpoint: string): Promise<T> {
-  return fetchFromDB<T>(endpoint, {
-    method: 'DELETE',
-  });
-}
+export const supabase: SupabaseClient | null =
+  typeof window !== "undefined" ? getSupabaseBrowserClient() : null;
