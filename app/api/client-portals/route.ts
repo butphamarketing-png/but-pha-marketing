@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db/src";
-import { clientPortals } from "@/lib/db/src/schema";
-import { eq } from "drizzle-orm";
+import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const data = await db.select().from(clientPortals);
-    return NextResponse.json(data);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("client_portals")
+      .select("*");
+
+    if (error) {
+      console.error("GET /api/client-portals Supabase error", error);
+      return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
+    }
+
+    return NextResponse.json(data ?? []);
   } catch (error) {
+    console.error("GET /api/client-portals failed", error);
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
   }
 }
@@ -15,9 +23,21 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const result = await db.insert(clientPortals).values(body).returning();
-    return NextResponse.json(result[0]);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("client_portals")
+      .insert(body)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("POST /api/client-portals Supabase error", error);
+      return NextResponse.json({ error: "Failed to create" }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
+    console.error("POST /api/client-portals failed", error);
     return NextResponse.json({ error: "Failed to create" }, { status: 500 });
   }
 }
@@ -27,9 +47,21 @@ export async function DELETE(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
-    await db.delete(clientPortals).where(eq(clientPortals.id, parseInt(id)));
+
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .from("client_portals")
+      .delete()
+      .eq("id", parseInt(id));
+
+    if (error) {
+      console.error("DELETE /api/client-portals Supabase error", error);
+      return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("DELETE /api/client-portals failed", error);
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
@@ -39,14 +71,24 @@ export async function PATCH(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+
     const payload = await req.json();
-    const [updated] = await db
-      .update(clientPortals)
-      .set(payload)
-      .where(eq(clientPortals.id, parseInt(id, 10)))
-      .returning();
-    return NextResponse.json(updated);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("client_portals")
+      .update(payload)
+      .eq("id", parseInt(id, 10))
+      .select()
+      .single();
+
+    if (error) {
+      console.error("PATCH /api/client-portals Supabase error", error);
+      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
+    console.error("PATCH /api/client-portals failed", error);
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }

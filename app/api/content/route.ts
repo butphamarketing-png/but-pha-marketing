@@ -1,58 +1,78 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db/src";
-import { pageContent } from "@/lib/db/src/schema";
+import { createServerClient } from "@/lib/supabase";
 
-export async function GET(request: Request) {
+function jsonError(message: string, status: number, details?: unknown) {
+  return NextResponse.json(
+    { ok: false, error: message, ...(details ? { details } : {}) },
+    { status }
+  );
+}
+
+export async function GET(req: Request) {
   try {
-    const url = new URL(request.url);
-    const platform = url.searchParams.get("platform");
-    
+    const { searchParams } = new URL(req.url);
+    const platform = searchParams.get("platform");
+
     if (!platform) {
-      return NextResponse.json({ error: "Missing platform parameter" }, { status: 400 });
+      return jsonError("Missing platform query parameter", 400);
     }
 
-    const [record] = await db.select().from(pageContent).where(eq(pageContent.platform, platform)).limit(1);
-    
-    if (!record) {
-      return NextResponse.json({ platform, content: null });
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("page_content")
+      .select("platform, content, updated_at")
+      .eq("platform", platform)
+      .maybeSingle();
+
+    if (error) {
+      console.error("GET /api/content Supabase error", error);
+      return jsonError("Failed to fetch page content", 500, error);
     }
 
-    return NextResponse.json({ platform, content: record.content });
+    return NextResponse.json({
+      ok: true,
+      platform,
+      content: data?.content ?? null,
+      updatedAt: data?.updated_at ?? null,
+    });
   } catch (error) {
     console.error("GET /api/content failed", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return jsonError("Internal Server Error", 500);
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const platform = body?.platform as string | undefined;
-    const content = body?.content;
+    const body = await req.json();
+    const platform = typeof body?.platform === "string" ? body.platform.trim() : "";
+    const content = body?.content ?? null;
 
-    if (!platform || !content) {
-      return NextResponse.json({ error: "Missing platform or content" }, { status: 400 });
+    if (!platform) {
+      return jsonError("Missing platform in request body", 400);
     }
 
-    // Check if record exists
-    const [existing] = await db.select().from(pageContent).where(eq(pageContent.platform, platform)).limit(1);
-    
-    if (existing) {
-      // Update existing record
-      await db
-        .update(pageContent)
-        .set({ content, updatedAt: new Date() })
-        .where(eq(pageContent.id, existing.id))
-        .execute();
-    } else {
-      // Insert new record
-      await db.insert(pageContent).values({ platform, content }).execute();
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("page_content")
+      .upsert({ platform, content }, { onConflict: "platform" })
+      .select("platform, content, updated_at")
+      .single();
+
+    if (error) {
+      console.error("POST /api/content Supabase error", error);
+      return jsonError("Failed to save page content", 500, error);
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      data: {
+        platform: data.platform,
+        content: data.content,
+        updatedAt: data.updated_at,
+      },
+    });
   } catch (error) {
     console.error("POST /api/content failed", error);
-    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    return jsonError("Invalid JSON body", 400);
   }
 }

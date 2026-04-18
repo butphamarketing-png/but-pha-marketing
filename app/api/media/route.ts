@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db/src";
-import { mediaItems } from "@/lib/db/src/schema";
+import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const items = await db.select().from(mediaItems).orderBy(mediaItems.timestamp);
-    return NextResponse.json(items);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("media")
+      .select("*")
+      .order("timestamp", { ascending: false });
+
+    if (error) {
+      console.error("GET /api/media Supabase error", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
+    return NextResponse.json(data ?? []);
   } catch (error) {
     console.error("GET /api/media failed", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -21,8 +30,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields: url, name, type" }, { status: 400 });
     }
 
-    const [item] = await db.insert(mediaItems).values({ url, name, type }).returning();
-    return NextResponse.json(item);
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("media")
+      .insert({ url, name, type, timestamp: Date.now() })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("POST /api/media Supabase error", error);
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("POST /api/media failed", error);
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });

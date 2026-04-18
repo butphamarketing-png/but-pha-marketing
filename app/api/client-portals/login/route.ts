@@ -1,22 +1,31 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db/src";
-import { clientPortals } from "@/lib/db/src/schema";
-import { eq, and } from "drizzle-orm";
+import { createServerClient } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
-    const result = await db
-      .select()
-      .from(clientPortals)
-      .where(and(eq(clientPortals.username, username), eq(clientPortals.password, password)));
 
-    if (result.length > 0) {
-      return NextResponse.json(result[0]);
-    } else {
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("client_portals")
+      .select("*")
+      .eq("username", username)
+      .eq("password", password)
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error("POST /api/client-portals/login Supabase error", error);
+      return NextResponse.json({ error: "Failed to login" }, { status: 500 });
+    }
+
+    if (!data) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
+
+    return NextResponse.json(data);
   } catch (error) {
+    console.error("POST /api/client-portals/login failed", error);
     return NextResponse.json({ error: "Failed to login" }, { status: 500 });
   }
 }

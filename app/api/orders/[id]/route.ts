@@ -1,0 +1,51 @@
+import { NextResponse } from "next/server";
+import { createServerClient } from "@/lib/supabase";
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const payload = await req.json();
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("orders")
+      .update(payload)
+      .eq("id", parseInt(params.id, 10))
+      .select()
+      .single();
+
+    if (error) {
+      console.error("PATCH /api/orders/[id] Supabase error", error);
+      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("PATCH /api/orders/[id] failed", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .from("orders")
+      .delete()
+      .eq("id", parseInt(params.id, 10));
+
+    if (error) {
+      console.error("DELETE /api/orders/[id] Supabase error", error);
+      return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE /api/orders/[id] failed", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}

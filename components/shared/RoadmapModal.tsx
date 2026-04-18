@@ -28,7 +28,12 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setLoading(true);
     setError("");
     try {
-      const res = await db.clientPortals.login(authForm.username, authForm.password);
+      const result = await db.clientPortals.login(authForm.username, authForm.password);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      const res = result.data;
       if (res) {
         login({
           name: res.clientName,

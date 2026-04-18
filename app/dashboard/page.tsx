@@ -25,12 +25,21 @@ function DashboardContent() {
     if (!user?.portalId) return;
 
     const loadPortal = async () => {
-      const portals = await db.clientPortals.getAll();
+      const result = await db.clientPortals.getAll();
+      if (result.error) {
+        console.error('Load portals error:', result.error);
+        return;
+      }
+      const portals = result.data || [];
       const found = portals.find((p) => p.id === user.portalId) || null;
       setPortal(found);
       if (found) {
-        const articles = await db.progressArticles.getByClient(found.id);
-        setProgressArticles(articles);
+        const articlesResult = await db.progressArticles.getByClient(found.id);
+        if (articlesResult.error) {
+          console.error('Load articles error:', articlesResult.error);
+        } else {
+          setProgressArticles(articlesResult.data || []);
+        }
       }
     };
 
