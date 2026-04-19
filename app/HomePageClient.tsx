@@ -116,7 +116,7 @@ export default function HomePageClient() {
 
       <DynamicGreeting color="#7C3AED" />
 
-      <header className="flex items-center justify-between p-6">
+      <header className="relative z-[50] flex items-center justify-between px-6 pb-6 pt-16">
         <div className="flex items-center gap-3">
           <img src="/logo.jpg" alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
           <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings?.title || "Bứt Phá Marketing"}</span>

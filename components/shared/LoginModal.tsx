@@ -12,14 +12,14 @@ type LoginModalProps = {
 
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "" });
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     login({
       name: "Khách hàng",
-      email: formData.email.trim(),
+      email: formData.username.trim(),
       phone: "",
     });
 
@@ -56,13 +56,13 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-200">Email</label>
+                <label className="mb-2 block text-sm font-medium text-gray-200">Tài khoản hoặc email</label>
                 <input
                   required
-                  type="email"
-                  value={formData.email}
-                  onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))}
-                  placeholder="ban@company.com"
+                  type="text"
+                  value={formData.username}
+                  onChange={(event) => setFormData((current) => ({ ...current, username: event.target.value }))}
+                  placeholder="long1234 hoặc ban@company.com"
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-purple-400 focus:bg-white/10"
                 />
               </div>
