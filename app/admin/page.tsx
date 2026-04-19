@@ -285,6 +285,84 @@ export default function AdminPage() {
     }));
   };
 
+  const generateBlogDraftByAIV2 = () => {
+    const title = blogForm.title.trim();
+    if (!title) {
+      alert("Nhap tieu de truoc khi dung AI.");
+      return;
+    }
+
+    const normalizedTitle = title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const derivedKeywords = normalizedTitle
+      .split(" ")
+      .filter(Boolean)
+      .reduce<string[]>((result, word) => {
+        if (!result.includes(word)) {
+          result.push(word);
+        }
+        return result;
+      }, []);
+    const mainKeyword = blogForm.keywordsMain.trim() || derivedKeywords.slice(0, 4).join(" ") || normalizedTitle;
+    const secondaryKeyword =
+      blogForm.keywordsSecondary.trim() ||
+      [derivedKeywords.slice(0, 2).join(" "), "chien luoc tang truong", "marketing thuc chien"]
+        .filter(Boolean)
+        .join(", ");
+    const slug = title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    const generatedImageUrl =
+      blogForm.imageUrl.trim() ||
+      `https://placehold.co/1600x900/12081f/f8fafc/png?text=${encodeURIComponent(mainKeyword)}`;
+    const html = `
+      <h1>${title}</h1>
+      <figure>
+        <img src="${generatedImageUrl}" alt="${mainKeyword}" />
+        <figcaption>Hinh minh hoa tu dong cho chu de ${mainKeyword}.</figcaption>
+      </figure>
+      <p><strong>Tu khoa chinh:</strong> ${mainKeyword} · <strong>Tu khoa phu:</strong> ${secondaryKeyword}</p>
+      <h2>Muc luc</h2>
+      <ul>
+        <li><a href="#tong-quan">Tong quan</a></li>
+        <li><a href="#giai-phap">Giai phap trien khai</a></li>
+        <li><a href="#toi-uu-seo">Toi uu SEO thuc chien</a></li>
+      </ul>
+      <h2 id="tong-quan">Tong quan</h2>
+      <p>${mainKeyword} la trong tam giup doanh nghiep tang chuyen doi ben vung. Bai viet nay cung cap cach xay dung chien luoc noi dung va quang ba toan dien.</p>
+      <h2 id="giai-phap">Giai phap trien khai</h2>
+      <h3>1. Phan tich thi truong</h3>
+      <p>Nghien cuu chan dung khach hang, insight va doi thu de xac dinh thong diep ro rang.</p>
+      <h3>2. Xay dung noi dung chuan SEO</h3>
+      <p>Trien khai noi dung theo cum chu de, toi uu H1-H3, lien ket noi bo va CTA chuyen doi.</p>
+      <h3>3. Toi uu chuyen doi</h3>
+      <p>Ket hop landing page, tracking va test A/B de cai thien hieu qua theo du lieu thuc te.</p>
+      <h2 id="toi-uu-seo">Toi uu SEO thuc chien</h2>
+      <p>Dat tu khoa chinh o title, URL, 100 chu dau tien va meta description. Bo sung hinh anh co ALT de tang thoi gian o lai trang.</p>
+      <p>Internal link goi y: <a href="/facebook">Dich vu Facebook</a>, <a href="/website">Dich vu Website</a>.</p>
+    `.trim();
+
+    setBlogForm((prev) => ({
+      ...prev,
+      slug: prev.slug || slug,
+      keywordsMain: prev.keywordsMain || mainKeyword,
+      keywordsSecondary: prev.keywordsSecondary || secondaryKeyword,
+      imageUrl: prev.imageUrl || generatedImageUrl,
+      metaDescription: prev.metaDescription || `Giai phap ${mainKeyword} chuyen sau, toi uu chuyen doi va SEO ben vung cho doanh nghiep.`,
+      description: prev.description || `Tong hop chien luoc ${mainKeyword} tu nen tang den toi uu hieu qua thuc te.`,
+      content: html,
+    }));
+  };
+
   const updateMascotSectionMessages = (raw: string) => {
     const rows = raw
       .split("\n")
@@ -1673,7 +1751,7 @@ export default function AdminPage() {
                       placeholder="Nhập tiêu đề blog"
                       className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
                     />
-                    <button type="button" onClick={generateBlogDraftByAI} className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">
+                    <button type="button" onClick={generateBlogDraftByAIV2} className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">
                       AI viết
                     </button>
                   </div>

@@ -1,109 +1,94 @@
+"use client";
+
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { useRouter } from "next/navigation";
 
-export function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [tab, setTab] = useState<"login" | "register">("login");
+type LoginModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth();
-  const router = useRouter();
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    login({ 
-      name: tab === "register" ? formData.name : "Người dùng", 
-      phone: formData.phone,
-      email: formData.email
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    login({
+      name: "Khách hàng",
+      email: formData.email.trim(),
+      phone: "",
     });
-    onClose();
-    router.push("/dashboard");
-  };
 
-  if (!isOpen) return null;
+    onClose();
+  }
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-2xl"
-        >
-          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-white">
-            <X size={20} />
-          </button>
-          
-          <div className="mb-6 flex border-b border-white/10">
-            <button 
-              className={`flex-1 pb-3 font-medium transition-colors ${tab === "login" ? "border-b-2 border-primary text-white" : "text-gray-400 hover:text-gray-200"}`}
-              onClick={() => setTab("login")}
+      {isOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#120a1d]/95 p-6 shadow-[0_30px_120px_rgba(80,0,160,0.35)]"
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Đóng"
+              className="absolute right-4 top-4 rounded-full border border-white/10 bg-white/5 p-2 text-gray-300 transition hover:bg-white/10 hover:text-white"
             >
-              Đăng nhập
+              <X size={18} />
             </button>
-            <button 
-              className={`flex-1 pb-3 font-medium transition-colors ${tab === "register" ? "border-b-2 border-primary text-white" : "text-gray-400 hover:text-gray-200"}`}
-              onClick={() => setTab("register")}
-            >
-              Đăng ký
-            </button>
-          </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {tab === "register" && (
+            <div className="mb-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-purple-300">Client Portal</p>
+              <h2 className="mt-3 text-3xl font-black text-white">🔒 Khu vực khách hàng</h2>
+              <p className="mt-3 text-sm leading-6 text-gray-300">
+                Đăng nhập để xem tiến độ &amp; báo cáo dự án của bạn
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="mb-1 block text-sm text-gray-300">Họ và tên</label>
-                <input 
+                <label className="mb-2 block text-sm font-medium text-gray-200">Email</label>
+                <input
                   required
-                  type="text" 
-                  value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
-                  className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-2 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+                  type="email"
+                  value={formData.email}
+                  onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))}
+                  placeholder="ban@company.com"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-purple-400 focus:bg-white/10"
                 />
               </div>
-            )}
-            <div>
-              <label className="mb-1 block text-sm text-gray-300">Email hoặc Số điện thoại</label>
-              <input 
-                required
-                type="text" 
-                value={formData.email}
-                onChange={e => setFormData({...formData, email: e.target.value})}
-                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-2 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm text-gray-300">Mật khẩu</label>
-              <input 
-                required
-                type="password" 
-                value={formData.password}
-                onChange={e => setFormData({...formData, password: e.target.value})}
-                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-2 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
-              />
-            </div>
-            <button 
-              type="submit"
-              className="mt-2 w-full rounded-lg bg-primary py-3 font-medium text-white transition-all hover:bg-primary/90 hover:shadow-[0_0_15px_rgba(107,33,168,0.5)]"
-            >
-              {tab === "login" ? "Đăng nhập" : "Đăng ký thành viên"}
-            </button>
-            
-            {tab === "login" && (
-              <button 
-                type="button"
-                className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 py-3 font-medium text-white transition-all hover:bg-white/10"
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-200">Password</label>
+                <input
+                  required
+                  type="password"
+                  value={formData.password}
+                  onChange={(event) => setFormData((current) => ({ ...current, password: event.target.value }))}
+                  placeholder="••••••••"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-purple-400 focus:bg-white/10"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-500 px-4 py-3 text-sm font-bold text-white transition hover:from-purple-400 hover:to-fuchsia-400"
               >
-                Đăng nhập bằng Google
+                Xem dự án của bạn →
               </button>
-            )}
-          </form>
-        </motion.div>
-      </div>
+            </form>
+          </motion.div>
+        </div>
+      ) : null}
     </AnimatePresence>
   );
 }
-
-

@@ -39,6 +39,8 @@ import {
 
 type PostStudioProps = {
   postId?: string;
+  seedKeyword?: string;
+  initialIds?: string[];
 };
 
 type EditorState = {
@@ -59,7 +61,7 @@ const EMPTY_EDITOR: EditorState = {
   status: "draft",
 };
 
-export function PostStudio({ postId }: PostStudioProps) {
+export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps) {
   const router = useRouter();
   const [posts, setPosts] = useState<PostListItem[]>([]);
   const [activePost, setActivePost] = useState<PostDetail | null>(null);
@@ -109,7 +111,40 @@ export function PostStudio({ postId }: PostStudioProps) {
     });
   }, [postId]);
 
+  useEffect(() => {
+    if (postId || !seedKeyword?.trim()) {
+      return;
+    }
+
+    const keyword = seedKeyword.trim();
+
+    setEditor((current) => {
+      if (current.title || current.keywords || current.content) {
+        return current;
+      }
+
+      return {
+        ...EMPTY_EDITOR,
+        title: keyword,
+        slug: keyword
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .trim()
+          .replace(/\s+/g, "-"),
+        keywords: keyword,
+      };
+    });
+  }, [postId, seedKeyword]);
+
   const generationHistory = useMemo(() => activePost?.generations ?? [], [activePost]);
+  const visiblePosts = useMemo(() => {
+    if (!initialIds?.length) {
+      return posts;
+    }
+
+    const idSet = new Set(initialIds);
+    return posts.filter((post) => idSet.has(post.id));
+  }, [initialIds, posts]);
 
   async function loadPosts() {
     try {
@@ -399,12 +434,12 @@ export function PostStudio({ postId }: PostStudioProps) {
           </button>
 
           <div className="space-y-3">
-            {posts.length === 0 ? (
+            {visiblePosts.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-amber-300 bg-amber-50 px-4 py-6 text-sm text-slate-600">
                 No posts saved yet.
               </div>
             ) : (
-              posts.map((post) => {
+              visiblePosts.map((post) => {
                 const isActive = activePost?.id === post.id || postId === post.id;
 
                 return (
