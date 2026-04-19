@@ -1,5 +1,13 @@
-"use client";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Dịch vụ Facebook Marketing",
+  description:
+    "Giải pháp Facebook Marketing trọn gói: xây dựng fanpage, chăm sóc nội dung và triển khai Facebook Ads để tăng lead và doanh thu.",
+  path: "/facebook",
+  keywords: ["facebook marketing", "facebook ads", "quản trị fanpage", "chạy quảng cáo facebook"],
+});
 
 const config: PlatformConfig = {
   name: "Facebook",

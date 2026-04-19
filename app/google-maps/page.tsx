@@ -1,5 +1,13 @@
-"use client";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Dịch vụ Google Maps Marketing",
+  description:
+    "Tối ưu Google Business Profile, Local SEO và đánh giá uy tín để doanh nghiệp nổi bật trên Google Maps và kết quả tìm kiếm địa phương.",
+  path: "/google-maps",
+  keywords: ["google maps marketing", "local seo", "google business", "seo địa phương"],
+});
 
 const config: PlatformConfig = {
   name: "Google Maps",

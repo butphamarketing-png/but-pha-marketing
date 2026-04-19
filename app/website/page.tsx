@@ -1,5 +1,13 @@
-"use client";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Dịch vụ Website Marketing",
+  description:
+    "Thiết kế website, tối ưu SEO website và bảo trì kỹ thuật để tăng tốc độ tải trang, trải nghiệm người dùng và chuyển đổi kinh doanh.",
+  path: "/website",
+  keywords: ["website marketing", "thiết kế website", "seo website", "bảo trì website"],
+});
 
 const config: PlatformConfig = {
   name: "Website",

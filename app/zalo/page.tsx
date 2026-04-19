@@ -1,5 +1,13 @@
-"use client";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Dịch vụ Zalo Marketing",
+  description:
+    "Triển khai Zalo OA, chăm sóc khách hàng trên Zalo và tối ưu chiến dịch Zalo Ads để tăng tỷ lệ chuyển đổi cho doanh nghiệp.",
+  path: "/zalo",
+  keywords: ["zalo marketing", "zalo oa", "zalo ads", "chăm sóc khách hàng trên zalo"],
+});
 
 const config: PlatformConfig = {
   name: "Zalo",

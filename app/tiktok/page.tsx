@@ -1,5 +1,13 @@
-"use client";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Dịch vụ TikTok Marketing",
+  description:
+    "Xây dựng kênh TikTok, sản xuất video ngắn và chạy TikTok Ads để tăng nhận diện thương hiệu, follower và chuyển đổi bán hàng.",
+  path: "/tiktok",
+  keywords: ["tiktok marketing", "tiktok ads", "xây dựng kênh tiktok", "sản xuất video tiktok"],
+});
 
 const config: PlatformConfig = {
   name: "TikTok",
