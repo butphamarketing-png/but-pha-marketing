@@ -432,22 +432,6 @@ export default function AdminPage() {
   const selectedProject = selectedProjects.find(p => p.id === selectedClientProjectId) || selectedProjects[0] || null;
 
   useEffect(() => {
-    // Load SEO data from Supabase API
-    const loadSeoData = async () => {
-      try {
-        const res = await fetch("/api/seo");
-        if (res.ok) {
-          const data = await res.json();
-          setSeoData(data || {});
-        }
-      } catch (e) {
-        console.warn("Failed to load SEO data from Supabase", e);
-      }
-    };
-    loadSeoData();
-  }, []);
-
-  useEffect(() => {
     if (selectedPlatform === "home") return;
     const loadContent = async () => {
       setIsLoadingContent(true);
