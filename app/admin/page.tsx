@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Package, ShoppingCart, Newspaper, FileText,
@@ -112,6 +113,7 @@ const SEO_DEFAULTS: Record<string, { title: string; desc: string; keywords: stri
 };
 
 export default function AdminPage() {
+  const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -289,18 +291,16 @@ export default function AdminPage() {
   const generateBlogDraftByAIV2 = () => {
     const title = blogForm.title.trim();
     if (!title) {
-      alert("Nhap tieu de truoc khi dung AI.");
+      alert("Nhập tiêu đề trước khi dùng AI.");
       return;
     }
 
-    const normalizedTitle = title
+    const readableTitle = title
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s-]/g, " ")
+      .replace(/[^\p{L}\p{N}\s-]/gu, " ")
       .replace(/\s+/g, " ")
       .trim();
-    const derivedKeywords = normalizedTitle
+    const readableKeywords = readableTitle
       .split(" ")
       .filter(Boolean)
       .reduce<string[]>((result, word) => {
@@ -309,10 +309,10 @@ export default function AdminPage() {
         }
         return result;
       }, []);
-    const mainKeyword = blogForm.keywordsMain.trim() || derivedKeywords.slice(0, 4).join(" ") || normalizedTitle;
+    const mainKeyword = blogForm.keywordsMain.trim() || readableKeywords.slice(0, 4).join(" ") || title;
     const secondaryKeyword =
       blogForm.keywordsSecondary.trim() ||
-      [derivedKeywords.slice(0, 2).join(" "), "chien luoc tang truong", "marketing thuc chien"]
+      [readableKeywords.slice(0, 2).join(" "), "chiến lược tăng trưởng", "marketing thực chiến"]
         .filter(Boolean)
         .join(", ");
     const slug = title
@@ -329,27 +329,27 @@ export default function AdminPage() {
       <h1>${title}</h1>
       <figure>
         <img src="${generatedImageUrl}" alt="${mainKeyword}" />
-        <figcaption>Hinh minh hoa tu dong cho chu de ${mainKeyword}.</figcaption>
+        <figcaption>Hình minh họa tự động cho chủ đề ${mainKeyword}.</figcaption>
       </figure>
-      <p><strong>Tu khoa chinh:</strong> ${mainKeyword} · <strong>Tu khoa phu:</strong> ${secondaryKeyword}</p>
-      <h2>Muc luc</h2>
+      <p><strong>Từ khóa chính:</strong> ${mainKeyword} · <strong>Từ khóa phụ:</strong> ${secondaryKeyword}</p>
+      <h2>Mục lục</h2>
       <ul>
-        <li><a href="#tong-quan">Tong quan</a></li>
-        <li><a href="#giai-phap">Giai phap trien khai</a></li>
-        <li><a href="#toi-uu-seo">Toi uu SEO thuc chien</a></li>
+        <li><a href="#tong-quan">Tổng quan</a></li>
+        <li><a href="#giai-phap">Giải pháp triển khai</a></li>
+        <li><a href="#toi-uu-seo">Tối ưu SEO thực chiến</a></li>
       </ul>
-      <h2 id="tong-quan">Tong quan</h2>
-      <p>${mainKeyword} la trong tam giup doanh nghiep tang chuyen doi ben vung. Bai viet nay cung cap cach xay dung chien luoc noi dung va quang ba toan dien.</p>
-      <h2 id="giai-phap">Giai phap trien khai</h2>
-      <h3>1. Phan tich thi truong</h3>
-      <p>Nghien cuu chan dung khach hang, insight va doi thu de xac dinh thong diep ro rang.</p>
-      <h3>2. Xay dung noi dung chuan SEO</h3>
-      <p>Trien khai noi dung theo cum chu de, toi uu H1-H3, lien ket noi bo va CTA chuyen doi.</p>
-      <h3>3. Toi uu chuyen doi</h3>
-      <p>Ket hop landing page, tracking va test A/B de cai thien hieu qua theo du lieu thuc te.</p>
-      <h2 id="toi-uu-seo">Toi uu SEO thuc chien</h2>
-      <p>Dat tu khoa chinh o title, URL, 100 chu dau tien va meta description. Bo sung hinh anh co ALT de tang thoi gian o lai trang.</p>
-      <p>Internal link goi y: <a href="/facebook">Dich vu Facebook</a>, <a href="/website">Dich vu Website</a>.</p>
+      <h2 id="tong-quan">Tổng quan</h2>
+      <p>${mainKeyword} là trọng tâm giúp doanh nghiệp tăng chuyển đổi bền vững. Bài viết này cung cấp cách xây dựng chiến lược nội dung và quảng bá toàn diện.</p>
+      <h2 id="giai-phap">Giải pháp triển khai</h2>
+      <h3>1. Phân tích thị trường</h3>
+      <p>Nghiên cứu chân dung khách hàng, insight và đối thủ để xác định thông điệp rõ ràng.</p>
+      <h3>2. Xây dựng nội dung chuẩn SEO</h3>
+      <p>Triển khai nội dung theo cụm chủ đề, tối ưu H1-H3, liên kết nội bộ và CTA chuyển đổi.</p>
+      <h3>3. Tối ưu chuyển đổi</h3>
+      <p>Kết hợp landing page, tracking và test A/B để cải thiện hiệu quả theo dữ liệu thực tế.</p>
+      <h2 id="toi-uu-seo">Tối ưu SEO thực chiến</h2>
+      <p>Đặt từ khóa chính ở title, URL, 100 chữ đầu tiên và meta description. Bổ sung hình ảnh có ALT để tăng thời gian ở lại trang.</p>
+      <p>Internal link gợi ý: <a href="/facebook">Dịch vụ Facebook</a>, <a href="/website">Dịch vụ Website</a>.</p>
     `.trim();
 
     setBlogForm((prev) => ({
@@ -358,12 +358,11 @@ export default function AdminPage() {
       keywordsMain: prev.keywordsMain || mainKeyword,
       keywordsSecondary: prev.keywordsSecondary || secondaryKeyword,
       imageUrl: prev.imageUrl || generatedImageUrl,
-      metaDescription: prev.metaDescription || `Giai phap ${mainKeyword} chuyen sau, toi uu chuyen doi va SEO ben vung cho doanh nghiep.`,
-      description: prev.description || `Tong hop chien luoc ${mainKeyword} tu nen tang den toi uu hieu qua thuc te.`,
+      metaDescription: prev.metaDescription || `Giải pháp ${mainKeyword} chuyên sâu, tối ưu chuyển đổi và SEO bền vững cho doanh nghiệp.`,
+      description: prev.description || `Tổng hợp chiến lược ${mainKeyword} từ nền tảng đến tối ưu hiệu quả thực tế.`,
       content: html,
     }));
   };
-
   const updateMascotSectionMessages = (raw: string) => {
     const rows = raw
       .split("\n")
@@ -1144,7 +1143,7 @@ export default function AdminPage() {
         <div className="border-b border-white/10 p-5 font-bold text-white">Admin Panel</div>
         <nav className="flex-1 space-y-1 p-3">
           {NAV.map(n => (
-            <button key={n.id} onClick={() => setActiveTab(n.id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}>
+            <button key={n.id} onClick={() => n.id === "news" ? router.push("/admin/news") : setActiveTab(n.id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}>
               <n.icon size={18} /> {n.label}
             </button>
           ))}
@@ -1163,7 +1162,7 @@ export default function AdminPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-400">Chuyển mục quản trị</label>
               <select
                 value={activeTab}
-                onChange={e => setActiveTab(e.target.value)}
+                onChange={e => e.target.value === "news" ? router.push("/admin/news") : setActiveTab(e.target.value)}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
               >
                 {NAV.map(item => (
