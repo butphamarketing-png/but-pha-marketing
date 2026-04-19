@@ -25,19 +25,21 @@ function getYoutubeEmbedUrl(url: string) {
       }
     }
   } catch {
-    return url;
+    return "";
   }
-  return url;
+  return "";
 }
 
 export function VideoIntroButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [shake, setShake] = useState(false);
   const { settings } = useAdmin();
-  const videoUrl = settings.media.home?.videoUrl?.trim();
-  const iframeSrc = videoUrl ? getYoutubeEmbedUrl(videoUrl) : "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&rel=0";
+  const videoUrl = settings?.media?.home?.videoUrl?.trim?.() || "";
+  const iframeSrc = videoUrl ? getYoutubeEmbedUrl(videoUrl) : "";
 
   useEffect(() => {
+    if (!iframeSrc) return;
+
     let intervalId: number | undefined;
     const timeout = window.setTimeout(() => {
       setShake(true);
@@ -48,13 +50,15 @@ export function VideoIntroButton() {
       window.clearTimeout(timeout);
       if (intervalId) window.clearInterval(intervalId);
     };
-  }, []);
+  }, [iframeSrc]);
 
   useEffect(() => {
     if (!shake) return;
-    const t = window.setTimeout(() => setShake(false), 700);
-    return () => window.clearTimeout(t);
+    const timeout = window.setTimeout(() => setShake(false), 700);
+    return () => window.clearTimeout(timeout);
   }, [shake]);
+
+  if (!iframeSrc) return null;
 
   return (
     <>

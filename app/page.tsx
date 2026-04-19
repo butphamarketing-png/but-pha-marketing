@@ -40,8 +40,8 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
-    db.news.getAll().then((items) => {
-      const sorted = [...items]
+    db.news.getAll().then((result) => {
+      const sorted = [...(result.data || [])]
         .filter((item) => item.published !== false)
         .sort((a, b) => (b.publishedAt ? Date.parse(b.publishedAt) : b.timestamp) - (a.publishedAt ? Date.parse(a.publishedAt) : a.timestamp));
       setBlogs(sorted);
@@ -86,12 +86,12 @@ function HomeContent() {
   }
 
   const platforms = [
-    { id: "facebook", name: "Facebook", icon: SiFacebook, color: settings.colors.facebook, to: "/facebook" },
-    { id: "tiktok", name: "TikTok", icon: SiTiktok, color: settings.colors.tiktok, to: "/tiktok" },
-    { id: "instagram", name: "Instagram", icon: SiInstagram, color: settings.colors.instagram, to: "/instagram" },
-    { id: "zalo", name: "Zalo", icon: SiZalo, color: settings.colors.zalo, to: "/zalo" },
-    { id: "googlemaps", name: "Google Maps", icon: SiGooglemaps, color: settings.colors.googlemaps, to: "/google-maps" },
-    { id: "website", name: "Website", icon: SiWebflow, color: settings.colors.website, to: "/website" },
+    { id: "facebook", name: "Facebook", icon: SiFacebook, color: settings?.colors?.facebook || "#1877F2", to: "/facebook" },
+    { id: "tiktok", name: "TikTok", icon: SiTiktok, color: settings?.colors?.tiktok || "#FF0050", to: "/tiktok" },
+    { id: "instagram", name: "Instagram", icon: SiInstagram, color: settings?.colors?.instagram || "#E1306C", to: "/instagram" },
+    { id: "zalo", name: "Zalo", icon: SiZalo, color: settings?.colors?.zalo || "#0068FF", to: "/zalo" },
+    { id: "googlemaps", name: "Google Maps", icon: SiGooglemaps, color: settings?.colors?.googlemaps || "#EA4335", to: "/google-maps" },
+    { id: "website", name: "Website", icon: SiWebflow, color: settings?.colors?.website || "#34A853", to: "/website" },
   ];
   const visibleBlogs = blogs.slice(blogPage * 4, blogPage * 4 + 4);
   const blogMaxPage = Math.max(0, Math.ceil(blogs.length / 4) - 1);
@@ -113,8 +113,8 @@ function HomeContent() {
       <DynamicGreeting color="#7C3AED" />
       <header className="flex items-center justify-between p-6">
         <div className="flex items-center gap-3">
-          <img src="/logo.jpg" alt={settings.title} className="h-10 w-10 rounded-full object-cover shadow-lg" />
-          <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings.title}</span>
+          <img src="/logo.jpg" alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
+          <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings?.title || "Bứt Phá Marketing"}</span>
         </div>
         {!settings.presentationMode && (
           <div className="flex flex-col items-end gap-2">
@@ -141,9 +141,9 @@ function HomeContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-4 text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600 md:text-7xl lg:text-8xl"
-            style={{ backgroundImage: `linear-gradient(to right, ${settings.colors.primary}, #fff)` }}
+            style={{ backgroundImage: `linear-gradient(to right, ${settings?.colors?.primary || "#000"}, #fff)` }}
           >
-            {settings.heroTitle}
+            {settings?.heroTitle || ""}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -151,7 +151,7 @@ function HomeContent() {
             transition={{ delay: 0.2 }}
             className="mx-auto max-w-2xl whitespace-pre-line text-lg text-purple-200 md:text-xl"
           >
-            {settings.heroSubtitle}
+            {settings?.heroSubtitle || ""}
           </motion.p>
         </div>
 
@@ -161,7 +161,7 @@ function HomeContent() {
           transition={{ delay: 0.4 }}
           className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
         >
-          {platforms.filter(platform => settings.visibility[platform.id] !== false).map((platform, index) => (
+          {platforms.filter((platform) => settings?.visibility?.[platform.id] !== false).map((platform) => (
             <Link key={platform.id} href={platform.to} onClick={playClickSound} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-xl transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-white/20">
               <div className="absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ backgroundImage: `linear-gradient(to bottom right, transparent, ${platform.color}40)` }} />
               <div className="relative z-10 flex flex-col items-center text-center">

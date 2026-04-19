@@ -1,146 +1,497 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
-// [All interfaces unchanged: PackageConfig, PlatformCMS, SiteSettings, AdminContextType]
+export interface CaseStudyItem {
+  id: string;
+  title: string;
+  before: string;
+  after: string;
+}
 
-const defaultSettings: SiteSettings = {
-  // [defaultSettings object unchanged - full original content here]
-  title: "Bứt Phá Marketing",
-  // ... (paste full original defaultSettings from previous read_file)
-  // [Omitted for brevity in this response, but include COMPLETE original defaultSettings in actual file]
+export interface MediaSection {
+  videoUrl: string;
+  slideshow: string[];
+  cases: CaseStudyItem[];
+}
+
+export interface PackageConfig {
+  price: string;
+  features: string[];
+  allFeatures: string[];
+  audio: string;
+}
+
+export interface PlatformCMS {
+  packages: Record<string, PackageConfig>;
+}
+
+export interface SiteSettings {
+  title: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  content: string;
+  hotline: string;
+  address: string;
+  email: string;
+  zalo: string;
+  fanpage: string;
+  googleAnalytics: string;
+  headJs: string;
+  presentationMode: boolean;
+  softSoundsEnabled: boolean;
+  softSoundsVolume: number;
+  mascotEnabled: boolean;
+  mascotMessages: Record<string, string>;
+  mascotAudioUrls: Record<string, string>;
+  mascotSectionMessages: Record<string, Record<string, string>>;
+  mascotErrorMessages: Record<string, { login: string; phone: string; link: string }>;
+  mascotClickMessages: Record<string, string[]>;
+  media: Record<string, MediaSection>;
+  cms: Record<string, PlatformCMS>;
+  colors: Record<string, string>;
+  visibility: Record<string, boolean>;
+  platformNames: Record<string, string>;
+}
+
+export interface AdminContextType {
+  settings: SiteSettings;
+  updateSettings: (newSettings: Partial<SiteSettings>) => void;
+  updateColor: (key: string, value: string) => void;
+  updatePlatformName: (key: string, value: string) => void;
+  toggleVisibility: (key: string, visible: boolean) => void;
+  updateCMS: (platform: string, packageName: string, patch: Partial<PackageConfig>) => void;
+  addSlideshowImage: (platform: string, imageUrl: string) => void;
+  removeSlideshowImage: (platform: string, index: number) => void;
+  addCase: (platform: string, item: Omit<CaseStudyItem, "id">) => void;
+  removeCase: (platform: string, id: string) => void;
+  updateMediaVideo: (platform: string, videoUrl: string) => void;
+}
+
+const SETTINGS_KEY = "admin_settings";
+const MEDIA_KEYS = ["home", "facebook", "tiktok", "instagram", "zalo", "googlemaps", "website"] as const;
+const COLOR_DEFAULTS: Record<string, string> = {
+  primary: "#7C3AED",
+  facebook: "#1877F2",
+  tiktok: "#FF0050",
+  instagram: "#E1306C",
+  zalo: "#0068FF",
+  googlemaps: "#EA4335",
+  website: "#34A853",
+};
+const VISIBILITY_DEFAULTS: Record<string, boolean> = {
+  facebook: true,
+  tiktok: true,
+  instagram: true,
+  zalo: true,
+  googlemaps: true,
+  website: true,
+  intro: true,
+  audit: true,
+  pricing: true,
+  stats: true,
+};
+const PLATFORM_NAME_DEFAULTS: Record<string, string> = {
+  facebook: "Facebook",
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  zalo: "Zalo",
+  googlemaps: "Google Maps",
+  website: "Website",
 };
 
-const AdminContext = createContext<AdminContextType | undefined>(undefined);
-const SETTINGS_KEY = "admin_settings";
-
-function mergeWithDefaults(parsed: Partial<SiteSettings>): SiteSettings {
+function createMediaSection(): MediaSection {
   return {
-    ...defaultSettings,
-    ...parsed,
-    cms: { ...defaultSettings.cms, ...(parsed.cms || {}) },
-    media: { ...defaultSettings.media, ...(parsed.media || {}) },
-    colors: { ...defaultSettings.colors, ...(parsed.colors || {}) },
-    visibility: { ...defaultSettings.visibility, ...(parsed.visibility || {}) },
-    platformNames: { ...defaultSettings.platformNames, ...(parsed.platformNames || {}) },
-    presentationMode: parsed.presentationMode ?? false,
+    videoUrl: "",
+    slideshow: [],
+    cases: [],
   };
 }
 
-// [AdminProvider component]
+function createDefaultMedia(): Record<string, MediaSection> {
+  return MEDIA_KEYS.reduce<Record<string, MediaSection>>((acc, key) => {
+    acc[key] = createMediaSection();
+    return acc;
+  }, {});
+}
+
+const defaultSettings: SiteSettings = {
+  title: "Bứt Phá Marketing",
+  heroTitle: "Bứt Phá Marketing",
+  heroSubtitle: "",
+  content: "",
+  hotline: "0937 417 982",
+  address: "",
+  email: "",
+  zalo: "",
+  fanpage: "",
+  googleAnalytics: "",
+  headJs: "",
+  presentationMode: false,
+  softSoundsEnabled: true,
+  softSoundsVolume: 0.05,
+  mascotEnabled: true,
+  mascotMessages: {},
+  mascotAudioUrls: {},
+  mascotSectionMessages: {},
+  mascotErrorMessages: {},
+  mascotClickMessages: {},
+  media: createDefaultMedia(),
+  cms: {},
+  colors: COLOR_DEFAULTS,
+  visibility: VISIBILITY_DEFAULTS,
+  platformNames: PLATFORM_NAME_DEFAULTS,
+};
+
+function mergePackageConfig(parsed?: Partial<PackageConfig>): PackageConfig {
+  return {
+    price: parsed?.price ?? "",
+    features: parsed?.features ?? [],
+    allFeatures: parsed?.allFeatures ?? [],
+    audio: parsed?.audio ?? "",
+  };
+}
+
+function mergeMediaSection(parsed?: Partial<MediaSection>): MediaSection {
+  return {
+    videoUrl: parsed?.videoUrl ?? "",
+    slideshow: parsed?.slideshow ?? [],
+    cases: parsed?.cases ?? [],
+  };
+}
+
+function mergeCms(parsed: Partial<SiteSettings>["cms"]): Record<string, PlatformCMS> {
+  const merged: Record<string, PlatformCMS> = {};
+  const source = parsed ?? {};
+
+  for (const [platform, config] of Object.entries(source)) {
+    const packages = config?.packages ?? {};
+    merged[platform] = {
+      packages: Object.fromEntries(
+        Object.entries(packages).map(([packageName, packageConfig]) => [
+          packageName,
+          mergePackageConfig(packageConfig),
+        ]),
+      ),
+    };
+  }
+
+  return merged;
+}
+
+function mergeMedia(parsed: Partial<SiteSettings>["media"]): Record<string, MediaSection> {
+  const merged = createDefaultMedia();
+  const source = parsed ?? {};
+
+  for (const [key, value] of Object.entries(source)) {
+    merged[key] = mergeMediaSection(value);
+  }
+
+  return merged;
+}
+
+function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): SiteSettings {
+  if (!parsed) return defaultSettings;
+
+  return {
+    ...defaultSettings,
+    ...parsed,
+    media: mergeMedia(parsed.media),
+    cms: mergeCms(parsed.cms),
+    colors: { ...COLOR_DEFAULTS, ...(parsed.colors ?? {}) },
+    visibility: { ...VISIBILITY_DEFAULTS, ...(parsed.visibility ?? {}) },
+    platformNames: { ...PLATFORM_NAME_DEFAULTS, ...(parsed.platformNames ?? {}) },
+    mascotMessages: { ...defaultSettings.mascotMessages, ...(parsed.mascotMessages ?? {}) },
+    mascotAudioUrls: { ...defaultSettings.mascotAudioUrls, ...(parsed.mascotAudioUrls ?? {}) },
+    mascotSectionMessages: {
+      ...defaultSettings.mascotSectionMessages,
+      ...(parsed.mascotSectionMessages ?? {}),
+    },
+    mascotErrorMessages: {
+      ...defaultSettings.mascotErrorMessages,
+      ...(parsed.mascotErrorMessages ?? {}),
+    },
+    mascotClickMessages: {
+      ...defaultSettings.mascotClickMessages,
+      ...(parsed.mascotClickMessages ?? {}),
+    },
+    presentationMode: parsed.presentationMode ?? false,
+    softSoundsEnabled: parsed.softSoundsEnabled ?? true,
+    softSoundsVolume: parsed.softSoundsVolume ?? 0.05,
+    mascotEnabled: parsed.mascotEnabled ?? true,
+  };
+}
+
+const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoaded, setIsLoaded] = useState(false);
   const persistTimerRef = useRef<number | null>(null);
   const lastSavedRef = useRef("");
+  const channelRef = useRef<BroadcastChannel | null>(null);
 
-  // Safe settings load with res.text() + JSON.parse try/catch
   useEffect(() => {
     if (typeof window === "undefined") return;
-    let mounted = true;
-    const loadSettings = async () => {
-      try {
-        console.log('[AdminContext] Loading settings from API...');
-        const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`);
-        let data: any = { ok: false, value: null };
-        if (res.ok) {
-          try {
-            const text = await res.text();
-            data = JSON.parse(text);
-          } catch (parseErr) {
-            console.error('[AdminContext LOAD] Failed to parse API response (HTML/server error?):', parseErr, text?.slice(0, 200) || 'empty');
-          }
-        } else {
-          console.warn('[AdminContext LOAD] API request failed:', res.status, res.statusText);
-        }
-        if (mounted && data?.ok && data.value !== undefined) {
-          console.log('[AdminContext LOAD] Loaded successfully, merging defaults');
-          const merged = mergeWithDefaults(data.value);
-          setSettings(merged);
-          return;
-        }
-      } catch (loadErr) {
-        console.error('[AdminContext LOAD] Fetch error:', loadErr);
-      } finally {
-        if (mounted) setIsLoaded(true);
-      }
-      // Fallback to defaults
-      console.log('[AdminContext LOAD] Using default settings (API unavailable)');
-      setSettings(defaultSettings);
-    };
-    loadSettings();
-    return () => { mounted = false; };
-  }, []);
 
-  // Safe persist - direct object, no double stringify
-  useEffect(() => {
-    if (!isLoaded || typeof window === "undefined") return;
-    const settingsObj = { ...settings, presentationMode: false };
-    const payload = JSON.stringify(settingsObj);
-    if (payload === lastSavedRef.current) return;
-    if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
-    persistTimerRef.current = window.setTimeout(async () => {
-      lastSavedRef.current = payload;
-      try {
-        const res = await fetch("/api/settings", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key: SETTINGS_KEY, value: settingsObj }),
-        });
-        if (res.ok) {
-          console.log('[AdminContext PERSIST] Settings saved OK');
-        } else {
-          console.error('[AdminContext PERSIST] Save failed:', res.status);
-        }
-      } catch (saveErr) {
-        console.error('[AdminContext PERSIST] Save error:', saveErr);
-      }
-    }, 300);
-    return () => { if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current); };
-  }, [settings, isLoaded]);
-
-  // [All updater functions unchanged: updateSettings, updateColor, etc. - full original]
-
-  // Cross-tab broadcast unchanged but defensive
-  useEffect(() => {
-    if (typeof window === "undefined") return;
     const channel = new BroadcastChannel("admin_settings_channel");
-    channel.onmessage = (event) => {
+    channel.onmessage = (event: MessageEvent<{ type?: string; value?: string }>) => {
+      if (event.data?.type !== "settings_update" || !event.data.value) return;
       try {
-        if (event.data?.type === "settings_update" && event.data.value) {
-          const parsed = JSON.parse(event.data.value);
-          setSettings(mergeWithDefaults(parsed));
-        }
-      } catch (e) {
-        console.error('[AdminContext SYNC] Broadcast parse error:', e);
+        const parsed = JSON.parse(event.data.value) as Partial<SiteSettings>;
+        setSettings(mergeWithDefaults(parsed));
+      } catch (error) {
+        console.error("[AdminContext] Failed to parse broadcast settings", error);
       }
     };
-    return () => channel.close();
+    channelRef.current = channel;
+
+    return () => {
+      channel.close();
+      channelRef.current = null;
+    };
   }, []);
 
-  const broadcastSettings = (newSettings: SiteSettings) => {
-    if (typeof window === "undefined") return;
+  const broadcastSettings = (nextSettings: SiteSettings) => {
     try {
-      const channel = new BroadcastChannel("admin_settings_channel");
-      channel.postMessage({
+      channelRef.current?.postMessage({
         type: "settings_update",
-        value: JSON.stringify(newSettings),
+        value: JSON.stringify(nextSettings),
       });
-      channel.close();
-    } catch (e) {
-      console.error('[AdminContext SYNC] Broadcast error:', e);
+    } catch (error) {
+      console.error("[AdminContext] Failed to broadcast settings", error);
     }
   };
 
-  // [All update functions with broadcastSettings call - paste full original updater code]
+  useEffect(() => {
+    let mounted = true;
+
+    const loadSettings = async () => {
+      try {
+        const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`);
+        const text = await res.text();
+        const parsed = text ? (JSON.parse(text) as { ok?: boolean; value?: Partial<SiteSettings> | null }) : null;
+
+        if (mounted && res.ok && parsed?.ok) {
+          setSettings(mergeWithDefaults(parsed.value ?? undefined));
+          return;
+        }
+      } catch (error) {
+        console.error("[AdminContext] Failed to load settings", error);
+      } finally {
+        if (mounted) setIsLoaded(true);
+      }
+
+      if (mounted) setSettings(defaultSettings);
+    };
+
+    void loadSettings();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded || typeof window === "undefined") return;
+
+    const cleanSettings: SiteSettings = {
+      ...settings,
+      presentationMode: false,
+    };
+    const payload = JSON.stringify(cleanSettings);
+
+    if (payload === lastSavedRef.current) return;
+    if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
+
+    persistTimerRef.current = window.setTimeout(async () => {
+      lastSavedRef.current = payload;
+      try {
+        await fetch("/api/settings", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: SETTINGS_KEY, value: cleanSettings }),
+        });
+      } catch (error) {
+        console.error("[AdminContext] Failed to persist settings", error);
+      }
+    }, 300);
+
+    return () => {
+      if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
+    };
+  }, [isLoaded, settings]);
+
+  const setAndBroadcast = (updater: (prev: SiteSettings) => SiteSettings) => {
+    setSettings((prev) => {
+      const next = mergeWithDefaults(updater(prev));
+      broadcastSettings(next);
+      return next;
+    });
+  };
+
+  const updateSettings = (newSettings: Partial<SiteSettings>) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      ...newSettings,
+    }));
+  };
+
+  const updateColor = (key: string, value: string) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      colors: {
+        ...prev.colors,
+        [key]: value,
+      },
+    }));
+  };
+
+  const updatePlatformName = (key: string, value: string) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      platformNames: {
+        ...prev.platformNames,
+        [key]: value,
+      },
+    }));
+  };
+
+  const toggleVisibility = (key: string, visible: boolean) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      visibility: {
+        ...prev.visibility,
+        [key]: visible,
+      },
+    }));
+  };
+
+  const updateCMS = (platform: string, packageName: string, patch: Partial<PackageConfig>) => {
+    setAndBroadcast((prev) => {
+      const platformCms = prev.cms[platform] ?? { packages: {} };
+      const existingPackage = platformCms.packages[packageName];
+
+      return {
+        ...prev,
+        cms: {
+          ...prev.cms,
+          [platform]: {
+            packages: {
+              ...platformCms.packages,
+              [packageName]: {
+                ...mergePackageConfig(existingPackage),
+                ...patch,
+                features: patch.features ?? existingPackage?.features ?? [],
+                allFeatures: patch.allFeatures ?? existingPackage?.allFeatures ?? [],
+                audio: patch.audio ?? existingPackage?.audio ?? "",
+              },
+            },
+          },
+        },
+      };
+    });
+  };
+
+  const addSlideshowImage = (platform: string, imageUrl: string) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          slideshow: [...mergeMediaSection(prev.media[platform]).slideshow, imageUrl],
+        },
+      },
+    }));
+  };
+
+  const removeSlideshowImage = (platform: string, index: number) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            slideshow: mediaSection.slideshow.filter((_, currentIndex) => currentIndex !== index),
+          },
+        },
+      };
+    });
+  };
+
+  const addCase = (platform: string, item: Omit<CaseStudyItem, "id">) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      const nextId = `${Date.now()}-${mediaSection.cases.length + 1}`;
+
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            cases: [...mediaSection.cases, { ...item, id: nextId }],
+          },
+        },
+      };
+    });
+  };
+
+  const removeCase = (platform: string, id: string) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            cases: mediaSection.cases.filter((entry) => entry.id !== id),
+          },
+        },
+      };
+    });
+  };
+
+  const updateMediaVideo = (platform: string, videoUrl: string) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          videoUrl,
+        },
+      },
+    }));
+  };
 
   return (
-    <AdminContext.Provider value={{
-      settings,
-      updateSettings: (newSettings) => setSettings(prev => { const updated = {...prev, ...newSettings}; broadcastSettings(updated); return updated; }),
-      // [all other value functions - full original but with defensive broadcast]
-    }}>
+    <AdminContext.Provider
+      value={{
+        settings,
+        updateSettings,
+        updateColor,
+        updatePlatformName,
+        toggleVisibility,
+        updateCMS,
+        addSlideshowImage,
+        removeSlideshowImage,
+        addCase,
+        removeCase,
+        updateMediaVideo,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
@@ -148,6 +499,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
 export function useAdmin() {
   const context = useContext(AdminContext);
-  if (context === undefined) throw new Error("useAdmin must be within AdminProvider");
+  if (!context) {
+    throw new Error("useAdmin must be used inside AdminProvider");
+  }
   return context;
 }

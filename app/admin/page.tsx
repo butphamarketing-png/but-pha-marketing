@@ -856,8 +856,13 @@ export default function AdminPage() {
   };
 
   const refreshClientPortal = async (clientId: number) => {
-    const portals = await db.clientPortals.getAll();
-    const client = portals.find((p) => p.id === clientId) || null;
+    const result = await db.clientPortals.getAll();
+    if (result.error) {
+      console.error("Portals error:", result.error);
+      return;
+    }
+    const portals = result.data || [];
+    const client = portals.find((portal) => portal.id === clientId) || null;
     setSelectedClient(client);
     setClientPortals(portals);
   };
@@ -911,8 +916,8 @@ export default function AdminPage() {
   useEffect(() => {
     if (!authenticated) return;
     refreshOrders(); refreshLeads(); refreshPortals(); refreshServices();
-    db.news.getAll().then((items) => {
-      setBlogs([...items].sort((a, b) => b.timestamp - a.timestamp));
+    db.news.getAll().then((result) => {
+      setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     });
   }, [authenticated]);
 
@@ -953,8 +958,8 @@ export default function AdminPage() {
     };
     if (editingBlogId) await db.news.update(editingBlogId, payload);
     else await db.news.add(payload);
-    const items = await db.news.getAll();
-    setBlogs([...items].sort((a, b) => b.timestamp - a.timestamp));
+    const result = await db.news.getAll();
+    setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     resetBlogForm();
     alert("Đã lưu blog");
   };
@@ -1713,9 +1718,9 @@ export default function AdminPage() {
                       <p className="text-[11px] text-gray-400">{new Date(item.publishedAt || item.timestamp).toLocaleDateString("vi-VN")} · {item.published ? "Hiện" : "Ẩn"} {item.hot ? "· HOT" : ""}</p>
                     </div>
                     <button type="button" onClick={() => editBlog(item)} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">Sửa</button>
-                    <button type="button" onClick={async () => { await db.news.update(item.id, { published: !item.published }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">{item.published ? "Ẩn" : "Hiện"}</button>
-                    <button type="button" onClick={async () => { await db.news.update(item.id, { hot: !item.hot }); setBlogs(await db.news.getAll()); }} className="rounded-lg border border-orange-400/40 px-2 py-1 text-xs text-orange-300">{item.hot ? "Bỏ hot" : "Hot"}</button>
-                    <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); setBlogs(await db.news.getAll()); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
+                    <button type="button" onClick={async () => { await db.news.update(item.id, { published: !item.published }); const result = await db.news.getAll(); setBlogs(result.data || []); }} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">{item.published ? "Ẩn" : "Hiện"}</button>
+                    <button type="button" onClick={async () => { await db.news.update(item.id, { hot: !item.hot }); const result = await db.news.getAll(); setBlogs(result.data || []); }} className="rounded-lg border border-orange-400/40 px-2 py-1 text-xs text-orange-300">{item.hot ? "Bỏ hot" : "Hot"}</button>
+                    <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); const result = await db.news.getAll(); setBlogs(result.data || []); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
                   </div>
                 ))}
               </div>

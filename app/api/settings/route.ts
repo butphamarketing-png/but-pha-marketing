@@ -92,8 +92,7 @@ export async function PATCH(request: Request) {
       .from(TABLE_NAME)
       .upsert({ key, value }, { onConflict: "key" })
       .select("key, value, updated_at")
-      .single()
-      .catch((err) => ({ data: null, error: err }));
+      .single();
 
     console.log('[API/settings PATCH] Supabase response:', {
       hasData: !!data,

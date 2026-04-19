@@ -1,4 +1,10 @@
 import { useRealtime } from "./useRealtime";
+
+export interface ApiResult<T> {
+  data: T | null;
+  error: string | null;
+}
+
 export interface Order {
   id: number;
   name: string;
@@ -50,6 +56,18 @@ export interface MediaItem {
   timestamp: number;
 }
 
+export interface ServiceProcessStep {
+  step: number;
+  title: string;
+  desc: string;
+}
+
+export interface ServiceFeedback {
+  clientName: string;
+  avatar: string;
+  content: string;
+}
+
 export interface Service {
   id: number;
   platform: string;
@@ -60,16 +78,27 @@ export interface Service {
   features: string[];
   allFeatures: string[];
   audioText: string;
-  process: { step: number; title: string; desc: string }[];
-  feedbacks: { clientName: string; avatar: string; content: string }[];
+  process: ServiceProcessStep[];
+  feedbacks: ServiceFeedback[];
 }
 
 export interface PortalReport {
-  date: string;
+  id?: number;
+  date?: string;
   title?: string;
   content: string;
   category?: string;
   image?: string;
+}
+
+export interface ProgressArticle {
+  id: number;
+  clientId: number;
+  title: string;
+  content: string;
+  status: string;
+  image?: string;
+  createdAt: string;
 }
 
 export interface ClientPortal {
@@ -78,300 +107,409 @@ export interface ClientPortal {
   clientName: string;
   phone: string;
   platform: string;
-  daysRemaining: number;
-  postsCount: number;
-  progressPercent: number;
-  weeklyReports: PortalReport[];
+  daysRemaining?: number;
+  postsCount?: number;
+  progressPercent?: number;
+  weeklyReports?: PortalReport[];
   createdAt: string;
   password?: string;
 }
 
 const API_URL = "/api";
+const CACHE_TTL = 10_000;
+const cache = new Map<string, { data: unknown; error: string | null; timestamp: number }>();
 
-interface ApiResult<T> {
-  data: T | null;
-  error: string | null;
-  loading?: boolean;
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+type JsonObject = { [key: string]: JsonValue };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }
 
-async function apiFetch<T>(path: string, options?: RequestInit): Promise<ApiResult<T>> {
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return "Unknown error";
+}
+
+function toNumber(value: unknown, fallback = 0): number {
+  return typeof value === "number" ? value : fallback;
+}
+
+function toStringValue(value: unknown, fallback = ""): string {
+  return typeof value === "string" ? value : fallback;
+}
+
+function toOptionalString(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
+
+function toStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+}
+
+function mapOrder(value: unknown): Order {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    name: toStringValue(item.name),
+    phone: toStringValue(item.phone),
+    pkg: toStringValue(item.pkg),
+    tabLabel: toStringValue(item.tabLabel ?? item.tab_label),
+    platform: toStringValue(item.platform),
+    duration: toNumber(item.duration),
+    total: toNumber(item.total),
+    payMethod: toStringValue(item.payMethod ?? item.pay_method),
+    status: (toStringValue(item.status, "pending") as Order["status"]),
+    createdAt: toStringValue(item.createdAt ?? item.created_at),
+  };
+}
+
+function mapLead(value: unknown): Lead {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    type: toStringValue(item.type, "contact") as Lead["type"],
+    name: typeof item.name === "string" ? item.name : undefined,
+    phone: toStringValue(item.phone),
+    service: typeof item.service === "string" ? item.service : undefined,
+    note: typeof item.note === "string" ? item.note : undefined,
+    platform: typeof item.platform === "string" ? item.platform : undefined,
+    url: typeof item.url === "string" ? item.url : undefined,
+    createdAt: toStringValue(item.createdAt ?? item.created_at),
+  };
+}
+
+function mapNewsItem(value: unknown): NewsItem {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toStringValue(item.id),
+    title: toStringValue(item.title),
+    content: toStringValue(item.content),
+    category: toStringValue(item.category, "blog"),
+    published: typeof item.published === "boolean" ? item.published : true,
+    timestamp: toNumber(item.timestamp),
+    description: toOptionalString(item.description),
+    imageUrl: toOptionalString(item.imageUrl) ?? toOptionalString(item.image_url),
+    slug: toOptionalString(item.slug),
+    hot: typeof item.hot === "boolean" ? item.hot : undefined,
+    metaDescription:
+      toOptionalString(item.metaDescription) ?? toOptionalString(item.meta_description),
+    keywordsMain:
+      toOptionalString(item.keywordsMain) ?? toOptionalString(item.keywords_main),
+    keywordsSecondary:
+      toOptionalString(item.keywordsSecondary) ?? toOptionalString(item.keywords_secondary),
+    publishedAt:
+      toOptionalString(item.publishedAt) ?? toOptionalString(item.published_at),
+  };
+}
+
+function mapMediaItem(value: unknown): MediaItem {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    url: toStringValue(item.url),
+    name: toStringValue(item.name),
+    type: toStringValue(item.type, "image") as MediaItem["type"],
+    timestamp: toNumber(item.timestamp),
+  };
+}
+
+function mapServiceProcess(value: unknown): ServiceProcessStep {
+  const item = isRecord(value) ? value : {};
+  return {
+    step: toNumber(item.step),
+    title: toStringValue(item.title),
+    desc: toStringValue(item.desc),
+  };
+}
+
+function mapServiceFeedback(value: unknown): ServiceFeedback {
+  const item = isRecord(value) ? value : {};
+  return {
+    clientName: toStringValue(item.clientName),
+    avatar: toStringValue(item.avatar),
+    content: toStringValue(item.content),
+  };
+}
+
+function mapService(value: unknown): Service {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    platform: toStringValue(item.platform),
+    name: toStringValue(item.name),
+    price: toStringValue(item.price),
+    period: toStringValue(item.period, "month") as Service["period"],
+    popular: typeof item.popular === "boolean" ? item.popular : false,
+    features: toStringArray(item.features),
+    allFeatures: toStringArray(item.allFeatures ?? item.all_features),
+    audioText: toStringValue(item.audioText ?? item.audio_text),
+    process: Array.isArray(item.process) ? item.process.map(mapServiceProcess) : [],
+    feedbacks: Array.isArray(item.feedbacks) ? item.feedbacks.map(mapServiceFeedback) : [],
+  };
+}
+
+function mapPortalReport(value: unknown): PortalReport {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: typeof item.id === "number" ? item.id : undefined,
+    date: typeof item.date === "string" ? item.date : undefined,
+    title: typeof item.title === "string" ? item.title : undefined,
+    content: toStringValue(item.content),
+    category: typeof item.category === "string" ? item.category : undefined,
+    image: typeof item.image === "string" ? item.image : undefined,
+  };
+}
+
+function mapClientPortal(value: unknown): ClientPortal {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    username: toStringValue(item.username),
+    clientName: toStringValue(item.clientName ?? item.client_name),
+    phone: toStringValue(item.phone),
+    platform: toStringValue(item.platform),
+    daysRemaining:
+      typeof item.daysRemaining === "number"
+        ? item.daysRemaining
+        : typeof item.days_remaining === "number"
+          ? item.days_remaining
+          : undefined,
+    postsCount:
+      typeof item.postsCount === "number"
+        ? item.postsCount
+        : typeof item.posts_count === "number"
+          ? item.posts_count
+          : undefined,
+    progressPercent:
+      typeof item.progressPercent === "number"
+        ? item.progressPercent
+        : typeof item.progress_percent === "number"
+          ? item.progress_percent
+          : undefined,
+    weeklyReports: Array.isArray(item.weeklyReports ?? item.weekly_reports)
+      ? ((item.weeklyReports ?? item.weekly_reports) as unknown[]).map(mapPortalReport)
+      : undefined,
+    createdAt: toStringValue(item.createdAt ?? item.created_at),
+    password: typeof item.password === "string" ? item.password : undefined,
+  };
+}
+
+function mapProgressArticle(value: unknown): ProgressArticle {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toNumber(item.id),
+    clientId: toNumber(item.clientId ?? item.client_id),
+    title: toStringValue(item.title),
+    content: toStringValue(item.content),
+    status: toStringValue(item.status, ""),
+    image: typeof item.image === "string" ? item.image : undefined,
+    createdAt: toStringValue(item.createdAt ?? item.created_at),
+  };
+}
+
+function normalizeArray<T>(value: unknown, mapper: (item: unknown) => T): T[] {
+  return Array.isArray(value) ? value.map(mapper) : [];
+}
+
+async function apiFetch<T>(path: string, options?: RequestInit, mapper?: (value: unknown) => T): Promise<ApiResult<T>> {
   try {
     const res = await fetch(`${API_URL}${path}`, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
+        "Content-Type": "application/json",
+        ...(options?.headers ?? {}),
       },
     });
-    if (!res.ok) {
-      const text = await res.text();
-      return { data: null, error: `API Error ${res.status}: ${text}` };
+    const text = await res.text();
+
+    let parsed: unknown = null;
+    try {
+      parsed = text ? (JSON.parse(text) as JsonValue) : null;
+    } catch {
+      return {
+        data: null,
+        error: `Invalid JSON response (${res.status})`,
+      };
     }
-    const data = await res.json();
+
+    if (!res.ok) {
+      const errorMessage =
+        isRecord(parsed) && typeof parsed.error === "string"
+          ? parsed.error
+          : isRecord(parsed) && typeof parsed.message === "string"
+            ? parsed.message
+            : `API Error ${res.status}`;
+      return { data: null, error: errorMessage };
+    }
+
+    const data = mapper ? mapper(parsed) : (parsed as T);
     return { data, error: null };
-  } catch (e: any) {
-    return { data: null, error: e.message || "Network error" };
+  } catch (error) {
+    return {
+      data: null,
+      error: getErrorMessage(error),
+    };
   }
 }
 
-
-
-
-
-// Cache for reducing API calls - kept for perf, but with error handling
-const cache = new Map<string, { data: unknown; timestamp: number; error?: string }>();
-const CACHE_TTL = 10000;
-
-async function cachedFetch<T>(key: string, fetchFn: () => Promise<T>): Promise<ApiResult<T>> {
+async function cachedFetch<T>(key: string, fetchFn: () => Promise<ApiResult<T>>): Promise<ApiResult<T>> {
   const cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    if ('error' in cached) {
-      return { data: null, loading: false, error: cached.error! };
-    }
-    return { data: cached.data as T, loading: false, error: null };
+    return {
+      data: (cached.data as T) ?? null,
+      error: cached.error,
+    };
   }
 
-  try {
-    const data = await fetchFn();
-    const result: ApiResult<T> = { data, loading: false, error: null };
-    cache.set(key, { data, timestamp: Date.now() });
-    return result;
-  } catch (error) {
-    const err = error as Error;
-    const result: ApiResult<T> = { data: null, loading: false, error: err.message };
-    cache.set(key, { error: err.message, timestamp: Date.now(), data: null });
-    return result;
-  }
+  const result = await fetchFn();
+  cache.set(key, {
+    data: result.data,
+    error: result.error,
+    timestamp: Date.now(),
+  });
+  return result;
 }
 
-
-
-export interface ProgressArticle {
-  id: number;
-  clientId: number;
-  title: string;
-  content: string;
-  image?: string;
-  createdAt: string;
-}
-
-export interface PlatformConfig {
-  id: number;
-  key: string;
-  name: string;
-  color: string;
-  isVisible: boolean;
+function invalidateCache(...keys: string[]) {
+  keys.forEach((key) => cache.delete(key));
 }
 
 export const db = {
   orders: {
-    getAll: async (): Promise<ApiResult<Order[]>> => cachedFetch<Order[]>("orders", () => apiFetch<Order[]>("/orders")),
-    add: async (o: Omit<Order, "id" | "createdAt" | "status">): Promise<ApiResult<Order>> => {
-      try {
-        const result = await apiFetch<Order>("/orders", {
-          method: "POST",
-          body: JSON.stringify(o),
-        });
-        cache.delete("orders");
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+    getAll: (): Promise<ApiResult<Order[]>> =>
+      cachedFetch("orders", () => apiFetch<Order[]>("/orders", undefined, (value) => normalizeArray(value, mapOrder))),
+    add: async (order: Omit<Order, "id" | "createdAt" | "status">): Promise<ApiResult<Order>> => {
+      const result = await apiFetch<Order>("/orders", {
+        method: "POST",
+        body: JSON.stringify(order),
+      }, mapOrder);
+      if (!result.error) invalidateCache("orders");
+      return result;
     },
     updateStatus: async (id: string, status: Order["status"]): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/orders/${id}`, {
-          method: "PATCH",
-          body: JSON.stringify({ status }),
-        });
-        cache.delete("orders");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+      const result = await apiFetch<JsonObject>(`/orders/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+      if (!result.error) invalidateCache("orders");
+      return { data: null, error: result.error };
     },
     delete: async (id: string): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/orders/${id}`, { method: "DELETE" });
-        cache.delete("orders");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+      const result = await apiFetch<JsonObject>(`/orders/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("orders");
+      return { data: null, error: result.error };
     },
   },
   leads: {
-    getAll: async (): Promise<ApiResult<Lead[]>> => cachedFetch<Lead[]>("leads", () => apiFetch<Lead[]>("/leads")),
-    add: async (l: Omit<Lead, "id" | "createdAt">): Promise<ApiResult<Lead>> => {
-      try {
-        const result = await apiFetch<Lead>("/leads", {
-          method: "POST",
-          body: JSON.stringify(l),
-        });
-        cache.delete("leads");
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+    getAll: (): Promise<ApiResult<Lead[]>> =>
+      cachedFetch("leads", () => apiFetch<Lead[]>("/leads", undefined, (value) => normalizeArray(value, mapLead))),
+    add: async (lead: Omit<Lead, "id" | "createdAt">): Promise<ApiResult<Lead>> => {
+      const result = await apiFetch<Lead>("/leads", {
+        method: "POST",
+        body: JSON.stringify(lead),
+      }, mapLead);
+      if (!result.error) invalidateCache("leads");
+      return result;
     },
     delete: async (id: string): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/leads/${id}`, { method: "DELETE" });
-        cache.delete("leads");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+      const result = await apiFetch<JsonObject>(`/leads/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("leads");
+      return { data: null, error: result.error };
     },
   },
   news: {
-    getAll: async (): Promise<ApiResult<NewsItem[]>> => cachedFetch<NewsItem[]>("news", () => apiFetch<NewsItem[]>("/news")),
-    add: async (n: Omit<NewsItem, "id" | "timestamp">): Promise<ApiResult<NewsItem>> => {
+    getAll: (): Promise<ApiResult<NewsItem[]>> =>
+      cachedFetch("news", () => apiFetch<NewsItem[]>("/news", undefined, (value) => normalizeArray(value, mapNewsItem))),
+    add: async (item: Omit<NewsItem, "id" | "timestamp">): Promise<ApiResult<NewsItem>> => {
       const result = await apiFetch<NewsItem>("/news", {
         method: "POST",
-        body: JSON.stringify(n),
-      });
-      if (!result.error) cache.delete("news");
+        body: JSON.stringify(item),
+      }, mapNewsItem);
+      if (!result.error) invalidateCache("news");
       return result;
     },
     update: async (id: string, data: Partial<NewsItem>): Promise<ApiResult<void>> => {
-      const result = await apiFetch(`/news/${id}`, {
+      const result = await apiFetch<JsonObject>(`/news/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),
       });
-      if (!result.error) cache.delete("news");
-      return result;
+      if (!result.error) invalidateCache("news");
+      return { data: null, error: result.error };
     },
     delete: async (id: string): Promise<ApiResult<void>> => {
-      const result = await apiFetch(`/news/${id}`, { method: "DELETE" });
-      if (!result.error) cache.delete("news");
-      return result;
+      const result = await apiFetch<JsonObject>(`/news/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("news");
+      return { data: null, error: result.error };
     },
   },
   media: {
-    getAll: async (): Promise<ApiResult<MediaItem[]>> => cachedFetch<MediaItem[]>("media", () => apiFetch<MediaItem[]>("/media")),
-    add: async (m: Omit<MediaItem, "id" | "timestamp">): Promise<ApiResult<MediaItem>> => {
-      try {
-        const result = await apiFetch<MediaItem>("/media", {
-          method: "POST",
-          body: JSON.stringify(m),
-        });
-        cache.delete("media");
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
-    },
-    delete: async (id: number): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/media/${id}`, { method: "DELETE" });
-        cache.delete("media");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
-    },
+    getAll: (): Promise<ApiResult<MediaItem[]>> =>
+      cachedFetch("media", () => apiFetch<MediaItem[]>("/media", undefined, (value) => normalizeArray(value, mapMediaItem))),
   },
   services: {
-    getAll: async (): Promise<ApiResult<Service[]>> => cachedFetch<Service[]>("services", () => apiFetch<Service[]>("/services")),
-    update: async (platform: string, data: Partial<Service>[]): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/services/${platform}`, {
-          method: "PATCH",
-          body: JSON.stringify(data),
-        });
-        cache.delete("services");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
-    },
+    getAll: (): Promise<ApiResult<Service[]>> =>
+      cachedFetch("services", () => apiFetch<Service[]>("/services", undefined, (value) => normalizeArray(value, mapService))),
   },
   clientPortals: {
-    getAll: async (): Promise<ApiResult<ClientPortal[]>> => cachedFetch<ClientPortal[]>("client_portals", () => apiFetch<ClientPortal[]>("/client-portals")),
-    add: async (p: Omit<ClientPortal, "id" | "createdAt"> & { password?: string }): Promise<ApiResult<ClientPortal>> => {
-      try {
-        const result = await apiFetch<ClientPortal>("/client-portals", {
-          method: "POST",
-          body: JSON.stringify(p),
-        });
-        cache.delete("client_portals");
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
+    getAll: (): Promise<ApiResult<ClientPortal[]>> =>
+      cachedFetch("client_portals", () =>
+        apiFetch<ClientPortal[]>("/client-portals", undefined, (value) => normalizeArray(value, mapClientPortal)),
+      ),
+    add: async (
+      portal: Omit<ClientPortal, "id" | "createdAt"> & { password?: string },
+    ): Promise<ApiResult<ClientPortal>> => {
+      const result = await apiFetch<ClientPortal>("/client-portals", {
+        method: "POST",
+        body: JSON.stringify(portal),
+      }, mapClientPortal);
+      if (!result.error) invalidateCache("client_portals");
+      return result;
     },
     update: async (id: string, data: Partial<ClientPortal>): Promise<ApiResult<ClientPortal>> => {
-      try {
-        const result = await apiFetch<ClientPortal>(`/client-portals/${id}`, {
-          method: "PATCH",
-          body: JSON.stringify(data),
-        });
-        cache.delete("client_portals");
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
+      const result = await apiFetch<ClientPortal>(`/client-portals/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }, mapClientPortal);
+      if (!result.error) invalidateCache("client_portals");
+      return result;
     },
     delete: async (id: string): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/client-portals/${id}`, { method: "DELETE" });
-        cache.delete("client_portals");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return resultFrom(error as Error);
-      }
+      const result = await apiFetch<JsonObject>(`/client-portals/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("client_portals");
+      return { data: null, error: result.error };
     },
-    login: async (username: string, password: string): Promise<ApiResult<ClientPortal | null>> => {
-      try {
-        const result = await apiFetch<ClientPortal>("/client-portals/login", {
-          method: "POST",
-          body: JSON.stringify({ username, password }),
-        });
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return { data: null, loading: false, error: (error as Error).message };
-      }
-    },
+    login: (username: string, password: string): Promise<ApiResult<ClientPortal>> =>
+      apiFetch<ClientPortal>("/client-portals/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      }, mapClientPortal),
   },
   progressArticles: {
-    getByClient: async (clientId: number): Promise<ApiResult<ProgressArticle[]>> => cachedFetch<ProgressArticle[]>(`progress_articles_${clientId}`, () => apiFetch<ProgressArticle[]>(`/progress-articles?clientId=${clientId}`)),
-    add: async (a: Omit<ProgressArticle, "id" | "createdAt">): Promise<ApiResult<ProgressArticle>> => {
-      try {
-        const result = await apiFetch<ProgressArticle>("/progress-articles", {
-          method: "POST",
-          body: JSON.stringify(a),
-        });
-        cache.delete(`progress_articles_${a.clientId}`);
-        return { data: result, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+    getByClient: (clientId: number): Promise<ApiResult<ProgressArticle[]>> =>
+      cachedFetch(`progress_articles_${clientId}`, () =>
+        apiFetch<ProgressArticle[]>(
+          `/progress-articles?clientId=${clientId}`,
+          undefined,
+          (value) => normalizeArray(value, mapProgressArticle),
+        ),
+      ),
+    add: async (
+      article: Omit<ProgressArticle, "id" | "createdAt">,
+    ): Promise<ApiResult<ProgressArticle>> => {
+      const result = await apiFetch<ProgressArticle>("/progress-articles", {
+        method: "POST",
+        body: JSON.stringify(article),
+      }, mapProgressArticle);
+      if (!result.error) invalidateCache(`progress_articles_${article.clientId}`);
+      return result;
     },
     delete: async (id: number, clientId: number): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/progress-articles/${id}`, { method: "DELETE" });
-        cache.delete(`progress_articles_${clientId}`);
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
-    },
-  },
-  platformConfigs: {
-    getAll: async (): Promise<ApiResult<PlatformConfig[]>> => cachedFetch<PlatformConfig[]>("platform_configs", () => apiFetch<PlatformConfig[]>("/platform-configs")),
-    update: async (key: string, data: Partial<PlatformConfig>): Promise<ApiResult<void>> => {
-      try {
-        await apiFetch(`/platform-configs/${key}`, {
-          method: "PATCH",
-          body: JSON.stringify(data),
-        });
-        cache.delete("platform_configs");
-        return { data: null, loading: false, error: null };
-      } catch (error) {
-        return makeErrorResult(error as Error);
-      }
+      const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache(`progress_articles_${clientId}`);
+      return { data: null, error: result.error };
     },
   },
 };
 
+export { useRealtime };

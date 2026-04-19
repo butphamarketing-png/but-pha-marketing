@@ -215,7 +215,8 @@ function CheckoutModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platfo
 function Slideshow({ color, platformKey }: { color: string; platformKey: string }) {
   const { settings } = useAdmin();
   const [current, setCurrent] = useState(0);
-  const customSlides = settings.media[platformKey]?.slideshow || [];
+  const platformMedia = settings?.media?.[platformKey] ?? { slideshow: [], cases: [], videoUrl: "" };
+  const customSlides = platformMedia.slideshow || [];
   
   const defaultSlides = [
     { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" },
@@ -511,7 +512,10 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const [loadedOverride, setLoadedOverride] = useState<ContentOverride | null>(null);
 
   const platformKey = (config.auditPlatform || config.name).toLowerCase();
-  const cms = settings.cms[platformKey];
+  const platformCms = settings?.cms?.[platformKey] ?? { packages: {} };
+  const platformMedia = settings?.media?.[platformKey] ?? { slideshow: [], cases: [], videoUrl: "" };
+  const platformColor = settings?.colors?.[platformKey] || config.color;
+  const visibility = settings?.visibility ?? {};
 
   useEffect(() => {
     const loadOverride = async () => {
@@ -536,7 +540,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
     ...tab,
     packages: tab.packages.map((pkg, idx) => {
       const pkgName = `Gói ${idx + 1}`;
-      const override = settings.cms[platformKey]?.packages?.[pkgName];
+      const override = platformCms.packages?.[pkgName];
       return {
         ...pkg,
         price: override?.price || pkg.price,
@@ -548,17 +552,17 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   }));
   const tabsForRender = loadedOverride?.tabs || updatedTabs;
   const processTabs = loadedOverride?.processTabs ?? buildDefaultProcessTabs(tabsForRender.map((t: { label: string }) => t.label));
-  const cases = settings.media[platformKey]?.cases || [];
+  const cases = platformMedia.cases || [];
   const beforeAfterBefore = loadedOverride?.beforeAfterBefore;
   const beforeAfterAfter = loadedOverride?.beforeAfterAfter;
 
   const handleCheckout = (pkg: CheckoutPkg) => setCheckoutPkg(pkg);
 
   return (
-    <SubPageLayout platformName={content.name} primaryColor={settings.colors[platformKey] || content.color}>
-      <Slideshow color={settings.colors[platformKey] || content.color} platformKey={platformKey} />
+    <SubPageLayout platformName={content.name} primaryColor={platformColor}>
+      <Slideshow color={platformColor} platformKey={platformKey} />
 
-      {settings.visibility.intro !== false && (
+      {visibility.intro !== false && (
         <section data-section="intro" id="intro" className="py-20 px-4">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
             <h2 className="mb-10 text-center text-3xl font-black text-white md:text-4xl">Giới Thiệu Về Dịch Vụ {content.name}</h2>
@@ -587,28 +591,28 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
         </section>
       )}
 
-      {settings.visibility.audit !== false && (
+      {visibility.audit !== false && (
         <FanpageAudit
-          primaryColor={settings.colors[platformKey] || content.color}
+          primaryColor={platformColor}
           platform={content.auditPlatform ?? "facebook"}
         />
       )}
 
-      {settings.visibility.pricing !== false && (
-        <PricingSection tabs={tabsForRender} color={settings.colors[platformKey] || content.color} onCheckout={handleCheckout} />
+      {visibility.pricing !== false && (
+        <PricingSection tabs={tabsForRender} color={platformColor} onCheckout={handleCheckout} />
       )}
 
       <FeaturedProjectsFlip cases={cases} />
       
       <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
       
-      {settings.visibility.stats !== false && (
-        <Stats stats={content.stats} color={settings.colors[platformKey] || content.color} />
+      {visibility.stats !== false && (
+        <Stats stats={content.stats} color={platformColor} />
       )}
       
-      <ProcessSection processTabs={processTabs} color={settings.colors[platformKey] || content.color} />
+      <ProcessSection processTabs={processTabs} color={platformColor} />
       <FAQSection faqs={content.faqs} />
-      <ContactForm color={settings.colors[platformKey] || content.color} />
+      <ContactForm color={platformColor} />
 
       <AnimatePresence>
         {checkoutPkg && <CheckoutModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}
