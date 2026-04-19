@@ -63,6 +63,8 @@ export interface SiteSettings {
 
 export interface AdminContextType {
   settings: SiteSettings;
+  saveStatus: "idle" | "saving" | "saved" | "error";
+  saveError: string | null;
   updateSettings: (newSettings: Partial<SiteSettings>) => void;
   updateColor: (key: string, value: string) => void;
   updatePlatformName: (key: string, value: string) => void;
@@ -229,13 +231,22 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
   };
 }
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error && error.message) return error.message;
+  return "Không thể lưu thay đổi. Vui lòng thử lại.";
+}
+
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [saveError, setSaveError] = useState<string | null>(null);
   const persistTimerRef = useRef<number | null>(null);
+  const saveStatusTimerRef = useRef<number | null>(null);
   const lastSavedRef = useRef("");
+  const lastConfirmedSettingsRef = useRef<SiteSettings>(defaultSettings);
   const channelRef = useRef<BroadcastChannel | null>(null);
 
   useEffect(() => {
@@ -280,7 +291,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         const parsed = text ? (JSON.parse(text) as { ok?: boolean; value?: Partial<SiteSettings> | null }) : null;
 
         if (mounted && res.ok && parsed?.ok) {
-          setSettings(mergeWithDefaults(parsed.value ?? undefined));
+          const merged = mergeWithDefaults(parsed.value ?? undefined);
+          lastConfirmedSettingsRef.current = merged;
+          lastSavedRef.current = JSON.stringify({
+            ...merged,
+            presentationMode: false,
+          });
+          setSettings(merged);
           return;
         }
       } catch (error) {
@@ -312,15 +329,62 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (persistTimerRef.current) window.clearTimeout(persistTimerRef.current);
 
     persistTimerRef.current = window.setTimeout(async () => {
-      lastSavedRef.current = payload;
       try {
-        await fetch("/api/settings", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key: SETTINGS_KEY, value: cleanSettings }),
-        });
+        setSaveStatus("saving");
+        setSaveError(null);
+
+        let lastError = "Không thể lưu thay đổi. Vui lòng thử lại.";
+        let saved = false;
+
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          const res = await fetch("/api/settings", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key: SETTINGS_KEY, value: cleanSettings }),
+          });
+
+          let parsed: { ok?: boolean; error?: string } | null = null;
+          try {
+            parsed = (await res.json()) as { ok?: boolean; error?: string };
+          } catch {
+            parsed = null;
+          }
+
+          if (res.ok && parsed?.ok) {
+            saved = true;
+            break;
+          }
+
+          lastError = parsed?.error || `Lưu thất bại (${res.status})`;
+          if (attempt < 2) {
+            await new Promise((resolve) => window.setTimeout(resolve, 800));
+          }
+        }
+
+        if (!saved) {
+          const rollback = lastConfirmedSettingsRef.current;
+          setSaveStatus("error");
+          setSaveError(lastError);
+          setSettings(rollback);
+          broadcastSettings(rollback);
+          return;
+        }
+
+        lastSavedRef.current = payload;
+        lastConfirmedSettingsRef.current = cleanSettings;
+        setSaveStatus("saved");
+        setSaveError(null);
+        if (saveStatusTimerRef.current) window.clearTimeout(saveStatusTimerRef.current);
+        saveStatusTimerRef.current = window.setTimeout(() => {
+          setSaveStatus("idle");
+        }, 1600);
       } catch (error) {
         console.error("[AdminContext] Failed to persist settings", error);
+        const rollback = lastConfirmedSettingsRef.current;
+        setSaveStatus("error");
+        setSaveError(getErrorMessage(error));
+        setSettings(rollback);
+        broadcastSettings(rollback);
       }
     }, 300);
 
@@ -480,6 +544,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     <AdminContext.Provider
       value={{
         settings,
+        saveStatus,
+        saveError,
         updateSettings,
         updateColor,
         updatePlatformName,

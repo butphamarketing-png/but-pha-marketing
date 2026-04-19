@@ -115,7 +115,21 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { settings, updateSettings, updateColor, updatePlatformName, toggleVisibility, updateCMS, addSlideshowImage, removeSlideshowImage, addCase, removeCase, updateMediaVideo } = useAdmin();
+  const {
+    settings,
+    saveStatus,
+    saveError,
+    updateSettings,
+    updateColor,
+    updatePlatformName,
+    toggleVisibility,
+    updateCMS,
+    addSlideshowImage,
+    removeSlideshowImage,
+    addCase,
+    removeCase,
+    updateMediaVideo,
+  } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
     { key: "facebook", label: settings.platformNames?.facebook || "Facebook", path: "/facebook", color: settings.colors?.facebook || "#1877F2" },
@@ -138,6 +152,8 @@ export default function AdminPage() {
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [seoData, setSeoData] = useState<any>({});
+  const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
+  const [blogSaveError, setBlogSaveError] = useState<string | null>(null);
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState(0);
   const [selectedCompareTab, setSelectedCompareTab] = useState(0);
@@ -926,6 +942,8 @@ export default function AdminPage() {
       alert("Nhập tiêu đề blog.");
       return;
     }
+    setBlogSaveMessage(null);
+    setBlogSaveError(null);
     const payload = {
       title: blogForm.title,
       content: blogForm.content,
@@ -940,10 +958,22 @@ export default function AdminPage() {
       keywordsSecondary: blogForm.keywordsSecondary,
       publishedAt: blogForm.publishedAt ? new Date(blogForm.publishedAt).toISOString() : new Date().toISOString(),
     };
-    if (editingBlogId) await db.news.update(editingBlogId, payload);
-    else await db.news.add(payload);
+    const mutationResult = editingBlogId
+      ? await db.news.update(editingBlogId, payload)
+      : await db.news.add(payload);
+    if (mutationResult.error) {
+      setBlogSaveError(mutationResult.error);
+      alert(`Lưu blog thất bại: ${mutationResult.error}`);
+      return;
+    }
     const result = await db.news.getAll();
+    if (result.error) {
+      setBlogSaveError(result.error);
+      alert(`Blog đã lưu nhưng tải lại danh sách thất bại: ${result.error}`);
+      return;
+    }
     setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
+    setBlogSaveMessage("Đã lưu blog");
     resetBlogForm();
     alert("Đã lưu blog");
   };
@@ -1017,6 +1047,20 @@ export default function AdminPage() {
               </select>
             </div>
           </div>
+
+          {(saveStatus !== "idle" || saveError || blogSaveMessage || blogSaveError) && (
+            <div
+              className={`rounded-2xl border px-4 py-3 text-sm ${
+                saveError || blogSaveError
+                  ? "border-red-500/30 bg-red-500/10 text-red-200"
+                  : saveStatus === "saved" || blogSaveMessage
+                    ? "border-green-500/30 bg-green-500/10 text-green-200"
+                    : "border-amber-500/30 bg-amber-500/10 text-amber-100"
+              }`}
+            >
+              {saveError || blogSaveError || (saveStatus === "saving" ? "Đang lưu thay đổi..." : null) || blogSaveMessage || (saveStatus === "saved" ? "Đã lưu cài đặt." : null)}
+            </div>
+          )}
 
           {activeTab === "dashboard" && (
             <div className="space-y-8">
