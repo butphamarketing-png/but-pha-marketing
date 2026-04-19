@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
-import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
-import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
-import { SocialProofToast } from "@/components/shared/SocialProofToast";
-import { AnimatedMascot } from "@/components/shared/AnimatedMascot";
-import { SoftUISounds } from "@/components/shared/SoftUISounds";
+import { MarketingChrome } from "@/components/shared/MarketingChrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com"),
@@ -63,11 +59,7 @@ export default function RootLayout({
         <AuthProvider>
           <AdminProvider>
             {children}
-            <SoftUISounds />
-            <AnimatedMascot />
-            <SocialProofToast />
-            <ThemeToggleButton />
-            <VideoIntroButton />
+            <MarketingChrome />
           </AdminProvider>
         </AuthProvider>
       </body>

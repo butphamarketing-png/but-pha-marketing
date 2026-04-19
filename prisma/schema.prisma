@@ -4,6 +4,207 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-url = "postgresql://neondb_owner:npg_1lAYLCB7Gx@ep-shy-brook-a1agi3f3-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
 }
-// Giữ lại các Model của bạn ở dưới này (ví dụ: model Setting...)
+
+enum PostStatus {
+  draft
+  published
+}
+
+enum GenerationType {
+  initial
+  regenerate
+  refresh
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  passwordHash  String?
+  projects      Project[]
+  posts         Post[]
+  generations   AIGeneration[]
+  contentBriefs ContentBrief[]
+  clusters      TopicalCluster[]
+  embeddings    PostEmbedding[]
+  rankings      KeywordRanking[]
+  serpAnalyses  SerpAnalysis[]
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Project {
+  id            String         @id @default(cuid())
+  userId        String         @map("user_id")
+  name          String
+  description   String?
+  posts         Post[]
+  generations   AIGeneration[]
+  contentBriefs ContentBrief[]
+  clusters      TopicalCluster[]
+  embeddings    PostEmbedding[]
+  rankings      KeywordRanking[]
+  serpAnalyses  SerpAnalysis[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@unique([userId, name])
+  @@map("projects")
+}
+
+model Post {
+  id               String         @id @default(cuid())
+  userId           String         @map("user_id")
+  projectId        String         @map("project_id")
+  title            String
+  slug             String         @unique
+  content          String         @db.Text
+  metaDescription  String         @map("meta_description")
+  keywords         String[]
+  status           PostStatus     @default(draft)
+  currentVersion   Int            @default(1) @map("current_version")
+  needsUpdate      Boolean        @default(false) @map("needs_update")
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project          Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  generations      AIGeneration[]
+  contentBriefs    ContentBrief[]
+  embedding        PostEmbedding?
+  rankings         KeywordRanking[]
+  serpAnalyses     SerpAnalysis[]
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@map("posts")
+}
+
+model AIGeneration {
+  id               String           @id @default(cuid())
+  userId           String           @map("user_id")
+  projectId        String           @map("project_id")
+  postId           String?          @map("post_id")
+  type             GenerationType   @default(initial)
+  version          Int
+  inputTitle       String           @map("input_title")
+  optimizedTitle   String           @map("optimized_title")
+  slug             String
+  metaDescription  String           @map("meta_description")
+  keywords         String[]
+  outline          Json
+  content          String           @db.Text
+  model            String
+  promptVersion    String           @default("phase1-v1") @map("prompt_version")
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project          Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post             Post?            @relation(fields: [postId], references: [id], onDelete: SetNull)
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([postId, version(sort: Desc)])
+  @@index([userId])
+  @@map("ai_generations")
+}
+
+model ContentBrief {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  projectId         String   @map("project_id")
+  postId            String?  @map("post_id")
+  inputTitle        String   @map("input_title")
+  keyword           String
+  searchIntent      String   @map("search_intent")
+  targetAudience    String   @map("target_audience")
+  outlineSuggestion Json     @map("outline_suggestion")
+  contentGaps       Json     @map("content_gaps")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post              Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([postId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@map("content_briefs")
+}
+
+model PostEmbedding {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  projectId   String   @map("project_id")
+  postId      String   @unique @map("post_id")
+  sourceText  String   @db.Text @map("source_text")
+  vector      Json
+  dimensions  Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId, updatedAt(sort: Desc)])
+  @@index([userId])
+  @@map("post_embeddings")
+}
+
+model TopicalCluster {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  projectId    String   @map("project_id")
+  inputTopic   String   @map("input_topic")
+  pillarTopic  String   @map("pillar_topic")
+  clusterTopics Json    @map("cluster_topics")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@map("topical_clusters")
+}
+
+model KeywordRanking {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  projectId  String   @map("project_id")
+  postId     String   @map("post_id")
+  keyword    String
+  position   Int
+  location   String?
+  checkedAt  DateTime @default(now()) @map("checked_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, keyword, checkedAt(sort: Desc)])
+  @@index([projectId, checkedAt(sort: Desc)])
+  @@index([userId])
+  @@map("keyword_rankings")
+}
+
+model SerpAnalysis {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  projectId   String   @map("project_id")
+  postId      String?  @map("post_id")
+  query       String
+  location    String
+  topResults  Json     @map("top_results")
+  headings    Json
+  avgLength   Int      @map("avg_length")
+  contentGap  Json     @map("content_gap")
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post        Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+
+  @@index([postId, createdAt(sort: Desc)])
+  @@index([projectId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@map("serp_analyses")
+}

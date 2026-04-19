@@ -188,6 +188,8 @@ export default function AdminPage() {
   }));
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
+  const [portalCreateMessage, setPortalCreateMessage] = useState<string | null>(null);
+  const [portalCreateError, setPortalCreateError] = useState<string | null>(null);
   const [selectedClientProjectId, setSelectedClientProjectId] = useState("");
   const [showSourceViewer, setShowSourceViewer] = useState(false);
   const [sourceFiles, setSourceFiles] = useState<string[]>([]);
@@ -1760,18 +1762,23 @@ export default function AdminPage() {
               <div className="space-y-6 lg:col-span-1">
                 <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
                   <h3 className="font-bold text-white">Tạo tài khoản khách hàng</h3>
-                  <input value={newPortal.clientName || ""} onChange={e => setNewPortal({ ...newPortal, clientName: e.target.value })} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={newPortal.username || ""} onChange={e => setNewPortal({ ...newPortal, username: e.target.value })} placeholder="Tài khoản" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={portalPassword} onChange={e => setPortalPassword(e.target.value)} type="password" placeholder="Mật khẩu" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={newPortal.phone || ""} onChange={e => setNewPortal({ ...newPortal, phone: e.target.value })} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <select value={newPortal.platform || "facebook"} onChange={e => setNewPortal({ ...newPortal, platform: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+                  <input value={newPortal.clientName || ""} onChange={e => { setNewPortal({ ...newPortal, clientName: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <input value={newPortal.username || ""} onChange={e => { setNewPortal({ ...newPortal, username: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Tài khoản" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <input value={portalPassword} onChange={e => { setPortalPassword(e.target.value); setPortalCreateError(null); setPortalCreateMessage(null); }} type="password" placeholder="Mật khẩu" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <input value={newPortal.phone || ""} onChange={e => { setNewPortal({ ...newPortal, phone: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                  <select value={newPortal.platform || "facebook"} onChange={e => { setNewPortal({ ...newPortal, platform: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                     {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                   </select>
                   <button
                     onClick={async () => {
-                      if (!newPortal.username || !portalPassword || !newPortal.clientName) return;
+                      setPortalCreateError(null);
+                      setPortalCreateMessage(null);
+                      if (!newPortal.username || !portalPassword || !newPortal.clientName) {
+                        setPortalCreateError("Vui lòng nhập đầy đủ tên khách hàng, tài khoản và mật khẩu.");
+                        return;
+                      }
                       const initialProject = createEmptyProject(1);
-                      await db.clientPortals.add({
+                      const result = await db.clientPortals.add({
                         username: newPortal.username,
                         password: portalPassword,
                         clientName: newPortal.clientName,
@@ -1782,7 +1789,14 @@ export default function AdminPage() {
                         progressPercent: 0,
                         weeklyReports: [initialProject],
                       } as any);
-                      refreshPortals();
+
+                      if (result.error) {
+                        setPortalCreateError(`Tạo tài khoản thất bại: ${result.error}`);
+                        return;
+                      }
+
+                      await refreshPortals();
+                      setPortalCreateMessage("Tạo tài khoản khách hàng thành công.");
                       setPortalPassword("");
                       setNewPortal({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
                     }}
@@ -1790,6 +1804,8 @@ export default function AdminPage() {
                   >
                     Tạo tài khoản
                   </button>
+                  {portalCreateError && <p className="text-xs text-red-400">{portalCreateError}</p>}
+                  {portalCreateMessage && <p className="text-xs text-green-400">{portalCreateMessage}</p>}
                 </div>
 
                 <div className="space-y-2 rounded-2xl border border-white/10 bg-card p-6">

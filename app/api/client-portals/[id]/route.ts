@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
+import { normalizeClientPortalPayload } from "../payload";
 
 export async function GET(
   _req: Request,
@@ -31,7 +32,8 @@ export async function PATCH(
 ) {
   try {
     const { id } = await context.params;
-    const payload = await req.json();
+    const body = await req.json();
+    const payload = normalizeClientPortalPayload(body);
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("client_portals")
@@ -42,7 +44,10 @@ export async function PATCH(
 
     if (error) {
       console.error("PATCH /api/client-portals/[id] Supabase error", error);
-      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message || "Failed to update" },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(data);
