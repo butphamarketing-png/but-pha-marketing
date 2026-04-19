@@ -3,14 +3,15 @@ import { createServerClient } from "@/lib/supabase";
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const supabase = createServerClient();
     const { error } = await supabase
       .from("leads")
       .delete()
-      .eq("id", parseInt(params.id, 10));
+      .eq("id", parseInt(id, 10));
 
     if (error) {
       console.error("DELETE /api/leads/[id] Supabase error", error);

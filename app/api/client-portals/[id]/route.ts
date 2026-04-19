@@ -3,14 +3,15 @@ import { createServerClient } from "@/lib/supabase";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("client_portals")
       .select("*")
-      .eq("id", parseInt(params.id, 10))
+      .eq("id", parseInt(id, 10))
       .single();
 
     if (error) {
@@ -26,15 +27,16 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const payload = await req.json();
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("client_portals")
       .update(payload)
-      .eq("id", parseInt(params.id, 10))
+      .eq("id", parseInt(id, 10))
       .select()
       .single();
 
@@ -52,14 +54,15 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const supabase = createServerClient();
     const { error } = await supabase
       .from("client_portals")
       .delete()
-      .eq("id", parseInt(params.id, 10));
+      .eq("id", parseInt(id, 10));
 
     if (error) {
       console.error("DELETE /api/client-portals/[id] Supabase error", error);

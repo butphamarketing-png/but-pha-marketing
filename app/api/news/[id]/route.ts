@@ -3,9 +3,10 @@ import { createServerClient } from "@/lib/supabase";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const updates = await req.json();
 
     // Normalize field names to snake_case for Supabase
@@ -24,7 +25,7 @@ export async function PATCH(
     const { error } = await supabase
       .from("news")
       .update(normalized)
-      .eq("id", params.id);
+      .eq("id", id);
 
     if (error) {
       console.error("PATCH /api/news/[id] Supabase error", error);
@@ -40,14 +41,15 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const supabase = createServerClient();
     const { error } = await supabase
       .from("news")
       .delete()
-      .eq("id", params.id);
+      .eq("id", id);
 
     if (error) {
       console.error("DELETE /api/news/[id] Supabase error", error);

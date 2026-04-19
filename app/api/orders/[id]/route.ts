@@ -3,15 +3,16 @@ import { createServerClient } from "@/lib/supabase";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const payload = await req.json();
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("orders")
       .update(payload)
-      .eq("id", parseInt(params.id, 10))
+      .eq("id", parseInt(id, 10))
       .select()
       .single();
 
@@ -29,14 +30,15 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const supabase = createServerClient();
     const { error } = await supabase
       .from("orders")
       .delete()
-      .eq("id", parseInt(params.id, 10));
+      .eq("id", parseInt(id, 10));
 
     if (error) {
       console.error("DELETE /api/orders/[id] Supabase error", error);
