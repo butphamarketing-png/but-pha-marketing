@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
+import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -1075,6 +1076,50 @@ export default function AdminPage() {
     });
   };
 
+  const refreshBlogs = async () => {
+    const result = await db.news.getAll();
+    if (result.error) {
+      setBlogSaveError(result.error);
+      return;
+    }
+    setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
+  };
+
+  const handleToggleBlogPublished = async (item: NewsItem) => {
+    setBlogSaveError(null);
+    setBlogSaveMessage(null);
+    const result = await db.news.update(item.id, { published: !item.published });
+    if (result.error) {
+      setBlogSaveError(result.error);
+      return;
+    }
+    await refreshBlogs();
+  };
+
+  const handleToggleBlogHot = async (item: NewsItem) => {
+    setBlogSaveError(null);
+    setBlogSaveMessage(null);
+    const result = await db.news.update(item.id, { hot: !item.hot });
+    if (result.error) {
+      setBlogSaveError(result.error);
+      return;
+    }
+    await refreshBlogs();
+  };
+
+  const handleDeleteBlog = async (item: NewsItem) => {
+    if (!confirm("Xóa bài viết này?")) return;
+    setBlogSaveError(null);
+    setBlogSaveMessage(null);
+    const result = await db.news.delete(item.id);
+    if (result.error) {
+      setBlogSaveError(result.error);
+      return;
+    }
+    await refreshBlogs();
+    if (editingBlogId === item.id) resetBlogForm();
+  };
+
   if (!authenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -1734,7 +1779,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {activeTab === "news" && (
+          {activeTab === "news" && false && (
             <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h3 className="text-lg font-bold text-white">Quản lý Blog Trang Chủ</h3>
@@ -1833,6 +1878,24 @@ export default function AdminPage() {
                 ))}
               </div>
             </div>
+          )}
+
+          {activeTab === "news" && (
+            <NewsDashboard
+              blogs={blogs}
+              editingBlogId={editingBlogId}
+              blogForm={blogForm}
+              setBlogForm={setBlogForm}
+              onReset={resetBlogForm}
+              onSave={saveBlog}
+              onEdit={editBlog}
+              onGenerate={generateBlogDraftByAIV2}
+              onTogglePublished={handleToggleBlogPublished}
+              onToggleHot={handleToggleBlogHot}
+              onDelete={handleDeleteBlog}
+              settings={settings}
+              onUpdateIntegrations={(next) => updateSettings({ seoIntegrations: next })}
+            />
           )}
 
           {activeTab === "portals" && (

@@ -33,6 +33,16 @@ export interface PlatformCMS {
   packages: Record<string, PackageConfig>;
 }
 
+export interface SeoIntegrationConfig {
+  enabled: boolean;
+  status: "disconnected" | "configured";
+  label: string;
+  propertyId: string;
+  apiKey: string;
+  siteUrl: string;
+  notes: string;
+}
+
 export interface SiteSettings {
   title: string;
   heroTitle: string;
@@ -56,6 +66,12 @@ export interface SiteSettings {
   mascotClickMessages: Record<string, string[]>;
   media: Record<string, MediaSection>;
   cms: Record<string, PlatformCMS>;
+  seoIntegrations: {
+    searchConsole: SeoIntegrationConfig;
+    ga4: SeoIntegrationConfig;
+    rankTracker: SeoIntegrationConfig;
+    siteCrawler: SeoIntegrationConfig;
+  };
   colors: Record<string, string>;
   visibility: Record<string, boolean>;
   platformNames: Record<string, string>;
@@ -124,6 +140,18 @@ function createDefaultMedia(): Record<string, MediaSection> {
   }, {});
 }
 
+function createSeoIntegration(label: string): SeoIntegrationConfig {
+  return {
+    enabled: false,
+    status: "disconnected",
+    label,
+    propertyId: "",
+    apiKey: "",
+    siteUrl: "",
+    notes: "",
+  };
+}
+
 const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   heroTitle: "Bứt Phá Marketing",
@@ -147,6 +175,12 @@ const defaultSettings: SiteSettings = {
   mascotClickMessages: {},
   media: createDefaultMedia(),
   cms: {},
+  seoIntegrations: {
+    searchConsole: createSeoIntegration("Google Search Console"),
+    ga4: createSeoIntegration("Google Analytics 4"),
+    rankTracker: createSeoIntegration("Rank Tracker / SERP API"),
+    siteCrawler: createSeoIntegration("Website Crawler"),
+  },
   colors: COLOR_DEFAULTS,
   visibility: VISIBILITY_DEFAULTS,
   platformNames: PLATFORM_NAME_DEFAULTS,
@@ -207,6 +241,24 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     ...parsed,
     media: mergeMedia(parsed.media),
     cms: mergeCms(parsed.cms),
+    seoIntegrations: {
+      searchConsole: {
+        ...defaultSettings.seoIntegrations.searchConsole,
+        ...(parsed.seoIntegrations?.searchConsole ?? {}),
+      },
+      ga4: {
+        ...defaultSettings.seoIntegrations.ga4,
+        ...(parsed.seoIntegrations?.ga4 ?? {}),
+      },
+      rankTracker: {
+        ...defaultSettings.seoIntegrations.rankTracker,
+        ...(parsed.seoIntegrations?.rankTracker ?? {}),
+      },
+      siteCrawler: {
+        ...defaultSettings.seoIntegrations.siteCrawler,
+        ...(parsed.seoIntegrations?.siteCrawler ?? {}),
+      },
+    },
     colors: { ...COLOR_DEFAULTS, ...(parsed.colors ?? {}) },
     visibility: { ...VISIBILITY_DEFAULTS, ...(parsed.visibility ?? {}) },
     platformNames: { ...PLATFORM_NAME_DEFAULTS, ...(parsed.platformNames ?? {}) },
