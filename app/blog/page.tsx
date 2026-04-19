@@ -14,13 +14,36 @@ export const metadata: Metadata = {
     description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     url: `${BASE_URL}/blog`,
     type: "website",
+    images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: "Blog Bứt Phá Marketing" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog Marketing | Bứt Phá Marketing",
+    description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
+    images: [`${BASE_URL}/opengraph.jpg`],
   },
 };
 
 export default async function BlogPage() {
   const blogs = await getPublishedBlogs();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Blog Marketing",
+    url: `${BASE_URL}/blog`,
+    description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
+    inLanguage: "vi-VN",
+    hasPart: blogs.slice(0, 12).map((blog) => ({
+      "@type": "BlogPosting",
+      headline: blog.title,
+      url: `${BASE_URL}/blog/${blog.slug}`,
+      datePublished: blog.publishedAt || new Date(blog.timestamp).toISOString(),
+    })),
+  };
+
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-4 py-10 text-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className="text-4xl font-black">Blog Marketing</h1>
       <p className="mt-2 text-sm text-gray-400">Bài viết chuẩn SEO, cập nhật theo xu hướng tăng trưởng mới nhất.</p>
 
@@ -46,4 +69,3 @@ export default async function BlogPage() {
     </main>
   );
 }
-

@@ -2,11 +2,11 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Dịch vụ Facebook Marketing",
+  title: "Dịch vụ Facebook Marketing, quản trị Fanpage và Facebook Ads",
   description:
-    "Giải pháp Facebook Marketing trọn gói: xây dựng fanpage, chăm sóc nội dung và triển khai Facebook Ads để tăng lead và doanh thu.",
+    "Dịch vụ Facebook Marketing trọn gói gồm quản trị Fanpage, sáng tạo nội dung và triển khai Facebook Ads giúp tăng lead, đơn hàng và doanh thu bền vững.",
   path: "/facebook",
-  keywords: ["facebook marketing", "facebook ads", "quản trị fanpage", "chạy quảng cáo facebook"],
+  keywords: ["dịch vụ facebook marketing", "facebook ads", "quản trị fanpage", "chạy quảng cáo facebook", "agency facebook marketing"],
 });
 
 const config: PlatformConfig = {

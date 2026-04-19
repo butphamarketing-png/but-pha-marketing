@@ -2,11 +2,11 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Dịch vụ Zalo Marketing",
+  title: "Dịch vụ Zalo Marketing, Zalo OA và Zalo Ads",
   description:
-    "Triển khai Zalo OA, chăm sóc khách hàng trên Zalo và tối ưu chiến dịch Zalo Ads để tăng tỷ lệ chuyển đổi cho doanh nghiệp.",
+    "Dịch vụ Zalo Marketing giúp triển khai Zalo OA, chăm sóc khách hàng trên Zalo và tối ưu Zalo Ads để tăng tỷ lệ chuyển đổi cho doanh nghiệp.",
   path: "/zalo",
-  keywords: ["zalo marketing", "zalo oa", "zalo ads", "chăm sóc khách hàng trên zalo"],
+  keywords: ["dịch vụ zalo marketing", "zalo oa", "zalo ads", "chăm sóc khách hàng trên zalo", "agency zalo marketing"],
 });
 
 const config: PlatformConfig = {

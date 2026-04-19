@@ -2,11 +2,11 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Dịch vụ Instagram Marketing",
+  title: "Dịch vụ Instagram Marketing, Reels và Instagram Ads",
   description:
-    "Dịch vụ Instagram Marketing tập trung vào hình ảnh thương hiệu, Reels, Stories và nội dung chuyển đổi để tăng tương tác bền vững.",
+    "Dịch vụ Instagram Marketing tập trung vào hình ảnh thương hiệu, Reels, Stories và Instagram Ads để tăng tương tác, độ nhận diện và chuyển đổi bền vững.",
   path: "/instagram",
-  keywords: ["instagram marketing", "reels marketing", "quản trị instagram", "instagram ads"],
+  keywords: ["dịch vụ instagram marketing", "reels marketing", "quản trị instagram", "instagram ads", "agency instagram marketing"],
 });
 
 const config: PlatformConfig = {

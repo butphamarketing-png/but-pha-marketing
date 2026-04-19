@@ -17,7 +17,7 @@ export function buildMetadata({
   path,
   keywords,
   type = "website",
-  image = "/logo.jpg",
+  image = "/opengraph.jpg",
 }: SeoInput): Metadata {
   const canonical = `${BASE_URL}${path}`;
 
@@ -25,6 +25,10 @@ export function buildMetadata({
     title,
     description,
     keywords,
+    robots: {
+      index: true,
+      follow: true,
+    },
     alternates: {
       canonical,
     },
@@ -35,7 +39,7 @@ export function buildMetadata({
       siteName: "Bứt Phá Marketing",
       locale: "vi_VN",
       type,
-      images: [{ url: image }],
+      images: [{ url: image, alt: title }],
     },
     twitter: {
       card: "summary_large_image",

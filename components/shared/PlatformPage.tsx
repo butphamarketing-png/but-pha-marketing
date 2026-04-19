@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ChevronDown, X, ShoppingCart, Check, CreditCard, Building2, Smartphone } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SubPageLayout } from "./SubPageLayout";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { FeaturedProjectsFlip } from "./FeaturedProjectsFlip";
@@ -38,6 +40,15 @@ export interface PlatformConfig {
   mission: string;
   responsibility: string;
 }
+
+const SERVICE_LINKS = [
+  { href: "/facebook", label: "Facebook Marketing" },
+  { href: "/tiktok", label: "TikTok Marketing" },
+  { href: "/instagram", label: "Instagram Marketing" },
+  { href: "/zalo", label: "Zalo Marketing" },
+  { href: "/google-maps", label: "Google Maps Marketing" },
+  { href: "/website", label: "Website Marketing" },
+];
 
 const DURATION_OPTIONS = [
   { months: 1, label: "1 tháng", discount: 0 },
@@ -506,6 +517,7 @@ function ContactForm({ color }: { color: string }) {
 
 export function PlatformPage({ config }: { config: PlatformConfig }) {
   const { settings } = useAdmin();
+  const pathname = usePathname() || "/";
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   const [content, setContent] = useState(config);
   const [openIntro, setOpenIntro] = useState<"vision" | "mission" | "responsibility">("vision");
@@ -555,12 +567,118 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   const cases = platformMedia.cases || [];
   const beforeAfterBefore = loadedOverride?.beforeAfterBefore;
   const beforeAfterAfter = loadedOverride?.beforeAfterAfter;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+  const canonicalUrl = `${baseUrl}${pathname}`;
+  const serviceTitle = `Dịch vụ ${content.name} Marketing`;
+  const heroTitle = content.name === "Website" ? "Dịch vụ Website Marketing" : serviceTitle;
+  const serviceLinks = SERVICE_LINKS.filter((item) => item.href !== pathname).slice(0, 3);
+  const offerItems = tabsForRender.flatMap((tab) =>
+    tab.packages.map((pkg) => ({
+      "@type": "Offer",
+      name: `${tab.label} - ${pkg.name}`,
+      price: parsePrice(pkg.price),
+      priceCurrency: "VND",
+      availability: "https://schema.org/InStock",
+      url: canonicalUrl,
+      description: pkg.features.join(", "),
+    })),
+  );
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Trang chủ", item: baseUrl },
+          { "@type": "ListItem", position: 2, name: heroTitle, item: canonicalUrl },
+        ],
+      },
+      {
+        "@type": "Service",
+        name: heroTitle,
+        serviceType: content.name,
+        description: content.mission,
+        url: canonicalUrl,
+        provider: {
+          "@type": "Organization",
+          name: "Bứt Phá Marketing",
+          url: baseUrl,
+          logo: `${baseUrl}/logo.jpg`,
+        },
+        areaServed: {
+          "@type": "Country",
+          name: "Vietnam",
+        },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: `Bảng giá ${heroTitle}`,
+          itemListElement: offerItems,
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: content.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.a,
+          },
+        })),
+      },
+    ],
+  };
 
   const handleCheckout = (pkg: CheckoutPkg) => setCheckoutPkg(pkg);
 
   return (
     <SubPageLayout platformName={content.name} primaryColor={platformColor}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <Slideshow color={platformColor} platformKey={platformKey} />
+
+      <section className="border-b border-white/10 bg-black/20 px-4 py-8">
+        <div className="mx-auto max-w-5xl">
+          <nav aria-label="Breadcrumb" className="mb-4 text-sm text-gray-400">
+            <ol className="flex flex-wrap items-center gap-2">
+              <li><Link href="/" className="hover:text-white">Trang chủ</Link></li>
+              <li>/</li>
+              <li className="text-white">{heroTitle}</li>
+            </ol>
+          </nav>
+
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_280px] md:items-start">
+            <div>
+              <h1 className="text-3xl font-black text-white md:text-5xl">{heroTitle}</h1>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-gray-300 md:text-lg">{content.mission}</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href="#pricing" className="rounded-full px-5 py-3 text-sm font-bold text-white" style={{ backgroundColor: platformColor }}>
+                  Xem bảng giá
+                </a>
+                <a href="#contact" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
+                  Nhận tư vấn
+                </a>
+                <a href="#faq" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
+                  Câu hỏi thường gặp
+                </a>
+              </div>
+            </div>
+
+            <aside className="rounded-2xl border border-white/10 bg-card/80 p-5">
+              <p className="text-sm font-semibold text-white">Liên kết nội bộ nổi bật</p>
+              <div className="mt-4 flex flex-col gap-3 text-sm">
+                {serviceLinks.map((item) => (
+                  <Link key={item.href} href={item.href} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-gray-200 transition-colors hover:text-white">
+                    {item.label}
+                  </Link>
+                ))}
+                <Link href="/blog" className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-gray-200 transition-colors hover:text-white">
+                  Blog marketing thực chiến
+                </Link>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
 
       {visibility.intro !== false && (
         <section data-section="intro" id="intro" className="py-20 px-4">
@@ -612,6 +730,23 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       
       <ProcessSection processTabs={processTabs} color={platformColor} />
       <FAQSection faqs={content.faqs} />
+
+      <section className="px-4 py-10">
+        <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-card/80 p-6 md:p-8">
+          <h2 className="text-2xl font-black text-white md:text-3xl">Dịch vụ liên quan để tăng sức mạnh SEO cụm chủ đề</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-gray-300 md:text-base">
+            Google đánh giá cao website có cụm nội dung và landing page liên kết chặt chẽ. Kết hợp nhiều dịch vụ phù hợp giúp tăng độ phủ chủ đề, cải thiện tín hiệu chuyên môn và tăng khả năng chuyển đổi.
+          </p>
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            {serviceLinks.map((item) => (
+              <Link key={`related-${item.href}`} href={item.href} className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <ContactForm color={platformColor} />
 
       <AnimatePresence>

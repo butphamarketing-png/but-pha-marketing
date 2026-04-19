@@ -2,11 +2,11 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Dịch vụ Website Marketing",
+  title: "Dịch vụ Website Marketing, thiết kế web và SEO website",
   description:
-    "Thiết kế website, tối ưu SEO website và bảo trì kỹ thuật để tăng tốc độ tải trang, trải nghiệm người dùng và chuyển đổi kinh doanh.",
+    "Dịch vụ Website Marketing bao gồm thiết kế website, tối ưu SEO website và bảo trì kỹ thuật để tăng tốc độ tải trang, trải nghiệm người dùng và chuyển đổi kinh doanh.",
   path: "/website",
-  keywords: ["website marketing", "thiết kế website", "seo website", "bảo trì website"],
+  keywords: ["dịch vụ website marketing", "thiết kế website", "seo website", "bảo trì website", "thiết kế web chuẩn seo"],
 });
 
 const config: PlatformConfig = {

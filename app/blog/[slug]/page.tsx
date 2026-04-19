@@ -15,7 +15,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
   if (!blog) return {};
-  const canonical = `${BASE_URL}/blog/${blog.slug}`;
+  const blogPath = blog.slug || blog.id;
+  const canonical = `${BASE_URL}/blog/${blogPath}`;
+  const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
   return {
     title: blog.title,
     description: blog.metaDescription || blog.description,
@@ -26,13 +28,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       url: canonical,
       type: "article",
       publishedTime: blog.publishedAt || undefined,
-      images: blog.imageUrl ? [{ url: blog.imageUrl }] : undefined,
+      images: [{ url: image, alt: blog.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: blog.title,
       description: blog.metaDescription || blog.description,
-      images: blog.imageUrl ? [blog.imageUrl] : undefined,
+      images: [image],
     },
   };
 }
@@ -41,18 +43,31 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
+  const blogPath = blog.slug || blog.id;
+  const canonical = `${BASE_URL}/blog/${blogPath}`;
+  const publishedDate = blog.publishedAt || new Date(blog.timestamp).toISOString();
+  const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: blog.title,
-    datePublished: blog.publishedAt || new Date(blog.timestamp).toISOString(),
-    dateModified: blog.publishedAt || new Date(blog.timestamp).toISOString(),
+    datePublished: publishedDate,
+    dateModified: publishedDate,
     description: blog.metaDescription || blog.description,
-    image: blog.imageUrl ? [blog.imageUrl] : [],
+    image: [image],
+    inLanguage: "vi-VN",
+    url: canonical,
     author: [{ "@type": "Organization", name: "Bứt Phá Marketing" }],
-    publisher: { "@type": "Organization", name: "Bứt Phá Marketing" },
-    mainEntityOfPage: `${BASE_URL}/blog/${blog.slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "Bứt Phá Marketing",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo.jpg`,
+      },
+    },
+    mainEntityOfPage: canonical,
   };
 
   return (
@@ -65,4 +80,3 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
     </main>
   );
 }
-
