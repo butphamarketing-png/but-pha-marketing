@@ -1,7 +1,20 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const NEXT_PUBLIC_SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 function getEnv(name: string): string {
-  const value = process.env[name];
+  const value =
+    name === "NEXT_PUBLIC_SUPABASE_URL"
+      ? NEXT_PUBLIC_SUPABASE_URL
+      : name === "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+        ? NEXT_PUBLIC_SUPABASE_ANON_KEY
+        : name === "SUPABASE_SERVICE_ROLE_KEY"
+          ? SUPABASE_SERVICE_ROLE_KEY
+          : process.env[name];
+
   if (!value || !value.trim()) {
     if (name === "SUPABASE_SERVICE_ROLE_KEY") {
       console.warn(`[Supabase] Missing SUPABASE_SERVICE_ROLE_KEY env var. API requests will fail gracefully with JSON error.`);
