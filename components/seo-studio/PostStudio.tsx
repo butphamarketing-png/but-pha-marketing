@@ -760,12 +760,13 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Hạng hiện tại</p>
                     <div className="mt-2 flex items-baseline gap-2">
                       <span className={`text-4xl font-black ${
+                        rankTracking.currentPosition === null ? "text-slate-400" :
                         rankTracking.currentPosition <= 3 ? "text-emerald-500" :
                         rankTracking.currentPosition <= 10 ? "text-orange-500" : "text-rose-500"
                       }`}>
-                        #{rankTracking.currentPosition}
+                        #{rankTracking.currentPosition ?? "--"}
                       </span>
-                      {rankTracking.history.length > 1 && (
+                      {rankTracking.currentPosition !== null && rankTracking.history.length > 1 && (
                         <span className={`flex items-center text-sm font-bold ${
                           rankTracking.currentPosition < rankTracking.history[rankTracking.history.length - 2].position
                             ? "text-emerald-500"

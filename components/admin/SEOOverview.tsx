@@ -15,7 +15,8 @@ import {
   RefreshCw,
   Search,
   Download,
-  Calendar
+  Calendar,
+  Settings
 } from "lucide-react";
 import {
   Area,

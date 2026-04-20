@@ -36,7 +36,7 @@ export function Step3Article({ data, setData, onNext, onPrev }: any) {
 
       <div className="rounded-[32px] border border-slate-100 bg-slate-50/30 p-2 min-h-[500px]">
         <RichTextEditor
-          content={data.content}
+          value={data.content}
           onChange={(html) => setData({ ...data, content: html })}
         />
       </div>

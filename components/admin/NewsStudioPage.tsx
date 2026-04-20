@@ -305,7 +305,7 @@ export function NewsStudioPage() {
   });
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<"all" | "published" | "draft" | "needs-update">("all");
-  const [activeTab, setActiveTab] = useState<"dashboard" | "plugins">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "news" | "plugins" | "settings">("dashboard");
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

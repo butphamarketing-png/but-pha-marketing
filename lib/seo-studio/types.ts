@@ -80,8 +80,11 @@ export type RelatedPost = {
   score: number;
 };
 
-export type InternalLinkSuggestion = RelatedPost & {
-  anchorTextSuggestion: string;
+export type InternalLinkSuggestion = {
+  targetPostId: string;
+  title: string;
+  slug: string;
+  anchorText: string;
   reason: string;
 };
 
@@ -129,6 +132,7 @@ export type RankTrackingResponse = {
   postId: string;
   slug: string;
   needsUpdate: boolean;
+  currentPosition: number | null;
   latest: KeywordRanking[];
   history: KeywordRanking[];
 };
@@ -137,6 +141,7 @@ export type DecayCheck = {
   postId: string;
   keyword?: string;
   needsUpdate: boolean;
+  status: "good" | "warning" | "critical";
   currentPosition: number | null;
   previousPosition: number | null;
   dropAmount: number;
