@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SiFacebook, SiGooglemaps, SiInstagram, SiTiktok, SiWebflow, SiZalo } from "react-icons/si";
 import { ChevronLeft, ChevronRight, Flame, Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
+import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
@@ -17,23 +18,11 @@ export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [showRoadmap, setShowRoadmap] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [blogPage, setBlogPage] = useState(0);
   const { user } = useAuth();
   const { settings } = useAdmin();
-  const [stats, setStats] = useState({ clients: 0, projects: 0, years: 0 });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setStats((prev) => ({
-        clients: prev.clients < 500 ? prev.clients + 5 : 500,
-        projects: prev.projects < 1200 ? prev.projects + 12 : 1200,
-        years: prev.years < 10 ? prev.years + 1 : 10,
-      }));
-    }, 50);
-
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     db.news.getAll().then((result) => {
@@ -130,9 +119,17 @@ export default function HomePageClient() {
                 onClick={() => setShowLogin(true)}
                 className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10"
               >
-                {user ? "Khu vực khách hàng" : "Khu vực khách hàng"}
+                {user ? "Khu vực khách hàng" : "Đăng nhập / Đăng ký"}
               </button>
             </div>
+            <button
+              type="button"
+              onClick={() => setShowRoadmap(true)}
+              className="group flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary transition-all hover:bg-primary/20"
+            >
+              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+              Lộ trình dự án
+            </button>
           </div>
         )}
       </header>
@@ -268,6 +265,7 @@ export default function HomePageClient() {
       </main>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
 
       <style>{`
         @keyframes shimmer {

@@ -648,36 +648,20 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
             </ol>
           </nav>
 
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_280px] md:items-start">
-            <div>
-              <h1 className="text-3xl font-black text-white md:text-5xl">{heroTitle}</h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-gray-300 md:text-lg">{content.mission}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#pricing" className="rounded-full px-5 py-3 text-sm font-bold text-white" style={{ backgroundColor: platformColor }}>
-                  Xem bảng giá
-                </a>
-                <a href="#contact" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
-                  Nhận tư vấn
-                </a>
-                <a href="#faq" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
-                  Câu hỏi thường gặp
-                </a>
-              </div>
+          <div className="max-w-4xl">
+            <h1 className="text-3xl font-black text-white md:text-5xl">{heroTitle}</h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-gray-300 md:text-lg">{content.mission}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="#pricing" className="rounded-full px-5 py-3 text-sm font-bold text-white" style={{ backgroundColor: platformColor }}>
+                Xem bảng giá
+              </a>
+              <a href="#contact" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
+                Nhận tư vấn
+              </a>
+              <a href="#faq" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
+                Câu hỏi thường gặp
+              </a>
             </div>
-
-            <aside className="rounded-2xl border border-white/10 bg-card/80 p-5">
-              <p className="text-sm font-semibold text-white">Liên kết nội bộ nổi bật</p>
-              <div className="mt-4 flex flex-col gap-3 text-sm">
-                {serviceLinks.map((item) => (
-                  <Link key={item.href} href={item.href} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-gray-200 transition-colors hover:text-white">
-                    {item.label}
-                  </Link>
-                ))}
-                <Link href="/blog" className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-gray-200 transition-colors hover:text-white">
-                  Blog marketing thực chiến
-                </Link>
-              </div>
-            </aside>
           </div>
         </div>
       </section>
@@ -733,18 +717,54 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       <ProcessSection processTabs={processTabs} color={platformColor} />
       <FAQSection faqs={content.faqs} />
 
-      <section className="px-4 py-10">
-        <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-card/80 p-6 md:p-8">
-          <h2 className="text-2xl font-black text-white md:text-3xl">Dịch vụ liên quan để tăng sức mạnh SEO cụm chủ đề</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-gray-300 md:text-base">
-            Google đánh giá cao website có cụm nội dung và landing page liên kết chặt chẽ. Kết hợp nhiều dịch vụ phù hợp giúp tăng độ phủ chủ đề, cải thiện tín hiệu chuyên môn và tăng khả năng chuyển đổi.
-          </p>
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
-            {serviceLinks.map((item) => (
-              <Link key={`related-${item.href}`} href={item.href} className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">
-                {item.label}
-              </Link>
-            ))}
+      <section className="px-4 py-20 border-t border-white/5 bg-black/20">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div>
+              <h2 className="text-2xl font-black text-white md:text-3xl flex items-center gap-3">
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: platformColor }} />
+                Liên kết nội bộ nổi bật
+              </h2>
+              <p className="mt-4 text-sm leading-7 text-gray-400">
+                Khám phá thêm các dịch vụ Marketing chuyên sâu của Bứt Phá Marketing để tối ưu hóa hiệu quả kinh doanh của bạn.
+              </p>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                {SERVICE_LINKS.map((item) => (
+                  <Link 
+                    key={`footer-${item.href}`} 
+                    href={item.href} 
+                    className={`rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold transition-all hover:bg-white/10 ${pathname === item.href ? 'border-primary/50 text-white' : 'text-gray-300 hover:text-white'}`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Link href="/blog" className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-gray-300 transition-all hover:bg-white/10 hover:text-white sm:col-span-2">
+                  Blog marketing thực chiến
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center">
+              <div className="rounded-3xl border border-dashed border-white/10 p-8 text-center lg:text-left bg-card/40">
+                <h3 className="text-2xl font-black text-white mb-4">Dịch vụ liên quan tăng sức mạnh SEO</h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                  Google đánh giá cao website có cụm nội dung và landing page liên kết chặt chẽ. Kết hợp nhiều dịch vụ phù hợp giúp tăng độ phủ chủ đề, cải thiện tín hiệu chuyên môn và tăng khả năng chuyển đổi.
+                </p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                  <a 
+                    href="#contact"
+                    className="rounded-full px-8 py-3 font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95"
+                    style={{ backgroundColor: platformColor }}
+                  >
+                    Nhận tư vấn miễn phí
+                  </a>
+                  <div className="flex items-center gap-3">
+                    <img src="/logo.jpg" alt="Logo" className="h-6 w-6 rounded-full" />
+                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">© 2026 Bứt Phá Marketing</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

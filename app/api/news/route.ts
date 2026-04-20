@@ -3,21 +3,26 @@ import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceRoleKey) {
+      return NextResponse.json({ error: "Server misconfigured: Missing SUPABASE_SERVICE_ROLE_KEY" }, { status: 500 });
+    }
+
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("news")
       .select("*")
-      .order("timestamp", { ascending: true });
+      .order("timestamp", { ascending: false });
 
     if (error) {
       console.error("GET /api/news Supabase error", error);
-      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+      return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
     }
 
     return NextResponse.json(data ?? []);
   } catch (error) {
     console.error("GET /api/news failed", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown server error" }, { status: 500 });
   }
 }
 

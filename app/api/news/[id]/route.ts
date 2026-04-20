@@ -6,6 +6,11 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceRoleKey) {
+      return NextResponse.json({ error: "Server misconfigured: Missing SUPABASE_SERVICE_ROLE_KEY" }, { status: 500 });
+    }
+
     const { id } = await context.params;
     const updates = await req.json();
 
@@ -29,13 +34,13 @@ export async function PATCH(
 
     if (error) {
       console.error("PATCH /api/news/[id] Supabase error", error);
-      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+      return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("PATCH /api/news/[id] failed", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown server error" }, { status: 500 });
   }
 }
 
@@ -44,6 +49,11 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceRoleKey) {
+      return NextResponse.json({ error: "Server misconfigured: Missing SUPABASE_SERVICE_ROLE_KEY" }, { status: 500 });
+    }
+
     const { id } = await context.params;
     const supabase = createServerClient();
     const { error } = await supabase
@@ -53,12 +63,12 @@ export async function DELETE(
 
     if (error) {
       console.error("DELETE /api/news/[id] Supabase error", error);
-      return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+      return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("DELETE /api/news/[id] failed", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown server error" }, { status: 500 });
   }
 }

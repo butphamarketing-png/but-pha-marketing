@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronUp } from "lucide-react";
 import { ConsultModal } from "./ConsultModal";
 import { CursorEffect } from "./CursorEffect";
 import { ChatbotWidget } from "./ChatbotWidget";
+import { PresentationButton } from "./PresentationButton";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
@@ -183,7 +184,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
         ))}
       </div>
 
-      <main className="pb-24">
+      <main>
         {children}
       </main>
 
@@ -203,6 +204,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       </AnimatePresence>
 
       <ChatbotWidget color={primaryColor} />
+      <PresentationButton />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
     </div>
   );

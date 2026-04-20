@@ -69,6 +69,7 @@ model Post {
   status           PostStatus     @default(draft)
   currentVersion   Int            @default(1) @map("current_version")
   needsUpdate      Boolean        @default(false) @map("needs_update")
+  trackedKeyword   String?        @map("tracked_keyword")
   user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   project          Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   generations      AIGeneration[]
@@ -169,17 +170,20 @@ model TopicalCluster {
 }
 
 model KeywordRanking {
-  id         String   @id @default(cuid())
-  userId     String   @map("user_id")
-  projectId  String   @map("project_id")
-  postId     String   @map("post_id")
-  keyword    String
-  position   Int
-  location   String?
-  checkedAt  DateTime @default(now()) @map("checked_at")
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  projectId    String   @map("project_id")
+  postId       String   @map("post_id")
+  keyword      String
+  position     Int
+  previous     Int?
+  change       Int?
+  location     String?
+  device       String? // desktop/mobile
+  checkedAt    DateTime @default(now()) @map("checked_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post         Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([postId, keyword, checkedAt(sort: Desc)])
   @@index([projectId, checkedAt(sort: Desc)])
@@ -208,3 +212,84 @@ model SerpAnalysis {
   @@index([userId])
   @@map("serp_analyses")
 }
+
+model Plugin {
+  id            String   @id @default(cuid())
+  key           String   @unique
+  name          String
+  description   String?
+  category      String   // "AI" | "SEO" | "SYSTEM"
+  isCore        Boolean  @default(false) @map("is_core")
+  createdAt     DateTime @default(now()) @map("created_at")
+  workspaces    WorkspacePlugin[]
+
+  @@map("plugins")
+}
+
+model WorkspacePlugin {
+  id            String   @id @default(cuid())
+  projectId     String   @map("project_id")
+  pluginId      String   @map("plugin_id")
+  enabled       Boolean  @default(true)
+  plugin        Plugin   @relation(fields: [pluginId], references: [id])
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, pluginId])
+  @@map("workspace_plugins")
+}
+
+model PluginDependency {
+  id              String @id @default(cuid())
+  pluginId        String @map("plugin_id")
+  dependsOnKey    String @map("depends_on_key")
+
+  @@map("plugin_dependencies")
+}
+
+model PluginUsageLog {
+  id            String   @id @default(cuid())
+  projectId     String   @map("project_id")
+  pluginKey     String   @map("plugin_key")
+  action        String
+  metadata      Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("plugin_usage_logs")
+}
+
+model ContentOpportunity {
+  id              String   @id @default(cuid())
+  topic           String
+  keyword         String
+  searchVolume    Int?     @map("search_volume")
+  difficulty      Int?     // 0–100
+  intent          String?  // informational, commercial, transactional
+  opportunityScore Float    @map("opportunity_score")
+  projectId       String   @map("project_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("content_opportunities")
+}
+
+model SerpAnalysisPro {
+  id            String   @id @default(cuid())
+  keyword       String   @unique
+  results       Json
+  avgWordCount  Int?     @map("avg_word_count")
+  avgHeadings   Int?     @map("avg_headings")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("serp_analyses_pro")
+}
+
+model ContentGap {
+  id            String   @id @default(cuid())
+  keyword       String   @unique
+  missingTopics Json     @map("missing_topics")
+  weaknesses    Json
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("content_gaps")
+}
+

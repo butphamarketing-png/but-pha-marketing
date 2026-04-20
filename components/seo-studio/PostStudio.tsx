@@ -22,6 +22,42 @@ import {
   updatePost,
 } from "@/lib/seo-studio/api";
 import {
+  AlertCircle,
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  ChevronRight,
+  Copy,
+  FileText,
+  History,
+  Link2,
+  ListOrdered,
+  MoreVertical,
+  Plus,
+  RefreshCw,
+  Rocket,
+  Save,
+  Search,
+  Settings,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Target as TargetIcon,
+  TrendingDown,
+  TrendingUp,
+  Wand2,
+  X,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
   ContentBrief,
   DecayCheck,
   GenerateArticleResponse,
@@ -467,6 +503,27 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
         </aside>
 
         <section className="rounded-[32px] border border-white/70 bg-white/85 p-6 shadow-[0_24px_90px_rgba(32,20,6,0.08)] backdrop-blur lg:p-8">
+          {activePost?.needsUpdate && (
+            <div className="mb-6 flex items-center justify-between rounded-[24px] border border-orange-200 bg-orange-50 p-6 shadow-sm">
+              <div className="flex items-center gap-4">
+                <div className="rounded-xl bg-orange-100 p-3 text-orange-600">
+                  <TrendingDown size={24} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-slate-900">Bài viết đang tụt hạng!</h3>
+                  <p className="text-sm text-slate-600 font-medium">Hệ thống phát hiện thứ hạng từ khóa chính đã giảm mạnh. Bạn nên thực hiện SEO Refresh.</p>
+                </div>
+              </div>
+              <button
+                onClick={handleRefresh}
+                className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-100 hover:bg-indigo-500 transition-all"
+              >
+                <Sparkles size={18} />
+                🤖 Improve with AI
+              </button>
+            </div>
+          )}
+
           <div className="flex flex-col gap-4 border-b border-stone-200 pb-6 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">Editor</p>
@@ -661,84 +718,81 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
             </div>
           </div>
 
-          <div className="mt-5 grid gap-5 lg:grid-cols-[360px_minmax(0,1fr)]">
-            <div className="rounded-[28px] border border-stone-200 bg-stone-50 p-5">
-              <p className="text-sm font-semibold text-slate-900">Rank tracking</p>
-              <div className="mt-4 space-y-3">
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-slate-700">Keyword</span>
-                  <input
-                    value={trackedKeyword}
-                    onChange={(event) => setTrackedKeyword(event.target.value)}
-                    className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-400"
-                    placeholder="Track target keyword"
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-slate-700">Location</span>
-                  <input
-                    value={trackedLocation}
-                    onChange={(event) => setTrackedLocation(event.target.value)}
-                    className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-400"
-                    placeholder="United States"
-                  />
-                </label>
+          <div className="mt-5 rounded-[28px] border border-stone-200 bg-stone-50 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Keyword & Rank</h3>
+                <p className="text-xs text-slate-500 mt-1 font-medium">Theo dõi thứ hạng của keyword chính trên SERP.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  placeholder="Keyword..."
+                  value={trackedKeyword}
+                  onChange={(e) => setTrackedKeyword(e.target.value)}
+                  className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm outline-none transition focus:border-indigo-300"
+                />
                 <button
-                  type="button"
                   onClick={handleTrackKeyword}
-                  disabled={isPending || !activePost}
-                  className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-slate-800"
                 >
+                  <TargetIcon size={16} />
                   Track Rank
                 </button>
               </div>
-
-              <div className="mt-5 space-y-2">
-                {(rankTracking?.latest ?? []).length === 0 ? (
-                  <p className="text-sm text-slate-500">No ranking checkpoints yet.</p>
-                ) : (
-                  rankTracking!.latest.map((item) => (
-                    <div key={`${item.keyword}-${item.checkedAt}`} className="rounded-2xl bg-white px-4 py-3 text-sm">
-                      <p className="font-semibold text-slate-900">{item.keyword}</p>
-                      <p className="mt-1 text-slate-500">
-                        Position {item.position}
-                        {item.location ? ` • ${item.location}` : ""}
-                      </p>
-                    </div>
-                  ))
-                )}
-              </div>
             </div>
 
-            <div className="rounded-[28px] border border-stone-200 bg-stone-50 p-5">
-              <p className="text-sm font-semibold text-slate-900">Decay check</p>
-              {decayCheck ? (
-                <div className="mt-4 grid gap-3 md:grid-cols-4">
-                  <div className="rounded-2xl bg-white px-4 py-3 text-sm">
-                    <span className="block text-xs uppercase tracking-[0.2em] text-stone-400">Keyword</span>
-                    <span className="mt-2 block font-semibold text-slate-900">{decayCheck.keyword ?? "N/A"}</span>
-                  </div>
-                  <div className="rounded-2xl bg-white px-4 py-3 text-sm">
-                    <span className="block text-xs uppercase tracking-[0.2em] text-stone-400">Current</span>
-                    <span className="mt-2 block font-semibold text-slate-900">{decayCheck.currentPosition ?? "-"}</span>
-                  </div>
-                  <div className="rounded-2xl bg-white px-4 py-3 text-sm">
-                    <span className="block text-xs uppercase tracking-[0.2em] text-stone-400">Previous</span>
-                    <span className="mt-2 block font-semibold text-slate-900">{decayCheck.previousPosition ?? "-"}</span>
-                  </div>
-                  <div className="rounded-2xl bg-white px-4 py-3 text-sm">
-                    <span className="block text-xs uppercase tracking-[0.2em] text-stone-400">Drop</span>
-                    <span className="mt-2 block font-semibold text-slate-900">{decayCheck.dropAmount}</span>
-                  </div>
-                  <div className="rounded-2xl bg-white px-4 py-3 text-sm md:col-span-4">
-                    <p className="font-semibold text-slate-900">Recommendation</p>
-                    <p className="mt-2 text-slate-600">{decayCheck.recommendation}</p>
-                  </div>
+            {rankTracking ? (
+              <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+                <div className="h-[250px] rounded-2xl bg-white p-4 shadow-sm">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={rankTracking.history}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="date" hide />
+                      <YAxis reversed hide />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="position" stroke="#6366f1" strokeWidth={3} dot={{r: 4}} />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
-              ) : (
-                <p className="mt-4 text-sm text-slate-500">Track rankings first to detect decay.</p>
-              )}
-            </div>
+                <div className="space-y-4">
+                  <div className="rounded-2xl bg-white p-5 shadow-sm">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Hạng hiện tại</p>
+                    <div className="mt-2 flex items-baseline gap-2">
+                      <span className={`text-4xl font-black ${
+                        rankTracking.currentPosition <= 3 ? "text-emerald-500" :
+                        rankTracking.currentPosition <= 10 ? "text-orange-500" : "text-rose-500"
+                      }`}>
+                        #{rankTracking.currentPosition}
+                      </span>
+                      {rankTracking.history.length > 1 && (
+                        <span className={`flex items-center text-sm font-bold ${
+                          rankTracking.currentPosition < rankTracking.history[rankTracking.history.length - 2].position
+                            ? "text-emerald-500"
+                            : "text-rose-500"
+                        }`}>
+                          {rankTracking.currentPosition < rankTracking.history[rankTracking.history.length - 2].position ? "+" : ""}
+                          {rankTracking.history[rankTracking.history.length - 2].position - rankTracking.currentPosition}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {decayCheck && (
+                    <div className={`rounded-2xl p-5 ${
+                      decayCheck.status === 'good' ? 'bg-emerald-50 text-emerald-700' :
+                      decayCheck.status === 'warning' ? 'bg-orange-50 text-orange-700' : 'bg-rose-50 text-rose-700'
+                    }`}>
+                      <p className="text-[10px] font-black uppercase tracking-widest mb-1">Đề xuất AI</p>
+                      <p className="text-xs font-bold leading-relaxed">{decayCheck.recommendation}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-stone-300 p-8 text-center text-slate-400">
+                Chưa có dữ liệu thứ hạng. Hãy nhập keyword và nhấn Track Rank.
+              </div>
+            )}
           </div>
 
           <div className="mt-5 grid gap-5 lg:grid-cols-2">
@@ -822,15 +876,35 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
 
             <div className="rounded-[28px] border border-stone-200 bg-stone-50 p-5">
               <p className="text-sm font-semibold text-slate-900">Internal link suggestions</p>
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-3">
                 {internalLinks.length === 0 ? (
                   <p className="text-sm text-slate-500">Save a post to see suggested links. Nothing is auto-inserted.</p>
                 ) : (
                   internalLinks.map((item) => (
-                    <div key={item.postId} className="rounded-2xl bg-white px-4 py-3 text-sm">
-                      <p className="font-semibold text-slate-900">{item.title}</p>
-                      <p className="mt-1 text-slate-500">Anchor: {item.anchorTextSuggestion}</p>
-                      <p className="mt-2 text-slate-600">{item.reason}</p>
+                    <div key={item.targetPostId} className="group rounded-2xl bg-white p-4 text-sm shadow-sm transition hover:shadow-md">
+                      <p className="font-bold text-slate-900 group-hover:text-indigo-600 transition">{item.title}</p>
+                      <p className="mt-2 text-xs font-bold text-slate-400 uppercase tracking-widest">Gợi ý Anchor:</p>
+                      <div className="mt-1 flex items-center justify-between gap-3">
+                        <code className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-bold text-indigo-600">
+                          {item.anchorText}
+                        </code>
+                        <button 
+                          onClick={() => {
+                            const linkHtml = `<a href="/posts/${item.slug}" class="text-indigo-600 font-bold hover:underline">${item.anchorText}</a>`;
+                            setEditor(prev => ({
+                              ...prev,
+                              content: prev.content + "\n\n" + linkHtml
+                            }));
+                            setMessage(`Inserted link to "${item.title}" at the end of content.`);
+                          }}
+                          className="rounded-xl bg-slate-900 p-2 text-white hover:bg-slate-800 transition-colors"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                      <p className="mt-3 text-[11px] font-medium text-slate-500 leading-relaxed italic border-l-2 border-indigo-100 pl-3">
+                        {item.reason}
+                      </p>
                     </div>
                   ))
                 )}

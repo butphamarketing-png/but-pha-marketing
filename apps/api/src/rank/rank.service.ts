@@ -49,6 +49,14 @@ export class RankService {
 
     this.logger.log(`Tracking keyword "${dto.keyword}" for post ${post.id} using ${lookup.source}`);
 
+    const recent = await this.prisma.keywordRanking.findFirst({
+      where: { postId: post.id, keyword: dto.keyword },
+      orderBy: { checkedAt: "desc" },
+    });
+
+    const previous = recent?.position ?? null;
+    const change = previous !== null ? previous - lookup.position : null;
+
     const record = await this.prisma.keywordRanking.create({
       data: {
         userId,
@@ -56,6 +64,8 @@ export class RankService {
         postId: post.id,
         keyword: dto.keyword,
         position: lookup.position,
+        previous,
+        change,
         location: dto.location,
       },
     });
