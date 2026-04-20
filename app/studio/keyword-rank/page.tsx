@@ -11,12 +11,12 @@ import {
   RefreshCw,
   Filter,
   ArrowRight,
-  Target as TargetIcon,
   ChevronRight,
   AlertCircle,
   MoreVertical,
   Calendar,
-  Sparkles
+  Sparkles,
+  Plus
 } from "lucide-react";
 import {
   LineChart,
@@ -326,7 +326,7 @@ export default function KeywordRankPage() {
                 </div>
               ) : (
                 <div className="rounded-[32px] border border-dashed border-slate-200 p-12 text-center">
-                  <TargetIcon size={48} className="mx-auto text-slate-200 mb-4" />
+                  <Target size={48} className="mx-auto text-slate-200 mb-4" />
                   <p className="text-sm font-bold text-slate-400">Chọn một keyword để xem chi tiết lịch sử thứ hạng.</p>
                 </div>
               )}

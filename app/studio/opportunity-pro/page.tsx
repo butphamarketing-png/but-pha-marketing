@@ -19,6 +19,7 @@ import {
   Info
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function OpportunityProPage() {
   const router = useRouter();
