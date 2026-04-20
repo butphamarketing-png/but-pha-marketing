@@ -4,10 +4,8 @@ import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   ArrowUpRight,
-  BarChart3,
   CheckCircle2,
   ChevronDown,
-  Database,
   Eye,
   FilePlus2,
   FileText,
@@ -314,33 +312,6 @@ export function NewsDashboard({
     [blogForm, editingBlogId],
   );
 
-  const integrationCards = [
-    {
-      key: "searchConsole" as const,
-      title: "Google Search Console",
-      helper: "Dùng cho query, impression, click, CTR và vị trí trung bình.",
-      icon: BarChart3,
-    },
-    {
-      key: "ga4" as const,
-      title: "Google Analytics 4",
-      helper: "Dùng cho pageview, session, hành vi người dùng và landing page.",
-      icon: Eye,
-    },
-    {
-      key: "rankTracker" as const,
-      title: "Rank Tracker / SERP API",
-      helper: "Dùng để kéo lịch sử thứ hạng từ khóa theo ngày.",
-      icon: TrendingUp,
-    },
-    {
-      key: "siteCrawler" as const,
-      title: "Website Crawler",
-      helper: "Dùng để soi internal link, orphan page và cấu trúc liên kết nội bộ.",
-      icon: Database,
-    },
-  ];
-
   return (
     <div className="space-y-6">
       <section className="rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,rgba(24,31,53,0.96),rgba(18,14,34,0.96))] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.25)]">
@@ -612,133 +583,6 @@ export function NewsDashboard({
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-[28px] border border-white/10 bg-card p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h4 className="text-lg font-bold text-white">Khung kết nối dữ liệu giai đoạn 2</h4>
-                <p className="mt-1 text-sm text-slate-400">Hiện tại đây là nơi nhập cấu hình. Sau này chỉ cần điền thông tin kết nối thật là dùng được.</p>
-              </div>
-              <CheckCircle2 className="text-violet-300" size={20} />
-            </div>
-
-            <div className="space-y-4">
-              {integrationCards.map((item) => {
-                const config = settings.seoIntegrations[item.key];
-                const Icon = item.icon;
-
-                return (
-                  <div key={item.key} className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                    <div className="mb-4 flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-200">
-                          <Icon size={18} />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-white">{item.title}</p>
-                          <p className="mt-1 text-sm text-slate-400">{item.helper}</p>
-                        </div>
-                      </div>
-                      <span
-                        className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
-                          config.status === "configured"
-                            ? "bg-emerald-500/10 text-emerald-200"
-                            : "bg-slate-500/10 text-slate-300"
-                        }`}
-                      >
-                        {config.status === "configured" ? "Đã cấu hình" : "Chưa kết nối"}
-                      </span>
-                    </div>
-
-                    <div className="grid gap-3">
-                      <label className="flex items-center gap-2 text-sm text-slate-300">
-                        <input
-                          type="checkbox"
-                          checked={config.enabled}
-                          onChange={(event) =>
-                            onUpdateIntegrations({
-                              ...settings.seoIntegrations,
-                              [item.key]: {
-                                ...config,
-                                enabled: event.target.checked,
-                                status: event.target.checked && (config.propertyId || config.apiKey || config.siteUrl) ? "configured" : "disconnected",
-                              },
-                            })
-                          }
-                        />
-                        Bật sẵn khung kết nối
-                      </label>
-
-                      <input
-                        value={config.siteUrl}
-                        onChange={(event) =>
-                          onUpdateIntegrations({
-                            ...settings.seoIntegrations,
-                            [item.key]: {
-                              ...config,
-                              siteUrl: event.target.value,
-                              status: event.target.value || config.propertyId || config.apiKey ? "configured" : "disconnected",
-                            },
-                          })
-                        }
-                        placeholder="Domain / site URL / endpoint"
-                        className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                      />
-
-                      <div className="grid gap-3 md:grid-cols-2">
-                        <input
-                          value={config.propertyId}
-                          onChange={(event) =>
-                            onUpdateIntegrations({
-                              ...settings.seoIntegrations,
-                              [item.key]: {
-                                ...config,
-                                propertyId: event.target.value,
-                                status: event.target.value || config.apiKey || config.siteUrl ? "configured" : "disconnected",
-                              },
-                            })
-                          }
-                          placeholder="Property ID / Measurement ID"
-                          className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                        />
-                        <input
-                          value={config.apiKey}
-                          onChange={(event) =>
-                            onUpdateIntegrations({
-                              ...settings.seoIntegrations,
-                              [item.key]: {
-                                ...config,
-                                apiKey: event.target.value,
-                                status: event.target.value || config.propertyId || config.siteUrl ? "configured" : "disconnected",
-                              },
-                            })
-                          }
-                          placeholder="API key / access token"
-                          className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                        />
-                      </div>
-
-                      <textarea
-                        value={config.notes}
-                        onChange={(event) =>
-                          onUpdateIntegrations({
-                            ...settings.seoIntegrations,
-                            [item.key]: {
-                              ...config,
-                              notes: event.target.value,
-                            },
-                          })
-                        }
-                        rows={2}
-                        placeholder="Ghi chú cấu hình, tài khoản, phạm vi quyền truy cập..."
-                        className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
           <div className="rounded-[28px] border border-white/10 bg-card p-5">
             <div className="mb-4 flex items-center justify-between">
               <div>

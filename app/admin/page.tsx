@@ -1804,10 +1804,17 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">SEO Title</label>
                         <input
-                          value={seoData[key]?.title || SEO_DEFAULTS[key].title}
+                          value={settings.seoPages?.[key]?.title || SEO_DEFAULTS[key].title}
                           onChange={e => {
-                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } };
-                            setSeoData(next);
+                            updateSettings({
+                              seoPages: {
+                                ...(settings.seoPages || {}),
+                                [key]: {
+                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  title: e.target.value
+                                }
+                              }
+                            });
                           }}
                           placeholder="Meta Title"
                           className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
@@ -1816,10 +1823,17 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Keywords</label>
                         <input
-                          value={seoData[key]?.keywords || SEO_DEFAULTS[key].keywords}
+                          value={settings.seoPages?.[key]?.keywords || SEO_DEFAULTS[key].keywords}
                           onChange={e => {
-                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), keywords: e.target.value } };
-                            setSeoData(next);
+                            updateSettings({
+                              seoPages: {
+                                ...(settings.seoPages || {}),
+                                [key]: {
+                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  keywords: e.target.value
+                                }
+                              }
+                            });
                           }}
                           placeholder="marketing, seo, facebook ads..."
                           className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
@@ -1828,10 +1842,17 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Description</label>
                         <textarea
-                          value={seoData[key]?.desc || SEO_DEFAULTS[key].desc}
+                          value={settings.seoPages?.[key]?.desc || SEO_DEFAULTS[key].desc}
                           onChange={e => {
-                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } };
-                            setSeoData(next);
+                            updateSettings({
+                              seoPages: {
+                                ...(settings.seoPages || {}),
+                                [key]: {
+                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  desc: e.target.value
+                                }
+                              }
+                            });
                           }}
                           placeholder="Meta Description"
                           className="w-full h-24 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"

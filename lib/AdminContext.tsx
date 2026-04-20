@@ -69,6 +69,7 @@ export interface SiteSettings {
   googleConsole: string;
   rankMath: string;
   aiKtp: string;
+  seoPages: Record<string, { title: string; desc: string; keywords: string }>;
   media: Record<string, MediaSection>;
   cms: Record<string, PlatformCMS>;
   seoIntegrations: {
@@ -183,6 +184,7 @@ const defaultSettings: SiteSettings = {
   googleConsole: "",
   rankMath: "",
   aiKtp: "",
+  seoPages: {},
   media: createDefaultMedia(),
   cms: {},
   seoIntegrations: {
@@ -291,6 +293,7 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     googleConsole: parsed.googleConsole ?? "",
     rankMath: parsed.rankMath ?? "",
     aiKtp: parsed.aiKtp ?? "",
+    seoPages: parsed.seoPages ?? {},
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
     softSoundsVolume: parsed.softSoundsVolume ?? 0.05,

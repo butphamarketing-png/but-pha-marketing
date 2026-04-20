@@ -1,13 +1,13 @@
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
-import { buildMetadata } from "@/lib/seo";
+import { getDynamicMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
-  title: "Dịch vụ TikTok Marketing, xây kênh TikTok và TikTok Ads",
-  description:
-    "Dịch vụ TikTok Marketing giúp xây kênh TikTok, sản xuất video ngắn và triển khai TikTok Ads để tăng nhận diện thương hiệu, follower và chuyển đổi bán hàng.",
-  path: "/tiktok",
-  keywords: ["dịch vụ tiktok marketing", "tiktok ads", "xây dựng kênh tiktok", "sản xuất video tiktok", "agency tiktok marketing"],
-});
+export async function generateMetadata() {
+  return getDynamicMetadata("/tiktok", {
+    title: "Dịch vụ TikTok Marketing, xây kênh TikTok và TikTok Ads",
+    description: "Dịch vụ TikTok Marketing giúp xây kênh TikTok, sản xuất video ngắn và triển khai TikTok Ads để tăng nhận diện thương hiệu, follower và chuyển đổi bán hàng.",
+    keywords: ["dịch vụ tiktok marketing", "tiktok ads", "xây dựng kênh tiktok", "sản xuất video tiktok", "agency tiktok marketing"],
+  });
+}
 
 const config: PlatformConfig = {
   name: "TikTok",

@@ -56,6 +56,7 @@ export function AnimatedMascot() {
     () => settings.mascotClickMessages?.[platform] || settings.mascotClickMessages?.home || [],
     [platform, settings.mascotClickMessages],
   );
+  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "/mascot-dragon.svg";
 
   const estimateSpeechDurationMs = (text: string) => {
     const words = text.trim().split(/\s+/).filter(Boolean).length;
@@ -353,7 +354,7 @@ export function AnimatedMascot() {
               <div className="absolute inset-0 -z-10 bg-white/20 blur-2xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-500 opacity-50" />
               
               <img
-                src="/mascot-home.png"
+                src={mascotImg}
                 alt="AI Mascot"
                 className="h-[82px] w-[82px] object-contain"
                 style={{ 

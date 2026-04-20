@@ -26,7 +26,12 @@ export function ExternalScripts() {
         </>
       )}
 
-      {/* Custom Head Scripts (Gg Console Meta Tags, etc.) */}
+      {/* Google Search Console */}
+      {settings.googleConsole && (
+        <meta name="google-site-verification" content={settings.googleConsole} />
+      )}
+
+      {/* Custom Head Scripts (GTM, Pixel, FB Chat, etc.) */}
       {settings.headJs && (
         <div
           dangerouslySetInnerHTML={{ __html: settings.headJs }}
