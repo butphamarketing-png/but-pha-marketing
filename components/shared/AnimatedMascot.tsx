@@ -98,32 +98,14 @@ export function AnimatedMascot() {
 
   useEffect(() => {
     if (!enabled || !isShown) return;
-    
-    const timer = setTimeout(() => {
-      const speechDone = speakCute(message);
-      const audioDone = new Promise<void>((resolve) => {
-        if (!audioUrl) {
-          resolve();
-          return;
-        }
-        if (!audioRef.current) audioRef.current = new Audio(audioUrl);
-        else audioRef.current.src = audioUrl;
-        audioRef.current.loop = false;
-        audioRef.current.onended = () => resolve();
-        audioRef.current.onerror = () => resolve();
-        audioRef.current.play().catch(() => resolve());
-      });
 
-      Promise.all([speechDone, audioDone]).then(() => {
-        // Any cleanup if needed
-      });
+    // Tự động nói khi đổi trang
+    const timer = setTimeout(() => {
+      speakCute(message);
     }, 1500);
 
-    return () => {
-      clearTimeout(timer);
-      stopSpeaking();
-    };
-  }, [pathname, enabled, isShown, message, audioUrl]);
+    return () => clearTimeout(timer);
+  }, [pathname, enabled, isShown, message]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -181,18 +163,21 @@ export function AnimatedMascot() {
       }, durationMs);
     };
     const onSectionChange = (event: Event) => {
-      if (holdingRef.current) return;
       const custom = event as CustomEvent<{ sectionId?: string; sectionLabel?: string }>;
       const sectionId = custom.detail?.sectionId || "";
       if (!sectionId) return;
       if (lastSectionRef.current === sectionId) return;
+
       const now = Date.now();
-      if (now - sectionSpeakCooldownRef.current < 2200) return;
+      if (now - sectionSpeakCooldownRef.current < 2500) return;
+
       lastSectionRef.current = sectionId;
       sectionSpeakCooldownRef.current = now;
+
       const text =
         sectionMessages[sectionId] ||
-        `Đây là phần ${custom.detail?.sectionLabel?.toLowerCase() || sectionId}`;
+        `Bạn đang xem phần ${custom.detail?.sectionLabel || sectionId}`;
+      
       speakCute(text);
     };
     const onKeyDown = (event: KeyboardEvent) => {

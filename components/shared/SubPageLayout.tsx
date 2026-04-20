@@ -101,12 +101,14 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       const target = document.getElementById(section.id);
       if (!target) return;
       const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
+        ([entry]) => {
+          if (entry.isIntersecting) {
             setActiveSection(idx);
+
             if (seen.has(section.id)) return;
             seen.add(section.id);
+
+            // Bắn event để linh vật tự nói khi đến phần này
             window.dispatchEvent(
               new CustomEvent("mascot-section-change", {
                 detail: {
@@ -114,11 +116,11 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
                   sectionLabel: section.label,
                   platform: pathname.replace("/", "") || "home",
                 },
-              }),
+              })
             );
-          });
+          }
         },
-        { threshold: 0.45 },
+        { threshold: 0.5 },
       );
       observer.observe(target);
       observers.push(observer);
