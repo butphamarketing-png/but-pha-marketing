@@ -6,19 +6,19 @@ import { getPublishedBlogs } from "@/lib/server-blog";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
 
 export const metadata: Metadata = {
-  title: "Blog Marketing | Bứt Phá Marketing",
+  title: "Tin Tức Marketing | Bứt Phá Marketing",
   description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
   alternates: { canonical: `${BASE_URL}/blog` },
   openGraph: {
-    title: "Blog Marketing | Bứt Phá Marketing",
+    title: "Tin Tức Marketing | Bứt Phá Marketing",
     description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     url: `${BASE_URL}/blog`,
     type: "website",
-    images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: "Blog Bứt Phá Marketing" }],
+    images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: "Tin tức Bứt Phá Marketing" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog Marketing | Bứt Phá Marketing",
+    title: "Tin Tức Marketing | Bứt Phá Marketing",
     description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     images: [`${BASE_URL}/opengraph.jpg`],
   },
@@ -29,7 +29,7 @@ export default async function BlogPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Blog Marketing",
+    name: "Tin tức Marketing",
     url: `${BASE_URL}/blog`,
     description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     inLanguage: "vi-VN",
@@ -44,7 +44,7 @@ export default async function BlogPage() {
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-4 py-10 text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <h1 className="text-4xl font-black">Blog Marketing</h1>
+      <h1 className="text-4xl font-black">Tin tức Marketing</h1>
       <p className="mt-2 text-sm text-gray-400">Bài viết chuẩn SEO, cập nhật theo xu hướng tăng trưởng mới nhất.</p>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

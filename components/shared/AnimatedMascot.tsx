@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAdmin } from "@/lib/AdminContext";
+import { Power, Bot, MessageSquare } from "lucide-react";
 
 function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
@@ -93,6 +94,35 @@ export function AnimatedMascot() {
       audioRef.current.currentTime = 0;
     }
   };
+
+  useEffect(() => {
+    if (!enabled || !isShown) return;
+    
+    const timer = setTimeout(() => {
+      const speechDone = speakCute(message);
+      const audioDone = new Promise<void>((resolve) => {
+        if (!audioUrl) {
+          resolve();
+          return;
+        }
+        if (!audioRef.current) audioRef.current = new Audio(audioUrl);
+        else audioRef.current.src = audioUrl;
+        audioRef.current.loop = false;
+        audioRef.current.onended = () => resolve();
+        audioRef.current.onerror = () => resolve();
+        audioRef.current.play().catch(() => resolve());
+      });
+
+      Promise.all([speechDone, audioDone]).then(() => {
+        // Any cleanup if needed
+      });
+    }, 1500);
+
+    return () => {
+      clearTimeout(timer);
+      stopSpeaking();
+    };
+  }, [pathname, enabled, isShown, message, audioUrl]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -219,19 +249,29 @@ export function AnimatedMascot() {
             setIsShown(true);
           }
         }}
-        className="fixed left-3 top-1/2 z-[94] -translate-y-1/2 rounded-full border border-white/20 bg-black/50 px-3 py-2 text-xs font-semibold text-white backdrop-blur"
-        title="Bật/tắt rồng (Shift + D)"
+        className="fixed left-3 top-1/2 z-[94] -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-3 text-white backdrop-blur transition-all hover:scale-110 active:scale-95"
+        title={isShown ? "Tắt linh vật" : "Bật linh vật"}
       >
-        {isShown ? "Ẩn rồng" : "Hiện rồng"}
+        <Power size={20} className={isShown ? "text-cyan-400" : "text-white/50"} />
       </button>
 
       {isShown && (
         <div className="fixed z-[93]" style={{ left: pos.x, top: pos.y }} data-mascot="dragon">
-          {open && (
-            <div className="absolute -top-14 left-1/2 mb-2 w-max max-w-[230px] -translate-x-1/2 rounded-xl border border-white/15 bg-black/75 px-3 py-2 text-xs text-white backdrop-blur-sm">
-              {message}
-            </div>
-          )}
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                className="absolute -top-16 left-1/2 mb-2 w-max max-w-[260px] -translate-x-1/2 rounded-2xl border border-white/15 bg-black/80 px-4 py-3 text-sm font-medium text-white backdrop-blur-md shadow-2xl"
+              >
+                <div className="relative">
+                  <MessageSquare size={12} className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-black/80" />
+                  {message}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {bursting && (
             <div className="pointer-events-none absolute left-1/2 top-1/2">
@@ -295,20 +335,19 @@ export function AnimatedMascot() {
                 });
               }
             }}
-            animate={{ y: [0, -4, 0], rotate: [0, 2, -2, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="flex h-[78px] w-[78px] items-center justify-center rounded-full border shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur-sm"
+            animate={{ y: [0, -6, 0], rotate: [0, 3, -3, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex h-[72px] w-[72px] items-center justify-center rounded-full border shadow-[0_12px_28px_rgba(0,0,0,0.45)] backdrop-blur-md transition-transform hover:scale-105"
             style={{
-              borderColor: `${platformColor}99`,
-              background: `radial-gradient(circle at 30% 30%, ${platformColor}66, rgba(255,255,255,0.16), rgba(0,0,0,0.28))`,
+              borderColor: `${platformColor}cc`,
+              background: `radial-gradient(circle at 30% 30%, ${platformColor}88, rgba(255,255,255,0.2), rgba(0,0,0,0.4))`,
             }}
             aria-label="AI Mascot"
           >
-            <img
-              src="/mascot-dragon.svg"
-              alt="Linh vật rồng"
-              className="h-[70px] w-[70px] object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.45)]"
-              style={{ filter: dragonStyle.filter, transform: `scale(${dragonStyle.scale})` }}
+            <Bot 
+              size={42} 
+              className="text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
+              style={{ filter: dragonStyle.filter }}
             />
           </motion.button>
         </div>

@@ -92,15 +92,6 @@ export function DynamicGreeting({ color }: { color: string }) {
               {tickerText}
             </motion.div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setDismissed(true)}
-            aria-label="Đóng thông báo"
-            className="absolute right-3 top-1/2 z-[2] -translate-y-1/2 rounded-full border border-white/15 bg-white/10 p-1.5 opacity-80 transition hover:bg-white/15 hover:opacity-100"
-          >
-            <X size={14} />
-          </button>
         </motion.div>
       ) : null}
     </AnimatePresence>

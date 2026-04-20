@@ -191,7 +191,7 @@ export default function HomePageClient() {
         <section className="mx-auto mt-20 max-w-6xl">
           <div className="mb-8 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-black text-white md:text-4xl">Blog</h2>
+              <h2 className="text-3xl font-black text-white md:text-4xl">Tin tức</h2>
               <p className="mt-1 text-sm text-gray-400">Kiến thức marketing cập nhật và tối ưu SEO thực chiến.</p>
             </div>
 
@@ -221,7 +221,7 @@ export default function HomePageClient() {
             <div className="rounded-2xl border border-dashed border-white/20 bg-card/40 p-8 text-center">
               <p className="text-sm text-gray-300">Chưa có bài viết nào. Vào Admin `Danh mục tin tức` để tạo bài đầu tiên.</p>
               <Link href="/blog" className="mt-3 inline-block text-sm font-semibold text-primary underline">
-                Xem trang Blog
+                Xem trang tin tức
               </Link>
             </div>
           ) : (
