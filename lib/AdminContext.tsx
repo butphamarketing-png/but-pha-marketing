@@ -59,11 +59,16 @@ export interface SiteSettings {
   softSoundsEnabled: boolean;
   softSoundsVolume: number;
   mascotEnabled: boolean;
+  mascotImage: string;
+  mascotImages: Record<string, string>;
   mascotMessages: Record<string, string>;
   mascotAudioUrls: Record<string, string>;
   mascotSectionMessages: Record<string, Record<string, string>>;
   mascotErrorMessages: Record<string, { login: string; phone: string; link: string }>;
   mascotClickMessages: Record<string, string[]>;
+  googleConsole: string;
+  rankMath: string;
+  aiKtp: string;
   media: Record<string, MediaSection>;
   cms: Record<string, PlatformCMS>;
   seoIntegrations: {
@@ -168,11 +173,16 @@ const defaultSettings: SiteSettings = {
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
   mascotEnabled: true,
+  mascotImage: "/mascot-dragon.svg",
+  mascotImages: {},
   mascotMessages: {},
   mascotAudioUrls: {},
   mascotSectionMessages: {},
   mascotErrorMessages: {},
   mascotClickMessages: {},
+  googleConsole: "",
+  rankMath: "",
+  aiKtp: "",
   media: createDefaultMedia(),
   cms: {},
   seoIntegrations: {
@@ -262,6 +272,8 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     colors: { ...COLOR_DEFAULTS, ...(parsed.colors ?? {}) },
     visibility: { ...VISIBILITY_DEFAULTS, ...(parsed.visibility ?? {}) },
     platformNames: { ...PLATFORM_NAME_DEFAULTS, ...(parsed.platformNames ?? {}) },
+    mascotImage: parsed.mascotImage ?? defaultSettings.mascotImage,
+    mascotImages: { ...defaultSettings.mascotImages, ...(parsed.mascotImages ?? {}) },
     mascotMessages: { ...defaultSettings.mascotMessages, ...(parsed.mascotMessages ?? {}) },
     mascotAudioUrls: { ...defaultSettings.mascotAudioUrls, ...(parsed.mascotAudioUrls ?? {}) },
     mascotSectionMessages: {
@@ -276,6 +288,9 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
       ...defaultSettings.mascotClickMessages,
       ...(parsed.mascotClickMessages ?? {}),
     },
+    googleConsole: parsed.googleConsole ?? "",
+    rankMath: parsed.rankMath ?? "",
+    aiKtp: parsed.aiKtp ?? "",
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
     softSoundsVolume: parsed.softSoundsVolume ?? 0.05,

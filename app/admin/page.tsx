@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import {
   Bell, Globe, Image, Search, Settings, LogOut, ChevronRight,
   Trash2, Eye, EyeOff, Check, X, Plus, Edit3, ExternalLink,
   BarChart2, TrendingUp, Users, DollarSign, Palette, Code, Copy,
-  Calendar, Clock, CheckCircle2, Lock, type LucideIcon
+  Calendar, Clock, CheckCircle2, Lock, Sparkles, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
@@ -24,13 +24,14 @@ const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
   { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
-  { id: "news", label: "Danh mục tin tức", icon: Newspaper },
-  { id: "orders", label: "Quản lý Đơn hàng", icon: ShoppingCart },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
+  { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
+  { id: "tracking", label: "Tối ưu Website", icon: Code },
   { id: "settings", label: "Thiết lập hệ thống", icon: Settings },
+  { id: "news", label: "Quản lý SEO Content", icon: Newspaper, color: "#f97316" },
 ];
 
 const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
@@ -115,8 +116,17 @@ const SEO_DEFAULTS: Record<string, { title: string; desc: string; keywords: stri
 export default function AdminPage() {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const auth = localStorage.getItem("admin_auth");
+      if (auth === "1") setAuthenticated(true);
+      setIsAuthChecking(false);
+    }
+  }, []);
   const [activeTab, setActiveTab] = useState("dashboard");
   const {
     settings,
@@ -1119,6 +1129,10 @@ export default function AdminPage() {
     if (editingBlogId === item.id) resetBlogForm();
   };
 
+  if (isAuthChecking) {
+    return <div className="flex min-h-screen items-center justify-center bg-background"></div>;
+  }
+
   if (!authenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -1143,7 +1157,14 @@ export default function AdminPage() {
         <div className="border-b border-white/10 p-5 font-bold text-white">Admin Panel</div>
         <nav className="flex-1 space-y-1 p-3">
           {NAV.map(n => (
-            <button key={n.id} onClick={() => n.id === "news" ? router.push("/admin/news") : setActiveTab(n.id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}>
+            <button
+              key={n.id}
+              onClick={() => n.id === "news" ? router.push("/admin/news") : setActiveTab(n.id)}
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+                activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
+              style={n.color && activeTab !== n.id ? { color: n.color } : {}}
+            >
               <n.icon size={18} /> {n.label}
             </button>
           ))}
@@ -1767,14 +1788,59 @@ export default function AdminPage() {
           )}
 
           {activeTab === "seo" && (
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              {Object.keys(SEO_DEFAULTS).map(key => (
-                <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
-                  <input value={seoData[key]?.title || SEO_DEFAULTS[key].title} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } }; setSeoData(next); }} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                  <textarea value={seoData[key]?.desc || SEO_DEFAULTS[key].desc} onChange={e => { const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } }; setSeoData(next); }} placeholder="Description" className="w-full h-20 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                </div>
-              ))}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Tối ưu SEO Page</h3>
+                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {Object.keys(SEO_DEFAULTS).map(key => (
+                  <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
+                      <span className="text-[10px] text-gray-500 font-mono">/{key === "home" ? "" : key}</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase text-gray-500 font-bold">SEO Title</label>
+                        <input
+                          value={seoData[key]?.title || SEO_DEFAULTS[key].title}
+                          onChange={e => {
+                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), title: e.target.value } };
+                            setSeoData(next);
+                          }}
+                          placeholder="Meta Title"
+                          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Keywords</label>
+                        <input
+                          value={seoData[key]?.keywords || SEO_DEFAULTS[key].keywords}
+                          onChange={e => {
+                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), keywords: e.target.value } };
+                            setSeoData(next);
+                          }}
+                          placeholder="marketing, seo, facebook ads..."
+                          className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Description</label>
+                        <textarea
+                          value={seoData[key]?.desc || SEO_DEFAULTS[key].desc}
+                          onChange={e => {
+                            const next = { ...seoData, [key]: { ...(seoData[key] || {}), desc: e.target.value } };
+                            setSeoData(next);
+                          }}
+                          placeholder="Meta Description"
+                          className="w-full h-24 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -2064,128 +2130,237 @@ export default function AdminPage() {
                     className="w-full"
                   />
                 </div>
-                <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
-                  <h4 className="text-sm font-semibold text-white">Linh vật AI</h4>
-                  <label className="flex items-center justify-between text-sm text-gray-300">
-                    Bật linh vật
-                    <input type="checkbox" checked={settings.mascotEnabled !== false} onChange={e => updateSettings({ mascotEnabled: e.target.checked })} />
-                  </label>
-                  <select value={selectedMascotPlatform} onChange={e => setSelectedMascotPlatform(e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white">
-                    <option value="home">Trang chủ</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="tiktok">TikTok</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="zalo">Zalo</option>
-                    <option value="googlemaps">Google Maps</option>
-                    <option value="website">Website</option>
-                  </select>
-                  <textarea
-                    value={settings.mascotMessages?.[selectedMascotPlatform] || ""}
-                    onChange={e =>
-                      updateSettings({
-                        mascotMessages: {
-                          ...(settings.mascotMessages || {}),
-                          [selectedMascotPlatform]: e.target.value,
-                        },
-                      })
-                    }
-                    placeholder="Nội dung bong bóng chat linh vật"
-                    className="h-24 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                  />
-                  <input
-                    value={settings.mascotAudioUrls?.[selectedMascotPlatform] || ""}
-                    onChange={e =>
-                      updateSettings({
-                        mascotAudioUrls: {
-                          ...(settings.mascotAudioUrls || {}),
-                          [selectedMascotPlatform]: e.target.value,
-                        },
-                      })
-                    }
-                    placeholder="Link âm thanh (.mp3/.wav) cho linh vật trang này"
-                    className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                  />
-                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
-                    <p className="text-xs font-bold text-white">1) Câu lỗi nhập sai (chỉnh được)</p>
-                    <input
-                      value={mascotErrorPack.login}
-                      onChange={e => updateMascotErrorPack("login", e.target.value)}
-                      placeholder="Sai tài khoản / mật khẩu"
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
-                    />
-                    <input
-                      value={mascotErrorPack.phone}
-                      onChange={e => updateMascotErrorPack("phone", e.target.value)}
-                      placeholder="Sai số điện thoại"
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
-                    />
-                    <input
-                      value={mascotErrorPack.link}
-                      onChange={e => updateMascotErrorPack("link", e.target.value)}
-                      placeholder="Sai link chuẩn đoán"
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
-                    />
+                <button onClick={() => { alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "mascot" && (
+            <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Linh vật công ty</h3>
+                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="space-y-4">
+                  <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
+                    <h4 className="text-sm font-semibold text-white">Cấu hình chung</h4>
+                    <label className="flex items-center justify-between text-sm text-gray-300">
+                      Bật linh vật AI
+                      <input type="checkbox" checked={settings.mascotEnabled !== false} onChange={e => updateSettings({ mascotEnabled: e.target.checked })} />
+                    </label>
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-400">Hình ảnh linh vật mặc định (URL)</p>
+                      <div className="flex gap-2">
+                        <input value={settings.mascotImage || ""} onChange={e => updateSettings({ mascotImage: e.target.value })} placeholder="/mascot-dragon.svg" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                        <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">
+                          Tải ảnh
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ mascotImage: imageUrl });
+                              e.currentTarget.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+                      {settings.mascotImage && <img src={settings.mascotImage} alt="Mascot Preview" className="h-20 w-20 rounded-lg border border-white/10 object-contain" />}
+                    </div>
                   </div>
-                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
-                    <p className="text-xs font-bold text-white">2) Câu khi lướt section (chỉnh được)</p>
+
+                  <div className="space-y-4 rounded-xl border border-white/10 bg-black/20 p-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-white">Cấu hình theo trang</h4>
+                      <select value={selectedMascotPlatform} onChange={e => setSelectedMascotPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white">
+                        <option value="home">Trang chủ</option>
+                        {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-400">Hình ảnh linh vật cho trang này (nếu khác mặc định)</p>
+                      <div className="flex gap-2">
+                        <input
+                          value={settings.mascotImages?.[selectedMascotPlatform] || ""}
+                          onChange={e => updateSettings({ mascotImages: { ...(settings.mascotImages || {}), [selectedMascotPlatform]: e.target.value } })}
+                          placeholder="URL ảnh linh vật..."
+                          className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                        />
+                        <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">
+                          Tải ảnh
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ mascotImages: { ...(settings.mascotImages || {}), [selectedMascotPlatform]: imageUrl } });
+                              e.currentTarget.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+                      {(settings.mascotImages?.[selectedMascotPlatform] || settings.mascotImage) && (
+                        <img src={settings.mascotImages?.[selectedMascotPlatform] || settings.mascotImage} alt="Platform Mascot Preview" className="h-16 w-16 rounded-lg border border-white/10 object-contain" />
+                      )}
+                    </div>
+
+                    <textarea
+                      value={settings.mascotMessages?.[selectedMascotPlatform] || ""}
+                      onChange={e =>
+                        updateSettings({
+                          mascotMessages: {
+                            ...(settings.mascotMessages || {}),
+                            [selectedMascotPlatform]: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder="Nội dung bong bóng chat linh vật"
+                      className="h-24 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                    />
+
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-400">Âm thanh linh vật (.mp3/.wav)</p>
+                      <input
+                        value={settings.mascotAudioUrls?.[selectedMascotPlatform] || ""}
+                        onChange={e =>
+                          updateSettings({
+                            mascotAudioUrls: {
+                              ...(settings.mascotAudioUrls || {}),
+                              [selectedMascotPlatform]: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Link âm thanh..."
+                        className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                      />
+                      <label className="block cursor-pointer rounded-lg border border-dashed border-white/20 px-3 py-2 text-xs text-gray-400 text-center">
+                        Tải file âm thanh
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const result = typeof reader.result === "string" ? reader.result : "";
+                              updateSettings({
+                                mascotAudioUrls: {
+                                  ...(settings.mascotAudioUrls || {}),
+                                  [selectedMascotPlatform]: result,
+                                },
+                              });
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
+                    <h4 className="text-sm font-semibold text-white">Tin nhắn lỗi nhập liệu</h4>
+                    <div className="grid gap-3">
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase text-gray-500">Sai tài khoản / mật khẩu</p>
+                        <input value={mascotErrorPack.login} onChange={e => updateMascotErrorPack("login", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase text-gray-500">Sai số điện thoại</p>
+                        <input value={mascotErrorPack.phone} onChange={e => updateMascotErrorPack("phone", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[10px] uppercase text-gray-500">Sai link chuẩn đoán</p>
+                        <input value={mascotErrorPack.link} onChange={e => updateMascotErrorPack("link", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
+                    <h4 className="text-sm font-semibold text-white">Tin nhắn khi lướt (Scroll)</h4>
                     <textarea
                       value={sectionMessageText}
                       onChange={e => updateMascotSectionMessages(e.target.value)}
                       placeholder={"Mỗi dòng: sectionId|nội dung\nVí dụ:\nslideshow|Đây là menu tổng quan\npricing|Đây là dịch vụ và bảng giá"}
-                      className="h-28 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
+                      className="h-28 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white font-mono"
                     />
                   </div>
-                  <div className="space-y-2 rounded-lg border border-white/10 bg-black/25 p-3">
+
+                  <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-white">3) Câu theo số lần click (chỉnh + thêm)</p>
-                      <button type="button" onClick={addClickMessage} className="rounded-lg border border-white/20 px-2 py-1 text-[11px] text-white">Thêm lần click</button>
+                      <h4 className="text-sm font-semibold text-white">Tin nhắn theo lần click</h4>
+                      <button type="button" onClick={addClickMessage} className="rounded-lg border border-white/20 px-2 py-1 text-[10px] text-white">Thêm</button>
                     </div>
-                    {mascotClickMessages.map((line, idx) => (
-                      <div key={`click-msg-${idx}`} className="flex items-center gap-2">
-                        <span className="w-16 text-[11px] text-gray-300">Lần {idx + 1}</span>
-                        <input
-                          value={line}
-                          onChange={e => updateClickMessage(idx, e.target.value)}
-                          placeholder={`Câu nói lần ${idx + 1}`}
-                          className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white"
-                        />
-                        <button type="button" onClick={() => removeClickMessage(idx)} className="rounded-lg border border-red-400/30 px-2 py-1 text-[11px] text-red-200">Xóa</button>
-                      </div>
-                    ))}
+                    <div className="max-h-48 overflow-auto space-y-2 pr-1">
+                      {mascotClickMessages.map((line, idx) => (
+                        <div key={`click-msg-${idx}`} className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-500 w-8">#{idx + 1}</span>
+                          <input value={line} onChange={e => updateClickMessage(idx, e.target.value)} className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
+                          <button type="button" onClick={() => removeClickMessage(idx)} className="text-red-400 hover:text-red-300"><Trash2 size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <label className="block rounded-lg border border-dashed border-white/20 px-3 py-2 text-xs text-gray-300">
-                    Tải file âm thanh từ máy
-                    <input
-                      type="file"
-                      accept="audio/*"
-                      className="mt-2 block w-full text-xs text-gray-300"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          const result = typeof reader.result === "string" ? reader.result : "";
-                          updateSettings({
-                            mascotAudioUrls: {
-                              ...(settings.mascotAudioUrls || {}),
-                              [selectedMascotPlatform]: result,
-                            },
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }}
-                    />
-                  </label>
                 </div>
-                <button onClick={() => { alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                <h3 className="font-bold text-white">Tracking & Scripts</h3>
-                <input value={settings.googleAnalytics || ""} onChange={e => updateSettings({ googleAnalytics: e.target.value })} placeholder="GA4 ID" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                <textarea value={settings.headJs || ""} onChange={e => updateSettings({ headJs: e.target.value })} placeholder="Head Scripts" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-white" />
-                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                  <div className="mb-2 flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-white">Xem mã nguồn (chỉ đọc)</h4>
+            </div>
+          )}
+
+          {activeTab === "tracking" && (
+            <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Tối ưu Website</h3>
+                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="space-y-4 rounded-xl border border-white/10 bg-black/20 p-5">
+                  <h4 className="font-bold text-white flex items-center gap-2"><Globe size={16} className="text-blue-400" /> Mã kết nối công cụ</h4>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <label className="text-xs text-gray-400">Google Analytics (GA4 ID)</label>
+                      <input value={settings.googleAnalytics || ""} onChange={e => updateSettings({ googleAnalytics: e.target.value })} placeholder="G-XXXXXXXXXX" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs text-gray-400">Google Search Console (HTML Tag / ID)</label>
+                      <input value={settings.googleConsole || ""} onChange={e => updateSettings({ googleConsole: e.target.value })} placeholder="Nhập mã xác minh..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs text-gray-400">Rank Math SEO ID / Key</label>
+                      <input value={settings.rankMath || ""} onChange={e => updateSettings({ rankMath: e.target.value })} placeholder="Mã kết nối Rank Math..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 rounded-xl border border-white/10 bg-black/20 p-5">
+                  <h4 className="font-bold text-white flex items-center gap-2"><Plus size={16} className="text-green-400" /> Plugins & Script bổ sung</h4>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <label className="text-xs text-gray-400">AIKTP Connection Key</label>
+                      <input value={settings.aiKtp || ""} onChange={e => updateSettings({ aiKtp: e.target.value })} placeholder="Mã API AIKTP..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs text-gray-400">Custom Head Scripts (GTM, Pixel, FB Chat...)</label>
+                      <textarea value={settings.headJs || ""} onChange={e => updateSettings({ headJs: e.target.value })} placeholder="<script>...</script>" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-2 space-y-4 rounded-xl border border-white/10 bg-black/20 p-5">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-bold text-white flex items-center gap-2"><Code size={16} className="text-purple-400" /> Xem mã nguồn hệ thống (Chỉ đọc)</h4>
                     <button
                       onClick={async () => {
                         const next = !showSourceViewer;
@@ -2194,22 +2369,28 @@ export default function AdminPage() {
                       }}
                       className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white"
                     >
-                      {showSourceViewer ? "Ẩn" : "Mở"}
+                      {showSourceViewer ? "Đóng trình xem" : "Mở trình xem"}
                     </button>
                   </div>
                   {showSourceViewer && (
-                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                      <div className="max-h-72 overflow-auto rounded-lg border border-white/10 bg-black/30 p-2 text-xs text-gray-300">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-[250px_1fr]">
+                      <div className="max-h-[400px] overflow-auto rounded-lg border border-white/10 bg-black/30 p-2 text-xs text-gray-400">
                         {sourceFiles.map(file => (
-                          <button key={file} onClick={() => openSourceFile(file)} className="block w-full rounded px-2 py-1 text-left hover:bg-white/10">
+                          <button key={file} onClick={() => openSourceFile(file)} className={`block w-full rounded px-2 py-1.5 text-left transition ${selectedSourceFile === file ? "bg-primary/20 text-white" : "hover:bg-white/5"}`}>
                             {file}
                           </button>
                         ))}
                       </div>
                       <div className="space-y-2">
-                        <p className="truncate text-xs text-gray-400">{selectedSourceFile || "Chọn file để xem"}</p>
-                        <textarea readOnly value={selectedSourceContent} className="h-72 w-full rounded-lg border border-white/10 bg-black/40 p-2 font-mono text-xs text-gray-200" />
-                        <button onClick={() => navigator.clipboard.writeText(selectedSourceContent)} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Copy nội dung</button>
+                        <div className="flex items-center justify-between">
+                          <p className="truncate text-[10px] text-gray-500 font-mono">{selectedSourceFile || "Chưa chọn file"}</p>
+                          {selectedSourceContent && (
+                            <button onClick={() => { navigator.clipboard.writeText(selectedSourceContent); alert("Đã copy!"); }} className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-white">
+                              <Copy size={12} /> Copy
+                            </button>
+                          )}
+                        </div>
+                        <textarea readOnly value={selectedSourceContent} className="h-[350px] w-full rounded-lg border border-white/10 bg-black/40 p-3 font-mono text-xs text-gray-300 leading-relaxed" />
                       </div>
                     </div>
                   )}
