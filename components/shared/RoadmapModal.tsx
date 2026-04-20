@@ -35,6 +35,12 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       }
       const res = result.data;
       if (res) {
+        // Kiểm tra nền tảng
+        if (res.platform !== authForm.platform) {
+          setError(`Tài khoản này thuộc nền tảng ${res.platform.toUpperCase()}, vui lòng chọn đúng nền tảng.`);
+          return;
+        }
+
         login({
           name: res.clientName,
           email: res.username,
@@ -78,19 +84,23 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="relative">
-              <BarChart2 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-              <select
-                required
-                value={authForm.platform}
-                onChange={e => setAuthForm({...authForm, platform: e.target.value})}
-                className="w-full appearance-none rounded-xl border border-white/10 bg-white/5 py-4 pl-12 pr-4 text-white outline-none focus:border-primary"
-              >
-                {PLATFORMS_DYNAMIC.map(p => (
-                  <option key={p.key} value={p.key} className="bg-card">{p.label}</option>
-                ))}
-              </select>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {PLATFORMS_DYNAMIC.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => setAuthForm({ ...authForm, platform: p.key })}
+                  className={`flex-1 min-w-[100px] rounded-xl border py-2 text-[10px] font-bold uppercase tracking-wider transition-all ${
+                    authForm.platform === p.key
+                      ? "border-primary bg-primary/20 text-white"
+                      : "border-white/10 bg-white/5 text-gray-500 hover:border-white/20"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
             </div>
+
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input 

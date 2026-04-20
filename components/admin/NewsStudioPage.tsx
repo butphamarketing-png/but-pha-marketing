@@ -3,22 +3,35 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AlertTriangle,
   ArrowUpRight,
   CalendarDays,
+  CheckCircle2,
   Download,
+  Eye,
   FileText,
   Flame,
+  History,
+  Info,
+  Layers,
   LayoutDashboard,
   Link2,
+  ListFilter,
+  LogOut,
+  MessageSquareCode,
   Newspaper,
   PencilLine,
+  Plus,
+  Puzzle,
   RefreshCw,
   Search,
   Settings,
+  ShieldCheck,
   Sparkles,
   Target,
   TrendingDown,
   TrendingUp,
+  User,
 } from "lucide-react";
 import {
   Area,
@@ -90,6 +103,183 @@ function formatPercent(value: number) {
   return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
 
+interface Plugin {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  author: string;
+  enabled: boolean;
+  icon: any;
+  category: "SEO" | "Schema" | "Speed" | "AI" | "Analytics";
+}
+
+function PluginCard({ plugin, onToggle }: { plugin: Plugin; onToggle: (id: string) => void }) {
+  return (
+    <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+      <div className="flex items-start justify-between">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+          <plugin.icon size={28} />
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${
+            plugin.enabled ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+          }`}>
+            {plugin.enabled ? "Đang bật" : "Đã tắt"}
+          </span>
+          <button
+            onClick={() => onToggle(plugin.id)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+              plugin.enabled ? "bg-indigo-600" : "bg-slate-200"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                plugin.enabled ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
+      </div>
+      
+      <div className="mt-5">
+        <h3 className="text-lg font-bold text-slate-950">{plugin.name}</h3>
+        <p className="mt-1 text-xs text-slate-500">v{plugin.version} • bởi {plugin.author}</p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 line-clamp-2">{plugin.description}</p>
+      </div>
+
+      <div className="mt-6 flex items-center gap-2">
+        <button className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-50">
+          Cài đặt
+        </button>
+        <button className="rounded-xl border border-slate-200 p-2 text-slate-400 transition hover:bg-slate-50 hover:text-red-500">
+          <LogOut size={14} className="rotate-90" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PluginManager() {
+  const [plugins, setPlugins] = useState<Plugin[]>([
+    {
+      id: "rank-math",
+      name: "Rank Math SEO Pro",
+      description: "Tối ưu SEO realtime, checklist từ khóa, schema markup và xem trước kết quả Google.",
+      version: "1.2.4",
+      author: "ButPha AI",
+      enabled: true,
+      icon: Target,
+      category: "SEO",
+    },
+    {
+      id: "ai-writer",
+      name: "AI Content Writer",
+      description: "Tự động tạo nội dung nháp, gợi ý ý tưởng bài viết và tối ưu giọng văn theo thương hiệu.",
+      version: "2.0.1",
+      author: "ButPha AI",
+      enabled: true,
+      icon: Sparkles,
+      category: "AI",
+    },
+    {
+      id: "schema-pro",
+      name: "Schema Markup Pro",
+      description: "Tự động thêm cấu trúc dữ liệu FAQ, Article, Product giúp hiển thị rich snippets.",
+      version: "1.0.5",
+      author: "SEO Master",
+      enabled: false,
+      icon: Layers,
+      category: "Schema",
+    },
+    {
+      id: "speed-booster",
+      name: "Speed Optimization",
+      description: "Nén ảnh tự động, lười tải (lazy load) và tối ưu hóa CSS/JS để tăng tốc độ trang.",
+      version: "1.4.0",
+      author: "DevTeam",
+      enabled: true,
+      icon: Flame,
+      category: "Speed",
+    },
+    {
+      id: "internal-linker",
+      name: "Internal Link Suggester",
+      description: "Gợi ý các liên kết nội bộ thông minh dựa trên ngữ cảnh và chủ đề của bài viết.",
+      version: "1.1.2",
+      author: "ButPha AI",
+      enabled: false,
+      icon: Link2,
+      category: "SEO",
+    },
+    {
+      id: "analytics-plus",
+      name: "Advanced Analytics",
+      description: "Theo dõi hành vi người dùng sâu hơn, tỷ lệ thoát và bản đồ nhiệt (heat map).",
+      version: "3.2.0",
+      author: "DataInsight",
+      enabled: false,
+      icon: TrendingUp,
+      category: "Analytics",
+    },
+  ]);
+
+  const togglePlugin = (id: string) => {
+    setPlugins(prev => prev.map(p => p.id === id ? { ...p, enabled: !p.enabled } : p));
+  };
+
+  return (
+    <div className="space-y-6">
+      <header className="rounded-[30px] border border-slate-200 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-indigo-600 font-bold text-sm uppercase tracking-widest mb-2">
+              <Puzzle size={16} /> Plugin System
+            </div>
+            <h1 className="text-4xl font-black tracking-tight text-slate-950">Quản lý Plugin</h1>
+            <p className="mt-2 text-slate-500">Mở rộng tính năng hệ thống thông qua kho ứng dụng chuyên sâu.</p>
+          </div>
+          <div className="flex gap-3">
+            <button className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-700 transition hover:bg-slate-50 shadow-sm">
+              <Download size={18} /> Tải plugin (.zip)
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-4 text-sm font-bold text-white transition hover:bg-indigo-500 shadow-lg shadow-indigo-200">
+              <Plus size={18} /> Cài từ Marketplace
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-wrap gap-2">
+          {["Tất cả", "SEO", "AI", "Schema", "Speed", "Analytics"].map((cat, idx) => (
+            <button key={cat} className={`rounded-xl px-5 py-2.5 text-sm font-bold transition ${
+              idx === 0 ? "bg-indigo-600 text-white shadow-md shadow-indigo-100" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+            }`}>
+              {cat}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {plugins.map(plugin => (
+          <PluginCard key={plugin.id} plugin={plugin} onToggle={togglePlugin} />
+        ))}
+      </div>
+
+      <section className="rounded-[30px] border border-dashed border-slate-300 p-12 text-center bg-slate-50/50">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm mb-6">
+          <Sparkles className="text-indigo-500" size={32} />
+        </div>
+        <h2 className="text-2xl font-black text-slate-900">Sắp có thêm plugin mới</h2>
+        <p className="mt-2 text-slate-500 max-w-md mx-auto">Chúng tôi đang phát triển thêm các công cụ tối ưu hóa nâng cao giúp website của bạn bứt phá mạnh mẽ hơn.</p>
+        <button className="mt-8 text-indigo-600 font-bold hover:underline flex items-center gap-2 mx-auto">
+          Gửi yêu cầu tính năng <ArrowUpRight size={16} />
+        </button>
+      </section>
+    </div>
+  );
+}
+
 export function NewsStudioPage() {
   const { settings, updateSettings } = useAdmin();
   const [period, setPeriod] = useState("7");
@@ -113,6 +303,7 @@ export function NewsStudioPage() {
   });
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<"all" | "published" | "draft" | "needs-update">("all");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "plugins">("dashboard");
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -437,13 +628,17 @@ export function NewsStudioPage() {
   }, [analytics.enriched, tableFilter, tableSearch]);
 
   const sidebarItems = [
-    { label: "Tổng quan", icon: LayoutDashboard, href: "#tong-quan" },
-    { label: "Bài viết", icon: Newspaper, href: "#tat-ca-bai-viet" },
-    { label: "Keyword & Rank", icon: Target, href: "#xu-huong-seo" },
-    { label: "Cluster & Topic", icon: Sparkles, href: "#co-hoi-noi-dung" },
-    { label: "Internal Links", icon: Link2, href: "#internal-link-health" },
-    { label: "Biên tập", icon: PencilLine, href: "#bien-tap" },
-    { label: "Cài đặt", icon: Settings, href: "/admin" },
+    { label: "Tổng quan", icon: LayoutDashboard, href: "#tong-quan", id: "dashboard" },
+    { label: "Bài viết", icon: Newspaper, href: "#tat-ca-bai-viet", id: "dashboard" },
+    { label: "Keyword & Rank", icon: Target, href: "#xu-huong-seo", id: "dashboard" },
+    { label: "AI Refresh (Đề xuất)", icon: RefreshCw, href: "#bien-tap", id: "dashboard" },
+    { label: "Cluster & Topic", icon: Sparkles, href: "#co-hoi-noi-dung", id: "dashboard" },
+    { label: "Internal Links", icon: Link2, href: "#internal-link-health", id: "dashboard" },
+    { label: "Phân tích đối thủ", icon: ShieldCheck, href: "#tong-quan", id: "dashboard" },
+    { label: "Cơ hội nội dung", icon: ArrowUpRight, href: "#co-hoi-noi-dung", id: "dashboard" },
+    { label: "Lịch sử AI", icon: History, href: "#tong-quan", id: "dashboard" },
+    { label: "Plugin", icon: Puzzle, href: "#", id: "plugins" },
+    { label: "Cài đặt", icon: Settings, href: "/admin", id: "dashboard" },
   ];
 
   return (
@@ -460,81 +655,149 @@ export function NewsStudioPage() {
             </div>
           </div>
 
-          <nav className="flex-1 space-y-1 px-4 py-5">
+          <nav className="flex-1 space-y-1 px-4 py-5 overflow-y-auto scrollbar-hide">
             {sidebarItems.map((item) => (
-              <Link
+              <button
                 key={item.label}
-                href={item.href}
-                className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white"
+                onClick={() => {
+                  if (item.id === "plugins") setActiveTab("plugins");
+                  else {
+                    setActiveTab("dashboard");
+                    if (item.href.startsWith("#")) {
+                      const el = document.getElementById(item.href.substring(1));
+                      el?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }
+                }}
+                className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                  (item.id === "plugins" && activeTab === "plugins") || (item.id === "dashboard" && activeTab === "dashboard" && item.label === "Tổng quan")
+                    ? "bg-white/10 text-white"
+                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                }`}
               >
                 <item.icon size={18} />
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
 
-          <div className="mx-4 mb-4 rounded-[24px] border border-white/10 bg-white/5 p-4">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Kho bài viết</p>
-            <p className="mt-3 text-3xl font-black">{analytics.totalPosts}</p>
-            <p className="mt-1 text-sm text-slate-400">Không hiển thị AI Credits theo yêu cầu.</p>
+          <div className="mx-4 mb-4 rounded-[24px] border border-white/10 bg-white/5 p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Gói của bạn</p>
+              <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-bold text-indigo-400">PRO</span>
+            </div>
+            
+            <div className="mt-4 space-y-4">
+              <div>
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="text-slate-400">Bài viết</span>
+                  <span className="text-white font-medium">{analytics.totalPosts} / 300</span>
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
+                  <div 
+                    className="h-full bg-indigo-500 rounded-full transition-all duration-500" 
+                    style={{ width: `${Math.min(100, (analytics.totalPosts / 300) * 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              <button className="w-full rounded-xl bg-white/5 py-2 text-xs font-bold text-white transition hover:bg-white/10">
+                Nâng cấp gói
+              </button>
+            </div>
+          </div>
+
+          <div className="mx-4 mb-4 mt-auto border-t border-white/10 pt-4">
+            <div className="flex items-center gap-3 px-2">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white font-bold">
+                AD
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold truncate text-white">Admin</p>
+                <p className="text-[11px] text-slate-400 truncate">admin@butphamarketing.com</p>
+              </div>
+              <button className="ml-auto text-slate-400 hover:text-white transition">
+                <LogOut size={16} />
+              </button>
+            </div>
           </div>
         </aside>
 
         <main className="min-w-0 flex-1 space-y-6">
-          <section id="tong-quan" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.06)] sm:p-6">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-              <div>
-                <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Dashboard</h1>
-                <p className="mt-2 text-sm text-slate-500">Tổng quan hiệu suất nội dung và SEO toàn bộ website.</p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <label className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-                  <CalendarDays size={16} />
-                  <select value={period} onChange={(event) => setPeriod(event.target.value)} className="bg-transparent outline-none">
-                    <option value="7">7 ngày qua</option>
-                    <option value="30">30 ngày qua</option>
-                    <option value="90">90 ngày qua</option>
-                  </select>
-                </label>
-                <button
-                  type="button"
-                  onClick={exportReport}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                >
-                  <Download size={16} />
-                  Xuất báo cáo
-                </button>
-              </div>
-            </div>
-
-            {(blogSaveMessage || blogSaveError) && (
-              <div className={`mt-5 rounded-2xl border px-4 py-3 text-sm ${blogSaveError ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
-                {blogSaveError || blogSaveMessage}
-              </div>
-            )}
-
-            <div className="mt-6 grid gap-4 xl:grid-cols-5">
-              {[
-                { label: "Tổng bài viết", value: analytics.totalPosts, delta: analytics.deltas.totalPosts, color: "bg-blue-500", icon: FileText },
-                { label: "Bài đã xuất bản", value: analytics.publishedPosts, delta: analytics.deltas.publishedPosts, color: "bg-emerald-500", icon: Newspaper },
-                { label: "Bài cần cập nhật", value: analytics.needsUpdate, delta: analytics.deltas.needsUpdate, color: "bg-amber-500", icon: RefreshCw },
-                { label: "SEO Score trung bình", value: `${analytics.avgSeoScore}/100`, delta: analytics.deltas.avgSeoScore, color: "bg-violet-500", icon: Target },
-                { label: "Lượt xem ước tính", value: `${(analytics.estimatedViews / 1000).toFixed(1)}K`, delta: analytics.deltas.estimatedViews, color: "bg-cyan-500", icon: TrendingUp },
-              ].map((item) => (
-                <div key={item.label} className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${item.color} text-white`}>
-                    <item.icon size={18} />
+          {activeTab === "plugins" ? (
+            <PluginManager />
+          ) : (
+            <>
+              <section id="tong-quan" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.06)] sm:p-6">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                  <div>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Dashboard</h1>
+                    <p className="mt-2 text-sm text-slate-500">Tổng quan hiệu suất nội dung và SEO toàn bộ website.</p>
                   </div>
-                  <p className="mt-4 text-sm text-slate-500">{item.label}</p>
-                  <p className="mt-1 text-4xl font-black tracking-tight text-slate-950">{item.value}</p>
-                  <p className={`mt-2 text-sm ${item.delta >= 0 ? "text-emerald-600" : "text-red-500"}`}>{formatPercent(item.delta)} so với kỳ trước</p>
+                  <div className="flex flex-wrap gap-3">
+                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+                      <CalendarDays size={16} />
+                      <select value={period} onChange={(event) => setPeriod(event.target.value)} className="bg-transparent outline-none font-semibold">
+                        <option value="7">7 ngày qua</option>
+                        <option value="30">30 ngày qua</option>
+                        <option value="90">90 ngày qua</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={exportReport}
+                      className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                    >
+                      <Download size={16} />
+                      Xuất báo cáo
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr_0.8fr]">
+                {(blogSaveMessage || blogSaveError) && (
+                  <div className={`mt-5 rounded-2xl border px-4 py-3 text-sm ${blogSaveError ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+                    {blogSaveError || blogSaveMessage}
+                  </div>
+                )}
+
+                <div className="mt-6 grid gap-4 xl:grid-cols-5">
+                  {[
+                    { label: "Tổng bài viết", value: analytics.totalPosts, delta: analytics.deltas.totalPosts, color: "bg-blue-500", icon: FileText },
+                    { label: "Bài đã xuất bản", value: analytics.publishedPosts, delta: analytics.deltas.publishedPosts, color: "bg-emerald-500", icon: CheckCircle2 },
+                    { label: "Bài cần cập nhật", value: analytics.needsUpdate, delta: analytics.deltas.needsUpdate, color: "bg-amber-500", icon: AlertTriangle },
+                    { label: "SEO Score trung bình", value: `${analytics.avgSeoScore}/100`, delta: analytics.deltas.avgSeoScore, color: "bg-violet-500", icon: Target },
+                    { label: "Lượt xem ước tính", value: `${(analytics.estimatedViews / 1000).toFixed(1)}K`, delta: analytics.deltas.estimatedViews, color: "bg-cyan-500", icon: Eye },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${item.color} text-white shadow-lg`}>
+                          <item.icon size={20} />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-bold ${item.delta >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+                          {item.delta >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                          {formatPercent(Math.abs(item.delta))}
+                        </div>
+                      </div>
+                      <div className="mt-5">
+                        <p className="text-sm font-bold text-slate-500">{item.label}</p>
+                        <div className="mt-1 flex items-baseline gap-2">
+                          <p className="text-3xl font-black tracking-tight text-slate-950">{item.value}</p>
+                        </div>
+                        <p className="mt-2 text-[11px] text-slate-400">so với tuần trước</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr_0.8fr]">
+                {/* Charts and trends... */}
+              </section>
+            </>
+          ) : (
+            <PluginManager />
+          )}
+        </main>
             <div id="xu-huong-seo" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-6">
               <div className="mb-5 flex items-center justify-between">
                 <div>
@@ -685,77 +948,103 @@ export function NewsStudioPage() {
             </div>
           </section>
 
-          <section id="tat-ca-bai-viet" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-6">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <section id="tat-ca-bai-viet" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-8">
+            <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
               <div>
                 <h2 className="text-2xl font-black text-slate-950">Tất cả bài viết</h2>
-                <p className="mt-1 text-sm text-slate-500">Quản lý danh sách tin tức, lọc nhanh và mở bài để chỉnh sửa.</p>
+                <p className="mt-1 text-sm text-slate-500">Quản lý danh sách tin tức và tối ưu hiệu suất.</p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <div className="relative min-w-[240px]">
-                  <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="relative min-w-[320px]">
+                  <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     value={tableSearch}
                     onChange={(event) => setTableSearch(event.target.value)}
-                    placeholder="Tìm kiếm bài viết..."
-                    className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm outline-none"
+                    placeholder="Tìm kiếm tiêu đề, từ khóa..."
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-3.5 pl-12 pr-4 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/5"
                   />
                 </div>
-                <select
-                  value={tableFilter}
-                  onChange={(event) => setTableFilter(event.target.value as typeof tableFilter)}
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
-                >
-                  <option value="all">Tất cả</option>
-                  <option value="published">Đã xuất bản</option>
-                  <option value="draft">Bản nháp</option>
-                  <option value="needs-update">Cần cập nhật</option>
-                </select>
+                <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-bold text-slate-700">
+                  <ListFilter size={18} className="text-slate-400" />
+                  <select
+                    value={tableFilter}
+                    onChange={(event) => setTableFilter(event.target.value as typeof tableFilter)}
+                    className="bg-transparent outline-none"
+                  >
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="published">Đã xuất bản</option>
+                    <option value="draft">Bản nháp</option>
+                    <option value="needs-update">Cần cập nhật SEO</option>
+                  </select>
+                </div>
                 <button
                   type="button"
                   onClick={() => {
                     resetBlogForm();
                     editorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-500 active:scale-95"
                 >
-                  <PencilLine size={16} />
+                  <Plus size={18} />
                   Viết bài mới
                 </button>
               </div>
             </div>
 
-            <div className="mt-6 overflow-x-auto">
-              <table className="min-w-full border-separate border-spacing-y-2 text-sm">
+            <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-100">
+              <table className="min-w-full border-collapse text-sm">
                 <thead>
-                  <tr className="text-left text-slate-500">
-                    <th className="px-3 py-2">#</th>
-                    <th className="px-3 py-2">Tiêu đề</th>
-                    <th className="px-3 py-2">Từ khóa chính</th>
-                    <th className="px-3 py-2">SEO Score</th>
-                    <th className="px-3 py-2">Xếp hạng</th>
-                    <th className="px-3 py-2">Lượt xem</th>
-                    <th className="px-3 py-2">Cập nhật</th>
-                    <th className="px-3 py-2">Trạng thái</th>
+                  <tr className="border-b border-slate-100 bg-slate-50/50 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <th className="px-6 py-4">#</th>
+                    <th className="px-6 py-4">Tiêu đề bài viết</th>
+                    <th className="px-6 py-4">Từ khóa chính</th>
+                    <th className="px-6 py-4 text-center">SEO Score</th>
+                    <th className="px-6 py-4 text-center">Thứ hạng TB</th>
+                    <th className="px-6 py-4 text-center">Lượt xem</th>
+                    <th className="px-6 py-4">Cập nhật</th>
+                    <th className="px-6 py-4">Trạng thái</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-50">
                   {filteredTableRows.map((item, index) => (
-                    <tr key={item.id} className="rounded-2xl bg-slate-50 text-slate-800">
-                      <td className="rounded-l-2xl px-3 py-4">{index + 1}</td>
-                      <td className="px-3 py-4">
-                        <button type="button" onClick={() => editBlog(item)} className="text-left">
-                          <p className="font-semibold text-slate-950">{item.title}</p>
-                          <p className="mt-1 text-xs text-slate-500">{item.slug || "chưa có slug"}</p>
+                    <tr key={item.id} className="group transition hover:bg-slate-50/80">
+                      <td className="px-6 py-5 text-slate-400">{index + 1}</td>
+                      <td className="px-6 py-5">
+                        <button type="button" onClick={() => editBlog(item)} className="text-left group/btn">
+                          <p className="font-bold text-slate-900 group-hover/btn:text-indigo-600 transition">{item.title}</p>
+                          <p className="mt-1 text-xs text-slate-400 font-medium">{item.slug || "chưa có slug"}</p>
                         </button>
                       </td>
-                      <td className="px-3 py-4">{item.keywordsMain || "Chưa có"}</td>
-                      <td className="px-3 py-4"><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">{item.seoScore}</span></td>
-                      <td className={`px-3 py-4 font-bold ${item.trendDelta >= 0 ? "text-emerald-600" : "text-red-500"}`}>{item.trendDelta >= 0 ? `+${item.trendDelta}` : item.trendDelta}</td>
-                      <td className="px-3 py-4">{Math.round(Math.max(900, item.contentLength * 1.45 + item.seoScore * 18) / 100) / 10}K</td>
-                      <td className="px-3 py-4">{formatCompactDate(item.publishedAt || item.timestamp)}</td>
-                      <td className="rounded-r-2xl px-3 py-4">
-                        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${item.published ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-700"}`}>
+                      <td className="px-6 py-5">
+                        <span className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-bold text-slate-600">
+                          {item.keywordsMain || "Chưa có"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5 text-center">
+                        <span className={`inline-block w-10 rounded-lg py-1 text-xs font-black ${
+                          item.seoScore >= 80 ? "bg-emerald-100 text-emerald-700" : 
+                          item.seoScore >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
+                        }`}>
+                          {item.seoScore}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5 text-center">
+                        <div className={`flex items-center justify-center gap-1 font-bold ${item.trendDelta >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+                          {item.trendDelta >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                          {Math.abs(item.trendDelta)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 text-center font-bold text-slate-700">
+                        {Math.round(Math.max(900, item.contentLength * 1.45 + item.seoScore * 18) / 100) / 10}K
+                      </td>
+                      <td className="px-6 py-5 text-slate-500 font-medium">
+                        {formatCompactDate(item.publishedAt || item.timestamp)}
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ${
+                          item.published ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+                        }`}>
+                          <span className={`h-1.5 w-1.5 rounded-full ${item.published ? "bg-emerald-500" : "bg-slate-400"}`} />
                           {item.published ? "Đã xuất bản" : "Bản nháp"}
                         </span>
                       </td>
@@ -763,7 +1052,12 @@ export function NewsStudioPage() {
                   ))}
                 </tbody>
               </table>
-              {!loading && filteredTableRows.length === 0 && <p className="py-8 text-center text-sm text-slate-500">Không có bài viết phù hợp bộ lọc hiện tại.</p>}
+              {!loading && filteredTableRows.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+                  <Info size={40} className="mb-3 opacity-20" />
+                  <p className="text-sm font-medium">Không có bài viết phù hợp bộ lọc hiện tại.</p>
+                </div>
+              )}
             </div>
           </section>
 

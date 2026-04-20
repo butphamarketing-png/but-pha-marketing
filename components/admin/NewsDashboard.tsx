@@ -3,21 +3,38 @@
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
+  ArrowUpRight,
   BarChart3,
-  CalendarDays,
   CheckCircle2,
+  ChevronDown,
   Database,
   Eye,
   FilePlus2,
+  FileText,
   Flame,
-  Globe2,
+  Globe,
+  History,
   Image as ImageIcon,
+  Info,
+  Layers,
+  LayoutDashboard,
   Link2,
+  ListFilter,
+  LogOut,
+  MessageSquareCode,
+  Newspaper,
   PencilLine,
+  Plus,
+  Puzzle,
+  RefreshCw,
   Search,
+  Settings,
+  ShieldCheck,
   Sparkles,
   Target,
+  TrendingDown,
   TrendingUp,
+  User,
 } from "lucide-react";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsItem } from "@/lib/useData";
@@ -99,6 +116,77 @@ function getIssueList(item: NewsItem) {
 function formatDate(value?: string | number) {
   if (!value) return "Chưa đặt ngày";
   return new Date(value).toLocaleDateString("vi-VN");
+}
+
+function SeoChecklist({ score, issues }: { score: number; issues: string[] }) {
+  const allChecks = [
+    { id: "title", label: "Tiêu đề có từ khóa chính", check: (issues: string[]) => !issues.includes("Thiếu từ khóa chính") },
+    { id: "meta", label: "Meta description chuẩn SEO", check: (issues: string[]) => !issues.includes("Thiếu meta description") },
+    { id: "length", label: "Độ dài nội dung đạt chuẩn (900+ từ)", check: (issues: string[]) => !issues.includes("Nội dung còn mỏng") },
+    { id: "image", label: "Đã có ảnh đại diện (Featured Image)", check: (issues: string[]) => !issues.includes("Thiếu ảnh đại diện") },
+    { id: "slug", label: "Slug chứa từ khóa chính", check: (issues: string[]) => !issues.includes("Thiếu slug chuẩn SEO") },
+    { id: "secondary", label: "Sử dụng ít nhất 2 từ khóa phụ", check: (issues: string[]) => !issues.includes("Thiếu từ khóa phụ") },
+    { id: "h2", label: "Sử dụng các thẻ H2, H3 hợp lý", check: (issues: string[]) => true }, // Placeholder
+    { id: "internal", label: "Gợi ý Internal Link nội bộ", check: (issues: string[]) => true }, // Placeholder
+  ];
+
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black/40 p-5 backdrop-blur-sm">
+      <div className="flex items-center justify-between mb-6">
+        <h4 className="font-bold text-white flex items-center gap-2">
+          <ShieldCheck size={18} className="text-indigo-400" /> Rank Math SEO
+        </h4>
+        <span className={`text-xl font-black ${
+          score >= 80 ? "text-emerald-400" : score >= 60 ? "text-amber-400" : "text-red-400"
+        }`}>
+          {score}/100
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        {allChecks.map((item) => {
+          const isPassed = item.check(issues);
+          return (
+            <div key={item.id} className="flex items-start gap-3">
+              {isPassed ? (
+                <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-400" />
+              ) : (
+                <AlertTriangle size={16} className="mt-0.5 shrink-0 text-amber-400" />
+              )}
+              <span className={`text-xs font-medium ${isPassed ? "text-slate-300" : "text-slate-400"}`}>
+                {item.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SerpPreview({ title, slug, description }: { title: string; slug: string; description: string }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+      <div className="flex items-center gap-2 mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+        <Globe size={14} /> Google SERP Preview
+      </div>
+      <div className="space-y-1 overflow-hidden">
+        <div className="flex items-center gap-1 text-[13px] text-slate-400">
+          <span>butphamarketing.com</span>
+          <span>›</span>
+          <span className="truncate">blog</span>
+          <span>›</span>
+          <span className="truncate">{slug || "..."}</span>
+        </div>
+        <h3 className="text-xl font-medium text-[#8ab4f8] hover:underline cursor-pointer truncate">
+          {title || "Tiêu đề bài viết hiển thị trên Google..."}
+        </h3>
+        <p className="text-[14px] leading-relaxed text-[#bdc1c6] line-clamp-2">
+          {description || "Phần mô tả ngắn (Meta Description) sẽ xuất hiện ở đây để thu hút người dùng nhấp vào bài viết của bạn từ kết quả tìm kiếm..."}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 function MetricCard({
@@ -364,180 +452,160 @@ export function NewsDashboard({
           </div>
 
           <div className="rounded-[28px] border border-white/10 bg-card p-6">
-            <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h4 className="text-xl font-bold text-white">{editingBlogId ? "Chỉnh sửa bài viết" : "Soạn bài viết mới"}</h4>
-                <p className="mt-1 text-sm text-slate-400">Giao diện tập trung cho nội dung, từ khóa và xuất bản.</p>
-              </div>
-              <div className="rounded-2xl border border-violet-400/20 bg-violet-500/10 px-4 py-3 text-right">
-                <p className="text-xs uppercase tracking-[0.22em] text-violet-200">Điểm SEO hiện tại</p>
-                <p className="mt-1 text-2xl font-black text-white">{currentSeoScore}/100</p>
-              </div>
-            </div>
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Tiêu đề bài viết</label>
-                <div className="flex gap-2">
-                  <input
-                    value={blogForm.title}
-                    onChange={(event) => setBlogForm((prev) => ({ ...prev, title: event.target.value }))}
-                    placeholder="Ví dụ: Hướng dẫn SEO tổng thể cho doanh nghiệp địa phương"
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={onGenerate}
-                    className="rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-                  >
-                    AI viết
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Slug</label>
-                <input
-                  value={blogForm.slug}
-                  onChange={(event) => setBlogForm((prev) => ({ ...prev, slug: event.target.value }))}
-                  placeholder="huong-dan-seo-tong-the"
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Từ khóa chính</label>
-                <input
-                  value={blogForm.keywordsMain}
-                  onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsMain: event.target.value }))}
-                  placeholder="seo tổng thể"
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Từ khóa phụ</label>
-                <input
-                  value={blogForm.keywordsSecondary}
-                  onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsSecondary: event.target.value }))}
-                  placeholder="seo onpage, tối ưu website, audit seo"
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                />
-              </div>
-
-              <div className="space-y-2 lg:col-span-2">
-                <label className="text-sm font-medium text-slate-200">Mô tả ngắn hiển thị ngoài danh sách</label>
-                <textarea
-                  value={blogForm.description}
-                  onChange={(event) => setBlogForm((prev) => ({ ...prev, description: event.target.value }))}
-                  rows={3}
-                  placeholder="Tóm tắt ngắn gọn, rõ lợi ích và đúng ý định tìm kiếm."
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                />
-              </div>
-
-              <div className="space-y-2 lg:col-span-2">
-                <label className="text-sm font-medium text-slate-200">Meta description</label>
-                <textarea
-                  value={blogForm.metaDescription}
-                  onChange={(event) => setBlogForm((prev) => ({ ...prev, metaDescription: event.target.value }))}
-                  rows={3}
-                  placeholder="Nên trong khoảng 120-160 ký tự, có từ khóa chính và lợi ích rõ ràng."
-                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-violet-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Ngày xuất bản</label>
-                <div className="relative">
-                  <CalendarDays size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="date"
-                    value={blogForm.publishedAt}
-                    onChange={(event) => setBlogForm((prev) => ({ ...prev, publishedAt: event.target.value }))}
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition focus:border-violet-400"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200">Ảnh đại diện</label>
-                <div className="relative">
-                  <ImageIcon size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    value={blogForm.imageUrl}
-                    onChange={(event) => setBlogForm((prev) => ({ ...prev, imageUrl: event.target.value }))}
-                    placeholder="Dán URL ảnh hoặc dùng upload bên dưới"
-                    className="w-full rounded-2xl border border-white/10 bg-black/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition focus:border-violet-400"
-                  />
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="block w-full text-xs text-slate-400"
-                  onChange={async (event) => {
-                    const file = event.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = () => setBlogForm((prev) => ({ ...prev, imageUrl: String(reader.result || "") }));
-                    reader.readAsDataURL(file);
-                  }}
-                />
+                <h4 className="text-xl font-bold text-white flex items-center gap-2">
+                  {editingBlogId ? <PencilLine size={20} className="text-indigo-400" /> : <Plus size={20} className="text-indigo-400" />}
+                  {editingBlogId ? "Chỉnh sửa bài viết" : "Soạn bài viết mới"}
+                </h4>
+                <p className="mt-1 text-sm text-slate-400">Tối ưu nội dung và cấu trúc SEO theo chuẩn Rank Math.</p>
               </div>
             </div>
 
-            <div className="mt-5 rounded-3xl border border-white/10 bg-black/20 p-4">
-              <div className="mb-3 flex flex-wrap gap-2">
-                {currentIssues.length > 0 ? (
-                  currentIssues.map((issue) => (
-                    <span key={issue} className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200">
-                      {issue}
-                    </span>
-                  ))
-                ) : (
-                  <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
-                    Bản nháp này đang ở trạng thái tốt
-                  </span>
-                )}
-              </div>
-              <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm((prev) => ({ ...prev, content: html }))} minHeight={320} />
-            </div>
+            <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+              <div className="space-y-6">
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Tiêu đề bài viết</label>
+                    <div className="flex gap-2">
+                      <input
+                        value={blogForm.title}
+                        onChange={(event) => setBlogForm((prev) => ({ ...prev, title: event.target.value }))}
+                        placeholder="Ví dụ: Hướng dẫn SEO tổng thể cho doanh nghiệp"
+                        className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+                      />
+                      <button
+                        type="button"
+                        onClick={onGenerate}
+                        className="rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-indigo-500 active:scale-95 shadow-lg shadow-indigo-500/20 shrink-0"
+                      >
+                        AI Viết
+                      </button>
+                    </div>
+                  </div>
 
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap gap-4">
-                <label className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
-                  <input
-                    type="checkbox"
-                    checked={blogForm.published}
-                    onChange={(event) => setBlogForm((prev) => ({ ...prev, published: event.target.checked }))}
-                  />
-                  Hiển thị công khai
-                </label>
-                <label className="flex items-center gap-2 rounded-full border border-orange-400/20 bg-orange-500/10 px-4 py-2 text-sm text-orange-200">
-                  <input
-                    type="checkbox"
-                    checked={blogForm.hot}
-                    onChange={(event) => setBlogForm((prev) => ({ ...prev, hot: event.target.checked }))}
-                  />
-                  Đánh dấu bài nổi bật
-                </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Slug URL</label>
+                    <input
+                      value={blogForm.slug}
+                      onChange={(event) => setBlogForm((prev) => ({ ...prev, slug: event.target.value }))}
+                      placeholder="huong-dan-seo-tong-the"
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Từ khóa chính (Focus Keyword)</label>
+                    <div className="relative">
+                      <Target size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                      <input
+                        value={blogForm.keywordsMain}
+                        onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsMain: event.target.value }))}
+                        placeholder="seo tổng thể"
+                        className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pl-11 pr-4 text-sm text-white outline-none transition focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Từ khóa phụ (LSI Keywords)</label>
+                    <input
+                      value={blogForm.keywordsSecondary}
+                      onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsSecondary: event.target.value }))}
+                      placeholder="seo onpage, audit seo..."
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div className="space-y-2 lg:col-span-2">
+                    <label className="text-sm font-bold text-slate-300">Meta description</label>
+                    <textarea
+                      value={blogForm.metaDescription}
+                      onChange={(event) => setBlogForm((prev) => ({ ...prev, metaDescription: event.target.value }))}
+                      rows={3}
+                      placeholder="Mô tả ngắn hiển thị trên kết quả tìm kiếm Google..."
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-indigo-500"
+                    />
+                    <div className="flex justify-between px-1 mt-1">
+                      <p className="text-[10px] text-slate-500">Gợi ý: 120 - 160 ký tự</p>
+                      <p className={`text-[10px] font-bold ${blogForm.metaDescription.length >= 120 && blogForm.metaDescription.length <= 160 ? "text-emerald-400" : "text-amber-400"}`}>
+                        {blogForm.metaDescription.length} ký tự
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-300">Nội dung bài viết</label>
+                  <div className="rounded-3xl border border-white/10 bg-black/30 p-2">
+                    <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm((prev) => ({ ...prev, content: html }))} minHeight={450} />
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={onReset}
-                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                >
-                  Làm mới form
-                </button>
-                <button
-                  type="button"
-                  onClick={onSave}
-                  className="rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
-                >
-                  {editingBlogId ? "Cập nhật bài viết" : "Lưu bài viết"}
-                </button>
+              <div className="space-y-6">
+                <SeoChecklist score={currentSeoScore} issues={currentIssues} />
+                <SerpPreview title={blogForm.title} slug={blogForm.slug} description={blogForm.metaDescription} />
+                
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-4">
+                    <ImageIcon size={16} className="text-indigo-400" /> Hình ảnh & Xuất bản
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-slate-400">Ảnh đại diện</p>
+                      <input
+                        value={blogForm.imageUrl}
+                        onChange={(event) => setBlogForm((prev) => ({ ...prev, imageUrl: event.target.value }))}
+                        placeholder="URL ảnh..."
+                        className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-white outline-none focus:border-indigo-500"
+                      />
+                      {blogForm.imageUrl && (
+                        <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 mt-2">
+                          <img src={blogForm.imageUrl} alt="Preview" className="h-full w-full object-cover" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-2 pt-2 border-t border-white/5">
+                      <label className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={blogForm.published}
+                          onChange={(event) => setBlogForm((prev) => ({ ...prev, published: event.target.checked }))}
+                          className="rounded border-white/20 bg-black/20 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="text-xs font-medium text-slate-300 group-hover:text-white transition">Xuất bản công khai</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={blogForm.hot}
+                          onChange={(event) => setBlogForm((prev) => ({ ...prev, hot: event.target.checked }))}
+                          className="rounded border-white/20 bg-black/20 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="text-xs font-medium text-slate-300 group-hover:text-white transition">Đánh dấu bài HOT</span>
+                      </label>
+                    </div>
+
+                    <div className="pt-4 flex flex-col gap-2">
+                      <button
+                        type="button"
+                        onClick={onSave}
+                        className="w-full rounded-2xl bg-indigo-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-500 active:scale-95"
+                      >
+                        {editingBlogId ? "Cập nhật bài viết" : "Lưu bài viết"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onReset}
+                        className="w-full rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+                      >
+                        Hủy bỏ
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

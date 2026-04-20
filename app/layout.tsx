@@ -3,6 +3,7 @@ import "./globals.css";
 import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
+import { ExternalScripts } from "@/components/shared/ExternalScripts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com"),
@@ -58,6 +59,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <AdminProvider>
+            <ExternalScripts />
             {children}
             <MarketingChrome />
           </AdminProvider>

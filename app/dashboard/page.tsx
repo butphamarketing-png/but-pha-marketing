@@ -25,14 +25,14 @@ function DashboardContent() {
     if (!user?.portalId) return;
 
     const loadPortal = async () => {
-      const result = await db.clientPortals.getAll();
+      // Fetch specifically by the logged-in user's portalId
+      const result = await db.clientPortals.get(user.portalId);
       if (result.error) {
         console.error('Load portals error:', result.error);
         return;
       }
-      const portals = result.data || [];
-      const found = portals.find((p) => p.id === user.portalId) || null;
-      setPortal(found);
+      const found = result.data;
+      setPortal(found || null);
       if (found) {
         const articlesResult = await db.progressArticles.getByClient(found.id);
         if (articlesResult.error) {
