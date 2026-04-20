@@ -74,7 +74,7 @@ export default function HomePageClient() {
             transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
             className="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary"
           />
-          <img src="/logo.jpg" alt="Logo" className="h-20 w-20 rounded-full object-cover" />
+          <img src={settings?.logo ? `${settings.logo}?v=${Date.now()}` : "/logo.jpg"} alt="Logo" className="h-20 w-20 rounded-full object-cover" />
         </div>
 
         <div className="w-64 text-center">
@@ -118,7 +118,7 @@ export default function HomePageClient() {
 
       <header className="relative z-[50] flex items-center justify-between px-6 pb-6 pt-16">
         <div className="flex items-center gap-3">
-          <img src="/logo.jpg" alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
+          <img src={settings?.logo ? `${settings.logo}?v=${Date.now()}` : "/logo.jpg"} alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
           <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings?.title || "Bứt Phá Marketing"}</span>
         </div>
 

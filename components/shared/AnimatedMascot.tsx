@@ -20,6 +20,7 @@ export function AnimatedMascot() {
   const pathname = usePathname();
   const { settings } = useAdmin();
   const [open, setOpen] = useState(false);
+  const [currentText, setCurrentText] = useState("");
   const [isShown, setIsShown] = useState(true);
   const [bursting, setBursting] = useState(false);
   const [pos, setPos] = useState({ x: 220, y: 240 });
@@ -47,6 +48,15 @@ export function AnimatedMascot() {
     googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
     website: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
   };
+  
+  // Custom filter based on platform color if needed
+  const customFilter = useMemo(() => {
+    const color = settings.colors?.[platform] || settings.colors?.primary || "#7C3AED";
+    // We could calculate the hue-rotate dynamically here if needed, but the map is already good.
+    // For simplicity, let's keep the map but ensure it matches the platform.
+    return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;
+  }, [platform, settings.colors]);
+
   const dragonStyle = dragonStyleMap[platform] || dragonStyleMap.home;
   const sectionMessages = useMemo(
     () => settings.mascotSectionMessages?.[platform] || settings.mascotSectionMessages?.home || {},
@@ -66,14 +76,20 @@ export function AnimatedMascot() {
   const speakCute = (text: string) => {
     if (!("speechSynthesis" in window)) return Promise.resolve();
     if (!text.trim()) return Promise.resolve();
+    
+    setCurrentText(text);
+    setOpen(true);
+    
     const estimatedDuration = estimateSpeechDurationMs(text);
     window.speechSynthesis.cancel();
+    
     return new Promise<void>((resolve) => {
       const utter = new SpeechSynthesisUtterance(text);
       let done = false;
       const finish = () => {
         if (done) return;
         done = true;
+        setOpen(false);
         resolve();
       };
       utter.lang = "vi-VN";
@@ -253,7 +269,7 @@ export function AnimatedMascot() {
               >
                 <div className="relative">
                   <MessageSquare size={12} className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-black/80" />
-                  {message}
+                  {currentText || message}
                 </div>
               </motion.div>
             )}
@@ -279,10 +295,7 @@ export function AnimatedMascot() {
           )}
 
           <motion.button
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
             onClick={() => {
-              setOpen(true);
               holdingRef.current = true;
               lastVelocityRef.current = { ...velocityRef.current };
               velocityRef.current = { x: 0, y: 0 };
@@ -334,7 +347,12 @@ export function AnimatedMascot() {
             className="flex h-[88px] w-[82px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >
-            <div className="relative group">
+            <div 
+              className="relative group"
+              style={{ 
+                filter: `drop-shadow(0 0 15px ${settings.colors?.[platform] || settings.colors?.primary || "#7C3AED"}44)`
+              }}
+            >
               {/* Glow effect background */}
               <div className="absolute inset-0 -z-10 bg-white/20 blur-2xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-500 opacity-50" />
               
@@ -343,7 +361,7 @@ export function AnimatedMascot() {
                 alt="AI Mascot"
                 className="h-[82px] w-[82px] object-contain"
                 style={{ 
-                  filter: `${dragonStyle.filter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`, 
+                  filter: `${customFilter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`, 
                   transform: `scale(${dragonStyle.scale})` 
                 }}
               />

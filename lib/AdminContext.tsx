@@ -47,6 +47,8 @@ export interface SiteSettings {
   title: string;
   heroTitle: string;
   heroSubtitle: string;
+  logo: string;
+  favicon: string;
   content: string;
   hotline: string;
   address: string;
@@ -162,6 +164,8 @@ const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   heroTitle: "Bứt Phá Marketing",
   heroSubtitle: "",
+  logo: "/logo.svg",
+  favicon: "/favicon.svg",
   content: "",
   hotline: "0937 417 982",
   address: "",
@@ -293,6 +297,8 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     googleConsole: parsed.googleConsole ?? "",
     rankMath: parsed.rankMath ?? "",
     aiKtp: parsed.aiKtp ?? "",
+    logo: parsed.logo ?? defaultSettings.logo,
+    favicon: parsed.favicon ?? defaultSettings.favicon,
     seoPages: parsed.seoPages ?? {},
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
