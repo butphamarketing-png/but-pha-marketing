@@ -356,7 +356,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
     const loadSettings = async () => {
       try {
-        const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`);
+        const res = await fetch(`/api/settings?key=${SETTINGS_KEY}`, { cache: "no-store" });
         const text = await res.text();
         const parsed = text ? (JSON.parse(text) as { ok?: boolean; value?: Partial<SiteSettings> | null }) : null;
 

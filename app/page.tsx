@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import HomePageClient from "./HomePageClient";
 import { getDynamicMetadata } from "@/lib/seo";
 
