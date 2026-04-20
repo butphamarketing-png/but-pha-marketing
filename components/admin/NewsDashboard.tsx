@@ -777,7 +777,7 @@ export function NewsDashboard({
                 <h4 className="text-lg font-bold text-white">Kho bài viết</h4>
                 <p className="mt-1 text-sm text-slate-400">Tìm nhanh và thao tác trực tiếp trên từng bài.</p>
               </div>
-              <Globe2 className="text-cyan-300" size={20} />
+              <Globe className="text-cyan-300" size={20} />
             </div>
 
             <div className="mb-4 flex flex-col gap-3">
