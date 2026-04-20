@@ -35,12 +35,6 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       }
       const res = result.data;
       if (res) {
-        // Kiểm tra nền tảng
-        if (res.platform !== authForm.platform) {
-          setError(`Tài khoản này thuộc nền tảng ${res.platform.toUpperCase()}, vui lòng chọn đúng nền tảng.`);
-          return;
-        }
-
         login({
           name: res.clientName,
           email: res.username,
@@ -68,7 +62,7 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-card shadow-2xl"
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-card shadow-2xl"
       >
         <button onClick={onClose} className="absolute right-6 top-6 z-10 text-gray-400 hover:text-white transition-colors">
           <X size={24} />
@@ -84,23 +78,6 @@ export function RoadmapModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="flex flex-wrap gap-2 mb-6">
-              {PLATFORMS_DYNAMIC.map((p) => (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => setAuthForm({ ...authForm, platform: p.key })}
-                  className={`flex-1 min-w-[100px] rounded-xl border py-2 text-[10px] font-bold uppercase tracking-wider transition-all ${
-                    authForm.platform === p.key
-                      ? "border-primary bg-primary/20 text-white"
-                      : "border-white/10 bg-white/5 text-gray-500 hover:border-white/20"
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input 
