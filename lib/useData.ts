@@ -456,6 +456,8 @@ export const db = {
       cachedFetch("client_portals", () =>
         apiFetch<ClientPortal[]>("/client-portals", undefined, (value) => normalizeArray(value, mapClientPortal)),
       ),
+    get: (id: number): Promise<ApiResult<ClientPortal>> =>
+      apiFetch<ClientPortal>(`/client-portals/${id}`, undefined, mapClientPortal),
     add: async (
       portal: Omit<ClientPortal, "id" | "createdAt"> & { password?: string },
     ): Promise<ApiResult<ClientPortal>> => {
