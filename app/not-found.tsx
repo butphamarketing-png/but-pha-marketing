@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Bot } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -12,8 +11,12 @@ export default function NotFound() {
         transition={{ duration: 2.4, repeat: Infinity }}
         className="mb-6 flex justify-center"
       >
-        <div className="flex h-36 w-36 items-center justify-center rounded-full bg-primary/20 shadow-[0_12px_24px_rgba(0,0,0,0.5)]">
-          <Bot size={80} className="text-primary drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]" />
+        <div className="flex h-44 w-44 items-center justify-center rounded-full bg-primary/10 shadow-[0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm border border-white/10">
+          <img
+            src="/mascot-home.png"
+            alt="AI Mascot"
+            className="h-36 w-36 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+          />
         </div>
       </motion.div>
       <h1 className="mb-3 text-3xl font-black text-white md:text-4xl">Bạn lạc trôi rồi</h1>

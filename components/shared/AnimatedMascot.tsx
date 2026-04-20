@@ -40,12 +40,12 @@ export function AnimatedMascot() {
   const platformColor = settings.colors?.[platform] || settings.colors?.primary || "#7C3AED";
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
-    facebook: { filter: "hue-rotate(190deg) saturate(1.05)", scale: 0.98 },
-    tiktok: { filter: "hue-rotate(300deg) saturate(1.15)", scale: 1.02 },
-    instagram: { filter: "hue-rotate(250deg) saturate(1.2)", scale: 1 },
-    zalo: { filter: "hue-rotate(170deg) saturate(1.1)", scale: 0.99 },
-    googlemaps: { filter: "hue-rotate(330deg) saturate(1.1)", scale: 1.01 },
-    website: { filter: "hue-rotate(90deg) saturate(1.08)", scale: 1 },
+    facebook: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
+    tiktok: { filter: "hue-rotate(110deg) saturate(1.5) brightness(1)", scale: 1.05 },
+    instagram: { filter: "hue-rotate(80deg) saturate(1.3) brightness(1.1)", scale: 1 },
+    zalo: { filter: "hue-rotate(200deg) saturate(1.3) brightness(1.1)", scale: 1 },
+    googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
+    website: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
   };
   const dragonStyle = dragonStyleMap[platform] || dragonStyleMap.home;
   const sectionMessages = useMemo(
@@ -344,10 +344,11 @@ export function AnimatedMascot() {
             }}
             aria-label="AI Mascot"
           >
-            <Bot 
-              size={42} 
-              className="text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
-              style={{ filter: dragonStyle.filter }}
+            <img
+              src="/mascot-home.png"
+              alt="AI Mascot"
+              className="h-[82px] w-[82px] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+              style={{ filter: dragonStyle.filter, transform: `scale(${dragonStyle.scale})` }}
             />
           </motion.button>
         </div>
