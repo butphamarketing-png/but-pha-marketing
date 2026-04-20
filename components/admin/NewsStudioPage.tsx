@@ -791,304 +791,299 @@ export function NewsStudioPage() {
               </section>
 
               <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr_0.8fr]">
-                {/* Charts and trends... */}
+                <div id="xu-huong-seo" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-6">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-black text-slate-950">Xu hướng thứ hạng từ khóa</h2>
+                      <p className="mt-1 text-sm text-slate-500">Mô phỏng theo chất lượng SEO hiện tại của kho bài viết.</p>
+                    </div>
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{period} ngày qua</span>
+                  </div>
+                  <div className="h-[320px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={analytics.chartData}>
+                        <defs>
+                          <linearGradient id="top3Fill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#22c55e" stopOpacity={0.24} />
+                            <stop offset="95%" stopColor="#22c55e" stopOpacity={0.02} />
+                          </linearGradient>
+                          <linearGradient id="top10Fill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.22} />
+                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
+                          </linearGradient>
+                          <linearGradient id="top100Fill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.22} />
+                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.02} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid stroke="#e2e8f0" vertical={false} />
+                        <XAxis dataKey="label" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                        <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="top3" stroke="#22c55e" fill="url(#top3Fill)" strokeWidth={2.5} />
+                        <Area type="monotone" dataKey="top10" stroke="#3b82f6" fill="url(#top10Fill)" strokeWidth={2.5} />
+                        <Area type="monotone" dataKey="top100" stroke="#8b5cf6" fill="url(#top100Fill)" strokeWidth={2.5} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-black text-slate-950">Bài viết đang tụt hạng</h2>
+                    <TrendingDown className="text-red-500" size={18} />
+                  </div>
+                  <div className="space-y-4">
+                    {analytics.dropping.length > 0 ? analytics.dropping.map((item, index) => (
+                      <button key={item.id} type="button" onClick={() => editBlog(item)} className="flex w-full items-start justify-between gap-4 text-left">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900">{index + 1}. {item.title}</p>
+                          <p className="mt-1 text-xs text-slate-500">{item.keywordsMain || "Chưa có từ khóa chính"}</p>
+                        </div>
+                        <span className="text-sm font-bold text-red-500">{item.trendDelta}</span>
+                      </button>
+                    )) : <p className="text-sm text-slate-500">Chưa có bài nào rơi mạnh trong kỳ này.</p>}
+                  </div>
+                </div>
+
+                <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-black text-slate-950">Bài viết đang tăng hạng</h2>
+                    <TrendingUp className="text-emerald-500" size={18} />
+                  </div>
+                  <div className="space-y-4">
+                    {analytics.rising.length > 0 ? analytics.rising.map((item, index) => (
+                      <button key={item.id} type="button" onClick={() => editBlog(item)} className="flex w-full items-start justify-between gap-4 text-left">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900">{index + 1}. {item.title}</p>
+                          <p className="mt-1 text-xs text-slate-500">{item.keywordsMain || "Chưa có từ khóa chính"}</p>
+                        </div>
+                        <span className="text-sm font-bold text-emerald-500">+{item.trendDelta}</span>
+                      </button>
+                    )) : <p className="text-sm text-slate-500">Chưa có bài tăng hạng nổi bật trong kỳ này.</p>}
+                  </div>
+                </div>
+              </section>
+
+              <section className="grid gap-6 xl:grid-cols-[1fr_1fr_0.9fr]">
+                <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                  <div className="mb-5">
+                    <h2 className="text-xl font-black text-slate-950">Phân bố điểm SEO</h2>
+                    <p className="mt-1 text-sm text-slate-500">Tổng hợp theo chất lượng hiện tại của toàn bộ bài viết.</p>
+                  </div>
+                  <div className="grid items-center gap-4 md:grid-cols-[220px_1fr]">
+                    <div className="h-[220px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={analytics.donutData} dataKey="value" innerRadius={58} outerRadius={86} paddingAngle={3}>
+                            {analytics.donutData.map((entry) => (
+                              <Cell key={entry.name} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="space-y-3">
+                      {analytics.donutData.map((item) => (
+                        <div key={item.name} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
+                            <span className="text-sm font-semibold text-slate-700">{item.name}</span>
+                          </div>
+                          <span className="text-sm font-bold text-slate-900">{item.value} bài</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div id="co-hoi-noi-dung" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-black text-slate-950">Cơ hội nội dung</h2>
+                      <p className="mt-1 text-sm text-slate-500">Ưu tiên cluster có dư địa tăng trưởng SEO tốt nhất.</p>
+                    </div>
+                    <ArrowUpRight size={18} className="text-indigo-500" />
+                  </div>
+                  <div className="space-y-3">
+                    {analytics.clusterRows.map((row) => (
+                      <div key={row.name} className="grid grid-cols-[1.3fr_0.5fr_0.7fr_0.8fr] items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm">
+                        <span className="font-semibold text-slate-800">{row.name}</span>
+                        <span className="font-bold text-slate-900">{row.opportunities}</span>
+                        <span className="rounded-full bg-amber-100 px-2 py-1 text-center text-xs font-semibold text-amber-700">{row.difficulty}</span>
+                        <span className="rounded-full bg-emerald-100 px-2 py-1 text-center text-xs font-semibold text-emerald-700">{row.potential}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div id="internal-link-health" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-black text-slate-950">Internal Link Health</h2>
+                      <p className="mt-1 text-sm text-slate-500">Đo nhanh tình trạng liên kết nội bộ trong kho bài viết.</p>
+                    </div>
+                    <Link2 size={18} className="text-cyan-500" />
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { label: "Bài viết thiếu internal link", value: analytics.internalLinkHealth.missing },
+                      { label: "Cơ hội internal link", value: analytics.internalLinkHealth.opportunities },
+                      { label: "Bài nhận link nhiều nhất", value: analytics.internalLinkHealth.bestLinked },
+                      { label: "Bài chưa nhận link nào", value: analytics.internalLinkHealth.orphan },
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+                        <span className="text-sm font-medium text-slate-700">{item.label}</span>
+                        <span className="text-lg font-black text-slate-950">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section id="tat-ca-bai-viet" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-8">
+                <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-950">Tất cả bài viết</h2>
+                    <p className="mt-1 text-sm text-slate-500">Quản lý danh sách tin tức và tối ưu hiệu suất.</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative min-w-[320px]">
+                      <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        value={tableSearch}
+                        onChange={(event) => setTableSearch(event.target.value)}
+                        placeholder="Tìm kiếm tiêu đề, từ khóa..."
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-3.5 pl-12 pr-4 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/5"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-bold text-slate-700">
+                      <ListFilter size={18} className="text-slate-400" />
+                      <select
+                        value={tableFilter}
+                        onChange={(event) => setTableFilter(event.target.value as typeof tableFilter)}
+                        className="bg-transparent outline-none"
+                      >
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="published">Đã xuất bản</option>
+                        <option value="draft">Bản nháp</option>
+                        <option value="needs-update">Cần cập nhật SEO</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        resetBlogForm();
+                        editorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-500 active:scale-95"
+                    >
+                      <Plus size={18} />
+                      Viết bài mới
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-100">
+                  <table className="min-w-full border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-100 bg-slate-50/50 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
+                        <th className="px-6 py-4">#</th>
+                        <th className="px-6 py-4">Tiêu đề bài viết</th>
+                        <th className="px-6 py-4">Từ khóa chính</th>
+                        <th className="px-6 py-4 text-center">SEO Score</th>
+                        <th className="px-6 py-4 text-center">Thứ hạng TB</th>
+                        <th className="px-6 py-4 text-center">Lượt xem</th>
+                        <th className="px-6 py-4">Cập nhật</th>
+                        <th className="px-6 py-4">Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {filteredTableRows.map((item, index) => (
+                        <tr key={item.id} className="group transition hover:bg-slate-50/80">
+                          <td className="px-6 py-5 text-slate-400">{index + 1}</td>
+                          <td className="px-6 py-5">
+                            <button type="button" onClick={() => editBlog(item)} className="text-left group/btn">
+                              <p className="font-bold text-slate-900 group-hover/btn:text-indigo-600 transition">{item.title}</p>
+                              <p className="mt-1 text-xs text-slate-400 font-medium">{item.slug || "chưa có slug"}</p>
+                            </button>
+                          </td>
+                          <td className="px-6 py-5">
+                            <span className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-bold text-slate-600">
+                              {item.keywordsMain || "Chưa có"}
+                            </span>
+                          </td>
+                          <td className="px-6 py-5 text-center">
+                            <span className={`inline-block w-10 rounded-lg py-1 text-xs font-black ${
+                              item.seoScore >= 80 ? "bg-emerald-100 text-emerald-700" : 
+                              item.seoScore >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
+                            }`}>
+                              {item.seoScore}
+                            </span>
+                          </td>
+                          <td className="px-6 py-5 text-center">
+                            <div className={`flex items-center justify-center gap-1 font-bold ${item.trendDelta >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+                              {item.trendDelta >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                              {Math.abs(item.trendDelta)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 text-center font-bold text-slate-700">
+                            {Math.round(Math.max(900, item.contentLength * 1.45 + item.seoScore * 18) / 100) / 10}K
+                          </td>
+                          <td className="px-6 py-5 text-slate-500 font-medium">
+                            {formatCompactDate(item.publishedAt || item.timestamp)}
+                          </td>
+                          <td className="px-6 py-5">
+                            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ${
+                              item.published ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+                            }`}>
+                              <span className={`h-1.5 w-1.5 rounded-full ${item.published ? "bg-emerald-500" : "bg-slate-400"}`} />
+                              {item.published ? "Đã xuất bản" : "Bản nháp"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {!loading && filteredTableRows.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+                      <Info size={40} className="mb-3 opacity-20" />
+                      <p className="text-sm font-medium">Không có bài viết phù hợp bộ lọc hiện tại.</p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              <section id="bien-tap" ref={editorRef} className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-950">Biên tập nội dung</h2>
+                    <p className="mt-1 text-sm text-slate-500">Giữ nguyên toàn bộ thao tác chỉnh sửa, SEO checklist và quản lý kho bài viết.</p>
+                  </div>
+                  <button type="button" onClick={() => void refreshBlogs()} className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                    <RefreshCw size={16} />
+                    Tải lại dữ liệu
+                  </button>
+                </div>
+
+                <NewsDashboard
+                  blogs={blogs}
+                  editingBlogId={editingBlogId}
+                  blogForm={blogForm}
+                  setBlogForm={setBlogForm}
+                  onReset={resetBlogForm}
+                  onSave={saveBlog}
+                  onEdit={editBlog}
+                  onGenerate={generateBlogDraftByAI}
+                  onTogglePublished={handleToggleBlogPublished}
+                  onToggleHot={handleToggleBlogHot}
+                  onDelete={handleDeleteBlog}
+                  settings={settings}
+                  onUpdateIntegrations={(next) => updateSettings({ seoIntegrations: next })}
+                />
               </section>
             </>
-          ) : (
-            <PluginManager />
           )}
-        </main>
-            <div id="xu-huong-seo" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-6">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-black text-slate-950">Xu hướng thứ hạng từ khóa</h2>
-                  <p className="mt-1 text-sm text-slate-500">Mô phỏng theo chất lượng SEO hiện tại của kho bài viết.</p>
-                </div>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{period} ngày qua</span>
-              </div>
-              <div className="h-[320px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={analytics.chartData}>
-                    <defs>
-                      <linearGradient id="top3Fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.24} />
-                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0.02} />
-                      </linearGradient>
-                      <linearGradient id="top10Fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.22} />
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
-                      </linearGradient>
-                      <linearGradient id="top100Fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.22} />
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.02} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid stroke="#e2e8f0" vertical={false} />
-                    <XAxis dataKey="label" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="top3" stroke="#22c55e" fill="url(#top3Fill)" strokeWidth={2.5} />
-                    <Area type="monotone" dataKey="top10" stroke="#3b82f6" fill="url(#top10Fill)" strokeWidth={2.5} />
-                    <Area type="monotone" dataKey="top100" stroke="#8b5cf6" fill="url(#top100Fill)" strokeWidth={2.5} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-black text-slate-950">Bài viết đang tụt hạng</h2>
-                <TrendingDown className="text-red-500" size={18} />
-              </div>
-              <div className="space-y-4">
-                {analytics.dropping.length > 0 ? analytics.dropping.map((item, index) => (
-                  <button key={item.id} type="button" onClick={() => editBlog(item)} className="flex w-full items-start justify-between gap-4 text-left">
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-slate-900">{index + 1}. {item.title}</p>
-                      <p className="mt-1 text-xs text-slate-500">{item.keywordsMain || "Chưa có từ khóa chính"}</p>
-                    </div>
-                    <span className="text-sm font-bold text-red-500">{item.trendDelta}</span>
-                  </button>
-                )) : <p className="text-sm text-slate-500">Chưa có bài nào rơi mạnh trong kỳ này.</p>}
-              </div>
-            </div>
-
-            <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-black text-slate-950">Bài viết đang tăng hạng</h2>
-                <TrendingUp className="text-emerald-500" size={18} />
-              </div>
-              <div className="space-y-4">
-                {analytics.rising.length > 0 ? analytics.rising.map((item, index) => (
-                  <button key={item.id} type="button" onClick={() => editBlog(item)} className="flex w-full items-start justify-between gap-4 text-left">
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-slate-900">{index + 1}. {item.title}</p>
-                      <p className="mt-1 text-xs text-slate-500">{item.keywordsMain || "Chưa có từ khóa chính"}</p>
-                    </div>
-                    <span className="text-sm font-bold text-emerald-500">+{item.trendDelta}</span>
-                  </button>
-                )) : <p className="text-sm text-slate-500">Chưa có bài tăng hạng nổi bật trong kỳ này.</p>}
-              </div>
-            </div>
-          </section>
-
-          <section className="grid gap-6 xl:grid-cols-[1fr_1fr_0.9fr]">
-            <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
-              <div className="mb-5">
-                <h2 className="text-xl font-black text-slate-950">Phân bố điểm SEO</h2>
-                <p className="mt-1 text-sm text-slate-500">Tổng hợp theo chất lượng hiện tại của toàn bộ bài viết.</p>
-              </div>
-              <div className="grid items-center gap-4 md:grid-cols-[220px_1fr]">
-                <div className="h-[220px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={analytics.donutData} dataKey="value" innerRadius={58} outerRadius={86} paddingAngle={3}>
-                        {analytics.donutData.map((entry) => (
-                          <Cell key={entry.name} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="space-y-3">
-                  {analytics.donutData.map((item) => (
-                    <div key={item.name} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
-                        <span className="text-sm font-semibold text-slate-700">{item.name}</span>
-                      </div>
-                      <span className="text-sm font-bold text-slate-900">{item.value} bài</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div id="co-hoi-noi-dung" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-black text-slate-950">Cơ hội nội dung</h2>
-                  <p className="mt-1 text-sm text-slate-500">Ưu tiên cluster có dư địa tăng trưởng SEO tốt nhất.</p>
-                </div>
-                <ArrowUpRight size={18} className="text-indigo-500" />
-              </div>
-              <div className="space-y-3">
-                {analytics.clusterRows.map((row) => (
-                  <div key={row.name} className="grid grid-cols-[1.3fr_0.5fr_0.7fr_0.8fr] items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm">
-                    <span className="font-semibold text-slate-800">{row.name}</span>
-                    <span className="font-bold text-slate-900">{row.opportunities}</span>
-                    <span className="rounded-full bg-amber-100 px-2 py-1 text-center text-xs font-semibold text-amber-700">{row.difficulty}</span>
-                    <span className="rounded-full bg-emerald-100 px-2 py-1 text-center text-xs font-semibold text-emerald-700">{row.potential}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div id="internal-link-health" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-black text-slate-950">Internal Link Health</h2>
-                  <p className="mt-1 text-sm text-slate-500">Đo nhanh tình trạng liên kết nội bộ trong kho bài viết.</p>
-                </div>
-                <Link2 size={18} className="text-cyan-500" />
-              </div>
-              <div className="space-y-3">
-                {[
-                  { label: "Bài viết thiếu internal link", value: analytics.internalLinkHealth.missing },
-                  { label: "Cơ hội internal link", value: analytics.internalLinkHealth.opportunities },
-                  { label: "Bài nhận link nhiều nhất", value: analytics.internalLinkHealth.bestLinked },
-                  { label: "Bài chưa nhận link nào", value: analytics.internalLinkHealth.orphan },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-                    <span className="text-sm font-medium text-slate-700">{item.label}</span>
-                    <span className="text-lg font-black text-slate-950">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section id="tat-ca-bai-viet" className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.05)] sm:p-8">
-            <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-              <div>
-                <h2 className="text-2xl font-black text-slate-950">Tất cả bài viết</h2>
-                <p className="mt-1 text-sm text-slate-500">Quản lý danh sách tin tức và tối ưu hiệu suất.</p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="relative min-w-[320px]">
-                  <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    value={tableSearch}
-                    onChange={(event) => setTableSearch(event.target.value)}
-                    placeholder="Tìm kiếm tiêu đề, từ khóa..."
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-3.5 pl-12 pr-4 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/5"
-                  />
-                </div>
-                <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-bold text-slate-700">
-                  <ListFilter size={18} className="text-slate-400" />
-                  <select
-                    value={tableFilter}
-                    onChange={(event) => setTableFilter(event.target.value as typeof tableFilter)}
-                    className="bg-transparent outline-none"
-                  >
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="published">Đã xuất bản</option>
-                    <option value="draft">Bản nháp</option>
-                    <option value="needs-update">Cần cập nhật SEO</option>
-                  </select>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetBlogForm();
-                    editorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-500 active:scale-95"
-                >
-                  <Plus size={18} />
-                  Viết bài mới
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-100">
-              <table className="min-w-full border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-slate-100 bg-slate-50/50 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
-                    <th className="px-6 py-4">#</th>
-                    <th className="px-6 py-4">Tiêu đề bài viết</th>
-                    <th className="px-6 py-4">Từ khóa chính</th>
-                    <th className="px-6 py-4 text-center">SEO Score</th>
-                    <th className="px-6 py-4 text-center">Thứ hạng TB</th>
-                    <th className="px-6 py-4 text-center">Lượt xem</th>
-                    <th className="px-6 py-4">Cập nhật</th>
-                    <th className="px-6 py-4">Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {filteredTableRows.map((item, index) => (
-                    <tr key={item.id} className="group transition hover:bg-slate-50/80">
-                      <td className="px-6 py-5 text-slate-400">{index + 1}</td>
-                      <td className="px-6 py-5">
-                        <button type="button" onClick={() => editBlog(item)} className="text-left group/btn">
-                          <p className="font-bold text-slate-900 group-hover/btn:text-indigo-600 transition">{item.title}</p>
-                          <p className="mt-1 text-xs text-slate-400 font-medium">{item.slug || "chưa có slug"}</p>
-                        </button>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-bold text-slate-600">
-                          {item.keywordsMain || "Chưa có"}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5 text-center">
-                        <span className={`inline-block w-10 rounded-lg py-1 text-xs font-black ${
-                          item.seoScore >= 80 ? "bg-emerald-100 text-emerald-700" : 
-                          item.seoScore >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
-                        }`}>
-                          {item.seoScore}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5 text-center">
-                        <div className={`flex items-center justify-center gap-1 font-bold ${item.trendDelta >= 0 ? "text-emerald-600" : "text-red-500"}`}>
-                          {item.trendDelta >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                          {Math.abs(item.trendDelta)}
-                        </div>
-                      </td>
-                      <td className="px-6 py-5 text-center font-bold text-slate-700">
-                        {Math.round(Math.max(900, item.contentLength * 1.45 + item.seoScore * 18) / 100) / 10}K
-                      </td>
-                      <td className="px-6 py-5 text-slate-500 font-medium">
-                        {formatCompactDate(item.publishedAt || item.timestamp)}
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ${
-                          item.published ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
-                        }`}>
-                          <span className={`h-1.5 w-1.5 rounded-full ${item.published ? "bg-emerald-500" : "bg-slate-400"}`} />
-                          {item.published ? "Đã xuất bản" : "Bản nháp"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {!loading && filteredTableRows.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-16 text-slate-400">
-                  <Info size={40} className="mb-3 opacity-20" />
-                  <p className="text-sm font-medium">Không có bài viết phù hợp bộ lọc hiện tại.</p>
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section id="bien-tap" ref={editorRef} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-black text-slate-950">Biên tập nội dung</h2>
-                <p className="mt-1 text-sm text-slate-500">Giữ nguyên toàn bộ thao tác chỉnh sửa, SEO checklist và quản lý kho bài viết.</p>
-              </div>
-              <button type="button" onClick={() => void refreshBlogs()} className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                <RefreshCw size={16} />
-                Tải lại dữ liệu
-              </button>
-            </div>
-
-            <NewsDashboard
-              blogs={blogs}
-              editingBlogId={editingBlogId}
-              blogForm={blogForm}
-              setBlogForm={setBlogForm}
-              onReset={resetBlogForm}
-              onSave={saveBlog}
-              onEdit={editBlog}
-              onGenerate={generateBlogDraftByAI}
-              onTogglePublished={handleToggleBlogPublished}
-              onToggleHot={handleToggleBlogHot}
-              onDelete={handleDeleteBlog}
-              settings={settings}
-              onUpdateIntegrations={(next) => updateSettings({ seoIntegrations: next })}
-            />
-          </section>
         </main>
       </div>
     </div>

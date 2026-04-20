@@ -335,21 +335,33 @@ export function AnimatedMascot() {
                 });
               }
             }}
-            animate={{ y: [0, -6, 0], rotate: [0, 3, -3, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex h-[72px] w-[72px] items-center justify-center rounded-full border shadow-[0_12px_28px_rgba(0,0,0,0.45)] backdrop-blur-md transition-transform hover:scale-105"
-            style={{
-              borderColor: `${platformColor}cc`,
-              background: `radial-gradient(circle at 30% 30%, ${platformColor}88, rgba(255,255,255,0.2), rgba(0,0,0,0.4))`,
+            animate={{ 
+              y: [0, -8, 0], 
+              rotate: [0, 2, -2, 0],
+              filter: [
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 20px 25px rgba(0,0,0,0.4)) brightness(1.1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)"
+              ]
             }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="flex h-[88px] w-[82px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >
-            <img
-              src="/mascot-home.png"
-              alt="AI Mascot"
-              className="h-[82px] w-[82px] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-              style={{ filter: dragonStyle.filter, transform: `scale(${dragonStyle.scale})` }}
-            />
+            <div className="relative group">
+              {/* Glow effect background */}
+              <div className="absolute inset-0 -z-10 bg-white/20 blur-2xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-500 opacity-50" />
+              
+              <img
+                src="/mascot-home.png"
+                alt="AI Mascot"
+                className="h-[82px] w-[82px] object-contain"
+                style={{ 
+                  filter: `${dragonStyle.filter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`, 
+                  transform: `scale(${dragonStyle.scale})` 
+                }}
+              />
+            </div>
           </motion.button>
         </div>
       )}
