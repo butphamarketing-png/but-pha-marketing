@@ -4,6 +4,7 @@ import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com"),
@@ -57,6 +58,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className="dark">
       <body>
+        <NextTopLoader color="#7C3AED" showSpinner={false} shadow="0 0 10px #7C3AED,0 0 5px #7C3AED" />
         <AuthProvider>
           <AdminProvider>
             <ExternalScripts />

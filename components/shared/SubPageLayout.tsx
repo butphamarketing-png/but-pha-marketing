@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronUp } from "lucide-react";
 import { ConsultModal } from "./ConsultModal";
 import { CursorEffect } from "./CursorEffect";
 import { ChatbotWidget } from "./ChatbotWidget";
 import { DynamicGreeting } from "./DynamicGreeting";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { usePathname } from "next/navigation";
 
@@ -40,7 +40,16 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   const [showConsult, setShowConsult] = useState(false);
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const playClick = useClickSound();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 500);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
 
   useEffect(() => {
@@ -175,6 +184,21 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       <main className="pb-24">
         {children}
       </main>
+
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-background/80 text-white shadow-lg backdrop-blur-md transition-all hover:scale-110 active:scale-95"
+            style={{ borderLeftColor: primaryColor, borderTopColor: primaryColor }}
+          >
+            <ChevronUp size={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <ChatbotWidget color={primaryColor} />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />

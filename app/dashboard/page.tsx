@@ -22,13 +22,21 @@ function DashboardContent() {
   const [projectDrafts, setProjectDrafts] = useState<Record<number, string>>({});
 
   useEffect(() => {
-    if (!user?.portalId) return;
+    const portalId = user?.portalId;
+    if (!portalId) return;
 
     const loadPortal = async () => {
-      // Fetch specifically by the logged-in user's portalId
-      const result = await db.clientPortals.get(user.portalId);
+      // Đảm bảo portalId luôn là số hợp lệ
+      const numericId = typeof portalId === "string" ? parseInt(portalId, 10) : portalId;
+      
+      if (isNaN(numericId)) {
+        console.error("ID cổng không hợp lệ:", portalId);
+        return;
+      }
+
+      const result = await db.clientPortals.get(numericId);
       if (result.error) {
-        console.error('Load portals error:', result.error);
+        console.error("Lỗi tải cổng:", result.error);
         return;
       }
       const found = result.data;
