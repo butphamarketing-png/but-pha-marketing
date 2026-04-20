@@ -164,7 +164,6 @@ export default function AdminPage() {
   const [selectedPkgPlatform, setSelectedPkgPlatform] = useState("facebook");
   const [mediaUrl, setMediaUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
-  const [seoData, setSeoData] = useState<any>({});
   const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
   const [blogSaveError, setBlogSaveError] = useState<string | null>(null);
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
