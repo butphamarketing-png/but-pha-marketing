@@ -5,51 +5,83 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
 import { DynamicFavicon } from "@/components/shared/DynamicFavicon";
+import { createServerClient } from "@/lib/supabase";
 import NextTopLoader from "nextjs-toploader";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com"),
-  applicationName: "Bứt Phá Marketing",
-  title: {
-    default: "Bứt Phá Marketing | Giải pháp marketing thực chiến",
-    template: "%s | Bứt Phá Marketing",
-  },
-  description: "Agency marketing toàn diện tại Việt Nam. Dịch vụ Facebook, TikTok, Instagram, Website, Local SEO và chiến lược tăng trưởng doanh thu.",
-  keywords: ["agency marketing", "facebook marketing", "tiktok marketing", "instagram marketing", "local seo", "website marketing"],
-  authors: [{ name: "Bứt Phá Marketing" }],
-  creator: "Bứt Phá Marketing",
-  publisher: "Bứt Phá Marketing",
-  alternates: {
-    canonical: "/",
-  },
-  icons: {
-    icon: "/favicon.svg",
-  },
-  openGraph: {
-    title: "Bứt Phá Marketing | Giải pháp marketing thực chiến",
-    description: "Agency marketing toàn diện tại Việt Nam với chiến lược tăng trưởng doanh thu thực tế.",
-    url: "/",
-    siteName: "Bứt Phá Marketing",
-    locale: "vi_VN",
-    type: "website",
-    images: [
-      {
-        url: "/opengraph.jpg",
-        alt: "Bứt Phá Marketing",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Bứt Phá Marketing | Giải pháp marketing thực chiến",
-    description: "Agency marketing toàn diện tại Việt Nam với chiến lược tăng trưởng doanh thu thực tế.",
-    images: ["/opengraph.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+const DEFAULT_TITLE = "But Pha Marketing";
+const DEFAULT_DESCRIPTION =
+  "Agency marketing toan dien tai Viet Nam. Dich vu Facebook, TikTok, Instagram, Website, Local SEO va chien luoc tang truong doanh thu.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let siteTitle = DEFAULT_TITLE;
+  let favicon = "/favicon.svg";
+
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "admin_settings")
+      .maybeSingle();
+
+    if (typeof data?.value?.title === "string" && data.value.title.trim()) {
+      siteTitle = data.value.title.trim();
+    }
+
+    if (typeof data?.value?.favicon === "string" && data.value.favicon.trim()) {
+      favicon = data.value.favicon.trim();
+    }
+  } catch (error) {
+    console.error("[layout metadata] Failed to load dynamic branding", error);
+  }
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    applicationName: siteTitle,
+    title: {
+      default: `${siteTitle} | Giai phap marketing thuc chien`,
+      template: `%s | ${siteTitle}`,
+    },
+    description: DEFAULT_DESCRIPTION,
+    keywords: ["agency marketing", "facebook marketing", "tiktok marketing", "instagram marketing", "local seo", "website marketing"],
+    authors: [{ name: siteTitle }],
+    creator: siteTitle,
+    publisher: siteTitle,
+    alternates: {
+      canonical: "/",
+    },
+    icons: {
+      icon: favicon,
+      shortcut: favicon,
+      apple: favicon,
+    },
+    openGraph: {
+      title: `${siteTitle} | Giai phap marketing thuc chien`,
+      description: DEFAULT_DESCRIPTION,
+      url: "/",
+      siteName: siteTitle,
+      locale: "vi_VN",
+      type: "website",
+      images: [
+        {
+          url: "/opengraph.jpg",
+          alt: siteTitle,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${siteTitle} | Giai phap marketing thuc chien`,
+      description: DEFAULT_DESCRIPTION,
+      images: ["/opengraph.jpg"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

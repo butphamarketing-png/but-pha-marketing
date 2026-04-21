@@ -153,7 +153,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
           <span className="hidden sm:inline">Hub Center</span>
         </Link>
         <div className="flex items-center gap-3">
-          <img src="/logo.jpg" alt="Logo" className="h-8 w-8 rounded-full" />
+          <img src={settings.logo || "/logo.jpg"} alt="Logo" className="h-8 w-8 rounded-full object-cover" />
           <span className="font-bold text-white hidden sm:inline">{settings.title}</span>
         </div>
         <button
@@ -209,5 +209,4 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
     </div>
   );
 }
-
 
