@@ -6,7 +6,6 @@ import Link from "next/link";
 import { SiFacebook, SiGooglemaps, SiInstagram, SiTiktok, SiWebflow, SiZalo } from "react-icons/si";
 import { ChevronLeft, ChevronRight, Flame, Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
-import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
@@ -18,9 +17,9 @@ export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
-  const [showRoadmap, setShowRoadmap] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [blogPage, setBlogPage] = useState(0);
+  const [reviewPage, setReviewPage] = useState(0);
   const { user } = useAuth();
   const { settings } = useAdmin();
 
@@ -114,22 +113,13 @@ export default function HomePageClient() {
         {!settings.presentationMode && (
           <div className="flex flex-col items-end gap-2">
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setShowLogin(true)}
+              <Link
+                href="/dashboard"
                 className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10"
               >
-                {user ? "Khu vực khách hàng" : "Đăng nhập / Đăng ký"}
-              </button>
+                Check Roadmap
+              </Link>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowRoadmap(true)}
-              className="group flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary transition-all hover:bg-primary/20"
-            >
-              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              Lộ trình dự án
-            </button>
           </div>
         )}
       </header>
@@ -256,6 +246,94 @@ export default function HomePageClient() {
           )}
         </section>
 
+        <section className="mx-auto mt-20 max-w-6xl">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-black text-white md:text-4xl">Đánh giá từ khách hàng</h2>
+              <p className="mt-1 text-sm text-gray-400">Cảm nhận thực tế từ những doanh nghiệp đã làm việc với chúng tôi.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setReviewPage((page) => Math.max(0, page - 1))}
+                disabled={reviewPage === 0}
+                className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setReviewPage((page) => Math.min(Math.max(0, 2 - 1), page + 1))}
+                disabled={reviewPage >= 1}
+                className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {[
+              {
+                id: 1,
+                name: "Công ty ABC",
+                logo: settings?.logo || "/logo.jpg",
+                rating: 5,
+                text: "Dịch vụ marketing của Bứt Phá rất chuyên nghiệp. Doanh số tăng 150% sau 3 tháng hợp tác.",
+                author: "CEO, Công ty ABC"
+              },
+              {
+                id: 2,
+                name: "Công ty XYZ",
+                logo: "/logo.jpg",
+                rating: 5,
+                text: "Team tư vấn rất nhiệt tình, chiến lược marketing được tối ưu hóa đúng nhu cầu business.",
+                author: "Marketing Manager, Công ty XYZ"
+              },
+              {
+                id: 3,
+                name: "Công ty 123",
+                logo: "/logo.jpg",
+                rating: 4,
+                text: "Kết quả tốt, đặc biệt là việc quản lý các chiến dịch rất chi tiết và minh bạch.",
+                author: "Director, Công ty 123"
+              },
+              {
+                id: 4,
+                name: "Công ty DEF",
+                logo: "/logo.jpg",
+                rating: 5,
+                text: "Tăng traffic website 200%, lead quality cũng cao. Rất đáng đầu tư.",
+                author: "Founder, Công ty DEF"
+              }
+            ].slice(reviewPage * 2, reviewPage * 2 + 2).map((review) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-card to-card/50 p-6 shadow-xl transition hover:border-primary/30"
+              >
+                <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl transition group-hover:bg-primary/20" />
+                
+                <div className="relative space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <img src={review.logo} alt={review.name} className="h-12 w-12 rounded-full object-cover" />
+                      <div>
+                        <p className="font-bold text-white">{review.name}</p>
+                        <p className="text-xs text-gray-400">{review.author}</p>
+                      </div>
+                    </div>
+                    <div className="text-lg text-yellow-400">{"★".repeat(review.rating)}</div>
+                  </div>
+                  
+                  <p className="text-sm leading-relaxed text-gray-200 italic">"{review.text}"</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         <div className="mt-20 flex flex-col items-center gap-6">
           <a href="tel:0937417982" className="flex items-center gap-3 rounded-full border border-primary/50 bg-primary/20 px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-primary/40">
             <Phone className="animate-pulse" />
@@ -265,7 +343,6 @@ export default function HomePageClient() {
       </main>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
-      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
 
       <style>{`
         @keyframes shimmer {

@@ -22,6 +22,7 @@ const ADMIN_PASSWORD = "admin123";
 
 const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
+  { id: "projects", label: "Quản lý dự án", icon: BarChart2 },
   { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
@@ -1138,7 +1139,7 @@ export default function AdminPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm rounded-2xl border border-white/10 bg-card p-8">
           <div className="mb-6 flex items-center gap-3">
             <img src="/logo.jpg" alt="Logo" className="h-10 w-10 rounded-full" />
-            <div><p className="font-bold text-white">Bứt Phá Marketing</p><p className="text-xs text-gray-400">Trang quản trị hệ thống</p></div>
+            <div><p className="font-bold text-white">Bứt Phá Marketing</p><p className="text-xs text-gray-400">Trang quản trị hệ th��ng</p></div>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <input type="password" value={password} onChange={e => { setPassword(e.target.value); setError(""); }} placeholder="Mật khẩu admin" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
@@ -1249,6 +1250,95 @@ export default function AdminPage() {
                       <input type="text" value={settings.platformNames?.[p.key] || ""} onChange={e => updatePlatformName(p.key, e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "projects" && (
+            <div className="space-y-8">
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h2 className="mb-6 text-2xl font-bold text-white">Quản lý dự án khách hàng</h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm text-gray-400">Tổng dự án</p>
+                    <p className="mt-3 text-3xl font-black text-white">12</p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm text-gray-400">Đang chạy</p>
+                    <p className="mt-3 text-3xl font-black text-white">8</p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm text-gray-400">Hoàn thành</p>
+                    <p className="mt-3 text-3xl font-black text-white">4</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h3 className="mb-4 text-lg font-bold text-white">Danh sách khách hàng và dự án</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Khách hàng</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Dự án</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Tiến độ</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Bài đăng</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Còn lại</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <tr key={i} className="hover:bg-white/5">
+                          <td className="px-4 py-3">
+                            <div>
+                              <p className="font-medium text-white">Khách hàng {i}</p>
+                              <p className="text-xs text-gray-500">customer{i}@example.com</p>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-white">Dự án {i}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <div className="h-2 w-24 rounded-full bg-white/10">
+                                <div className="h-full w-1/2 rounded-full bg-primary" />
+                              </div>
+                              <span className="text-xs text-white">50%</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-white">{i * 5}</td>
+                          <td className="px-4 py-3 text-white">{30 - i * 5} ngày</td>
+                          <td className="px-4 py-3">
+                            <button className="rounded px-3 py-1.5 text-xs font-bold text-primary hover:bg-white/5">
+                              Chi tiết
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h3 className="mb-4 text-lg font-bold text-white">Quản lý thông báo</h3>
+                <div className="space-y-3">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="font-medium text-white">Bảng tin dự án</p>
+                        <p className="mt-1 text-sm text-gray-400">Thông báo cập nhật dự án cho khách hàng</p>
+                      </div>
+                      <input type="checkbox" checked={true} className="mt-1 h-4 w-4" />
+                    </div>
+                  </div>
+                  <div>
+                    <textarea placeholder="Nội dung thông báo..." className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-primary/50" rows={3} />
+                    <button className="mt-3 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
+                      Gửi thông báo
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

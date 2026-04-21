@@ -13,7 +13,7 @@ export default function NotFound() {
       >
         <div className="flex h-44 w-44 items-center justify-center rounded-full bg-primary/10 shadow-[0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm border border-white/10">
           <img
-            src="/mascot-home.png"
+            src="/mascot-dragon.svg"
             alt="AI Mascot"
             className="h-36 w-36 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
           />
