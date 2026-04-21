@@ -1661,45 +1661,15 @@ export default function AdminPage() {
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <p className="text-xs font-semibold text-gray-400">Logo Website (Dạng ảnh)</p>
-                      <div className="relative aspect-square w-full max-w-[120px] overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                        {settings.logo ? <img src={settings.logo} alt="Logo" className="h-full w-full object-contain p-2" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có logo</div>}
-                        <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                          <span className="text-[10px] font-bold text-white">Thay đổi</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async e => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const url = await fileToDataUrl(file);
-                              updateSettings({ logo: url });
-                              e.currentTarget.value = "";
-                            }}
-                          />
-                        </label>
+                      <div className="aspect-square w-full max-w-[120px] overflow-hidden rounded-xl border border-white/10 bg-black/20 p-2">
+                        {settings.logo ? <img src={settings.logo} alt="Logo" className="h-full w-full object-contain" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có logo</div>}
                       </div>
                       <input value={settings.logo || ""} onChange={e => updateSettings({ logo: e.target.value })} placeholder="URL logo..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
                     </div>
                     <div className="space-y-2">
                       <p className="text-xs font-semibold text-gray-400">Favicon (Icon trình duyệt)</p>
-                      <div className="relative aspect-square w-12 overflow-hidden rounded-lg border border-white/10 bg-black/20">
-                        {settings.favicon ? <img src={settings.favicon} alt="Favicon" className="h-full w-full object-contain p-2" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">?</div>}
-                        <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                          <span className="text-[10px] font-bold text-white">Đổi</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async e => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const url = await fileToDataUrl(file);
-                              updateSettings({ favicon: url });
-                              e.currentTarget.value = "";
-                            }}
-                          />
-                        </label>
+                      <div className="aspect-square w-12 overflow-hidden rounded-lg border border-white/10 bg-black/20 p-2">
+                        {settings.favicon ? <img src={settings.favicon} alt="Favicon" className="h-full w-full object-contain" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">?</div>}
                       </div>
                       <input value={settings.favicon || ""} onChange={e => updateSettings({ favicon: e.target.value })} placeholder="URL favicon..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
                     </div>
