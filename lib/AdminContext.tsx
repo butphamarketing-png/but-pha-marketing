@@ -164,7 +164,7 @@ const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   heroTitle: "Bứt Phá Marketing",
   heroSubtitle: "",
-  logo: "/logo.svg",
+  logo: "/logo.jpg",
   favicon: "/favicon.svg",
   content: "",
   hotline: "0937 417 982",
