@@ -235,6 +235,7 @@ function DashboardContent() {
               </div>
             </div>
 
+            {activeTab === "projects" && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
               <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-5">
                 <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">Dự án</p>
