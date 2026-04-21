@@ -8,6 +8,7 @@ import { PresentationButton } from "./PresentationButton";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
+import { getBrandingAssetUrl } from "@/lib/branding";
 import { usePathname } from "next/navigation";
 
 interface SubPageLayoutProps {
@@ -37,6 +38,7 @@ function useClickSound() {
 
 export function SubPageLayout({ platformName, primaryColor, children }: SubPageLayoutProps) {
   const { settings } = useAdmin();
+  const logoSrc = getBrandingAssetUrl("logo", settings.logo || settings.favicon || "");
   const pathname = usePathname();
   const [showConsult, setShowConsult] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -153,7 +155,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
           <span className="hidden sm:inline">Hub Center</span>
         </Link>
         <div className="flex items-center gap-3">
-          <img src={settings.logo || "/logo.jpg"} alt="Logo" className="h-8 w-8 rounded-full object-cover" />
+          <img src={logoSrc} alt="Logo" className="h-8 w-8 rounded-full object-cover" />
           <span className="font-bold text-white hidden sm:inline">{settings.title}</span>
         </div>
         <button
@@ -209,4 +211,3 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
     </div>
   );
 }
-

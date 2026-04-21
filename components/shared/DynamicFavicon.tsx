@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { useAdmin } from "@/lib/AdminContext";
+import { getBrandingAssetUrl } from "@/lib/branding";
 
 export function DynamicFavicon() {
   const { settings } = useAdmin();
 
   useEffect(() => {
-    const href = `/api/branding/favicon?v=${Date.now()}`;
+    const href = getBrandingAssetUrl("favicon", settings.favicon || settings.logo);
 
     const ensureIconLink = (rel: string) => {
       let link = document.querySelector(`link[rel='${rel}']`) as HTMLLinkElement | null;

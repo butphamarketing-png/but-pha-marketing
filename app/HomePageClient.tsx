@@ -11,6 +11,7 @@ import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
+import { getBrandingAssetUrl } from "@/lib/branding";
 import { db, type NewsItem } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
@@ -23,7 +24,10 @@ export default function HomePageClient() {
   const [blogPage, setBlogPage] = useState(0);
   const { user } = useAuth();
   const { settings } = useAdmin();
-  const logoSrc = useMemo(() => settings?.logo || "/logo.jpg", [settings?.logo]);
+  const logoSrc = useMemo(
+    () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
+    [settings?.favicon, settings?.logo],
+  );
 
   useEffect(() => {
     db.news.getAll().then((result) => {
