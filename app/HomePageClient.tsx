@@ -12,7 +12,7 @@ import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
 import { getBrandingAssetUrl } from "@/lib/branding";
-import { db, type NewsItem } from "@/lib/useData";
+import { db, type ClientReview, type NewsItem } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
 export default function HomePageClient() {
@@ -22,6 +22,8 @@ export default function HomePageClient() {
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [blogPage, setBlogPage] = useState(0);
+  const [reviews, setReviews] = useState<ClientReview[]>([]);
+  const [reviewPage, setReviewPage] = useState(0);
   const { user } = useAuth();
   const { settings } = useAdmin();
   const logoSrc = useMemo(
@@ -41,11 +43,18 @@ export default function HomePageClient() {
 
       setBlogs(sorted);
     });
+
+    db.clientReviews.getAll().then((result) => {
+      const sorted = [...(result.data || [])].sort(
+        (a, b) => Date.parse(b.createdAt || "") - Date.parse(a.createdAt || ""),
+      );
+      setReviews(sorted);
+    });
   }, []);
 
   useEffect(() => {
     let raf = 0;
-    const durationMs = 2200;
+    const durationMs = 900;
     const startedAt = performance.now();
 
     const tick = (now: number) => {
@@ -98,6 +107,8 @@ export default function HomePageClient() {
 
   const visibleBlogs = blogs.slice(blogPage * 4, blogPage * 4 + 4);
   const blogMaxPage = Math.max(0, Math.ceil(blogs.length / 4) - 1);
+  const visibleReviews = reviews.slice(reviewPage * 4, reviewPage * 4 + 4);
+  const reviewMaxPage = Math.max(0, Math.ceil(reviews.length / 4) - 1);
   const blogSlug = (item: NewsItem) =>
     item.slug ||
     item.title
@@ -252,6 +263,74 @@ export default function HomePageClient() {
                   </div>
                   {blog.hot ? <div className="pointer-events-none absolute inset-0 animate-pulse rounded-2xl ring-1 ring-orange-500/70" /> : null}
                 </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="mx-auto mt-20 max-w-6xl">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-black text-white md:text-4xl">Danh gia khach hang</h2>
+              <p className="mt-1 text-sm text-gray-400">
+                Review duoc dong bo tu dashboard noi bo sau khi khach hang gui danh gia.
+              </p>
+            </div>
+
+            {reviews.length > 4 && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setReviewPage((page) => Math.max(0, page - 1))}
+                  disabled={reviewPage === 0}
+                  className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setReviewPage((page) => Math.min(reviewMaxPage, page + 1))}
+                  disabled={reviewPage === reviewMaxPage}
+                  className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {reviews.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-white/20 bg-card/40 p-8 text-center">
+              <p className="text-sm text-gray-300">Chua co review nao duoc gui tu dashboard khach hang.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {visibleReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="rounded-2xl border border-white/10 bg-card p-5 shadow-xl transition-transform hover:-translate-y-1"
+                >
+                  <div className="mb-4 flex items-center gap-3">
+                    {review.logoUrl ? (
+                      <img
+                        src={review.logoUrl}
+                        alt={review.clientName}
+                        className="h-12 w-12 rounded-2xl object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-sm font-black text-white">
+                        {review.clientName?.slice(0, 1) || "K"}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-black text-white">{review.clientName}</p>
+                      <p className="mt-1 text-xs text-yellow-300">
+                        {"★".repeat(Math.max(1, Math.min(5, review.rating || 5)))}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="line-clamp-6 text-sm leading-6 text-gray-300">{review.content}</p>
+                </div>
               ))}
             </div>
           )}

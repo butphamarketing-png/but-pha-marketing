@@ -325,9 +325,24 @@ function mapClientPortal(value: unknown): ClientPortal {
     password: typeof item.password === "string" ? item.password : undefined,
     email: typeof item.email === "string" ? item.email : undefined,
     address: typeof item.address === "string" ? item.address : undefined,
-    businessName: typeof item.businessName === "string" ? item.businessName : undefined,
-    platformLink: typeof item.platformLink === "string" ? item.platformLink : undefined,
-    tickerText: typeof item.tickerText === "string" ? item.tickerText : undefined,
+    businessName:
+      typeof item.businessName === "string"
+        ? item.businessName
+        : typeof item.business_name === "string"
+          ? item.business_name
+          : undefined,
+    platformLink:
+      typeof item.platformLink === "string"
+        ? item.platformLink
+        : typeof item.platform_link === "string"
+          ? item.platform_link
+          : undefined,
+    tickerText:
+      typeof item.tickerText === "string"
+        ? item.tickerText
+        : typeof item.ticker_text === "string"
+          ? item.ticker_text
+          : undefined,
   };
 }
 
@@ -346,13 +361,22 @@ function mapProgressArticle(value: unknown): ProgressArticle {
 
 function mapClientReview(value: unknown): ClientReview {
   const item = isRecord(value) ? value : {};
+  const rawNote = toStringValue(item.note);
+  let parsedNote: Record<string, unknown> = {};
+  try {
+    const maybe = rawNote ? JSON.parse(rawNote) : null;
+    if (isRecord(maybe)) parsedNote = maybe;
+  } catch {
+    parsedNote = {};
+  }
+
   return {
     id: toStringValue(item.id),
-    clientId: toNumber(item.clientId ?? item.client_id),
-    clientName: toStringValue(item.clientName ?? item.client_name),
-    logoUrl: typeof item.logoUrl === "string" ? item.logoUrl : undefined,
-    rating: toNumber(item.rating, 5),
-    content: toStringValue(item.content),
+    clientId: toNumber(item.clientId ?? item.client_id ?? parsedNote.clientId),
+    clientName: toStringValue(item.clientName ?? item.client_name ?? parsedNote.clientName ?? item.name),
+    logoUrl: typeof (item.logoUrl ?? parsedNote.logoUrl) === "string" ? (item.logoUrl ?? parsedNote.logoUrl) as string : undefined,
+    rating: toNumber(item.rating ?? parsedNote.rating, 5),
+    content: toStringValue(item.content ?? parsedNote.content ?? item.note),
     createdAt: toStringValue(item.createdAt ?? item.created_at),
   };
 }
@@ -565,20 +589,7 @@ export const db = {
   clientReviews: {
     getAll: (): Promise<ApiResult<ClientReview[]>> =>
       cachedFetch("client_reviews", () =>
-        apiFetch<ClientReview[]>("/leads?type=review", undefined, (value) =>
-          normalizeArray(value, (item) => {
-            const r = isRecord(item) ? item : {};
-            return {
-              id: toStringValue(r.id),
-              clientId: toNumber(r.clientId ?? r.client_id),
-              clientName: toStringValue(r.clientName ?? r.client_name ?? r.name),
-              logoUrl: typeof r.logoUrl === "string" ? r.logoUrl : undefined,
-              rating: toNumber(r.rating, 5),
-              content: toStringValue(r.content ?? r.note),
-              createdAt: toStringValue(r.createdAt ?? r.created_at),
-            } as ClientReview;
-          }),
-        ),
+        apiFetch<ClientReview[]>("/leads?type=review", undefined, (value) => normalizeArray(value, mapClientReview)),
       ),
     add: async (review: Omit<ClientReview, "id" | "createdAt">): Promise<ApiResult<Lead>> => {
       const result = await apiFetch<Lead>("/leads", {

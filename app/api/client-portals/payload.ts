@@ -42,6 +42,11 @@ export function normalizeClientPortalPayload(input: unknown) {
   const progressPercent =
     getNumber(body.progressPercent) ?? getNumber(body.progress_percent);
   const weeklyReports = getJson(body.weeklyReports ?? body.weekly_reports);
+  const email = getString(body.email);
+  const address = getString(body.address);
+  const businessName = getString(body.businessName) ?? getString(body.business_name);
+  const platformLink = getString(body.platformLink) ?? getString(body.platform_link);
+  const tickerText = getString(body.tickerText) ?? getString(body.ticker_text);
 
   if (username !== undefined) payload.username = username;
   if (password !== undefined) payload.password = password;
@@ -52,6 +57,11 @@ export function normalizeClientPortalPayload(input: unknown) {
   if (postsCount !== undefined) payload.posts_count = postsCount;
   if (progressPercent !== undefined) payload.progress_percent = progressPercent;
   if (weeklyReports !== undefined) payload.weekly_reports = weeklyReports;
+  if (email !== undefined) payload.email = email;
+  if (address !== undefined) payload.address = address;
+  if (businessName !== undefined) payload.business_name = businessName;
+  if (platformLink !== undefined) payload.platform_link = platformLink;
+  if (tickerText !== undefined) payload.ticker_text = tickerText;
 
   return payload;
 }
