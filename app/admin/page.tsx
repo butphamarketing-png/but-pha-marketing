@@ -1158,7 +1158,7 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button
               key={n.id}
-              onClick={() => n.id === "news" ? router.push("/admin/news") : setActiveTab(n.id)}
+              onClick={() => n.id === "news" ? router.push("/admin/news") : n.id === "portals" ? router.push("/admin/portals") : setActiveTab(n.id)}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                 activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"
               }`}

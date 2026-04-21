@@ -101,6 +101,31 @@ export interface ProgressArticle {
   createdAt: string;
 }
 
+// Extended project data stored in weeklyReports
+export interface ClientProject {
+  id: string;
+  title: string;
+  registeredAt: string;
+  deadlineAt: string;
+  budgetVnd: number;
+  // Thông tin dự án (rich text)
+  infoDoc: string;
+  // Tiến độ dự án (rich text)
+  progressDoc: string;
+  // Báo cáo dự án (rich text)
+  resultDoc: string;
+}
+
+export interface ClientReview {
+  id: string;
+  clientId: number;
+  clientName: string;
+  logoUrl?: string;
+  rating: number; // 1-5
+  content: string;
+  createdAt: string;
+}
+
 export interface ClientPortal {
   id: number;
   username: string;
@@ -113,6 +138,12 @@ export interface ClientPortal {
   weeklyReports?: PortalReport[];
   createdAt: string;
   password?: string;
+  // Extended fields
+  email?: string;
+  address?: string;
+  businessName?: string;
+  platformLink?: string;
+  tickerText?: string; // chữ chạy ngang thông báo
 }
 
 const API_URL = "/api";
@@ -292,6 +323,11 @@ function mapClientPortal(value: unknown): ClientPortal {
       : undefined,
     createdAt: toStringValue(item.createdAt ?? item.created_at),
     password: typeof item.password === "string" ? item.password : undefined,
+    email: typeof item.email === "string" ? item.email : undefined,
+    address: typeof item.address === "string" ? item.address : undefined,
+    businessName: typeof item.businessName === "string" ? item.businessName : undefined,
+    platformLink: typeof item.platformLink === "string" ? item.platformLink : undefined,
+    tickerText: typeof item.tickerText === "string" ? item.tickerText : undefined,
   };
 }
 
@@ -304,6 +340,19 @@ function mapProgressArticle(value: unknown): ProgressArticle {
     content: toStringValue(item.content),
     status: toStringValue(item.status, ""),
     image: typeof item.image === "string" ? item.image : undefined,
+    createdAt: toStringValue(item.createdAt ?? item.created_at),
+  };
+}
+
+function mapClientReview(value: unknown): ClientReview {
+  const item = isRecord(value) ? value : {};
+  return {
+    id: toStringValue(item.id),
+    clientId: toNumber(item.clientId ?? item.client_id),
+    clientName: toStringValue(item.clientName ?? item.client_name),
+    logoUrl: typeof item.logoUrl === "string" ? item.logoUrl : undefined,
+    rating: toNumber(item.rating, 5),
+    content: toStringValue(item.content),
     createdAt: toStringValue(item.createdAt ?? item.created_at),
   };
 }
@@ -509,6 +558,49 @@ export const db = {
     delete: async (id: number, clientId: number): Promise<ApiResult<void>> => {
       const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, { method: "DELETE" });
       if (!result.error) invalidateCache(`progress_articles_${clientId}`);
+      return { data: null, error: result.error };
+    },
+  },
+  // Client reviews stored in leads table with type="review"
+  clientReviews: {
+    getAll: (): Promise<ApiResult<ClientReview[]>> =>
+      cachedFetch("client_reviews", () =>
+        apiFetch<ClientReview[]>("/leads?type=review", undefined, (value) =>
+          normalizeArray(value, (item) => {
+            const r = isRecord(item) ? item : {};
+            return {
+              id: toStringValue(r.id),
+              clientId: toNumber(r.clientId ?? r.client_id),
+              clientName: toStringValue(r.clientName ?? r.client_name ?? r.name),
+              logoUrl: typeof r.logoUrl === "string" ? r.logoUrl : undefined,
+              rating: toNumber(r.rating, 5),
+              content: toStringValue(r.content ?? r.note),
+              createdAt: toStringValue(r.createdAt ?? r.created_at),
+            } as ClientReview;
+          }),
+        ),
+      ),
+    add: async (review: Omit<ClientReview, "id" | "createdAt">): Promise<ApiResult<Lead>> => {
+      const result = await apiFetch<Lead>("/leads", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "review",
+          name: review.clientName,
+          phone: "",
+          note: review.content,
+          clientId: review.clientId,
+          clientName: review.clientName,
+          logoUrl: review.logoUrl,
+          rating: review.rating,
+          content: review.content,
+        }),
+      }, mapLead);
+      if (!result.error) invalidateCache("client_reviews");
+      return result;
+    },
+    delete: async (id: string): Promise<ApiResult<void>> => {
+      const result = await apiFetch<JsonObject>(`/leads/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("client_reviews");
       return { data: null, error: result.error };
     },
   },

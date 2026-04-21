@@ -112,23 +112,13 @@ export default function HomePageClient() {
         </div>
 
         {!settings.presentationMode && (
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setShowLogin(true)}
-                className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10"
-              >
-                {user ? "Khu vực khách hàng" : "Đăng nhập / Đăng ký"}
-              </button>
-            </div>
+          <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setShowRoadmap(true)}
-              className="group flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary transition-all hover:bg-primary/20"
+              onClick={() => setShowLogin(true)}
+              className="rounded-full border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium transition-colors hover:bg-white/10"
             >
-              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              Lộ trình dự án
+              {user ? "Kiểm tra lộ trình" : "Kiểm tra lộ trình"}
             </button>
           </div>
         )}
