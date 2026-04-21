@@ -7,11 +7,7 @@ export function DynamicFavicon() {
   const { settings } = useAdmin();
 
   useEffect(() => {
-    if (!settings.favicon) return;
-
-    const href = settings.favicon.startsWith("data:")
-      ? settings.favicon
-      : `${settings.favicon}${settings.favicon.includes("?") ? "&" : "?"}v=${Date.now()}`;
+    const href = `/api/branding/favicon?v=${Date.now()}`;
 
     const ensureIconLink = (rel: string) => {
       let link = document.querySelector(`link[rel='${rel}']`) as HTMLLinkElement | null;
@@ -26,7 +22,7 @@ export function DynamicFavicon() {
     ensureIconLink("icon");
     ensureIconLink("shortcut icon");
     ensureIconLink("apple-touch-icon");
-  }, [settings.favicon]);
+  }, [settings.favicon, settings.logo]);
 
   return null;
 }

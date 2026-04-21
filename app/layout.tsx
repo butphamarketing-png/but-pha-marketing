@@ -15,7 +15,7 @@ const DEFAULT_DESCRIPTION =
 
 export async function generateMetadata(): Promise<Metadata> {
   let siteTitle = DEFAULT_TITLE;
-  let favicon = "/favicon.svg";
+  const favicon = "/api/branding/favicon";
 
   try {
     const supabase = createServerClient();
@@ -29,9 +29,6 @@ export async function generateMetadata(): Promise<Metadata> {
       siteTitle = data.value.title.trim();
     }
 
-    if (typeof data?.value?.favicon === "string" && data.value.favicon.trim()) {
-      favicon = data.value.favicon.trim();
-    }
   } catch (error) {
     console.error("[layout metadata] Failed to load dynamic branding", error);
   }
