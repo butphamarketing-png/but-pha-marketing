@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { SiFacebook, SiGooglemaps, SiInstagram, SiTiktok, SiWebflow, SiZalo } from "react-icons/si";
@@ -23,6 +23,7 @@ export default function HomePageClient() {
   const [blogPage, setBlogPage] = useState(0);
   const { user } = useAuth();
   const { settings } = useAdmin();
+  const logoSrc = useMemo(() => settings?.logo || "/logo.jpg", [settings?.logo]);
 
   useEffect(() => {
     db.news.getAll().then((result) => {
@@ -39,19 +40,25 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(() => setLoading(false), 500);
-          return 100;
-        }
+    let raf = 0;
+    const durationMs = 2200;
+    const startedAt = performance.now();
 
-        return prev + 2;
-      });
-    }, 60);
+    const tick = (now: number) => {
+      const elapsed = now - startedAt;
+      const nextProgress = Math.min(100, Math.round((elapsed / durationMs) * 100));
+      setProgress(nextProgress);
 
-    return () => clearInterval(timer);
+      if (elapsed >= durationMs) {
+        setLoading(false);
+        return;
+      }
+
+      raf = window.requestAnimationFrame(tick);
+    };
+
+    raf = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(raf);
   }, []);
 
   if (loading) {
@@ -63,7 +70,7 @@ export default function HomePageClient() {
             transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
             className="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary"
           />
-          <img src={settings?.logo ? `${settings.logo}?v=${Date.now()}` : "/logo.jpg"} alt="Logo" className="h-20 w-20 rounded-full object-cover" />
+          <img src={logoSrc} alt="Logo" className="h-20 w-20 rounded-full object-cover" />
         </div>
 
         <div className="w-64 text-center">
@@ -107,7 +114,7 @@ export default function HomePageClient() {
 
       <header className="relative z-[50] flex items-center justify-between px-6 pb-6 pt-16">
         <div className="flex items-center gap-3">
-          <img src={settings?.logo ? `${settings.logo}?v=${Date.now()}` : "/logo.jpg"} alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
+          <img src={logoSrc} alt={settings?.title || "Bứt Phá Marketing"} className="h-10 w-10 rounded-full object-cover shadow-lg" />
           <span className="hidden font-bold tracking-tight text-white md:inline-block">{settings?.title || "Bứt Phá Marketing"}</span>
         </div>
 
