@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAdmin } from "@/lib/AdminContext";
-import { Power, MessageSquare } from "lucide-react";
+import { Bot, EyeOff, MessageSquare } from "lucide-react";
 
 function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
@@ -219,6 +219,121 @@ function DefaultMascotGraphic({
   );
 }
 
+function RobotMascotGraphic({
+  animate,
+  glowColor,
+  filter,
+  scale,
+}: {
+  animate: boolean;
+  glowColor: string;
+  filter: string;
+  scale: number;
+}) {
+  return (
+    <>
+      <div
+        className={animate ? "mascot-robot-shell mascot-robot-sway" : "mascot-robot-shell"}
+        style={{
+          filter: `${filter} drop-shadow(0 0 18px ${glowColor}55) drop-shadow(0 8px 16px rgba(0,0,0,0.45))`,
+          transform: `scale(${scale})`,
+          transformOrigin: "center bottom",
+        }}
+        aria-hidden="true"
+      >
+        <img src="/mascot-home.png" alt="" className="h-[118px] w-[118px] object-contain select-none" draggable="false" />
+        <div className={animate ? "mascot-robot-open-eye" : "mascot-robot-open-eye mascot-robot-open-eye-static"}>
+          <span className="mascot-robot-open-eye-shine" />
+        </div>
+      </div>
+
+      <style>{`
+        .mascot-robot-shell {
+          position: relative;
+          width: 118px;
+          height: 118px;
+        }
+
+        .mascot-robot-open-eye {
+          position: absolute;
+          top: 29px;
+          right: 30px;
+          width: 16px;
+          height: 22px;
+          border-radius: 999px;
+          background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12), rgba(8,5,24,0.94) 58%);
+          border: 2px solid #d8b4fe;
+          box-shadow:
+            0 0 10px rgba(192, 132, 252, 0.95),
+            inset 0 0 10px rgba(168, 85, 247, 0.35);
+          opacity: 1;
+        }
+
+        .mascot-robot-open-eye-static {
+          opacity: 1;
+        }
+
+        .mascot-robot-open-eye-shine {
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          width: 4px;
+          height: 4px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.95);
+          box-shadow: 0 0 8px rgba(255,255,255,0.85);
+        }
+
+        .mascot-robot-sway {
+          animation: mascot-robot-sway 4s ease-in-out infinite;
+        }
+
+        .mascot-robot-open-eye {
+          animation: mascot-robot-wink 4s linear infinite;
+        }
+
+        @keyframes mascot-robot-wink {
+          0%,
+          69%,
+          100% {
+            opacity: 1;
+            transform: scaleY(1);
+          }
+
+          72%,
+          79% {
+            opacity: 0;
+            transform: scaleY(0.12);
+          }
+        }
+
+        @keyframes mascot-robot-sway {
+          0%,
+          74% {
+            transform: translateY(0) rotate(0deg) scale(${scale});
+          }
+
+          82% {
+            transform: translateY(-1px) rotate(-5deg) scale(${scale});
+          }
+
+          88% {
+            transform: translateY(-2px) rotate(6deg) scale(${scale});
+          }
+
+          94% {
+            transform: translateY(-1px) rotate(-4deg) scale(${scale});
+          }
+
+          100% {
+            transform: translateY(0) rotate(0deg) scale(${scale});
+          }
+        }
+      `}</style>
+    </>
+  );
+}
+
 export function AnimatedMascot() {
   const pathname = usePathname();
   const { settings } = useAdmin();
@@ -228,6 +343,10 @@ export function AnimatedMascot() {
   const [isShown, setIsShown] = useState(true);
   const [bursting, setBursting] = useState(false);
   const [pos, setPos] = useState({ x: 220, y: 240 });
+  const [flightPath, setFlightPath] = useState<{ x: number[]; y: number[] }>({
+    x: [220, 220, 220, 220, 220],
+    y: [240, 240, 240, 240, 240],
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sectionSpeakCooldownRef = useRef(0);
   const lastSectionRef = useRef("");
@@ -255,6 +374,7 @@ export function AnimatedMascot() {
   const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "/mascot-home.png";
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
+  const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
@@ -327,11 +447,23 @@ export function AnimatedMascot() {
     if (!enabled || !isShown) return;
 
     const updatePos = () => {
-      const width = 82;
-      const height = 88;
-      setPos({
-        x: Math.max(20, window.innerWidth - width - 24),
-        y: Math.max(120, window.innerHeight - height - 24),
+      const width = 118;
+      const height = 126;
+      const maxX = Math.max(24, window.innerWidth - width - 24);
+      const maxY = Math.max(140, window.innerHeight - height - 24);
+      const startX = Math.max(24, window.innerWidth - width - 40);
+      const startY = Math.max(160, window.innerHeight - height - 36);
+      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.56)));
+      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.16)));
+      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.78)));
+      const midY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.46)));
+      const upperY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.2)));
+      const lowerY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.72)));
+
+      setPos({ x: startX, y: startY });
+      setFlightPath({
+        x: [startX, centerX, leftX, rightX, startX],
+        y: [startY, midY, lowerY, upperY, startY],
       });
     };
 
@@ -416,14 +548,35 @@ export function AnimatedMascot() {
             setIsShown(true);
           }
         }}
-        className="fixed left-3 top-1/2 z-[94] -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-3 text-white backdrop-blur transition-all hover:scale-110 active:scale-95"
+        className="fixed left-3 top-1/2 z-[94] flex -translate-y-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-2 text-white shadow-xl backdrop-blur transition-all hover:scale-105 active:scale-95"
+        aria-label={isShown ? "An robot" : "Hien robot"}
         title={isShown ? "Tắt linh vật" : "Bật linh vật"}
       >
-        <Power size={20} className={isShown ? "text-cyan-400" : "text-white/50"} />
+        {isShown ? <EyeOff size={18} className="text-cyan-300" /> : <Bot size={18} className="text-white/70" />}
+        <span className="text-xs font-semibold">{isShown ? "An robot" : "Hien robot"}</span>
       </button>
 
       {isShown && (
-        <div className="fixed z-[93]" style={{ left: pos.x, top: pos.y }} data-mascot="dragon">
+        <motion.div
+          className="fixed left-0 top-0 z-[93]"
+          style={{ x: pos.x, y: pos.y }}
+          animate={
+            prefersReducedMotion
+              ? { x: pos.x, y: pos.y }
+              : { x: flightPath.x, y: flightPath.y }
+          }
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : {
+                  duration: 28,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.26, 0.56, 0.8, 1],
+                }
+          }
+          data-mascot="dragon"
+        >
           <AnimatePresence>
             {open && (
               <motion.div
@@ -504,7 +657,7 @@ export function AnimatedMascot() {
                 ? { duration: 0 }
                 : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
             }
-            className="flex h-[88px] w-[82px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
+            className="flex h-[126px] w-[118px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >
             <div
@@ -521,12 +674,19 @@ export function AnimatedMascot() {
                   glowColor={mascotGlowColor}
                   palette={mascotPalette}
                 />
+              ) : isBuiltInRobot ? (
+                <RobotMascotGraphic
+                  animate={!prefersReducedMotion}
+                  glowColor={mascotGlowColor}
+                  filter={customFilter}
+                  scale={dragonStyle.scale}
+                />
               ) : (
                 <div className={prefersReducedMotion ? "" : "mascot-default-wave"}>
                   <img
                     src={mascotImg}
                     alt="AI Mascot"
-                    className="h-[82px] w-[82px] object-contain"
+                    className="h-[118px] w-[118px] object-contain"
                     style={{
                       filter: `${customFilter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`,
                       transform: `scale(${dragonStyle.scale})`,
@@ -538,7 +698,7 @@ export function AnimatedMascot() {
               )}
             </div>
           </motion.button>
-        </div>
+        </motion.div>
       )}
     </>
   );
