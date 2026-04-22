@@ -401,17 +401,20 @@ export function AnimatedMascot() {
       const maxY = Math.max(140, window.innerHeight - height - 24);
       const startX = Math.max(24, window.innerWidth - width - 40);
       const startY = Math.max(160, window.innerHeight - height - 36);
-      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.56)));
-      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.16)));
-      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.78)));
-      const midY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.46)));
-      const upperY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.2)));
-      const lowerY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.72)));
+      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.52)));
+      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.08)));
+      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.24)));
+      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.74)));
+      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.88)));
+      const topY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.14)));
+      const midY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.38)));
+      const lowerY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.66)));
+      const bottomY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.82)));
 
       setPos({ x: startX, y: startY });
       setFlightPath({
-        x: [startX, centerX, leftX, rightX, startX],
-        y: [startY, midY, lowerY, upperY, startY],
+        x: [startX, farLeftX, centerX, farRightX, leftX, rightX, startX],
+        y: [startY, midY, bottomY, topY, lowerY, midY, startY],
       });
     };
 
@@ -517,10 +520,10 @@ export function AnimatedMascot() {
             prefersReducedMotion
               ? { duration: 0 }
               : {
-                  duration: 28,
+                  duration: 16,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  times: [0, 0.26, 0.56, 0.8, 1],
+                  times: [0, 0.16, 0.34, 0.52, 0.7, 0.86, 1],
                 }
           }
           data-mascot="dragon"

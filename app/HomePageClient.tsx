@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -121,7 +122,7 @@ export default function HomePageClient() {
 
   return (
     <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/40 via-background to-background text-foreground">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <ParticleBackground />
       </div>
 
@@ -147,23 +148,47 @@ export default function HomePageClient() {
       </header>
 
       <main className="container mx-auto px-4 py-12 md:py-24">
-        <div className="mb-16 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+        <div className="relative mb-16 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-5xl font-black tracking-tight text-transparent md:text-7xl lg:text-8xl"
-            style={{ backgroundImage: `linear-gradient(to right, ${settings?.colors?.primary || "#000"}, #fff)` }}
+            className="mb-5 inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-200 shadow-[0_0_30px_rgba(34,211,238,0.08)] backdrop-blur-md"
           >
-            {settings?.heroTitle || ""}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.95)]" />
+            AI Marketing Control Layer
+          </motion.div>
+
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-[min(72rem,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_rgba(168,85,247,0.26)_0%,_rgba(34,211,238,0.12)_38%,_transparent_72%)] blur-3xl" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mx-auto max-w-2xl whitespace-pre-line text-lg text-purple-200 md:text-xl"
+            className="tech-hero-shell"
           >
-            {settings?.heroSubtitle || ""}
-          </motion.p>
+            <div className="tech-hero-grid" aria-hidden="true" />
+            <div className="tech-hero-corners" aria-hidden="true" />
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 }}
+              className="tech-hero-title"
+              style={{ "--hero-primary": settings?.colors?.primary || "#8b5cf6" } as CSSProperties}
+            >
+              <span className="tech-hero-title-glow" aria-hidden="true">
+                {settings?.heroTitle || ""}
+              </span>
+              <span className="tech-hero-title-main">{settings?.heroTitle || ""}</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mx-auto mt-6 max-w-2xl whitespace-pre-line text-lg text-purple-100/85 md:text-xl"
+            >
+              {settings?.heroSubtitle || ""}
+            </motion.p>
+          </motion.div>
         </div>
 
         <motion.div
