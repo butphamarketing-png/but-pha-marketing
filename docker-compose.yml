@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ai_seo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./apps/backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/ai_seo
+      REDIS_URL: redis://redis:6379/0
+      OPENAI_API_KEY: ""
+      SERPAPI_API_KEY: ""
+      AUTH_SECRET_KEY: change-me
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8000:8000"
+
+  worker:
+    build:
+      context: ./apps/backend
+    command: ["python", "-m", "app.worker"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/ai_seo
+      REDIS_URL: redis://redis:6379/0
+      OPENAI_API_KEY: ""
+      SERPAPI_API_KEY: ""
+      AUTH_SECRET_KEY: change-me
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build:
+      context: ./apps/frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://backend:8000
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    command: ["npm", "run", "dev:host"]
+
+volumes:
+  postgres_data:
