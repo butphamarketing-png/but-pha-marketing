@@ -115,6 +115,7 @@ export type SerpAnalysis = {
   id?: string;
   query: string;
   location: string;
+  source?: "live" | "mock" | "verified";
   topResults: Array<{
     position: number;
     title: string;
@@ -124,6 +125,18 @@ export type SerpAnalysis = {
   headings: string[];
   avgLength: number;
   contentGap: string[];
+};
+
+export type SourceState = {
+  mode: "live" | "verified" | "mock";
+  source: "serpapi" | "gsc" | "ga4" | "mock";
+  label: string;
+};
+
+export type SourceStatusResponse = {
+  serp: SourceState;
+  rank: SourceState;
+  ga4: SourceState;
 };
 
 export type KeywordRanking = {

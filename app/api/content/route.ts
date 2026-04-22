@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
+import { isAdminRequest } from "@/lib/admin-auth";
 
 function jsonError(message: string, status: number, details?: unknown) {
   return NextResponse.json(
@@ -43,6 +44,10 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    if (!isAdminRequest(req)) {
+      return jsonError("Unauthorized", 401);
+    }
+
     const body = await req.json();
     const platform = typeof body?.platform === "string" ? body.platform.trim() : "";
     const content = body?.content ?? null;

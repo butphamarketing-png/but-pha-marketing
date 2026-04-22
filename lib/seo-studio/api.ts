@@ -11,6 +11,7 @@ import {
   RankTrackingResponse,
   RelatedPost,
   RefreshSuggestion,
+  SourceStatusResponse,
   SerpAnalysis,
   TopicalCluster,
 } from "./types";
@@ -132,4 +133,8 @@ export function refreshPost(postId: string) {
 
 export function getLatestSerpAnalysis(postId: string) {
   return request<SerpAnalysis | null>(`/seo/serp-analysis?postId=${encodeURIComponent(postId)}`);
+}
+
+export function getSourceStatus() {
+  return request<SourceStatusResponse>("/seo/source-status");
 }

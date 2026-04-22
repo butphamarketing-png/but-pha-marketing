@@ -2,25 +2,24 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
+import { isAdminRequest } from "@/lib/admin-auth";
 
 const TABLE_NAME = "site_settings";
 
-function mergeSettingsValue(currentValue: unknown, patchValue: unknown) {
-  if (
-    currentValue &&
-    typeof currentValue === "object" &&
-    !Array.isArray(currentValue) &&
-    patchValue &&
-    typeof patchValue === "object" &&
-    !Array.isArray(patchValue)
-  ) {
-    return {
-      ...(currentValue as Record<string, unknown>),
-      ...(patchValue as Record<string, unknown>),
-    };
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object" && !Array.isArray(value);
+}
+
+function mergeSettingsValue(currentValue: unknown, patchValue: unknown): unknown {
+  if (!isPlainObject(currentValue) || !isPlainObject(patchValue)) {
+    return patchValue;
   }
 
-  return patchValue;
+  const merged: Record<string, unknown> = { ...currentValue };
+  for (const [key, patchChild] of Object.entries(patchValue)) {
+    merged[key] = mergeSettingsValue((currentValue as Record<string, unknown>)[key], patchChild);
+  }
+  return merged;
 }
 
 function jsonError(message: string, status: number = 500, details: unknown = null) {
@@ -88,6 +87,10 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    if (!isAdminRequest(request)) {
+      return jsonError("Unauthorized", 401);
+    }
+
     console.log(`[API/settings] PATCH started: ${request.url.slice(-80)}`);
     const body = await request.json().catch(() => null);
     if (!body) return jsonError("Invalid or empty JSON body", 400);
@@ -99,7 +102,7 @@ export async function PATCH(request: Request) {
       return jsonError("'value' is required in request body", 400);
     }
 
-    console.log(`[API/settings PATCH] Processing key="${key}", valueType=${typeof value} (size: ${JSON.stringify(value)?.length ?? 0}), service_role=${process.env.SUPABASE_SERVICE_ROLE_KEY ? process.env.SUPABASE_SERVICE_ROLE_KEY.slice(0,8)+'...' : 'MISSING'}`);
+    console.log(`[API/settings PATCH] Processing key="${key}", valueType=${typeof value} (size: ${JSON.stringify(value)?.length ?? 0})`);
     
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       return jsonError("Server misconfigured: SUPABASE_SERVICE_ROLE_KEY environment variable missing", 500);

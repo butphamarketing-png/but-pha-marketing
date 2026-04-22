@@ -310,19 +310,45 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) {
     if (error.message === "Failed to fetch") {
-      return "Không thể kết nối để lưu thay đổi. Dữ liệu có thể quá lớn hoặc mạng/server đang gián đoạn.";
+      return "KhÃ´ng thá»ƒ káº¿t ná»‘i Ä‘á»ƒ lÆ°u thay Ä‘á»•i. Dá»¯ liá»‡u cÃ³ thá»ƒ quÃ¡ lá»›n hoáº·c máº¡ng/server Ä‘ang giÃ¡n Ä‘oáº¡n.";
     }
     return error.message;
   }
-  return "Không thể lưu thay đổi. Vui lòng thử lại.";
+  return "KhÃ´ng thá»ƒ lÆ°u thay Ä‘á»•i. Vui lÃ²ng thá»­ láº¡i.";
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object" && !Array.isArray(value);
+}
+
+function getChangedValue(previous: unknown, current: unknown): unknown {
+  if (Object.is(previous, current)) return undefined;
+
+  if (Array.isArray(previous) && Array.isArray(current)) {
+    return JSON.stringify(previous) === JSON.stringify(current) ? undefined : current;
+  }
+
+  if (isPlainObject(previous) && isPlainObject(current)) {
+    const nextPatch: Record<string, unknown> = {};
+    const keys = new Set([...Object.keys(previous), ...Object.keys(current)]);
+    for (const key of keys) {
+      if (!Object.prototype.hasOwnProperty.call(current, key)) continue;
+      const childPatch = getChangedValue(previous[key], current[key]);
+      if (childPatch !== undefined) nextPatch[key] = childPatch;
+    }
+    return Object.keys(nextPatch).length > 0 ? nextPatch : undefined;
+  }
+
+  return JSON.stringify(previous) === JSON.stringify(current) ? undefined : current;
 }
 
 function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings): Partial<SiteSettings> {
   const changed: Partial<SiteSettings> = {};
 
   (Object.keys(current) as Array<keyof SiteSettings>).forEach((key) => {
-    if (JSON.stringify(previous[key]) !== JSON.stringify(current[key])) {
-      Object.assign(changed, { [key]: current[key] });
+    const patch = getChangedValue(previous[key], current[key]);
+    if (patch !== undefined) {
+      Object.assign(changed, { [key]: patch as SiteSettings[typeof key] });
     }
   });
 

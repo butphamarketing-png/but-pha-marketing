@@ -1,6 +1,35 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 
+type AnalyticsOverview = {
+  traffic: string;
+  trafficChangePercent: number;
+  conversions: number;
+  source: "live" | "mock";
+  sourceLabel: string;
+};
+
+async function loadAnalyticsOverview(): Promise<AnalyticsOverview> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/seo/analytics-overview`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Analytics overview failed with status ${response.status}`);
+    }
+
+    return (await response.json()) as AnalyticsOverview;
+  } catch {
+    return {
+      traffic: "0",
+      trafficChangePercent: 0,
+      conversions: 0,
+      source: "mock",
+      sourceLabel: "GA4 mock",
+    };
+  }
+}
+
 export async function GET() {
   try {
     const supabase = createServerClient();
@@ -32,6 +61,8 @@ export async function GET() {
       ? Math.round(seoData.reduce((acc, curr) => acc + (curr.seo_score || 0), 0) / seoData.length)
       : 0;
 
+    const analyticsOverview = await loadAnalyticsOverview();
+
     // 5. Fetch Priority Posts (dropping rank or low SEO)
     const { data: priorityPosts } = await supabase
       .from("news")
@@ -44,13 +75,16 @@ export async function GET() {
       publishedPosts: publishedPosts || 0,
       needsUpdate: needsUpdate || 0,
       avgSeoScore: avgSeoScore,
-      traffic: "0K", // Traffic often comes from GSC/GA API, mocking for now
+      traffic: analyticsOverview.traffic,
+      trafficSource: analyticsOverview.source,
+      trafficSourceLabel: analyticsOverview.sourceLabel,
+      conversions: analyticsOverview.conversions,
       changes: {
         totalPosts: 0,
         publishedPosts: 0,
         needsUpdate: 0,
         avgSeoScore: 0,
-        traffic: 0,
+        traffic: analyticsOverview.trafficChangePercent,
       },
       priorityPosts: (priorityPosts || []).map(p => ({
         id: p.id,
@@ -74,6 +108,9 @@ export async function GET() {
       needsUpdate: 0,
       avgSeoScore: 0,
       traffic: "0K",
+      trafficSource: "mock",
+      trafficSourceLabel: "GA4 mock",
+      conversions: 0,
       priorityPosts: [],
       trend: []
     });

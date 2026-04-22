@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import { promises as fs } from "fs";
+import { isAdminRequest } from "@/lib/admin-auth";
 
 const ROOT = process.cwd();
 const BLOCKED_DIRS = new Set([".git", "node_modules", ".next", ".cursor"]);
@@ -24,6 +25,10 @@ async function walk(dir: string, base = ""): Promise<string[]> {
 
 export async function GET(req: Request) {
   try {
+    if (!isAdminRequest(req)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const file = searchParams.get("file");
     if (!file) {

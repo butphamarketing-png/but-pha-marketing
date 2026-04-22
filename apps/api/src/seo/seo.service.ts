@@ -1,5 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { Prisma, Post } from "@prisma/client";
+import { Ga4Service } from "../common/analytics/ga4.service";
 import { PrismaService } from "../common/prisma/prisma.service";
 import { CurrentWorkspaceService } from "../common/workspace/workspace.service";
 import { ClusterDto } from "./dto/cluster.dto";
@@ -26,6 +27,7 @@ export class SeoService {
     private readonly prisma: PrismaService,
     private readonly workspaceService: CurrentWorkspaceService,
     private readonly seoOpenAIService: SeoOpenAIService,
+    private readonly ga4Service: Ga4Service,
   ) {}
 
   async createContentBrief(dto: ContentBriefDto) {
@@ -156,7 +158,10 @@ export class SeoService {
       },
     });
 
-    return analysis;
+    return {
+      ...analysis,
+      source: this.resolveSerpSource().mode,
+    };
   }
 
   async refreshContent(dto: RefreshDto) {
@@ -225,10 +230,31 @@ export class SeoService {
 
   async getLatestSerpAnalysis(postId: string) {
     await this.requirePost(postId);
-    return this.prisma.serpAnalysis.findFirst({
+    const latest = await this.prisma.serpAnalysis.findFirst({
       where: { postId },
       orderBy: { createdAt: "desc" },
     });
+
+    if (!latest) {
+      return null;
+    }
+
+    return {
+      ...latest,
+      source: this.resolveSerpSource().mode,
+    };
+  }
+
+  async getAnalyticsOverview() {
+    return this.ga4Service.getOverview();
+  }
+
+  getSourceStatus() {
+    return {
+      serp: this.resolveSerpSource(),
+      rank: this.resolveRankSource(),
+      ga4: this.resolveGa4Source(),
+    };
   }
 
   private async fetchSerpAnalysis(title: string, location: string) {
@@ -449,6 +475,63 @@ export class SeoService {
         "Most competitor pages under-explain execution details.",
         "There is room for clearer examples and stronger internal linking suggestions.",
       ],
+      source: "mock" as const,
+    };
+  }
+
+  private resolveSerpSource() {
+    if (process.env.SERP_API_KEY && process.env.AI_MOCK_MODE !== "true") {
+      return {
+        mode: "live" as const,
+        source: "serpapi" as const,
+        label: "Live SERP via SerpAPI",
+      };
+    }
+
+    return {
+      mode: "mock" as const,
+      source: "mock" as const,
+      label: "Mock SERP",
+    };
+  }
+
+  private resolveRankSource() {
+    if (process.env.GSC_SITE_URL && process.env.GSC_ACCESS_TOKEN && process.env.AI_MOCK_MODE !== "true") {
+      return {
+        mode: "verified" as const,
+        source: "gsc" as const,
+        label: "Verified via Google Search Console",
+      };
+    }
+
+    if (process.env.SERP_API_KEY && process.env.AI_MOCK_MODE !== "true") {
+      return {
+        mode: "live" as const,
+        source: "serpapi" as const,
+        label: "Live rank via SerpAPI",
+      };
+    }
+
+    return {
+      mode: "mock" as const,
+      source: "mock" as const,
+      label: "Mock rank",
+    };
+  }
+
+  private resolveGa4Source() {
+    if (process.env.GA4_PROPERTY_ID && process.env.GA4_ACCESS_TOKEN && process.env.AI_MOCK_MODE !== "true") {
+      return {
+        mode: "live" as const,
+        source: "ga4" as const,
+        label: "Live GA4",
+      };
+    }
+
+    return {
+      mode: "mock" as const,
+      source: "mock" as const,
+      label: "Mock GA4",
     };
   }
 

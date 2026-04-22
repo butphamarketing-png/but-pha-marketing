@@ -17,6 +17,7 @@ import {
   getPosts,
   getRelatedPosts,
   getRankTracking,
+  getSourceStatus,
   refreshPost,
   trackKeyword,
   updatePost,
@@ -70,6 +71,7 @@ import {
   RefreshSuggestion,
   RelatedPost,
   SerpAnalysis,
+  SourceStatusResponse,
   TopicalCluster,
 } from "@/lib/seo-studio/types";
 
@@ -114,6 +116,9 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
   const [trackedKeyword, setTrackedKeyword] = useState("");
   const [trackedLocation, setTrackedLocation] = useState("");
   const [refreshSuggestion, setRefreshSuggestion] = useState<RefreshSuggestion | null>(null);
+  const [sourceStatus, setSourceStatus] = useState<SourceStatusResponse | null>(null);
+  const [rankSource, setRankSource] = useState<string | null>(null);
+  const [serpSource, setSerpSource] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -139,6 +144,8 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
       setTrackedKeyword("");
       setTrackedLocation("");
       setRefreshSuggestion(null);
+      setRankSource(null);
+      setSerpSource(null);
       return;
     }
 
@@ -146,6 +153,17 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
       void loadPost(postId);
     });
   }, [postId]);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const status = await getSourceStatus();
+        setSourceStatus(status);
+      } catch {
+        setSourceStatus(null);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (postId || !seedKeyword?.trim()) {
@@ -234,6 +252,7 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
               id: latestSerp.id,
               query: latestSerp.query,
               location: latestSerp.location,
+              source: latestSerp.source,
               topResults: Array.isArray(latestSerp.topResults) ? latestSerp.topResults : [],
               headings: Array.isArray(latestSerp.headings) ? latestSerp.headings : [],
               avgLength: latestSerp.avgLength,
@@ -241,6 +260,7 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
             }
           : null,
       );
+      setSerpSource(latestSerp?.source ?? null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Failed to load SEO suggestions");
     }
@@ -369,6 +389,7 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
     try {
       const result = await analyzeSerpForPost(editor.title, activePost?.id);
       setSerpAnalysis(result);
+      setSerpSource(result.source ?? null);
       setMessage("SERP analysis ready.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "SERP analysis failed");
@@ -389,7 +410,8 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
     setMessage("Tracking keyword ranking...");
 
     try {
-      await trackKeyword(activePost.id, trackedKeyword.trim(), trackedLocation.trim() || undefined);
+      const result = await trackKeyword(activePost.id, trackedKeyword.trim(), trackedLocation.trim() || undefined);
+      setRankSource(result.source);
       await loadSeoSuggestions(activePost.id);
       await loadPost(activePost.id);
       setMessage("Ranking checkpoint stored.");
@@ -731,6 +753,21 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
                 <p className="text-xs text-slate-500 mt-1 font-medium">Theo dõi thứ hạng của keyword chính trên SERP.</p>
               </div>
               <div className="flex items-center gap-3">
+                {sourceStatus?.rank && (
+                  <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${
+                    sourceStatus.rank.mode === "verified"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : sourceStatus.rank.mode === "live"
+                      ? "bg-blue-50 text-blue-700"
+                      : "bg-slate-200 text-slate-600"
+                  }`}>
+                    {(rankSource === "gsc"
+                      ? "verified"
+                      : rankSource === "serpapi"
+                      ? "live"
+                      : rankSource ?? sourceStatus.rank.label).replace(/^Live /, "").replace(/^Verified /, "")}
+                  </span>
+                )}
                 <input
                   type="text"
                   placeholder="Keyword..."
@@ -937,7 +974,18 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
           </div>
 
           <div className="mt-5 rounded-[28px] border border-stone-200 bg-stone-50 p-5">
-            <p className="text-sm font-semibold text-slate-900">SERP analysis</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold text-slate-900">SERP analysis</p>
+              {sourceStatus?.serp && (
+                <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${
+                  sourceStatus.serp.mode === "live"
+                    ? "bg-blue-50 text-blue-700"
+                    : "bg-slate-200 text-slate-600"
+                }`}>
+                  {(serpSource ? serpSource : sourceStatus.serp.label).replace(/^Live /, "")}
+                </span>
+              )}
+            </div>
             {serpAnalysis ? (
               <div className="mt-4 grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
                 <div>

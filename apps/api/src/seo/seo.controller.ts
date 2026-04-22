@@ -49,4 +49,14 @@ export class SeoController {
   getLatestSerpAnalysis(@Query() query: PostQueryDto) {
     return this.seoService.getLatestSerpAnalysis(query.postId);
   }
+
+  @Get("source-status")
+  getSourceStatus() {
+    return this.seoService.getSourceStatus();
+  }
+
+  @Get("analytics-overview")
+  getAnalyticsOverview() {
+    return this.seoService.getAnalyticsOverview();
+  }
 }

@@ -18,7 +18,6 @@ import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTab
 import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const ADMIN_PASSWORD = "admin123";
 
 const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
@@ -109,7 +108,7 @@ const SEO_DEFAULTS: Record<string, { title: string; desc: string; keywords: stri
   tiktok: { title: "Dịch Vụ TikTok Marketing", desc: "Sản xuất content TikTok, viral, TikTok Ads", keywords: "tiktok marketing, tiktok ads, content tiktok" },
   instagram: { title: "Dịch Vụ Instagram Marketing", desc: "Xây dựng brand trên Instagram, Reels, Stories", keywords: "instagram marketing, instagram ads, reels" },
   zalo: { title: "Dịch Vụ Zalo Marketing", desc: "Zalo OA, Zalo Ads, chăm sóc khách hàng qua Zalo", keywords: "zalo marketing, zalo ads, zalo oa" },
-  googlemaps: { title: "Dịch Vụ Google Maps Marketing", desc: "Local SEO, Google Business, đánh giá 5 sao", keywords: "google maps, local seo, google business" },
+  "google-maps": { title: "Dịch Vụ Google Maps Marketing", desc: "Local SEO, Google Business, đánh giá 5 sao", keywords: "google maps, local seo, google business" },
   website: { title: "Dịch Vụ Website Marketing", desc: "Thiết kế web, SEO website, bảo trì", keywords: "thiết kế website, seo website, web marketing" },
 };
 
@@ -121,11 +120,27 @@ export default function AdminPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const auth = localStorage.getItem("admin_auth");
-      if (auth === "1") setAuthenticated(true);
-      setIsAuthChecking(false);
-    }
+    let mounted = true;
+
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/admin/session", { cache: "no-store", credentials: "include" });
+        const data = await res.json().catch(() => null);
+        if (mounted && data?.authenticated) {
+          setAuthenticated(true);
+        }
+      } catch {
+        // Keep the login screen if the session check fails.
+      } finally {
+        if (mounted) setIsAuthChecking(false);
+      }
+    };
+
+    void checkSession();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
   const [activeTab, setActiveTab] = useState("dashboard");
   const {
@@ -227,6 +242,10 @@ export default function AdminPage() {
     Object.entries(settings.mascotSectionMessages?.[selectedMascotPlatform] || {})
       .map(([section, text]) => `${section}|${text}`)
       .join("\n");
+  const resolveSeoPage = (key: string) =>
+    settings.seoPages?.[key] ??
+    (key === "google-maps" ? settings.seoPages?.googlemaps : undefined) ??
+    SEO_DEFAULTS[key];
   const mascotErrorPack = settings.mascotErrorMessages?.[selectedMascotPlatform] || {
     login: "",
     phone: "",
@@ -1020,10 +1039,43 @@ export default function AdminPage() {
     }
   }, [selectedClient]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) { localStorage.setItem("admin_auth", "1"); setAuthenticated(true); }
-    else setError("Mật khẩu không đúng");
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.authenticated) {
+        setError(data?.error || "Máº­t kháº©u khÃ´ng Ä‘Ãºng");
+        return;
+      }
+
+      setAuthenticated(true);
+      setIsAuthChecking(false);
+      setPassword("");
+      router.refresh();
+    } catch {
+      setError("KhÃ´ng thá»ƒ Ä‘Äƒng nháº­p ngay lÃºc nÃ y.");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
+    } catch {
+      // Logout should still clear the local UI state.
+    } finally {
+      setAuthenticated(false);
+      router.push("/admin");
+      router.refresh();
+    }
   };
 
   const saveBlog = async () => {
@@ -1169,7 +1221,7 @@ export default function AdminPage() {
           ))}
         </nav>
         <div className="p-4 border-t border-white/10">
-          <button onClick={() => { localStorage.removeItem("admin_auth"); setAuthenticated(false); }} className="w-full flex items-center justify-center gap-2 rounded-xl bg-red-500/10 py-2.5 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white transition-all">
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 rounded-xl bg-red-500/10 py-2.5 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white transition-all">
             <LogOut size={16} /> Đăng xuất
           </button>
         </div>
@@ -1185,7 +1237,7 @@ export default function AdminPage() {
                   <p className="text-[11px] text-gray-400">Quản trị nội dung và dữ liệu</p>
                 </div>
                 <button
-                  onClick={() => { localStorage.removeItem("admin_auth"); setAuthenticated(false); }}
+                  onClick={handleLogout}
                   className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs font-bold text-red-200"
                 >
                   <LogOut size={14} /> Thoát
@@ -1872,13 +1924,13 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">SEO Title</label>
                         <input
-                          value={settings.seoPages?.[key]?.title || SEO_DEFAULTS[key].title}
+                          value={resolveSeoPage(key).title}
                           onChange={e => {
                             updateSettings({
                               seoPages: {
                                 ...(settings.seoPages || {}),
                                 [key]: {
-                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  ...resolveSeoPage(key),
                                   title: e.target.value
                                 }
                               }
@@ -1891,13 +1943,13 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Keywords</label>
                         <input
-                          value={settings.seoPages?.[key]?.keywords || SEO_DEFAULTS[key].keywords}
+                          value={resolveSeoPage(key).keywords}
                           onChange={e => {
                             updateSettings({
                               seoPages: {
                                 ...(settings.seoPages || {}),
                                 [key]: {
-                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  ...resolveSeoPage(key),
                                   keywords: e.target.value
                                 }
                               }
@@ -1910,13 +1962,13 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Description</label>
                         <textarea
-                          value={settings.seoPages?.[key]?.desc || SEO_DEFAULTS[key].desc}
+                          value={resolveSeoPage(key).desc}
                           onChange={e => {
                             updateSettings({
                               seoPages: {
                                 ...(settings.seoPages || {}),
                                 [key]: {
-                                  ...(settings.seoPages?.[key] || SEO_DEFAULTS[key]),
+                                  ...resolveSeoPage(key),
                                   desc: e.target.value
                                 }
                               }

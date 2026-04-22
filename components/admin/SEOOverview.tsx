@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import { 
@@ -35,6 +35,9 @@ interface DashboardData {
   needsUpdate: number;
   avgSeoScore: number;
   traffic: string;
+  trafficSource?: "live" | "mock";
+  trafficSourceLabel?: string;
+  conversions?: number;
   changes: {
     totalPosts: number;
     publishedPosts: number;
@@ -124,9 +127,24 @@ export function SEOOverview() {
             </div>
             <p className="text-sm font-bold text-slate-500">{card.label}</p>
             <p className={`mt-1 text-2xl font-black tracking-tight ${card.warning ? 'text-orange-600' : 'text-slate-900'}`}>
-              {card.value}
+                            {card.value}
             </p>
-            <p className="mt-1 text-[10px] text-slate-400 font-medium">so với tuần trước</p>
+            {i === 4 && (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <span className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${
+                  data.trafficSource === "live"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-slate-100 text-slate-500"
+                }`}>
+                  {data.trafficSourceLabel ?? "GA4 mock"}
+                </span>
+                {typeof data.conversions === "number" && (
+                  <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-indigo-700">
+                    {data.conversions} conversions
+                  </span>
+                )}
+              </div>
+            )}<p className="mt-1 text-[10px] text-slate-400 font-medium">so với tuần trước</p>
           </div>
         ))}
       </div>
