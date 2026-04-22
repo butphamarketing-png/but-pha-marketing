@@ -11,7 +11,7 @@ import { QuickActionBar } from "@/components/shared/QuickActionBar";
 export function MarketingChrome() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/studio")) {
+  if (pathname.startsWith("/studio") || pathname.startsWith("/admin")) {
     return null;
   }
 

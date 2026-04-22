@@ -2,21 +2,38 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, MessageCircle, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAdmin } from "@/lib/AdminContext";
+
+const DISMISS_KEY = "quick-action-dismissed";
 
 export function QuickActionBar() {
   const { settings } = useAdmin();
   const [isVisible, setIsVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
-  // Chỉ hiện khi scroll xuống một đoạn và trên mobile
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    setDismissed(window.sessionStorage.getItem(DISMISS_KEY) === "1");
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
+      if (dismissed) {
+        setIsVisible(false);
+        return;
+      }
+
       setIsVisible(window.scrollY > 300);
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [dismissed]);
 
   const hotline = settings.hotline || "0937417982";
   const zalo = settings.zalo || hotline;
@@ -28,7 +45,7 @@ export function QuickActionBar() {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-0 left-0 right-0 z-[60] flex items-center justify-around bg-black/80 p-3 backdrop-blur-lg border-t border-white/10 md:hidden"
+          className="fixed bottom-0 left-0 right-0 z-[60] flex items-center justify-around border-t border-white/10 bg-black/80 p-3 backdrop-blur-lg md:hidden"
         >
           <a
             href={`tel:${hotline.replace(/\s/g, "")}`}
@@ -53,10 +70,14 @@ export function QuickActionBar() {
           </a>
 
           <button
-            onClick={() => setIsVisible(false)}
+            onClick={() => {
+              setIsVisible(false);
+              setDismissed(true);
+              window.sessionStorage.setItem(DISMISS_KEY, "1");
+            }}
             className="flex flex-col items-center gap-1 text-gray-500"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 border border-white/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
               <X size={20} />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-wider">Đóng</span>

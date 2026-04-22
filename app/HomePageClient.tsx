@@ -7,7 +7,6 @@ import Link from "next/link";
 import { SiFacebook, SiGooglemaps, SiInstagram, SiTiktok, SiWebflow, SiZalo } from "react-icons/si";
 import { ChevronLeft, ChevronRight, Flame, Phone } from "lucide-react";
 import { LoginModal } from "@/components/shared/LoginModal";
-import { RoadmapModal } from "@/components/shared/RoadmapModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
@@ -20,7 +19,6 @@ export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
-  const [showRoadmap, setShowRoadmap] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [blogPage, setBlogPage] = useState(0);
   const [reviews, setReviews] = useState<ClientReview[]>([]);
@@ -147,12 +145,12 @@ export default function HomePageClient() {
         )}
       </header>
 
-      <main className="container mx-auto px-4 py-12 md:py-24">
-        <div className="relative mb-16 text-center">
+      <main className="container mx-auto px-4 py-10 md:py-20">
+        <div className="relative mb-12 text-center md:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-slate-950/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-200 shadow-[0_0_30px_rgba(34,211,238,0.08)] backdrop-blur-md"
+            className="mb-4 inline-flex items-center gap-3 rounded-full border border-cyan-400/15 bg-slate-950/30 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur-md md:px-4 md:text-[11px]"
           >
             <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.95)]" />
             AI Marketing Control Layer
@@ -184,7 +182,7 @@ export default function HomePageClient() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mt-6 max-w-2xl whitespace-pre-line text-lg text-purple-100/85 md:text-xl"
+              className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-base leading-7 text-purple-100/80 md:text-lg md:leading-8"
             >
               {settings?.heroSubtitle || ""}
             </motion.p>
@@ -368,9 +366,7 @@ export default function HomePageClient() {
           </a>
         </div>
       </main>
-
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
-      <RoadmapModal isOpen={showRoadmap} onClose={() => setShowRoadmap(false)} />
 
       <style>{`
         @keyframes shimmer {
