@@ -290,6 +290,7 @@ export function AnimatedMascot() {
   const [currentText, setCurrentText] = useState("");
   const [isShown, setIsShown] = useState(true);
   const [bursting, setBursting] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [pos, setPos] = useState({ x: 220, y: 240 });
   const [flightPath, setFlightPath] = useState<{ x: number[]; y: number[] }>({
     x: [220, 220, 220, 220, 220],
@@ -397,24 +398,30 @@ export function AnimatedMascot() {
     const updatePos = () => {
       const width = 118;
       const height = 126;
+      const mobile = window.innerWidth < 768;
       const maxX = Math.max(24, window.innerWidth - width - 24);
       const maxY = Math.max(140, window.innerHeight - height - 24);
       const startX = Math.max(24, window.innerWidth - width - 40);
       const startY = Math.max(160, window.innerHeight - height - 36);
-      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.48)));
-      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.04)));
-      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.18)));
-      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.7)));
-      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.9)));
-      const topY = Math.max(96, Math.min(maxY, Math.round(window.innerHeight * 0.08)));
-      const midY = Math.max(120, Math.min(maxY, Math.round(window.innerHeight * 0.32)));
-      const lowerY = Math.max(180, Math.min(maxY, Math.round(window.innerHeight * 0.62)));
-      const bottomY = Math.max(220, Math.min(maxY, Math.round(window.innerHeight * 0.84)));
+      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.52 : 0.44))));
+      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.12 : 0.03))));
+      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.26 : 0.16))));
+      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.66 : 0.68))));
+      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.82 : 0.88))));
+      const topY = Math.max(mobile ? 120 : 96, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.18 : 0.08))));
+      const midY = Math.max(mobile ? 180 : 120, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.42 : 0.3))));
+      const lowerY = Math.max(mobile ? 260 : 180, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.64 : 0.58))));
+      const bottomY = Math.max(mobile ? 320 : 220, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.78 : 0.82))));
 
+      setIsMobileViewport(mobile);
       setPos({ x: startX, y: startY });
       setFlightPath({
-        x: [startX, farLeftX, centerX, farRightX, leftX, rightX, startX],
-        y: [startY, midY, bottomY, topY, lowerY, midY, startY],
+        x: mobile
+          ? [startX, rightX, centerX, leftX, farLeftX, centerX, startX]
+          : [startX, farLeftX, centerX, farRightX, leftX, rightX, startX],
+        y: mobile
+          ? [startY, lowerY, midY, topY, midY, bottomY, startY]
+          : [startY, midY, bottomY, topY, lowerY, midY, startY],
       });
     };
 
@@ -520,7 +527,7 @@ export function AnimatedMascot() {
             prefersReducedMotion
               ? { duration: 0 }
               : {
-                  duration: 12,
+                  duration: isMobileViewport ? 18 : 10,
                   repeat: Infinity,
                   ease: "easeInOut",
                   times: [0, 0.16, 0.34, 0.52, 0.7, 0.86, 1],
