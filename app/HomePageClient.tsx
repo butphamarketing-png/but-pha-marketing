@@ -271,9 +271,9 @@ export default function HomePageClient() {
         <section className="mx-auto mt-20 max-w-6xl">
           <div className="mb-8 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-black text-white md:text-4xl">Danh gia khach hang</h2>
+              <h2 className="text-3xl font-black text-white md:text-4xl">Đánh giá khách hàng</h2>
               <p className="mt-1 text-sm text-gray-400">
-                Review duoc dong bo tu dashboard noi bo sau khi khach hang gui danh gia.
+                Review được đồng bộ từ dashboard nội bộ sau khi khách hàng gửi đánh giá.
               </p>
             </div>
 
@@ -301,7 +301,7 @@ export default function HomePageClient() {
 
           {reviews.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-white/20 bg-card/40 p-8 text-center">
-              <p className="text-sm text-gray-300">Chua co review nao duoc gui tu dashboard khach hang.</p>
+              <p className="text-sm text-gray-300">Chưa có review nào được gửi từ dashboard khách hàng.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

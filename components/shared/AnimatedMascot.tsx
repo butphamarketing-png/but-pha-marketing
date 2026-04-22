@@ -242,9 +242,6 @@ function RobotMascotGraphic({
         aria-hidden="true"
       >
         <img src="/mascot-home.png" alt="" className="h-[118px] w-[118px] object-contain select-none" draggable="false" />
-        <div className={animate ? "mascot-robot-open-eye" : "mascot-robot-open-eye mascot-robot-open-eye-static"}>
-          <span className="mascot-robot-open-eye-shine" />
-        </div>
       </div>
 
       <style>{`
@@ -254,57 +251,8 @@ function RobotMascotGraphic({
           height: 118px;
         }
 
-        .mascot-robot-open-eye {
-          position: absolute;
-          top: 29px;
-          right: 30px;
-          width: 16px;
-          height: 22px;
-          border-radius: 999px;
-          background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12), rgba(8,5,24,0.94) 58%);
-          border: 2px solid #d8b4fe;
-          box-shadow:
-            0 0 10px rgba(192, 132, 252, 0.95),
-            inset 0 0 10px rgba(168, 85, 247, 0.35);
-          opacity: 1;
-        }
-
-        .mascot-robot-open-eye-static {
-          opacity: 1;
-        }
-
-        .mascot-robot-open-eye-shine {
-          position: absolute;
-          top: 3px;
-          right: 3px;
-          width: 4px;
-          height: 4px;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.95);
-          box-shadow: 0 0 8px rgba(255,255,255,0.85);
-        }
-
         .mascot-robot-sway {
           animation: mascot-robot-sway 4s ease-in-out infinite;
-        }
-
-        .mascot-robot-open-eye {
-          animation: mascot-robot-wink 4s linear infinite;
-        }
-
-        @keyframes mascot-robot-wink {
-          0%,
-          69%,
-          100% {
-            opacity: 1;
-            transform: scaleY(1);
-          }
-
-          72%,
-          79% {
-            opacity: 0;
-            transform: scaleY(0.12);
-          }
         }
 
         @keyframes mascot-robot-sway {
@@ -549,11 +497,11 @@ export function AnimatedMascot() {
           }
         }}
         className="fixed left-3 top-1/2 z-[94] flex -translate-y-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-2 text-white shadow-xl backdrop-blur transition-all hover:scale-105 active:scale-95"
-        aria-label={isShown ? "An robot" : "Hien robot"}
+        aria-label={isShown ? "Ẩn robot" : "Hiện robot"}
         title={isShown ? "Tắt linh vật" : "Bật linh vật"}
       >
         {isShown ? <EyeOff size={18} className="text-cyan-300" /> : <Bot size={18} className="text-white/70" />}
-        <span className="text-xs font-semibold">{isShown ? "An robot" : "Hien robot"}</span>
+        <span className="text-xs font-semibold">{isShown ? "Ẩn robot" : "Hiện robot"}</span>
       </button>
 
       {isShown && (
