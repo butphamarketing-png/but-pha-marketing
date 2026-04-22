@@ -437,6 +437,12 @@ export function PostStudio({ postId, seedKeyword, initialIds }: PostStudioProps)
         .filter(Boolean),
       content: refreshSuggestion.newContent,
       outline: refreshSuggestion.improvements.map((item) => ({ heading: "Improvement", summary: item })),
+      faq: [],
+      cta: { heading: "", body: "", buttonText: "" },
+      searchIntent: "",
+      targetAudience: "",
+      primaryKeyword: "",
+      secondaryKeywords: [],
     });
     setMessage("Refresh draft applied to the editor. Review manually, then save if approved.");
   }

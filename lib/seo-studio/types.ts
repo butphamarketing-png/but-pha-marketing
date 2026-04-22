@@ -49,7 +49,13 @@ export type GenerateArticleResponse = {
   metaDescription: string;
   keywords: string[];
   content: string;
-  outline: Array<{ heading: string; summary: string }>;
+  outline: Array<{ heading: string; summary: string; keyPoints?: string[] }>;
+  faq: Array<{ question: string; answer: string }>;
+  cta: { heading: string; body: string; buttonText: string };
+  searchIntent: string;
+  targetAudience: string;
+  primaryKeyword: string;
+  secondaryKeywords: string[];
 };
 
 export type PostPayload = {

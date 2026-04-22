@@ -308,8 +308,25 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
 }
 
 function getErrorMessage(error: unknown): string {
-  if (error instanceof Error && error.message) return error.message;
+  if (error instanceof Error && error.message) {
+    if (error.message === "Failed to fetch") {
+      return "Không thể kết nối để lưu thay đổi. Dữ liệu có thể quá lớn hoặc mạng/server đang gián đoạn.";
+    }
+    return error.message;
+  }
   return "Không thể lưu thay đổi. Vui lòng thử lại.";
+}
+
+function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings): Partial<SiteSettings> {
+  const changed: Partial<SiteSettings> = {};
+
+  (Object.keys(current) as Array<keyof SiteSettings>).forEach((key) => {
+    if (JSON.stringify(previous[key]) !== JSON.stringify(current[key])) {
+      Object.assign(changed, { [key]: current[key] });
+    }
+  });
+
+  return changed;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -411,12 +428,19 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
         let lastError = "Không thể lưu thay đổi. Vui lòng thử lại.";
         let saved = false;
+        const changedFields = getChangedTopLevelFields(lastConfirmedSettingsRef.current, cleanSettings);
+
+        if (Object.keys(changedFields).length === 0) {
+          lastSavedRef.current = payload;
+          setSaveStatus("idle");
+          return;
+        }
 
         for (let attempt = 0; attempt < 3; attempt += 1) {
           const res = await fetch("/api/settings", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ key: SETTINGS_KEY, value: cleanSettings }),
+            body: JSON.stringify({ key: SETTINGS_KEY, value: changedFields }),
           });
 
           let parsed: { ok?: boolean; error?: string } | null = null;

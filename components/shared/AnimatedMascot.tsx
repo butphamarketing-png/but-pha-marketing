@@ -334,16 +334,36 @@ export function AnimatedMascot() {
                 });
               }
             }}
-            animate={{ 
-              y: [0, -8, 0], 
-              rotate: [0, 2, -2, 0],
+            animate={{
+              y: [0, 0, 0, 0, 0, -1.5, 0, 0, 0, 0, -4, 0, -4, 0, -4, 0],
+              rotate: [0, 0, 0, 0, 0, -0.6, 0, 0, 0, 0, 0, 8, -8, 7, -7, 0],
+              scaleX: [1, 1, 1, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              scaleY: [1, 1, 1, 0.92, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
               filter: [
                 "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
-                "drop-shadow(0 20px 25px rgba(0,0,0,0.4)) brightness(1.1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(0.98)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)",
+                "drop-shadow(0 18px 22px rgba(0,0,0,0.38)) brightness(1.03)",
+                "drop-shadow(0 18px 22px rgba(0,0,0,0.38)) brightness(1.03)",
+                "drop-shadow(0 18px 22px rgba(0,0,0,0.38)) brightness(1.03)",
+                "drop-shadow(0 18px 22px rgba(0,0,0,0.38)) brightness(1.03)",
                 "drop-shadow(0 10px 15px rgba(0,0,0,0.3)) brightness(1)"
               ]
             }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear",
+              times: [0, 0.2, 0.5, 0.525, 0.55, 0.6, 0.75, 0.76, 0.85, 0.9, 0.92, 0.94, 0.96, 0.98, 0.995, 1],
+            }}
             className="flex h-[88px] w-[82px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >

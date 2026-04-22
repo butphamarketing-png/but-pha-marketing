@@ -43,7 +43,7 @@ function normalizeProjects(portal: ClientPortal | null): ClientProject[] {
   if (raw.length === 0) return [];
   return raw.map((item: any, idx: number) => ({
     id: item.id || String(idx + 1),
-    title: item.title || `Du an ${idx + 1}`,
+    title: item.title || `Dự án ${idx + 1}`,
     registeredAt: item.registeredAt || "",
     deadlineAt: item.deadlineAt || "",
     budgetVnd: Number(item.budgetVnd || 0),
@@ -112,8 +112,8 @@ function DashboardContent() {
       type: "contact",
       name: user?.name || "",
       phone: user?.phone || "",
-      service: "Yeu cau khach hang",
-      note: reqContent + (reqImage ? `\n[Hinh anh: ${reqImage}]` : ""),
+      service: "Yêu cầu khách hàng",
+      note: reqContent + (reqImage ? `\n[Hình ảnh: ${reqImage}]` : ""),
     });
     setReqSent(true);
     setReqContent("");
@@ -174,8 +174,8 @@ function DashboardContent() {
               {user?.name?.[0] || "A"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="truncate text-xs font-bold text-white">{user?.name || "Khach hang"}</p>
-              <p className="truncate text-[10px] text-gray-500">Lo trinh du an</p>
+              <p className="truncate text-xs font-bold text-white">{user?.name || "Khách hàng"}</p>
+              <p className="truncate text-[10px] text-gray-500">Lộ trình dự án</p>
             </div>
             <button onClick={() => { logout(); router.push("/"); }} className="text-gray-500 hover:text-red-400 transition-colors">
               <LogOut size={16} />
@@ -221,19 +221,19 @@ function DashboardContent() {
             </div>
           )}
 
-          {/* TAB: Thong tin du an */}
+          {/* TAB: Thông tin dự án */}
           {activeTab === "info" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-4">Thong tin du an</h2>
+              <h2 className="text-xl font-black text-white mb-4">Thông tin dự án</h2>
               {selectedProject ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                     <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-xs text-gray-400 mb-1">Ten du an</p>
+                      <p className="text-xs text-gray-400 mb-1">Tên dự án</p>
                       <p className="font-bold text-white">{selectedProject.title}</p>
                     </div>
                     <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-xs text-gray-400 mb-1">Ngay dang ky</p>
+                      <p className="text-xs text-gray-400 mb-1">Ngày đăng ký</p>
                       <p className="font-bold text-white">{selectedProject.registeredAt ? new Date(selectedProject.registeredAt).toLocaleDateString("vi-VN") : "--"}</p>
                     </div>
                     <div className="rounded-2xl bg-white/5 p-4">
@@ -241,74 +241,74 @@ function DashboardContent() {
                       <p className="font-bold text-white">{selectedProject.deadlineAt ? new Date(selectedProject.deadlineAt).toLocaleDateString("vi-VN") : "--"}</p>
                     </div>
                     <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-xs text-gray-400 mb-1">Ngan sach</p>
-                      <p className="font-bold text-white">{selectedProject.budgetVnd ? selectedProject.budgetVnd.toLocaleString("vi-VN") + "d" : "--"}</p>
+                      <p className="text-xs text-gray-400 mb-1">Ngân sách</p>
+                      <p className="font-bold text-white">{selectedProject.budgetVnd ? selectedProject.budgetVnd.toLocaleString("vi-VN") + "đ" : "--"}</p>
                     </div>
                   </div>
                   {selectedProject.infoDoc && selectedProject.infoDoc !== "<p></p>" && (
                     <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-xs text-gray-400 mb-2">Chi tiet</p>
+                      <p className="text-xs text-gray-400 mb-2">Chi tiết</p>
                       <div className="prose prose-invert prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: selectedProject.infoDoc }} />
                     </div>
                   )}
                 </div>
               ) : (
-                <p className="text-gray-400 text-sm">Chua co thong tin du an.</p>
+                <p className="text-gray-400 text-sm">Chưa có thông tin dự án.</p>
               )}
             </div>
           )}
 
-          {/* TAB: Tien do du an */}
+          {/* TAB: Tiến độ dự án */}
           {activeTab === "progress" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-4">Tien do du an</h2>
+              <h2 className="text-xl font-black text-white mb-4">Tiến độ dự án</h2>
               {selectedProject?.progressDoc && selectedProject.progressDoc !== "<p></p>" ? (
                 <div className="prose prose-invert prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: selectedProject.progressDoc }} />
               ) : (
-                <p className="text-gray-400 text-sm">Chua co cap nhat tien do.</p>
+                <p className="text-gray-400 text-sm">Chưa có cập nhật tiến độ.</p>
               )}
             </div>
           )}
 
-          {/* TAB: Bao cao du an */}
+          {/* TAB: Báo cáo dự án */}
           {activeTab === "report" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-4">Bao cao du an</h2>
+              <h2 className="text-xl font-black text-white mb-4">Báo cáo dự án</h2>
               {selectedProject?.resultDoc && selectedProject.resultDoc !== "<p></p>" ? (
                 <div className="prose prose-invert prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: selectedProject.resultDoc }} />
               ) : (
-                <p className="text-gray-400 text-sm">Chua co bao cao.</p>
+                <p className="text-gray-400 text-sm">Chưa có báo cáo.</p>
               )}
             </div>
           )}
 
-          {/* TAB: Yeu cau khach hang */}
+          {/* TAB: Yêu cầu khách hàng */}
           {activeTab === "request" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-2">Yeu cau khach hang</h2>
-              <p className="text-sm text-gray-400 mb-6">Gui yeu cau, gop y hoac noi dung ban muon dang len nen tang.</p>
+              <h2 className="text-xl font-black text-white mb-2">Yêu cầu khách hàng</h2>
+              <p className="text-sm text-gray-400 mb-6">Gửi yêu cầu, góp ý hoặc nội dung bạn muốn đăng lên nền tảng.</p>
               {reqSent ? (
                 <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-8 text-center">
                   <p className="text-2xl mb-2">✓</p>
-                  <p className="font-bold text-white">Da gui yeu cau!</p>
-                  <p className="text-sm text-gray-400 mt-1">Doi ngu se xu ly trong thoi gian som nhat.</p>
-                  <button onClick={() => setReqSent(false)} className="mt-4 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white">Gui them</button>
+                  <p className="font-bold text-white">Đã gửi yêu cầu!</p>
+                  <p className="text-sm text-gray-400 mt-1">Đội ngũ sẽ xử lý trong thời gian sớm nhất.</p>
+                  <button onClick={() => setReqSent(false)} className="mt-4 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white">Gửi thêm</button>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <textarea
                     value={reqContent}
                     onChange={e => setReqContent(e.target.value)}
-                    placeholder="Noi dung yeu cau, gop y hoac noi dung ban muon dang..."
+                    placeholder="Nội dung yêu cầu, góp ý hoặc nội dung bạn muốn đăng..."
                     rows={6}
                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary resize-none"
                   />
                   <div>
-                    <label className="text-xs font-bold text-gray-400 mb-1 block">Link hinh anh (tuy chon)</label>
+                    <label className="text-xs font-bold text-gray-400 mb-1 block">Link hình ảnh (tùy chọn)</label>
                     <input
                       value={reqImage}
                       onChange={e => setReqImage(e.target.value)}
-                      placeholder="https://... hoac paste link hinh anh"
+                      placeholder="https://... hoặc dán link hình ảnh"
                       className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary"
                     />
                   </div>
@@ -320,62 +320,62 @@ function DashboardContent() {
                     disabled={!reqContent.trim()}
                     className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-black text-white disabled:opacity-50 hover:bg-primary/90 transition-colors"
                   >
-                    <Send size={16} /> Gui yeu cau
+                    <Send size={16} /> Gửi yêu cầu
                   </button>
                 </div>
               )}
             </div>
           )}
 
-          {/* TAB: Gia han du an */}
+          {/* TAB: Gia hạn dự án */}
           {activeTab === "renew" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6 text-center">
-              <h2 className="text-xl font-black text-white mb-2">Gia han du an</h2>
-              <p className="text-sm text-gray-400 mb-8">Chon goi dich vu phu hop de gia han hoac nang cap du an cua ban.</p>
+              <h2 className="text-xl font-black text-white mb-2">Gia hạn dự án</h2>
+              <p className="text-sm text-gray-400 mb-8">Chọn gói dịch vụ phù hợp để gia hạn hoặc nâng cấp dự án của bạn.</p>
               <a
                 href={PLATFORM_PATHS[portal?.platform || "facebook"] || "/facebook"}
                 className="inline-flex items-center gap-3 rounded-2xl bg-primary px-8 py-4 text-base font-black text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all hover:scale-105"
               >
                 <Bell size={20} />
-                Xem bang gia dich vu
+                Xem bảng giá dịch vụ
                 <ChevronRight size={20} />
               </a>
-              <p className="mt-4 text-xs text-gray-500">Ban se duoc chuyen den trang dich vu {portal?.platform || ""}.</p>
+              <p className="mt-4 text-xs text-gray-500">Bạn sẽ được chuyển đến trang dịch vụ {portal?.platform || ""}.</p>
             </div>
           )}
 
-          {/* TAB: Danh gia */}
+          {/* TAB: Đánh giá */}
           {activeTab === "review" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-2">Danh gia dich vu</h2>
-              <p className="text-sm text-gray-400 mb-6">Cam nhan cua ban giup chung toi cai thien dich vu tot hon.</p>
+              <h2 className="text-xl font-black text-white mb-2">Đánh giá dịch vụ</h2>
+              <p className="text-sm text-gray-400 mb-6">Cảm nhận của bạn giúp chúng tôi cải thiện dịch vụ tốt hơn.</p>
               {reviewSent ? (
                 <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-8 text-center">
                   <p className="text-3xl mb-2">⭐</p>
-                  <p className="font-bold text-white">Cam on ban da danh gia!</p>
-                  <p className="text-sm text-gray-400 mt-1">Danh gia cua ban da duoc ghi nhan.</p>
+                  <p className="font-bold text-white">Cảm ơn bạn đã đánh giá!</p>
+                  <p className="text-sm text-gray-400 mt-1">Đánh giá của bạn đã được ghi nhận.</p>
                 </div>
               ) : (
                 <div className="space-y-5">
                   <div>
-                    <label className="text-xs font-bold text-gray-400 mb-2 block">Danh gia sao</label>
+                    <label className="text-xs font-bold text-gray-400 mb-2 block">Đánh giá sao</label>
                     <StarRating value={reviewRating} onChange={setReviewRating} />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-gray-400 mb-1 block">Link logo / anh dai dien (tuy chon)</label>
+                    <label className="text-xs font-bold text-gray-400 mb-1 block">Link logo / ảnh đại diện (tùy chọn)</label>
                     <input
                       value={reviewLogoUrl}
                       onChange={e => setReviewLogoUrl(e.target.value)}
-                      placeholder="https://... link logo cong ty ban"
+                      placeholder="https://... link logo công ty bạn"
                       className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-gray-400 mb-1 block">Noi dung danh gia</label>
+                    <label className="text-xs font-bold text-gray-400 mb-1 block">Nội dung đánh giá</label>
                     <textarea
                       value={reviewContent}
                       onChange={e => setReviewContent(e.target.value)}
-                      placeholder="Chia se cam nhan cua ban ve dich vu..."
+                      placeholder="Chia sẻ cảm nhận của bạn về dịch vụ..."
                       rows={5}
                       className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary resize-none"
                     />
@@ -385,26 +385,26 @@ function DashboardContent() {
                     disabled={!reviewContent.trim()}
                     className="flex items-center gap-2 rounded-xl bg-yellow-500 px-6 py-3 text-sm font-black text-white disabled:opacity-50 hover:bg-yellow-400 transition-colors"
                   >
-                    <Star size={16} /> Gui danh gia
+                    <Star size={16} /> Gửi đánh giá
                   </button>
                 </div>
               )}
             </div>
           )}
 
-          {/* TAB: Cai dat */}
+          {/* TAB: Cài đặt */}
           {activeTab === "settings" && (
             <div className="rounded-3xl border border-white/10 bg-[#120a1d]/80 p-6">
-              <h2 className="text-xl font-black text-white mb-6">Thong tin tai khoan</h2>
+              <h2 className="text-xl font-black text-white mb-6">Thông tin tài khoản</h2>
               <div className="space-y-4">
                 {[
-                  { icon: Building2, label: "Ten khach hang", value: portal?.clientName },
-                  { icon: Phone, label: "So dien thoai", value: portal?.phone },
+                  { icon: Building2, label: "Tên khách hàng", value: portal?.clientName },
+                  { icon: Phone, label: "Số điện thoại", value: portal?.phone },
                   { icon: Mail, label: "Email", value: portal?.email },
-                  { icon: MapPin, label: "Dia chi", value: portal?.address },
-                  { icon: Building2, label: "Ten doanh nghiep", value: portal?.businessName },
-                  { icon: Globe, label: "Nen tang dang ho tro", value: portal?.platform },
-                  { icon: ExternalLink, label: "Link nen tang", value: portal?.platformLink },
+                  { icon: MapPin, label: "Địa chỉ", value: portal?.address },
+                  { icon: Building2, label: "Tên doanh nghiệp", value: portal?.businessName },
+                  { icon: Globe, label: "Nền tảng đang hỗ trợ", value: portal?.platform },
+                  { icon: ExternalLink, label: "Link nền tảng", value: portal?.platformLink },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4 rounded-2xl bg-white/5 p-4">
                     <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">

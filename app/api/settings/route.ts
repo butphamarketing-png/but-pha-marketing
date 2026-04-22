@@ -5,6 +5,24 @@ import { createServerClient } from "@/lib/supabase";
 
 const TABLE_NAME = "site_settings";
 
+function mergeSettingsValue(currentValue: unknown, patchValue: unknown) {
+  if (
+    currentValue &&
+    typeof currentValue === "object" &&
+    !Array.isArray(currentValue) &&
+    patchValue &&
+    typeof patchValue === "object" &&
+    !Array.isArray(patchValue)
+  ) {
+    return {
+      ...(currentValue as Record<string, unknown>),
+      ...(patchValue as Record<string, unknown>),
+    };
+  }
+
+  return patchValue;
+}
+
 function jsonError(message: string, status: number = 500, details: unknown = null) {
   console.error(`[API/settings] Error ${status}: ${message}`, details);
   return NextResponse.json({ ok: false, error: message, ...(details ? { details } : {}) }, { status });
@@ -90,9 +108,21 @@ export async function PATCH(request: Request) {
     console.log('[API/settings PATCH] Environment OK, creating Supabase client...');
     const supabase = createServerClient();
 
+    const { data: existing, error: readError } = await supabase
+      .from(TABLE_NAME)
+      .select("value")
+      .eq("key", key)
+      .maybeSingle();
+
+    if (readError) {
+      return handleSupabaseError(readError, "PATCH /api/settings (read current value)");
+    }
+
+    const mergedValue = mergeSettingsValue(existing?.value ?? null, value);
+
     const { data, error } = await supabase
       .from(TABLE_NAME)
-      .upsert({ key, value }, { onConflict: "key" })
+      .upsert({ key, value: mergedValue }, { onConflict: "key" })
       .select("key, value, updated_at")
       .single();
 
