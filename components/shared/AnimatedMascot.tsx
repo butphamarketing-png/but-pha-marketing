@@ -401,15 +401,15 @@ export function AnimatedMascot() {
       const maxY = Math.max(140, window.innerHeight - height - 24);
       const startX = Math.max(24, window.innerWidth - width - 40);
       const startY = Math.max(160, window.innerHeight - height - 36);
-      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.52)));
-      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.08)));
-      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.24)));
-      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.74)));
-      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.88)));
-      const topY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.14)));
-      const midY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.38)));
-      const lowerY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.66)));
-      const bottomY = Math.max(140, Math.min(maxY, Math.round(window.innerHeight * 0.82)));
+      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.48)));
+      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.04)));
+      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.18)));
+      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.7)));
+      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * 0.9)));
+      const topY = Math.max(96, Math.min(maxY, Math.round(window.innerHeight * 0.08)));
+      const midY = Math.max(120, Math.min(maxY, Math.round(window.innerHeight * 0.32)));
+      const lowerY = Math.max(180, Math.min(maxY, Math.round(window.innerHeight * 0.62)));
+      const bottomY = Math.max(220, Math.min(maxY, Math.round(window.innerHeight * 0.84)));
 
       setPos({ x: startX, y: startY });
       setFlightPath({
@@ -510,7 +510,7 @@ export function AnimatedMascot() {
       {isShown && (
         <motion.div
           className="fixed left-0 top-0 z-[93]"
-          style={{ x: pos.x, y: pos.y }}
+          initial={{ x: pos.x, y: pos.y }}
           animate={
             prefersReducedMotion
               ? { x: pos.x, y: pos.y }
@@ -520,7 +520,7 @@ export function AnimatedMascot() {
             prefersReducedMotion
               ? { duration: 0 }
               : {
-                  duration: 16,
+                  duration: 12,
                   repeat: Infinity,
                   ease: "easeInOut",
                   times: [0, 0.16, 0.34, 0.52, 0.7, 0.86, 1],
