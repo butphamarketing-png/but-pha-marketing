@@ -18,17 +18,22 @@ export async function generateMetadata(): Promise<Metadata> {
   const favicon = "/api/branding/favicon";
 
   try {
-    const supabase = createServerClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "admin_settings")
-      .maybeSingle();
+    const data = await Promise.race([
+      (async () => {
+        const supabase = createServerClient();
+        const result = await supabase
+          .from("site_settings")
+          .select("value")
+          .eq("key", "admin_settings")
+          .maybeSingle();
+        return result.data;
+      })(),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+    ]);
 
     if (typeof data?.value?.title === "string" && data.value.title.trim()) {
       siteTitle = data.value.title.trim();
     }
-
   } catch (error) {
     console.error("[layout metadata] Failed to load dynamic branding", error);
   }

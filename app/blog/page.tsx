@@ -4,6 +4,7 @@ import { Flame } from "lucide-react";
 import { getPublishedBlogs } from "@/lib/server-blog";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Tin Tức Marketing | Bứt Phá Marketing",

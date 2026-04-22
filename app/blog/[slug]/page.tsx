@@ -1,15 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getBlogBySlug, getPublishedBlogs } from "@/lib/server-blog";
+import { getBlogBySlug } from "@/lib/server-blog";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+export const dynamic = "force-dynamic";
 
 type Params = { slug: string };
-
-export async function generateStaticParams() {
-  const blogs = await getPublishedBlogs();
-  return blogs.map((blog) => ({ slug: blog.slug || blog.id }));
-}
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
