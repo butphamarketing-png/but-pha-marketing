@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -178,7 +179,7 @@ const defaultSettings: SiteSettings = {
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
   mascotEnabled: true,
-  mascotImage: "/mascot-dragon.svg",
+  mascotImage: "",
   mascotImages: {},
   mascotMessages: {},
   mascotAudioUrls: {},
@@ -504,6 +505,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
         lastSavedRef.current = payload;
         lastConfirmedSettingsRef.current = cleanSettings;
+        broadcastSettings(cleanSettings);
         setSaveStatus("saved");
         setSaveError(null);
         if (saveStatusTimerRef.current) window.clearTimeout(saveStatusTimerRef.current);
@@ -531,9 +533,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const setAndBroadcast = (updater: (prev: SiteSettings) => SiteSettings) => {
     setSettings((prev) => {
-      const next = mergeWithDefaults(updater(prev));
-      broadcastSettings(next);
-      return next;
+      return updater(prev);
     });
   };
 
@@ -676,23 +676,28 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const contextValue = useMemo(
+    () => ({
+      settings,
+      saveStatus,
+      saveError,
+      updateSettings,
+      updateColor,
+      updatePlatformName,
+      toggleVisibility,
+      updateCMS,
+      addSlideshowImage,
+      removeSlideshowImage,
+      addCase,
+      removeCase,
+      updateMediaVideo,
+    }),
+    [settings, saveStatus, saveError],
+  );
+
   return (
     <AdminContext.Provider
-      value={{
-        settings,
-        saveStatus,
-        saveError,
-        updateSettings,
-        updateColor,
-        updatePlatformName,
-        toggleVisibility,
-        updateCMS,
-        addSlideshowImage,
-        removeSlideshowImage,
-        addCase,
-        removeCase,
-        updateMediaVideo,
-      }}
+      value={contextValue}
     >
       {children}
     </AdminContext.Provider>

@@ -252,8 +252,9 @@ export function AnimatedMascot() {
     () => settings.mascotClickMessages?.[platform] || settings.mascotClickMessages?.home || [],
     [platform, settings.mascotClickMessages],
   );
-  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "/mascot-dragon.svg";
-  const isDefaultMascot = mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
+  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "";
+  const isDefaultMascot =
+    !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },

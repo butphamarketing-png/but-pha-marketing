@@ -252,6 +252,9 @@ export default function AdminPage() {
     link: "",
   };
   const mascotClickMessages = settings.mascotClickMessages?.[selectedMascotPlatform] || [];
+  const isBuiltInMascot = !settings.mascotImage || settings.mascotImage.endsWith("/mascot-dragon.svg");
+  const selectedMascotImage = settings.mascotImages?.[selectedMascotPlatform] || "";
+  const isBuiltInPlatformMascot = !selectedMascotImage;
 
   const resetBlogForm = () => {
     setEditingBlogId(null);
@@ -2294,7 +2297,7 @@ export default function AdminPage() {
                     <div className="space-y-2">
                       <p className="text-xs text-gray-400">Hình ảnh linh vật mặc định (URL)</p>
                       <div className="flex gap-2">
-                        <input value={settings.mascotImage || ""} onChange={e => updateSettings({ mascotImage: e.target.value })} placeholder="/mascot-dragon.svg" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                        <input value={isBuiltInMascot ? "" : settings.mascotImage || ""} onChange={e => updateSettings({ mascotImage: e.target.value })} placeholder="De trong de dung linh vat mac dinh tich hop" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                         <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">
                           Tải ảnh
                           <input
@@ -2311,7 +2314,11 @@ export default function AdminPage() {
                           />
                         </label>
                       </div>
-                      {settings.mascotImage && <img src={settings.mascotImage} alt="Mascot Preview" className="h-20 w-20 rounded-lg border border-white/10 object-contain" />}
+                      {isBuiltInMascot ? (
+                        <p className="text-xs text-emerald-300">Dang dung linh vat mac dinh tich hop san.</p>
+                      ) : (
+                        <img src={settings.mascotImage} alt="Mascot Preview" className="h-20 w-20 rounded-lg border border-white/10 object-contain" />
+                      )}
                     </div>
                   </div>
 
@@ -2328,7 +2335,7 @@ export default function AdminPage() {
                       <p className="text-xs text-gray-400">Hình ảnh linh vật cho trang này (nếu khác mặc định)</p>
                       <div className="flex gap-2">
                         <input
-                          value={settings.mascotImages?.[selectedMascotPlatform] || ""}
+                          value={selectedMascotImage}
                           onChange={e => updateSettings({ mascotImages: { ...(settings.mascotImages || {}), [selectedMascotPlatform]: e.target.value } })}
                           placeholder="URL ảnh linh vật..."
                           className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
@@ -2349,8 +2356,10 @@ export default function AdminPage() {
                           />
                         </label>
                       </div>
-                      {(settings.mascotImages?.[selectedMascotPlatform] || settings.mascotImage) && (
-                        <img src={settings.mascotImages?.[selectedMascotPlatform] || settings.mascotImage} alt="Platform Mascot Preview" className="h-16 w-16 rounded-lg border border-white/10 object-contain" />
+                      {isBuiltInPlatformMascot ? (
+                        <p className="text-xs text-emerald-300">Trang nay dang dung linh vat mac dinh.</p>
+                      ) : (
+                        <img src={selectedMascotImage} alt="Platform Mascot Preview" className="h-16 w-16 rounded-lg border border-white/10 object-contain" />
                       )}
                     </div>
 
