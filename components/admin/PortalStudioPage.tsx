@@ -7,7 +7,6 @@ import {
   BellRing,
   Building2,
   CalendarClock,
-  ChevronRight,
   Copy,
   FileText,
   FolderKanban,
@@ -115,6 +114,7 @@ function formatCompactDate(value?: string) {
 
 export function PortalStudioPage() {
   const { settings } = useAdmin();
+  const studioLogo = settings.logo || settings.favicon || "";
   const [authenticated, setAuthenticated] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [activeTab, setActiveTab] = useState<StudioTab>("overview");
@@ -242,7 +242,7 @@ export function PortalStudioPage() {
     });
   };
 
-  const saveSelectedClient = async (successMessage = "Da luu thong tin tai khoan khach hang.") => {
+  const saveSelectedClient = async (successMessage = "Đã lưu thông tin tài khoản khách hàng.") => {
     if (!selectedClient) return;
     setIsBusy(true);
     setMessage(null);
@@ -279,7 +279,7 @@ export function PortalStudioPage() {
     setError(null);
 
     if (!newPortal.clientName || !newPortal.username || !portalPassword) {
-      setError("Vui long nhap day du ten khach hang, tai khoan va mat khau.");
+      setError("Vui lòng nhập đầy đủ tên khách hàng, tài khoản và mật khẩu.");
       return;
     }
 
@@ -307,7 +307,7 @@ export function PortalStudioPage() {
       return;
     }
 
-    setMessage("Da tao tai khoan khach hang thanh cong.");
+    setMessage("Đã tạo tài khoản khách hàng thành công.");
     setPortalPassword("");
     setNewPortal({
       username: "",
@@ -330,7 +330,7 @@ export function PortalStudioPage() {
 
   const deleteSelectedClient = async () => {
     if (!selectedClient) return;
-    const shouldDelete = window.confirm(`Xoa tai khoan ${selectedClient.clientName}?`);
+    const shouldDelete = window.confirm(`Xóa tài khoản ${selectedClient.clientName}?`);
     if (!shouldDelete) return;
 
     setIsBusy(true);
@@ -346,19 +346,19 @@ export function PortalStudioPage() {
 
     setSelectedClient(null);
     setSelectedProjectId("");
-    setMessage("Da xoa tai khoan khach hang.");
+    setMessage("Đã xóa tài khoản khách hàng.");
     await refreshPortals();
   };
 
   const announceReport = async () => {
     if (!selectedClient || !selectedProject) return;
-    const announceText = `Thong bao moi: Bao cao du an ${selectedProject.title} da duoc cap nhat vao ${new Date().toLocaleDateString("vi-VN")}.`;
+    const announceText = `Thông báo mới: Báo cáo dự án ${selectedProject.title} đã được cập nhật vào ${new Date().toLocaleDateString("vi-VN")}.`;
     updateSelectedClientLocal({ tickerText: announceText });
-    await saveSelectedClient("Da luu bao cao va cap nhat thong bao cho khach hang.");
+    await saveSelectedClient("Đã lưu báo cáo và cập nhật thông báo cho khách hàng.");
   };
 
   const deleteReview = async (reviewId: string) => {
-    const shouldDelete = window.confirm("Xoa danh gia nay khoi trang chu va dashboard?");
+    const shouldDelete = window.confirm("Xóa đánh giá này khỏi trang chủ và dashboard?");
     if (!shouldDelete) return;
     setIsBusy(true);
     setMessage(null);
@@ -371,7 +371,7 @@ export function PortalStudioPage() {
       return;
     }
 
-    setMessage("Da xoa danh gia khach hang.");
+    setMessage("Đã xóa đánh giá khách hàng.");
     await refreshReviews();
   };
 
@@ -381,13 +381,13 @@ export function PortalStudioPage() {
     hint: string;
     icon: typeof LayoutDashboard;
   }> = [
-    { id: "overview", label: "Tong quan", hint: "Nhieu tai khoan, nhieu du an", icon: LayoutDashboard },
-    { id: "create-account", label: "Them tai khoan", hint: "Tao tai khoan dang nhap", icon: Plus },
-    { id: "manage-account", label: "Quan ly tai khoan", hint: "Sua thong tin khach hang", icon: UserRound },
-    { id: "project-info", label: "Thong tin du an", hint: "Noi dung gioi thieu tung du an", icon: FolderKanban },
-    { id: "project-progress", label: "Tien do du an", hint: "Cap nhat tien do thuc hien", icon: CalendarClock },
-    { id: "project-report", label: "Bao cao du an", hint: "Bao cao va thong bao", icon: FileText },
-    { id: "reviews", label: "Danh gia & thong bao", hint: "Review va chu chay ngang", icon: MessageSquareQuote },
+    { id: "overview", label: "Tổng quan", hint: "Nhiều tài khoản, nhiều dự án", icon: LayoutDashboard },
+    { id: "create-account", label: "Thêm tài khoản", hint: "Tạo tài khoản đăng nhập", icon: Plus },
+    { id: "manage-account", label: "Quản lý tài khoản", hint: "Sửa thông tin khách hàng", icon: UserRound },
+    { id: "project-info", label: "Thông tin dự án", hint: "Nội dung giới thiệu từng dự án", icon: FolderKanban },
+    { id: "project-progress", label: "Tiến độ dự án", hint: "Cập nhật tiến độ thực hiện", icon: CalendarClock },
+    { id: "project-report", label: "Báo cáo dự án", hint: "Báo cáo và thông báo", icon: FileText },
+    { id: "reviews", label: "Đánh giá & thông báo", hint: "Review và chữ chạy ngang", icon: MessageSquareQuote },
   ];
 
   if (isAuthChecking) {
@@ -401,15 +401,15 @@ export function PortalStudioPage() {
           <p className="text-xs font-bold uppercase tracking-[0.25em]" style={{ color: STUDIO_ACCENT }}>
             Admin
           </p>
-          <h1 className="mt-3 text-3xl font-black">Quan ly lo trinh du an</h1>
-          <p className="mt-3 text-sm text-slate-500">Trang nay can dang nhap admin truoc khi truy cap.</p>
+          <h1 className="mt-3 text-3xl font-black">Quản lý lộ trình dự án</h1>
+          <p className="mt-3 text-sm text-slate-500">Trang này cần đăng nhập admin trước khi truy cập.</p>
           <Link
             href="/admin"
             className="mt-6 inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white"
             style={{ backgroundColor: STUDIO_ACCENT }}
           >
             <ArrowLeft size={16} />
-            Ve trang admin
+            Về trang admin
           </Link>
         </div>
       </main>
@@ -422,15 +422,23 @@ export function PortalStudioPage() {
         <aside className="sticky top-6 hidden h-[calc(100vh-3rem)] w-[295px] shrink-0 overflow-hidden rounded-[30px] bg-[#161d31] text-white shadow-[0_24px_80px_rgba(15,23,42,0.22)] lg:flex lg:flex-col">
           <div className="border-b border-white/10 px-6 py-6">
             <div className="flex items-center gap-3">
-              <div
-                className="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-lg"
-                style={{ background: "linear-gradient(135deg, #fb923c 0%, #f97316 55%, #ea580c 100%)" }}
-              >
-                <FolderKanban size={20} />
-              </div>
+              {studioLogo ? (
+                <img
+                  src={studioLogo}
+                  alt={settings.title || "Logo"}
+                  className="h-12 w-12 rounded-2xl border border-white/10 bg-white object-cover shadow-lg"
+                />
+              ) : (
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-lg"
+                  style={{ background: "linear-gradient(135deg, #fb923c 0%, #f97316 55%, #ea580c 100%)" }}
+                >
+                  <FolderKanban size={20} />
+                </div>
+              )}
               <div>
                 <p className="font-black text-white">Project Studio</p>
-                <p className="text-xs text-slate-400">Quan ly lo trinh du an</p>
+                <p className="text-xs text-slate-400">Quản lý lộ trình dự án</p>
               </div>
             </div>
           </div>
@@ -455,35 +463,6 @@ export function PortalStudioPage() {
             ))}
           </nav>
 
-          <div className="mx-4 mb-4 rounded-[24px] border border-white/10 bg-white/5 p-5">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Tong hop nhanh</p>
-              <span
-                className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
-                style={{ backgroundColor: "rgba(249, 115, 22, 0.22)" }}
-              >
-                Studio
-              </span>
-            </div>
-
-            <div className="mt-4 space-y-3 text-sm text-slate-300">
-              <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
-                <span>Tai khoan</span>
-                <strong className="text-white">{clientPortals.length}</strong>
-              </div>
-              <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
-                <span>Danh gia</span>
-                <strong className="text-white">{clientReviews.length}</strong>
-              </div>
-              <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
-                <span>Du an</span>
-                <strong className="text-white">
-                  {clientPortals.reduce((sum, portal) => sum + normalizeProjects(portal).length, 0)}
-                </strong>
-              </div>
-            </div>
-          </div>
-
           <div className="mx-4 mb-4 border-t border-white/10 pt-4">
             <div className="flex items-center gap-3 px-2">
               <div
@@ -494,7 +473,7 @@ export function PortalStudioPage() {
               </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold text-white">Admin</p>
-                <p className="truncate text-[11px] text-slate-400">Portal management workspace</p>
+                <p className="truncate text-[11px] text-slate-400">Không gian quản lý lộ trình dự án</p>
               </div>
               <Link href="/admin" className="text-slate-400 transition hover:text-white">
                 <LogOut size={16} />
@@ -512,11 +491,11 @@ export function PortalStudioPage() {
                   Admin Studio
                 </div>
                 <h1 className="text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
-                  Quan ly lo trinh du an
+                  Quản lý lộ trình dự án
                 </h1>
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500 md:text-base">
-                  Mot workspace rieng de tao tai khoan, quan ly du an 1 - du an 2, cap nhat tien do, bao cao,
-                  thong bao chay ngang va danh gia khach hang cho tung cong.
+                  Một workspace riêng để tạo tài khoản, quản lý dự án 1 - dự án 2, cập nhật tiến độ, báo cáo,
+                  thông báo chạy ngang và đánh giá khách hàng cho từng cổng.
                 </p>
               </div>
 
@@ -526,7 +505,7 @@ export function PortalStudioPage() {
                   className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
                 >
                   <ArrowLeft size={16} />
-                  Quay lai admin
+                  Quay lại admin
                 </Link>
                 <button
                   type="button"
@@ -535,7 +514,7 @@ export function PortalStudioPage() {
                   style={{ backgroundColor: STUDIO_ACCENT }}
                 >
                   <Plus size={16} />
-                  Them tai khoan
+                  Thêm tài khoản
                 </button>
               </div>
             </div>
@@ -555,7 +534,7 @@ export function PortalStudioPage() {
 
           {!selectedClient && activeTab !== "create-account" && (
             <div className="rounded-[28px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-700">
-              Chon mot khach hang o cot ben trai trong danh sach tai khoan de cap nhat lo trinh du an va noi dung noi bo.
+              Chọn một khách hàng ở cột bên trái trong danh sách tài khoản để cập nhật lộ trình dự án và nội dung nội bộ.
             </div>
           )}
 
@@ -563,9 +542,9 @@ export function PortalStudioPage() {
             <section className="space-y-6">
               <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-black text-slate-950">Danh sach tai khoan</h2>
+                  <h2 className="text-lg font-black text-slate-950">Danh sách tài khoản</h2>
                   <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-                    {clientPortals.length} tai khoan
+                    {clientPortals.length} tài khoản
                   </span>
                 </div>
 
@@ -604,39 +583,12 @@ export function PortalStudioPage() {
                         </div>
 
                         <div className="mt-4 flex items-center justify-between text-xs text-slate-500">
-                          <span>{projectCount} du an</span>
+                          <span>{projectCount} dự án</span>
                           <span>{clientReviews.filter((review) => review.clientId === client.id).length} review</span>
                         </div>
                       </button>
                     );
                   })}
-                </div>
-              </div>
-
-              <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-black text-slate-950">Nut dieu huong nhanh</h2>
-                  <ChevronRight size={16} className="text-slate-400" />
-                </div>
-
-                <div className="space-y-2">
-                  {sidebarItems.slice(1).map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveTab(item.id)}
-                      className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm transition ${
-                        activeTab === item.id ? "text-white" : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                      }`}
-                      style={activeTab === item.id ? { backgroundColor: STUDIO_ACCENT } : undefined}
-                    >
-                      <item.icon size={16} />
-                      <div>
-                        <p className="font-semibold">{item.label}</p>
-                        <p className="text-[11px] opacity-80">{item.hint}</p>
-                      </div>
-                    </button>
-                  ))}
                 </div>
               </div>
             </section>
@@ -650,7 +602,7 @@ export function PortalStudioPage() {
                         <UserRound size={20} />
                       </div>
                       <p className="text-3xl font-black text-slate-950">{clientPortals.length}</p>
-                      <p className="mt-2 text-sm text-slate-500">Tong tai khoan khach hang dang duoc quan ly.</p>
+                      <p className="mt-2 text-sm text-slate-500">Tổng tài khoản khách hàng đang được quản lý.</p>
                     </div>
 
                     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
@@ -660,7 +612,7 @@ export function PortalStudioPage() {
                       <p className="text-3xl font-black text-slate-950">
                         {clientPortals.reduce((sum, portal) => sum + normalizeProjects(portal).length, 0)}
                       </p>
-                      <p className="mt-2 text-sm text-slate-500">Tong so du an dang mo trong he thong.</p>
+                      <p className="mt-2 text-sm text-slate-500">Tổng số dự án đang mở trong hệ thống.</p>
                     </div>
 
                     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
@@ -668,7 +620,7 @@ export function PortalStudioPage() {
                         <Star size={20} />
                       </div>
                       <p className="text-3xl font-black text-slate-950">{clientReviews.length}</p>
-                      <p className="mt-2 text-sm text-slate-500">Danh gia se duoc day len trang chu sau khi khach gui.</p>
+                      <p className="mt-2 text-sm text-slate-500">Đánh giá sẽ được đẩy lên trang chủ sau khi khách gửi.</p>
                     </div>
                   </div>
 
@@ -676,9 +628,9 @@ export function PortalStudioPage() {
                     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
                       <div className="mb-5 flex items-center justify-between">
                         <div>
-                          <h2 className="text-xl font-black text-slate-950">Mo ta luong khach hang</h2>
+                          <h2 className="text-xl font-black text-slate-950">Mô tả luồng khách hàng</h2>
                           <p className="mt-1 text-sm text-slate-500">
-                            Admin nhap du lieu trong studio nay va dashboard khach hang se doc lai theo tung tai khoan.
+                            Admin nhập dữ liệu trong studio này và dashboard khách hàng sẽ đọc lại theo từng tài khoản.
                           </p>
                         </div>
                         <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-orange-600">
@@ -688,12 +640,12 @@ export function PortalStudioPage() {
 
                       <div className="grid gap-4 md:grid-cols-2">
                         {[
-                          "1. Them tai khoan dang nhap cho khach hang",
-                          "2. Chon khach hang de quan ly nhieu du an",
-                          "3. Nhap thong tin du an, tien do va bao cao bang rich text",
-                          "4. Cap nhat thong bao chay ngang cho dashboard khach",
-                          "5. Nhan review tu dashboard va duoc phep xoa trong admin",
-                          "6. Nut gia han tren dashboard dua khach ve dung nen tang",
+                          "1. Thêm tài khoản đăng nhập cho khách hàng",
+                          "2. Chọn khách hàng để quản lý nhiều dự án",
+                          "3. Nhập thông tin dự án, tiến độ và báo cáo bằng rich text",
+                          "4. Cập nhật thông báo chạy ngang cho dashboard khách",
+                          "5. Nhận review từ dashboard và được phép xóa trong admin",
+                          "6. Nút gia hạn trên dashboard đưa khách về đúng nền tảng",
                         ].map((item) => (
                           <div key={item} className="rounded-2xl bg-slate-50 px-4 py-4 text-sm font-medium text-slate-700">
                             {item}
@@ -703,7 +655,7 @@ export function PortalStudioPage() {
                     </div>
 
                     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
-                      <h2 className="text-xl font-black text-slate-950">Khach hang dang chon</h2>
+                      <h2 className="text-xl font-black text-slate-950">Khách hàng đang chọn</h2>
                       {selectedClient ? (
                         <div className="mt-5 space-y-4">
                           <div className="rounded-[24px] bg-slate-50 p-5">
@@ -717,17 +669,17 @@ export function PortalStudioPage() {
                               {platforms.find((platform) => platform.key === selectedClient.platform)?.label || selectedClient.platform}
                             </div>
                             <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                              <strong className="text-slate-950">So du an:</strong> {selectedProjects.length}
+                              <strong className="text-slate-950">Số dự án:</strong> {selectedProjects.length}
                             </div>
                             <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                              <strong className="text-slate-950">Thong bao:</strong>{" "}
-                              {selectedClient.tickerText?.trim() ? "Da cau hinh" : "Chua cau hinh"}
+                              <strong className="text-slate-950">Thông báo:</strong>{" "}
+                              {selectedClient.tickerText?.trim() ? "Đã cấu hình" : "Chưa cấu hình"}
                             </div>
                           </div>
                         </div>
                       ) : (
                         <div className="mt-5 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
-                          Chon mot khach hang de xem nhanh lo trinh va thong tin tai khoan.
+                          Chọn một khách hàng để xem nhanh lộ trình và thông tin tài khoản.
                         </div>
                       )}
                     </div>
@@ -740,13 +692,13 @@ export function PortalStudioPage() {
                   <div className="mb-6 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-600">Step 01</p>
-                      <h2 className="mt-2 text-2xl font-black text-slate-950">Them tai khoan khach hang</h2>
+                      <h2 className="mt-2 text-2xl font-black text-slate-950">Thêm tài khoản khách hàng</h2>
                       <p className="mt-2 text-sm text-slate-500">
-                        Tao tai khoan dang nhap, cai dat ho so doanh nghiep va khoi tao du an dau tien.
+                        Tạo tài khoản đăng nhập, cài đặt hồ sơ doanh nghiệp và khởi tạo dự án đầu tiên.
                       </p>
                     </div>
                     <div className="hidden rounded-[24px] bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700 md:block">
-                      Noi dung nay se do vao dashboard khach hang sau khi login.
+                      Nội dung này sẽ đổ vào dashboard khách hàng sau khi login.
                     </div>
                   </div>
 
@@ -754,7 +706,7 @@ export function PortalStudioPage() {
                     <input
                       value={newPortal.clientName || ""}
                       onChange={(e) => setNewPortal({ ...newPortal, clientName: e.target.value })}
-                      placeholder="Ten khach hang"
+                      placeholder="Tên khách hàng"
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                     />
                     <input
@@ -766,7 +718,7 @@ export function PortalStudioPage() {
                     <input
                       value={newPortal.username || ""}
                       onChange={(e) => setNewPortal({ ...newPortal, username: e.target.value })}
-                      placeholder="Tai khoan dang nhap"
+                      placeholder="Tài khoản đăng nhập"
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                     />
                     <input
@@ -813,7 +765,7 @@ export function PortalStudioPage() {
                     <input
                       value={newPortal.tickerText || ""}
                       onChange={(e) => setNewPortal({ ...newPortal, tickerText: e.target.value })}
-                      placeholder="Dong thong bao chay ngang cho dashboard khach"
+                      placeholder="Dòng thông báo chạy ngang cho dashboard khách"
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400 md:col-span-2"
                     />
                   </div>
@@ -834,7 +786,7 @@ export function PortalStudioPage() {
                     <input
                       value={newPortal.progressPercent || 0}
                       onChange={(e) => setNewPortal({ ...newPortal, progressPercent: Number(e.target.value || 0) })}
-                      placeholder="Tien do %"
+                      placeholder="Tiến độ %"
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                     />
                   </div>
@@ -848,7 +800,7 @@ export function PortalStudioPage() {
                       style={{ backgroundColor: STUDIO_ACCENT }}
                     >
                       <Plus size={16} />
-                      Tao tai khoan
+                      Tạo tài khoản
                     </button>
                     <button
                       type="button"
@@ -883,9 +835,9 @@ export function PortalStudioPage() {
                   <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-600">Step 02</p>
-                      <h2 className="mt-2 text-2xl font-black text-slate-950">Quan ly tai khoan</h2>
+                      <h2 className="mt-2 text-2xl font-black text-slate-950">Quản lý tài khoản</h2>
                       <p className="mt-2 text-sm text-slate-500">
-                        Sua ho so cong ty, thong tin lien he, noi dung ticker va gia tri tong quan hien trong dashboard.
+                        Sửa hồ sơ công ty, thông tin liên hệ, nội dung ticker và giá trị tổng quan hiện trong dashboard.
                       </p>
                     </div>
 
@@ -894,9 +846,9 @@ export function PortalStudioPage() {
                         <button
                           type="button"
                           onClick={async () => {
-                            const loginText = `Tai khoan: ${selectedClient.username}\nMat khau: ${selectedClient.password || ""}`;
+                            const loginText = `Tài khoản: ${selectedClient.username}\nMật khẩu: ${selectedClient.password || ""}`;
                             await navigator.clipboard.writeText(loginText);
-                            setMessage("Da copy thong tin dang nhap.");
+                            setMessage("Đã copy thông tin đăng nhập.");
                           }}
                           className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
                         >
@@ -911,7 +863,7 @@ export function PortalStudioPage() {
                           style={{ backgroundColor: STUDIO_ACCENT }}
                         >
                           <Save size={16} />
-                          Luu tai khoan
+                          Lưu tài khoản
                         </button>
                         <button
                           type="button"
@@ -920,7 +872,7 @@ export function PortalStudioPage() {
                           className="inline-flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 disabled:opacity-60"
                         >
                           <Trash2 size={16} />
-                          Xoa tai khoan
+                          Xóa tài khoản
                         </button>
                       </div>
                     )}
@@ -928,7 +880,7 @@ export function PortalStudioPage() {
 
                   {!selectedClient ? (
                     <div className="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-sm text-slate-500">
-                      Chon mot khach hang ben trai de sua thong tin tai khoan.
+                      Chọn một khách hàng bên trái để sửa thông tin tài khoản.
                     </div>
                   ) : (
                     <>
@@ -936,7 +888,7 @@ export function PortalStudioPage() {
                         <input
                           value={selectedClient.clientName}
                           onChange={(e) => updateSelectedClientLocal({ clientName: e.target.value })}
-                          placeholder="Ten khach hang"
+                          placeholder="Tên khách hàng"
                           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                         />
                         <input
@@ -994,7 +946,7 @@ export function PortalStudioPage() {
                         <input
                           value={selectedClient.tickerText || ""}
                           onChange={(e) => updateSelectedClientLocal({ tickerText: e.target.value })}
-                          placeholder="Thong bao chay ngang tu trai sang phai"
+                          placeholder="Thông báo chạy ngang từ trái sang phải"
                           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400 md:col-span-2"
                         />
                       </div>
@@ -1015,7 +967,7 @@ export function PortalStudioPage() {
                         <input
                           value={selectedClient.progressPercent || 0}
                           onChange={(e) => updateSelectedClientLocal({ progressPercent: Number(e.target.value || 0) })}
-                          placeholder="Tien do tong %"
+                          placeholder="Tiến độ tổng %"
                           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                         />
                       </div>
@@ -1037,13 +989,13 @@ export function PortalStudioPage() {
                       </p>
                       <h2 className="mt-2 text-2xl font-black text-slate-950">
                         {activeTab === "project-info"
-                          ? "Thong tin du an"
+                          ? "Thông tin dự án"
                           : activeTab === "project-progress"
-                            ? "Tien do du an"
-                            : "Bao cao du an"}
+                            ? "Tiến độ dự án"
+                            : "Báo cáo dự án"}
                       </h2>
                       <p className="mt-2 text-sm text-slate-500">
-                        Moi khach co nhieu du an. Admin co the them, sua, xoa va cap nhat noi dung theo tung tab.
+                        Mỗi khách có nhiều dự án. Admin có thể thêm, sửa, xóa và cập nhật nội dung theo từng tab.
                       </p>
                     </div>
 
@@ -1055,17 +1007,17 @@ export function PortalStudioPage() {
                           className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
                         >
                           <Plus size={16} />
-                          Them du an
+                          Thêm dự án
                         </button>
                         <button
                           type="button"
                           onClick={() =>
                             void saveSelectedClient(
                               activeTab === "project-info"
-                                ? "Da luu thong tin du an."
+                                ? "Đã lưu thông tin dự án."
                                 : activeTab === "project-progress"
-                                  ? "Da luu tien do du an."
-                                  : "Da luu bao cao du an.",
+                                  ? "Đã lưu tiến độ dự án."
+                                  : "Đã lưu báo cáo dự án.",
                             )
                           }
                           disabled={!selectedClient || isBusy}
@@ -1073,7 +1025,7 @@ export function PortalStudioPage() {
                           style={{ backgroundColor: STUDIO_ACCENT }}
                         >
                           <Save size={16} />
-                          Luu noi dung
+                          Lưu nội dung
                         </button>
                         {activeTab === "project-report" && (
                           <button
@@ -1083,7 +1035,7 @@ export function PortalStudioPage() {
                             className="inline-flex items-center gap-2 rounded-2xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-bold text-orange-700 disabled:opacity-60"
                           >
                             <BellRing size={16} />
-                            Luu va thong bao
+                            Lưu và thông báo
                           </button>
                         )}
                       </div>
@@ -1092,7 +1044,7 @@ export function PortalStudioPage() {
 
                   {!selectedClient ? (
                     <div className="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-sm text-slate-500">
-                      Chon mot khach hang ben trai de bat dau quan ly danh sach du an.
+                      Chọn một khách hàng bên trái để bắt đầu quản lý danh sách dự án.
                     </div>
                   ) : (
                     <>
@@ -1120,7 +1072,7 @@ export function PortalStudioPage() {
                             <input
                               value={selectedProject.title}
                               onChange={(e) => updateSelectedProject(selectedProject.id, { title: e.target.value })}
-                              placeholder="Ten du an"
+                              placeholder="Tên dự án"
                               className="min-w-[240px] flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                             />
                             <button
@@ -1129,7 +1081,7 @@ export function PortalStudioPage() {
                               className="inline-flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700"
                             >
                               <Trash2 size={14} />
-                              Xoa du an
+                              Xóa dự án
                             </button>
                           </div>
 
@@ -1162,7 +1114,7 @@ export function PortalStudioPage() {
                             </div>
                             <div>
                               <label className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-                                Ngan sach (VND)
+                                Ngân sách (VND)
                               </label>
                               <input
                                 value={selectedProject.budgetVnd}
@@ -1179,7 +1131,7 @@ export function PortalStudioPage() {
                           {activeTab === "project-info" && (
                             <div className="space-y-2">
                               <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-                                Noi dung thong tin du an
+                                Nội dung thông tin dự án
                               </label>
                               <RichTextEditor
                                 value={selectedProject.infoDoc || "<p></p>"}
@@ -1192,7 +1144,7 @@ export function PortalStudioPage() {
                           {activeTab === "project-progress" && (
                             <div className="space-y-2">
                               <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-                                Noi dung tien do du an
+                                Nội dung tiến độ dự án
                               </label>
                               <RichTextEditor
                                 value={selectedProject.progressDoc || "<p></p>"}
@@ -1205,7 +1157,7 @@ export function PortalStudioPage() {
                           {activeTab === "project-report" && (
                             <div className="space-y-2">
                               <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-                                Noi dung bao cao du an
+                                Nội dung báo cáo dự án
                               </label>
                               <RichTextEditor
                                 value={selectedProject.resultDoc || "<p></p>"}
@@ -1227,29 +1179,29 @@ export function PortalStudioPage() {
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-600">Step 06</p>
-                        <h2 className="mt-2 text-2xl font-black text-slate-950">Danh gia va thong bao</h2>
+                        <h2 className="mt-2 text-2xl font-black text-slate-950">Đánh giá và thông báo</h2>
                         <p className="mt-2 text-sm text-slate-500">
-                          Quan ly chu chay ngang o dashboard, xoa review khach hang va theo doi noi dung se hien tren trang chu.
+                          Quản lý chữ chạy ngang ở dashboard, xóa review khách hàng và theo dõi nội dung sẽ hiện trên trang chủ.
                         </p>
                       </div>
 
                       {selectedClient && (
                         <button
                           type="button"
-                          onClick={() => void saveSelectedClient("Da luu thong bao chay ngang cho khach hang.")}
+                          onClick={() => void saveSelectedClient("Đã lưu thông báo chạy ngang cho khách hàng.")}
                           disabled={!selectedClient || isBusy}
                           className="inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-white disabled:opacity-60"
                           style={{ backgroundColor: STUDIO_ACCENT }}
                         >
                           <Save size={16} />
-                          Luu thong bao
+                          Lưu thông báo
                         </button>
                       )}
                     </div>
 
                     {!selectedClient ? (
                       <div className="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-sm text-slate-500">
-                        Chon mot khach hang de cai dat ticker text va xem review cua ho.
+                        Chọn một khách hàng để cài đặt ticker text và xem review của họ.
                       </div>
                     ) : (
                       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
@@ -1259,19 +1211,19 @@ export function PortalStudioPage() {
                               <Send size={18} />
                             </div>
                             <div>
-                              <h3 className="font-black text-slate-950">Chu thong bao chay ngang</h3>
-                              <p className="text-sm text-slate-500">Noi dung nay se hien o dau dashboard cua khach hang.</p>
+                              <h3 className="font-black text-slate-950">Chữ thông báo chạy ngang</h3>
+                              <p className="text-sm text-slate-500">Nội dung này sẽ hiện ở đầu dashboard của khách hàng.</p>
                             </div>
                           </div>
                           <textarea
                             value={selectedClient.tickerText || ""}
                             onChange={(e) => updateSelectedClientLocal({ tickerText: e.target.value })}
                             rows={6}
-                            placeholder="Nhap thong bao chay ngang..."
+                            placeholder="Nhập thông báo chạy ngang..."
                             className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-orange-400"
                           />
                           <div className="mt-4 rounded-2xl bg-[#161d31] px-4 py-3 text-sm font-bold text-white">
-                            Preview: {selectedClient.tickerText?.trim() || "Chua co thong bao"}
+                            Xem trước: {selectedClient.tickerText?.trim() || "Chưa có thông báo"}
                           </div>
                         </div>
 
@@ -1281,9 +1233,9 @@ export function PortalStudioPage() {
                               <Star size={18} />
                             </div>
                             <div>
-                              <h3 className="font-black text-slate-950">Review cua khach hang</h3>
+                              <h3 className="font-black text-slate-950">Review của khách hàng</h3>
                               <p className="text-sm text-slate-500">
-                                Cac review khach gui tu dashboard se hien o day va co the xoa bat ky luc nao.
+                                Các review khách gửi từ dashboard sẽ hiện ở đây và có thể xóa bất kỳ lúc nào.
                               </p>
                             </div>
                           </div>
@@ -1291,7 +1243,7 @@ export function PortalStudioPage() {
                           <div className="space-y-3">
                             {selectedClientReviews.length === 0 ? (
                               <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-5 text-sm text-slate-500">
-                                Khach hang nay chua gui review nao.
+                                Khách hàng này chưa gửi review nào.
                               </div>
                             ) : (
                               selectedClientReviews.map((review) => (
@@ -1332,7 +1284,7 @@ export function PortalStudioPage() {
 
                   <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
                     <div className="mb-4 flex items-center justify-between">
-                      <h3 className="text-xl font-black text-slate-950">Tat ca review trong he thong</h3>
+                      <h3 className="text-xl font-black text-slate-950">Tất cả review trong hệ thống</h3>
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
                         {clientReviews.length} review
                       </span>
@@ -1341,7 +1293,7 @@ export function PortalStudioPage() {
                     <div className="grid gap-4 md:grid-cols-2">
                       {clientReviews.length === 0 ? (
                         <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-500 md:col-span-2">
-                          Chua co review nao duoc gui tu dashboard.
+                          Chưa có review nào được gửi từ dashboard.
                         </div>
                       ) : (
                         clientReviews.map((review) => (

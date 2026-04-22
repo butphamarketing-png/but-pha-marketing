@@ -554,10 +554,10 @@ export const db = {
       if (!result.error) invalidateCache("client_portals");
       return { data: null, error: result.error };
     },
-    login: (username: string, password: string): Promise<ApiResult<ClientPortal>> =>
+    login: (username: string, password: string, platform: string): Promise<ApiResult<ClientPortal>> =>
       apiFetch<ClientPortal>("/client-portals/login", {
         method: "POST",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, platform }),
       }, mapClientPortal),
   },
   progressArticles: {
