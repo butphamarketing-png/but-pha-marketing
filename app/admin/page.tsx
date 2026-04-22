@@ -252,7 +252,10 @@ export default function AdminPage() {
     link: "",
   };
   const mascotClickMessages = settings.mascotClickMessages?.[selectedMascotPlatform] || [];
-  const isBuiltInMascot = !settings.mascotImage || settings.mascotImage.endsWith("/mascot-dragon.svg");
+  const isBuiltInMascot =
+    !settings.mascotImage ||
+    settings.mascotImage.endsWith("/mascot-dragon.svg") ||
+    settings.mascotImage.endsWith("/mascot-home.png");
   const selectedMascotImage = settings.mascotImages?.[selectedMascotPlatform] || "";
   const isBuiltInPlatformMascot = !selectedMascotImage;
 

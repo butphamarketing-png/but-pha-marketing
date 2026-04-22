@@ -179,7 +179,7 @@ const defaultSettings: SiteSettings = {
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
   mascotEnabled: true,
-  mascotImage: "",
+  mascotImage: "/mascot-home.png",
   mascotImages: {},
   mascotMessages: {},
   mascotAudioUrls: {},

@@ -252,7 +252,7 @@ export function AnimatedMascot() {
     () => settings.mascotClickMessages?.[platform] || settings.mascotClickMessages?.home || [],
     [platform, settings.mascotClickMessages],
   );
-  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "";
+  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "/mascot-home.png";
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
@@ -494,6 +494,16 @@ export function AnimatedMascot() {
                 });
               }
             }}
+            animate={
+              prefersReducedMotion
+                ? { y: 0, rotate: 0 }
+                : { y: [0, -10, 0], rotate: [0, 2, -2, 0] }
+            }
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+            }
             className="flex h-[88px] w-[82px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >
