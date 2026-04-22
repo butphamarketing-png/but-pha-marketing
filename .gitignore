@@ -8,7 +8,9 @@ node_modules
 
 # next.js
 /.next/
+/apps/frontend/.next/
 /out/
+/apps/frontend/out/
 
 # production
 /build

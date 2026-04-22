@@ -230,13 +230,13 @@ export default function ArticlesPage() {
             <button type="button" onClick={loadSerpGap}>
               Load SERP gap
             </button>
-            <button type="button" onClick={generateBrief}>
+            <button type="button" onClick={() => void generateBrief()}>
               Generate brief
             </button>
             <button type="button" onClick={runOneClickFlow}>
               Brief + generate
             </button>
-            <button type="button" onClick={createArticle}>
+            <button type="button" onClick={() => void createArticle()}>
               Generate
             </button>
           </div>
