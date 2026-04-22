@@ -147,15 +147,6 @@ export default function HomePageClient() {
 
       <main className="container mx-auto px-4 py-10 md:py-20">
         <div className="relative mb-12 text-center md:mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-4 inline-flex items-center gap-3 rounded-full border border-cyan-400/15 bg-slate-950/30 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur-md md:px-4 md:text-[11px]"
-          >
-            <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.95)]" />
-            AI Marketing Control Layer
-          </motion.div>
-
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-[min(72rem,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_rgba(168,85,247,0.26)_0%,_rgba(34,211,238,0.12)_38%,_transparent_72%)] blur-3xl" />
 
           <motion.div
