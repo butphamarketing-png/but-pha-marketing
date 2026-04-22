@@ -11,7 +11,7 @@ export async function DELETE(
     const { error } = await supabase
       .from("progress_articles")
       .delete()
-      .eq("id", parseInt(id, 10));
+      .eq("id", id);
 
     if (error) {
       console.error("DELETE /api/progress-articles/[id] Supabase error", error);

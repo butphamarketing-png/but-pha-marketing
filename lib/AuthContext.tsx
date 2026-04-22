@@ -6,7 +6,7 @@ interface User {
   name: string;
   phone?: string;
   email?: string;
-  portalId?: number;
+  portalId?: string;
   platform?: string;
 }
 

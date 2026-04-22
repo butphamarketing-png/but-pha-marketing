@@ -88,9 +88,7 @@ function DashboardContent() {
   useEffect(() => {
     const portalId = user?.portalId;
     if (!portalId) return;
-    const numericId = typeof portalId === "string" ? parseInt(portalId, 10) : portalId;
-    if (isNaN(numericId)) return;
-    db.clientPortals.get(numericId).then(r => {
+    db.clientPortals.get(portalId).then(r => {
       if (r.data) {
         setPortal(r.data);
         const p = normalizeProjects(r.data);
@@ -123,7 +121,7 @@ function DashboardContent() {
   const handleSendReview = async () => {
     if (!reviewContent.trim()) return;
     await db.clientReviews.add({
-      clientId: portal?.id || 0,
+      clientId: portal?.id || "",
       clientName: user?.name || "",
       logoUrl: reviewLogoUrl || undefined,
       rating: reviewRating,

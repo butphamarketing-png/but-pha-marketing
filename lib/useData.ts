@@ -92,8 +92,8 @@ export interface PortalReport {
 }
 
 export interface ProgressArticle {
-  id: number;
-  clientId: number;
+  id: string;
+  clientId: string;
   title: string;
   content: string;
   status: string;
@@ -118,7 +118,7 @@ export interface ClientProject {
 
 export interface ClientReview {
   id: string;
-  clientId: number;
+  clientId: string;
   clientName: string;
   logoUrl?: string;
   rating: number; // 1-5
@@ -127,7 +127,7 @@ export interface ClientReview {
 }
 
 export interface ClientPortal {
-  id: number;
+  id: string;
   username: string;
   clientName: string;
   phone: string;
@@ -295,7 +295,7 @@ function mapPortalReport(value: unknown): PortalReport {
 function mapClientPortal(value: unknown): ClientPortal {
   const item = isRecord(value) ? value : {};
   return {
-    id: toNumber(item.id),
+    id: toStringValue(item.id),
     username: toStringValue(item.username),
     clientName: toStringValue(item.clientName ?? item.client_name),
     phone: toStringValue(item.phone),
@@ -349,8 +349,8 @@ function mapClientPortal(value: unknown): ClientPortal {
 function mapProgressArticle(value: unknown): ProgressArticle {
   const item = isRecord(value) ? value : {};
   return {
-    id: toNumber(item.id),
-    clientId: toNumber(item.clientId ?? item.client_id),
+    id: toStringValue(item.id),
+    clientId: toStringValue(item.clientId ?? item.client_id),
     title: toStringValue(item.title),
     content: toStringValue(item.content),
     status: toStringValue(item.status, ""),
@@ -372,7 +372,7 @@ function mapClientReview(value: unknown): ClientReview {
 
   return {
     id: toStringValue(item.id),
-    clientId: toNumber(item.clientId ?? item.client_id ?? parsedNote.clientId),
+    clientId: toStringValue(item.clientId ?? item.client_id ?? parsedNote.clientId),
     clientName: toStringValue(item.clientName ?? item.client_name ?? parsedNote.clientName ?? item.name),
     logoUrl: typeof (item.logoUrl ?? parsedNote.logoUrl) === "string" ? (item.logoUrl ?? parsedNote.logoUrl) as string : undefined,
     rating: toNumber(item.rating ?? parsedNote.rating, 5),
@@ -529,7 +529,7 @@ export const db = {
       cachedFetch("client_portals", () =>
         apiFetch<ClientPortal[]>("/client-portals", undefined, (value) => normalizeArray(value, mapClientPortal)),
       ),
-    get: (id: number): Promise<ApiResult<ClientPortal>> =>
+    get: (id: string): Promise<ApiResult<ClientPortal>> =>
       apiFetch<ClientPortal>(`/client-portals/${id}`, undefined, mapClientPortal),
     add: async (
       portal: Omit<ClientPortal, "id" | "createdAt"> & { password?: string },
@@ -561,7 +561,7 @@ export const db = {
       }, mapClientPortal),
   },
   progressArticles: {
-    getByClient: (clientId: number): Promise<ApiResult<ProgressArticle[]>> =>
+    getByClient: (clientId: string): Promise<ApiResult<ProgressArticle[]>> =>
       cachedFetch(`progress_articles_${clientId}`, () =>
         apiFetch<ProgressArticle[]>(
           `/progress-articles?clientId=${clientId}`,
@@ -579,7 +579,7 @@ export const db = {
       if (!result.error) invalidateCache(`progress_articles_${article.clientId}`);
       return result;
     },
-    delete: async (id: number, clientId: number): Promise<ApiResult<void>> => {
+    delete: async (id: string, clientId: string): Promise<ApiResult<void>> => {
       const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, { method: "DELETE" });
       if (!result.error) invalidateCache(`progress_articles_${clientId}`);
       return { data: null, error: result.error };

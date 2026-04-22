@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       type === "review"
         ? JSON.stringify({
             kind: "review",
-            clientId: typeof clientId === "number" ? clientId : 0,
+            clientId: typeof clientId === "string" ? clientId : "",
             clientName: typeof clientName === "string" ? clientName : name || "",
             logoUrl: typeof logoUrl === "string" ? logoUrl : "",
             rating: typeof rating === "number" ? rating : 5,

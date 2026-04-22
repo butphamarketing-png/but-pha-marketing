@@ -399,7 +399,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         if (mounted) setIsLoaded(true);
       }
 
-      if (mounted) setSettings(defaultSettings);
+      if (mounted) {
+        setSettings(defaultSettings);
+      }
     };
 
     void loadSettings();
@@ -463,6 +465,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
         if (!saved) {
           const rollback = lastConfirmedSettingsRef.current;
+          lastSavedRef.current = JSON.stringify({
+            ...rollback,
+            presentationMode: false,
+          });
           setSaveStatus("error");
           setSaveError(lastError);
           setSettings(rollback);
@@ -481,6 +487,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("[AdminContext] Failed to persist settings", error);
         const rollback = lastConfirmedSettingsRef.current;
+        lastSavedRef.current = JSON.stringify({
+          ...rollback,
+          presentationMode: false,
+        });
         setSaveStatus("error");
         setSaveError(getErrorMessage(error));
         setSettings(rollback);

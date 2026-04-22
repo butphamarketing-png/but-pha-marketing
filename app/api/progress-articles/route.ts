@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     const { data, error } = await supabase
       .from("progress_articles")
       .select("*")
-      .eq("client_id", parseInt(clientId))
+      .eq("client_id", clientId)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -58,7 +58,7 @@ export async function DELETE(req: Request) {
     const { error } = await supabase
       .from("progress_articles")
       .delete()
-      .eq("id", parseInt(id));
+      .eq("id", id);
 
     if (error) {
       console.error("DELETE /api/progress-articles Supabase error", error);

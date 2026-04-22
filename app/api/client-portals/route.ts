@@ -65,7 +65,7 @@ export async function DELETE(req: Request) {
     const { error } = await supabase
       .from("client_portals")
       .delete()
-      .eq("id", parseInt(id));
+      .eq("id", id);
 
     if (error) {
       console.error("DELETE /api/client-portals Supabase error", error);
@@ -91,7 +91,7 @@ export async function PATCH(req: Request) {
     const { data, error } = await supabase
       .from("client_portals")
       .update(payload)
-      .eq("id", parseInt(id, 10))
+      .eq("id", id)
       .select()
       .single();
 

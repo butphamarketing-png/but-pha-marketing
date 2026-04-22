@@ -157,7 +157,7 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [clientPortals, setClientPortals] = useState<ClientPortal[]>([]);
-  const [progressArticles, setProgressArticles] = useState<Record<number, any[]>>({});
+  const [progressArticles, setProgressArticles] = useState<Record<string, any[]>>({});
   const [selectedClient, setSelectedClient] = useState<ClientPortal | null>(null);
   const [newArticle, setNewArticle] = useState({ title: "", content: "", image: "" });
   const [selectedPlatform, setSelectedPlatform] = useState("home");
@@ -585,9 +585,9 @@ export default function AdminPage() {
     setServiceContent(prev => ({ ...prev, tabs }));
   };
 
-  const saveServiceConfig = () => {
-    saveContent(selectedPkgPlatform, serviceContent);
-    alert("Đã lưu quản lý dịch vụ");
+  const saveServiceConfig = async () => {
+    const saved = await saveContent(selectedPkgPlatform, serviceContent);
+    alert(saved ? "Đã lưu quản lý dịch vụ" : "Lưu quản lý dịch vụ thất bại");
   };
 
   const updateServiceLabel = (tabIndex: number, label: string) => {
@@ -698,10 +698,10 @@ export default function AdminPage() {
     setServiceContent(prev => ({ ...prev, comparisonTabs: tabs }));
   };
 
-  const saveComparisonConfig = () => {
-    const current = getContent(selectedPkgPlatform) || {};
-    saveContent(selectedPkgPlatform, { ...current, comparisonTabs });
-    alert("Đã lưu bảng so sánh");
+  const saveComparisonConfig = async () => {
+    const current = (await getContent(selectedPkgPlatform)) || {};
+    const saved = await saveContent(selectedPkgPlatform, { ...current, comparisonTabs });
+    alert(saved ? "Đã lưu bảng so sánh" : "Lưu bảng so sánh thất bại");
   };
 
   const addComparisonTab = () => {
@@ -793,10 +793,10 @@ export default function AdminPage() {
     updateComparisonTabs(next);
   };
 
-  const savePageContent = () => {
+  const savePageContent = async () => {
     if (selectedPlatform !== "home") {
-      saveContent(selectedPlatform, pageContent);
-      alert("Đã lưu nội dung trang con");
+      const saved = await saveContent(selectedPlatform, pageContent);
+      alert(saved ? "Đã lưu nội dung trang con" : "Lưu nội dung trang con thất bại");
     }
   };
 
@@ -938,13 +938,13 @@ export default function AdminPage() {
     if (result.error) console.error('Services error:', result.error);
     else setServices(result.data || []);
   };
-  const refreshArticles = async (clientId: number) => {
+  const refreshArticles = async (clientId: string) => {
     const result = await db.progressArticles.getByClient(clientId);
     if (result.error) console.error('Articles error:', result.error);
     else setProgressArticles(prev => ({ ...prev, [clientId]: result.data || [] }));
   };
 
-  const refreshClientPortal = async (clientId: number) => {
+  const refreshClientPortal = async (clientId: string) => {
     const result = await db.clientPortals.getAll();
     if (result.error) {
       console.error("Portals error:", result.error);
@@ -1175,10 +1175,22 @@ export default function AdminPage() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto p-6">
-        <div className="max-w-6xl mx-auto space-y-8">
+      <main className="flex-1 overflow-auto p-4 sm:p-6">
+        <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
           <div className="md:hidden">
-            <div className="rounded-2xl border border-white/10 bg-card p-3">
+            <div className="space-y-3 rounded-2xl border border-white/10 bg-card p-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-white">Admin Panel</p>
+                  <p className="text-[11px] text-gray-400">Quản trị nội dung và dữ liệu</p>
+                </div>
+                <button
+                  onClick={() => { localStorage.removeItem("admin_auth"); setAuthenticated(false); }}
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs font-bold text-red-200"
+                >
+                  <LogOut size={14} /> Thoát
+                </button>
+              </div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-400">Chuyển mục quản trị</label>
               <select
                 value={activeTab}

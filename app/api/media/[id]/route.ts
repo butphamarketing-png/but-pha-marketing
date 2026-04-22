@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -15,7 +15,7 @@ export async function DELETE(
 
     const supabase = createServerClient();
     const { error } = await supabase
-      .from("media_items")
+      .from("media")
       .delete()
       .eq("id", idNum);
 

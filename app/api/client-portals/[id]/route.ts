@@ -12,7 +12,7 @@ export async function GET(
     const { data, error } = await supabase
       .from("client_portals")
       .select("*")
-      .eq("id", parseInt(id, 10))
+      .eq("id", id)
       .single();
 
     if (error) {
@@ -38,7 +38,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from("client_portals")
       .update(payload)
-      .eq("id", parseInt(id, 10))
+      .eq("id", id)
       .select()
       .single();
 
@@ -67,7 +67,7 @@ export async function DELETE(
     const { error } = await supabase
       .from("client_portals")
       .delete()
-      .eq("id", parseInt(id, 10));
+      .eq("id", id);
 
     if (error) {
       console.error("DELETE /api/client-portals/[id] Supabase error", error);

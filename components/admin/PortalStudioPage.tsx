@@ -178,7 +178,7 @@ export function PortalStudioPage() {
     }
   }, [selectedProjectId, selectedProjects]);
 
-  const refreshPortals = async (preferredId?: number) => {
+  const refreshPortals = async (preferredId?: string) => {
     const result = await db.clientPortals.getAll();
     if (result.error) {
       setError(result.error);

@@ -80,31 +80,30 @@ const contentCache = new Map<string, { data: ContentOverride | null; timestamp: 
 const CACHE_TTL = 30000; // 30 seconds cache
 
 /**
- * Get content for a platform from Supabase via API
- * No localStorage fallback - uses Supabase as single source of truth
+ * Get content for a platform from Supabase via API.
  */
 export async function getContent(platform: string): Promise<ContentOverride | null> {
   if (typeof window === "undefined") return null;
-  
+
   // Check cache first
   const cached = contentCache.get(platform);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     return cached.data;
   }
-  
+
   try {
     const res = await fetch(`/api/content?platform=${encodeURIComponent(platform)}`);
     if (!res.ok) {
       console.warn(`Failed to fetch content for ${platform}: ${res.status}`);
       return null;
     }
-    
+
     const data = await res.json();
     const content = data.content as ContentOverride | null;
-    
+
     // Update cache
     contentCache.set(platform, { data: content, timestamp: Date.now() });
-    
+
     return content;
   } catch (error) {
     console.error("API content fetch failed", error);
@@ -113,27 +112,27 @@ export async function getContent(platform: string): Promise<ContentOverride | nu
 }
 
 /**
- * Save content for a platform to Supabase via API
- * No localStorage fallback - uses Supabase as single source of truth
+ * Save content for a platform to Supabase via API.
+ * Only returns true after the server confirms persistence.
  */
 export async function saveContent(platform: string, content: ContentOverride): Promise<boolean> {
   if (typeof window === "undefined") return false;
-  
+
   try {
     const res = await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ platform, content }),
     });
-    
+
     if (!res.ok) {
       console.error(`Failed to save content for ${platform}: ${res.status}`);
       return false;
     }
-    
+
     // Update cache
     contentCache.set(platform, { data: content, timestamp: Date.now() });
-    
+
     return true;
   } catch (error) {
     console.error("API save failed", error);
