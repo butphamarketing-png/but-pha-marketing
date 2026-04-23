@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
   ImageIcon,
+  ImagePlus,
   Loader2,
   RefreshCw,
   Save,
   Sparkles,
 } from "lucide-react";
+import { uploadMediaFile } from "@/lib/client-media-upload";
 
 type OutlineItem = {
   level?: number;
@@ -37,7 +39,7 @@ type SavedImage = {
 };
 
 function getSectionLabel(item: OutlineItem) {
-  return item.text || item.heading || "Tổng quan bài viết";
+  return item.text || item.heading || "Tong quan bai viet";
 }
 
 function getSectionSummary(item: OutlineItem) {
@@ -45,9 +47,10 @@ function getSectionSummary(item: OutlineItem) {
 }
 
 export function Step4Images({ data, setData, onNext, onPrev }: any) {
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const outlineSections = useMemo<OutlineItem[]>(() => {
     if (!Array.isArray(data.outline) || data.outline.length === 0) {
-      return [{ heading: "Tổng quan bài viết", summary: "Ảnh hero tổng quát cho bài viết." }];
+      return [{ heading: "Tong quan bai viet", summary: "Anh hero tong quat cho bai viet." }];
     }
     return data.outline;
   }, [data.outline]);
@@ -59,6 +62,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
   const [error, setError] = useState<string | null>(null);
   const [prompt, setPrompt] = useState("");
   const [variants, setVariants] = useState<GeneratedVariant[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!outlineSections.some((item) => getSectionLabel(item) === selectedSectionLabel)) {
@@ -76,10 +80,10 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
   useEffect(() => {
     if (!brief.trim()) {
       const autoBrief = [
-        `Tạo ảnh minh họa cho bài viết "${data.title || "bài viết marketing"}".`,
-        `Nhấn mạnh phần "${getSectionLabel(selectedSection)}".`,
-        getSectionSummary(selectedSection) ? `Ngữ cảnh nội dung: ${getSectionSummary(selectedSection)}` : "",
-        "Phong cách hiện đại, chuyên nghiệp, đáng tin, phù hợp website agency marketing.",
+        `Tao anh minh hoa cho bai viet "${data.title || "bai viet marketing"}".`,
+        `Nhan manh phan "${getSectionLabel(selectedSection)}".`,
+        getSectionSummary(selectedSection) ? `Ngu canh noi dung: ${getSectionSummary(selectedSection)}` : "",
+        "Phong cach hien dai, chuyen nghiep, dang tin, phu hop website agency marketing.",
       ]
         .filter(Boolean)
         .join(" ");
@@ -89,7 +93,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
 
   async function handleGenerate() {
     if (!data.title?.trim()) {
-      setError("Cần có tiêu đề bài viết trước khi tạo ảnh.");
+      setError("Can co tieu de bai viet truoc khi tao anh.");
       return;
     }
 
@@ -112,13 +116,13 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
 
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result?.error || "Không thể tạo ảnh AI.");
+        throw new Error(result?.error || "Khong the tao anh AI.");
       }
 
       setPrompt(result.prompt || "");
       setVariants(Array.isArray(result.images) ? result.images : []);
     } catch (generationError) {
-      setError(generationError instanceof Error ? generationError.message : "Không thể tạo ảnh AI.");
+      setError(generationError instanceof Error ? generationError.message : "Khong the tao anh AI.");
     } finally {
       setLoading(false);
     }
@@ -142,7 +146,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
 
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result?.error || "Không thể lưu ảnh vào media.");
+        throw new Error(result?.error || "Khong the luu anh vao media.");
       }
 
       const nextImage: SavedImage = {
@@ -157,12 +161,63 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       setData({
         ...data,
         images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
+        featuredImageUrl: data.featuredImageUrl || nextImage.url,
       });
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : "Không thể lưu ảnh vào media.");
+      setError(saveError instanceof Error ? saveError.message : "Khong the luu anh vao media.");
     } finally {
       setSavingId(null);
     }
+  }
+
+  async function handleUploadLocalImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const result = await uploadMediaFile(file, {
+        title: data.title,
+        sectionLabel: getSectionLabel(selectedSection),
+        suggestedName: file.name,
+      });
+
+      const nextImage: SavedImage = {
+        id: result.item?.id,
+        url: result.url,
+        name: result.item?.name || file.name,
+        altText: data.title || file.name,
+        sectionLabel: getSectionLabel(selectedSection),
+      };
+
+      setData({
+        ...data,
+        images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
+        featuredImageUrl: data.featuredImageUrl || nextImage.url,
+      });
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "Khong the tai anh len luc nay.");
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  }
+
+  function setAsThumbnail(image: SavedImage) {
+    setData({
+      ...data,
+      featuredImageUrl: image.url,
+    });
+  }
+
+  function insertIntoContent(image: SavedImage) {
+    const figure = `<figure><img src="${image.url}" alt="${image.altText || image.name}" /><figcaption>${image.sectionLabel || image.name}</figcaption></figure>`;
+    setData({
+      ...data,
+      content: `${data.content || ""}${figure}`,
+    });
   }
 
   return (
@@ -171,10 +226,10 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         <div>
           <h2 className="flex items-center gap-3 text-2xl font-black text-slate-900">
             <ImageIcon className="text-indigo-600" />
-            Tạo ảnh AI cho bài viết
+            Tao anh cho bai viet
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Nhập brief, tạo nhiều phương án ảnh minh họa, rồi lưu trực tiếp vào thư viện media.
+            Ban co the tao anh AI hoac tai anh tu may, sau do dat lam thumbnail hoac chen vao noi dung.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -183,13 +238,13 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
             className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50"
           >
             <ArrowLeft size={18} />
-            Quay lại
+            Quay lai
           </button>
           <button
             onClick={onNext}
             className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500"
           >
-            Tiếp tục
+            Tiep tuc
             <ArrowRight size={18} />
           </button>
         </div>
@@ -198,12 +253,12 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       <div className="grid gap-6 lg:grid-cols-[420px_minmax(0,1fr)]">
         <div className="space-y-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Nguồn tạo ảnh</p>
-            <h3 className="mt-2 text-xl font-black text-slate-900">Brief và prompt</h3>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Nguon anh</p>
+            <h3 className="mt-2 text-xl font-black text-slate-900">Brief va upload</h3>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Section bài viết</label>
+            <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Section bai viet</label>
             <select
               value={selectedSectionLabel}
               onChange={(event) => setSelectedSectionLabel(event.target.value)}
@@ -218,20 +273,20 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
           </div>
 
           <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500">Tóm tắt section</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500">Tom tat section</p>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
-              {getSectionSummary(selectedSection) || "Chưa có mô tả riêng cho section này. Hệ thống sẽ dùng tiêu đề section và keyword của bài viết để tạo ảnh."}
+              {getSectionSummary(selectedSection) || "Chua co mo ta rieng cho section nay. He thong se dua vao section va keyword cua bai viet."}
             </p>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Brief cho ảnh</label>
+            <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Brief cho anh AI</label>
             <textarea
               value={brief}
               onChange={(event) => setBrief(event.target.value)}
               rows={8}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-500/10"
-              placeholder="Ví dụ: ảnh hero cho bài dịch vụ marketing, bối cảnh doanh nghiệp hiện đại, dashboard tăng trưởng, đội ngũ đang phân tích số liệu..."
+              placeholder="Vi du: anh hero cho bai dich vu marketing, boi canh doanh nghiep hien dai..."
             />
           </div>
 
@@ -241,13 +296,24 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-3 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
-            {loading ? "Đang tạo 4 phương án..." : "Tạo ảnh AI"}
+            {loading ? "Dang tao 4 phuong an..." : "Tao anh AI"}
           </button>
+
+          <button
+            onClick={() => uploadInputRef.current?.click()}
+            disabled={uploading}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {uploading ? <Loader2 size={18} className="animate-spin" /> : <ImagePlus size={18} />}
+            {uploading ? "Dang tai anh tu may..." : "Tai anh tu may"}
+          </button>
+
+          <input ref={uploadInputRef} type="file" accept="image/*" className="hidden" onChange={handleUploadLocalImage} />
 
           {prompt ? (
             <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Prompt đã dùng</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Prompt da dung</p>
                 <button
                   onClick={handleGenerate}
                   disabled={loading}
@@ -255,7 +321,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
                 >
                   <span className="inline-flex items-center gap-1">
                     <RefreshCw size={12} />
-                    Tạo lại
+                    Tao lai
                   </span>
                 </button>
               </div>
@@ -274,20 +340,16 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
           <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Kết quả</p>
-                <h3 className="mt-2 text-xl font-black text-slate-900">Các phương án ảnh AI</h3>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Ket qua</p>
+                <h3 className="mt-2 text-xl font-black text-slate-900">Cac phuong an anh AI</h3>
               </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">
-                {variants.length} ảnh
-              </span>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">{variants.length} anh</span>
             </div>
 
             {variants.length === 0 ? (
               <div className="mt-6 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-14 text-center">
-                <p className="text-sm font-semibold text-slate-500">Chưa có ảnh nào được tạo.</p>
-                <p className="mt-2 text-xs text-slate-400">
-                  Chọn section, chỉnh brief rồi bấm tạo ảnh để nhận 4 phương án landscape phù hợp bài viết.
-                </p>
+                <p className="text-sm font-semibold text-slate-500">Chua co anh AI nao duoc tao.</p>
+                <p className="mt-2 text-xs text-slate-400">Ban co the tao anh AI hoac tai anh tu may o cot ben trai.</p>
               </div>
             ) : (
               <div className="mt-6 grid gap-5 md:grid-cols-2">
@@ -314,7 +376,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
                           ) : (
                             <Save size={16} />
                           )}
-                          {savingId === variant.id ? "Đang lưu vào media..." : alreadySaved ? "Đã lưu vào media" : "Lưu vào media"}
+                          {savingId === variant.id ? "Dang luu vao media..." : alreadySaved ? "Da luu vao media" : "Luu vao media"}
                         </button>
                       </div>
                     </div>
@@ -327,17 +389,15 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
           <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Đã chọn</p>
-                <h3 className="mt-2 text-xl font-black text-slate-900">Ảnh đã lưu vào media</h3>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Da chon</p>
+                <h3 className="mt-2 text-xl font-black text-slate-900">Anh da luu vao bai viet</h3>
               </div>
-              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">
-                {savedImages.length} ảnh
-              </span>
+              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">{savedImages.length} anh</span>
             </div>
 
             {savedImages.length === 0 ? (
               <div className="mt-6 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm font-medium text-slate-500">
-                Chưa có ảnh nào được lưu. Khi bạn lưu một phương án, ảnh sẽ được ghi vào media và thêm vào bài viết hiện tại.
+                Chua co anh nao duoc luu. Khi ban luu mot phuong an hoac tai anh tu may, anh se duoc them vao bai viet hien tai.
               </div>
             ) : (
               <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -348,8 +408,28 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
                     </div>
                     <div className="space-y-2 p-4">
                       <p className="text-sm font-bold text-slate-900">{image.name}</p>
-                      <p className="text-xs text-slate-500">{image.sectionLabel || "Chưa gán section"}</p>
-                      <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{image.altText || "Chưa có ALT text"}</p>
+                      <p className="text-xs text-slate-500">{image.sectionLabel || "Chua gan section"}</p>
+                      <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{image.altText || "Chua co ALT text"}</p>
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setAsThumbnail(image)}
+                          className={`rounded-2xl px-3 py-2 text-xs font-bold transition ${
+                            data.featuredImageUrl === image.url
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                          }`}
+                        >
+                          {data.featuredImageUrl === image.url ? "Dang la thumbnail" : "Dat lam thumbnail"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertIntoContent(image)}
+                          className="rounded-2xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                        >
+                          Chen vao noi dung
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

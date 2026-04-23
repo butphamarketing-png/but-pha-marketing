@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock3,
+  Eye,
   FileText,
   Image as ImageIcon,
   ListOrdered,
@@ -15,7 +16,10 @@ import {
   Target,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { db } from "@/lib/useData";
+import { buildExcerpt, buildMetaDescription, buildMetaTitle, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
 import { Step1Title } from "@/components/studio/Step1Title";
 import { Step2Outline } from "@/components/studio/Step2Outline";
 import { Step3Article } from "@/components/studio/Step3Article";
@@ -45,10 +49,16 @@ type HistoryItem = {
   source?: string;
   detail?: string;
   hint?: string;
+  snapshot?: SeoStudioSnapshot | null;
 };
 
 const INITIAL_DATA = {
   title: "",
+  slug: "",
+  featuredImageUrl: "",
+  metaTitle: "",
+  metaDescription: "",
+  description: "",
   outline: [] as any[],
   content: "",
   keywords: [] as string[],
@@ -69,6 +79,10 @@ const INITIAL_DATA = {
     hint?: string;
     provider?: string;
   },
+  published: false,
+  hot: false,
+  publishedAt: new Date().toISOString().slice(0, 10),
+  savedNewsId: "",
 };
 
 function formatTime(value: string) {
@@ -83,10 +97,15 @@ function formatTime(value: string) {
 }
 
 export default function CreateArticlePage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [historyError, setHistoryError] = useState("");
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [draftSaving, setDraftSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [actionMessage, setActionMessage] = useState("");
   const [articleData, setArticleData] = useState(INITIAL_DATA);
 
   useEffect(() => {
@@ -97,9 +116,7 @@ export default function CreateArticlePage() {
         setHistoryLoading(true);
         setHistoryError("");
         const response = await fetch("/api/ai/history", { cache: "no-store" });
-        const payload = (await response.json().catch(() => null)) as
-          | { items?: HistoryItem[]; error?: string }
-          | null;
+        const payload = (await response.json().catch(() => null)) as { items?: HistoryItem[]; error?: string } | null;
 
         if (!response.ok) {
           throw new Error(payload?.error || "Khong the tai lich su SEO Studio.");
@@ -126,6 +143,35 @@ export default function CreateArticlePage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!articleData.title.trim()) return;
+
+    setArticleData((prev) => {
+      const nextSlug = prev.slug || slugify(prev.title);
+      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: prev.title, keyword: prev.keywords[0] });
+      const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
+      const nextMetaDescription =
+        prev.metaDescription || buildMetaDescription({ title: prev.title, keyword: prev.keywords[0], description: nextDescription, content: prev.content });
+
+      if (
+        nextSlug === prev.slug &&
+        nextMetaTitle === prev.metaTitle &&
+        nextDescription === prev.description &&
+        nextMetaDescription === prev.metaDescription
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        slug: nextSlug,
+        metaTitle: nextMetaTitle,
+        description: nextDescription,
+        metaDescription: nextMetaDescription,
+      };
+    });
+  }, [articleData.title, articleData.content, articleData.keywords]);
+
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 6));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
@@ -136,6 +182,141 @@ export default function CreateArticlePage() {
       throw new Error(payload?.error || "Khong the tai lich su SEO Studio.");
     }
     setHistory(Array.isArray(payload?.items) ? payload.items : []);
+  };
+
+  const applyHistorySnapshot = (snapshot: SeoStudioSnapshot | null | undefined) => {
+    if (!snapshot) return;
+
+    setActionError("");
+    setActionMessage("Da mo lai ket qua tu lich su.");
+    setArticleData((prev) => ({
+      ...prev,
+      title: snapshot.title || prev.title,
+      slug: snapshot.slug || slugify(snapshot.title || prev.title),
+      featuredImageUrl: snapshot.featuredImageUrl || snapshot.images?.[0]?.url || prev.featuredImageUrl,
+      metaTitle: snapshot.metaTitle || buildMetaTitle({ title: snapshot.title || prev.title, keyword: snapshot.keywords?.[0] }),
+      metaDescription:
+        snapshot.metaDescription ||
+        buildMetaDescription({
+          title: snapshot.title || prev.title,
+          keyword: snapshot.keywords?.[0],
+          description: snapshot.description,
+          content: snapshot.content,
+        }),
+      description: snapshot.description || buildExcerpt({ content: snapshot.content || prev.content, maxLength: 170 }),
+      content: snapshot.content || prev.content,
+      keywords: Array.isArray(snapshot.keywords) ? snapshot.keywords : prev.keywords,
+      outline: Array.isArray(snapshot.outline) ? snapshot.outline : prev.outline,
+      searchIntent: snapshot.searchIntent || prev.searchIntent,
+      serpInsight: snapshot.serpInsight || prev.serpInsight,
+      images: Array.isArray(snapshot.images) ? snapshot.images : prev.images,
+      published: typeof snapshot.published === "boolean" ? snapshot.published : prev.published,
+      hot: typeof snapshot.hot === "boolean" ? snapshot.hot : prev.hot,
+      publishedAt: snapshot.publishedAt || prev.publishedAt,
+      savedNewsId: snapshot.savedNewsId || prev.savedNewsId,
+      aiError: null,
+    }));
+
+    if (snapshot.content) setCurrentStep(3);
+    else if (snapshot.outline?.length) setCurrentStep(2);
+    else setCurrentStep(1);
+  };
+
+  const saveStudioArticle = async (mode: "draft" | "publish") => {
+    if (!articleData.title.trim()) {
+      setActionError("Nhap tieu de bai viet truoc khi luu.");
+      return;
+    }
+
+    const derivedContent =
+      articleData.content.trim() ||
+      (Array.isArray(articleData.outline) && articleData.outline.length > 0
+        ? articleData.outline
+            .map((item: any) => {
+              const heading = item?.text || item?.heading || "";
+              if (!heading) return "";
+              const tag = item?.level === 3 ? "h3" : "h2";
+              return `<${tag}>${heading}</${tag}><p>${item?.summary || `Noi dung nhap cho phan ${heading}.`}</p>`;
+            })
+            .filter(Boolean)
+            .join("")
+        : "");
+
+    if (!derivedContent.trim()) {
+      setActionError("Can co noi dung hoac it nhat mot dan y de luu nhap.");
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+    mode === "draft" ? setDraftSaving(true) : setPublishing(true);
+
+    const payload = {
+      title: articleData.title.trim(),
+      content: derivedContent,
+      category: "blog",
+      published: mode === "publish" ? true : false,
+      description: articleData.description || buildExcerpt({ content: articleData.content, maxLength: 170 }),
+      imageUrl:
+        articleData.featuredImageUrl ||
+        (Array.isArray(articleData.images) && articleData.images.length > 0 ? articleData.images[0]?.url || "" : ""),
+      slug: articleData.slug || slugify(articleData.title),
+      hot: articleData.hot,
+      metaDescription:
+        articleData.metaDescription ||
+        buildMetaDescription({
+          title: articleData.title,
+          keyword: articleData.keywords[0],
+          description: articleData.description,
+          content: articleData.content,
+        }),
+      keywordsMain: articleData.keywords[0] || "",
+      keywordsSecondary: articleData.keywords.slice(1).join(", "),
+      publishedAt: articleData.publishedAt || new Date().toISOString().slice(0, 10),
+    };
+
+    try {
+      if (articleData.savedNewsId) {
+        const result = await db.news.update(articleData.savedNewsId, payload);
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } else {
+        const result = await db.news.add(payload);
+        if (result.error || !result.data) {
+          throw new Error(result.error || "Khong the luu bai viet.");
+        }
+        setArticleData((prev) => ({ ...prev, savedNewsId: result.data?.id || "", published: payload.published }));
+      }
+
+      setArticleData((prev) => ({
+        ...prev,
+        slug: payload.slug,
+        featuredImageUrl: payload.imageUrl,
+        metaDescription: payload.metaDescription,
+        description: payload.description,
+        content: derivedContent,
+        published: payload.published,
+      }));
+
+      setActionMessage(mode === "publish" ? "Da xuat ban bai viet thanh cong." : "Da luu nhap bai viet.");
+      await refreshHistory().catch(() => undefined);
+      if (mode === "publish") {
+        router.push("/admin/news");
+      }
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Khong the luu bai viet luc nay.");
+    } finally {
+      setDraftSaving(false);
+      setPublishing(false);
+    }
+  };
+
+  const handleReset = () => {
+    setArticleData(INITIAL_DATA);
+    setCurrentStep(1);
+    setActionError("");
+    setActionMessage("");
   };
 
   const renderStep = () => {
@@ -157,7 +338,19 @@ export default function CreateArticlePage() {
       case 5:
         return <Step5SEO data={articleData} setData={setArticleData} onNext={nextStep} onPrev={prevStep} />;
       case 6:
-        return <Step6Publish data={articleData} setData={setArticleData} onPrev={prevStep} />;
+        return (
+          <Step6Publish
+            data={articleData}
+            setData={setArticleData}
+            onPrev={prevStep}
+            onSaveDraft={() => void saveStudioArticle("draft")}
+            onPublish={() => void saveStudioArticle("publish")}
+            savingDraft={draftSaving}
+            publishing={publishing}
+            actionError={actionError}
+            actionMessage={actionMessage}
+          />
+        );
       default:
         return null;
     }
@@ -178,11 +371,18 @@ export default function CreateArticlePage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
-              <Save size={18} />
+            <button
+              onClick={() => void saveStudioArticle("draft")}
+              disabled={draftSaving}
+              className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-60"
+            >
+              {draftSaving ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" /> : <Save size={18} />}
               Luu nhap
             </button>
-            <button className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500">
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500"
+            >
               Huy bo
             </button>
           </div>
@@ -190,6 +390,10 @@ export default function CreateArticlePage() {
       </header>
 
       <div className="mx-auto mt-8 max-w-7xl px-8">
+        {actionMessage && !actionError ? (
+          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700">{actionMessage}</div>
+        ) : null}
+
         <div className="mb-10 flex items-center justify-between">
           {STEPS.map((step, i) => (
             <React.Fragment key={step.id}>
@@ -207,11 +411,7 @@ export default function CreateArticlePage() {
                 </div>
                 <span
                   className={`text-[10px] font-bold uppercase tracking-wider ${
-                    currentStep === step.id
-                      ? "text-indigo-600"
-                      : currentStep > step.id
-                        ? "text-emerald-600"
-                        : "text-slate-400"
+                    currentStep === step.id ? "text-indigo-600" : currentStep > step.id ? "text-emerald-600" : "text-slate-400"
                   }`}
                 >
                   {step.name}
@@ -219,10 +419,7 @@ export default function CreateArticlePage() {
               </div>
               {i < STEPS.length - 1 && (
                 <div className="mx-4 h-0.5 flex-1 bg-slate-200">
-                  <div
-                    className="h-full bg-emerald-500 transition-all duration-500"
-                    style={{ width: currentStep > step.id ? "100%" : "0%" }}
-                  />
+                  <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: currentStep > step.id ? "100%" : "0%" }} />
                 </div>
               )}
             </React.Fragment>
@@ -274,11 +471,7 @@ export default function CreateArticlePage() {
                         strokeDasharray={364.4}
                         strokeDashoffset={364.4 - (364.4 * articleData.seoScore) / 100}
                         className={`transition-all duration-1000 ${
-                          articleData.seoScore >= 80
-                            ? "text-emerald-500"
-                            : articleData.seoScore >= 50
-                              ? "text-orange-500"
-                              : "text-rose-500"
+                          articleData.seoScore >= 80 ? "text-emerald-500" : articleData.seoScore >= 50 ? "text-orange-500" : "text-rose-500"
                         }`}
                       />
                     </svg>
@@ -290,6 +483,24 @@ export default function CreateArticlePage() {
                   <p className="mt-4 px-4 text-center text-xs font-bold text-slate-400">
                     {articleData.seoScore === 0 ? "Bat dau tao noi dung de xem diem SEO" : "Tiep tuc toi uu de dat diem cao nhat"}
                   </p>
+                </div>
+              </div>
+
+              <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">Metadata</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Slug</p>
+                    <p className="mt-2 font-bold text-slate-800">{articleData.slug || "Chua co slug"}</p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Meta Title</p>
+                    <p className="mt-2 font-bold text-slate-800">{articleData.metaTitle || "Chua co meta title"}</p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Meta Description</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-700">{articleData.metaDescription || "Chua co meta description"}</p>
+                  </div>
                 </div>
               </div>
 
@@ -310,11 +521,7 @@ export default function CreateArticlePage() {
                   <div className="mt-4 rounded-2xl bg-slate-50 p-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Search Intent</p>
                     <p className="mt-2 text-sm font-bold capitalize text-slate-800">{articleData.searchIntent}</p>
-                    {articleData.serpInsight ? (
-                      <p className="mt-1 text-xs text-slate-500">
-                        Nguon: {articleData.serpInsight.source} • Khu vuc: {articleData.serpInsight.location}
-                      </p>
-                    ) : null}
+                    {articleData.serpInsight ? <p className="mt-1 text-xs text-slate-500">Nguon: {articleData.serpInsight.source} • Khu vuc: {articleData.serpInsight.location}</p> : null}
                   </div>
                 ) : null}
               </div>
@@ -369,7 +576,19 @@ export default function CreateArticlePage() {
                         </div>
                         <p className="mt-2 text-[11px] leading-5 text-slate-500">{item.detail || "Khong co mo ta them."}</p>
                         {item.hint ? <p className="mt-2 text-[11px] font-semibold text-slate-700">Goi y: {item.hint}</p> : null}
-                        <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">{formatTime(item.createdAt)}</p>
+                        <div className="mt-3 flex items-center justify-between gap-3">
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{formatTime(item.createdAt)}</p>
+                          {item.snapshot ? (
+                            <button
+                              type="button"
+                              onClick={() => applyHistorySnapshot(item.snapshot)}
+                              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-100"
+                            >
+                              <Eye size={12} />
+                              Mo lai
+                            </button>
+                          ) : null}
+                        </div>
                       </div>
                     ))}
                   </div>

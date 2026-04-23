@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -325,22 +326,20 @@ export function NewsDashboard({
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={onReset}
+            <Link
+              href="/studio/posts/create"
               className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               <FilePlus2 size={16} />
               Bài viết mới
-            </button>
-            <button
-              type="button"
-              onClick={onGenerate}
+            </Link>
+            <Link
+              href="/studio/create"
               className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90"
             >
               <Sparkles size={16} />
               AI soạn nháp
-            </button>
+            </Link>
           </div>
         </div>
 

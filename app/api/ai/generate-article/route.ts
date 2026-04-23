@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
+import { buildExcerpt, buildMetaDescription, buildMetaTitle, slugify } from "@/lib/seo-studio-draft";
 import { getOpenAiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
@@ -145,6 +146,16 @@ export async function POST(req: Request) {
         source: "fallback",
         detail: "Khong co OpenAI key, da dung bai viet fallback.",
         hint: "Luu OpenAI key trong admin de viet bai chi tiet bang AI.",
+        snapshot: {
+          title,
+          slug: slugify(title),
+          metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
+          metaDescription: buildMetaDescription({ title, keyword: keywords[0], content }),
+          description: buildExcerpt({ content, maxLength: 170 }),
+          content,
+          keywords,
+          outline,
+        },
       }).catch(() => undefined);
 
       return NextResponse.json({
@@ -197,6 +208,16 @@ export async function POST(req: Request) {
       source: "openai",
       detail: `Da tao bai viet AI voi khoang ${wordCount} tu.`,
       hint: "",
+      snapshot: {
+        title,
+        slug: slugify(title),
+        metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: keywords[0], content }),
+        description: buildExcerpt({ content, maxLength: 170 }),
+        content,
+        keywords,
+        outline,
+      },
     }).catch(() => undefined);
 
     return NextResponse.json({
@@ -223,6 +244,14 @@ export async function POST(req: Request) {
       source: "openai",
       detail,
       hint,
+      snapshot: {
+        title,
+        slug: slugify(title),
+        metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: keywords[0] }),
+        keywords,
+        outline,
+      },
     }).catch(() => undefined);
 
     return buildErrorResponse("Khong the tao bai viet AI luc nay.", detail, hint, 500, "openai", "article_failed");

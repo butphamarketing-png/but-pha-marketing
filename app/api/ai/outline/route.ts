@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
+import { buildMetaDescription, buildMetaTitle, slugify } from "@/lib/seo-studio-draft";
 import { getOpenAiRuntimeConfig, getSerpApiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
@@ -220,6 +221,16 @@ export async function POST(req: Request) {
         source: payload.source,
         detail: "Khong co OpenAI key, da dung dan y fallback.",
         hint: "Luu OpenAI key trong admin de co dan y AI chat luong cao hon.",
+        snapshot: {
+          title,
+          slug: slugify(title),
+          metaTitle: buildMetaTitle({ title, keyword: payload.keywords[0] }),
+          metaDescription: buildMetaDescription({ title, keyword: payload.keywords[0] }),
+          keywords: payload.keywords,
+          outline: payload.structure,
+          searchIntent: payload.intent,
+          serpInsight: payload.serpInsight,
+        },
       }).catch(() => undefined);
 
       return NextResponse.json(payload);
@@ -293,6 +304,16 @@ export async function POST(req: Request) {
           ? "Da ket hop OpenAI voi du lieu tu SerpAPI de de xuat keyword va intent."
           : "Da tao dan y bang OpenAI voi intent heuristic.",
       hint: "",
+      snapshot: {
+        title,
+        slug: slugify(title),
+        metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: keywords[0] }),
+        keywords,
+        outline: payload.structure,
+        searchIntent: payload.intent,
+        serpInsight: payload.serpInsight,
+      },
     }).catch(() => undefined);
 
     return NextResponse.json(payload);
@@ -316,6 +337,15 @@ export async function POST(req: Request) {
       source: "openai",
       detail,
       hint,
+      snapshot: {
+        title,
+        slug: slugify(title),
+        metaTitle: buildMetaTitle({ title, keyword: serpInsight.relatedKeywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: serpInsight.relatedKeywords[0] }),
+        keywords: serpInsight.relatedKeywords,
+        searchIntent: serpInsight.intent,
+        serpInsight,
+      },
     }).catch(() => undefined);
 
     return buildErrorResponse("Khong the tao dan y AI luc nay.", detail, hint, 500, "openai", "outline_failed");
