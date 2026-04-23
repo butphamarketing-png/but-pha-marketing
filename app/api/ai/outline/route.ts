@@ -19,19 +19,21 @@ function stripCodeFences(raw: string) {
 }
 
 function fallbackOutline(title: string) {
+  const structure: OutlineItem[] = [
+    { level: 2, text: `Gioi thieu ve ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Nhu cau thuc te cua khach hang", summary: "", keyPoints: [] },
+    { level: 2, text: `Giai phap ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Quy trinh trien khai", summary: "", keyPoints: [] },
+    { level: 2, text: "Kinh nghiem thuc chien", summary: "", keyPoints: [] },
+    { level: 2, text: "Bang gia va luu y", summary: "", keyPoints: [] },
+    { level: 2, text: "Cau hoi thuong gap", summary: "", keyPoints: [] },
+    { level: 2, text: "Ket luan", summary: "", keyPoints: [] },
+  ];
+
   return {
     h1: title,
-    structure: [
-      { level: 2, text: `Giới thiệu về ${title}` },
-      { level: 2, text: "Nhu cầu thực tế của khách hàng" },
-      { level: 2, text: `Giải pháp ${title}` },
-      { level: 2, text: "Quy trình triển khai" },
-      { level: 2, text: "Kinh nghiệm thực chiến" },
-      { level: 2, text: "Bảng giá và lưu ý" },
-      { level: 2, text: "Câu hỏi thường gặp" },
-      { level: 2, text: "Kết luận" },
-    ],
-    keywords: [title, "dịch vụ marketing", "SEO", "chuyển đổi"],
+    structure,
+    keywords: [title, "dich vu marketing", "SEO", "chuyen doi"],
   };
 }
 
@@ -47,7 +49,7 @@ function normalizeKeywords(title: string, keywords: unknown) {
   const list = Array.isArray(keywords)
     ? keywords.map((item) => (typeof item === "string" ? item.trim() : "")).filter(Boolean)
     : [];
-  return list.length > 0 ? list.slice(0, 8) : [title, "dịch vụ marketing", "SEO"];
+  return list.length > 0 ? list.slice(0, 8) : [title, "dich vu marketing", "SEO"];
 }
 
 function normalizeStructure(items: unknown, title: string): OutlineItem[] {
@@ -79,7 +81,7 @@ export async function POST(req: Request) {
     const title = normalizeTitle(body?.title);
 
     if (!title) {
-      return NextResponse.json({ error: "Thiếu tiêu đề để tạo dàn ý AI." }, { status: 400 });
+      return NextResponse.json({ error: "Thieu tieu de de tao dan y AI." }, { status: 400 });
     }
 
     if (!process.env.OPENAI_API_KEY) {
@@ -95,18 +97,18 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "Bạn là chuyên gia SEO content tiếng Việt. Hãy trả về JSON hợp lệ, không markdown, không giải thích thêm.",
+            "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
         },
         {
           role: "user",
           content: [
-            `Tiêu đề bài viết: ${title}`,
-            "Hãy phân tích search intent và đề xuất dàn ý bài viết chuẩn SEO cho landing article dịch vụ marketing.",
-            "Yêu cầu:",
-            "- Tạo 6-8 mục chính",
-            "- level chỉ dùng 2 hoặc 3",
-            "- text là tiêu đề hiển thị rõ ràng bằng tiếng Việt có dấu",
-            "- keywords là danh sách từ khóa mục tiêu liên quan",
+            `Tieu de bai viet: ${title}`,
+            "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
+            "Yeu cau:",
+            "- Tao 6-8 muc chinh",
+            "- level chi dung 2 hoac 3",
+            "- text la tieu de hien thi ro rang bang tieng Viet",
+            "- keywords la danh sach tu khoa muc tieu lien quan",
             "Schema JSON:",
             '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
           ].join("\n"),
@@ -127,6 +129,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("POST /api/ai/outline failed", error);
-    return NextResponse.json({ error: "Không thể tạo dàn ý AI lúc này." }, { status: 500 });
+    return NextResponse.json({ error: "Khong the tao dan y AI luc nay." }, { status: 500 });
   }
 }
