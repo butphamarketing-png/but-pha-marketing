@@ -12,7 +12,7 @@ interface CaseItem {
 export function FeaturedProjectsFlip({ cases }: { cases: CaseItem[] }) {
   if (!cases || cases.length === 0) return null;
   return (
-    <section className="px-4 py-20">
+    <section data-section="compare" id="compare" className="px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">Dự Án Tiêu Biểu</h2>
         <p className="mb-10 text-center text-gray-400">Lật thẻ để xem trước và sau triển khai</p>

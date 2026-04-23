@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null);
     const password = typeof body?.password === "string" ? body.password : "";
-    if (!validateAdminPassword(password)) {
+    if (!(await validateAdminPassword(password))) {
       return NextResponse.json({ ok: false, error: "Sai mat khau admin." }, { status: 401 });
     }
 
@@ -28,4 +28,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Yeu cau dang nhap khong hop le." }, { status: 400 });
   }
 }
-

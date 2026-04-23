@@ -326,12 +326,12 @@ export function AnimatedMascot() {
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
-    facebook: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
+    facebook: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
     tiktok: { filter: "hue-rotate(110deg) saturate(1.5) brightness(1)", scale: 1.05 },
     instagram: { filter: "hue-rotate(80deg) saturate(1.3) brightness(1.1)", scale: 1 },
     zalo: { filter: "hue-rotate(200deg) saturate(1.3) brightness(1.1)", scale: 1 },
     googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
-    website: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
+    website: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
   };
   const customFilter = useMemo(() => {
     return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;

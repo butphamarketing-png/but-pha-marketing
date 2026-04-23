@@ -80,13 +80,13 @@ export function BeforeAfterSlider({ cases = [], beforeImage, afterImage }: Befor
           
           {cases.length > 1 && (
             <div className="mt-6 flex items-center gap-4">
-              <button onClick={prevCase} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all">
+              <button onClick={prevCase} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10" type="button">
                 <ChevronLeft size={20} />
               </button>
               <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
                 {currentIndex + 1} / {cases.length}
               </span>
-              <button onClick={nextCase} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all">
+              <button onClick={nextCase} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10" type="button">
                 <ChevronRight size={20} />
               </button>
             </div>
@@ -96,7 +96,7 @@ export function BeforeAfterSlider({ cases = [], beforeImage, afterImage }: Befor
         <div className="relative group">
           <div
             ref={containerRef}
-            className="relative h-80 cursor-ew-resize select-none overflow-hidden rounded-3xl border border-white/10 bg-black/20 md:h-[450px] shadow-2xl shadow-purple-500/10"
+            className="relative aspect-[4/3] min-h-[260px] cursor-ew-resize select-none overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-2xl shadow-purple-500/10 sm:aspect-[16/10] sm:min-h-[320px] md:h-[450px] md:min-h-0 md:aspect-auto"
             onMouseDown={() => { isDragging.current = true; }}
             onTouchStart={() => { isDragging.current = true; }}
           >
@@ -169,12 +169,14 @@ export function BeforeAfterSlider({ cases = [], beforeImage, afterImage }: Befor
               <button 
                 onClick={prevCase} 
                 className="absolute -left-6 top-1/2 z-30 hidden -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 group-hover:left-4 transition-all md:flex"
+                type="button"
               >
                 <ChevronLeft size={24} />
               </button>
               <button 
                 onClick={nextCase} 
                 className="absolute -right-6 top-1/2 z-30 hidden -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 group-hover:right-4 transition-all md:flex"
+                type="button"
               >
                 <ChevronRight size={24} />
               </button>

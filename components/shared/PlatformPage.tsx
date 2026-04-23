@@ -7,7 +7,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SubPageLayout } from "./SubPageLayout";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
-import { FeaturedProjectsFlip } from "./FeaturedProjectsFlip";
 import { FanpageAudit } from "./FanpageAudit";
 import { AudioGuide } from "./AudioGuide";
 import { CountUp } from "./CountUp";
@@ -225,6 +224,194 @@ function CheckoutModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platfo
   );
 }
 
+function ConsultationModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platformKey: string; onClose: () => void }) {
+  const [duration, setDuration] = useState(1);
+  const [step, setStep] = useState<"config" | "success">("config");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [note, setNote] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const base = parsePrice(pkg.price);
+  const opt = DURATION_OPTIONS.find((option) => option.months === duration)!;
+  const total = Math.round(base * duration * (1 - opt.discount / 100));
+  const saved = base * duration - total;
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !phone.trim()) {
+      setError("Vui lòng điền đầy đủ họ và tên và số điện thoại.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+
+    const result = await db.leads.add({
+      type: "contact",
+      name: name.trim(),
+      phone: phone.trim(),
+      service: pkg.name,
+      note: [
+        `Nhu cau: ${pkg.tabLabel} - ${pkg.name}`,
+        `Thoi han quan tam: ${opt.label}`,
+        `Chi phi tham khao: ${formatPrice(total)}`,
+        note.trim() ? `Ghi chu: ${note.trim()}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      platform: platformKey,
+      url: typeof window !== "undefined" ? window.location.pathname : undefined,
+    });
+
+    setSubmitting(false);
+
+    if (result.error) {
+      setError("Không gửi được yêu cầu tư vấn lúc này. Vui lòng thử lại sau.");
+      return;
+    }
+
+    setStep("success");
+  };
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: 20 }}
+        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl"
+      >
+        <button onClick={onClose} className="absolute right-4 top-4 z-10 text-gray-400 hover:text-white transition-colors">
+          <X size={20} />
+        </button>
+        {step === "success" ? (
+          <div className="flex flex-col items-center justify-center px-8 py-14 text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="mb-6 flex h-20 w-20 items-center justify-center rounded-full"
+              style={{ backgroundColor: `${pkg.color}20` }}
+            >
+              <Check className="h-10 w-10" style={{ color: pkg.color }} />
+            </motion.div>
+            <h3 className="mb-2 text-2xl font-black text-white">Đã gửi yêu cầu tư vấn!</h3>
+            <p className="mb-6 text-sm text-gray-400">
+              Đội ngũ sẽ liên hệ với bạn trong vòng 30 phút để tư vấn gói phù hợp và báo giá chi tiết.
+            </p>
+            <div className="mb-6 w-full rounded-xl border border-white/10 bg-white/5 p-4 text-left text-sm space-y-1">
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-400">Dịch vụ quan tâm</span>
+                <span className="text-right font-medium text-white">{pkg.tabLabel} · {pkg.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Nhu cầu triển khai</span>
+                <span className="text-white">{opt.label}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Chi phí tham khảo</span>
+                <span className="font-black" style={{ color: pkg.color }}>{formatPrice(total)}</span>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-full rounded-xl py-3 text-sm font-bold text-white transition-transform hover:scale-105"
+              style={{ backgroundColor: pkg.color }}
+            >
+              Đóng
+            </button>
+          </div>
+        ) : (
+          <div className="p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <ShoppingCart className="h-6 w-6" style={{ color: pkg.color }} />
+              <div>
+                <h3 className="text-xl font-black text-white">Đăng ký tư vấn dịch vụ</h3>
+                <p className="mt-0.5 text-xs text-gray-400">{pkg.tabLabel} · {pkg.name}</p>
+              </div>
+            </div>
+            <div className="mb-5 space-y-3">
+              <input
+                required
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Họ và tên *"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary"
+              />
+              <input
+                required
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                placeholder="Số điện thoại *"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary"
+              />
+              <textarea
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+                placeholder="Mô tả ngắn nhu cầu của bạn (không bắt buộc)"
+                rows={3}
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none resize-none focus:border-primary"
+              />
+            </div>
+            <div className="mb-5">
+              <p className="mb-2 text-sm font-semibold text-white">Chọn nhu cầu triển khai</p>
+              <div className="grid grid-cols-5 gap-2">
+                {DURATION_OPTIONS.map((option) => (
+                  <button
+                    key={option.months}
+                    onClick={() => setDuration(option.months)}
+                    className={`relative flex flex-col items-center rounded-xl border py-2.5 text-center transition-all ${
+                      duration === option.months ? "border-primary/60 bg-primary/10" : "border-white/10 hover:border-white/25"
+                    }`}
+                  >
+                    {option.discount > 0 && (
+                      <span
+                        className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white"
+                        style={{ backgroundColor: pkg.color }}
+                      >
+                        -{option.discount}%
+                      </span>
+                    )}
+                    <span className={`text-sm font-bold leading-tight ${duration === option.months ? "text-white" : "text-gray-400"}`}>
+                      {option.months}
+                    </span>
+                    <span className="text-[10px] text-gray-500">tháng</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mb-5 rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">
+                    {pkg.price}/tháng x {duration} tháng{opt.discount > 0 ? ` - ${opt.discount}%` : ""}
+                  </p>
+                  {saved > 0 && <p className="mt-0.5 text-xs text-green-400">Tiết kiệm {formatPrice(saved)}</p>}
+                  <p className="mt-0.5 text-xs text-gray-400">Chi phí này chỉ để đội ngũ tư vấn nhanh hơn cho bạn.</p>
+                </div>
+                <div className="text-right">
+                  {saved > 0 && <p className="text-xs text-gray-500 line-through">{formatPrice(base * duration)}</p>}
+                  <p className="text-xl font-black" style={{ color: pkg.color }}>{formatPrice(total)}</p>
+                </div>
+              </div>
+            </div>
+            {error && <p className="mb-4 text-sm font-medium text-red-400">{error}</p>}
+            <button
+              onClick={() => void handleSubmit()}
+              disabled={submitting}
+              className="w-full rounded-xl py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{ backgroundColor: pkg.color }}
+            >
+              {submitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu tư vấn →"}
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
+
 function Slideshow({ color, platformKey }: { color: string; platformKey: string }) {
   const { settings } = useAdmin();
   const [current, setCurrent] = useState(0);
@@ -247,7 +434,11 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
   }, [slides.length]);
 
   return (
-    <section data-section="slideshow" id="slideshow" className="relative overflow-hidden" style={{ height: "420px" }}>
+    <section
+      data-section="slideshow"
+      id="slideshow"
+      className="relative aspect-[16/11] min-h-[250px] overflow-hidden sm:aspect-[16/9] sm:min-h-[340px] md:min-h-[420px]"
+    >
       {slides.map((slide, i) => (
         <div 
           key={i} 
@@ -264,11 +455,35 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
           </div>
         </div>
       ))}
-      <button onClick={() => setCurrent(p => (p - 1 + slides.length) % slides.length)} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white hover:bg-black/50"><ChevronLeft size={20} /></button>
-      <button onClick={() => setCurrent(p => (p + 1) % slides.length)} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white hover:bg-black/50"><ChevronRight size={20} /></button>
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-        {slides.map((_, i) => <button key={i} onClick={() => setCurrent(i)} className="h-2 rounded-full transition-all" style={{ width: current === i ? "24px" : "8px", backgroundColor: current === i ? color : "rgba(255,255,255,0.4)" }} />)}
-      </div>
+      {slides.length > 1 && (
+        <>
+          <button
+            onClick={() => setCurrent(p => (p - 1 + slides.length) % slides.length)}
+            className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white hover:bg-black/50 sm:left-4 sm:h-10 sm:w-10"
+            type="button"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={() => setCurrent(p => (p + 1) % slides.length)}
+            className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white hover:bg-black/50 sm:right-4 sm:h-10 sm:w-10"
+            type="button"
+          >
+            <ChevronRight size={20} />
+          </button>
+          <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className="h-2 rounded-full transition-all"
+                style={{ width: current === i ? "24px" : "8px", backgroundColor: current === i ? color : "rgba(255,255,255,0.4)" }}
+                type="button"
+              />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
@@ -414,7 +629,7 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
                 </ul>
                 <AudioGuide text={pkg.audioText} color={color} />
                 <button onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} className="mt-3 w-full rounded-xl py-3 text-sm font-bold text-white transition-all" style={{ backgroundColor: isHovered ? color : isPopular ? color : "rgba(255,255,255,0.1)", transform: isHovered ? "scale(1.02)" : "scale(1)" }}>
-                  Đăng Ký Ngay
+                  Nhận Tư Vấn Ngay
                 </button>
               </motion.div>
             );
@@ -706,8 +921,6 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
         <PricingSection tabs={tabsForRender} color={platformColor} onCheckout={handleCheckout} />
       )}
 
-      <FeaturedProjectsFlip cases={cases} />
-      
       <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
       
       {visibility.stats !== false && (
@@ -720,7 +933,7 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       <ContactForm color={platformColor} />
 
       <AnimatePresence>
-        {checkoutPkg && <CheckoutModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}
+      {checkoutPkg && <ConsultationModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}
       </AnimatePresence>
 
     </SubPageLayout>

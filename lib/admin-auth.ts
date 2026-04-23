@@ -1,4 +1,5 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHash, createHmac, timingSafeEqual } from "crypto";
+import { createServerClient } from "@/lib/supabase";
 
 export const ADMIN_SESSION_COOKIE = "admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
@@ -18,6 +19,10 @@ function base64UrlDecode(input: string): string {
 
 function getAdminPassword(): string {
   return (process.env.ADMIN_PASSWORD || "admin123").trim();
+}
+
+function hashPassword(password: string) {
+  return createHash("sha256").update(password).digest("hex");
 }
 
 function getSessionSecret(): string {
@@ -46,8 +51,30 @@ function parseCookies(cookieHeader: string | null): Record<string, string> {
     }, {});
 }
 
-export function validateAdminPassword(password: string): boolean {
-  return password === getAdminPassword();
+export async function validateAdminPassword(password: string): Promise<boolean> {
+  try {
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "admin_auth_config")
+      .maybeSingle();
+
+    if (error) {
+      console.error("[admin-auth] Failed to load custom admin password", error);
+      return false;
+    }
+
+    const passwordHash = typeof data?.value?.passwordHash === "string" ? data.value.passwordHash : "";
+    if (passwordHash) {
+      return hashPassword(password) === passwordHash;
+    }
+
+    return password === getAdminPassword();
+  } catch (error) {
+    console.error("[admin-auth] validateAdminPassword failed", error);
+    return password === getAdminPassword();
+  }
 }
 
 export function createAdminSessionToken(): string {
@@ -83,4 +110,3 @@ export function isAdminRequest(request: Request): boolean {
   const cookies = parseCookies(request.headers.get("cookie"));
   return verifyAdminSessionToken(cookies[ADMIN_SESSION_COOKIE]);
 }
-

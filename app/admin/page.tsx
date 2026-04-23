@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard, Package, ShoppingCart, Newspaper, FileText,
-  Bell, Globe, Image, Search, Settings, LogOut, ChevronRight,
-  Trash2, Eye, EyeOff, Check, X, Plus, Edit3, ExternalLink,
-  BarChart2, TrendingUp, Users, DollarSign, Palette, Code, Copy,
-  Calendar, Clock, CheckCircle2, Lock, Sparkles, type LucideIcon
+  LayoutDashboard, Package, Newspaper,
+  Bell, Globe, Image, Search, Settings, LogOut,
+  Trash2, Plus, Edit3,
+  BarChart2, Code, Copy,
+  Calendar, Lock, Sparkles, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
-import { db, type Order, type Lead, type NewsItem, type MediaItem, type Service, type ClientPortal } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type ClientPortal } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 
@@ -40,22 +39,30 @@ const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
   cancelled: { label: "Đã huỷ", cls: "bg-red-500/20 text-red-400" },
 };
 
-function formatMoney(num: number) { return num.toLocaleString("vi-VN") + "đ"; }
 function formatDate(date: string | number) { return new Date(date).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
 function parseFeatureLine(line: string) {
   const [titlePart, detailPart] = line.split("::");
   return {
-    title: (titlePart || "").trim(),
-    details: detailPart ? detailPart.split("|").map(item => item.trim()).filter(Boolean) : [],
+    title: titlePart || "",
+    details: detailPart ? detailPart.split("|") : [],
   };
 }
 
 function serializeFeatureLine(title: string, details: string[]) {
-  const cleanTitle = title.trim();
-  const cleanDetails = details.map(item => item.trim()).filter(Boolean);
-  if (!cleanTitle) return "";
-  return cleanDetails.length > 0 ? `${cleanTitle}::${cleanDetails.join("|")}` : cleanTitle;
+  const cleanDetails = details.filter(item => item.trim().length > 0);
+  if (!title.trim()) return "";
+  return cleanDetails.length > 0 ? `${title}::${cleanDetails.join("|")}` : title;
 }
+
+type VisitorRecord = {
+  id: string;
+  ip: string;
+  userAgent: string;
+  firstSeenAt: string;
+  lastSeenAt: string;
+  hits: number;
+  paths: string[];
+};
 
 function parseResponsibilityEditor(raw: string) {
   const lines = raw
@@ -172,7 +179,8 @@ export default function AdminPage() {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
+  const [visitors, setVisitors] = useState<VisitorRecord[]>([]);
+  const [totalVisitorHits, setTotalVisitorHits] = useState(0);
   const [clientPortals, setClientPortals] = useState<ClientPortal[]>([]);
   const [progressArticles, setProgressArticles] = useState<Record<string, any[]>>({});
   const [selectedClient, setSelectedClient] = useState<ClientPortal | null>(null);
@@ -211,14 +219,23 @@ export default function AdminPage() {
     resultDoc: string;
   };
 
-  const visitorChartData = Array.from({ length: 12 }, (_, i) => ({
-    name: `Tuần ${i + 1}`,
-    visits: Math.round(90 + Math.sin((i / 11) * Math.PI * 2) * 30),
-  }));
+  const visitorChartData = visitors
+    .slice()
+    .reverse()
+    .slice(-12)
+    .map((visitor, index) => ({
+      name: `#${index + 1}`,
+      visits: visitor.hits,
+    }));
   const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
   const [portalPassword, setPortalPassword] = useState("");
   const [portalCreateMessage, setPortalCreateMessage] = useState<string | null>(null);
   const [portalCreateError, setPortalCreateError] = useState<string | null>(null);
+  const [currentAdminPassword, setCurrentAdminPassword] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [changePasswordMessage, setChangePasswordMessage] = useState<string | null>(null);
+  const [changePasswordError, setChangePasswordError] = useState<string | null>(null);
+  const [changingAdminPassword, setChangingAdminPassword] = useState(false);
   const [selectedClientProjectId, setSelectedClientProjectId] = useState("");
   const [showSourceViewer, setShowSourceViewer] = useState(false);
   const [sourceFiles, setSourceFiles] = useState<string[]>([]);
@@ -965,10 +982,16 @@ export default function AdminPage() {
     if (result.error) console.error('Portals error:', result.error);
     else setClientPortals(result.data || []);
   };
-  const refreshServices = async () => {
-    const result = await db.services.getAll();
-    if (result.error) console.error('Services error:', result.error);
-    else setServices(result.data || []);
+  const refreshVisitors = async () => {
+    try {
+      const res = await fetch("/api/visitors", { cache: "no-store", credentials: "include" });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) return;
+      setVisitors(Array.isArray(data.visitors) ? data.visitors : []);
+      setTotalVisitorHits(typeof data.totalHits === "number" ? data.totalHits : 0);
+    } catch (visitorError) {
+      console.error("Visitors error:", visitorError);
+    }
   };
   const refreshArticles = async (clientId: string) => {
     const result = await db.progressArticles.getByClient(clientId);
@@ -1009,6 +1032,44 @@ export default function AdminPage() {
       return;
     }
     setPanelFeedback("Đã lưu cấu hình.");
+  };
+
+  const changeAdminPassword = async () => {
+    if (!currentAdminPassword || !newAdminPassword) {
+      setChangePasswordError("Vui lòng nhập đủ mật khẩu hiện tại và mật khẩu mới.");
+      setChangePasswordMessage(null);
+      return;
+    }
+
+    setChangingAdminPassword(true);
+    setChangePasswordError(null);
+    setChangePasswordMessage(null);
+
+    try {
+      const res = await fetch("/api/admin/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          currentPassword: currentAdminPassword,
+          newPassword: newAdminPassword,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        setChangePasswordError(data?.error || "Đổi mật khẩu thất bại.");
+        return;
+      }
+
+      setCurrentAdminPassword("");
+      setNewAdminPassword("");
+      setChangePasswordMessage("Đã cập nhật mật khẩu admin.");
+    } catch {
+      setChangePasswordError("Không thể đổi mật khẩu lúc này.");
+    } finally {
+      setChangingAdminPassword(false);
+    }
   };
 
   const saveServiceConfigManual = async () => {
@@ -1094,7 +1155,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!authenticated) return;
-    refreshOrders(); refreshLeads(); refreshPortals(); refreshServices();
+    refreshOrders(); refreshLeads(); refreshPortals(); refreshVisitors();
     db.news.getAll().then((result) => {
       setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     });
@@ -1341,13 +1402,26 @@ export default function AdminPage() {
           {activeTab === "dashboard" && (
             <div className="space-y-8">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard value={leads.length} label="Tổng Lead" icon={Users} color="#A855F7" />
-                <StatCard value={orders.length} label="Đơn hàng" icon={ShoppingCart} color="#3B82F6" />
-                <StatCard value="2.4k" label="Truy cập" icon={BarChart2} color="#10B981" />
-                <StatCard value="15.2M" label="Doanh thu" icon={DollarSign} color="#F59E0B" />
+                <button type="button" onClick={() => refreshVisitors()} className="text-left">
+                  <StatCard value={visitors.length} label="Truy cập" icon={BarChart2} color="#10B981" />
+                </button>
+                <button type="button" onClick={() => setActiveTab("settings")} className="text-left">
+                  <StatCard value="Đổi" label="Mật khẩu" icon={Lock} color="#F59E0B" />
+                </button>
+                <button type="button" onClick={() => refreshVisitors()} className="text-left">
+                  <StatCard value={visitors.length} label="Người truy cập" icon={Globe} color="#3B82F6" />
+                </button>
+                <button type="button" onClick={() => setActiveTab("leads")} className="text-left">
+                  <StatCard value={leads.length} label="Nhận tin" icon={Bell} color="#A855F7" />
+                </button>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6">
-                <h2 className="mb-4 text-lg font-bold text-white">Khách truy cập website</h2>
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <h2 className="text-lg font-bold text-white">Khách truy cập website</h2>
+                  <button type="button" onClick={refreshVisitors} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white">
+                    Làm mới
+                  </button>
+                </div>
                 <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={visitorChartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
@@ -1364,6 +1438,47 @@ export default function AdminPage() {
                       <Area type="monotone" dataKey="visits" stroke="#10B981" fill="url(#visitsGradient)" strokeWidth={3} dot={false} />
                     </AreaChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="mt-6 grid gap-3 md:grid-cols-2">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-wide text-gray-400">Lượt truy cập ghi nhận</p>
+                    <p className="mt-2 text-2xl font-black text-white">{totalVisitorHits.toLocaleString()}</p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-wide text-gray-400">Khách truy cập thực</p>
+                    <p className="mt-2 text-2xl font-black text-white">{visitors.length.toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h2 className="mb-4 text-lg font-bold text-white">Người truy cập và IP</h2>
+                <div className="overflow-x-auto">
+                  <table className="min-w-[760px] w-full text-left text-sm">
+                    <thead className="bg-white/5 text-gray-400">
+                      <tr>
+                        <th className="px-4 py-3">IP</th>
+                        <th className="px-4 py-3">Lượt</th>
+                        <th className="px-4 py-3">Lần cuối</th>
+                        <th className="px-4 py-3">Trang đã vào</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {visitors.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="px-4 py-6 text-center text-gray-400">Chưa có dữ liệu truy cập thực.</td>
+                        </tr>
+                      ) : (
+                        visitors.slice(0, 20).map((visitor) => (
+                          <tr key={visitor.id} className="text-gray-200">
+                            <td className="px-4 py-3 font-mono text-xs">{visitor.ip}</td>
+                            <td className="px-4 py-3">{visitor.hits}</td>
+                            <td className="px-4 py-3 text-xs">{formatDate(visitor.lastSeenAt)}</td>
+                            <td className="px-4 py-3 text-xs text-gray-400">{visitor.paths.join(", ") || "/"}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6">
@@ -1855,8 +1970,22 @@ export default function AdminPage() {
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white">Slideshow</h3>
                   <div className="flex flex-wrap gap-2">
-                    <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} placeholder="URL ảnh..." className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                    <button onClick={() => { if (mediaUrl) { addSlideshowImage(selectedPlatform, mediaUrl); setMediaUrl(""); } }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Thêm</button>
+                    <textarea value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} placeholder="Mỗi dòng 1 URL ảnh hoặc ngăn cách bằng dấu phẩy" className="min-h-[88px] flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const urls = mediaUrl
+                          .split(/\r?\n|,/)
+                          .map(item => item.trim())
+                          .filter(Boolean);
+                        if (urls.length === 0) return;
+                        urls.forEach(url => addSlideshowImage(selectedPlatform, url));
+                        setMediaUrl("");
+                      }}
+                      className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                    >
+                      Thêm
+                    </button>
                     <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white">
                       Tải ảnh
                       <input
@@ -1897,17 +2026,18 @@ export default function AdminPage() {
                       </>
                     )}
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
                     {(settings.media[selectedPlatform]?.slideshow || []).map((url, i) => (
                       <div key={i} className="relative group aspect-video rounded-lg overflow-hidden border border-white/10">
                         <img src={url} className="w-full h-full object-cover" />
-                        <button onClick={() => removeSlideshowImage(selectedPlatform, i)} className="absolute inset-0 flex items-center justify-center bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16} className="text-white" /></button>
+                        <button type="button" onClick={() => removeSlideshowImage(selectedPlatform, i)} className="absolute inset-0 flex items-center justify-center bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16} className="text-white" /></button>
                       </div>
                     ))}
                   </div>
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu slideshow"}</button>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Case Study</h3>
+                  <h3 className="font-bold text-white">Case Study cho phần Sự Thay Đổi Kỳ Diệu</h3>
                   <div className="space-y-2">
                     <input value={newCase.title} onChange={e => setNewCase({ ...newCase, title: e.target.value })} placeholder="Tên Case Study" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
                     <div className="grid grid-cols-2 gap-2">
@@ -1960,16 +2090,17 @@ export default function AdminPage() {
                         </div>
                       </div>
                     )}
-                    <button onClick={() => { if (newCase.title) { addCase(selectedPlatform, { title: newCase.title, before: newCase.before, after: newCase.after }); setNewCase({ id: 0, title: "", before: "", after: "" }); } }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Thêm Case</button>
+                    <button type="button" onClick={() => { if (newCase.title.trim()) { addCase(selectedPlatform, { title: newCase.title, before: newCase.before, after: newCase.after }); setNewCase({ id: 0, title: "", before: "", after: "" }); } }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Thêm Case</button>
                   </div>
                   <div className="space-y-2">
                     {(settings.media[selectedPlatform]?.cases || []).map(c => (
                       <div key={c.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10">
                         <span className="text-xs text-white">{c.title}</span>
-                        <button onClick={() => removeCase(selectedPlatform, c.id)} className="text-red-400"><Trash2 size={14} /></button>
+                        <button type="button" onClick={() => removeCase(selectedPlatform, c.id)} className="text-red-400"><Trash2 size={14} /></button>
                       </div>
                     ))}
                   </div>
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu case study"}</button>
                 </div>
               </div>
             </div>
@@ -2316,6 +2447,14 @@ export default function AdminPage() {
 
           {activeTab === "settings" && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4" id="admin-password">
+                <h3 className="font-bold text-white">Đổi mật khẩu admin</h3>
+                <input value={currentAdminPassword} onChange={e => { setCurrentAdminPassword(e.target.value); setChangePasswordError(null); setChangePasswordMessage(null); }} type="password" placeholder="Mật khẩu hiện tại" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                <input value={newAdminPassword} onChange={e => { setNewAdminPassword(e.target.value); setChangePasswordError(null); setChangePasswordMessage(null); }} type="password" placeholder="Mật khẩu mới" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                {changePasswordMessage && <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-200">{changePasswordMessage}</div>}
+                {changePasswordError && <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{changePasswordError}</div>}
+                <button type="button" onClick={changeAdminPassword} disabled={changingAdminPassword} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{changingAdminPassword ? "Đang cập nhật..." : "Cập nhật mật khẩu"}</button>
+              </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                 <h3 className="font-bold text-white">Thông tin liên hệ</h3>
                 <input value={settings.address || ""} onChange={e => updateSettings({ address: e.target.value })} placeholder="Địa chỉ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />

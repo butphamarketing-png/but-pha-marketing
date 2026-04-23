@@ -89,34 +89,41 @@ export async function POST(req: Request) {
     }
 
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const response = await client.chat.completions.create({
+    const response = await client.responses.create({
       model: process.env.OPENAI_MODEL || "gpt-5.4",
-      temperature: 0.4,
-      response_format: { type: "json_object" },
-      messages: [
+      input: [
         {
           role: "system",
-          content:
-            "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
+          content: [
+            {
+              type: "input_text",
+              text: "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
+            },
+          ],
         },
         {
           role: "user",
           content: [
-            `Tieu de bai viet: ${title}`,
-            "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
-            "Yeu cau:",
-            "- Tao 6-8 muc chinh",
-            "- level chi dung 2 hoac 3",
-            "- text la tieu de hien thi ro rang bang tieng Viet",
-            "- keywords la danh sach tu khoa muc tieu lien quan",
-            "Schema JSON:",
-            '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
-          ].join("\n"),
+            {
+              type: "input_text",
+              text: [
+                `Tieu de bai viet: ${title}`,
+                "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
+                "Yeu cau:",
+                "- Tao 6-8 muc chinh",
+                "- level chi dung 2 hoac 3",
+                "- text la tieu de hien thi ro rang bang tieng Viet",
+                "- keywords la danh sach tu khoa muc tieu lien quan",
+                "Schema JSON:",
+                '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
+              ].join("\n"),
+            },
+          ],
         },
       ],
     });
 
-    const raw = response.choices[0]?.message?.content ?? "";
+    const raw = response.output_text ?? "";
     const parsed = parseJson<{ keywords?: unknown; structure?: unknown }>(raw);
     if (!parsed) {
       return NextResponse.json(fallbackOutline(title));

@@ -5,6 +5,7 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
 import { DynamicFavicon } from "@/components/shared/DynamicFavicon";
+import { VisitorTracker } from "@/components/shared/VisitorTracker";
 import { createServerClient } from "@/lib/supabase";
 import NextTopLoader from "nextjs-toploader";
 
@@ -98,6 +99,7 @@ export default function RootLayout({
           <AdminProvider>
             <DynamicFavicon />
             <ExternalScripts />
+            <VisitorTracker />
             {children}
             <MarketingChrome />
           </AdminProvider>
