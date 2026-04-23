@@ -187,6 +187,16 @@ export default function CreateArticlePage() {
   const applyHistorySnapshot = (snapshot: SeoStudioSnapshot | null | undefined) => {
     if (!snapshot) return;
 
+    const normalizedSerpInsight = snapshot.serpInsight
+      ? {
+          source: snapshot.serpInsight.source || "system",
+          intent: snapshot.serpInsight.intent || "",
+          relatedKeywords: Array.isArray(snapshot.serpInsight.relatedKeywords) ? snapshot.serpInsight.relatedKeywords : [],
+          headlines: Array.isArray(snapshot.serpInsight.headlines) ? snapshot.serpInsight.headlines : [],
+          location: snapshot.serpInsight.location || "",
+        }
+      : null;
+
     setActionError("");
     setActionMessage("Da mo lai ket qua tu lich su.");
     setArticleData((prev) => ({
@@ -208,7 +218,7 @@ export default function CreateArticlePage() {
       keywords: Array.isArray(snapshot.keywords) ? snapshot.keywords : prev.keywords,
       outline: Array.isArray(snapshot.outline) ? snapshot.outline : prev.outline,
       searchIntent: snapshot.searchIntent || prev.searchIntent,
-      serpInsight: snapshot.serpInsight || prev.serpInsight,
+      serpInsight: normalizedSerpInsight || prev.serpInsight,
       images: Array.isArray(snapshot.images) ? snapshot.images : prev.images,
       published: typeof snapshot.published === "boolean" ? snapshot.published : prev.published,
       hot: typeof snapshot.hot === "boolean" ? snapshot.hot : prev.hot,
