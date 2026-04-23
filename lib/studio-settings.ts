@@ -56,3 +56,15 @@ export async function getOpenAiRuntimeConfig() {
     settings,
   };
 }
+
+export async function getSerpApiRuntimeConfig() {
+  const settings = await getStudioSettings().catch(() => sanitizeStudioSettings(null));
+  const apiKey = settings.serpApiKey || (process.env.SERPAPI_KEY || "").trim();
+  const location = settings.defaultLocation || "Vietnam";
+
+  return {
+    apiKey,
+    location,
+    settings,
+  };
+}
