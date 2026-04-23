@@ -23,6 +23,11 @@ type StudioSettingsPayload = {
   aiModel: string;
 };
 
+type StudioConnectionPayload = StudioSettingsPayload & {
+  openaiConnected: boolean;
+  openaiMessage: string;
+};
+
 const DEFAULT_CONFIG: StudioSettingsPayload & {
   openaiKey: string;
   serpApiKey: string;
@@ -46,6 +51,8 @@ export function StudioSettings() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [testMessage, setTestMessage] = useState("");
+  const [testedOpenAiConnected, setTestedOpenAiConnected] = useState<boolean | null>(null);
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
   const [config, setConfig] = useState(DEFAULT_CONFIG);
 
@@ -96,6 +103,8 @@ export function StudioSettings() {
   const updateConfig = (patch: Partial<typeof config>) => {
     setSaveError("");
     setSaveSuccess(false);
+    setTestMessage("");
+    setTestedOpenAiConnected(null);
     setConfig((prev) => ({ ...prev, ...patch }));
   };
 
@@ -134,6 +143,8 @@ export function StudioSettings() {
         defaultLocation: data.defaultLocation,
         aiModel: data.aiModel,
       }));
+      setTestMessage("");
+      setTestedOpenAiConnected(null);
       setSaveSuccess(true);
       window.setTimeout(() => setSaveSuccess(false), 2500);
     } catch (error) {
@@ -147,9 +158,13 @@ export function StudioSettings() {
     try {
       setTesting(true);
       setSaveError("");
-      const res = await fetch("/api/admin/studio-settings", { cache: "no-store" });
+      setTestMessage("");
+      const res = await fetch("/api/admin/studio-settings", {
+        method: "POST",
+        cache: "no-store",
+      });
       const data = (await res.json()) as
-        | ({ ok: true } & StudioSettingsPayload)
+        | ({ ok: true } & StudioConnectionPayload)
         | { ok: false; error?: string };
 
       if (!res.ok || !data.ok) {
@@ -161,18 +176,22 @@ export function StudioSettings() {
         openaiKeySaved: data.openaiKeySaved,
         serpApiKeySaved: data.serpApiKeySaved,
       }));
-      setSaveSuccess(true);
-      window.setTimeout(() => setSaveSuccess(false), 1800);
+      setTestMessage(data.openaiMessage);
+      setTestedOpenAiConnected(data.openaiConnected);
     } catch (error) {
       setSaveError(getErrorMessage(error));
+      setTestedOpenAiConnected(false);
     } finally {
       setTesting(false);
     }
   };
 
   const openAiConnected = useMemo(
-    () => config.openaiKeySaved || config.openaiKey.trim().length > 0,
-    [config.openaiKey, config.openaiKeySaved],
+    () =>
+      testedOpenAiConnected === null
+        ? config.openaiKeySaved || config.openaiKey.trim().length > 0
+        : testedOpenAiConnected,
+    [config.openaiKey, config.openaiKeySaved, testedOpenAiConnected],
   );
   const serpConnected = useMemo(
     () => config.serpApiKeySaved || config.serpApiKey.trim().length > 0,
@@ -238,6 +257,15 @@ export function StudioSettings() {
                 {config.openaiKeySaved && !config.openaiKey && (
                   <p className="text-xs font-semibold text-emerald-600">Key da duoc luu tren server.</p>
                 )}
+                {testMessage && (
+                  <p
+                    className={`text-xs font-semibold ${
+                      testedOpenAiConnected ? "text-emerald-600" : "text-rose-600"
+                    }`}
+                  >
+                    {testMessage}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -250,8 +278,8 @@ export function StudioSettings() {
                   >
                     <option value="gpt-5.4">GPT-5.4 (Khuyen dung)</option>
                     <option value="gpt-4o">GPT-4o</option>
-                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gpt-4-turbo">GPT-4 Turbo (tu dong dung GPT-4o)</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo (tu dong dung GPT-4o)</option>
                   </select>
                 </div>
               </div>

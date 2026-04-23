@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getOpenAiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
 
@@ -38,7 +39,7 @@ function normalizeOutline(items: unknown) {
 }
 
 function fallbackParagraph(title: string, section: { text: string }) {
-  return `<p>${title} la chu de quan trong voi doanh nghiep dang muon tang hien dien so va cai thien chuyen doi. Phan "${section.text}" giup nguoi doc hieu ro gia tri thuc te, cach trien khai va cac luu y can co de ap dung hieu qua hon.</p>`;
+  return `<p>${title} là chủ đề quan trọng với doanh nghiệp đang muốn tăng hiện diện số và cải thiện chuyển đổi. Phần "${section.text}" giúp người đọc hiểu rõ giá trị thực tế, cách triển khai và các lưu ý cần có để áp dụng hiệu quả hơn.</p>`;
 }
 
 function fallbackContent(title: string, outline: Array<{ level: number; text: string }>) {
@@ -47,7 +48,7 @@ function fallbackContent(title: string, outline: Array<{ level: number; text: st
       const tag = item.level === 3 ? "h3" : "h2";
       const intro =
         index === 0
-          ? `<p>${title} can duoc trien khai theo huong ro search intent, giau gia tri thuc tien va co loi keu goi hanh dong phu hop.</p>`
+          ? `<p>${title} cần được triển khai theo hướng rõ search intent, giàu giá trị thực tiễn và có lời kêu gọi hành động phù hợp.</p>`
           : "";
       return `<${tag}>${item.text}</${tag}>${intro}${fallbackParagraph(title, item)}`;
     })
@@ -62,23 +63,23 @@ function buildPrompt(input: {
   const outlineText = input.outline
     .map((item) => {
       const keyPoints = item.keyPoints?.length ? ` | key points: ${item.keyPoints.join(", ")}` : "";
-      const summary = item.summary ? ` | summary: ${item.summary}` : "";
+      const summary = item.summary ? ` | tóm tắt: ${item.summary}` : "";
       return `- H${item.level}: ${item.text}${summary}${keyPoints}`;
     })
     .join("\n");
 
   return [
-    "Ban la senior SEO copywriter tieng Viet.",
-    `Viet noi dung HTML sach cho bai: ${input.title}`,
-    `Tu khoa muc tieu: ${input.keywords.filter(Boolean).join(", ") || input.title}`,
-    "Yeu cau:",
-    "- Chi tra ve HTML fragment, khong markdown, khong code fence",
-    "- Giu nguyen dan y da cho",
-    "- Moi heading phai co it nhat 1 doan van thuc chat, khong viet placeholder",
-    "- Van phong tu nhien, thuyet phuc, cu the, tranh lap cau mau",
-    "- Co the them bullet list ngan khi phu hop",
-    "- Noi dung bang tieng Viet",
-    "Dan y can bam theo:",
+    "Bạn là senior SEO copywriter tiếng Việt.",
+    `Viết nội dung HTML sạch cho bài: ${input.title}`,
+    `Từ khóa mục tiêu: ${input.keywords.filter(Boolean).join(", ") || input.title}`,
+    "Yêu cầu:",
+    "- Chỉ trả về HTML fragment, không markdown, không code fence",
+    "- Giữ nguyên dàn ý đã cho",
+    "- Mỗi heading phải có ít nhất 1 đoạn văn thực chất, không viết placeholder",
+    "- Văn phong tự nhiên, thuyết phục, cụ thể, tránh lặp câu mẫu",
+    "- Có thể thêm bullet list ngắn khi phù hợp",
+    "- Nội dung bằng tiếng Việt có dấu, giọng văn rõ ràng và đáng tin cậy",
+    "Dàn ý cần bám theo:",
     outlineText,
   ].join("\n");
 }
@@ -93,33 +94,35 @@ export async function POST(req: Request) {
     const outline = normalizeOutline(body?.outline);
 
     if (!title) {
-      return NextResponse.json({ error: "Thieu tieu de bai viet." }, { status: 400 });
+      return NextResponse.json({ error: "Thiếu tiêu đề bài viết." }, { status: 400 });
     }
 
     if (outline.length === 0) {
-      return NextResponse.json({ error: "Thieu dan y de viet bai." }, { status: 400 });
+      return NextResponse.json({ error: "Thiếu dàn ý để viết bài." }, { status: 400 });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    const { apiKey, model } = await getOpenAiRuntimeConfig();
+
+    if (!apiKey) {
       const content = fallbackContent(title, outline);
       return NextResponse.json({
         content,
         wordCount: content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length,
-        estimatedTime: "5 phut doc",
+        estimatedTime: "5 phút đọc",
         source: "fallback",
       });
     }
 
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const client = new OpenAI({ apiKey });
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || "gpt-5.4",
+      model,
       input: [
         {
           role: "system",
           content: [
             {
               type: "input_text",
-              text: "Ban viet landing article SEO bang tieng Viet. Chi tra ve HTML fragment hop le, khong giai thich, khong dung placeholder.",
+              text: "Bạn viết landing article SEO bằng tiếng Việt. Chỉ trả về HTML fragment hợp lệ, không giải thích, không dùng placeholder.",
             },
           ],
         },
@@ -137,18 +140,18 @@ export async function POST(req: Request) {
 
     const content = stripCodeFences(response.output_text ?? "");
     if (!content) {
-      return NextResponse.json({ error: "OpenAI khong tra ve noi dung hop le." }, { status: 502 });
+      return NextResponse.json({ error: "OpenAI không trả về nội dung hợp lệ." }, { status: 502 });
     }
 
     const wordCount = content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
     return NextResponse.json({
       content,
       wordCount,
-      estimatedTime: `${Math.max(3, Math.round(wordCount / 220))} phut doc`,
+      estimatedTime: `${Math.max(3, Math.round(wordCount / 220))} phút đọc`,
       source: "openai",
     });
   } catch (error) {
     console.error("POST /api/ai/generate-article failed", error);
-    return NextResponse.json({ error: "Khong the tao bai viet AI luc nay." }, { status: 500 });
+    return NextResponse.json({ error: "Không thể tạo bài viết AI lúc này." }, { status: 500 });
   }
 }

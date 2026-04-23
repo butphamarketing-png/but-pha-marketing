@@ -1,18 +1,18 @@
 export const dynamic = "force-dynamic";
 
+import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { isAdminRequest } from "@/lib/admin-auth";
+import {
+  getOpenAiRuntimeConfig,
+  getStudioSettings,
+  sanitizeStudioSettings,
+  type StudioSettingsValue,
+} from "@/lib/studio-settings";
 
 const TABLE_NAME = "site_settings";
 const SETTINGS_KEY = "studio_settings";
-
-type StudioSettingsValue = {
-  openaiKey?: string;
-  serpApiKey?: string;
-  defaultLocation?: string;
-  aiModel?: string;
-};
 
 function jsonError(message: string, status = 500, details?: unknown) {
   return NextResponse.json({ ok: false, error: message, ...(details ? { details } : {}) }, { status });
@@ -22,16 +22,6 @@ function normalizeString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function sanitizeStudioSettings(value: unknown): StudioSettingsValue {
-  const source = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
-  return {
-    openaiKey: normalizeString(source.openaiKey),
-    serpApiKey: normalizeString(source.serpApiKey),
-    defaultLocation: normalizeString(source.defaultLocation) || "Vietnam",
-    aiModel: normalizeString(source.aiModel) || "gpt-4-turbo",
-  };
-}
-
 function responseFromValue(value: StudioSettingsValue) {
   return {
     ok: true,
@@ -39,6 +29,29 @@ function responseFromValue(value: StudioSettingsValue) {
     serpApiKeySaved: Boolean(value.serpApiKey),
     defaultLocation: value.defaultLocation || "Vietnam",
     aiModel: value.aiModel || "gpt-4-turbo",
+  };
+}
+
+async function testOpenAiConnection() {
+  const { apiKey, model } = await getOpenAiRuntimeConfig();
+  if (!apiKey) {
+    return {
+      connected: false,
+      message: "Chua co OpenAI API key tren server.",
+    };
+  }
+
+  const client = new OpenAI({ apiKey });
+
+  await client.responses.create({
+    model,
+    input: "Tra ve duy nhat tu OK.",
+    max_output_tokens: 8,
+  });
+
+  return {
+    connected: true,
+    message: `Da ket noi OpenAI thanh cong voi model ${model}.`,
   };
 }
 
@@ -116,5 +129,32 @@ export async function PATCH(request: Request) {
   } catch (error) {
     console.error("[API/admin/studio-settings PATCH] Failed:", error);
     return jsonError("Khong the luu cau hinh studio.", 500, error);
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    if (!isAdminRequest(request)) {
+      return jsonError("Unauthorized", 401);
+    }
+
+    const settings = await getStudioSettings().catch(() => sanitizeStudioSettings(null));
+    const openai = await testOpenAiConnection().catch((error) => ({
+      connected: false,
+      message: error instanceof Error && error.message ? error.message : "Khong the ket noi OpenAI luc nay.",
+    }));
+
+    return NextResponse.json({
+      ok: true,
+      openaiConnected: openai.connected,
+      openaiMessage: openai.message,
+      openaiKeySaved: Boolean(settings.openaiKey),
+      serpApiKeySaved: Boolean(settings.serpApiKey),
+      defaultLocation: settings.defaultLocation || "Vietnam",
+      aiModel: settings.aiModel || "gpt-4-turbo",
+    });
+  } catch (error) {
+    console.error("[API/admin/studio-settings POST] Failed:", error);
+    return jsonError("Khong the kiem tra ket noi studio.", 500, error);
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getOpenAiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
 
@@ -20,20 +21,20 @@ function stripCodeFences(raw: string) {
 
 function fallbackOutline(title: string) {
   const structure: OutlineItem[] = [
-    { level: 2, text: `Gioi thieu ve ${title}`, summary: "", keyPoints: [] },
-    { level: 2, text: "Nhu cau thuc te cua khach hang", summary: "", keyPoints: [] },
-    { level: 2, text: `Giai phap ${title}`, summary: "", keyPoints: [] },
-    { level: 2, text: "Quy trinh trien khai", summary: "", keyPoints: [] },
-    { level: 2, text: "Kinh nghiem thuc chien", summary: "", keyPoints: [] },
-    { level: 2, text: "Bang gia va luu y", summary: "", keyPoints: [] },
-    { level: 2, text: "Cau hoi thuong gap", summary: "", keyPoints: [] },
-    { level: 2, text: "Ket luan", summary: "", keyPoints: [] },
+    { level: 2, text: `Giới thiệu về ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Nhu cầu thực tế của khách hàng", summary: "", keyPoints: [] },
+    { level: 2, text: `Giải pháp ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Quy trình triển khai", summary: "", keyPoints: [] },
+    { level: 2, text: "Kinh nghiệm thực chiến", summary: "", keyPoints: [] },
+    { level: 2, text: "Bảng giá và lưu ý", summary: "", keyPoints: [] },
+    { level: 2, text: "Câu hỏi thường gặp", summary: "", keyPoints: [] },
+    { level: 2, text: "Kết luận", summary: "", keyPoints: [] },
   ];
 
   return {
     h1: title,
     structure,
-    keywords: [title, "dich vu marketing", "SEO", "chuyen doi"],
+    keywords: [title, "dịch vụ marketing", "SEO", "chuyển đổi"],
   };
 }
 
@@ -81,23 +82,25 @@ export async function POST(req: Request) {
     const title = normalizeTitle(body?.title);
 
     if (!title) {
-      return NextResponse.json({ error: "Thieu tieu de de tao dan y AI." }, { status: 400 });
+      return NextResponse.json({ error: "Thiếu tiêu đề để tạo dàn ý AI." }, { status: 400 });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    const { apiKey, model } = await getOpenAiRuntimeConfig();
+
+    if (!apiKey) {
       return NextResponse.json(fallbackOutline(title));
     }
 
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const client = new OpenAI({ apiKey });
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || "gpt-5.4",
+      model,
       input: [
         {
           role: "system",
           content: [
             {
               type: "input_text",
-              text: "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
+              text: "Bạn là chuyên gia SEO content tiếng Việt. Hãy trả về JSON hợp lệ, không markdown, không giải thích thêm.",
             },
           ],
         },
@@ -107,13 +110,13 @@ export async function POST(req: Request) {
             {
               type: "input_text",
               text: [
-                `Tieu de bai viet: ${title}`,
-                "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
-                "Yeu cau:",
-                "- Tao 6-8 muc chinh",
-                "- level chi dung 2 hoac 3",
-                "- text la tieu de hien thi ro rang bang tieng Viet",
-                "- keywords la danh sach tu khoa muc tieu lien quan",
+                `Tiêu đề bài viết: ${title}`,
+                "Hãy phân tích search intent và đề xuất dàn ý bài viết chuẩn SEO cho landing article dịch vụ marketing.",
+                "Yêu cầu:",
+                "- Tạo 6-8 mục chính",
+                "- level chỉ dùng 2 hoặc 3",
+                "- text là tiêu đề hiển thị rõ ràng bằng tiếng Việt có dấu",
+                "- keywords là danh sách từ khóa mục tiêu liên quan",
                 "Schema JSON:",
                 '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
               ].join("\n"),
@@ -136,6 +139,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("POST /api/ai/outline failed", error);
-    return NextResponse.json({ error: "Khong the tao dan y AI luc nay." }, { status: 500 });
+    return NextResponse.json({ error: "Không thể tạo dàn ý AI lúc này." }, { status: 500 });
   }
 }
