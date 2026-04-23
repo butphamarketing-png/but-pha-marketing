@@ -46,7 +46,7 @@ async function testOpenAiConnection() {
   await client.responses.create({
     model,
     input: "Tra ve duy nhat tu OK.",
-    max_output_tokens: 8,
+    max_output_tokens: 16,
   });
 
   return {
