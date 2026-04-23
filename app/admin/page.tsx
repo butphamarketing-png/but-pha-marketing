@@ -147,6 +147,8 @@ export default function AdminPage() {
     settings,
     saveStatus,
     saveError,
+    hasUnsavedChanges,
+    saveSettings,
     updateSettings,
     updateColor,
     updatePlatformName,
@@ -237,6 +239,11 @@ export default function AdminPage() {
     published: true,
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+
+  const setPanelFeedback = (message: string | null, error: string | null = null) => {
+    setBlogSaveMessage(message);
+    setBlogSaveError(error);
+  };
 
   const sectionMessageText =
     Object.entries(settings.mascotSectionMessages?.[selectedMascotPlatform] || {})
@@ -985,13 +992,71 @@ export default function AdminPage() {
     if (!selectedClient) return;
     await db.clientPortals.update(selectedClient.id.toString(), patch);
     await refreshClientPortal(selectedClient.id);
-    alert("Đã lưu thông tin khách hàng");
+    setPanelFeedback("Đã lưu thông tin khách hàng.");
   };
 
   const saveSelectedProjects = async (projects: ClientProject[]) => {
     if (!selectedClient) return;
     await db.clientPortals.update(selectedClient.id.toString(), { weeklyReports: projects as any });
     await refreshClientPortal(selectedClient.id);
+  };
+
+  const saveSettingsPanel = async () => {
+    setPanelFeedback(null, null);
+    const result = await saveSettings();
+    if (!result.ok) {
+      setPanelFeedback(null, result.error || "Lưu cấu hình thất bại.");
+      return;
+    }
+    setPanelFeedback("Đã lưu cấu hình.");
+  };
+
+  const saveServiceConfigManual = async () => {
+    setPanelFeedback(null, null);
+    const saved = await saveContent(selectedPkgPlatform, serviceContent);
+    setPanelFeedback(saved ? "Đã lưu quản lý dịch vụ." : null, saved ? null : "Lưu quản lý dịch vụ thất bại.");
+  };
+
+  const saveComparisonConfigManual = async () => {
+    setPanelFeedback(null, null);
+    const current = (await getContent(selectedPkgPlatform)) || {};
+    const saved = await saveContent(selectedPkgPlatform, { ...current, comparisonTabs });
+    setPanelFeedback(saved ? "Đã lưu bảng so sánh." : null, saved ? null : "Lưu bảng so sánh thất bại.");
+  };
+
+  const savePageContentManual = async () => {
+    if (selectedPlatform === "home") {
+      await saveSettingsPanel();
+      return;
+    }
+
+    setPanelFeedback(null, null);
+    const saved = await saveContent(selectedPlatform, pageContent);
+    setPanelFeedback(saved ? "Đã lưu nội dung trang con." : null, saved ? null : "Lưu nội dung trang con thất bại.");
+  };
+
+  const saveSelectedClientManual = async (patch: Partial<ClientPortal>) => {
+    if (!selectedClient) return;
+    setPanelFeedback(null, null);
+    const result = await db.clientPortals.update(selectedClient.id.toString(), patch);
+    if (result.error) {
+      setPanelFeedback(null, `Lưu thông tin khách hàng thất bại: ${result.error}`);
+      return;
+    }
+    await refreshClientPortal(selectedClient.id);
+    setPanelFeedback("Đã lưu thông tin khách hàng.");
+  };
+
+  const saveSelectedProjectsManual = async (projects: ClientProject[]) => {
+    if (!selectedClient) return;
+    setPanelFeedback(null, null);
+    const result = await db.clientPortals.update(selectedClient.id.toString(), { weeklyReports: projects as any });
+    if (result.error) {
+      setPanelFeedback(null, `Lưu dự án thất bại: ${result.error}`);
+      return;
+    }
+    await refreshClientPortal(selectedClient.id);
+    setPanelFeedback("Đã lưu dự án.");
   };
 
   const updateSelectedProject = (projectId: string, patch: Partial<ClientProject>) => {
@@ -1109,20 +1174,17 @@ export default function AdminPage() {
       ? await db.news.update(editingBlogId, payload)
       : await db.news.add(payload);
     if (mutationResult.error) {
-      setBlogSaveError(mutationResult.error);
-      alert(`Lưu blog thất bại: ${mutationResult.error}`);
+      setBlogSaveError(`Lưu blog thất bại: ${mutationResult.error}`);
       return;
     }
     const result = await db.news.getAll();
     if (result.error) {
-      setBlogSaveError(result.error);
-      alert(`Blog đã lưu nhưng tải lại danh sách thất bại: ${result.error}`);
+      setBlogSaveError(`Blog đã lưu nhưng tải lại danh sách thất bại: ${result.error}`);
       return;
     }
     setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     setBlogSaveMessage("Đã lưu blog");
     resetBlogForm();
-    alert("Đã lưu blog");
   };
 
   const editBlog = (item: NewsItem) => {
@@ -1331,7 +1393,7 @@ export default function AdminPage() {
                   <option value="home">Trang chủ</option>
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
               </div>
               {selectedPlatform === "home" ? (
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1351,7 +1413,7 @@ export default function AdminPage() {
                       <h3 className="font-bold text-white">Nội dung {selectedPlatform}</h3>
                       <p className="text-sm text-gray-400">Chỉnh sửa tầm nhìn, sứ mệnh, thống kê, quy trình và FAQ của dịch vụ.</p>
                     </div>
-                    <button onClick={savePageContent} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu nội dung trang con</button>
+                    <button onClick={savePageContentManual} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu nội dung trang con</button>
                   </div>
 
                   <div className="grid gap-6 lg:grid-cols-2">
@@ -1472,7 +1534,7 @@ export default function AdminPage() {
                 <select value={selectedPkgPlatform} onChange={e => setSelectedPkgPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={saveServiceConfig} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu quản lý dịch vụ</button>
+                <button onClick={saveServiceConfigManual} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu quản lý dịch vụ</button>
                 <button onClick={addServiceTab} className="rounded-lg bg-white/5 px-4 py-2 text-sm text-white border border-white/10">Thêm dịch vụ</button>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
@@ -1585,7 +1647,7 @@ export default function AdminPage() {
                 <select value={selectedPkgPlatform} onChange={e => setSelectedPkgPlatform(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                   {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={saveComparisonConfig} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu bảng so sánh</button>
+                <button onClick={saveComparisonConfigManual} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu bảng so sánh</button>
                 <button onClick={addComparisonTab} className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white">Thêm bảng</button>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
@@ -1774,7 +1836,7 @@ export default function AdminPage() {
                       <input value={settings.favicon || ""} onChange={e => updateSettings({ favicon: e.target.value })} placeholder="URL favicon..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
                     </div>
                   </div>
-                  <button onClick={() => { alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Lưu Logo & Favicon</button>
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu Logo & Favicon"}</button>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
@@ -1784,7 +1846,7 @@ export default function AdminPage() {
                       <option value="home">Trang chủ</option>
                       {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                     </select>
-                    <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                    <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
                   </div>
                 </div>
               </div>
@@ -1917,7 +1979,7 @@ export default function AdminPage() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white">Tối ưu SEO Page</h3>
-                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
               </div>
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {Object.keys(SEO_DEFAULTS).map(key => (
@@ -2193,7 +2255,7 @@ export default function AdminPage() {
                         <input value={selectedClient.password || ""} onChange={e => setSelectedClient({ ...selectedClient, password: e.target.value })} type="text" placeholder="Mật khẩu mới" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white md:col-span-2" />
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        <button onClick={() => saveSelectedClient({ clientName: selectedClient.clientName, phone: selectedClient.phone, platform: selectedClient.platform, password: selectedClient.password })} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu tài khoản</button>
+                        <button onClick={() => saveSelectedClientManual({ clientName: selectedClient.clientName, phone: selectedClient.phone, platform: selectedClient.platform, password: selectedClient.password })} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu tài khoản</button>
                         <button onClick={async () => { await db.clientPortals.delete(selectedClient.id.toString()); setSelectedClient(null); refreshPortals(); }} className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200">Xóa tài khoản</button>
                       </div>
                     </div>
@@ -2242,7 +2304,7 @@ export default function AdminPage() {
                             />
                           </div>
 
-                          <button onClick={async () => { await saveSelectedProjects(selectedProjects); alert("Đã lưu dự án"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu dự án</button>
+                          <button onClick={() => saveSelectedProjectsManual(selectedProjects)} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu dự án</button>
                         </div>
                       )}
                     </div>
@@ -2277,7 +2339,7 @@ export default function AdminPage() {
                     className="w-full"
                   />
                 </div>
-                <button onClick={() => { alert("Đã lưu!"); }} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white">Lưu cấu hình</button>
+                <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu cấu hình"}</button>
               </div>
             </div>
           )}
@@ -2286,7 +2348,7 @@ export default function AdminPage() {
             <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white">Linh vật công ty</h3>
-                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
               </div>
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -2475,7 +2537,7 @@ export default function AdminPage() {
             <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white">Tối ưu Website</h3>
-                <button onClick={() => { alert("Đã lưu!"); }} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu thay đổi</button>
+                <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
               </div>
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

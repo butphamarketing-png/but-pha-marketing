@@ -90,6 +90,8 @@ export interface AdminContextType {
   settings: SiteSettings;
   saveStatus: "idle" | "saving" | "saved" | "error";
   saveError: string | null;
+  hasUnsavedChanges: boolean;
+  saveSettings: () => Promise<{ ok: boolean; error: string | null }>;
   updateSettings: (newSettings: Partial<SiteSettings>) => void;
   updateColor: (key: string, value: string) => void;
   updatePlatformName: (key: string, value: string) => void;
@@ -356,16 +358,24 @@ function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings)
   return changed;
 }
 
+function sanitizeSettingsForSave(settings: SiteSettings): SiteSettings {
+  return {
+    ...settings,
+    presentationMode: false,
+  };
+}
+
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
+  const disableAutoSave = true;
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoaded, setIsLoaded] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [saveError, setSaveError] = useState<string | null>(null);
-  const persistTimerRef = useRef<number | null>(null);
   const saveStatusTimerRef = useRef<number | null>(null);
-  const lastSavedRef = useRef("");
+  const persistTimerRef = useRef<number | null>(null);
+  const lastSavedRef = useRef<string>(JSON.stringify(sanitizeSettingsForSave(defaultSettings)));
   const lastConfirmedSettingsRef = useRef<SiteSettings>(defaultSettings);
   const channelRef = useRef<BroadcastChannel | null>(null);
 
@@ -413,10 +423,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         if (mounted && res.ok && parsed?.ok) {
           const merged = mergeWithDefaults(parsed.value ?? undefined);
           lastConfirmedSettingsRef.current = merged;
-          lastSavedRef.current = JSON.stringify({
-            ...merged,
-            presentationMode: false,
-          });
           setSettings(merged);
           return;
         }
@@ -439,7 +445,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded || typeof window === "undefined") return;
+    if (disableAutoSave || !isLoaded || typeof window === "undefined") return;
 
     const cleanSettings: SiteSettings = {
       ...settings,
@@ -531,8 +537,86 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     };
   }, [isLoaded, settings]);
 
+  const hasUnsavedChanges =
+    JSON.stringify(sanitizeSettingsForSave(settings)) !==
+    JSON.stringify(sanitizeSettingsForSave(lastConfirmedSettingsRef.current));
+
+  const saveSettings = async () => {
+    if (!isLoaded) {
+      const error = "Cấu hình chưa tải xong. Vui lòng thử lại sau vài giây.";
+      setSaveStatus("error");
+      setSaveError(error);
+      return { ok: false, error };
+    }
+
+    const cleanSettings = sanitizeSettingsForSave(settings);
+    const payload = JSON.stringify(cleanSettings);
+    const changedFields = getChangedTopLevelFields(lastConfirmedSettingsRef.current, cleanSettings);
+
+    if (Object.keys(changedFields).length === 0) {
+      lastSavedRef.current = payload;
+      setSaveStatus("idle");
+      setSaveError(null);
+      return { ok: true, error: null };
+    }
+
+    try {
+      setSaveStatus("saving");
+      setSaveError(null);
+
+      let lastError = "Không thể lưu thay đổi. Vui lòng thử lại.";
+
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const res = await fetch("/api/settings", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: SETTINGS_KEY, value: changedFields }),
+        });
+
+        let parsed: { ok?: boolean; error?: string } | null = null;
+        try {
+          parsed = (await res.json()) as { ok?: boolean; error?: string };
+        } catch {
+          parsed = null;
+        }
+
+        if (res.ok && parsed?.ok) {
+          lastSavedRef.current = payload;
+          lastConfirmedSettingsRef.current = cleanSettings;
+          broadcastSettings(cleanSettings);
+          setSaveStatus("saved");
+          setSaveError(null);
+          if (saveStatusTimerRef.current) window.clearTimeout(saveStatusTimerRef.current);
+          saveStatusTimerRef.current = window.setTimeout(() => {
+            setSaveStatus("idle");
+          }, 1600);
+          return { ok: true, error: null };
+        }
+
+        lastError = parsed?.error || `Lưu thất bại (${res.status})`;
+        if (attempt < 2) {
+          await new Promise((resolve) => window.setTimeout(resolve, 800));
+        }
+      }
+
+      setSaveStatus("error");
+      setSaveError(lastError);
+      return { ok: false, error: lastError };
+    } catch (error) {
+      console.error("[AdminContext] Failed to persist settings", error);
+      const message = getErrorMessage(error);
+      setSaveStatus("error");
+      setSaveError(message);
+      return { ok: false, error: message };
+    }
+  };
+
   const setAndBroadcast = (updater: (prev: SiteSettings) => SiteSettings) => {
     setSettings((prev) => {
+      setSaveError(null);
+      if (saveStatus !== "saving") {
+        setSaveStatus("idle");
+      }
       return updater(prev);
     });
   };
@@ -681,6 +765,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       settings,
       saveStatus,
       saveError,
+      hasUnsavedChanges,
+      saveSettings,
       updateSettings,
       updateColor,
       updatePlatformName,
@@ -692,7 +778,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       removeCase,
       updateMediaVideo,
     }),
-    [settings, saveStatus, saveError],
+    [settings, saveStatus, saveError, hasUnsavedChanges],
   );
 
   return (
