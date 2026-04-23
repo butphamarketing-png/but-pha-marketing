@@ -48,12 +48,13 @@ import {
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { SEOOverview } from "@/components/admin/SEOOverview";
 import { StudioSettings } from "@/components/admin/StudioSettings";
-import { useAdmin } from "@/lib/AdminContext";
+import { mergeNewsContentMeta } from "@/lib/news-content-meta";
 import { buildExcerpt, buildMetaDescription, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { db, type NewsItem } from "@/lib/useData";
 
 type BlogFormState = {
   title: string;
+  metaTitle: string;
   slug: string;
   description: string;
   metaDescription: string;
@@ -284,8 +285,6 @@ function PluginManager() {
 }
 
 export function NewsStudioPage() {
-  const { settings, updateSettings } = useAdmin();
-  const [period, setPeriod] = useState("7");
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
@@ -293,6 +292,7 @@ export function NewsStudioPage() {
   const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
   const [blogForm, setBlogForm] = useState<BlogFormState>({
     title: "",
+    metaTitle: "",
     slug: "",
     description: "",
     metaDescription: "",
@@ -343,6 +343,7 @@ export function NewsStudioPage() {
 
       return {
         ...prev,
+        metaTitle: prev.metaTitle || prev.title,
         keywordsMain: nextKeywordMain,
         keywordsSecondary: nextKeywordSecondary,
         slug: nextSlug,
@@ -367,6 +368,7 @@ export function NewsStudioPage() {
     setEditingBlogId(null);
     setBlogForm({
       title: "",
+      metaTitle: "",
       slug: "",
       description: "",
       metaDescription: "",
@@ -384,6 +386,7 @@ export function NewsStudioPage() {
     setEditingBlogId(item.id);
     setBlogForm({
       title: item.title || "",
+      metaTitle: item.metaTitle || item.title || "",
       slug: item.slug || "",
       description: item.description || "",
       metaDescription: item.metaDescription || "",
@@ -454,6 +457,7 @@ export function NewsStudioPage() {
 
     setBlogForm((prev) => ({
       ...prev,
+      metaTitle: prev.metaTitle || title,
       slug: prev.slug || slug,
       keywordsMain: prev.keywordsMain || mainKeyword,
       keywordsSecondary: prev.keywordsSecondary || secondaryKeyword,
@@ -476,7 +480,7 @@ export function NewsStudioPage() {
 
     const payload = {
       title: blogForm.title,
-      content: blogForm.content,
+      content: mergeNewsContentMeta(blogForm.content, { metaTitle: blogForm.metaTitle }),
       category: "blog",
       published: blogForm.published,
       description: blogForm.description,
@@ -505,17 +509,6 @@ export function NewsStudioPage() {
     setBlogSaveError(null);
     setBlogSaveMessage(null);
     const result = await db.news.update(item.id, { published: !item.published });
-    if (result.error) {
-      setBlogSaveError(result.error);
-      return;
-    }
-    await refreshBlogs();
-  }
-
-  async function handleToggleBlogHot(item: NewsItem) {
-    setBlogSaveError(null);
-    setBlogSaveMessage(null);
-    const result = await db.news.update(item.id, { hot: !item.hot });
     if (result.error) {
       setBlogSaveError(result.error);
       return;
@@ -801,10 +794,7 @@ export function NewsStudioPage() {
               onEdit={editBlog}
               onGenerate={generateBlogDraftByAI}
               onTogglePublished={handleToggleBlogPublished}
-              onToggleHot={handleToggleBlogHot}
               onDelete={handleDeleteBlog}
-              settings={settings}
-              onUpdateIntegrations={(next) => updateSettings({ seoIntegrations: next })}
             />
           )}
         </main>

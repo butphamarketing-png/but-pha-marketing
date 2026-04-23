@@ -13,6 +13,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { uploadMediaFile } from "@/lib/client-media-upload";
+import { slugify } from "@/lib/seo-studio-draft";
 
 type OutlineItem = {
   level?: number;
@@ -36,6 +37,7 @@ type SavedImage = {
   altText?: string;
   prompt?: string;
   sectionLabel?: string;
+  sectionId?: string;
 };
 
 type MediaLibraryItem = {
@@ -52,6 +54,10 @@ function getSectionSummary(item: OutlineItem) {
   return item.summary || "";
 }
 
+function getSectionId(item: OutlineItem) {
+  return slugify(getSectionLabel(item));
+}
+
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -62,21 +68,35 @@ function buildFigureMarkup(image: SavedImage) {
   return `<figure><img src="${image.url}" alt="${alt}" /><figcaption>${caption}</figcaption></figure>`;
 }
 
-function insertImageBySection(content: string, image: SavedImage) {
-  const figure = buildFigureMarkup(image);
-  if (!content?.trim()) return figure;
-  if (content.includes(`src="${image.url}"`)) return content;
+function ensureSectionAnchors(content: string, sections: OutlineItem[]) {
+  let nextContent = content || "";
+  sections.forEach((section) => {
+    const label = getSectionLabel(section);
+    const sectionId = getSectionId(section);
+    const escaped = escapeRegExp(label);
+    const withIdRegex = new RegExp(`<h[23][^>]*id=["']${escapeRegExp(sectionId)}["'][^>]*>\\s*${escaped}\\s*<\\/h[23]>`, "i");
+    if (withIdRegex.test(nextContent)) return;
+    const headingRegex = new RegExp(`(<h([23])([^>]*)>\\s*${escaped}\\s*<\\/h\\2>)`, "i");
+    nextContent = nextContent.replace(headingRegex, `<h$2 id="${sectionId}"$3>${label}</h$2>`);
+  });
+  return nextContent;
+}
 
-  const sectionLabel = (image.sectionLabel || "").trim();
-  if (sectionLabel) {
-    const escaped = escapeRegExp(sectionLabel);
-    const headingRegex = new RegExp(`(<h[23][^>]*>\\s*${escaped}\\s*<\\/h[23]>)`, "i");
-    if (headingRegex.test(content)) {
-      return content.replace(headingRegex, `$1${figure}`);
+function insertImageBySection(content: string, image: SavedImage, sections: OutlineItem[]) {
+  const anchoredContent = ensureSectionAnchors(content, sections);
+  const figure = buildFigureMarkup(image);
+  if (!anchoredContent?.trim()) return figure;
+  if (anchoredContent.includes(`src="${image.url}"`)) return anchoredContent;
+
+  const sectionId = (image.sectionId || "").trim();
+  if (sectionId) {
+    const headingRegex = new RegExp(`(<h[23][^>]*id=["']${escapeRegExp(sectionId)}["'][^>]*>.*?<\\/h[23]>)`, "i");
+    if (headingRegex.test(anchoredContent)) {
+      return anchoredContent.replace(headingRegex, `$1${figure}`);
     }
   }
 
-  return `${content}${figure}`;
+  return `${anchoredContent}${figure}`;
 }
 
 export function Step4Images({ data, setData, onNext, onPrev }: any) {
@@ -211,13 +231,14 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         altText: variant.altText,
         prompt,
         sectionLabel: getSectionLabel(selectedSection),
+        sectionId: getSectionId(selectedSection),
       };
 
       setData({
         ...data,
         images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
         featuredImageUrl: savedImages.length === 0 ? nextImage.url : data.featuredImageUrl || nextImage.url,
-        content: insertImageBySection(data.content || "", nextImage),
+        content: insertImageBySection(data.content || "", nextImage, outlineSections),
       });
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Khong the luu anh vao media.");
@@ -248,6 +269,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
             name: result.item?.name || file.name,
             altText: data.title || file.name,
             sectionLabel: getSectionLabel(selectedSection),
+            sectionId: getSectionId(selectedSection),
           } satisfies SavedImage;
         }),
       );
@@ -256,7 +278,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         ...data,
         images: [...savedImages, ...uploaded.filter((item) => !savedImages.some((saved) => saved.url === item.url))],
         featuredImageUrl: savedImages.length === 0 ? uploaded[0]?.url || "" : data.featuredImageUrl || uploaded[0]?.url || "",
-        content: uploaded.reduce((currentContent, image) => insertImageBySection(currentContent, image), data.content || ""),
+        content: uploaded.reduce((currentContent, image) => insertImageBySection(currentContent, image, outlineSections), data.content || ""),
       });
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Khong the tai anh len luc nay.");
@@ -280,20 +302,21 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       name: item.name,
       altText: data.title || item.name,
       sectionLabel: getSectionLabel(selectedSection),
+      sectionId: getSectionId(selectedSection),
     };
 
     setData({
       ...data,
       images: [...savedImages.filter((saved) => saved.url !== item.url), nextImage],
       featuredImageUrl: savedImages.length === 0 ? item.url : data.featuredImageUrl || item.url,
-      content: insertImageBySection(data.content || "", nextImage),
+      content: insertImageBySection(data.content || "", nextImage, outlineSections),
     });
   }
 
   function insertIntoContent(image: SavedImage) {
     setData({
       ...data,
-      content: insertImageBySection(data.content || "", image),
+      content: insertImageBySection(data.content || "", image, outlineSections),
     });
   }
 

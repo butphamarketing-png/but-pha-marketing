@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { mergeNewsContentMeta } from "@/lib/news-content-meta";
 import { db } from "@/lib/useData";
 import { buildExcerpt, buildMetaDescription, buildMetaTitle, deriveKeywordCandidates, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
 import { Step1Title } from "@/components/studio/Step1Title";
@@ -85,7 +86,9 @@ const INITIAL_DATA = {
   savedNewsId: "",
 };
 
-const LOCAL_DRAFT_KEY = "seo-studio-local-draft-v1";
+function getLocalDraftKey(newsId?: string, slug?: string) {
+  return `seo-studio-local-draft:${newsId || slug || "new"}`;
+}
 
 function formatTime(value: string) {
   const date = new Date(value);
@@ -113,6 +116,7 @@ export default function CreateArticlePage() {
   const [actionError, setActionError] = useState("");
   const [actionMessage, setActionMessage] = useState("");
   const [articleData, setArticleData] = useState(INITIAL_DATA);
+  const localDraftKey = getLocalDraftKey(newsId || articleData.savedNewsId, articleData.slug);
 
   useEffect(() => {
     let cancelled = false;
@@ -168,7 +172,7 @@ export default function CreateArticlePage() {
               title: item.title || "",
               slug: item.slug || "",
               featuredImageUrl: item.imageUrl || "",
-              metaTitle: item.title || "",
+              metaTitle: item.metaTitle || item.title || "",
               metaDescription: item.metaDescription || "",
               description: item.description || "",
               content: item.content || "",
@@ -194,7 +198,7 @@ export default function CreateArticlePage() {
         return;
       }
 
-      const savedDraft = typeof window !== "undefined" ? window.localStorage.getItem(LOCAL_DRAFT_KEY) : null;
+      const savedDraft = typeof window !== "undefined" ? window.localStorage.getItem(getLocalDraftKey(newsId, "")) || window.localStorage.getItem(getLocalDraftKey("", "new")) : null;
       if (!savedDraft) return;
 
       try {
@@ -220,11 +224,11 @@ export default function CreateArticlePage() {
     if (!articleData.title && !articleData.content && !articleData.outline.length) return;
 
     const handle = window.setTimeout(() => {
-      window.localStorage.setItem(LOCAL_DRAFT_KEY, JSON.stringify(articleData));
+      window.localStorage.setItem(localDraftKey, JSON.stringify(articleData));
     }, 800);
 
     return () => window.clearTimeout(handle);
-  }, [articleData]);
+  }, [articleData, localDraftKey]);
 
   useEffect(() => {
     if (!articleData.title.trim()) return;
@@ -332,7 +336,7 @@ export default function CreateArticlePage() {
               const heading = item?.text || item?.heading || "";
               if (!heading) return "";
               const tag = item?.level === 3 ? "h3" : "h2";
-              return `<${tag}>${heading}</${tag}><p>${item?.summary || `Noi dung nhap cho phan ${heading}.`}</p>`;
+              return `<${tag} id="${slugify(heading)}">${heading}</${tag}><p>${item?.summary || `Noi dung nhap cho phan ${heading}.`}</p>`;
             })
             .filter(Boolean)
             .join("")
@@ -349,7 +353,7 @@ export default function CreateArticlePage() {
 
     const payload = {
       title: articleData.title.trim(),
-      content: derivedContent,
+      content: mergeNewsContentMeta(derivedContent, { metaTitle: articleData.metaTitle }),
       category: "blog",
       published: mode === "publish" ? true : false,
       description: articleData.description || buildExcerpt({ content: articleData.content, maxLength: 170 }),
@@ -399,7 +403,7 @@ export default function CreateArticlePage() {
       await refreshHistory().catch(() => undefined);
       if (mode === "publish") {
         if (typeof window !== "undefined") {
-          window.localStorage.removeItem(LOCAL_DRAFT_KEY);
+          window.localStorage.removeItem(localDraftKey);
         }
         router.push("/admin/news");
       }
@@ -417,7 +421,7 @@ export default function CreateArticlePage() {
     setActionError("");
     setActionMessage("");
     if (typeof window !== "undefined") {
-      window.localStorage.removeItem(LOCAL_DRAFT_KEY);
+      window.localStorage.removeItem(localDraftKey);
     }
   };
 

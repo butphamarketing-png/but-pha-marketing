@@ -15,11 +15,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
   return {
-    title: blog.title,
+    title: blog.metaTitle || blog.title,
     description: blog.metaDescription || blog.description,
     alternates: { canonical },
     openGraph: {
-      title: blog.title,
+      title: blog.metaTitle || blog.title,
       description: blog.metaDescription || blog.description,
       url: canonical,
       type: "article",
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     },
     twitter: {
       card: "summary_large_image",
-      title: blog.title,
+      title: blog.metaTitle || blog.title,
       description: blog.metaDescription || blog.description,
       images: [image],
     },

@@ -1,3 +1,4 @@
+import { parseNewsContentMeta } from "./news-content-meta";
 import { useRealtime } from "./useRealtime";
 
 export interface ApiResult<T> {
@@ -38,6 +39,7 @@ export interface NewsItem {
   category: string;
   published: boolean;
   timestamp: number;
+  metaTitle?: string;
   description?: string;
   imageUrl?: string;
   slug?: string;
@@ -212,13 +214,15 @@ function mapLead(value: unknown): Lead {
 
 function mapNewsItem(value: unknown): NewsItem {
   const item = isRecord(value) ? value : {};
+  const parsedContent = parseNewsContentMeta(toStringValue(item.content));
   return {
     id: toStringValue(item.id),
     title: toStringValue(item.title),
-    content: toStringValue(item.content),
+    content: parsedContent.content,
     category: toStringValue(item.category, "blog"),
     published: typeof item.published === "boolean" ? item.published : true,
     timestamp: toNumber(item.timestamp),
+    metaTitle: typeof parsedContent.meta.metaTitle === "string" ? parsedContent.meta.metaTitle : undefined,
     description: toOptionalString(item.description),
     imageUrl: toOptionalString(item.imageUrl) ?? toOptionalString(item.image_url),
     slug: toOptionalString(item.slug),

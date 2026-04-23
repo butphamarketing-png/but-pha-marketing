@@ -1,9 +1,11 @@
 import { createServerClient } from "@/lib/supabase";
+import { parseNewsContentMeta } from "@/lib/news-content-meta";
 
 export interface ServerBlogItem {
   id: string;
   title: string;
   content: string;
+  metaTitle?: string;
   description?: string;
   imageUrl?: string;
   slug?: string;
@@ -46,10 +48,12 @@ function slugify(text: string) {
 }
 
 function normalize(row: RawNewsRow): ServerBlogItem {
+  const parsedContent = parseNewsContentMeta(row.content);
   const item: ServerBlogItem = {
     id: row.id,
     title: row.title,
-    content: row.content,
+    content: parsedContent.content,
+    metaTitle: parsedContent.meta.metaTitle || "",
     description: row.description || "",
     imageUrl: row.image_url || "",
     slug: row.slug || slugify(row.title) || row.id,
