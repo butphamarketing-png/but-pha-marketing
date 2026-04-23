@@ -6,8 +6,8 @@ export const runtime = "nodejs";
 type OutlineItem = {
   level: number;
   text: string;
-  summary?: string;
-  keyPoints?: string[];
+  summary: string;
+  keyPoints: string[];
 };
 
 function normalizeTitle(value: unknown) {
