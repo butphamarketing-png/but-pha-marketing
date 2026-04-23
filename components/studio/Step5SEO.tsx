@@ -5,6 +5,7 @@ import { Target, ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Sparkles, Ref
 
 export function Step5SEO({ data, setData, onNext, onPrev }: any) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     handleAnalyze();
@@ -12,15 +13,22 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
 
   const handleAnalyze = async () => {
     setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/seo/analyze", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: data.content, title: data.title }),
       });
+      if (!res.ok) {
+        const result = await res.json().catch(() => null);
+        throw new Error(result?.error || "Không thể phân tích SEO lúc này.");
+      }
       const result = await res.json();
       setData({ ...data, seoScore: result.score, seoIssues: result.issues });
     } catch (err) {
       console.error(err);
+      setError(err instanceof Error ? err.message : "Không thể phân tích SEO lúc này.");
     } finally {
       setLoading(false);
     }
@@ -35,6 +43,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
             Tối ưu hóa SEO Checklist
           </h2>
           <p className="text-sm text-slate-500 mt-1">Hệ thống AI phân tích nội dung và đưa ra các đề xuất cải thiện điểm SEO.</p>
+          {error ? <p className="mt-2 text-sm font-medium text-rose-600">{error}</p> : null}
         </div>
         <div className="flex items-center gap-3">
           <button onClick={onPrev} className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors">

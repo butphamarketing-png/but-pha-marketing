@@ -5,21 +5,29 @@ import { Sparkles, ArrowRight } from "lucide-react";
 
 export function Step1Title({ data, setData, onNext }: any) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleGenerateOutline = async () => {
     if (!data.title.trim()) return;
     setLoading(true);
+    setError("");
     
     try {
       const res = await fetch("/api/ai/outline", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: data.title }),
       });
+      if (!res.ok) {
+        const result = await res.json().catch(() => null);
+        throw new Error(result?.error || "Không thể tạo dàn ý AI.");
+      }
       const result = await res.json();
       setData({ ...data, outline: result.structure, keywords: result.keywords });
       onNext();
     } catch (err) {
       console.error(err);
+      setError(err instanceof Error ? err.message : "Không thể tạo dàn ý AI.");
     } finally {
       setLoading(false);
     }
@@ -33,6 +41,7 @@ export function Step1Title({ data, setData, onNext }: any) {
         </div>
         <h2 className="text-3xl font-black tracking-tight text-slate-900">Bắt đầu bài viết với AI</h2>
         <p className="text-slate-500">Chỉ cần nhập tiêu đề, AI sẽ phân tích keyword, search intent và đề xuất dàn ý bài viết tối ưu SEO.</p>
+        {error ? <p className="text-center text-sm font-medium text-rose-600">{error}</p> : null}
       </div>
 
       <div className="space-y-6 bg-slate-50 p-8 rounded-[32px] border border-slate-100">

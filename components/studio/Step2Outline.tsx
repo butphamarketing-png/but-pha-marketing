@@ -5,6 +5,7 @@ import { ListOrdered, ArrowLeft, ArrowRight, Plus, Trash2, GripVertical, Sparkle
 
 export function Step2Outline({ data, setData, onNext, onPrev }: any) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleEditOutline = (index: number, text: string) => {
     const newOutline = [...data.outline];
@@ -26,16 +27,27 @@ export function Step2Outline({ data, setData, onNext, onPrev }: any) {
 
   const handleGenerateArticle = async () => {
     setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/ai/generate-article", {
         method: "POST",
-        body: JSON.stringify({ outline: data.outline }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.title,
+          outline: data.outline,
+          keywords: data.keywords,
+        }),
       });
+      if (!res.ok) {
+        const result = await res.json().catch(() => null);
+        throw new Error(result?.error || "Không thể viết bài bằng AI.");
+      }
       const result = await res.json();
       setData({ ...data, content: result.content });
       onNext();
     } catch (err) {
       console.error(err);
+      setError(err instanceof Error ? err.message : "Không thể viết bài bằng AI.");
     } finally {
       setLoading(false);
     }
@@ -65,6 +77,7 @@ export function Step2Outline({ data, setData, onNext, onPrev }: any) {
             Viết bài chi tiết
           </button>
         </div>
+        {error ? <p className="text-center text-sm font-medium text-rose-600">{error}</p> : null}
       </div>
 
       <div className="space-y-4 max-w-3xl mx-auto py-4">
