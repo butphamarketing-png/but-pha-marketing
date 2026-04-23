@@ -688,32 +688,6 @@ export function NewsStudioPage() {
             })}
           </nav>
 
-          <div className="mx-4 mb-4 rounded-[24px] border border-white/10 bg-white/5 p-5">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Gói của bạn</p>
-              <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-bold text-indigo-400">PRO</span>
-            </div>
-            
-            <div className="mt-4 space-y-4">
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="text-slate-400">Bài viết</span>
-                  <span className="text-white font-medium">{analytics.totalPosts} / 300</span>
-                </div>
-                <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
-                  <div 
-                    className="h-full bg-indigo-500 rounded-full transition-all duration-500" 
-                    style={{ width: `${Math.min(100, (analytics.totalPosts / 300) * 100)}%` }}
-                  />
-                </div>
-              </div>
-
-              <button className="w-full rounded-xl bg-white/5 py-2 text-xs font-bold text-white transition hover:bg-white/10">
-                Nâng cấp gói
-              </button>
-            </div>
-          </div>
-
           <div className="mx-4 mb-4 mt-auto border-t border-white/10 pt-4">
             <div className="flex items-center gap-3 px-2">
               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white font-bold">
