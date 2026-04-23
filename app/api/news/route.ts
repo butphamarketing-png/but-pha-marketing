@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
@@ -39,8 +40,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields: title, content" }, { status: 400 });
     }
 
-    const id = slug || crypto.randomUUID();
     const supabase = createServerClient();
+    const { data: existingRows, error: existingError } = await supabase.from("news").select("id,slug,title");
+
+    if (existingError) {
+      console.error("POST /api/news preload slug error", existingError);
+      return NextResponse.json({ error: `Database error: ${existingError.message}` }, { status: 500 });
+    }
+
+    const uniqueSlug = ensureUniqueNewsSlug(existingRows || [], { slug, title });
+    const id = uniqueSlug || crypto.randomUUID();
     const { data, error } = await supabase
       .from("news")
       .insert({
@@ -51,7 +60,7 @@ export async function POST(request: Request) {
         published: published !== false,
         description: description || "",
         image_url: imageUrl || "",
-        slug: slug || "",
+        slug: uniqueSlug,
         hot: !!hot,
         meta_description: metaDescription || "",
         keywords_main: keywordsMain || "",
@@ -97,6 +106,28 @@ export async function PATCH(request: Request) {
     normalized["updated_at"] = new Date().toISOString();
 
     const supabase = createServerClient();
+    const shouldResolveSlug = typeof normalized["slug"] === "string" || typeof normalized["title"] === "string";
+
+    if (shouldResolveSlug) {
+      const { data: currentRow, error: currentError } = await supabase.from("news").select("id,title,slug").eq("id", id).maybeSingle();
+      if (currentError) {
+        console.error("PATCH /api/news current slug error", currentError);
+        return NextResponse.json({ error: `Database error: ${currentError.message}` }, { status: 500 });
+      }
+
+      const { data: existingRows, error: existingError } = await supabase.from("news").select("id,slug,title");
+      if (existingError) {
+        console.error("PATCH /api/news preload slug error", existingError);
+        return NextResponse.json({ error: `Database error: ${existingError.message}` }, { status: 500 });
+      }
+
+      normalized["slug"] = ensureUniqueNewsSlug(existingRows || [], {
+        slug: typeof normalized["slug"] === "string" ? normalized["slug"] : (currentRow?.slug ?? ""),
+        title: typeof normalized["title"] === "string" ? normalized["title"] : (currentRow?.title ?? ""),
+        excludeId: id,
+      });
+    }
+
     const { error } = await supabase
       .from("news")
       .update(normalized)

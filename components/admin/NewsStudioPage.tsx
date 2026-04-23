@@ -49,6 +49,7 @@ import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { SEOOverview } from "@/components/admin/SEOOverview";
 import { StudioSettings } from "@/components/admin/StudioSettings";
 import { useAdmin } from "@/lib/AdminContext";
+import { buildExcerpt, buildMetaDescription, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { db, type NewsItem } from "@/lib/useData";
 
 type BlogFormState = {
@@ -305,12 +306,51 @@ export function NewsStudioPage() {
   });
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<"all" | "published" | "draft" | "needs-update">("all");
-  const [activeTab, setActiveTab] = useState<"dashboard" | "news" | "plugins" | "settings">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "news" | "plugins" | "settings">("news");
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     void refreshBlogs();
   }, []);
+
+  useEffect(() => {
+    if (!blogForm.title.trim()) return;
+
+    setBlogForm((prev) => {
+      const keywordCandidates = deriveKeywordCandidates(prev.title);
+      const nextKeywordMain = prev.keywordsMain || keywordCandidates[0] || prev.title;
+      const nextKeywordSecondary = prev.keywordsSecondary || keywordCandidates.slice(1).join(", ");
+      const nextSlug = prev.slug || slugify(prev.title);
+      const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
+      const nextMetaDescription =
+        prev.metaDescription ||
+        buildMetaDescription({
+          title: prev.title,
+          keyword: nextKeywordMain,
+          description: nextDescription,
+          content: prev.content,
+        });
+
+      if (
+        nextKeywordMain === prev.keywordsMain &&
+        nextKeywordSecondary === prev.keywordsSecondary &&
+        nextSlug === prev.slug &&
+        nextDescription === prev.description &&
+        nextMetaDescription === prev.metaDescription
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        keywordsMain: nextKeywordMain,
+        keywordsSecondary: nextKeywordSecondary,
+        slug: nextSlug,
+        description: nextDescription,
+        metaDescription: nextMetaDescription,
+      };
+    });
+  }, [blogForm.title, blogForm.content]);
 
   async function refreshBlogs() {
     setLoading(true);
@@ -381,13 +421,7 @@ export function NewsStudioPage() {
     const secondaryKeyword =
       blogForm.keywordsSecondary.trim() ||
       [readableKeywords.slice(0, 2).join(" "), "chiến lược tăng trưởng", "marketing thực chiến"].filter(Boolean).join(", ");
-    const slug = title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-");
+    const slug = slugify(title);
     const generatedImageUrl =
       blogForm.imageUrl.trim() ||
       `https://placehold.co/1600x900/12081f/f8fafc/png?text=${encodeURIComponent(mainKeyword)}`;
@@ -645,7 +679,7 @@ export function NewsStudioPage() {
 
   return (
     <div className="min-h-screen bg-[#f3f6fb] text-slate-900">
-      <div className="mx-auto flex max-w-[1600px] gap-6 px-4 py-6 lg:px-6">
+      <div className="mx-auto flex max-w-[1600px] gap-4 px-3 py-4 sm:px-4 lg:gap-6 lg:px-6 lg:py-6">
         <aside className="sticky top-6 hidden h-[calc(100vh-3rem)] w-[270px] shrink-0 overflow-hidden rounded-[28px] bg-[#111c30] text-white shadow-[0_24px_80px_rgba(15,23,42,0.25)] lg:flex lg:flex-col">
           <div className="flex items-center gap-3 border-b border-white/10 px-6 py-6">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-500 text-white">
@@ -704,7 +738,55 @@ export function NewsStudioPage() {
           </div>
         </aside>
 
-        <main className="min-w-0 flex-1 space-y-6">
+        <main className="min-w-0 flex-1 space-y-4 lg:space-y-6">
+          <div className="rounded-[24px] border border-slate-200 bg-white p-3 shadow-sm lg:hidden">
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Admin News</p>
+                <h2 className="text-lg font-black text-slate-900">Quan ly bai viet</h2>
+              </div>
+              <Link
+                href="/studio/create"
+                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-bold text-white"
+              >
+                <Sparkles size={14} />
+                Tao bai
+              </Link>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {sidebarItems.map((item) => {
+                if (item.href && item.href.startsWith("/")) {
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className={`inline-flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold ${
+                        item.id === "news" ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      <item.icon size={14} />
+                      {item.label}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => setActiveTab(item.id as any)}
+                    className={`inline-flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold transition ${
+                      activeTab === item.id ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
+                    <item.icon size={14} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {activeTab === "plugins" && <PluginManager />}
           {activeTab === "settings" && <StudioSettings />}
           {activeTab === "dashboard" && <SEOOverview />}

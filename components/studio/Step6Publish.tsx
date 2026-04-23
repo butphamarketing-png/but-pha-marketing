@@ -220,6 +220,9 @@ export function Step6Publish({
                 onChange={(event) => setData({ ...data, slug: event.target.value })}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white"
               />
+              <p className="text-[11px] text-slate-400">
+                Link bai viet se la: <span className="font-bold text-slate-600">/blog/{data.slug || "tu-dong-theo-tieu-de"}</span>. Neu trung, he thong tu them hau to `-2`, `-3`...
+              </p>
             </div>
 
             <div className="space-y-2">

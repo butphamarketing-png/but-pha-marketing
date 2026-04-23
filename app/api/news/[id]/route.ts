@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { createServerClient } from "@/lib/supabase";
 
 export async function GET(
@@ -61,6 +62,28 @@ export async function PATCH(
     normalized["updated_at"] = new Date().toISOString();
 
     const supabase = createServerClient();
+    const shouldResolveSlug = typeof normalized["slug"] === "string" || typeof normalized["title"] === "string";
+
+    if (shouldResolveSlug) {
+      const { data: currentRow, error: currentError } = await supabase.from("news").select("id,title,slug").eq("id", id).maybeSingle();
+      if (currentError) {
+        console.error("PATCH /api/news/[id] current slug error", currentError);
+        return NextResponse.json({ error: `Database error: ${currentError.message}` }, { status: 500 });
+      }
+
+      const { data: existingRows, error: existingError } = await supabase.from("news").select("id,slug,title");
+      if (existingError) {
+        console.error("PATCH /api/news/[id] preload slug error", existingError);
+        return NextResponse.json({ error: `Database error: ${existingError.message}` }, { status: 500 });
+      }
+
+      normalized["slug"] = ensureUniqueNewsSlug(existingRows || [], {
+        slug: typeof normalized["slug"] === "string" ? normalized["slug"] : (currentRow?.slug ?? ""),
+        title: typeof normalized["title"] === "string" ? normalized["title"] : (currentRow?.title ?? ""),
+        excludeId: id,
+      });
+    }
+
     const { error } = await supabase
       .from("news")
       .update(normalized)

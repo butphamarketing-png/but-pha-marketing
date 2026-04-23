@@ -38,6 +38,37 @@ export function slugify(text: string) {
     .replace(/-+/g, "-");
 }
 
+export function deriveKeywordCandidates(title: string) {
+  const cleaned = (title || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned) return [];
+
+  const words = cleaned
+    .split(" ")
+    .map((item) => item.trim())
+    .filter((item) => item.length >= 2);
+
+  const uniqueWords = words.filter((word, index) => words.indexOf(word) === index);
+  const mainKeyword = uniqueWords.slice(0, Math.min(4, uniqueWords.length)).join(" ").trim();
+  const related = [
+    mainKeyword,
+    uniqueWords.slice(0, 2).join(" ").trim(),
+    `${mainKeyword} chuyen nghiep`.trim(),
+    `${mainKeyword} hieu qua`.trim(),
+  ]
+    .map((item) => item.replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .filter((item, index, arr) => arr.indexOf(item) === index);
+
+  return related;
+}
+
 export function buildExcerpt(input: { description?: string; content?: string; maxLength?: number }) {
   const maxLength = input.maxLength ?? 170;
   const source = (input.description || "").trim() || stripHtml(input.content || "");

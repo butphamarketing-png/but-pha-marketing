@@ -52,6 +52,33 @@ function getSectionSummary(item: OutlineItem) {
   return item.summary || "";
 }
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildFigureMarkup(image: SavedImage) {
+  const alt = image.altText || image.name || image.sectionLabel || "Hinh minh hoa";
+  const caption = image.sectionLabel || image.name || alt;
+  return `<figure><img src="${image.url}" alt="${alt}" /><figcaption>${caption}</figcaption></figure>`;
+}
+
+function insertImageBySection(content: string, image: SavedImage) {
+  const figure = buildFigureMarkup(image);
+  if (!content?.trim()) return figure;
+  if (content.includes(`src="${image.url}"`)) return content;
+
+  const sectionLabel = (image.sectionLabel || "").trim();
+  if (sectionLabel) {
+    const escaped = escapeRegExp(sectionLabel);
+    const headingRegex = new RegExp(`(<h[23][^>]*>\\s*${escaped}\\s*<\\/h[23]>)`, "i");
+    if (headingRegex.test(content)) {
+      return content.replace(headingRegex, `$1${figure}`);
+    }
+  }
+
+  return `${content}${figure}`;
+}
+
 export function Step4Images({ data, setData, onNext, onPrev }: any) {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const outlineSections = useMemo<OutlineItem[]>(() => {
@@ -189,7 +216,8 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       setData({
         ...data,
         images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
-        featuredImageUrl: data.featuredImageUrl || nextImage.url,
+        featuredImageUrl: savedImages.length === 0 ? nextImage.url : data.featuredImageUrl || nextImage.url,
+        content: insertImageBySection(data.content || "", nextImage),
       });
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Khong the luu anh vao media.");
@@ -227,7 +255,8 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       setData({
         ...data,
         images: [...savedImages, ...uploaded.filter((item) => !savedImages.some((saved) => saved.url === item.url))],
-        featuredImageUrl: data.featuredImageUrl || uploaded[0]?.url || "",
+        featuredImageUrl: savedImages.length === 0 ? uploaded[0]?.url || "" : data.featuredImageUrl || uploaded[0]?.url || "",
+        content: uploaded.reduce((currentContent, image) => insertImageBySection(currentContent, image), data.content || ""),
       });
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Khong the tai anh len luc nay.");
@@ -256,15 +285,15 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     setData({
       ...data,
       images: [...savedImages.filter((saved) => saved.url !== item.url), nextImage],
-      featuredImageUrl: data.featuredImageUrl || item.url,
+      featuredImageUrl: savedImages.length === 0 ? item.url : data.featuredImageUrl || item.url,
+      content: insertImageBySection(data.content || "", nextImage),
     });
   }
 
   function insertIntoContent(image: SavedImage) {
-    const figure = `<figure><img src="${image.url}" alt="${image.altText || image.name}" /><figcaption>${image.sectionLabel || image.name}</figcaption></figure>`;
     setData({
       ...data,
-      content: `${data.content || ""}${figure}`,
+      content: insertImageBySection(data.content || "", image),
     });
   }
 

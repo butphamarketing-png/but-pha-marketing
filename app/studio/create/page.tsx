@@ -19,7 +19,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/lib/useData";
-import { buildExcerpt, buildMetaDescription, buildMetaTitle, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
+import { buildExcerpt, buildMetaDescription, buildMetaTitle, deriveKeywordCandidates, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
 import { Step1Title } from "@/components/studio/Step1Title";
 import { Step2Outline } from "@/components/studio/Step2Outline";
 import { Step3Article } from "@/components/studio/Step3Article";
@@ -230,13 +230,15 @@ export default function CreateArticlePage() {
     if (!articleData.title.trim()) return;
 
     setArticleData((prev) => {
+      const nextKeywords = prev.keywords.length > 0 ? prev.keywords : deriveKeywordCandidates(prev.title);
       const nextSlug = prev.slug || slugify(prev.title);
-      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: prev.title, keyword: prev.keywords[0] });
+      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: prev.title, keyword: nextKeywords[0] });
       const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
       const nextMetaDescription =
-        prev.metaDescription || buildMetaDescription({ title: prev.title, keyword: prev.keywords[0], description: nextDescription, content: prev.content });
+        prev.metaDescription || buildMetaDescription({ title: prev.title, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
 
       if (
+        nextKeywords.join("|") === prev.keywords.join("|") &&
         nextSlug === prev.slug &&
         nextMetaTitle === prev.metaTitle &&
         nextDescription === prev.description &&
@@ -247,6 +249,7 @@ export default function CreateArticlePage() {
 
       return {
         ...prev,
+        keywords: nextKeywords,
         slug: nextSlug,
         metaTitle: nextMetaTitle,
         description: nextDescription,
