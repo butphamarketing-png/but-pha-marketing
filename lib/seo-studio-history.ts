@@ -164,3 +164,16 @@ export async function appendSeoStudioHistory(entry: Omit<SeoStudioHistoryEntry, 
 
   return nextEntry;
 }
+
+export async function deleteSeoStudioHistoryItem(id: string) {
+  const supabase = createServerClient();
+  const current = await getSeoStudioHistory().catch(() => []);
+  const nextValue = current.filter((item) => item.id !== id);
+  const { error } = await supabase.from(TABLE_NAME).upsert({ key: SETTINGS_KEY, value: nextValue }, { onConflict: "key" });
+
+  if (error) {
+    throw new Error(error.message || "Khong the xoa lich su SEO Studio.");
+  }
+
+  return nextValue;
+}

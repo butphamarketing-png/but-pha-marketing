@@ -16,7 +16,7 @@ import {
   Target,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/lib/useData";
 import { buildExcerpt, buildMetaDescription, buildMetaTitle, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
@@ -85,6 +85,8 @@ const INITIAL_DATA = {
   savedNewsId: "",
 };
 
+const LOCAL_DRAFT_KEY = "seo-studio-local-draft-v1";
+
 function formatTime(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
@@ -98,12 +100,16 @@ function formatTime(value: string) {
 
 export default function CreateArticlePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const newsId = searchParams.get("id") || searchParams.get("newsId") || "";
   const [currentStep, setCurrentStep] = useState(1);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [historyError, setHistoryError] = useState("");
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [historyFilter, setHistoryFilter] = useState<"all" | "outline" | "article">("all");
   const [draftSaving, setDraftSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [loadingExisting, setLoadingExisting] = useState(false);
   const [actionError, setActionError] = useState("");
   const [actionMessage, setActionMessage] = useState("");
   const [articleData, setArticleData] = useState(INITIAL_DATA);
@@ -142,6 +148,83 @@ export default function CreateArticlePage() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadExistingArticle = async () => {
+      if (newsId) {
+        try {
+          setLoadingExisting(true);
+          const result = await db.news.get(newsId);
+          if (result.error || !result.data) {
+            throw new Error(result.error || "Khong the tai bai viet de chinh sua.");
+          }
+
+          if (!cancelled) {
+            const item = result.data;
+            setArticleData((prev) => ({
+              ...prev,
+              title: item.title || "",
+              slug: item.slug || "",
+              featuredImageUrl: item.imageUrl || "",
+              metaTitle: item.title || "",
+              metaDescription: item.metaDescription || "",
+              description: item.description || "",
+              content: item.content || "",
+              keywords: [item.keywordsMain || "", ...(item.keywordsSecondary || "").split(",").map((part) => part.trim()).filter(Boolean)].filter(Boolean),
+              images: item.imageUrl
+                ? [{ url: item.imageUrl, name: item.title || "Thumbnail", altText: item.title || "", sectionLabel: "Thumbnail" }]
+                : [],
+              published: item.published !== false,
+              hot: !!item.hot,
+              publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString().slice(0, 10) : prev.publishedAt,
+              savedNewsId: item.id,
+            }));
+            setCurrentStep(3);
+            setActionMessage("Da mo bai viet de chinh sua trong SEO Studio.");
+          }
+        } catch (error) {
+          if (!cancelled) {
+            setActionError(error instanceof Error ? error.message : "Khong the tai bai viet de chinh sua.");
+          }
+        } finally {
+          if (!cancelled) setLoadingExisting(false);
+        }
+        return;
+      }
+
+      const savedDraft = typeof window !== "undefined" ? window.localStorage.getItem(LOCAL_DRAFT_KEY) : null;
+      if (!savedDraft) return;
+
+      try {
+        const snapshot = JSON.parse(savedDraft) as typeof INITIAL_DATA;
+        if (!cancelled && snapshot?.title) {
+          setArticleData((prev) => ({ ...prev, ...snapshot }));
+          setActionMessage("Da phuc hoi ban nhap tu dong tren may nay.");
+        }
+      } catch {
+        // ignore bad local draft
+      }
+    };
+
+    void loadExistingArticle();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [newsId]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!articleData.title && !articleData.content && !articleData.outline.length) return;
+
+    const handle = window.setTimeout(() => {
+      window.localStorage.setItem(LOCAL_DRAFT_KEY, JSON.stringify(articleData));
+    }, 800);
+
+    return () => window.clearTimeout(handle);
+  }, [articleData]);
 
   useEffect(() => {
     if (!articleData.title.trim()) return;
@@ -312,6 +395,9 @@ export default function CreateArticlePage() {
       setActionMessage(mode === "publish" ? "Da xuat ban bai viet thanh cong." : "Da luu nhap bai viet.");
       await refreshHistory().catch(() => undefined);
       if (mode === "publish") {
+        if (typeof window !== "undefined") {
+          window.localStorage.removeItem(LOCAL_DRAFT_KEY);
+        }
         router.push("/admin/news");
       }
     } catch (error) {
@@ -327,6 +413,22 @@ export default function CreateArticlePage() {
     setCurrentStep(1);
     setActionError("");
     setActionMessage("");
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(LOCAL_DRAFT_KEY);
+    }
+  };
+
+  const handleDeleteHistory = async (id: string) => {
+    const response = await fetch("/api/ai/history", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    const payload = (await response.json().catch(() => null)) as { items?: HistoryItem[]; error?: string } | null;
+    if (!response.ok) {
+      throw new Error(payload?.error || "Khong the xoa lich su.");
+    }
+    setHistory(Array.isArray(payload?.items) ? payload.items : []);
   };
 
   const renderStep = () => {
@@ -375,8 +477,10 @@ export default function CreateArticlePage() {
               <ArrowLeft size={20} />
             </Link>
             <div>
-              <h1 className="text-lg font-black tracking-tight">Tao Bai Viet Moi</h1>
-              <p className="text-xs text-slate-500">Quy trinh tao noi dung chuan SEO voi AI</p>
+              <h1 className="text-lg font-black tracking-tight">{articleData.savedNewsId ? "Chinh Sua Bai Viet" : "Tao Bai Viet Moi"}</h1>
+              <p className="text-xs text-slate-500">
+                {articleData.savedNewsId ? "Dang mo bai viet de chinh sua trong SEO Studio" : "Quy trinh tao noi dung chuan SEO voi AI"}
+              </p>
             </div>
           </div>
 
@@ -400,6 +504,11 @@ export default function CreateArticlePage() {
       </header>
 
       <div className="mx-auto mt-8 max-w-7xl px-8">
+        {loadingExisting ? (
+          <div className="mb-6 rounded-2xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-sm font-semibold text-indigo-700">
+            Dang tai bai viet de chinh sua...
+          </div>
+        ) : null}
         {actionMessage && !actionError ? (
           <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700">{actionMessage}</div>
         ) : null}
@@ -559,6 +668,24 @@ export default function CreateArticlePage() {
                   <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">Lich su AI</h3>
                   <Clock3 size={16} className="text-slate-300" />
                 </div>
+                <div className="mb-4 flex gap-2">
+                  {[
+                    { id: "all", label: "Tat ca" },
+                    { id: "outline", label: "Dan y" },
+                    { id: "article", label: "Bai viet" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setHistoryFilter(item.id as typeof historyFilter)}
+                      className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                        historyFilter === item.id ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
                 {historyLoading ? (
                   <p className="text-xs text-slate-400">Dang tai lich su...</p>
                 ) : historyError ? (
@@ -567,7 +694,10 @@ export default function CreateArticlePage() {
                   <p className="text-xs text-slate-400">Chua co lan tao dan y hoac bai viet nao.</p>
                 ) : (
                   <div className="space-y-3">
-                    {history.slice(0, 6).map((item) => (
+                    {history
+                      .filter((item) => historyFilter === "all" || item.type === historyFilter)
+                      .slice(0, 8)
+                      .map((item) => (
                       <div key={item.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                         <div className="flex items-start justify-between gap-3">
                           <div>
@@ -588,16 +718,25 @@ export default function CreateArticlePage() {
                         {item.hint ? <p className="mt-2 text-[11px] font-semibold text-slate-700">Goi y: {item.hint}</p> : null}
                         <div className="mt-3 flex items-center justify-between gap-3">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{formatTime(item.createdAt)}</p>
-                          {item.snapshot ? (
+                          <div className="flex items-center gap-2">
+                            {item.snapshot ? (
+                              <button
+                                type="button"
+                                onClick={() => applyHistorySnapshot(item.snapshot)}
+                                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-100"
+                              >
+                                <Eye size={12} />
+                                Mo lai
+                              </button>
+                            ) : null}
                             <button
                               type="button"
-                              onClick={() => applyHistorySnapshot(item.snapshot)}
-                              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-100"
+                              onClick={() => void handleDeleteHistory(item.id).catch((error) => setHistoryError(error instanceof Error ? error.message : "Khong the xoa lich su."))}
+                              className="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-600 transition hover:bg-rose-50"
                             >
-                              <Eye size={12} />
-                              Mo lai
+                              Xoa
                             </button>
-                          ) : null}
+                          </div>
                         </div>
                       </div>
                     ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Rocket, ArrowLeft, CheckCircle2, Globe, ImagePlus, Newspaper, Save, Send, Loader2 } from "lucide-react";
+import { Rocket, ArrowLeft, CheckCircle2, Globe, ImagePlus, Newspaper, Save, Send, Loader2, Eye, X } from "lucide-react";
 import { uploadMediaFile } from "@/lib/client-media-upload";
 
 export function Step6Publish({
@@ -18,6 +18,7 @@ export function Step6Publish({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
   const images = Array.isArray(data.images) ? data.images : [];
   const thumbnailUrl = data.featuredImageUrl || images[0]?.url || "";
 
@@ -88,6 +89,13 @@ export function Step6Publish({
             Luu nhap
           </button>
           <button
+            onClick={() => setPreviewOpen(true)}
+            className="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+          >
+            <Eye size={18} />
+            Xem truoc
+          </button>
+          <button
             onClick={onPublish}
             disabled={publishing}
             className="flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 transition-all hover:bg-indigo-500 disabled:opacity-60"
@@ -107,6 +115,30 @@ export function Step6Publish({
           {actionError || uploadError || actionMessage}
         </div>
       )}
+
+      {previewOpen ? (
+        <div className="fixed inset-0 z-[70] bg-slate-950/60 p-6 backdrop-blur-sm">
+          <div className="mx-auto flex h-full max-w-5xl flex-col overflow-hidden rounded-[32px] bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preview</p>
+                <h3 className="text-lg font-black text-slate-900">{data.title || "Xem truoc bai viet"}</h3>
+              </div>
+              <button onClick={() => setPreviewOpen(false)} className="rounded-xl border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-8 py-8">
+              <article className="mx-auto max-w-3xl">
+                <h1 className="text-4xl font-black leading-tight text-slate-900">{data.metaTitle || data.title || "Chua co tieu de"}</h1>
+                <p className="mt-3 text-sm text-slate-500">{data.metaDescription || "Chua co meta description"}</p>
+                {thumbnailUrl ? <img src={thumbnailUrl} alt={data.title || "Thumbnail"} className="mt-6 h-72 w-full rounded-3xl object-cover" /> : null}
+                <div className="prose mt-8 max-w-none prose-slate" dangerouslySetInnerHTML={{ __html: data.content || "<p>Chua co noi dung de xem truoc.</p>" }} />
+              </article>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUploadThumbnail} />
 

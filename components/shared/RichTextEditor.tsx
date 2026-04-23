@@ -1,23 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { uploadMediaFile } from "@/lib/client-media-upload";
 
 interface RichTextEditorProps {
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
   minHeight?: number;
+  uploadTitle?: string;
 }
 
 const FONT_SIZES = [
-  { label: "Nhỏ", value: "2" },
-  { label: "Vừa", value: "3" },
-  { label: "Lớn", value: "4" },
-  { label: "Rất lớn", value: "5" },
+  { label: "Nho", value: "2" },
+  { label: "Vua", value: "3" },
+  { label: "Lon", value: "4" },
+  { label: "Rat lon", value: "5" },
 ];
 
 const FONT_FAMILIES = [
-  { label: "Mặc định", value: "inherit" },
+  { label: "Mac dinh", value: "inherit" },
   { label: "Arial", value: "Arial" },
   { label: "Verdana", value: "Verdana" },
   { label: "Times New Roman", value: "Times New Roman" },
@@ -25,19 +27,9 @@ const FONT_FAMILIES = [
   { label: "Courier New", value: "Courier New" },
 ];
 
-function EditorButton({
-  label,
-  onClick,
-}: {
-  label: string;
-  onClick: () => void;
-}) {
+function EditorButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="rounded border border-white/20 px-2 py-1 text-xs font-semibold text-white hover:bg-white/10"
-    >
+    <button type="button" onClick={onClick} className="rounded border border-white/20 px-2 py-1 text-xs font-semibold text-white hover:bg-white/10">
       {label}
     </button>
   );
@@ -46,13 +38,16 @@ function EditorButton({
 export function RichTextEditor({
   value,
   onChange,
-  placeholder = "Nhập nội dung...",
+  placeholder = "Nhap noi dung...",
   minHeight = 170,
+  uploadTitle,
 }: RichTextEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [fontSize, setFontSize] = useState("3");
   const [fontFamily, setFontFamily] = useState("inherit");
   const [color, setColor] = useState("#ffffff");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -68,9 +63,30 @@ export function RichTextEditor({
   };
 
   const applyLink = () => {
-    const url = window.prompt("Nhập link:");
+    const url = window.prompt("Nhap link:");
     if (!url) return;
     exec("createLink", url);
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const result = await uploadMediaFile(file, {
+        title: uploadTitle,
+        sectionLabel: "editor",
+        suggestedName: file.name,
+      });
+      const figure = `<figure><img src="${result.url}" alt="${uploadTitle || file.name}" /><figcaption>${uploadTitle || file.name}</figcaption></figure>`;
+      exec("insertHTML", figure);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Khong the tai anh len luc nay.");
+    } finally {
+      setUploadingImage(false);
+      event.target.value = "";
+    }
   };
 
   return (
@@ -83,10 +99,11 @@ export function RichTextEditor({
         <EditorButton label="H2" onClick={() => exec("formatBlock", "H2")} />
         <EditorButton label="• List" onClick={() => exec("insertUnorderedList")} />
         <EditorButton label="1. List" onClick={() => exec("insertOrderedList")} />
-        <EditorButton label="Canh trái" onClick={() => exec("justifyLeft")} />
-        <EditorButton label="Canh giữa" onClick={() => exec("justifyCenter")} />
-        <EditorButton label="Canh phải" onClick={() => exec("justifyRight")} />
+        <EditorButton label="Trai" onClick={() => exec("justifyLeft")} />
+        <EditorButton label="Giua" onClick={() => exec("justifyCenter")} />
+        <EditorButton label="Phai" onClick={() => exec("justifyRight")} />
         <EditorButton label="Link" onClick={applyLink} />
+        <EditorButton label={uploadingImage ? "Dang tai..." : "Anh"} onClick={() => imageInputRef.current?.click()} />
         <EditorButton label="↺" onClick={() => exec("undo")} />
         <EditorButton label="↻" onClick={() => exec("redo")} />
 
@@ -130,6 +147,8 @@ export function RichTextEditor({
           className="h-7 w-9 cursor-pointer rounded border border-white/20 bg-transparent p-0.5"
         />
       </div>
+
+      <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
 
       <div
         ref={editorRef}

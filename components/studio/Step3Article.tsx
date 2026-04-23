@@ -99,6 +99,7 @@ export function Step3Article({ data, setData, onNext, onPrev }: any) {
         <RichTextEditor
           value={data.content}
           onChange={(html) => setData({ ...data, content: html })}
+          uploadTitle={data.title}
         />
       </div>
     </div>

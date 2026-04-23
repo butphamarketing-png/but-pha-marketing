@@ -38,6 +38,12 @@ type SavedImage = {
   sectionLabel?: string;
 };
 
+type MediaLibraryItem = {
+  id?: number | string;
+  url: string;
+  name: string;
+};
+
 function getSectionLabel(item: OutlineItem) {
   return item.text || item.heading || "Tong quan bai viet";
 }
@@ -63,6 +69,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
   const [prompt, setPrompt] = useState("");
   const [variants, setVariants] = useState<GeneratedVariant[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [mediaLibrary, setMediaLibrary] = useState<MediaLibraryItem[]>([]);
 
   useEffect(() => {
     if (!outlineSections.some((item) => getSectionLabel(item) === selectedSectionLabel)) {
@@ -90,6 +97,27 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       setBrief(autoBrief);
     }
   }, [data.title, selectedSection, brief]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadMedia = async () => {
+      try {
+        const response = await fetch("/api/media", { cache: "no-store" });
+        const payload = (await response.json().catch(() => [])) as MediaLibraryItem[];
+        if (!cancelled) {
+          setMediaLibrary(Array.isArray(payload) ? payload : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setMediaLibrary([]);
+        }
+      }
+    };
+    void loadMedia();
+    return () => {
+      cancelled = true;
+    };
+  }, [savedImages.length]);
 
   async function handleGenerate() {
     if (!data.title?.trim()) {
@@ -171,31 +199,35 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
   }
 
   async function handleUploadLocalImage(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
 
     setUploading(true);
     setError(null);
 
     try {
-      const result = await uploadMediaFile(file, {
-        title: data.title,
-        sectionLabel: getSectionLabel(selectedSection),
-        suggestedName: file.name,
-      });
+      const uploaded = await Promise.all(
+        files.map(async (file) => {
+          const result = await uploadMediaFile(file, {
+            title: data.title,
+            sectionLabel: getSectionLabel(selectedSection),
+            suggestedName: file.name,
+          });
 
-      const nextImage: SavedImage = {
-        id: result.item?.id,
-        url: result.url,
-        name: result.item?.name || file.name,
-        altText: data.title || file.name,
-        sectionLabel: getSectionLabel(selectedSection),
-      };
+          return {
+            id: result.item?.id,
+            url: result.url,
+            name: result.item?.name || file.name,
+            altText: data.title || file.name,
+            sectionLabel: getSectionLabel(selectedSection),
+          } satisfies SavedImage;
+        }),
+      );
 
       setData({
         ...data,
-        images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
-        featuredImageUrl: data.featuredImageUrl || nextImage.url,
+        images: [...savedImages, ...uploaded.filter((item) => !savedImages.some((saved) => saved.url === item.url))],
+        featuredImageUrl: data.featuredImageUrl || uploaded[0]?.url || "",
       });
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Khong the tai anh len luc nay.");
@@ -209,6 +241,22 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     setData({
       ...data,
       featuredImageUrl: image.url,
+    });
+  }
+
+  function addFromLibrary(item: MediaLibraryItem) {
+    const nextImage: SavedImage = {
+      id: item.id,
+      url: item.url,
+      name: item.name,
+      altText: data.title || item.name,
+      sectionLabel: getSectionLabel(selectedSection),
+    };
+
+    setData({
+      ...data,
+      images: [...savedImages.filter((saved) => saved.url !== item.url), nextImage],
+      featuredImageUrl: data.featuredImageUrl || item.url,
     });
   }
 
@@ -308,7 +356,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
             {uploading ? "Dang tai anh tu may..." : "Tai anh tu may"}
           </button>
 
-          <input ref={uploadInputRef} type="file" accept="image/*" className="hidden" onChange={handleUploadLocalImage} />
+          <input ref={uploadInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleUploadLocalImage} />
 
           {prompt ? (
             <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -382,6 +430,42 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Thu vien media</p>
+                <h3 className="mt-2 text-xl font-black text-slate-900">Anh da upload</h3>
+              </div>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">{mediaLibrary.length} anh</span>
+            </div>
+
+            {mediaLibrary.length === 0 ? (
+              <div className="mt-6 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm font-medium text-slate-500">
+                Chua co anh nao trong media.
+              </div>
+            ) : (
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                {mediaLibrary.slice(0, 12).map((image) => (
+                  <div key={`${image.id}-${image.url}`} className="overflow-hidden rounded-[22px] border border-slate-200 bg-white">
+                    <div className="aspect-square bg-slate-100">
+                      <img src={image.url} alt={image.name} className="h-full w-full object-cover" />
+                    </div>
+                    <div className="space-y-2 p-3">
+                      <p className="line-clamp-2 text-xs font-bold text-slate-900">{image.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => addFromLibrary(image)}
+                        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        Them vao bai viet
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

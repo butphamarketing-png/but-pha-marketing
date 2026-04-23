@@ -1,6 +1,40 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceRoleKey) {
+      return NextResponse.json({ error: "Server misconfigured: Missing SUPABASE_SERVICE_ROLE_KEY" }, { status: 500 });
+    }
+
+    const { id } = await context.params;
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("GET /api/news/[id] Supabase error", error);
+      return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
+    }
+
+    if (!data) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("GET /api/news/[id] failed", error);
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown server error" }, { status: 500 });
+  }
+}
+
 export async function PATCH(
   req: Request,
   context: { params: Promise<{ id: string }> }

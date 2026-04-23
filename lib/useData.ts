@@ -494,6 +494,8 @@ export const db = {
   news: {
     getAll: (): Promise<ApiResult<NewsItem[]>> =>
       cachedFetch("news", () => apiFetch<NewsItem[]>("/news", undefined, (value) => normalizeArray(value, mapNewsItem))),
+    get: (id: string): Promise<ApiResult<NewsItem>> =>
+      apiFetch<NewsItem>(`/news/${id}`, undefined, mapNewsItem),
     add: async (item: Omit<NewsItem, "id" | "timestamp">): Promise<ApiResult<NewsItem>> => {
       const result = await apiFetch<NewsItem>("/news", {
         method: "POST",
