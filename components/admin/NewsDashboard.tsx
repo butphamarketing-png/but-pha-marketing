@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { CheckCircle2, Eye, FilePlus2, PencilLine, Search, Sparkles, Target, Trash2 } from "lucide-react";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsItem } from "@/lib/useData";
@@ -75,15 +75,17 @@ export function NewsDashboard({
 }: NewsDashboardProps) {
   const [filter, setFilter] = useState<"draft" | "published">("published");
   const [search, setSearch] = useState("");
+  const deferredSearch = useDeferredValue(search);
 
   const filteredBlogs = useMemo(() => {
+    const normalizedSearch = deferredSearch.trim().toLowerCase();
     return blogs.filter((item) => {
       const matchesState = filter === "published" ? item.published : !item.published;
       if (!matchesState) return false;
       const haystack = `${item.title} ${item.slug || ""} ${item.keywordsMain || ""} ${item.metaDescription || ""}`.toLowerCase();
-      return !search.trim() || haystack.includes(search.trim().toLowerCase());
+      return !normalizedSearch || haystack.includes(normalizedSearch);
     });
-  }, [blogs, filter, search]);
+  }, [blogs, deferredSearch, filter]);
 
   const counts = useMemo(
     () => ({

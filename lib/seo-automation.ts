@@ -13,7 +13,10 @@ import { evaluateSeoArticle } from "@/lib/seo-quality";
 const SETTINGS_TABLE = "site_settings";
 const AUTOMATION_SETTINGS_KEY = "seo_automation_settings";
 const AUTOMATION_RUNS_KEY = "seo_automation_runs";
+const AUTOMATION_LOCK_KEY = "seo_automation_lock";
 const MAX_RUN_LOGS = 30;
+const AUTOMATION_LOCK_TTL_MS = 1000 * 60 * 45;
+const AUTO_PUBLISH_MIN_SCORE = 81;
 const DEFAULT_TOPIC_SEEDS = [
   "thiết kế website",
   "dịch vụ SEO tổng thể",
@@ -108,6 +111,13 @@ type RunOptions = {
 type ServiceSeed = {
   keyword: string;
   source: string;
+};
+
+type AutomationLock = {
+  runId: string;
+  reason: SeoAutomationRunLog["reason"];
+  startedAt: string;
+  expiresAt: string;
 };
 
 function normalizeString(value: unknown) {
@@ -266,6 +276,12 @@ async function writeSiteSetting(key: string, value: unknown) {
   if (error) throw new Error(error.message || `Khong the luu setting ${key}.`);
 }
 
+async function deleteSiteSetting(key: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from(SETTINGS_TABLE).delete().eq("key", key);
+  if (error) throw new Error(error.message || `Khong the xoa setting ${key}.`);
+}
+
 export async function getSeoAutomationSettings() {
   const raw = await readSiteSetting(AUTOMATION_SETTINGS_KEY).catch(() => null);
   return sanitizeSettings(raw);
@@ -285,6 +301,48 @@ export async function getSeoAutomationRuns() {
 
 async function saveSeoAutomationRuns(runs: SeoAutomationRunLog[]) {
   await writeSiteSetting(AUTOMATION_RUNS_KEY, runs.slice(0, MAX_RUN_LOGS));
+}
+
+function sanitizeAutomationLock(value: unknown): AutomationLock | null {
+  if (!value || typeof value !== "object") return null;
+  const row = value as AutomationStoredValue;
+  const reason = row.reason === "cron" || row.reason === "repair" || row.reason === "manual" ? row.reason : null;
+  const runId = normalizeString(row.runId);
+  const startedAt = normalizeString(row.startedAt);
+  const expiresAt = normalizeString(row.expiresAt);
+  if (!reason || !runId || !startedAt || !expiresAt) return null;
+  return { runId, reason, startedAt, expiresAt };
+}
+
+async function getAutomationLock() {
+  const raw = await readSiteSetting(AUTOMATION_LOCK_KEY).catch(() => null);
+  return sanitizeAutomationLock(raw);
+}
+
+async function releaseAutomationLock(runId?: string) {
+  const current = await getAutomationLock();
+  if (!current) return;
+  if (runId && current.runId !== runId) return;
+  await deleteSiteSetting(AUTOMATION_LOCK_KEY).catch(() => undefined);
+}
+
+async function acquireAutomationLock(runId: string, reason: SeoAutomationRunLog["reason"]) {
+  const current = await getAutomationLock();
+  if (current) {
+    const expiresAt = new Date(current.expiresAt).getTime();
+    if (Number.isFinite(expiresAt) && expiresAt > Date.now()) {
+      throw new Error("SEO Autopilot dang co mot luot chay khac. Vui long doi luot hien tai hoan tat.");
+    }
+    await releaseAutomationLock(current.runId);
+  }
+
+  const nextLock: AutomationLock = {
+    runId,
+    reason,
+    startedAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + AUTOMATION_LOCK_TTL_MS).toISOString(),
+  };
+  await writeSiteSetting(AUTOMATION_LOCK_KEY, nextLock);
 }
 
 async function createRunLog(reason: SeoAutomationRunLog["reason"]) {
@@ -867,6 +925,46 @@ async function optimizeArticleQuality(input: {
   return { content: nextContent, evaluation };
 }
 
+function canAutoPublish(input: {
+  evaluation: ReturnType<typeof evaluateSeoArticle>;
+  autoPublishEnabled: boolean;
+  featuredImageUrl: string;
+  imageGenerationEnabled: boolean;
+}) {
+  if (!input.autoPublishEnabled) {
+    return {
+      allowed: false,
+      reason: "Che do tu dang dang tat.",
+    };
+  }
+
+  if (input.evaluation.score < AUTO_PUBLISH_MIN_SCORE) {
+    return {
+      allowed: false,
+      reason: `Diem SEO ${input.evaluation.score}/100 chua vuot nguong tu dang.`,
+    };
+  }
+
+  if (input.evaluation.issues.some((issue) => issue.status === "critical")) {
+    return {
+      allowed: false,
+      reason: "Van con loi SEO muc critical.",
+    };
+  }
+
+  if (input.imageGenerationEnabled && !normalizeString(input.featuredImageUrl)) {
+    return {
+      allowed: false,
+      reason: "Chua tao duoc anh dai dien cho bai viet.",
+    };
+  }
+
+  return {
+    allowed: true,
+    reason: "Bai da qua quality gate va san sang tu dang.",
+  };
+}
+
 function getExtensionFromMime(mimeType: string) {
   if (mimeType.includes("jpeg")) return "jpg";
   if (mimeType.includes("webp")) return "webp";
@@ -1106,10 +1204,30 @@ export async function runSeoAutomation(options: RunOptions) {
   }
 
   const run = await createRunLog(options.reason);
-  const rows = await getAllNewsRows();
-  const alreadyCreatedToday = getTodaysAutomationCount(rows, settings.timezone);
-  const requestedCount = Math.max(0, Math.min(options.manualCount ?? settings.dailyPostCount, 10));
-  const remaining = options.force ? requestedCount : Math.max(0, requestedCount - alreadyCreatedToday);
+  try {
+    await acquireAutomationLock(run.id, options.reason);
+  } catch (error) {
+    await finalizeRunLog(run.id, {
+      finishedAt: new Date().toISOString(),
+      status: "failed",
+      failedCount: 1,
+      items: [
+        {
+          title: "Khong the bat dau luot chay",
+          slug: "automation-lock",
+          keyword: "automation",
+          status: "failed",
+          detail: error instanceof Error ? error.message : "Khong the khoa SEO Autopilot.",
+        },
+      ],
+    }).catch(() => undefined);
+    throw error;
+  }
+  try {
+    const rows = await getAllNewsRows();
+    const alreadyCreatedToday = getTodaysAutomationCount(rows, settings.timezone);
+    const requestedCount = Math.max(0, Math.min(options.manualCount ?? settings.dailyPostCount, 10));
+    const remaining = options.force ? requestedCount : Math.max(0, requestedCount - alreadyCreatedToday);
 
   if (remaining <= 0) {
     await finalizeRunLog(run.id, {
@@ -1126,10 +1244,10 @@ export async function runSeoAutomation(options: RunOptions) {
         },
       ],
     });
-    return {
-      settings,
-      run: await getSeoAutomationRuns().then((items) => items.find((item) => item.id === run.id) || null),
-    };
+      return {
+        settings,
+        run: await getSeoAutomationRuns().then((items) => items.find((item) => item.id === run.id) || null),
+      };
   }
 
   const { apiKey, model } = await getOpenAiRuntimeConfig();
@@ -1194,7 +1312,13 @@ export async function runSeoAutomation(options: RunOptions) {
       });
       const description = buildExcerpt({ content, maxLength: 170 });
       const desiredSlug = slugify(plan.title);
-      const shouldPublish = settings.autoPublish && qualityResult.evaluation.score >= 80;
+      const publishDecision = canAutoPublish({
+        evaluation: qualityResult.evaluation,
+        autoPublishEnabled: settings.autoPublish,
+        featuredImageUrl,
+        imageGenerationEnabled: settings.generateImages,
+      });
+      const shouldPublish = publishDecision.allowed;
       const saved = await createOrUpdateNewsArticle({
         title: plan.title,
         keyword: outlineResult.keywords[0] || plan.keyword,
@@ -1222,7 +1346,7 @@ export async function runSeoAutomation(options: RunOptions) {
         intent: outlineResult.intent,
         source: "seo-automation",
         detail: `SEO Autopilot da tao bai ${plan.title} voi diem SEO ${qualityResult.evaluation.score}/100.`,
-        hint: shouldPublish ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO." : "Bai duoc giu o trang thai nhap vi score chua dat nguong auto publish.",
+        hint: shouldPublish ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO." : publishDecision.reason,
         snapshot: {
           title: plan.title,
           slug: saved.slug,
@@ -1251,6 +1375,9 @@ export async function runSeoAutomation(options: RunOptions) {
         status: "created",
         detail: `${shouldPublish ? "Đã đăng" : "Đã lưu nháp"} với ${countWords(content)} từ${featuredImageUrl ? ", có ảnh AI" : ""}, score ${qualityResult.evaluation.score}/100.`,
       });
+      if (!shouldPublish && items[items.length - 1]) {
+        items[items.length - 1]!.detail = `${items[items.length - 1]!.detail} ${publishDecision.reason}`.trim();
+      }
     } catch (error) {
       items.push({
         title: plan.title,
@@ -1282,4 +1409,23 @@ export async function runSeoAutomation(options: RunOptions) {
     settings,
     run: finalized,
   };
+  } catch (error) {
+    await finalizeRunLog(run.id, {
+      finishedAt: new Date().toISOString(),
+      status: "failed",
+      failedCount: 1,
+      items: [
+        {
+          title: "SEO Autopilot gap loi he thong",
+          slug: "automation-runtime",
+          keyword: "automation",
+          status: "failed",
+          detail: error instanceof Error ? error.message : "Khong the hoan tat luot SEO Autopilot.",
+        },
+      ],
+    }).catch(() => undefined);
+    throw error;
+  } finally {
+    await releaseAutomationLock(run.id);
+  }
 }

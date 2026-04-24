@@ -444,7 +444,7 @@ export function SeoAutomationPanel() {
               <Clock3 size={14} />
               Tự động hóa thật
             </div>
-            <ul className="mt-4 space-y-3 text-sm text-slate-600">
+            <ul className="mt-4 space-y-3 text-sm text-slate-600 [&>li:nth-child(6)]:hidden">
               <li className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
                 Tạo tối đa {settings.dailyPostCount} bài/ngày theo chủ đề hạt giống.
@@ -465,7 +465,14 @@ export function SeoAutomationPanel() {
                 <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
                 Chỉ tự publish khi điểm SEO nội bộ đạt từ 80/100, thấp hơn sẽ giữ ở nháp để tránh đăng bài yếu.
               </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
+                Quality gate má»›i: pháº£i vÆ°á»£t ngÆ°á»¡ng 80/100, khÃ´ng cÃ²n lá»—i critical vÃ  khÃ´ng thiáº¿u áº£nh Ä‘áº¡i diá»‡n má»›i Ä‘Æ°á»£c tá»± Ä‘Äƒng.
+              </li>
             </ul>
+            <p className="mt-3 rounded-2xl bg-white px-3 py-3 text-xs font-bold leading-6 text-slate-600">
+              Quality gate moi: chi tu dang bai khi vuot 80/100, khong con loi critical va khong thieu anh dai dien.
+            </p>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-5">

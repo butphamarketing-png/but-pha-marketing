@@ -21,6 +21,9 @@ export function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const mouse = {
       x: 0,
@@ -33,17 +36,20 @@ export function ParticleBackground() {
     let height = 0;
     let raf = 0;
     let nodes: NodePoint[] = [];
+    let cols = 0;
+    let rows = 0;
 
     const createNodes = () => {
-      const spacing = 88;
-      const cols = Math.ceil(width / spacing) + 1;
-      const rows = Math.ceil(height / spacing) + 1;
+      const isCompactViewport = width < 768;
+      const spacing = isCompactViewport ? 124 : 96;
+      cols = Math.ceil(width / spacing) + 1;
+      rows = Math.ceil(height / spacing) + 1;
 
       nodes = [];
       for (let row = 0; row < rows; row += 1) {
         for (let col = 0; col < cols; col += 1) {
-          const jitterX = (Math.random() - 0.5) * 14;
-          const jitterY = (Math.random() - 0.5) * 14;
+          const jitterX = (Math.random() - 0.5) * (isCompactViewport ? 8 : 14);
+          const jitterY = (Math.random() - 0.5) * (isCompactViewport ? 8 : 14);
           const x = col * spacing + jitterX;
           const y = row * spacing + jitterY;
 
@@ -57,6 +63,32 @@ export function ParticleBackground() {
           });
         }
       }
+    };
+
+    const getNode = (row: number, col: number) => {
+      if (row < 0 || row >= rows || col < 0 || col >= cols) return null;
+      return nodes[row * cols + col] || null;
+    };
+
+    const drawLink = (a: NodePoint, b: NodePoint) => {
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+      const dist = Math.hypot(dx, dy);
+      const maxDistance = width < 768 ? 132 : 146;
+
+      if (dist > maxDistance) return;
+
+      const midpointX = (a.x + b.x) / 2;
+      const midpointY = (a.y + b.y) / 2;
+      const mouseDist = Math.hypot(midpointX - mouse.x, midpointY - mouse.y);
+      const lineBoost = mouse.active ? Math.max(0, 1 - mouseDist / 180) : 0;
+      const alpha = 0.035 + (1 - dist / maxDistance) * 0.08 + lineBoost * 0.2;
+
+      ctx.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
     };
 
     const resize = () => {
@@ -115,28 +147,20 @@ export function ParticleBackground() {
       ctx.save();
       ctx.lineWidth = 1;
 
-      for (let i = 0; i < nodes.length; i += 1) {
-        const a = nodes[i];
+      for (let row = 0; row < rows; row += 1) {
+        for (let col = 0; col < cols; col += 1) {
+          const current = getNode(row, col);
+          if (!current) continue;
 
-        for (let j = i + 1; j < nodes.length; j += 1) {
-          const b = nodes[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const dist = Math.hypot(dx, dy);
+          const right = getNode(row, col + 1);
+          const down = getNode(row + 1, col);
+          const diagonal = getNode(row + 1, col + 1);
+          const diagonalBack = getNode(row + 1, col - 1);
 
-          if (dist > 120) continue;
-
-          const midpointX = (a.x + b.x) / 2;
-          const midpointY = (a.y + b.y) / 2;
-          const mouseDist = Math.hypot(midpointX - mouse.x, midpointY - mouse.y);
-          const lineBoost = mouse.active ? Math.max(0, 1 - mouseDist / 180) : 0;
-          const alpha = 0.04 + (1 - dist / 120) * 0.08 + lineBoost * 0.24;
-
-          ctx.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
+          if (right) drawLink(current, right);
+          if (down) drawLink(current, down);
+          if (diagonal) drawLink(current, diagonal);
+          if (diagonalBack) drawLink(current, diagonalBack);
         }
       }
 

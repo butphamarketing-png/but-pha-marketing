@@ -47,11 +47,20 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   const playClick = useClickSound();
 
   useEffect(() => {
+    let rafId = 0;
+
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 500);
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        setShowBackToTop(window.scrollY > 500);
+        rafId = 0;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -100,6 +109,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
 
   useEffect(() => {
     const seen = new Set<string>();
+    let rafId = 0;
 
     const updateActiveSection = () => {
       const anchor = window.innerHeight * 0.32;
@@ -139,13 +149,22 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       );
     };
 
+    const scheduleUpdateActiveSection = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        updateActiveSection();
+        rafId = 0;
+      });
+    };
+
     updateActiveSection();
-    window.addEventListener("scroll", updateActiveSection, { passive: true });
-    window.addEventListener("resize", updateActiveSection);
+    window.addEventListener("scroll", scheduleUpdateActiveSection, { passive: true });
+    window.addEventListener("resize", scheduleUpdateActiveSection);
 
     return () => {
-      window.removeEventListener("scroll", updateActiveSection);
-      window.removeEventListener("resize", updateActiveSection);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", scheduleUpdateActiveSection);
+      window.removeEventListener("resize", scheduleUpdateActiveSection);
     };
   }, [pathname, sections]);
 
