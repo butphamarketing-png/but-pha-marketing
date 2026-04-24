@@ -47,6 +47,7 @@ import {
 } from "recharts";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { SEOOverview } from "@/components/admin/SEOOverview";
+import { SeoAutomationPanel } from "@/components/admin/SeoAutomationPanel";
 import { StudioSettings } from "@/components/admin/StudioSettings";
 import { mergeNewsContentMeta } from "@/lib/news-content-meta";
 import { buildExcerpt, buildMetaDescription, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
@@ -784,18 +785,21 @@ export function NewsStudioPage() {
           {activeTab === "settings" && <StudioSettings />}
           {activeTab === "dashboard" && <SEOOverview />}
           {activeTab === "news" && (
-            <NewsDashboard
-              blogs={blogs}
-              editingBlogId={editingBlogId}
-              blogForm={blogForm}
-              setBlogForm={setBlogForm}
-              onReset={resetBlogForm}
-              onSave={saveBlog}
-              onEdit={editBlog}
-              onGenerate={generateBlogDraftByAI}
-              onTogglePublished={handleToggleBlogPublished}
-              onDelete={handleDeleteBlog}
-            />
+            <div className="space-y-5">
+              <SeoAutomationPanel />
+              <NewsDashboard
+                blogs={blogs}
+                editingBlogId={editingBlogId}
+                blogForm={blogForm}
+                setBlogForm={setBlogForm}
+                onReset={resetBlogForm}
+                onSave={saveBlog}
+                onEdit={editBlog}
+                onGenerate={generateBlogDraftByAI}
+                onTogglePublished={handleToggleBlogPublished}
+                onDelete={handleDeleteBlog}
+              />
+            </div>
           )}
         </main>
       </div>

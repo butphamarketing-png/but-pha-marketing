@@ -1,5 +1,13 @@
 type NewsContentMeta = {
   metaTitle?: string;
+  automation?: {
+    source?: "manual" | "seo-automation";
+    runId?: string;
+    batchId?: string;
+    keyword?: string;
+    generatedAt?: string;
+    autoPublished?: boolean;
+  };
 };
 
 const META_PREFIX = "<!-- BUTPHA_META ";
@@ -30,7 +38,11 @@ export function mergeNewsContentMeta(rawContent: string, meta: NewsContentMeta) 
     ...meta,
   };
 
-  const hasMeta = Object.values(nextMeta).some((value) => typeof value === "string" && value.trim());
+  const hasMeta = Object.values(nextMeta).some((value) => {
+    if (typeof value === "string") return Boolean(value.trim());
+    if (value && typeof value === "object") return Object.values(value).some(Boolean);
+    return Boolean(value);
+  });
   if (!hasMeta) return parsed.content;
 
   return `${META_PREFIX}${JSON.stringify(nextMeta)}${META_SUFFIX}\n${parsed.content}`;

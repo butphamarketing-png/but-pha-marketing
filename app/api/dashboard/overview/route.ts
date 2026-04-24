@@ -25,7 +25,7 @@ async function loadAnalyticsOverview(): Promise<AnalyticsOverview> {
       trafficChangePercent: 0,
       conversions: 0,
       source: "mock",
-      sourceLabel: "GA4 mock",
+      sourceLabel: "GA4 ước tính",
     };
   }
 }
@@ -109,7 +109,7 @@ export async function GET() {
       avgSeoScore: 0,
       traffic: "0K",
       trafficSource: "mock",
-      trafficSourceLabel: "GA4 mock",
+      trafficSourceLabel: "GA4 ước tính",
       conversions: 0,
       priorityPosts: [],
       trend: []

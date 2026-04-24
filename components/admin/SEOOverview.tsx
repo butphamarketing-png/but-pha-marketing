@@ -136,7 +136,7 @@ export function SEOOverview() {
                     ? "bg-emerald-50 text-emerald-700"
                     : "bg-slate-100 text-slate-500"
                 }`}>
-                  {data.trafficSourceLabel ?? "GA4 mock"}
+                  {data.trafficSourceLabel ?? "GA4 ước tính"}
                 </span>
                 {typeof data.conversions === "number" && (
                   <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-indigo-700">
