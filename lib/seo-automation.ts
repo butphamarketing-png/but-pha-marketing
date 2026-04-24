@@ -8,6 +8,7 @@ import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { getOpenAiRuntimeConfig, getSerpApiRuntimeConfig } from "@/lib/studio-settings";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
 import { mergeNewsContentMeta, parseNewsContentMeta } from "@/lib/news-content-meta";
+import { evaluateSeoArticle } from "@/lib/seo-quality";
 
 const SETTINGS_TABLE = "site_settings";
 const AUTOMATION_SETTINGS_KEY = "seo_automation_settings";
@@ -104,6 +105,11 @@ type RunOptions = {
   manualCount?: number;
 };
 
+type ServiceSeed = {
+  keyword: string;
+  source: string;
+};
+
 function normalizeString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -163,6 +169,10 @@ function countWords(text: string) {
 
 function sectionIdFromHeading(text: string) {
   return slugify(text || "");
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function sanitizeSettings(value: unknown): SeoAutomationSettings {
@@ -324,6 +334,24 @@ async function getAllNewsRows() {
   return (data || []) as RawNewsRow[];
 }
 
+async function getMarketingServiceSeeds(fallbackSeeds: string[]) {
+  const supabase = createServerClient();
+  const { data, error } = await supabase.from("services").select("*");
+  if (error || !Array.isArray(data)) {
+    return fallbackSeeds.map((item) => ({ keyword: item, source: "fallback" })) as ServiceSeed[];
+  }
+
+  const derived = data
+    .flatMap((item) => {
+      const row = item as AutomationStoredValue;
+      return [normalizeString(row.name), normalizeString(row.platform)].filter(Boolean);
+    })
+    .filter((item) => /seo|facebook|website|google|maps|instagram|tiktok|marketing|content|fanpage|ads/i.test(item));
+
+  const normalized = dedupeByCase([...derived, ...fallbackSeeds]).slice(0, 24);
+  return normalized.map((keyword) => ({ keyword, source: derived.includes(keyword) ? "services" : "fallback" }));
+}
+
 function getTodaysAutomationCount(rows: RawNewsRow[], timezone: string) {
   const today = localDayKey(new Date(), timezone);
   return rows.filter((row) => {
@@ -362,9 +390,17 @@ function buildFallbackTitlePlans(existingTitles: string[], topicSeeds: string[],
   return plans.slice(0, count);
 }
 
-async function generateTitlePlans(client: OpenAI | null, model: string, settings: SeoAutomationSettings, existingTitles: string[], count: number) {
+async function generateTitlePlans(
+  client: OpenAI | null,
+  model: string,
+  settings: SeoAutomationSettings,
+  existingTitles: string[],
+  count: number,
+  serviceSeeds: ServiceSeed[],
+) {
+  const seedKeywords = serviceSeeds.map((item) => item.keyword);
   if (!client) {
-    return buildFallbackTitlePlans(existingTitles, settings.topicSeeds, count);
+    return buildFallbackTitlePlans(existingTitles, seedKeywords, count);
   }
 
   try {
@@ -382,11 +418,12 @@ async function generateTitlePlans(client: OpenAI | null, model: string, settings
               type: "input_text",
               text: [
                 `Hãy tạo ${count} ý tưởng bài SEO tiếng Việt thật chỉn chu cho website agency marketing.`,
-                `Chủ đề ưu tiên: ${settings.topicSeeds.join(", ")}`,
+                `Chủ đề dịch vụ bắt buộc phải bám theo: ${seedKeywords.join(", ")}`,
                 `Những tiêu đề đã có: ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
                 "Yêu cầu:",
                 "- Không trùng ý giữa các bài",
-                "- Nghiêng về dịch vụ, chuyển đổi, local SEO, content marketing và website",
+                "- Chỉ viết quanh các dịch vụ marketing của website",
+                "- Tiêu đề phải có khả năng tìm kiếm thật, bám intent dịch vụ hoặc nhu cầu chuyển đổi",
                 "- Có thể đăng ngay trên site agency",
                 '- Trả về JSON: {"items":[{"title":"...","keyword":"...","angle":"..."}]}',
               ].join("\n"),
@@ -408,11 +445,12 @@ async function generateTitlePlans(client: OpenAI | null, model: string, settings
       .filter((item) => item.title && item.keyword)
       .filter((item, index, list) => list.findIndex((candidate) => candidate.title.toLowerCase() === item.title.toLowerCase()) === index)
       .filter((item) => !existingTitles.some((existing) => existing.toLowerCase() === item.title.toLowerCase()))
+      .filter((item) => seedKeywords.some((seed) => item.title.toLowerCase().includes(seed.toLowerCase()) || item.keyword.toLowerCase().includes(seed.toLowerCase())))
       .slice(0, count);
 
-    return plans.length > 0 ? plans : buildFallbackTitlePlans(existingTitles, settings.topicSeeds, count);
+    return plans.length > 0 ? plans : buildFallbackTitlePlans(existingTitles, seedKeywords, count);
   } catch {
-    return buildFallbackTitlePlans(existingTitles, settings.topicSeeds, count);
+    return buildFallbackTitlePlans(existingTitles, seedKeywords, count);
   }
 }
 
@@ -709,6 +747,126 @@ function injectInternalLinks(content: string, suggestions: Array<{ slug: string;
   return `${content}${block}`;
 }
 
+function getAuthoritySource(keyword: string) {
+  const normalized = normalizeString(keyword).toLowerCase();
+  if (/google ads|quảng cáo google|google maps|local seo|seo/i.test(normalized)) {
+    return { label: "Google Search Central", url: "https://developers.google.com/search/docs/fundamentals/seo-starter-guide" };
+  }
+  if (/facebook|fanpage|instagram|meta/i.test(normalized)) {
+    return { label: "Meta Business Help Center", url: "https://www.facebook.com/business/help" };
+  }
+  if (/tiktok/i.test(normalized)) {
+    return { label: "TikTok for Business", url: "https://ads.tiktok.com/business/learning-center" };
+  }
+  return { label: "Google Search Central", url: "https://developers.google.com/search/docs/fundamentals/seo-starter-guide" };
+}
+
+function ensureOutboundLink(content: string, keyword: string) {
+  if (/<a\s+[^>]*href=["']https?:\/\//i.test(content)) return content;
+  const source = getAuthoritySource(keyword);
+  return `${content}<section class="article-reference"><h2 id="nguon-tham-khao">Nguồn tham khảo</h2><p>Xem thêm tài liệu chính thức tại <a href="${source.url}" target="_blank" rel="nofollow noopener">${source.label}</a> để cập nhật quy chuẩn và nền tảng liên quan.</p></section>`;
+}
+
+function ensureFaqBlock(content: string, keyword: string) {
+  if (/<h2[^>]*>[^<]*câu hỏi thường gặp/i.test(content)) return content;
+  const normalizedKeyword = normalizeString(keyword) || "dịch vụ marketing";
+  return `${content}<section class="article-faq"><h2 id="cau-hoi-thuong-gap">Câu hỏi thường gặp</h2><h3>${normalizedKeyword} phù hợp với doanh nghiệp nào?</h3><p>${normalizedKeyword} phù hợp với doanh nghiệp muốn tăng hiện diện số, tìm khách hàng đều hơn và tối ưu hiệu quả chuyển đổi theo mục tiêu kinh doanh.</p><h3>Triển khai mất bao lâu để có tín hiệu tốt?</h3><p>Tùy dịch vụ và độ cạnh tranh, doanh nghiệp nên đi theo lộ trình ít nhất 2-3 tháng để có nền tảng dữ liệu, tối ưu vận hành và đo hiệu quả rõ ràng hơn.</p></section>`;
+}
+
+function ensureKeywordPresence(content: string, keyword: string) {
+  if (!keyword) return content;
+  if (normalizeString(content).toLowerCase().includes(keyword.toLowerCase())) return content;
+  return `<p>${keyword} là trọng tâm của kế hoạch triển khai trong bài viết này, vì đây là nhóm dịch vụ khách hàng thường tìm khi muốn tăng chuyển đổi và tối ưu tăng trưởng bền vững.</p>${content}`;
+}
+
+function ensureMinimumDepth(content: string, keyword: string, targetWordCount: number) {
+  const currentWords = countWords(content);
+  if (currentWords >= Math.min(targetWordCount, 1200)) return content;
+  const extraSection = `<section class="article-implementation"><h2 id="luu-y-trien-khai-thuc-te">Lưu ý triển khai thực tế</h2><p>Khi triển khai ${keyword}, doanh nghiệp không nên chỉ nhìn vào một chỉ số đơn lẻ. Điều quan trọng là bám mục tiêu kinh doanh, chuẩn hóa hành trình khách hàng, theo dõi chi phí chuyển đổi và tối ưu liên tục dựa trên dữ liệu thực tế. Ở giai đoạn đầu, nên ưu tiên các hạng mục tạo nền như nội dung, landing page, thông điệp, tracking và năng lực xử lý lead. Khi nền tảng đã rõ, việc mở rộng quy mô sẽ hiệu quả hơn và tránh lãng phí ngân sách.</p><p>Để đạt kết quả tốt, doanh nghiệp nên có kế hoạch phối hợp giữa nội dung, quảng cáo, SEO, social và tối ưu chuyển đổi. Một bài viết mạnh không chỉ để có traffic mà còn giúp chốt niềm tin, định hướng nhu cầu và đưa người đọc sang bước hành động tiếp theo. Vì vậy, nội dung cần đủ sâu, có ví dụ thực tế, có FAQ, có liên kết nội bộ và có CTA rõ ràng nhưng tự nhiên. Đó cũng là lý do các bài viết về ${keyword} nên được tối ưu theo cụm chủ đề thay vì đăng rời rạc.</p></section>`;
+  return `${content}${extraSection}`;
+}
+
+async function optimizeArticleQuality(input: {
+  client: OpenAI | null;
+  model: string;
+  title: string;
+  keyword: string;
+  keywords: string[];
+  content: string;
+  metaDescription: string;
+  slug: string;
+  serviceKeywords: string[];
+  targetWordCount: number;
+}) {
+  let nextContent = ensureKeywordPresence(input.content, input.keyword);
+  nextContent = ensureFaqBlock(nextContent, input.keyword);
+  nextContent = ensureOutboundLink(nextContent, input.keyword);
+  nextContent = ensureMinimumDepth(nextContent, input.keyword, input.targetWordCount);
+  let evaluation = evaluateSeoArticle({
+    title: input.title,
+    metaDescription: input.metaDescription,
+    slug: input.slug,
+    keywords: input.keywords,
+    content: nextContent,
+    serviceKeywords: input.serviceKeywords,
+  });
+
+  if (evaluation.score >= 80 || !input.client) {
+    return { content: nextContent, evaluation };
+  }
+
+  try {
+    const response = await input.client.responses.create({
+      model: input.model,
+      input: [
+        {
+          role: "system",
+          content: [{ type: "input_text", text: "Bạn là chuyên gia tối ưu bài SEO. Chỉ trả về HTML fragment hợp lệ, không markdown." }],
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: [
+                `Tối ưu bài viết sau để điểm SEO nội bộ đạt trên 80/100.`,
+                `Tiêu đề: ${input.title}`,
+                `Keyword chính: ${input.keyword}`,
+                `Các lỗi cần sửa: ${evaluation.issues.map((item) => item.label).join(" | ")}`,
+                `Nhóm dịch vụ phải bám: ${input.serviceKeywords.join(", ") || input.keyword}`,
+                "Yêu cầu:",
+                "- Giữ đúng chủ đề dịch vụ marketing",
+                "- Không lan man ngoài intent người tìm dịch vụ",
+                "- Cần có internal links, outbound link, FAQ, chiều sâu nội dung, H2/H3 rõ ràng",
+                "- Không bỏ mất nội dung tốt sẵn có",
+                "HTML hiện tại:",
+                nextContent,
+              ].join("\n"),
+            },
+          ],
+        },
+      ],
+    });
+
+    const improved = (response.output_text || "").replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
+    if (improved) {
+      nextContent = ensureMinimumDepth(ensureOutboundLink(ensureFaqBlock(improved, input.keyword), input.keyword), input.keyword, input.targetWordCount);
+      evaluation = evaluateSeoArticle({
+        title: input.title,
+        metaDescription: input.metaDescription,
+        slug: input.slug,
+        keywords: input.keywords,
+        content: nextContent,
+        serviceKeywords: input.serviceKeywords,
+      });
+    }
+  } catch {
+    // Ignore AI optimization failure.
+  }
+
+  return { content: nextContent, evaluation };
+}
+
 function getExtensionFromMime(mimeType: string) {
   if (mimeType.includes("jpeg")) return "jpg";
   if (mimeType.includes("webp")) return "webp";
@@ -977,7 +1135,8 @@ export async function runSeoAutomation(options: RunOptions) {
   const { apiKey, model } = await getOpenAiRuntimeConfig();
   const client = apiKey ? new OpenAI({ apiKey }) : null;
   const existingTitles = rows.map((row) => row.title).filter(Boolean);
-  const titlePlans = await generateTitlePlans(client, model, settings, existingTitles, remaining);
+  const serviceSeeds = await getMarketingServiceSeeds(settings.topicSeeds);
+  const titlePlans = await generateTitlePlans(client, model, settings, existingTitles, remaining, serviceSeeds);
   const items: SeoAutomationArticleResult[] = settings.autoBackfillMissingSeo ? await repairExistingSeoFields(rows, 3) : [];
   const batchId = run.id;
 
@@ -1009,6 +1168,25 @@ export async function runSeoAutomation(options: RunOptions) {
       }
 
       const metaTitle = buildMetaTitle({ title: plan.title, keyword: outlineResult.keywords[0] || plan.keyword });
+      const serviceKeywords = serviceSeeds.map((item) => item.keyword);
+      const initialMetaDescription = buildMetaDescription({
+        title: plan.title,
+        keyword: outlineResult.keywords[0] || plan.keyword,
+        content,
+      });
+      const qualityResult = await optimizeArticleQuality({
+        client,
+        model,
+        title: plan.title,
+        keyword: outlineResult.keywords[0] || plan.keyword,
+        keywords: outlineResult.keywords,
+        content,
+        metaDescription: initialMetaDescription,
+        slug: slugify(plan.title),
+        serviceKeywords,
+        targetWordCount: settings.targetWordCount,
+      });
+      content = qualityResult.content;
       const metaDescription = buildMetaDescription({
         title: plan.title,
         keyword: outlineResult.keywords[0] || plan.keyword,
@@ -1016,6 +1194,7 @@ export async function runSeoAutomation(options: RunOptions) {
       });
       const description = buildExcerpt({ content, maxLength: 170 });
       const desiredSlug = slugify(plan.title);
+      const shouldPublish = settings.autoPublish && qualityResult.evaluation.score >= 80;
       const saved = await createOrUpdateNewsArticle({
         title: plan.title,
         keyword: outlineResult.keywords[0] || plan.keyword,
@@ -1028,7 +1207,7 @@ export async function runSeoAutomation(options: RunOptions) {
         category: settings.defaultCategory,
         runId: run.id,
         batchId,
-        autoPublish: settings.autoPublish,
+        autoPublish: shouldPublish,
         publishedAt: new Date().toISOString(),
         secondaryKeywords: outlineResult.keywords.slice(1),
       });
@@ -1042,8 +1221,8 @@ export async function runSeoAutomation(options: RunOptions) {
         keywords: outlineResult.keywords,
         intent: outlineResult.intent,
         source: "seo-automation",
-        detail: `SEO Autopilot da tao bai ${plan.title}.`,
-        hint: settings.autoPublish ? "Bai da duoc dang tu dong." : "Bai dang o trang thai nhap.",
+        detail: `SEO Autopilot da tao bai ${plan.title} voi diem SEO ${qualityResult.evaluation.score}/100.`,
+        hint: shouldPublish ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO." : "Bai duoc giu o trang thai nhap vi score chua dat nguong auto publish.",
         snapshot: {
           title: plan.title,
           slug: saved.slug,
@@ -1057,7 +1236,7 @@ export async function runSeoAutomation(options: RunOptions) {
           searchIntent: outlineResult.intent,
           serpInsight: outlineResult.serpInsight,
           images,
-          published: settings.autoPublish,
+          published: shouldPublish,
           hot: false,
           publishedAt: new Date().toISOString().slice(0, 10),
           savedNewsId: saved.id,
@@ -1070,7 +1249,7 @@ export async function runSeoAutomation(options: RunOptions) {
         keyword: outlineResult.keywords[0] || plan.keyword,
         newsId: saved.id,
         status: "created",
-        detail: `${settings.autoPublish ? "Đã đăng" : "Đã lưu nháp"} với ${countWords(content)} từ${featuredImageUrl ? ", có ảnh AI" : ""}.`,
+        detail: `${shouldPublish ? "Đã đăng" : "Đã lưu nháp"} với ${countWords(content)} từ${featuredImageUrl ? ", có ảnh AI" : ""}, score ${qualityResult.evaluation.score}/100.`,
       });
     } catch (error) {
       items.push({

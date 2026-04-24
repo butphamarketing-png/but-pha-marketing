@@ -461,6 +461,10 @@ export function SeoAutomationPanel() {
                 <Link2 size={16} className="mt-0.5 text-cyan-500" />
                 {settings.autoInsertInternalLinks ? "Có tự chèn internal links." : "Đang tắt tự chèn internal links."}
               </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
+                Chỉ tự publish khi điểm SEO nội bộ đạt từ 80/100, thấp hơn sẽ giữ ở nháp để tránh đăng bài yếu.
+              </li>
             </ul>
           </div>
 
