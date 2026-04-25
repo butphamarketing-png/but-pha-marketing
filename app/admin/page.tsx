@@ -245,6 +245,7 @@ export default function AdminPage() {
   const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
   const [blogForm, setBlogForm] = useState({
     title: "",
+    metaTitle: "",
     slug: "",
     description: "",
     metaDescription: "",
@@ -287,6 +288,7 @@ export default function AdminPage() {
     setEditingBlogId(null);
     setBlogForm({
       title: "",
+      metaTitle: "",
       slug: "",
       description: "",
       metaDescription: "",
@@ -339,6 +341,7 @@ export default function AdminPage() {
     `.trim();
     setBlogForm((prev) => ({
       ...prev,
+      metaTitle: prev.metaTitle || title,
       slug: prev.slug || slug,
       metaDescription: prev.metaDescription || `Giải pháp ${mainKeyword} chuyên sâu, tối ưu chuyển đổi và SEO bền vững cho doanh nghiệp.`,
       description: prev.description || `Tổng hợp chiến lược ${mainKeyword} từ nền tảng đến tối ưu hiệu quả thực tế.`,
@@ -412,6 +415,7 @@ export default function AdminPage() {
 
     setBlogForm((prev) => ({
       ...prev,
+      metaTitle: prev.metaTitle || title,
       slug: prev.slug || slug,
       keywordsMain: prev.keywordsMain || mainKeyword,
       keywordsSecondary: prev.keywordsSecondary || secondaryKeyword,
@@ -1252,6 +1256,7 @@ export default function AdminPage() {
     setEditingBlogId(item.id);
     setBlogForm({
       title: item.title || "",
+      metaTitle: item.title || "",
       slug: item.slug || "",
       description: item.description || "",
       metaDescription: item.metaDescription || "",
@@ -2296,10 +2301,7 @@ export default function AdminPage() {
               onEdit={editBlog}
               onGenerate={generateBlogDraftByAIV2}
               onTogglePublished={handleToggleBlogPublished}
-              onToggleHot={handleToggleBlogHot}
               onDelete={handleDeleteBlog}
-              settings={settings}
-              onUpdateIntegrations={(next) => updateSettings({ seoIntegrations: next })}
             />
           )}
 

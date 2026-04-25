@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   AlertCircle,
   ArrowLeft,
@@ -101,7 +101,7 @@ function formatTime(value: string) {
   }).format(date);
 }
 
-export default function CreateArticlePage() {
+function CreateArticlePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const newsId = searchParams.get("id") || searchParams.get("newsId") || "";
@@ -755,5 +755,13 @@ export default function CreateArticlePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CreateArticlePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+      <CreateArticlePageContent />
+    </Suspense>
   );
 }
