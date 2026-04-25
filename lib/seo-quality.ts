@@ -131,7 +131,7 @@ export function evaluateSeoArticle(input: {
     issues.push({ id: 4, label: "Cần thêm heading H2 để chia rõ các phần nội dung.", status: "critical", fixable: true });
   }
   if (wordCount < 900) {
-    issues.push({ id: 5, label: "Nội dung còn ngắn, nên mở rộng để đạt ít nhất 900 từ.", status: "critical", fixable: false });
+    issues.push({ id: 5, label: "Nội dung còn ngắn, nên mở rộng để đạt ít nhất 900 từ.", status: "critical", fixable: true });
   }
   if (density < 0.5 || density > 2.5) {
     issues.push({ id: 6, label: `Mật độ từ khóa chính chưa tối ưu (${density}%).`, status: "warning", fixable: true });

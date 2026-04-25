@@ -13,6 +13,7 @@ type InternalLinkItem = {
 
 export function Step5SEO({ data, setData, onNext, onPrev }: any) {
   const [loading, setLoading] = useState(false);
+  const [autoFixing, setAutoFixing] = useState(false);
   const [error, setError] = useState("");
   const [metrics, setMetrics] = useState<Record<string, number>>({});
   const [internalLinks, setInternalLinks] = useState<InternalLinkItem[]>([]);
@@ -81,6 +82,59 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
 
   const relatedKeywords = (data.serpInsight?.relatedKeywords?.length ? data.serpInsight.relatedKeywords : data.keywords || []).slice(0, 8);
 
+  const handleAutoFix = async () => {
+    setAutoFixing(true);
+    setError("");
+    try {
+      const response = await fetch("/api/seo/autofix", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.title,
+          metaTitle: data.metaTitle,
+          metaDescription: data.metaDescription,
+          description: data.description,
+          slug: data.slug,
+          content: data.content,
+          keywords: data.keywords,
+          imageUrls: Array.isArray(data.images) ? data.images.map((item: any) => item?.url).filter(Boolean) : [],
+          internalLinks,
+          serviceKeywords: data.serpInsight?.relatedKeywords || data.keywords || [],
+        }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result?.ok) {
+        throw new Error(result?.error || "Khong the tu sua SEO luc nay.");
+      }
+
+      const nextImages = Array.isArray(data.images)
+        ? data.images.map((item: any, index: number) => ({
+            ...item,
+            altText: result.images?.[index]?.altText || item.altText,
+          }))
+        : [];
+
+      setData({
+        ...data,
+        title: result.title,
+        slug: result.slug,
+        description: result.description,
+        metaTitle: result.metaTitle,
+        metaDescription: result.metaDescription,
+        content: result.content,
+        keywords: result.keywords,
+        images: nextImages,
+        seoScore: result.evaluation?.score || data.seoScore,
+        seoIssues: result.evaluation?.issues || data.seoIssues,
+      });
+      setMetrics(result.evaluation?.metrics || {});
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Khong the tu sua SEO luc nay.");
+    } finally {
+      setAutoFixing(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between border-b border-slate-100 pb-6">
@@ -100,6 +154,10 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
           <button onClick={handleAnalyze} className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
             <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
             Phan tich lai
+          </button>
+          <button onClick={handleAutoFix} className="flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-700 transition-colors hover:bg-indigo-100">
+            <Sparkles size={18} className={autoFixing ? "animate-pulse" : ""} />
+            {autoFixing ? "Dang tu sua" : "Tu sua tat ca"}
           </button>
           <button
             onClick={onNext}

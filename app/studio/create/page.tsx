@@ -20,7 +20,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { mergeNewsContentMeta } from "@/lib/news-content-meta";
 import { db } from "@/lib/useData";
-import { buildExcerpt, buildMetaDescription, buildMetaTitle, deriveKeywordCandidates, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
+import { autoFixSeoDraft } from "@/lib/seo-autofix";
+import { buildExcerpt, buildMetaDescription, buildMetaTitle, buildReliableSlug, buildSeoFriendlyTitle, deriveKeywordCandidates, slugify, type SeoStudioSnapshot } from "@/lib/seo-studio-draft";
 import { Step1Title } from "@/components/studio/Step1Title";
 import { Step2Outline } from "@/components/studio/Step2Outline";
 import { Step3Article } from "@/components/studio/Step3Article";
@@ -235,13 +236,15 @@ function CreateArticlePageContent() {
 
     setArticleData((prev) => {
       const nextKeywords = prev.keywords.length > 0 ? prev.keywords : deriveKeywordCandidates(prev.title);
-      const nextSlug = prev.slug || slugify(prev.title);
-      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: prev.title, keyword: nextKeywords[0] });
+      const nextTitle = prev.title ? buildSeoFriendlyTitle({ title: prev.title, keyword: nextKeywords[0] }) : prev.title;
+      const nextSlug = prev.slug || buildReliableSlug({ title: nextTitle, keyword: nextKeywords[0] });
+      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: nextTitle, keyword: nextKeywords[0] });
       const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
       const nextMetaDescription =
-        prev.metaDescription || buildMetaDescription({ title: prev.title, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
+        prev.metaDescription || buildMetaDescription({ title: nextTitle, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
 
       if (
+        nextTitle === prev.title &&
         nextKeywords.join("|") === prev.keywords.join("|") &&
         nextSlug === prev.slug &&
         nextMetaTitle === prev.metaTitle &&
@@ -253,6 +256,7 @@ function CreateArticlePageContent() {
 
       return {
         ...prev,
+        title: nextTitle,
         keywords: nextKeywords,
         slug: nextSlug,
         metaTitle: nextMetaTitle,
@@ -291,8 +295,8 @@ function CreateArticlePageContent() {
     setActionMessage("Da mo lai ket qua tu lich su.");
     setArticleData((prev) => ({
       ...prev,
-      title: snapshot.title || prev.title,
-      slug: snapshot.slug || slugify(snapshot.title || prev.title),
+      title: buildSeoFriendlyTitle({ title: snapshot.title || prev.title, keyword: snapshot.keywords?.[0] || prev.keywords?.[0] }),
+      slug: snapshot.slug || buildReliableSlug({ title: snapshot.title || prev.title, keyword: snapshot.keywords?.[0] || prev.keywords?.[0] }),
       featuredImageUrl: snapshot.featuredImageUrl || snapshot.images?.[0]?.url || prev.featuredImageUrl,
       metaTitle: snapshot.metaTitle || buildMetaTitle({ title: snapshot.title || prev.title, keyword: snapshot.keywords?.[0] }),
       metaDescription:
@@ -351,27 +355,42 @@ function CreateArticlePageContent() {
     setActionMessage("");
     mode === "draft" ? setDraftSaving(true) : setPublishing(true);
 
-    const payload = {
+    const autoFixed = autoFixSeoDraft({
       title: articleData.title.trim(),
-      content: mergeNewsContentMeta(derivedContent, { metaTitle: articleData.metaTitle }),
+      metaTitle: articleData.metaTitle,
+      metaDescription: articleData.metaDescription,
+      description: articleData.description,
+      slug: articleData.slug,
+      content: derivedContent,
+      keywords: articleData.keywords,
+      imageUrls: Array.isArray(articleData.images) ? articleData.images.map((item: any) => item?.url).filter(Boolean) : [],
+      serviceKeywords: articleData.serpInsight?.relatedKeywords || articleData.keywords,
+    });
+
+    const allowPublish =
+      mode === "publish" &&
+      autoFixed.evaluation.score >= 80 &&
+      !autoFixed.evaluation.issues.some((item) => item.status === "critical");
+
+    const payload = {
+      title: autoFixed.title,
+      content: mergeNewsContentMeta(autoFixed.content, { metaTitle: autoFixed.metaTitle }),
       category: "blog",
-      published: mode === "publish" ? true : false,
-      description: articleData.description || buildExcerpt({ content: articleData.content, maxLength: 170 }),
+      published: allowPublish,
+      description: autoFixed.description || buildExcerpt({ content: autoFixed.content, maxLength: 170 }),
       imageUrl:
         articleData.featuredImageUrl ||
         (Array.isArray(articleData.images) && articleData.images.length > 0 ? articleData.images[0]?.url || "" : ""),
-      slug: articleData.slug || slugify(articleData.title),
+      slug: autoFixed.slug || buildReliableSlug({ title: autoFixed.title, keyword: autoFixed.keywords[0] }),
       hot: articleData.hot,
-      metaDescription:
-        articleData.metaDescription ||
-        buildMetaDescription({
-          title: articleData.title,
-          keyword: articleData.keywords[0],
-          description: articleData.description,
-          content: articleData.content,
-        }),
-      keywordsMain: articleData.keywords[0] || "",
-      keywordsSecondary: articleData.keywords.slice(1).join(", "),
+      metaDescription: autoFixed.metaDescription || buildMetaDescription({
+        title: autoFixed.title,
+        keyword: autoFixed.keywords[0],
+        description: autoFixed.description,
+        content: autoFixed.content,
+      }),
+      keywordsMain: autoFixed.keywords[0] || "",
+      keywordsSecondary: autoFixed.keywords.slice(1).join(", "),
       publishedAt: articleData.publishedAt || new Date().toISOString().slice(0, 10),
     };
 
@@ -391,17 +410,28 @@ function CreateArticlePageContent() {
 
       setArticleData((prev) => ({
         ...prev,
+        title: autoFixed.title,
         slug: payload.slug,
         featuredImageUrl: payload.imageUrl,
         metaDescription: payload.metaDescription,
         description: payload.description,
-        content: derivedContent,
+        metaTitle: autoFixed.metaTitle,
+        content: autoFixed.content,
+        keywords: autoFixed.keywords,
+        seoScore: autoFixed.evaluation.score,
+        seoIssues: autoFixed.evaluation.issues,
         published: payload.published,
       }));
 
-      setActionMessage(mode === "publish" ? "Da xuat ban bai viet thanh cong." : "Da luu nhap bai viet.");
+      setActionMessage(
+        mode === "publish"
+          ? allowPublish
+            ? "Da xuat ban bai viet thanh cong."
+            : `Bai viet chua qua quality gate ${autoFixed.evaluation.score}/100, he thong da luu nhap de ban xem lai.`
+          : "Da luu nhap bai viet.",
+      );
       await refreshHistory().catch(() => undefined);
-      if (mode === "publish") {
+      if (mode === "publish" && allowPublish) {
         if (typeof window !== "undefined") {
           window.localStorage.removeItem(localDraftKey);
         }

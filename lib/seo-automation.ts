@@ -3,7 +3,8 @@ import path from "path";
 import OpenAI from "openai";
 import npmSlugify from "slugify";
 import { createServerClient } from "@/lib/supabase";
-import { buildExcerpt, buildMetaDescription, buildMetaTitle, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
+import { autoFixSeoDraft } from "@/lib/seo-autofix";
+import { buildExcerpt, buildMetaDescription, buildMetaTitle, buildReliableSlug, buildSeoFriendlyTitle, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { getOpenAiRuntimeConfig, getSerpApiRuntimeConfig } from "@/lib/studio-settings";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
@@ -952,6 +953,20 @@ function canAutoPublish(input: {
     };
   }
 
+  if (input.evaluation.metrics.titleLength < 30 || input.evaluation.metrics.metaLength < 120) {
+    return {
+      allowed: false,
+      reason: "Metadata chua dat chuan title/meta de tu dang.",
+    };
+  }
+
+  if (input.evaluation.metrics.wordCount < 900 || input.evaluation.metrics.h2Count < 2 || input.evaluation.metrics.h3Count < 1) {
+    return {
+      allowed: false,
+      reason: "Noi dung chua du do sau heading/depth de tu dang.",
+    };
+  }
+
   if (input.imageGenerationEnabled && !normalizeString(input.featuredImageUrl)) {
     return {
       allowed: false,
@@ -1137,12 +1152,18 @@ async function repairExistingSeoFields(rows: RawNewsRow[], limit: number) {
   const results: SeoAutomationArticleResult[] = [];
   for (const row of candidates.slice(0, limit)) {
     const primaryKeyword = deriveKeywordCandidates(row.title)[0] || row.title;
-    const metaTitle = buildMetaTitle({ title: row.title, keyword: primaryKeyword });
-    const description = buildExcerpt({ description: row.description, content: row.content, maxLength: 170 });
-    const metaDescription = normalizeString(row.meta_description) || buildMetaDescription({ title: row.title, keyword: primaryKeyword, content: row.content, description });
-    const mergedContent = mergeNewsContentMeta(row.content, { metaTitle });
+    const autoFixed = autoFixSeoDraft({
+      title: row.title,
+      metaTitle: parseNewsContentMeta(row.content).meta.metaTitle,
+      metaDescription: normalizeString(row.meta_description),
+      description: normalizeString(row.description),
+      slug: normalizeString(row.slug),
+      content: row.content,
+      keywords: [normalizeString(row.keywords_main) || primaryKeyword, ...deriveKeywordCandidates(row.title).slice(1)],
+    });
+    const mergedContent = mergeNewsContentMeta(autoFixed.content, { metaTitle: autoFixed.metaTitle });
     const repairedSlug = ensureUniqueNewsSlug(rows, {
-      slug: normalizeString(row.slug) || slugify(row.title),
+      slug: autoFixed.slug,
       title: row.title,
       excludeId: row.id,
     });
@@ -1151,10 +1172,10 @@ async function repairExistingSeoFields(rows: RawNewsRow[], limit: number) {
       .from("news")
       .update({
         slug: repairedSlug,
-        description,
-        meta_description: metaDescription,
-        keywords_main: normalizeString(row.keywords_main) || primaryKeyword,
-        keywords_secondary: normalizeString(row.keywords_secondary) || deriveKeywordCandidates(row.title).slice(1).join(", "),
+        description: autoFixed.description,
+        meta_description: autoFixed.metaDescription,
+        keywords_main: autoFixed.keywords[0] || primaryKeyword,
+        keywords_secondary: autoFixed.keywords.slice(1).join(", "),
         content: mergedContent,
         updated_at: new Date().toISOString(),
       })
@@ -1272,7 +1293,7 @@ export async function runSeoAutomation(options: RunOptions) {
       let content = ensureSectionAnchors(articleResult.content, outlineResult.structure);
 
       if (settings.autoInsertInternalLinks) {
-        const draftSlug = slugify(plan.title);
+        const draftSlug = buildReliableSlug({ title: plan.title, keyword: plan.keyword });
         const suggestions = await buildInternalLinkSuggestions(draftSlug, plan.title, content, outlineResult.keywords);
         content = injectInternalLinks(content, suggestions);
       }
@@ -1285,43 +1306,48 @@ export async function runSeoAutomation(options: RunOptions) {
         }
       }
 
-      const metaTitle = buildMetaTitle({ title: plan.title, keyword: outlineResult.keywords[0] || plan.keyword });
       const serviceKeywords = serviceSeeds.map((item) => item.keyword);
+      const seoTitle = buildSeoFriendlyTitle({ title: plan.title, keyword: outlineResult.keywords[0] || plan.keyword });
       const initialMetaDescription = buildMetaDescription({
-        title: plan.title,
+        title: seoTitle,
         keyword: outlineResult.keywords[0] || plan.keyword,
         content,
       });
       const qualityResult = await optimizeArticleQuality({
         client,
         model,
-        title: plan.title,
+        title: seoTitle,
         keyword: outlineResult.keywords[0] || plan.keyword,
         keywords: outlineResult.keywords,
         content,
         metaDescription: initialMetaDescription,
-        slug: slugify(plan.title),
+        slug: buildReliableSlug({ title: seoTitle, keyword: outlineResult.keywords[0] || plan.keyword }),
         serviceKeywords,
         targetWordCount: settings.targetWordCount,
       });
-      content = qualityResult.content;
-      const metaDescription = buildMetaDescription({
-        title: plan.title,
-        keyword: outlineResult.keywords[0] || plan.keyword,
-        content,
+      const autoFixed = autoFixSeoDraft({
+        title: seoTitle,
+        metaDescription: initialMetaDescription,
+        content: qualityResult.content,
+        keywords: outlineResult.keywords,
+        imageUrls: images.map((image) => image.url),
+        serviceKeywords,
       });
-      const description = buildExcerpt({ content, maxLength: 170 });
-      const desiredSlug = slugify(plan.title);
+      content = autoFixed.content;
+      const metaTitle = autoFixed.metaTitle;
+      const metaDescription = autoFixed.metaDescription;
+      const description = autoFixed.description;
+      const desiredSlug = autoFixed.slug;
       const publishDecision = canAutoPublish({
-        evaluation: qualityResult.evaluation,
+        evaluation: autoFixed.evaluation,
         autoPublishEnabled: settings.autoPublish,
         featuredImageUrl,
         imageGenerationEnabled: settings.generateImages,
       });
       const shouldPublish = publishDecision.allowed;
       const saved = await createOrUpdateNewsArticle({
-        title: plan.title,
-        keyword: outlineResult.keywords[0] || plan.keyword,
+        title: autoFixed.title,
+        keyword: autoFixed.keywords[0] || plan.keyword,
         content,
         metaTitle,
         metaDescription,
@@ -1333,29 +1359,29 @@ export async function runSeoAutomation(options: RunOptions) {
         batchId,
         autoPublish: shouldPublish,
         publishedAt: new Date().toISOString(),
-        secondaryKeywords: outlineResult.keywords.slice(1),
+        secondaryKeywords: autoFixed.keywords.slice(1),
       });
 
       await appendSeoStudioHistory({
         type: "article",
         status: "success",
-        title: plan.title,
+        title: autoFixed.title,
         provider: client ? "openai" : "fallback",
         model,
-        keywords: outlineResult.keywords,
+        keywords: autoFixed.keywords,
         intent: outlineResult.intent,
         source: "seo-automation",
-        detail: `SEO Autopilot da tao bai ${plan.title} voi diem SEO ${qualityResult.evaluation.score}/100.`,
+        detail: `SEO Autopilot da tao bai ${autoFixed.title} voi diem SEO ${autoFixed.evaluation.score}/100.`,
         hint: shouldPublish ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO." : publishDecision.reason,
         snapshot: {
-          title: plan.title,
+          title: autoFixed.title,
           slug: saved.slug,
           featuredImageUrl,
           metaTitle,
           metaDescription,
           description,
           content,
-          keywords: outlineResult.keywords,
+          keywords: autoFixed.keywords,
           outline: outlineResult.structure,
           searchIntent: outlineResult.intent,
           serpInsight: outlineResult.serpInsight,
@@ -1368,12 +1394,12 @@ export async function runSeoAutomation(options: RunOptions) {
       }).catch(() => undefined);
 
       items.push({
-        title: plan.title,
+        title: autoFixed.title,
         slug: saved.slug,
-        keyword: outlineResult.keywords[0] || plan.keyword,
+        keyword: autoFixed.keywords[0] || plan.keyword,
         newsId: saved.id,
         status: "created",
-        detail: `${shouldPublish ? "Đã đăng" : "Đã lưu nháp"} với ${countWords(content)} từ${featuredImageUrl ? ", có ảnh AI" : ""}, score ${qualityResult.evaluation.score}/100.`,
+        detail: `${shouldPublish ? "Đã đăng" : "Đã lưu nháp"} với ${countWords(content)} từ${featuredImageUrl ? ", có ảnh AI" : ""}, score ${autoFixed.evaluation.score}/100.`,
       });
       if (!shouldPublish && items[items.length - 1]) {
         items[items.length - 1]!.detail = `${items[items.length - 1]!.detail} ${publishDecision.reason}`.trim();
