@@ -1,20 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
-  BadgeCheck,
-  Bot,
   CalendarDays,
   CheckCircle2,
-  ChevronLeft,
   ChevronRight,
-  Globe2,
   LayoutTemplate,
   MapPinned,
+  MessageCircleMore,
   Phone,
+  Play,
   ShieldCheck,
   Sparkles,
   Star,
@@ -23,7 +20,7 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
-import { SiFacebook, SiGooglemaps, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
+import { SiFacebook, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { DynamicGreeting } from "@/components/shared/DynamicGreeting";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
@@ -76,11 +73,22 @@ export default function HomePageClient() {
   const { settings } = useAdmin();
 
   const brandName = settings?.title || "Bứt Phá Marketing";
-  const primaryColor = settings?.colors?.primary || "#8b5cf6";
   const logoSrc = useMemo(
     () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
     [settings?.favicon, settings?.logo],
   );
+
+  const homeMedia = settings?.media?.home;
+  const mascotImage = settings?.mascotImage || "/mascot-home.png";
+  const heroVisual =
+    homeMedia?.slideshow?.[0] ||
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80";
+  const teamImage =
+    homeMedia?.slideshow?.[1] ||
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1400&q=80";
+  const bookingVisual =
+    homeMedia?.slideshow?.[2] ||
+    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80";
 
   useEffect(() => {
     void Promise.all([db.news.getAll(), db.clientReviews.getAll(), db.services.getAll()]).then(
@@ -124,171 +132,159 @@ export default function HomePageClient() {
     return () => window.cancelAnimationFrame(raf);
   }, []);
 
-  const homeMedia = settings?.media?.home;
-  const teamImage =
-    homeMedia?.slideshow?.[0] ||
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1400&q=80";
-  const bookingVisual =
-    homeMedia?.slideshow?.[1] ||
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80";
-  const mascotImage = settings?.mascotImage || "/mascot-home.png";
-
   const navigation = [
     { label: "Trang Chủ", href: "#hero" },
-    { label: "Giới Thiệu", href: "#about" },
-    { label: "Website", href: "/website" },
-    { label: "Facebook", href: "/facebook" },
-    { label: "Google Maps", href: "/google-maps" },
+    { label: "Giới Thiệu", href: "/gioi-thieu" },
+    { label: "Dịch Vụ", href: "#services" },
+    { label: "Dự Án", href: "#projects" },
     { label: "Tin Tức", href: "#news" },
-    { label: "Liên Hệ Tư Vấn", href: "#consultation" },
-    { label: "Lộ Trình Khách Hàng", href: "#roadmap" },
+    { label: "Liên Hệ", href: "#consultation" },
   ];
 
-  const serviceShowcase = useMemo(() => {
+  const serviceCards = useMemo(() => {
     const preferredPlatforms = ["website", "facebook", "googlemaps"];
-    const fallbackIcons = {
-      website: LayoutTemplate,
-      facebook: SiFacebook,
-      googlemaps: MapPinned,
-    };
 
-    return preferredPlatforms.map((platformKey) => {
-      const match = services.find((service) => service.platform === platformKey);
+    return preferredPlatforms.map((platformKey, index) => {
+      const match = services.find((item) => item.platform === platformKey);
       const media = settings?.media?.[platformKey];
       const image =
         media?.slideshow?.[0] ||
         media?.cases?.[0]?.after ||
         media?.cases?.[0]?.before ||
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80";
-      const title =
-        match?.name ||
-        (platformKey === "website"
-          ? "Thiết kế Website"
-          : platformKey === "facebook"
-            ? "Quản trị Fanpage"
-            : "Google Maps Marketing");
-      const description =
-        match?.features?.slice(0, 2).join(", ") ||
-        (platformKey === "website"
-          ? "Website chuẩn SEO, tối ưu chuyển đổi và dễ vận hành."
-          : platformKey === "facebook"
-            ? "Tăng tương tác, nội dung đều và chốt khách tốt hơn."
-            : "Tối ưu hiển thị địa phương, tăng khách gọi và ghé thăm.");
+        heroVisual;
 
       return {
         key: platformKey,
-        title,
-        description,
+        title:
+          match?.name ||
+          (platformKey === "website"
+            ? "Thiết Kế Website"
+            : platformKey === "facebook"
+              ? "Quản trị Fanpage"
+              : "Google Maps Marketing"),
+        description:
+          match?.features?.slice(0, 2).join(", ") ||
+          (platformKey === "website"
+            ? "Website chuẩn SEO, giao diện đẹp, tối ưu chuyển đổi."
+            : platformKey === "facebook"
+              ? "Tăng hiện diện, tăng tương tác, tăng chuyển đổi."
+              : "Đưa doanh nghiệp vào top tìm kiếm địa phương."),
         href:
           platformKey === "website" ? "/website" : platformKey === "facebook" ? "/facebook" : "/google-maps",
         image,
-        icon: fallbackIcons[platformKey as keyof typeof fallbackIcons],
         accent:
-          platformKey === "website"
-            ? "from-emerald-500/20 via-emerald-500/10 to-transparent"
-            : platformKey === "facebook"
-              ? "from-sky-500/20 via-sky-500/10 to-transparent"
-              : "from-orange-500/20 via-orange-500/10 to-transparent",
+          index === 0
+            ? "from-emerald-500/25 via-emerald-500/10"
+            : index === 1
+              ? "from-sky-500/25 via-sky-500/10"
+              : "from-orange-500/25 via-orange-500/10",
       };
     });
-  }, [services, settings?.media]);
+  }, [heroVisual, services, settings?.media]);
 
   const projectShowcase = useMemo(() => {
-    const projectSeeds = [
-      { key: "website", subtitle: "Website chuẩn SEO" },
-      { key: "facebook", subtitle: "Fanpage chuyển đổi" },
-      { key: "googlemaps", subtitle: "Google Maps Marketing" },
-      { key: "website", subtitle: "Website bán hàng" },
+    const seeds = [
+      { key: "website", label: "Website bán hàng", result: "+150%", note: "Tăng doanh thu" },
+      { key: "facebook", label: "Website bán hàng", result: "+120%", note: "Tăng đơn hàng" },
+      { key: "googlemaps", label: "Google Maps", result: "Top 1", note: "Google Maps" },
+      { key: "website", label: "Website chuẩn SEO", result: "+200%", note: "Lượt truy cập" },
     ];
 
-    const cases = projectSeeds
-      .map((seed, index) => {
-        const media = settings?.media?.[seed.key];
-        const caseItem = media?.cases?.[index] || media?.cases?.[0];
-        const image =
+    return seeds.map((seed, index) => {
+      const media = settings?.media?.[seed.key];
+      const caseItem = media?.cases?.[index] || media?.cases?.[0];
+      return {
+        title:
+          caseItem?.title ||
+          (seed.key === "website"
+            ? index === 0
+              ? "Nội Thất Xinh"
+              : "Spa & Clinic"
+            : seed.key === "facebook"
+              ? "Thời Trang Eva"
+              : "Nhà Hàng Sushi House"),
+        subtitle: seed.label,
+        image:
           caseItem?.after ||
           caseItem?.before ||
           media?.slideshow?.[index] ||
           media?.slideshow?.[0] ||
-          bookingVisual;
-
-        return {
-          title: caseItem?.title || (seed.key === "website" ? "Thiết Kế Website Chuẩn SEO" : seed.key === "facebook" ? "Tăng Trưởng Fanpage" : "Google Maps Tăng Hiển Thị"),
-          subtitle: seed.subtitle,
-          result:
-            seed.key === "website"
-              ? "+150%"
-              : seed.key === "facebook"
-                ? "+120%"
-                : "Top 1",
-          note:
-            seed.key === "googlemaps"
-              ? "Google Maps"
-              : seed.key === "facebook"
-                ? "Tăng đơn hàng"
-                : "Tăng chuyển đổi",
-          image,
-        };
-      })
-      .slice(0, 4);
-
-    return cases;
-  }, [bookingVisual, settings?.media]);
+          heroVisual,
+        result: seed.result,
+        note: seed.note,
+      };
+    });
+  }, [heroVisual, settings?.media]);
 
   const topBlogs = blogs.slice(0, 4);
-  const topReviews = reviews.slice(0, 4);
+  const topReviews = reviews.slice(0, 3);
 
-  const platformCards = [
-    { label: "Website", icon: Globe2, href: "/website" },
-    { label: "Facebook", icon: SiFacebook, href: "/facebook" },
-    { label: "Google Maps", icon: MapPinned, href: "/google-maps" },
+  const heroStats = [
+    { value: "300+", label: "Dự án hoàn thành" },
+    { value: "150%", label: "Tăng trưởng TB" },
+    { value: "98%", label: "Khách hàng hài lòng" },
+  ];
+
+  const whyChooseUs = [
+    {
+      title: "Tư duy marketing định hướng kết quả",
+      description: "Không chỉ làm web, chúng tôi xử lý hệ thống tạo nhiều khách hàng và doanh thu.",
+      icon: Target,
+    },
+    {
+      title: "Tối ưu chuyển đổi",
+      description: "Thiết kế chuẩn hành vi người dùng, tăng tỷ lệ chuyển đổi và hiệu quả kinh doanh.",
+      icon: TrendingUp,
+    },
+    {
+      title: "Hệ thống tự động",
+      description: "Ứng dụng AI & automation giúp tiết kiệm thời gian, chi phí và tối ưu hiệu suất.",
+      icon: Workflow,
+    },
+    {
+      title: "Đồng hành lâu dài",
+      description: "Hỗ trợ 24/7, nâng cấp và tối ưu cùng doanh nghiệp trên hành trình tăng trưởng.",
+      icon: Users,
+    },
   ];
 
   const valuePillars = [
     {
       title: "Tầm nhìn",
-      description: "Trở thành đơn vị dẫn đầu trong việc xây hệ thống marketing giúp doanh nghiệp tăng trưởng bền vững.",
+      description: "Trở thành đơn vị dẫn đầu trong việc tạo hệ thống marketing online tạo ra tăng trưởng bền vững.",
       icon: Target,
     },
     {
       title: "Sứ mệnh",
-      description: "Mang giải pháp marketing thực chiến, đo lường được và dễ triển khai cho doanh nghiệp Việt Nam.",
+      description: "Mang giải pháp marketing hiệu quả – minh bạch – bền vững cho mỗi doanh nghiệp.",
       icon: Sparkles,
     },
     {
       title: "Trách nhiệm",
-      description: "Cam kết đồng hành, tối ưu liên tục và minh bạch kết quả để khách hàng an tâm phát triển.",
+      description: "Luôn đồng hành, hỗ trợ và cam kết hiệu quả, lấy thành công của khách hàng làm giá trị cốt lõi.",
       icon: ShieldCheck,
     },
   ];
 
-  const advantages = [
+  const socialLinks = [
     {
-      title: "Tư duy marketing định hướng kết quả",
-      description: "Không chỉ làm web hay chạy ads, chúng tôi xây hệ thống tạo khách hàng và doanh thu.",
-      icon: TrendingUp,
+      label: "Messenger",
+      href: settings?.fanpage || "#",
+      icon: SiMessenger,
+      bg: "bg-[#0078FF]",
     },
     {
-      title: "Tối ưu chuyển đổi",
-      description: "Thiết kế và nội dung đều đi theo mục tiêu chốt khách, không chỉ dừng ở hiển thị đẹp.",
-      icon: Target,
+      label: "Zalo",
+      href: settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#",
+      icon: SiZalo,
+      bg: "bg-[#0068FF]",
     },
     {
-      title: "Hệ thống tự động",
-      description: "Ứng dụng AI và automation để giảm thời gian xử lý và tăng hiệu quả vận hành.",
-      icon: Workflow,
+      label: "Gọi ngay",
+      href: settings?.hotline ? `tel:${settings.hotline}` : "#",
+      icon: Phone,
+      bg: "bg-[#26C16A]",
     },
-    {
-      title: "Đồng hành lâu dài",
-      description: "Tư vấn, tối ưu và hỗ trợ liên tục như một đội marketing nội bộ cho doanh nghiệp.",
-      icon: Users,
-    },
-  ];
-
-  const stats = [
-    { value: "300+", label: "Dự án hoàn thành" },
-    { value: "150%", label: "Tăng trưởng TB" },
-    { value: "98%", label: "Khách hàng hài lòng" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -302,18 +298,16 @@ export default function HomePageClient() {
   const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (submittingContact) return;
+
     setSubmittingContact(true);
     setContactState({ type: "idle", message: "" });
-
-    const service = contactForm.interest || "Tư vấn tổng thể";
-    const note = [contactForm.location, contactForm.note].filter(Boolean).join(" | ");
 
     const result = await db.leads.add({
       type: "contact",
       name: contactForm.name,
       phone: contactForm.phone,
-      service,
-      note,
+      service: contactForm.interest || "Tư vấn tổng thể",
+      note: [contactForm.location, contactForm.note].filter(Boolean).join(" | "),
     });
 
     if (result.error) {
@@ -336,11 +330,7 @@ export default function HomePageClient() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background">
         <div className="relative mb-8 flex h-36 w-36 items-center justify-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 2.2, ease: "linear" }}
-            className="absolute inset-0 rounded-full border border-primary/20 border-t-primary shadow-[0_0_40px_rgba(139,92,246,0.3)]"
-          />
+          <div className="absolute inset-0 rounded-full border border-primary/20 border-t-primary shadow-[0_0_40px_rgba(139,92,246,0.3)] animate-spin" />
           <div className="absolute inset-[18px] rounded-full bg-[radial-gradient(circle,_rgba(139,92,246,0.25)_0%,_transparent_70%)] blur-2xl" />
           <img src={logoSrc} alt="Logo" className="relative h-20 w-20 rounded-full object-cover" />
         </div>
@@ -358,25 +348,23 @@ export default function HomePageClient() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#090511] text-foreground">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <ParticleBackground />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.28),_transparent_35%),linear-gradient(180deg,rgba(8,5,16,0.5),rgba(8,5,16,0.95))]" />
-      </div>
+    <div className="relative min-h-screen overflow-x-hidden bg-[#07040d] text-white">
+      <ParticleBackground />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_28%),linear-gradient(180deg,rgba(9,5,17,0.82),rgba(6,3,12,0.98))]" />
 
-      <DynamicGreeting color={primaryColor} />
+      <DynamicGreeting color={settings?.colors?.primary || "#8b5cf6"} />
 
       <div className="relative z-10">
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-[#080510]/85 backdrop-blur-xl">
+        <header className="sticky top-0 z-50 border-b border-fuchsia-400/15 bg-[#090512]/90 backdrop-blur-xl">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 lg:px-6">
-            <Link href="/" className="group flex items-center gap-3" onClick={playClickSound}>
+            <Link href="/" className="flex items-center gap-3" onClick={playClickSound}>
               <div className="relative">
-                <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="absolute inset-0 rounded-full bg-fuchsia-500/30 blur-xl" />
                 <img src={logoSrc} alt={brandName} className="relative h-11 w-11 rounded-full object-cover" />
               </div>
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.18em] text-white">{brandName}</p>
-                <p className="text-[11px] font-medium text-purple-200/80">Growth • AI • Conversion</p>
+                <p className="text-[11px] text-purple-200/80">Marketing & Growth System</p>
               </div>
             </Link>
 
@@ -387,16 +375,12 @@ export default function HomePageClient() {
                     key={item.label}
                     type="button"
                     onClick={() => scrollToSection(item.href)}
-                    className="text-sm font-semibold text-white/80 transition-colors hover:text-white"
+                    className="text-sm font-semibold text-white/80 transition hover:text-white"
                   >
                     {item.label}
                   </button>
                 ) : (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="text-sm font-semibold text-white/80 transition-colors hover:text-white"
-                  >
+                  <Link key={item.label} href={item.href} className="text-sm font-semibold text-white/80 transition hover:text-white">
                     {item.label}
                   </Link>
                 ),
@@ -406,15 +390,18 @@ export default function HomePageClient() {
             <div className="hidden items-center gap-3 lg:flex">
               <button
                 type="button"
-                onClick={() => setShowLogin(true)}
-                className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-bold text-white transition hover:border-white/25 hover:bg-white/10"
+                onClick={() => {
+                  playClickSound();
+                  setShowLogin(true);
+                }}
+                className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10"
               >
-                Lộ trình khách hàng
+                Lộ trình dự án
               </button>
               <button
                 type="button"
                 onClick={() => scrollToSection("#consultation")}
-                className="rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-sm font-bold text-white shadow-[0_12px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
+                className="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
               >
                 Liên hệ tư vấn
               </button>
@@ -422,37 +409,25 @@ export default function HomePageClient() {
           </div>
         </header>
 
-        <main className="pb-16">
-          <section id="hero" className="mx-auto max-w-7xl px-4 pb-8 pt-8 lg:px-6 lg:pt-10">
-            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45 }}
-                className="space-y-7"
-              >
-                <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/25 bg-fuchsia-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.26em] text-fuchsia-200">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  Bứt phá doanh thu
-                </div>
+        <main>
+          <section id="hero" className="mx-auto max-w-7xl px-4 pb-10 pt-10 lg:px-6 lg:pt-12">
+            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div className="space-y-7">
+                <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.04] tracking-[-0.05em] text-white md:text-6xl">
+                  Website chỉ để đẹp
+                  <br />
+                  không tạo ra doanh thu
+                  <br />
+                  <span className="bg-gradient-to-r from-fuchsia-400 via-violet-300 to-fuchsia-500 bg-clip-text text-transparent">
+                    thì không có ý nghĩa!
+                  </span>
+                </h1>
 
-                <div className="space-y-4">
-                  <h1 className="max-w-3xl text-4xl font-black uppercase leading-[0.94] tracking-[-0.04em] text-white sm:text-5xl xl:text-[4.8rem]">
-                    Website chỉ để đẹp
-                    <br />
-                    không tạo ra doanh thu
-                    <br />
-                    <span className="bg-gradient-to-r from-fuchsia-400 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
-                      thì không có ý nghĩa!
-                    </span>
-                  </h1>
-                  <p className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                    {settings?.heroSubtitle?.trim() ||
-                      `${brandName} giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.`}
-                  </p>
-                </div>
+                <p className="max-w-2xl text-lg leading-8 text-slate-300">
+                  Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.
+                </p>
 
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-wrap gap-4">
                   <button
                     type="button"
                     onClick={() => scrollToSection("#consultation")}
@@ -461,107 +436,75 @@ export default function HomePageClient() {
                     Liên hệ tư vấn ngay
                     <ArrowRight className="h-4 w-4" />
                   </button>
-                  <Link
-                    href="/website"
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection("#services")}
                     className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10"
                   >
                     Xem dịch vụ
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
+                    <Play className="h-4 w-4 fill-current" />
+                  </button>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
-                  {stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-                    >
-                      <div className="mb-1 text-2xl font-black text-white">{stat.value}</div>
-                      <div className="text-sm text-slate-300">{stat.label}</div>
+                  {heroStats.map((item) => (
+                    <div key={item.label} className="rounded-2xl border border-fuchsia-400/15 bg-white/[0.03] px-4 py-4">
+                      <div className="text-3xl font-black text-white">{item.value}</div>
+                      <div className="mt-1 text-sm text-slate-300">{item.label}</div>
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.55, delay: 0.08 }}
-                className="relative"
-              >
-                <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,_rgba(168,85,247,0.35),_transparent_52%)] blur-3xl" />
-                <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(16,10,26,0.9),rgba(9,5,17,0.95))] p-5 shadow-[0_30px_80px_rgba(2,0,10,0.5)]">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.12),_transparent_34%),radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.16),_transparent_44%)]" />
-
-                  <div className="relative grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-                    <div className="space-y-4">
-                      <div className="rounded-3xl border border-fuchsia-500/25 bg-fuchsia-500/10 p-5">
-                        <p className="text-sm font-semibold text-fuchsia-100/80">Tăng trưởng doanh thu</p>
-                        <div className="mt-2 text-4xl font-black text-white">+215%</div>
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                          <p className="text-sm font-semibold text-slate-300">Khách hàng mới</p>
-                          <div className="mt-2 text-3xl font-black text-white">+180%</div>
-                        </div>
-                        <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                          <p className="text-sm font-semibold text-slate-300">Hiệu quả chiến dịch</p>
-                          <div className="mt-2 text-3xl font-black text-white">+150%</div>
-                        </div>
-                      </div>
+              <div className="relative overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.22),transparent_44%),linear-gradient(180deg,rgba(18,9,32,0.9),rgba(11,6,20,0.96))] p-6 shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent)]" />
+                <div className="grid gap-6 lg:grid-cols-[1fr_0.72fr]">
+                  <div className="relative">
+                    <img src={heroVisual} alt="Dashboard tăng trưởng" className="h-[360px] w-full rounded-[1.6rem] object-cover opacity-80" />
+                    <div className="absolute left-4 top-4 rounded-2xl border border-fuchsia-400/20 bg-[#130a22]/90 px-4 py-4 shadow-[0_20px_50px_rgba(7,3,15,0.4)]">
+                      <div className="text-sm font-bold text-slate-300">Tăng trưởng doanh thu</div>
+                      <div className="mt-2 text-4xl font-black text-white">+215%</div>
+                      <div className="mt-3 text-sm text-emerald-300">Khách hàng mới +180%</div>
                     </div>
-
-                    <div className="relative min-h-[360px]">
-                      <div className="absolute inset-x-6 bottom-0 h-10 rounded-full bg-fuchsia-500/25 blur-2xl" />
-                      <div className="absolute inset-x-0 bottom-3 h-44 rounded-[999px] border border-fuchsia-500/20 bg-[radial-gradient(circle,_rgba(168,85,247,0.22),_transparent_65%)]" />
-                      <div className="absolute inset-x-12 top-6 rounded-3xl border border-white/10 bg-white/5 p-4 text-right shadow-[0_20px_40px_rgba(12,6,20,0.3)]">
-                        <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Marketing system</p>
-                        <div className="mt-3 flex items-end justify-end gap-2">
-                          <span className="h-10 w-3 rounded-full bg-violet-500/80" />
-                          <span className="h-16 w-3 rounded-full bg-fuchsia-500/80" />
-                          <span className="h-24 w-3 rounded-full bg-cyan-400/80" />
-                          <span className="h-14 w-3 rounded-full bg-violet-300/80" />
+                    <div className="absolute bottom-4 left-4 right-4 grid gap-3 sm:grid-cols-3">
+                      {[
+                        { label: "Website", icon: LayoutTemplate },
+                        { label: "Facebook", icon: SiFacebook },
+                        { label: "Google Maps", icon: MapPinned },
+                      ].map((item) => (
+                        <div key={item.label} className="rounded-2xl border border-white/10 bg-[#130a22]/85 px-4 py-3 text-center shadow-[0_14px_32px_rgba(5,2,10,0.32)]">
+                          <div className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-fuchsia-500/15 text-fuchsia-200">
+                            <item.icon className="h-4.5 w-4.5" />
+                          </div>
+                          <div className="text-sm font-black text-white">{item.label}</div>
                         </div>
-                      </div>
-                      <div className="absolute bottom-8 left-1/2 w-[74%] -translate-x-1/2">
-                        <img src={mascotImage} alt="Bứt Phá Marketing AI" className="mx-auto w-full max-w-[360px] drop-shadow-[0_18px_40px_rgba(168,85,247,0.35)]" />
-                      </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="relative mt-5 grid gap-3 sm:grid-cols-3">
-                    {platformCards.map((card) => {
-                      const Icon = card.icon;
-                      return (
-                        <Link
-                          key={card.label}
-                          href={card.href}
-                          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0f0a1c] px-4 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-fuchsia-400/30"
-                        >
-                          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/15 text-fuchsia-200">
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          {card.label}
-                        </Link>
-                      );
-                    })}
+                  <div className="relative flex items-end justify-center">
+                    <span className="absolute bottom-6 h-28 w-28 rounded-full bg-fuchsia-500/25 blur-3xl" />
+                    <img
+                      src={mascotImage}
+                      alt="Robot Bứt Phá Marketing"
+                      className="relative max-h-[340px] object-contain drop-shadow-[0_28px_40px_rgba(168,85,247,0.34)]"
+                    />
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </section>
 
-          <section id="about" className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-14">
-            <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
-              <div className="overflow-hidden rounded-[2rem] border border-fuchsia-500/20 bg-white/[0.03] p-3 shadow-[0_24px_70px_rgba(5,2,12,0.45)]">
-                <div className="relative overflow-hidden rounded-[1.6rem]">
-                  <img src={teamImage} alt={`${brandName} team`} className="h-full min-h-[360px] w-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080510] via-transparent to-transparent" />
+          <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
+            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+              <div className="overflow-hidden rounded-[1.9rem] border border-fuchsia-400/15 bg-[#10081b] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
+                <div className="relative">
+                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-[340px] w-full object-cover" />
                   <button
                     type="button"
-                    className="absolute bottom-5 left-5 inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:scale-105"
+                    className="absolute bottom-5 left-1/2 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border border-fuchsia-300/35 bg-fuchsia-500/20 text-white shadow-[0_0_40px_rgba(168,85,247,0.35)] backdrop-blur"
                   >
-                    <span className="ml-1 text-2xl">▶</span>
+                    <Play className="ml-1 h-8 w-8 fill-current" />
                   </button>
                 </div>
               </div>
@@ -569,129 +512,80 @@ export default function HomePageClient() {
               <div className="space-y-6">
                 <div>
                   <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Về chúng tôi</p>
-                  <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-white md:text-5xl">Bứt Phá Marketing</h2>
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-300">
-                    Chúng tôi không chỉ làm marketing. Chúng tôi xây hệ thống giúp doanh nghiệp tăng trưởng bền
-                    vững, tự động và có thể đo lường.
+                  <h2 className="mt-2 text-4xl font-black tracking-[-0.05em] text-white">Bứt Phá Marketing</h2>
+                  <p className="mt-2 text-xl font-semibold text-purple-200">Đồng hành cùng doanh nghiệp bứt phá doanh thu</p>
+                  <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300">
+                    Chúng tôi không chỉ làm marketing. Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
                   </p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
                   {valuePillars.map((pillar) => (
-                    <div
-                      key={pillar.title}
-                      className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-                    >
-                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
+                    <div key={pillar.title} className="rounded-[1.5rem] border border-fuchsia-400/15 bg-[#10081b] p-5">
+                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
                         <pillar.icon className="h-5 w-5" />
                       </span>
                       <h3 className="mt-4 text-xl font-black text-white">{pillar.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-300">{pillar.description}</p>
+                      <p className="mt-2 text-sm leading-7 text-slate-300">{pillar.description}</p>
                     </div>
                   ))}
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/website"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
-                  >
-                    Xem dịch vụ
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection("#consultation")}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-fuchsia-500/30 bg-fuchsia-500/10 px-5 py-3 text-sm font-black text-fuchsia-100 transition hover:bg-fuchsia-500/15"
-                  >
-                    Nhận tư vấn ngay
-                  </button>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
-                <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">Nền tảng chúng tôi triển khai</h2>
-              </div>
+          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+            <div className="mb-6 text-center">
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
             </div>
 
             <div className="grid gap-4 lg:grid-cols-3">
-              {serviceShowcase.map((service) => (
+              {serviceCards.map((card) => (
                 <Link
-                  key={service.key}
-                  href={service.href}
-                  className={`group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0e0918] p-5 shadow-[0_20px_60px_rgba(4,2,10,0.42)] transition hover:-translate-y-1 ${service.accent}`}
+                  key={card.key}
+                  href={card.href}
+                  className={`group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(16,8,27,0.96),rgba(12,6,20,0.98))] p-5 shadow-[0_24px_70px_rgba(4,2,10,0.36)]`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br opacity-70 transition duration-500 group-hover:opacity-100" />
-                  <div className="relative z-10 flex h-full flex-col">
-                    <div className="mb-4 overflow-hidden rounded-[1.4rem] border border-white/10">
-                      <img src={service.image} alt={service.title} className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${card.accent} to-transparent opacity-70`} />
+                  <div className="relative z-10">
+                    <div className="overflow-hidden rounded-[1.3rem] border border-white/10 bg-black/20">
+                      <img src={card.image} alt={card.title} className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white">
-                        <service.icon className="h-5 w-5" />
-                      </span>
-                      <h3 className="text-2xl font-black text-white">{service.title}</h3>
-                    </div>
-                    <p className="mt-4 flex-1 text-sm leading-7 text-slate-300">{service.description}</p>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-fuchsia-200">
+                    <h3 className="mt-5 text-2xl font-black text-white">{card.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">{card.description}</p>
+                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-black text-fuchsia-300">
                       Xem chi tiết
-                      <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                    </span>
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           </section>
 
-          <section id="roadmap" className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-            <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 shadow-[0_24px_70px_rgba(5,2,12,0.4)]">
-              <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">Xây đúng hệ thống, tăng đúng doanh thu</h2>
+          <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
+            <div className="mb-6 text-center">
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {whyChooseUs.map((item) => (
+                <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center">
+                  <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-500/12 text-fuchsia-200 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
+                    <item.icon className="h-7 w-7" />
+                  </span>
+                  <h3 className="mt-4 text-xl font-black text-white">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setShowLogin(true)}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
-                >
-                  Xem lộ trình khách hàng
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {advantages.map((advantage) => (
-                  <div
-                    key={advantage.title}
-                    className="rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5"
-                  >
-                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
-                      <advantage.icon className="h-6 w-6" />
-                    </span>
-                    <h3 className="mt-4 text-xl font-black text-white">{advantage.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{advantage.description}</p>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
+          <section id="projects" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Dự án tiêu biểu</p>
-                <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">Một vài thành quả nổi bật</h2>
               </div>
-              <Link
-                href="/website"
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
-              >
+              <Link href="/website" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
                 Xem tất cả dự án
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -699,17 +593,14 @@ export default function HomePageClient() {
 
             <div className="grid gap-4 xl:grid-cols-4">
               {projectShowcase.map((project) => (
-                <article
-                  key={`${project.title}-${project.subtitle}`}
-                  className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(5,2,12,0.35)]"
-                >
-                  <img src={project.image} alt={project.title} className="h-48 w-full object-cover" />
+                <article key={`${project.title}-${project.subtitle}`} className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)]">
+                  <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
                   <div className="space-y-3 p-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-fuchsia-300">{project.subtitle}</p>
                     <h3 className="text-xl font-black text-white">{project.title}</h3>
-                    <div className="flex items-end justify-between gap-3">
+                    <div className="text-sm text-slate-300">{project.subtitle}</div>
+                    <div className="flex items-center justify-between gap-3">
                       <div className="text-3xl font-black text-emerald-300">{project.result}</div>
-                      <div className="text-sm text-slate-300">{project.note}</div>
+                      <div className="text-sm font-semibold text-slate-300">{project.note}</div>
                     </div>
                   </div>
                 </article>
@@ -717,115 +608,61 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Khách hàng nói gì về chúng tôi?</p>
-                <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">Niềm tin đến từ kết quả thật</h2>
-              </div>
+          <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
+            <div className="mb-6 text-center">
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Khách hàng nói gì về chúng tôi?</p>
             </div>
-
-            <div className="grid gap-4 xl:grid-cols-4">
-              {topReviews.length > 0
-                ? topReviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_20px_60px_rgba(4,2,10,0.32)]"
-                    >
-                      <div className="flex items-center gap-3">
-                        {review.logoUrl ? (
-                          <img src={review.logoUrl} alt={review.clientName} className="h-12 w-12 rounded-2xl object-cover" />
-                        ) : (
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/15 font-black text-white">
-                            {review.clientName?.slice(0, 1) || "K"}
-                          </div>
-                        )}
-                        <div>
-                          <div className="text-sm font-black text-white">{review.clientName}</div>
-                          <div className="mt-1 flex items-center gap-1 text-yellow-300">
-                            {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, index) => (
-                              <Star key={`${review.id}-${index}`} className="h-3.5 w-3.5 fill-current" />
-                            ))}
-                          </div>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {(topReviews.length ? topReviews : Array.from({ length: 3 }).map((_, index) => ({
+                id: `fallback-${index}`,
+                clientName: index === 0 ? "Nguyễn Văn Hùng" : index === 1 ? "Trần Thị Mai" : "Lê Minh Tuấn",
+                rating: 5,
+                content:
+                  index === 0
+                    ? "Từ ngày làm web bên em đơn nhiều hơn hẳn anh ơi. Chuẩn luôn! Doanh số tăng rõ."
+                    : index === 1
+                      ? "Fanpage lên đều, khách nhắn đông hơn trước rất nhiều. Dạ em cảm ơn chị, bên em sẽ hỗ trợ lâu dài."
+                      : "Google Maps lên top 1 luôn. Tuyệt vời! Chúc mừng anh.",
+                createdAt: "",
+              } as ClientReview))).map((review) => (
+                <div key={review.id} className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.3)]">
+                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      {"logoUrl" in review && review.logoUrl ? (
+                        <img src={review.logoUrl} alt={review.clientName} className="h-12 w-12 rounded-full object-cover" />
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-fuchsia-500/15 font-black text-white">
+                          {review.clientName.slice(0, 1)}
                         </div>
+                      )}
+                      <div>
+                        <div className="text-sm font-black text-white">{review.clientName}</div>
+                        <div className="text-xs text-slate-400">Khách hàng Bứt Phá Marketing</div>
                       </div>
-                      <p className="mt-4 text-sm leading-7 text-slate-300">{review.content}</p>
                     </div>
-                  ))
-                : Array.from({ length: 4 }).map((_, index) => (
-                    <div key={index} className="rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/15 font-black text-white">
-                          B
-                        </div>
-                        <div>
-                          <div className="text-sm font-black text-white">Khách hàng tiêu biểu</div>
-                          <div className="mt-1 text-xs text-yellow-300">★★★★★</div>
-                        </div>
-                      </div>
-                      <p className="mt-4 text-sm leading-7 text-slate-300">
-                        Dịch vụ bám sát mục tiêu kinh doanh và tối ưu đều tay theo từng giai đoạn phát triển.
-                      </p>
+                    <div className="rounded-full bg-[#1677ff] px-3 py-1 text-xs font-black text-white">Zalo</div>
+                  </div>
+                  <div className="space-y-4 px-5 py-5">
+                    <div className="rounded-2xl bg-[#e9f3ff] px-4 py-4 text-[15px] leading-7 text-slate-800">
+                      {review.content}
                     </div>
-                  ))}
+                    <div className="flex items-center gap-1 text-yellow-300">
+                      {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, index) => (
+                        <Star key={`${review.id}-${index}`} className="h-4 w-4 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
 
-          <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Tin tức & kiến thức</p>
-                <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">Cập nhật liên tục để làm đúng hơn</h2>
-              </div>
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
-              >
-                Xem tất cả bài viết
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="grid gap-4 xl:grid-cols-4">
-              {topBlogs.map((blog) => {
-                const href = `/blog/${blog.slug || slugify(blog.title) || blog.id}`;
-                return (
-                  <Link
-                    key={blog.id}
-                    href={href}
-                    className="group overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.32)]"
-                  >
-                    <div className="overflow-hidden">
-                      <img
-                        src={blog.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"}
-                        alt={blog.title}
-                        className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                      />
-                    </div>
-                    <div className="space-y-3 p-5">
-                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-fuchsia-300">
-                        {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
-                      </p>
-                      <h3 className="line-clamp-2 text-xl font-black text-white">{blog.title}</h3>
-                      <p className="line-clamp-3 text-sm leading-7 text-slate-300">
-                        {blog.description || "Kiến thức thực chiến giúp doanh nghiệp làm marketing hiệu quả hơn."}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-
-          <section id="consultation" className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-            <div className="grid gap-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(20,12,32,0.95),rgba(11,7,21,0.98))] p-6 shadow-[0_30px_80px_rgba(3,1,8,0.46)] lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
+          <section id="consultation" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+            <div className="grid gap-6 overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[linear-gradient(180deg,rgba(22,11,36,0.96),rgba(11,6,20,0.98))] p-6 shadow-[0_30px_80px_rgba(3,1,8,0.46)] lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Đặt lịch tư vấn trực tiếp</p>
-                <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">
-                  Nhận lộ trình marketing phù hợp cho doanh nghiệp
-                </h2>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
-                  Chúng tôi sẽ liên hệ nhanh để phân tích nhu cầu, định hướng dịch vụ phù hợp và đề xuất lộ trình rõ ràng.
+                <p className="mt-3 text-base leading-8 text-slate-300">
+                  Chọn thời gian phù hợp, chúng tôi sẽ liên hệ xác nhận trong vòng 15 phút!
                 </p>
 
                 <form className="mt-8 space-y-4" onSubmit={handleContactSubmit}>
@@ -839,7 +676,7 @@ export default function HomePageClient() {
                     <input
                       value={contactForm.phone}
                       onChange={(event) => setContactForm((prev) => ({ ...prev, phone: event.target.value }))}
-                      placeholder="Số điện thoại"
+                      placeholder="Nhập số điện thoại"
                       className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
                     />
                   </div>
@@ -847,7 +684,7 @@ export default function HomePageClient() {
                     <input
                       value={contactForm.location}
                       onChange={(event) => setContactForm((prev) => ({ ...prev, location: event.target.value }))}
-                      placeholder="Địa điểm / ngành nghề"
+                      placeholder="Địa điểm"
                       className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
                     />
                     <select
@@ -855,17 +692,27 @@ export default function HomePageClient() {
                       onChange={(event) => setContactForm((prev) => ({ ...prev, interest: event.target.value }))}
                       className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition focus:border-fuchsia-400/50"
                     >
-                      <option value="" className="bg-[#120b20]">Chọn nền tảng quan tâm</option>
-                      <option value="Thiết kế Website" className="bg-[#120b20]">Thiết kế Website</option>
-                      <option value="Quản trị Fanpage" className="bg-[#120b20]">Quản trị Fanpage</option>
-                      <option value="Google Maps Marketing" className="bg-[#120b20]">Google Maps Marketing</option>
-                      <option value="SEO Website" className="bg-[#120b20]">SEO Website</option>
+                      <option value="" className="bg-[#120b20]">
+                        Chọn nền tảng
+                      </option>
+                      <option value="Thiết kế Website" className="bg-[#120b20]">
+                        Thiết kế Website
+                      </option>
+                      <option value="Quản trị Fanpage" className="bg-[#120b20]">
+                        Quản trị Fanpage
+                      </option>
+                      <option value="Google Maps Marketing" className="bg-[#120b20]">
+                        Google Maps Marketing
+                      </option>
+                      <option value="SEO Website" className="bg-[#120b20]">
+                        SEO Website
+                      </option>
                     </select>
                   </div>
                   <textarea
                     value={contactForm.note}
                     onChange={(event) => setContactForm((prev) => ({ ...prev, note: event.target.value }))}
-                    placeholder="Bạn đang muốn tư vấn về vấn đề gì?"
+                    placeholder="Bạn muốn tư vấn về vấn đề gì?"
                     rows={4}
                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
                   />
@@ -885,7 +732,7 @@ export default function HomePageClient() {
                 </form>
               </div>
 
-              <div className="relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(168,85,247,0.18),_transparent_45%),rgba(255,255,255,0.03)] p-6">
+              <div className="relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_45%),rgba(255,255,255,0.03)] p-6">
                 <div className="absolute right-4 top-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-right">
                   <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Phản hồi</p>
                   <div className="mt-2 text-3xl font-black text-white">15 phút</div>
@@ -912,17 +759,50 @@ export default function HomePageClient() {
             </div>
           </section>
 
+          <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Tin tức & kiến thức</p>
+              </div>
+              <Link href="/blog" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
+                Xem tất cả bài viết
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid gap-4 xl:grid-cols-4">
+              {topBlogs.map((blog) => {
+                const href = `/blog/${blog.slug || slugify(blog.title) || blog.id}`;
+                return (
+                  <Link key={blog.id} href={href} className="group overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.32)]">
+                    <div className="overflow-hidden">
+                      <img
+                        src={blog.imageUrl || heroVisual}
+                        alt={blog.title}
+                        className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                      />
+                    </div>
+                    <div className="space-y-3 p-5">
+                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-fuchsia-300">
+                        {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
+                      </p>
+                      <h3 className="line-clamp-2 text-xl font-black text-white">{blog.title}</h3>
+                      <p className="line-clamp-3 text-sm leading-7 text-slate-300">
+                        {blog.description || "Kiến thức thực chiến giúp doanh nghiệp làm marketing hiệu quả hơn."}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+
           <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(90deg,rgba(26,14,44,0.96),rgba(63,28,112,0.9))] px-6 py-8 shadow-[0_24px_70px_rgba(6,2,14,0.42)] md:px-10">
+            <div className="overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[linear-gradient(90deg,rgba(26,14,44,0.96),rgba(63,28,112,0.9))] px-6 py-8 shadow-[0_24px_70px_rgba(6,2,14,0.42)] md:px-10">
               <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
                 <div>
                   <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-200">Sẵn sàng bứt phá doanh thu?</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-4xl">
-                    Đồng hành cùng bạn để tạo ra khách hàng và tăng trưởng thật
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-base leading-8 text-violet-100/85">
-                    Chúng tôi sẵn sàng xây cho doanh nghiệp một hệ thống marketing vừa đẹp, vừa bán được hàng và tối ưu được dài hạn.
-                  </p>
+                  <h2 className="mt-2 text-4xl font-black tracking-[-0.05em] text-white">Chúng tôi sẵn sàng đồng hành cùng bạn chinh phục những đỉnh cao mới!</h2>
                 </div>
                 <div className="flex flex-wrap items-center justify-start gap-4 md:justify-end">
                   <button
@@ -935,10 +815,13 @@ export default function HomePageClient() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowLogin(true)}
+                    onClick={() => {
+                      playClickSound();
+                      setShowLogin(true);
+                    }}
                     className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15"
                   >
-                    Xem lộ trình dự án
+                    Lộ trình dự án
                   </button>
                 </div>
               </div>
@@ -957,37 +840,29 @@ export default function HomePageClient() {
                 </div>
               </div>
               <p className="mt-4 max-w-sm text-sm leading-7 text-slate-400">
-                Xây hệ thống marketing giúp doanh nghiệp tăng trưởng, tiếp cận đúng khách hàng và tạo ra kết quả đo lường được.
+                Giúp doanh nghiệp online toàn diện, tiếp cận đúng khách hàng và bứt phá doanh thu.
               </p>
               <div className="mt-5 flex items-center gap-3 text-white">
-                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200">
-                  <SiFacebook />
-                </a>
-                <a href={settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200">
-                  <SiZalo />
-                </a>
-                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200">
-                  <SiMessenger />
-                </a>
-                <a href="https://www.youtube.com" className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200">
-                  <SiYoutube />
-                </a>
+                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiFacebook /></a>
+                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiMessenger /></a>
+                <a href={settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiZalo /></a>
+                <a href="https://www.youtube.com" className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiYoutube /></a>
               </div>
             </div>
 
             <div>
               <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên hệ</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li>{settings?.hotline || "0937 417 982"}</li>
+                <li>{settings?.hotline || "090.143.8703"}</li>
                 <li>{settings?.email || "hello@butphamarketing.com"}</li>
-                <li>{settings?.address || "TP. HCM"}</li>
+                <li>{settings?.address || "123 Đường ABC, TP. HCM"}</li>
               </ul>
             </div>
 
             <div>
               <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Dịch vụ</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li><Link href="/website">Thiết kế Website</Link></li>
+                <li><Link href="/website">Thiết Kế Website</Link></li>
                 <li><Link href="/facebook">Quản trị Fanpage</Link></li>
                 <li><Link href="/google-maps">Google Maps Marketing</Link></li>
                 <li><Link href="/blog">AI Content / SEO</Link></li>
@@ -997,17 +872,10 @@ export default function HomePageClient() {
             <div>
               <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên kết nhanh</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                {navigation.slice(0, 6).map((item) => (
-                  <li key={item.label}>
-                    {item.href.startsWith("#") ? (
-                      <button type="button" onClick={() => scrollToSection(item.href)} className="text-left transition hover:text-white">
-                        {item.label}
-                      </button>
-                    ) : (
-                      <Link href={item.href}>{item.label}</Link>
-                    )}
-                  </li>
-                ))}
+                <li><Link href="/">Trang Chủ</Link></li>
+                <li><Link href="/gioi-thieu">Giới Thiệu</Link></li>
+                <li><Link href="/blog">Tin Tức</Link></li>
+                <li><Link href="/#consultation">Liên Hệ</Link></li>
               </ul>
             </div>
 
@@ -1021,6 +889,21 @@ export default function HomePageClient() {
             </div>
           </div>
         </footer>
+
+        <div className="fixed right-4 top-40 z-30 hidden flex-col gap-3 xl:flex">
+          {socialLinks.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0f0918]/90 px-4 py-3 text-sm font-bold text-white shadow-[0_20px_40px_rgba(4,2,10,0.34)] backdrop-blur transition hover:border-fuchsia-400/35"
+            >
+              <span className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${item.bg}`}>
+                <item.icon className="h-5 w-5" />
+              </span>
+              <span className="hidden text-slate-200 2xl:block">{item.label}</span>
+            </a>
+          ))}
+        </div>
       </div>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
