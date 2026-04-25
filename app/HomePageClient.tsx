@@ -60,6 +60,7 @@ export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [reviews, setReviews] = useState<ClientReview[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -89,6 +90,63 @@ export default function HomePageClient() {
   const bookingVisual =
     homeMedia?.slideshow?.[2] ||
     "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80";
+  const heroSlides = useMemo(
+    () => [
+      {
+        eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
+        middle: "KHÔNG TẠO RA DOANH THU",
+        accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
+        description:
+          "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
+        visual: homeMedia?.slideshow?.[0] || heroVisual,
+        revenue: "+215%",
+        growth: "+150%",
+        newClients: "+180%",
+        highlight: "Hiệu quả chiến dịch",
+        pills: [
+          { label: "Website", icon: LayoutTemplate },
+          { label: "Facebook", icon: SiFacebook },
+          { label: "Google Maps", icon: MapPinned },
+        ],
+      },
+      {
+        eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
+        middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
+        accent: "VÀ DOANH THU THẬT!",
+        description:
+          "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
+        visual: homeMedia?.slideshow?.[1] || teamImage,
+        revenue: "+168%",
+        growth: "+132%",
+        newClients: "+145%",
+        highlight: "Tăng trưởng Fanpage",
+        pills: [
+          { label: "Facebook", icon: SiFacebook },
+          { label: "Messenger", icon: MessageCircleMore },
+          { label: "Zalo", icon: SiZalo },
+        ],
+      },
+      {
+        eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
+        middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
+        accent: "VÀ TĂNG CUỘC GỌI THẬT!",
+        description:
+          "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
+        visual: homeMedia?.slideshow?.[2] || bookingVisual,
+        revenue: "Top 1",
+        growth: "+120%",
+        newClients: "+95%",
+        highlight: "Hiệu quả tìm kiếm",
+        pills: [
+          { label: "Google Maps", icon: MapPinned },
+          { label: "Website", icon: LayoutTemplate },
+          { label: "Facebook", icon: SiFacebook },
+        ],
+      },
+    ],
+    [bookingVisual, heroVisual, homeMedia?.slideshow, teamImage],
+  );
+  const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0];
 
   useEffect(() => {
     void Promise.all([db.news.getAll(), db.clientReviews.getAll(), db.services.getAll()]).then(
@@ -132,13 +190,23 @@ export default function HomePageClient() {
     return () => window.cancelAnimationFrame(raf);
   }, []);
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 4800);
+
+    return () => window.clearInterval(timer);
+  }, [heroSlides.length]);
+
   const navigation = [
     { label: "Trang Chủ", href: "#hero" },
     { label: "Giới Thiệu", href: "/gioi-thieu" },
-    { label: "Dịch Vụ", href: "#services" },
-    { label: "Dự Án", href: "#projects" },
+    { label: "Website", href: "/website" },
+    { label: "Facebook", href: "/facebook" },
+    { label: "Google Maps", href: "/google-maps" },
     { label: "Tin Tức", href: "#news" },
-    { label: "Liên Hệ", href: "#consultation" },
+    { label: "Liên Hệ Tư Vấn", href: "#consultation" },
+    { label: "Lộ Trình Khách Hàng", href: "/gioi-thieu#lo-trinh" },
   ];
 
   const serviceCards = useMemo(() => {
@@ -355,32 +423,32 @@ export default function HomePageClient() {
       <DynamicGreeting color={settings?.colors?.primary || "#8b5cf6"} />
 
       <div className="relative z-10">
-        <header className="sticky top-0 z-50 border-b border-fuchsia-400/15 bg-[#090512]/90 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 lg:px-6">
+        <header className="sticky top-0 z-50 bg-[#070b1b]/96 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-3.5 lg:px-5">
             <Link href="/" className="flex items-center gap-3" onClick={playClickSound}>
               <div className="relative">
-                <span className="absolute inset-0 rounded-full bg-fuchsia-500/30 blur-xl" />
+                <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-xl" />
                 <img src={logoSrc} alt={brandName} className="relative h-11 w-11 rounded-full object-cover" />
               </div>
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-white">{brandName}</p>
-                <p className="text-[11px] text-purple-200/80">Marketing & Growth System</p>
+                <p className="text-[13px] font-black uppercase tracking-[0.14em] text-white">{brandName}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-purple-200/75">Marketing</p>
               </div>
             </Link>
 
-            <nav className="hidden items-center gap-6 lg:flex">
+            <nav className="hidden items-center gap-7 lg:flex">
               {navigation.map((item) =>
                 item.href.startsWith("#") ? (
                   <button
                     key={item.label}
                     type="button"
                     onClick={() => scrollToSection(item.href)}
-                    className="text-sm font-semibold text-white/80 transition hover:text-white"
+                    className="text-[13px] font-semibold text-white/80 transition hover:text-white"
                   >
                     {item.label}
                   </button>
                 ) : (
-                  <Link key={item.label} href={item.href} className="text-sm font-semibold text-white/80 transition hover:text-white">
+                  <Link key={item.label} href={item.href} className="text-[13px] font-semibold text-white/80 transition hover:text-white">
                     {item.label}
                   </Link>
                 ),
@@ -394,44 +462,45 @@ export default function HomePageClient() {
                   playClickSound();
                   setShowLogin(true);
                 }}
-                className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10"
+                className="rounded-xl border border-fuchsia-400/25 bg-[#0b1022] px-4 py-2.5 text-[13px] font-bold text-white transition hover:border-fuchsia-300/40 hover:bg-white/5"
               >
                 Lộ trình dự án
               </button>
               <button
                 type="button"
                 onClick={() => scrollToSection("#consultation")}
-                className="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
+                className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_14px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
               >
                 Liên hệ tư vấn
               </button>
             </div>
           </div>
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-fuchsia-500/70 to-transparent shadow-[0_0_22px_rgba(168,85,247,0.55)]" />
         </header>
 
         <main>
-          <section id="hero" className="mx-auto max-w-7xl px-4 pb-10 pt-10 lg:px-6 lg:pt-12">
-            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-              <div className="space-y-7">
-                <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.04] tracking-[-0.05em] text-white md:text-6xl">
-                  Website chỉ để đẹp
+          <section id="hero" className="mx-auto max-w-[1180px] px-4 pb-8 pt-8 lg:px-5 lg:pt-9">
+            <div className="grid gap-7 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+              <div className="space-y-6">
+                <h1 className="max-w-3xl text-[54px] font-black uppercase leading-[1.08] tracking-[-0.05em] text-white md:text-[62px]">
+                  {currentHeroSlide.eyebrow}
                   <br />
-                  không tạo ra doanh thu
+                  {currentHeroSlide.middle}
                   <br />
                   <span className="bg-gradient-to-r from-fuchsia-400 via-violet-300 to-fuchsia-500 bg-clip-text text-transparent">
-                    thì không có ý nghĩa!
+                    {currentHeroSlide.accent}
                   </span>
                 </h1>
 
-                <p className="max-w-2xl text-lg leading-8 text-slate-300">
-                  Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.
+                <p className="max-w-xl text-[18px] leading-8 text-slate-300">
+                  {currentHeroSlide.description}
                 </p>
 
                 <div className="flex flex-wrap gap-4">
                   <button
                     type="button"
                     onClick={() => scrollToSection("#consultation")}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-4 text-sm font-black text-white shadow-[0_18px_40px_rgba(168,85,247,0.34)] transition hover:scale-[1.02]"
+                    className="inline-flex min-w-[210px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-4 text-[15px] font-black text-white shadow-[0_18px_40px_rgba(168,85,247,0.34)] transition hover:scale-[1.02]"
                   >
                     Liên hệ tư vấn ngay
                     <ArrowRight className="h-4 w-4" />
@@ -439,67 +508,97 @@ export default function HomePageClient() {
                   <button
                     type="button"
                     onClick={() => scrollToSection("#services")}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10"
+                    className="inline-flex min-w-[180px] items-center justify-center gap-2 rounded-xl border border-fuchsia-400/30 bg-[#0b1022] px-6 py-4 text-[15px] font-black text-white transition hover:border-fuchsia-300/45 hover:bg-white/5"
                   >
                     Xem dịch vụ
                     <Play className="h-4 w-4 fill-current" />
                   </button>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid max-w-[520px] gap-3 sm:grid-cols-3">
                   {heroStats.map((item) => (
-                    <div key={item.label} className="rounded-2xl border border-fuchsia-400/15 bg-white/[0.03] px-4 py-4">
-                      <div className="text-3xl font-black text-white">{item.value}</div>
-                      <div className="mt-1 text-sm text-slate-300">{item.label}</div>
+                    <div key={item.label} className="rounded-xl border border-fuchsia-400/12 bg-transparent px-0 py-1">
+                      <div className="text-[30px] font-black text-white">{item.value}</div>
+                      <div className="mt-1 text-[12px] font-semibold text-slate-300">{item.label}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="relative overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.22),transparent_44%),linear-gradient(180deg,rgba(18,9,32,0.9),rgba(11,6,20,0.96))] p-6 shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
+              <div className="relative overflow-hidden rounded-[30px] border border-fuchsia-400/14 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.24),transparent_44%),linear-gradient(180deg,rgba(17,9,31,0.96),rgba(9,5,18,0.98))] p-6 shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent)]" />
-                <div className="grid gap-6 lg:grid-cols-[1fr_0.72fr]">
-                  <div className="relative">
-                    <img src={heroVisual} alt="Dashboard tăng trưởng" className="h-[360px] w-full rounded-[1.6rem] object-cover opacity-80" />
-                    <div className="absolute left-4 top-4 rounded-2xl border border-fuchsia-400/20 bg-[#130a22]/90 px-4 py-4 shadow-[0_20px_50px_rgba(7,3,15,0.4)]">
-                      <div className="text-sm font-bold text-slate-300">Tăng trưởng doanh thu</div>
-                      <div className="mt-2 text-4xl font-black text-white">+215%</div>
-                      <div className="mt-3 text-sm text-emerald-300">Khách hàng mới +180%</div>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4 grid gap-3 sm:grid-cols-3">
-                      {[
-                        { label: "Website", icon: LayoutTemplate },
-                        { label: "Facebook", icon: SiFacebook },
-                        { label: "Google Maps", icon: MapPinned },
-                      ].map((item) => (
-                        <div key={item.label} className="rounded-2xl border border-white/10 bg-[#130a22]/85 px-4 py-3 text-center shadow-[0_14px_32px_rgba(5,2,10,0.32)]">
-                          <div className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-fuchsia-500/15 text-fuchsia-200">
-                            <item.icon className="h-4.5 w-4.5" />
-                          </div>
-                          <div className="text-sm font-black text-white">{item.label}</div>
-                        </div>
+                <div className="absolute inset-x-10 bottom-7 h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/70 to-transparent blur-[1px]" />
+                <div className="relative min-h-[500px]">
+                  <div className="absolute left-0 top-4 w-[54%] rounded-[26px] border border-fuchsia-400/22 bg-[linear-gradient(180deg,rgba(37,19,65,0.92),rgba(23,12,42,0.94))] p-5 shadow-[0_22px_55px_rgba(8,3,18,0.44)]">
+                    <div className="text-[13px] font-bold text-purple-200/90">Tăng trưởng doanh thu</div>
+                    <div className="mt-2 text-[46px] font-black text-white">{currentHeroSlide.revenue}</div>
+                    <div className="mt-4 text-[13px] font-bold text-purple-200/80">Khách hàng mới</div>
+                    <div className="mt-1 text-[30px] font-black text-white">{currentHeroSlide.newClients}</div>
+                    <div className="mt-4 flex -space-x-2">
+                      {[0, 1, 2, 3].map((index) => (
+                        <span
+                          key={index}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#160b29] bg-fuchsia-500/20 text-[11px] font-black text-white"
+                        >
+                          {index + 1}
+                        </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="relative flex items-end justify-center">
-                    <span className="absolute bottom-6 h-28 w-28 rounded-full bg-fuchsia-500/25 blur-3xl" />
+                  <div className="absolute right-0 top-9 w-[33%] rounded-[24px] border border-fuchsia-400/20 bg-[linear-gradient(180deg,rgba(34,18,61,0.92),rgba(20,11,39,0.95))] p-4 shadow-[0_20px_48px_rgba(8,3,18,0.4)]">
+                    <div className="text-[13px] font-bold text-purple-200/85">{currentHeroSlide.highlight}</div>
+                    <div className="mt-2 text-[38px] font-black text-white">{currentHeroSlide.growth}</div>
+                    <div className="mt-4 h-28 rounded-full border border-fuchsia-400/14 bg-[radial-gradient(circle,rgba(168,85,247,0.18),transparent_62%)] p-5">
+                      <div className="mx-auto h-full w-full rounded-full border-[10px] border-fuchsia-500/15 border-t-fuchsia-400 border-r-fuchsia-300/80" />
+                    </div>
+                  </div>
+
+                  <div className="absolute inset-x-[18%] bottom-14 h-56 rounded-full bg-fuchsia-500/14 blur-3xl" />
+                  <div className="absolute left-[20%] right-[18%] top-[18%] overflow-hidden rounded-[28px] border border-fuchsia-400/16 bg-[#0e0818] shadow-[0_30px_90px_rgba(10,4,21,0.54)]">
+                    <img
+                      key={currentHeroSlide.visual}
+                      src={currentHeroSlide.visual}
+                      alt="Visual marketing automation"
+                      className="h-[320px] w-full object-cover opacity-70 transition duration-700"
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,4,13,0.1),rgba(7,4,13,0.7))]" />
+                  </div>
+
+                  <div className="absolute bottom-[72px] right-[12%] flex items-end justify-center">
+                    <span className="absolute bottom-6 h-32 w-32 rounded-full bg-fuchsia-500/25 blur-3xl" />
                     <img
                       src={mascotImage}
                       alt="Robot Bứt Phá Marketing"
-                      className="relative max-h-[340px] object-contain drop-shadow-[0_28px_40px_rgba(168,85,247,0.34)]"
+                      className="relative max-h-[320px] object-contain drop-shadow-[0_28px_40px_rgba(168,85,247,0.34)]"
                     />
+                  </div>
+
+                  <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+                    <div className="grid w-full max-w-[520px] gap-3 sm:grid-cols-3">
+                      {currentHeroSlide.pills.map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-[18px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(25,14,44,0.95),rgba(14,9,28,0.98))] px-4 py-3 text-center shadow-[0_16px_36px_rgba(7,3,15,0.34)]"
+                        >
+                          <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
+                            <item.icon className="h-5 w-5" />
+                          </div>
+                          <div className="text-[14px] font-black text-white">{item.label}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-              <div className="overflow-hidden rounded-[1.9rem] border border-fuchsia-400/15 bg-[#10081b] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
+          <section className="mx-auto max-w-[1180px] px-4 py-6 lg:px-5">
+            <div className="grid gap-7 lg:grid-cols-[0.93fr_1.07fr] lg:items-center">
+              <div className="overflow-hidden rounded-[24px] border border-fuchsia-400/16 bg-[#10081b] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
                 <div className="relative">
-                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-[340px] w-full object-cover" />
+                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-[350px] w-full object-cover" />
                   <button
                     type="button"
                     className="absolute bottom-5 left-1/2 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border border-fuchsia-300/35 bg-fuchsia-500/20 text-white shadow-[0_0_40px_rgba(168,85,247,0.35)] backdrop-blur"
@@ -511,22 +610,23 @@ export default function HomePageClient() {
 
               <div className="space-y-6">
                 <div>
-                  <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Về chúng tôi</p>
-                  <h2 className="mt-2 text-4xl font-black tracking-[-0.05em] text-white">Bứt Phá Marketing</h2>
-                  <p className="mt-2 text-xl font-semibold text-purple-200">Đồng hành cùng doanh nghiệp bứt phá doanh thu</p>
-                  <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300">
-                    Chúng tôi không chỉ làm marketing. Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
+                  <p className="text-[12px] font-black uppercase tracking-[0.28em] text-fuchsia-300">Về chúng tôi</p>
+                  <h2 className="mt-2 text-[48px] font-black tracking-[-0.05em] text-white">Bứt Phá Marketing</h2>
+                  <p className="mt-3 text-[17px] leading-8 text-slate-300">
+                    Chúng tôi không chỉ làm marketing.
+                    <br />
+                    Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
                   </p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
                   {valuePillars.map((pillar) => (
-                    <div key={pillar.title} className="rounded-[1.5rem] border border-fuchsia-400/15 bg-[#10081b] p-5">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
-                        <pillar.icon className="h-5 w-5" />
+                    <div key={pillar.title} className="rounded-[20px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(21,11,34,0.98),rgba(12,7,22,0.98))] p-5 shadow-[0_18px_46px_rgba(6,2,14,0.24)]">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
+                        <pillar.icon className="h-4.5 w-4.5" />
                       </span>
-                      <h3 className="mt-4 text-xl font-black text-white">{pillar.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-slate-300">{pillar.description}</p>
+                      <h3 className="mt-4 text-[21px] font-black text-white">{pillar.title}</h3>
+                      <p className="mt-2 text-[13px] leading-7 text-slate-300">{pillar.description}</p>
                     </div>
                   ))}
                 </div>
