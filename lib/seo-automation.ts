@@ -753,6 +753,17 @@ function insertImageBySection(content: string, image: GeneratedImageAsset, outli
   if (headingPattern.test(normalized)) {
     return normalized.replace(headingPattern, `$1${figure}`);
   }
+
+  const firstHeadingPattern = /(<h[23][^>]*>.*?<\/h[23]>)/i;
+  if (firstHeadingPattern.test(normalized)) {
+    return normalized.replace(firstHeadingPattern, `$1${figure}`);
+  }
+
+  const firstParagraphPattern = /(<p[^>]*>.*?<\/p>)/i;
+  if (firstParagraphPattern.test(normalized)) {
+    return normalized.replace(firstParagraphPattern, `$1${figure}`);
+  }
+
   return `${normalized}${figure}`;
 }
 

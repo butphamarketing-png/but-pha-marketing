@@ -96,6 +96,16 @@ function insertImageBySection(content: string, image: SavedImage, sections: Outl
     }
   }
 
+  const firstHeadingRegex = /(<h[23][^>]*>.*?<\/h[23]>)/i;
+  if (firstHeadingRegex.test(anchoredContent)) {
+    return anchoredContent.replace(firstHeadingRegex, `$1${figure}`);
+  }
+
+  const firstParagraphRegex = /(<p[^>]*>.*?<\/p>)/i;
+  if (firstParagraphRegex.test(anchoredContent)) {
+    return anchoredContent.replace(firstParagraphRegex, `$1${figure}`);
+  }
+
   return `${anchoredContent}${figure}`;
 }
 
