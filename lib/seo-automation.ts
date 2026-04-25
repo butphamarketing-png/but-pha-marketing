@@ -17,7 +17,8 @@ const AUTOMATION_RUNS_KEY = "seo_automation_runs";
 const AUTOMATION_LOCK_KEY = "seo_automation_lock";
 const MAX_RUN_LOGS = 30;
 const AUTOMATION_LOCK_TTL_MS = 1000 * 60 * 45;
-const AUTO_PUBLISH_MIN_SCORE = 81;
+const AUTO_PUBLISH_MIN_SCORE = 65;
+const PREFERRED_PUBLISH_SCORE = 80;
 const DEFAULT_TOPIC_SEEDS = [
   "thiết kế website",
   "dịch vụ SEO tổng thể",
@@ -176,6 +177,12 @@ function stripHtml(html: string) {
 
 function countWords(text: string) {
   return stripHtml(text).split(/\s+/).filter(Boolean).length;
+}
+
+function getQualityLabel(score: number) {
+  if (score >= PREFERRED_PUBLISH_SCORE) return "ready" as const;
+  if (score >= AUTO_PUBLISH_MIN_SCORE) return "needs_optimization" as const;
+  return "weak" as const;
 }
 
 function sectionIdFromHeading(text: string) {
@@ -767,6 +774,13 @@ function insertImageBySection(content: string, image: GeneratedImageAsset, outli
   return `${normalized}${figure}`;
 }
 
+function ensureInlineArticleImage(content: string, images: GeneratedImageAsset[], outline: OutlineItem[]) {
+  if (!images.length) return content;
+  if (/<img\b/i.test(content)) return content;
+  const candidate = images[1] || images[0];
+  return insertImageBySection(content, candidate, outline);
+}
+
 function tokenize(text: string) {
   return text
     .toLowerCase()
@@ -953,7 +967,7 @@ function canAutoPublish(input: {
   if (input.evaluation.score < AUTO_PUBLISH_MIN_SCORE) {
     return {
       allowed: false,
-      reason: `Diem SEO ${input.evaluation.score}/100 chua vuot nguong tu dang.`,
+      reason: `Diem SEO ${input.evaluation.score}/100 con qua thap cho che do tu dang.`,
     };
   }
 
@@ -987,7 +1001,10 @@ function canAutoPublish(input: {
 
   return {
     allowed: true,
-    reason: "Bai da qua quality gate va san sang tu dang.",
+    reason:
+      input.evaluation.score >= PREFERRED_PUBLISH_SCORE
+        ? "Bai da qua quality gate va san sang tu dang."
+        : "Bai dat muc kha, van duoc tu dang nhung can toi uu them.",
   };
 }
 
@@ -1106,6 +1123,9 @@ async function createOrUpdateNewsArticle(input: {
   runId: string;
   batchId: string;
   autoPublish: boolean;
+  seoScore: number;
+  qualityLabel: "ready" | "needs_optimization" | "weak";
+  indexStatus: "pending_indexing" | "indexed" | "unknown";
   publishedAt: string;
   secondaryKeywords: string[];
 }) {
@@ -1120,6 +1140,9 @@ async function createOrUpdateNewsArticle(input: {
     title: input.title,
     content: mergeNewsContentMeta(input.content, {
       metaTitle: input.metaTitle,
+      seoScore: input.seoScore,
+      qualityLabel: input.qualityLabel,
+      indexStatus: input.indexStatus,
       automation: {
         source: "seo-automation",
         runId: input.runId,
@@ -1316,6 +1339,7 @@ export async function runSeoAutomation(options: RunOptions) {
           content = insertImageBySection(content, image, outlineResult.structure);
         }
       }
+      content = ensureInlineArticleImage(content, images, outlineResult.structure);
 
       const serviceKeywords = serviceSeeds.map((item) => item.keyword);
       const seoTitle = buildSeoFriendlyTitle({ title: plan.title, keyword: outlineResult.keywords[0] || plan.keyword });
@@ -1349,6 +1373,7 @@ export async function runSeoAutomation(options: RunOptions) {
       const metaDescription = autoFixed.metaDescription;
       const description = autoFixed.description;
       const desiredSlug = autoFixed.slug;
+      const qualityLabel = getQualityLabel(autoFixed.evaluation.score);
       const publishDecision = canAutoPublish({
         evaluation: autoFixed.evaluation,
         autoPublishEnabled: settings.autoPublish,
@@ -1369,6 +1394,9 @@ export async function runSeoAutomation(options: RunOptions) {
         runId: run.id,
         batchId,
         autoPublish: shouldPublish,
+        seoScore: autoFixed.evaluation.score,
+        qualityLabel,
+        indexStatus: shouldPublish ? "pending_indexing" : "unknown",
         publishedAt: new Date().toISOString(),
         secondaryKeywords: autoFixed.keywords.slice(1),
       });
@@ -1383,7 +1411,12 @@ export async function runSeoAutomation(options: RunOptions) {
         intent: outlineResult.intent,
         source: "seo-automation",
         detail: `SEO Autopilot da tao bai ${autoFixed.title} voi diem SEO ${autoFixed.evaluation.score}/100.`,
-        hint: shouldPublish ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO." : publishDecision.reason,
+        hint:
+          shouldPublish
+            ? qualityLabel === "ready"
+              ? "Bai da duoc dang tu dong sau khi qua kiem dinh SEO."
+              : "Bai da duoc dang tu dong va duoc gan nhan can toi uu them."
+            : publishDecision.reason,
         snapshot: {
           title: autoFixed.title,
           slug: saved.slug,

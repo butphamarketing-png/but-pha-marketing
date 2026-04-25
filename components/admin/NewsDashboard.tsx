@@ -61,6 +61,19 @@ function getSimpleSeoState(item: NewsItem) {
   };
 }
 
+function getQualityLabel(item: NewsItem) {
+  if (item.qualityLabel === "ready") return "Tot";
+  if (item.qualityLabel === "needs_optimization") return "Can toi uu";
+  if (item.qualityLabel === "weak") return "Yeu";
+  return null;
+}
+
+function getIndexLabel(item: NewsItem) {
+  if (item.indexStatus === "pending_indexing") return "Chua lap chi muc";
+  if (item.indexStatus === "indexed") return "Da index";
+  return null;
+}
+
 export function NewsDashboard({
   blogs,
   editingBlogId,
@@ -191,6 +204,15 @@ export function NewsDashboard({
                     <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">
                       SEO: {seoState.label}
                     </span>
+                    {typeof item.seoScore === "number" ? (
+                      <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">Diem: {item.seoScore}/100</span>
+                    ) : null}
+                    {getQualityLabel(item) ? (
+                      <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">{getQualityLabel(item)}</span>
+                    ) : null}
+                    {getIndexLabel(item) ? (
+                      <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">{getIndexLabel(item)}</span>
+                    ) : null}
                     <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">
                       {seoState.contentLength} ky tu
                     </span>

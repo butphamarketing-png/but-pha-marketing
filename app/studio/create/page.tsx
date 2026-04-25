@@ -87,6 +87,12 @@ const INITIAL_DATA = {
   savedNewsId: "",
 };
 
+function getQualityLabel(score: number) {
+  if (score >= 80) return "ready" as const;
+  if (score >= 65) return "needs_optimization" as const;
+  return "weak" as const;
+}
+
 function getLocalDraftKey(newsId?: string, slug?: string) {
   return `seo-studio-local-draft:${newsId || slug || "new"}`;
 }
@@ -367,14 +373,23 @@ function CreateArticlePageContent() {
       serviceKeywords: articleData.serpInsight?.relatedKeywords || articleData.keywords,
     });
 
-    const allowPublish =
-      mode === "publish" &&
-      autoFixed.evaluation.score >= 80 &&
-      !autoFixed.evaluation.issues.some((item) => item.status === "critical");
+    const hasCriticalIssue = autoFixed.evaluation.issues.some((item) => item.status === "critical");
+    const allowPublish = mode === "publish" && !hasCriticalIssue;
+    const qualityLabel = getQualityLabel(autoFixed.evaluation.score);
 
     const payload = {
       title: autoFixed.title,
-      content: mergeNewsContentMeta(autoFixed.content, { metaTitle: autoFixed.metaTitle }),
+      content: mergeNewsContentMeta(autoFixed.content, {
+        metaTitle: autoFixed.metaTitle,
+        seoScore: autoFixed.evaluation.score,
+        qualityLabel,
+        indexStatus: allowPublish ? "pending_indexing" : "unknown",
+        automation: {
+          source: "manual",
+          generatedAt: new Date().toISOString(),
+          autoPublished: false,
+        },
+      }),
       category: "blog",
       published: allowPublish,
       description: autoFixed.description || buildExcerpt({ content: autoFixed.content, maxLength: 170 }),
@@ -426,8 +441,10 @@ function CreateArticlePageContent() {
       setActionMessage(
         mode === "publish"
           ? allowPublish
-            ? "Da xuat ban bai viet thanh cong."
-            : `Bai viet chua qua quality gate ${autoFixed.evaluation.score}/100, he thong da luu nhap de ban xem lai.`
+            ? autoFixed.evaluation.score >= 80
+              ? "Da xuat ban bai viet thanh cong."
+              : `Bai da dang voi ${autoFixed.evaluation.score}/100 va duoc danh dau can toi uu them.`
+            : `Bai viet van con loi critical, he thong da luu nhap de ban xem lai.`
           : "Da luu nhap bai viet.",
       );
       await refreshHistory().catch(() => undefined);

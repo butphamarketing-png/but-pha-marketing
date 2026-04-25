@@ -1,5 +1,8 @@
 type NewsContentMeta = {
   metaTitle?: string;
+  seoScore?: number;
+  qualityLabel?: "ready" | "needs_optimization" | "weak";
+  indexStatus?: "pending_indexing" | "indexed" | "unknown";
   automation?: {
     source?: "manual" | "seo-automation";
     runId?: string;

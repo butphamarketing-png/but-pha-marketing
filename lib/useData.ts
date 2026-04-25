@@ -48,6 +48,9 @@ export interface NewsItem {
   keywordsMain?: string;
   keywordsSecondary?: string;
   publishedAt?: string;
+  seoScore?: number;
+  qualityLabel?: "ready" | "needs_optimization" | "weak";
+  indexStatus?: "pending_indexing" | "indexed" | "unknown";
 }
 
 export interface MediaItem {
@@ -235,6 +238,19 @@ function mapNewsItem(value: unknown): NewsItem {
       toOptionalString(item.keywordsSecondary) ?? toOptionalString(item.keywords_secondary),
     publishedAt:
       toOptionalString(item.publishedAt) ?? toOptionalString(item.published_at),
+    seoScore: typeof parsedContent.meta.seoScore === "number" ? parsedContent.meta.seoScore : undefined,
+    qualityLabel:
+      parsedContent.meta.qualityLabel === "ready" ||
+      parsedContent.meta.qualityLabel === "needs_optimization" ||
+      parsedContent.meta.qualityLabel === "weak"
+        ? parsedContent.meta.qualityLabel
+        : undefined,
+    indexStatus:
+      parsedContent.meta.indexStatus === "pending_indexing" ||
+      parsedContent.meta.indexStatus === "indexed" ||
+      parsedContent.meta.indexStatus === "unknown"
+        ? parsedContent.meta.indexStatus
+        : undefined,
   };
 }
 
