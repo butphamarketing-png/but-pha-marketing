@@ -62,11 +62,11 @@ export default async function BlogPage() {
               <span className="h-2.5 w-2.5 rounded-full bg-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.95)]" />
               <span className="h-px w-20 bg-gradient-to-r from-fuchsia-500 to-transparent" />
             </div>
-            <h1 className="text-4xl font-black uppercase tracking-tight text-white md:text-5xl">
+            <h1 className="text-4xl font-extrabold uppercase tracking-[-0.02em] text-white md:text-5xl">
               Tin tuc &{" "}
               <span className="bg-gradient-to-r from-fuchsia-400 to-violet-500 bg-clip-text text-transparent">Kien thuc</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
+            <p className="mt-5 max-w-2xl text-[1.05rem] leading-8 text-white/72">
               Cap nhat nhung xu huong, chien luoc va kien thuc marketing moi nhat giup ban tang truong ben vung.
             </p>
           </div>
@@ -106,13 +106,15 @@ export default async function BlogPage() {
               </div>
 
               <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
-                <span className="mb-4 inline-flex self-start rounded-full bg-[#5c1ea8] px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white">
+                <span className="mb-4 inline-flex self-start rounded-full bg-[#5c1ea8] px-4 py-2 text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-white">
                   {resolveBlogTag(blog.title, blog.slug || "")}
                 </span>
-                <h2 className="line-clamp-3 text-[2rem] font-black leading-tight text-white">{blog.title}</h2>
-                <p className="mt-4 line-clamp-4 text-lg leading-8 text-white/72">{blog.description}</p>
+                <h2 className="line-clamp-3 text-[2.05rem] font-extrabold leading-[1.22] tracking-[-0.025em] text-white md:text-[2.2rem]">
+                  {blog.title}
+                </h2>
+                <p className="mt-4 line-clamp-4 text-[1.02rem] leading-8 text-white/68">{blog.description}</p>
                 <div className="mt-auto pt-8">
-                  <span className="inline-flex items-center gap-3 text-2xl font-semibold text-fuchsia-400 transition group-hover:text-fuchsia-300">
+                  <span className="inline-flex items-center gap-3 text-[1.85rem] font-semibold text-fuchsia-400 transition group-hover:text-fuchsia-300">
                     Xem chi tiet
                     <ArrowRight size={22} />
                   </span>
