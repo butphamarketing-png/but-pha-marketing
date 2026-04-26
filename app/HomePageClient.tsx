@@ -11,7 +11,6 @@ import {
   MapPinned,
   MessageCircleMore,
   Phone,
-  Play,
   ShieldCheck,
   Sparkles,
   Star,
@@ -519,28 +518,33 @@ export default function HomePageClient() {
           </section>
 
           <section className="mx-auto max-w-[1180px] px-4 py-6 lg:px-5">
-            <div className="grid gap-7 lg:grid-cols-[0.93fr_1.07fr] lg:items-center">
-              <div className="overflow-hidden rounded-[24px] border border-fuchsia-400/16 bg-[#10081b] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
-                <div className="relative">
-                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-[350px] w-full object-cover" />
-                  <button
-                    type="button"
-                    className="absolute bottom-5 left-1/2 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border border-fuchsia-300/35 bg-fuchsia-500/20 text-white shadow-[0_0_40px_rgba(168,85,247,0.35)] backdrop-blur"
-                  >
-                    <Play className="ml-1 h-8 w-8 fill-current" />
-                  </button>
+            <div className="grid gap-7 lg:grid-cols-[0.76fr_1.24fr] lg:items-center">
+              <div className="overflow-hidden rounded-[24px] border border-fuchsia-400/16 bg-[radial-gradient(circle_at_top,_rgba(146,64,255,0.22),_rgba(16,8,27,0.96)_64%)] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
+                <div className="flex min-h-[350px] items-center justify-center px-8 py-10">
+                  <img
+                    src="/mascot-home.png"
+                    alt="Robot But Pha Marketing"
+                    className="h-auto max-h-[390px] w-full max-w-[360px] object-contain drop-shadow-[0_24px_40px_rgba(168,85,247,0.28)]"
+                  />
                 </div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <p className="text-[12px] font-black uppercase tracking-[0.28em] text-fuchsia-300">Về chúng tôi</p>
-                  <h2 className="mt-2 text-[48px] font-black tracking-[-0.05em] text-white">Bứt Phá Marketing</h2>
-                  <p className="mt-3 text-[17px] leading-8 text-slate-300">
+                  <h2 className="mt-2 text-[40px] font-black tracking-[-0.045em] text-white lg:text-[44px]">Bứt Phá Marketing</h2>
+                  <p className="mt-3 max-w-3xl text-[15px] leading-7 text-slate-300">
                     Chúng tôi không chỉ làm marketing.
                     <br />
                     Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
                   </p>
+                  <Link
+                    href="/gioi-thieu"
+                    className="mt-5 inline-flex items-center gap-2 rounded-full border border-fuchsia-400/30 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300/50 hover:bg-fuchsia-500/10"
+                  >
+                    Xem tất cả
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
@@ -936,3 +940,4 @@ export default function HomePageClient() {
     </div>
   );
 }
+
