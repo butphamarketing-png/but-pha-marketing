@@ -2031,11 +2031,20 @@ export default function AdminPage() {
                       </>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
                     {(settings.media[selectedPlatform]?.slideshow || []).map((url, i) => (
-                      <div key={i} className="relative group aspect-video rounded-lg overflow-hidden border border-white/10">
-                        <img src={url} className="w-full h-full object-cover" />
-                        <button type="button" onClick={() => removeSlideshowImage(selectedPlatform, i)} className="absolute inset-0 flex items-center justify-center bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16} className="text-white" /></button>
+                      <div key={i} className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-2">
+                        <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10">
+                          <img src={url} className="h-full w-full object-cover" />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeSlideshowImage(selectedPlatform, i)}
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                        >
+                          <Trash2 size={15} />
+                          Xóa ảnh
+                        </button>
                       </div>
                     ))}
                   </div>
