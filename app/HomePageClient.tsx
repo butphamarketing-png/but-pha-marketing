@@ -203,8 +203,7 @@ export default function HomePageClient() {
     { label: "Facebook", href: "/facebook" },
     { label: "Google Maps", href: "/google-maps" },
     { label: "Tin Tức", href: "#news" },
-    { label: "Liên Hệ Tư Vấn", href: "#consultation" },
-    { label: "Lộ Trình Khách Hàng", href: "/gioi-thieu#lo-trinh" },
+    { label: "Liên Hệ", href: "/lien-he" },
   ];
 
   const serviceCards = useMemo(() => {
@@ -464,7 +463,9 @@ export default function HomePageClient() {
               </button>
               <button
                 type="button"
-                onClick={() => scrollToSection("#consultation")}
+                onClick={() => {
+                  window.location.href = "/lien-he";
+                }}
                 className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-3.5 py-2.5 text-[12px] font-bold text-white shadow-[0_14px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
               >
                 Liên hệ tư vấn
@@ -830,7 +831,9 @@ export default function HomePageClient() {
                 <div className="flex flex-wrap items-center justify-start gap-4 md:justify-end">
                   <button
                     type="button"
-                    onClick={() => scrollToSection("#consultation")}
+                    onClick={() => {
+                      window.location.href = "/lien-he";
+                    }}
                     className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-900 transition hover:scale-[1.02]"
                   >
                     Liên hệ tư vấn ngay
@@ -895,12 +898,12 @@ export default function HomePageClient() {
             <div>
               <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên kết nhanh</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li><Link href="/">Trang Chủ</Link></li>
-                <li><Link href="/gioi-thieu">Giới Thiệu</Link></li>
-                <li><Link href="/blog">Tin Tức</Link></li>
-                <li><Link href="/#consultation">Liên Hệ</Link></li>
-              </ul>
-            </div>
+              <li><Link href="/">Trang Chủ</Link></li>
+              <li><Link href="/gioi-thieu">Giới Thiệu</Link></li>
+              <li><Link href="/blog">Tin Tức</Link></li>
+              <li><Link href="/lien-he">Liên Hệ</Link></li>
+            </ul>
+          </div>
 
             <div>
               <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Cam kết</h3>

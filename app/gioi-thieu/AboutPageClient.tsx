@@ -129,13 +129,12 @@ export default function AboutPageClient() {
     { label: "Facebook", href: "/facebook" },
     { label: "Google Maps", href: "/google-maps" },
     { label: "Tin tức", href: "/blog" },
-    { label: "Liên hệ", href: "#consultation" },
+    { label: "Liên hệ", href: "/lien-he" },
   ];
 
   const scrollToConsultation = () => {
     playClickSound();
-    const element = document.querySelector("#consultation");
-    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.location.href = "/lien-he";
   };
 
   return (
@@ -482,7 +481,7 @@ export default function AboutPageClient() {
               <li><Link href="/">Trang chủ</Link></li>
               <li><Link href="/gioi-thieu">Giới thiệu</Link></li>
               <li><Link href="/blog">Tin tức</Link></li>
-              <li><Link href="/#consultation">Liên hệ tư vấn</Link></li>
+              <li><Link href="/lien-he">Liên hệ tư vấn</Link></li>
             </ul>
           </div>
         </div>
