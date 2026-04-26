@@ -481,13 +481,13 @@ export default function HomePageClient() {
                 key={currentHeroSlide.visual}
                 src={currentHeroSlide.visual}
                 alt="Slideshow marketing"
-                className="absolute inset-0 h-full w-full object-cover opacity-42 transition duration-700"
+                className="absolute inset-0 h-full w-full object-cover opacity-52 transition duration-700"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,4,18,0.98)_0%,rgba(9,4,18,0.95)_42%,rgba(12,7,22,0.76)_68%,rgba(14,8,24,0.72)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,4,18,0.98)_0%,rgba(9,4,18,0.92)_36%,rgba(12,7,22,0.56)_64%,rgba(14,8,24,0.74)_100%)]" />
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-fuchsia-500/75 to-transparent" />
 
-              <div className="relative grid min-h-[640px] gap-8 px-10 py-10 lg:grid-cols-[0.96fr_1.04fr] lg:items-center">
-                <div className="space-y-7">
+              <div className="relative min-h-[640px] px-10 py-10">
+                <div className="max-w-[700px] space-y-7">
                   <h1 className="max-w-[680px] text-[72px] font-black uppercase leading-[0.97] tracking-[-0.06em] text-white">
                     {currentHeroSlide.eyebrow}
                     <br />
@@ -529,41 +529,29 @@ export default function HomePageClient() {
                   </div>
                 </div>
 
-                <div className="relative min-h-[540px]">
-                  <div className="absolute inset-x-[6%] top-[8%] bottom-[17%] overflow-hidden rounded-[32px] border border-fuchsia-400/18 bg-[#0e0818] shadow-[0_30px_90px_rgba(10,4,21,0.54)]">
-                    <img
-                      key={`${currentHeroSlide.visual}-panel`}
-                      src={currentHeroSlide.visual}
-                      alt="Ảnh slideshow"
-                      className="h-full w-full object-cover transition duration-700"
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,4,13,0.08),rgba(7,4,13,0.5))]" />
-                    <div className="absolute left-6 top-6 rounded-[20px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(37,19,65,0.88),rgba(23,12,42,0.9))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)]">
-                      <div className="text-[13px] font-bold text-purple-200/90">Tăng trưởng doanh thu</div>
-                      <div className="mt-2 text-[48px] font-black leading-none text-white">{currentHeroSlide.revenue}</div>
-                      <div className="mt-4 text-[13px] font-bold text-purple-200/85">Khách hàng mới {currentHeroSlide.newClients}</div>
-                    </div>
-                    <div className="absolute right-6 top-6 rounded-[20px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(34,18,61,0.88),rgba(20,11,39,0.9))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)]">
-                      <div className="text-[13px] font-bold text-purple-200/85">{currentHeroSlide.highlight}</div>
-                      <div className="mt-2 text-[38px] font-black text-white">{currentHeroSlide.growth}</div>
-                    </div>
-                  </div>
+                <div className="pointer-events-none absolute right-[6%] top-[10%] hidden w-[26%] rounded-[24px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(37,19,65,0.82),rgba(23,12,42,0.88))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)] lg:block">
+                  <div className="text-[13px] font-bold text-purple-200/90">Tăng trưởng doanh thu</div>
+                  <div className="mt-2 text-[44px] font-black leading-none text-white">{currentHeroSlide.revenue}</div>
+                  <div className="mt-4 text-[13px] font-bold text-purple-200/85">Khách hàng mới {currentHeroSlide.newClients}</div>
+                </div>
 
-                  <div className="absolute bottom-0 left-[8%] right-[8%] grid gap-4 sm:grid-cols-3">
-                    {currentHeroSlide.pills.map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-[22px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(25,14,44,0.95),rgba(14,9,28,0.98))] px-4 py-4 text-center shadow-[0_16px_36px_rgba(7,3,15,0.34)]"
-                      >
-                        <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
-                          <item.icon className="h-5 w-5" />
-                        </div>
-                        <div className="text-[14px] font-black text-white">{item.label}</div>
+                <div className="pointer-events-none absolute bottom-[18%] right-[8%] hidden w-[22%] rounded-[22px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(34,18,61,0.82),rgba(20,11,39,0.88))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)] lg:block">
+                  <div className="text-[13px] font-bold text-purple-200/85">{currentHeroSlide.highlight}</div>
+                  <div className="mt-2 text-[34px] font-black text-white">{currentHeroSlide.growth}</div>
+                </div>
+
+                <div className="absolute bottom-8 right-8 hidden max-w-[520px] gap-4 sm:grid-cols-3 lg:grid">
+                  {currentHeroSlide.pills.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-[22px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(25,14,44,0.92),rgba(14,9,28,0.95))] px-4 py-4 text-center shadow-[0_16px_36px_rgba(7,3,15,0.34)]"
+                    >
+                      <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
+                        <item.icon className="h-5 w-5" />
                       </div>
-                    ))}
-                  </div>
-
-                  <div className="absolute bottom-14 left-[18%] right-[18%] h-16 rounded-full bg-fuchsia-500/12 blur-3xl" />
+                      <div className="text-[14px] font-black text-white">{item.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
