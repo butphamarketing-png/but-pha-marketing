@@ -481,81 +481,29 @@ export default function HomePageClient() {
                 key={currentHeroSlide.visual}
                 src={currentHeroSlide.visual}
                 alt="Slideshow marketing"
-                className="absolute inset-0 h-full w-full object-cover opacity-52 transition duration-700"
+                className="absolute inset-0 h-full w-full object-cover transition duration-700"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,4,18,0.98)_0%,rgba(9,4,18,0.92)_36%,rgba(12,7,22,0.56)_64%,rgba(14,8,24,0.74)_100%)]" />
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-fuchsia-500/75 to-transparent" />
-
-              <div className="relative min-h-[640px] px-10 py-10">
-                <div className="max-w-[700px] space-y-7">
-                  <h1 className="max-w-[680px] text-[72px] font-black uppercase leading-[0.97] tracking-[-0.06em] text-white">
-                    {currentHeroSlide.eyebrow}
-                    <br />
-                    {currentHeroSlide.middle}
-                    <br />
-                    <span className="bg-gradient-to-r from-fuchsia-400 via-violet-300 to-fuchsia-500 bg-clip-text text-transparent">
-                      {currentHeroSlide.accent}
-                    </span>
-                  </h1>
-
-                  <p className="max-w-[640px] text-[17px] leading-8 text-slate-300">{currentHeroSlide.description}</p>
-
-                  <div className="flex flex-wrap gap-4">
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection("#consultation")}
-                      className="inline-flex min-w-[214px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-4 text-[15px] font-black text-white shadow-[0_18px_40px_rgba(168,85,247,0.34)] transition hover:scale-[1.02]"
-                    >
-                      Liên hệ tư vấn ngay
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection("#services")}
-                      className="inline-flex min-w-[180px] items-center justify-center gap-2 rounded-xl border border-fuchsia-400/30 bg-[#0b1022] px-6 py-4 text-[15px] font-black text-white transition hover:border-fuchsia-300/45 hover:bg-white/5"
-                    >
-                      Xem dịch vụ
-                      <Play className="h-4 w-4 fill-current" />
-                    </button>
-                  </div>
-
-                  <div className="grid max-w-[520px] gap-4 sm:grid-cols-3">
-                    {heroStats.map((item) => (
-                      <div key={item.label} className="rounded-[18px] border border-fuchsia-400/10 bg-black/10 px-0 py-1">
-                        <div className="text-[34px] font-black text-white">{item.value}</div>
-                        <div className="mt-1 text-[12px] font-semibold text-slate-300">{item.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pointer-events-none absolute right-[6%] top-[10%] hidden w-[26%] rounded-[24px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(37,19,65,0.82),rgba(23,12,42,0.88))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)] lg:block">
-                  <div className="text-[13px] font-bold text-purple-200/90">Tăng trưởng doanh thu</div>
-                  <div className="mt-2 text-[44px] font-black leading-none text-white">{currentHeroSlide.revenue}</div>
-                  <div className="mt-4 text-[13px] font-bold text-purple-200/85">Khách hàng mới {currentHeroSlide.newClients}</div>
-                </div>
-
-                <div className="pointer-events-none absolute bottom-[18%] right-[8%] hidden w-[22%] rounded-[22px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(34,18,61,0.82),rgba(20,11,39,0.88))] px-5 py-4 shadow-[0_18px_46px_rgba(8,3,18,0.35)] lg:block">
-                  <div className="text-[13px] font-bold text-purple-200/85">{currentHeroSlide.highlight}</div>
-                  <div className="mt-2 text-[34px] font-black text-white">{currentHeroSlide.growth}</div>
-                </div>
-
-                <div className="absolute bottom-8 right-8 hidden max-w-[520px] gap-4 sm:grid-cols-3 lg:grid">
-                  {currentHeroSlide.pills.map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-[22px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(25,14,44,0.92),rgba(14,9,28,0.95))] px-4 py-4 text-center shadow-[0_16px_36px_rgba(7,3,15,0.34)]"
-                    >
-                      <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
-                        <item.icon className="h-5 w-5" />
-                      </div>
-                      <div className="text-[14px] font-black text-white">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,4,18,0.08),rgba(9,4,18,0.22))]" />
+              <div className="relative min-h-[540px] sm:min-h-[620px]">
+                <button
+                  type="button"
+                  onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+                  className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
+                  aria-label="Slide trước"
+                >
+                  <ChevronRight className="h-5 w-5 rotate-180" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
+                  className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
+                  aria-label="Slide tiếp theo"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
               </div>
 
-              <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+              <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
                 {heroSlides.map((_, index) => (
                   <button
                     key={index}
