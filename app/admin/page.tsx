@@ -15,6 +15,7 @@ import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type ClientPortal } from "@/lib/useData";
+import { uploadMediaFile } from "@/lib/client-media-upload";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 
@@ -2001,8 +2002,12 @@ export default function AdminPage() {
                         onChange={async e => {
                           const files = Array.from(e.target.files || []);
                           for (const file of files) {
-                            const imageUrl = await fileToDataUrl(file);
-                            addSlideshowImage(selectedPlatform, imageUrl);
+                            const uploaded = await uploadMediaFile(file, {
+                              title: `${selectedPlatform} slideshow`,
+                              sectionLabel: "slideshow",
+                              suggestedName: `${selectedPlatform}-slideshow`,
+                            });
+                            addSlideshowImage(selectedPlatform, uploaded.url);
                           }
                           e.currentTarget.value = "";
                         }}
