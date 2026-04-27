@@ -164,9 +164,9 @@ export default function AdminPage() {
     updateCMS,
     addSlideshowImage,
     removeSlideshowImage,
+    setSlideshowImages,
     addCase,
     removeCase,
-    updateMediaVideo,
   } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
@@ -188,7 +188,7 @@ export default function AdminPage() {
   const [newArticle, setNewArticle] = useState({ title: "", content: "", image: "" });
   const [selectedPlatform, setSelectedPlatform] = useState("home");
   const [selectedPkgPlatform, setSelectedPkgPlatform] = useState("facebook");
-  const [mediaUrl, setMediaUrl] = useState("");
+  const [slideshowImageUrl, setSlideshowImageUrl] = useState("");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
   const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
   const [blogSaveError, setBlogSaveError] = useState<string | null>(null);
@@ -511,29 +511,6 @@ export default function AdminPage() {
       reader.onerror = () => reject(new Error("Không thể đọc file ảnh"));
       reader.readAsDataURL(file);
     });
-
-  const getYoutubeEmbedUrl = (url: string) => {
-    if (!url) return "";
-    try {
-      const parsed = new URL(url);
-      if (parsed.hostname.includes("youtu.be")) {
-        const id = parsed.pathname.replace(/^\//, "");
-        return `https://www.youtube.com/embed/${id}`;
-      }
-      if (parsed.hostname.includes("youtube.com")) {
-        const v = parsed.searchParams.get("v");
-        if (v) return `https://www.youtube.com/embed/${v}`;
-        if (parsed.pathname.startsWith("/shorts/")) {
-          const id = parsed.pathname.split("/")[2];
-          return `https://www.youtube.com/embed/${id}`;
-        }
-        if (parsed.pathname.startsWith("/embed/")) return `${parsed.origin}${parsed.pathname}`;
-      }
-    } catch {
-      return "";
-    }
-    return "";
-  };
 
   const createEmptyProject = (index: number): ClientProject => {
     const now = new Date();
@@ -1973,75 +1950,65 @@ export default function AdminPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Slideshow</h3>
-                  <div className="flex flex-wrap gap-2">
-                    <textarea value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} placeholder="Mỗi dòng 1 URL ảnh hoặc ngăn cách bằng dấu phẩy" className="min-h-[88px] flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const urls = mediaUrl
-                          .split(/\r?\n|,/)
-                          .map(item => item.trim())
-                          .filter(Boolean);
-                        if (urls.length === 0) return;
-                        urls.forEach(url => addSlideshowImage(selectedPlatform, url));
-                        setMediaUrl("");
-                      }}
-                      className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
-                    >
-                      Thêm
+                  <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                    <h3 className="font-bold text-white">Slideshow</h3>
+                    <div className="flex flex-wrap gap-2">
+                      <input
+                        value={slideshowImageUrl}
+                      onChange={e => setSlideshowImageUrl(e.target.value)}
+                      placeholder="Dán 1 URL ảnh nếu muốn thêm từ link"
+                      className="min-w-[260px] flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                    />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const url = slideshowImageUrl.trim();
+                          if (!url) return;
+                          const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
+                          setSlideshowImages(selectedPlatform, [...existing, url]);
+                          setSlideshowImageUrl("");
+                        }}
+                        className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                      >
+                        Thêm URL
                     </button>
                     <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white">
                       Tải ảnh
                       <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        className="hidden"
-                        onChange={async e => {
-                          const files = Array.from(e.target.files || []);
-                          for (const file of files) {
-                            const uploaded = await uploadMediaFile(file, {
-                              title: `${selectedPlatform} slideshow`,
-                              sectionLabel: "slideshow",
-                              suggestedName: `${selectedPlatform}-slideshow`,
-                            });
-                            addSlideshowImage(selectedPlatform, uploaded.url);
-                          }
-                          e.currentTarget.value = "";
-                        }}
-                      />
-                    </label>
-                  </div>
-                  <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-white">Video gắn kèm</label>
-                      <input value={settings.media[selectedPlatform]?.videoUrl || ""} onChange={e => updateMediaVideo(selectedPlatform, e.target.value)} placeholder="URL YouTube hoặc video" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={async e => {
+                            const files = Array.from(e.target.files || []);
+                            if (!files.length) return;
+                            const uploadedUrls: string[] = [];
+                            for (const file of files) {
+                              const uploaded = await uploadMediaFile(file, {
+                                title: `${selectedPlatform} slideshow`,
+                                sectionLabel: "slideshow",
+                                suggestedName: `${selectedPlatform}-slideshow`,
+                              });
+                              uploadedUrls.push(uploaded.url);
+                            }
+                            const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
+                            setSlideshowImages(selectedPlatform, [...existing, ...uploadedUrls]);
+                            e.currentTarget.value = "";
+                          }}
+                        />
+                      </label>
                     </div>
-                    {settings.media[selectedPlatform]?.videoUrl && (
-                      <>
-                        <a href={settings.media[selectedPlatform]?.videoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Xem link video</a>
-                        {getYoutubeEmbedUrl(settings.media[selectedPlatform]?.videoUrl || "") && (
-                          <div className="overflow-hidden rounded-xl border border-white/10">
-                            <iframe
-                              src={getYoutubeEmbedUrl(settings.media[selectedPlatform]?.videoUrl || "")}
-                              title="Video preview"
-                              className="aspect-video w-full"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
+                    <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/70">
+                      Chỉ dùng ảnh cho slideshow. Ưu tiên tải ảnh từ máy, hoặc dán thêm 1 URL ảnh nếu cần.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+                      {(settings.media[selectedPlatform]?.slideshow || [])
+                        .filter(Boolean)
+                        .map((url, i) => (
+                        <div key={i} className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-2">
+                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10">
+                            <img src={url} className="h-full w-full object-cover" />
                           </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-                    {(settings.media[selectedPlatform]?.slideshow || []).map((url, i) => (
-                      <div key={i} className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-2">
-                        <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10">
-                          <img src={url} className="h-full w-full object-cover" />
-                        </div>
                         <button
                           type="button"
                           onClick={() => removeSlideshowImage(selectedPlatform, i)}
@@ -2050,9 +2017,18 @@ export default function AdminPage() {
                           <Trash2 size={15} />
                           Xóa ảnh
                         </button>
-                      </div>
-                    ))}
-                  </div>
+                        </div>
+                      ))}
+                    </div>
+                    {(settings.media[selectedPlatform]?.slideshow || []).filter(Boolean).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSlideshowImages(selectedPlatform, [])}
+                        className="w-full rounded-lg border border-red-400/30 bg-red-500/10 py-2 text-sm font-bold text-red-200 transition hover:bg-red-500/20"
+                      >
+                        Xóa tất cả slideshow
+                      </button>
+                    )}
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu slideshow"}</button>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">

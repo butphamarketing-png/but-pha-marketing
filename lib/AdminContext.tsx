@@ -99,6 +99,7 @@ export interface AdminContextType {
   updateCMS: (platform: string, packageName: string, patch: Partial<PackageConfig>) => void;
   addSlideshowImage: (platform: string, imageUrl: string) => void;
   removeSlideshowImage: (platform: string, index: number) => void;
+  setSlideshowImages: (platform: string, images: string[]) => void;
   addCase: (platform: string, item: Omit<CaseStudyItem, "id">) => void;
   removeCase: (platform: string, id: string) => void;
   updateMediaVideo: (platform: string, videoUrl: string) => void;
@@ -358,9 +359,34 @@ function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings)
   return changed;
 }
 
+function sanitizeSlideshowItems(items: string[] | undefined): string[] {
+  const seen = new Set<string>();
+  return (items ?? [])
+    .map((item) => item.trim())
+    .filter((item) => {
+      if (!item) return false;
+      if (item.startsWith("data:image/")) return false;
+      if (seen.has(item)) return false;
+      seen.add(item);
+      return true;
+    });
+}
+
 function sanitizeSettingsForSave(settings: SiteSettings): SiteSettings {
+  const sanitizedMedia = Object.fromEntries(
+    Object.entries(settings.media ?? {}).map(([platform, section]) => [
+      platform,
+      {
+        ...section,
+        videoUrl: "",
+        slideshow: sanitizeSlideshowItems(section?.slideshow),
+      },
+    ]),
+  ) as SiteSettings["media"];
+
   return {
     ...settings,
+    media: sanitizedMedia,
     presentationMode: false,
   };
 }
@@ -697,6 +723,19 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const setSlideshowImages = (platform: string, images: string[]) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          slideshow: images,
+        },
+      },
+    }));
+  };
+
   const removeSlideshowImage = (platform: string, index: number) => {
     setAndBroadcast((prev) => {
       const mediaSection = mergeMediaSection(prev.media[platform]);
@@ -774,6 +813,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       updateCMS,
       addSlideshowImage,
       removeSlideshowImage,
+      setSlideshowImages,
       addCase,
       removeCase,
       updateMediaVideo,
