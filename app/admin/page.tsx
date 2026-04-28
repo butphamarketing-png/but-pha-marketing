@@ -167,6 +167,14 @@ export default function AdminPage() {
     setSlideshowImages,
     addCase,
     removeCase,
+    setSolutionImages,
+    addProject,
+    updateProject,
+    removeProject,
+    addTestimonial,
+    updateTestimonial,
+    removeTestimonial,
+    setConsultationImages,
   } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
@@ -260,6 +268,12 @@ export default function AdminPage() {
   });
   const [slideshowUploadingProgress, setSlideshowUploadingProgress] = useState(0);
   const [slideshowUploadError, setSlideshowUploadError] = useState<string | null>(null);
+  const [solutionUploadingProgress, setSolutionUploadingProgress] = useState(0);
+  const [solutionUploadError, setSolutionUploadError] = useState<string | null>(null);
+  const [consultationUploadingProgress, setConsultationUploadingProgress] = useState(0);
+  const [consultationUploadError, setConsultationUploadError] = useState<string | null>(null);
+  const [newProject, setNewProject] = useState({ name: "", description: "", thumbnail: "", beforeMetric: "", beforeMetricLabel: "", afterMetric: "", afterMetricLabel: "" });
+  const [newTestimonial, setNewTestimonial] = useState({ customerName: "", customerLogo: "", feedbackImage: "", rating: 5 });
 
   const setPanelFeedback = (message: string | null, error: string | null = null) => {
     setBlogSaveMessage(message);

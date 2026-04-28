@@ -17,10 +17,33 @@ export interface CaseStudyItem {
   after: string;
 }
 
+export interface ProjectItem {
+  id: string;
+  name: string;
+  description: string;
+  thumbnail: string;
+  beforeMetric: string;
+  beforeMetricLabel: string;
+  afterMetric: string;
+  afterMetricLabel: string;
+}
+
+export interface TestimonialItem {
+  id: string;
+  customerName: string;
+  customerLogo: string;
+  feedbackImage: string;
+  rating: number;
+}
+
 export interface MediaSection {
   videoUrl: string;
   slideshow: string[];
   cases: CaseStudyItem[];
+  solutions: string[];
+  projects: ProjectItem[];
+  testimonials: TestimonialItem[];
+  consultationImages: string[];
 }
 
 export interface PackageConfig {
@@ -103,6 +126,14 @@ export interface AdminContextType {
   addCase: (platform: string, item: Omit<CaseStudyItem, "id">) => void;
   removeCase: (platform: string, id: string) => void;
   updateMediaVideo: (platform: string, videoUrl: string) => void;
+  setSolutionImages: (platform: string, images: string[]) => void;
+  addProject: (platform: string, item: Omit<ProjectItem, "id">) => void;
+  updateProject: (platform: string, id: string, patch: Partial<ProjectItem>) => void;
+  removeProject: (platform: string, id: string) => void;
+  addTestimonial: (platform: string, item: Omit<TestimonialItem, "id">) => void;
+  updateTestimonial: (platform: string, id: string, patch: Partial<TestimonialItem>) => void;
+  removeTestimonial: (platform: string, id: string) => void;
+  setConsultationImages: (platform: string, images: string[]) => void;
 }
 
 const SETTINGS_KEY = "admin_settings";
@@ -142,6 +173,10 @@ function createMediaSection(): MediaSection {
     videoUrl: "",
     slideshow: [],
     cases: [],
+    solutions: [],
+    projects: [],
+    testimonials: [],
+    consultationImages: [],
   };
 }
 
@@ -220,6 +255,10 @@ function mergeMediaSection(parsed?: Partial<MediaSection>): MediaSection {
     videoUrl: parsed?.videoUrl ?? "",
     slideshow: parsed?.slideshow ?? [],
     cases: parsed?.cases ?? [],
+    solutions: parsed?.solutions ?? [],
+    projects: parsed?.projects ?? [],
+    testimonials: parsed?.testimonials ?? [],
+    consultationImages: parsed?.consultationImages ?? [],
   };
 }
 
@@ -799,6 +838,136 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const setSolutionImages = (platform: string, images: string[]) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          solutions: images,
+        },
+      },
+    }));
+  };
+
+  const addProject = (platform: string, item: Omit<ProjectItem, "id">) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      const nextId = `${Date.now()}-${mediaSection.projects.length + 1}`;
+
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            projects: [...mediaSection.projects, { ...item, id: nextId }],
+          },
+        },
+      };
+    });
+  };
+
+  const updateProject = (platform: string, id: string, patch: Partial<ProjectItem>) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            projects: mediaSection.projects.map((project) =>
+              project.id === id ? { ...project, ...patch } : project,
+            ),
+          },
+        },
+      };
+    });
+  };
+
+  const removeProject = (platform: string, id: string) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            projects: mediaSection.projects.filter((project) => project.id !== id),
+          },
+        },
+      };
+    });
+  };
+
+  const addTestimonial = (platform: string, item: Omit<TestimonialItem, "id">) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      const nextId = `${Date.now()}-${mediaSection.testimonials.length + 1}`;
+
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            testimonials: [...mediaSection.testimonials, { ...item, id: nextId }],
+          },
+        },
+      };
+    });
+  };
+
+  const updateTestimonial = (platform: string, id: string, patch: Partial<TestimonialItem>) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            testimonials: mediaSection.testimonials.map((testimonial) =>
+              testimonial.id === id ? { ...testimonial, ...patch } : testimonial,
+            ),
+          },
+        },
+      };
+    });
+  };
+
+  const removeTestimonial = (platform: string, id: string) => {
+    setAndBroadcast((prev) => {
+      const mediaSection = mergeMediaSection(prev.media[platform]);
+      return {
+        ...prev,
+        media: {
+          ...prev.media,
+          [platform]: {
+            ...mediaSection,
+            testimonials: mediaSection.testimonials.filter((testimonial) => testimonial.id !== id),
+          },
+        },
+      };
+    });
+  };
+
+  const setConsultationImages = (platform: string, images: string[]) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          consultationImages: images,
+        },
+      },
+    }));
+  };
+
   const contextValue = useMemo(
     () => ({
       settings,
@@ -817,6 +986,14 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       addCase,
       removeCase,
       updateMediaVideo,
+      setSolutionImages,
+      addProject,
+      updateProject,
+      removeProject,
+      addTestimonial,
+      updateTestimonial,
+      removeTestimonial,
+      setConsultationImages,
     }),
     [settings, saveStatus, saveError, hasUnsavedChanges],
   );
