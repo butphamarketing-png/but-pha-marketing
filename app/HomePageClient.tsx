@@ -647,6 +647,7 @@ export default function HomePageClient() {
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Dự án tiêu biểu</p>
+                <h2 className="mt-2 text-3xl font-black text-white">Thành quả từ sự tận tâm</h2>
               </div>
               <Link href="/website" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
                 Xem tất cả dự án
@@ -654,20 +655,47 @@ export default function HomePageClient() {
               </Link>
             </div>
 
-            <div className="grid gap-4 xl:grid-cols-4">
-              {projectShowcase.map((project) => (
-                <article key={`${project.title}-${project.subtitle}`} className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)]">
-                  <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
-                  <div className="space-y-3 p-5">
-                    <h3 className="text-xl font-black text-white">{project.title}</h3>
-                    <div className="text-sm text-slate-300">{project.subtitle}</div>
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="text-3xl font-black text-emerald-300">{project.result}</div>
-                      <div className="text-sm font-semibold text-slate-300">{project.note}</div>
+            <div className="relative group">
+              <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory scroll-smooth" id="projects-slider">
+                {(settings?.featuredProjects || []).length > 0 ? (
+                  settings.featuredProjects.map((proj) => (
+                    <div key={proj.id} className="min-w-[85%] md:min-w-[45%] lg:min-w-[31%] snap-center">
+                      <article className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] h-full">
+                        <img src={proj.thumbnail} alt={proj.title} className="h-48 w-full object-cover" />
+                        <div className="space-y-3 p-5">
+                          <h3 className="text-xl font-black text-white">{proj.title}</h3>
+                          <div className="text-sm text-slate-400 line-clamp-2">{proj.description}</div>
+                          <div className="flex items-center justify-between gap-3 pt-2 border-t border-white/5">
+                            <div className="text-2xl font-black text-emerald-300">{proj.result}</div>
+                            <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">{proj.note}</div>
+                          </div>
+                        </div>
+                      </article>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  ))
+                ) : (
+                  projectShowcase.map((project) => (
+                    <div key={`${project.title}-${project.subtitle}`} className="min-w-[85%] md:min-w-[45%] lg:min-w-[24%] snap-center">
+                      <article className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] h-full">
+                        <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
+                        <div className="space-y-3 p-5">
+                          <h3 className="text-xl font-black text-white">{project.title}</h3>
+                          <div className="text-sm text-slate-300">{project.subtitle}</div>
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="text-3xl font-black text-emerald-300">{project.result}</div>
+                            <div className="text-sm font-semibold text-slate-300">{project.note}</div>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  ))
+                )}
+              </div>
+              
+              <div className="flex items-center justify-center gap-4 mt-2">
+                <button onClick={() => { const el = document.getElementById('projects-slider'); if (el) el.scrollLeft -= el.offsetWidth * 0.8; }} className="p-3 rounded-full border border-white/10 bg-white/5 text-white"><ArrowRight className="h-5 w-5 rotate-180" /></button>
+                <button onClick={() => { const el = document.getElementById('projects-slider'); if (el) el.scrollLeft += el.offsetWidth * 0.8; }} className="p-3 rounded-full border border-white/10 bg-white/5 text-white"><ArrowRight className="h-5 w-5" /></button>
+              </div>
             </div>
           </section>
 
@@ -675,48 +703,93 @@ export default function HomePageClient() {
             <div className="mb-6 text-center">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Khách hàng nói gì về chúng tôi?</p>
             </div>
-            <div className="grid gap-4 lg:grid-cols-3">
-              {(topReviews.length ? topReviews : Array.from({ length: 3 }).map((_, index) => ({
-                id: `fallback-${index}`,
-                clientName: index === 0 ? "Nguyễn Văn Hùng" : index === 1 ? "Trần Thị Mai" : "Lê Minh Tuấn",
-                rating: 5,
-                content:
-                  index === 0
-                    ? "Từ ngày làm web bên em đơn nhiều hơn hẳn anh ơi. Chuẩn luôn! Doanh số tăng rõ."
-                    : index === 1
-                      ? "Fanpage lên đều, khách nhắn đông hơn trước rất nhiều. Dạ em cảm ơn chị, bên em sẽ hỗ trợ lâu dài."
-                      : "Google Maps lên top 1 luôn. Tuyệt vời! Chúc mừng anh.",
-                createdAt: "",
-              } as ClientReview))).map((review) => (
-                <div key={review.id} className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.3)]">
-                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      {"logoUrl" in review && review.logoUrl ? (
-                        <img src={review.logoUrl} alt={review.clientName} className="h-12 w-12 rounded-full object-cover" />
-                      ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-fuchsia-500/15 font-black text-white">
-                          {review.clientName.slice(0, 1)}
+            
+            <div className="relative group">
+              <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory scroll-smooth" id="feedback-slider">
+                {(settings?.customerFeedbacks || []).length > 0 ? (
+                  settings.customerFeedbacks.map((fb) => (
+                    <div key={fb.id} className="min-w-[85%] md:min-w-[45%] lg:min-w-[31%] snap-center">
+                      <div className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.3)] h-full">
+                        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            {fb.clientLogo ? (
+                              <img src={fb.clientLogo} alt={fb.clientName} className="h-10 w-10 rounded-full object-cover" />
+                            ) : (
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-fuchsia-500/15 font-black text-white text-xs">
+                                {fb.clientName.slice(0, 1)}
+                              </div>
+                            )}
+                            <div>
+                              <div className="text-sm font-black text-white">{fb.clientName}</div>
+                              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Đối tác tin tưởng</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 text-yellow-400">
+                            {Array.from({ length: fb.rating }).map((_, i) => (
+                              <Star key={i} className="h-3 w-3 fill-current" />
+                            ))}
+                          </div>
                         </div>
-                      )}
-                      <div>
-                        <div className="text-sm font-black text-white">{review.clientName}</div>
-                        <div className="text-xs text-slate-400">Khách hàng Bứt Phá Marketing</div>
+                        <div className="p-4">
+                          <img src={fb.contentImage} alt="Feedback" className="w-full rounded-xl object-cover aspect-video mb-3" />
+                          <div className="flex justify-center">
+                            <div className="rounded-full bg-[#1677ff] px-4 py-1 text-[10px] font-black text-white uppercase tracking-widest">Zalo / Messenger</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="rounded-full bg-[#1677ff] px-3 py-1 text-xs font-black text-white">Zalo</div>
-                  </div>
-                  <div className="space-y-4 px-5 py-5">
-                    <div className="rounded-2xl bg-[#e9f3ff] px-4 py-4 text-[15px] leading-7 text-slate-800">
-                      {review.content}
+                  ))
+                ) : (
+                  (topReviews.length ? topReviews : Array.from({ length: 3 }).map((_, index) => ({
+                    id: `fallback-${index}`,
+                    clientName: index === 0 ? "Nguyễn Văn Hùng" : index === 1 ? "Trần Thị Mai" : "Lê Minh Tuấn",
+                    rating: 5,
+                    content:
+                      index === 0
+                        ? "Từ ngày làm web bên em đơn nhiều hơn hẳn anh ơi. Chuẩn luôn! Doanh số tăng rõ."
+                        : index === 1
+                          ? "Fanpage lên đều, khách nhắn đông hơn trước rất nhiều. Dạ em cảm ơn chị, bên em sẽ hỗ trợ lâu dài."
+                          : "Google Maps lên top 1 luôn. Tuyệt vời! Chúc mừng anh.",
+                    createdAt: "",
+                  } as ClientReview))).map((review) => (
+                    <div key={review.id} className="min-w-[85%] md:min-w-[45%] lg:min-w-[31%] snap-center">
+                      <div className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.3)] h-full">
+                        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            {"logoUrl" in review && review.logoUrl ? (
+                              <img src={review.logoUrl} alt={review.clientName} className="h-12 w-12 rounded-full object-cover" />
+                            ) : (
+                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-fuchsia-500/15 font-black text-white">
+                                {review.clientName.slice(0, 1)}
+                              </div>
+                            )}
+                            <div>
+                              <div className="text-sm font-black text-white">{review.clientName}</div>
+                              <div className="text-xs text-slate-400">Khách hàng Bứt Phá Marketing</div>
+                            </div>
+                          </div>
+                          <div className="rounded-full bg-[#1677ff] px-3 py-1 text-xs font-black text-white">Zalo</div>
+                        </div>
+                        <div className="space-y-4 px-5 py-5">
+                          <div className="rounded-2xl bg-[#e9f3ff] px-4 py-4 text-[15px] leading-7 text-slate-800">
+                            {review.content}
+                          </div>
+                          <div className="flex items-center gap-1 text-yellow-300">
+                            {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, index) => (
+                              <Star key={`${review.id}-${index}`} className="h-4 w-4 fill-current" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-yellow-300">
-                      {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, index) => (
-                        <Star key={`${review.id}-${index}`} className="h-4 w-4 fill-current" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  ))
+                )}
+              </div>
+              
+              <div className="flex items-center justify-center gap-4 mt-2">
+                <button onClick={() => { const el = document.getElementById('feedback-slider'); if (el) el.scrollLeft -= el.offsetWidth * 0.8; }} className="p-3 rounded-full border border-white/10 bg-white/5 text-white"><ArrowRight className="h-5 w-5 rotate-180" /></button>
+                <button onClick={() => { const el = document.getElementById('feedback-slider'); if (el) el.scrollLeft += el.offsetWidth * 0.8; }} className="p-3 rounded-full border border-white/10 bg-white/5 text-white"><ArrowRight className="h-5 w-5" /></button>
+              </div>
             </div>
           </section>
 
@@ -800,12 +873,12 @@ export default function HomePageClient() {
                   <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Phản hồi</p>
                   <div className="mt-2 text-3xl font-black text-white">15 phút</div>
                 </div>
-                <div className="mt-10 flex items-center justify-center">
-                  <div className="relative">
-                    <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-3xl" />
-                    <img src={bookingVisual} alt="Đặt lịch tư vấn" className="relative max-h-[360px] w-full rounded-[1.6rem] object-cover opacity-90" />
+                  <div className="mt-10 flex items-center justify-center">
+                    <div className="relative">
+                      <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-3xl" />
+                      <img src={settings?.bookingConsultationImage || bookingVisual} alt="Đặt lịch tư vấn" className="relative max-h-[360px] w-full rounded-[1.6rem] object-cover opacity-90" />
+                    </div>
                   </div>
-                </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
                     <CalendarDays className="mb-3 h-5 w-5 text-fuchsia-200" />

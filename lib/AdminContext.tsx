@@ -44,6 +44,24 @@ export interface SeoIntegrationConfig {
   notes: string;
 }
 
+export interface FeaturedProject {
+  id: string;
+  title: string;
+  thumbnail: string;
+  description: string;
+  content: string;
+  result?: string;
+  note?: string;
+}
+
+export interface CustomerFeedback {
+  id: string;
+  clientName: string;
+  clientLogo: string;
+  contentImage: string;
+  rating: number;
+}
+
 export interface SiteSettings {
   title: string;
   heroTitle: string;
@@ -75,6 +93,9 @@ export interface SiteSettings {
   seoPages: Record<string, { title: string; desc: string; keywords: string }>;
   media: Record<string, MediaSection>;
   marketingSolutionImage: string;
+  bookingConsultationImage: string;
+  featuredProjects: FeaturedProject[];
+  customerFeedbacks: CustomerFeedback[];
   cms: Record<string, PlatformCMS>;
   seoIntegrations: {
     searchConsole: SeoIntegrationConfig;
@@ -196,6 +217,9 @@ const defaultSettings: SiteSettings = {
   seoPages: {},
   media: createDefaultMedia(),
   marketingSolutionImage: "",
+  bookingConsultationImage: "",
+  featuredProjects: [],
+  customerFeedbacks: [],
   cms: {},
   seoIntegrations: {
     searchConsole: createSeoIntegration("Google Search Console"),
@@ -306,6 +330,9 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     logo: parsed.logo ?? defaultSettings.logo,
     favicon: parsed.favicon ?? defaultSettings.favicon,
     marketingSolutionImage: parsed.marketingSolutionImage ?? "",
+    bookingConsultationImage: parsed.bookingConsultationImage ?? "",
+    featuredProjects: parsed.featuredProjects ?? [],
+    customerFeedbacks: parsed.customerFeedbacks ?? [],
     seoPages: parsed.seoPages ?? {},
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,

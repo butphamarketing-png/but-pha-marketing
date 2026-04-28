@@ -25,6 +25,8 @@ const NAV = [
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
+  { id: "projects", label: "Dự án tiêu biểu", icon: Package },
+  { id: "feedback", label: "Feedback khách hàng", icon: MessageCircleMore },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
@@ -1883,6 +1885,192 @@ export default function AdminPage() {
             </div>
           )}
 
+          {activeTab === "projects" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Dự án tiêu biểu</h3>
+                <button 
+                  onClick={() => {
+                    const newProj = { id: Date.now().toString(), title: "Dự án mới", thumbnail: "", description: "", content: "", result: "+100%", note: "Tăng trưởng" };
+                    updateSettings({ featuredProjects: [...(settings.featuredProjects || []), newProj] });
+                  }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                >
+                  Thêm dự án
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {(settings.featuredProjects || []).map((proj, idx) => (
+                  <div key={proj.id} className="rounded-2xl border border-white/10 bg-card p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">Dự án #{idx + 1}</h4>
+                      <button 
+                        onClick={() => {
+                          const next = (settings.featuredProjects || []).filter(p => p.id !== proj.id);
+                          updateSettings({ featuredProjects: next });
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-gray-400">Hình ảnh Thumbnail</p>
+                        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                          {proj.thumbnail ? <img src={proj.thumbnail} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-xs text-gray-500">Chưa có ảnh</div>}
+                          <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                            <span className="text-xs font-bold text-white">Tải ảnh</span>
+                            <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const uploaded = await uploadMediaFile(file, { title: proj.title, sectionLabel: "project" });
+                              const next = [...(settings.featuredProjects || [])];
+                              next[idx] = { ...next[idx], thumbnail: uploaded.url };
+                              updateSettings({ featuredProjects: next });
+                            }} />
+                          </label>
+                        </div>
+                        <input value={proj.thumbnail} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], thumbnail: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="URL ảnh..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
+                      </div>
+                      <input value={proj.title} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], title: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Tên dự án" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <input value={proj.description} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], description: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Mô tả ngắn" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={proj.result} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], result: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Kết quả (vd: +150%)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                        <input value={proj.note} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], note: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Ghi chú (vd: Doanh thu)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      </div>
+                      <textarea value={proj.content} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], content: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Nội dung chi tiết" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white disabled:opacity-50">Lưu tất cả dự án</button>
+            </div>
+          )}
+
+          {activeTab === "feedback" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Feedback khách hàng</h3>
+                <button 
+                  onClick={() => {
+                    const newFeedback = { id: Date.now().toString(), clientName: "Khách hàng mới", clientLogo: "", contentImage: "", rating: 5 };
+                    updateSettings({ customerFeedbacks: [...(settings.customerFeedbacks || []), newFeedback] });
+                  }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                >
+                  Thêm feedback
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {(settings.customerFeedbacks || []).map((fb, idx) => (
+                  <div key={fb.id} className="rounded-2xl border border-white/10 bg-card p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">Feedback #{idx + 1}</h4>
+                      <button 
+                        onClick={() => {
+                          const next = (settings.customerFeedbacks || []).filter(f => f.id !== fb.id);
+                          updateSettings({ customerFeedbacks: next });
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="grid gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <p className="text-xs font-semibold text-gray-400">Logo khách hàng</p>
+                          <div className="relative aspect-square w-20 overflow-hidden rounded-lg border border-white/10 bg-black/20">
+                            {fb.clientLogo ? <img src={fb.clientLogo} className="h-full w-full object-contain p-2" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Logo</div>}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-[10px] font-bold text-white">Đổi</span>
+                              <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const uploaded = await uploadMediaFile(file, { title: fb.clientName, sectionLabel: "feedback-logo" });
+                                const next = [...(settings.customerFeedbacks || [])];
+                                next[idx] = { ...next[idx], clientLogo: uploaded.url };
+                                updateSettings({ customerFeedbacks: next });
+                              }} />
+                            </label>
+                          </div>
+                          <input value={fb.clientLogo} onChange={e => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], clientLogo: e.target.value };
+                            updateSettings({ customerFeedbacks: next });
+                          }} placeholder="URL logo..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1 text-[10px] text-white" />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-xs font-semibold text-gray-400">Ảnh nội dung feedback</p>
+                          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-black/20">
+                            {fb.contentImage ? <img src={fb.contentImage} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Ảnh nội dung</div>}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-[10px] font-bold text-white">Tải ảnh</span>
+                              <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const uploaded = await uploadMediaFile(file, { title: fb.clientName, sectionLabel: "feedback-content" });
+                                const next = [...(settings.customerFeedbacks || [])];
+                                next[idx] = { ...next[idx], contentImage: uploaded.url };
+                                updateSettings({ customerFeedbacks: next });
+                              }} />
+                            </label>
+                          </div>
+                          <input value={fb.contentImage} onChange={e => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], contentImage: e.target.value };
+                            updateSettings({ customerFeedbacks: next });
+                          }} placeholder="URL ảnh..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1 text-[10px] text-white" />
+                        </div>
+                      </div>
+                      <input value={fb.clientName} onChange={e => {
+                        const next = [...(settings.customerFeedbacks || [])];
+                        next[idx] = { ...next[idx], clientName: e.target.value };
+                        updateSettings({ customerFeedbacks: next });
+                      }} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">Đánh giá:</span>
+                        {[1,2,3,4,5].map(star => (
+                          <button key={star} onClick={() => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], rating: star };
+                            updateSettings({ customerFeedbacks: next });
+                          }} className={`${fb.rating >= star ? "text-yellow-400" : "text-gray-600"}`}><Star size={16} fill={fb.rating >= star ? "currentColor" : "none"} /></button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white disabled:opacity-50">Lưu tất cả feedback</button>
+            </div>
+          )}
+
           {activeTab === "media" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1955,9 +2143,33 @@ export default function AdminPage() {
                           onChange={async e => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            const url = await fileToDataUrl(file);
-                            updateSettings({ marketingSolutionImage: url });
-                            e.currentTarget.value = "";
+                            try {
+                              setSaveStatus("saving");
+                              const uploaded = await uploadMediaFile(file, {
+                                title: "Giải pháp Marketing toàn diện",
+                                sectionLabel: "marketing-solution",
+                                suggestedName: "marketing-solution-image",
+                              });
+                              updateSettings({ marketingSolutionImage: uploaded.url });
+                              
+                              // Auto save after upload
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { marketingSolutionImage: uploaded.url } 
+                                }),
+                              });
+                              setSaveStatus("saved");
+                              setTimeout(() => setSaveStatus("idle"), 2000);
+                            } catch (err) {
+                              console.error("Upload failed", err);
+                              setSaveStatus("error");
+                              setSaveError("Không thể tải ảnh lên.");
+                            } finally {
+                              e.currentTarget.value = "";
+                            }
                           }}
                         />
                       </label>
@@ -1965,12 +2177,66 @@ export default function AdminPage() {
                     <input
                       value={settings.marketingSolutionImage || ""}
                       onChange={e => updateSettings({ marketingSolutionImage: e.target.value })}
-                      placeholder="URL hoặc dán Base64..."
+                      placeholder="URL ảnh..."
                       className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
                     />
                   </div>
+                  
+                  <div className="space-y-2 mt-4 pt-4 border-t border-white/5">
+                    <p className="text-xs font-semibold text-gray-400">Ảnh phần Đặt lịch tư vấn</p>
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                      {settings.bookingConsultationImage ? (
+                        <img src={settings.bookingConsultationImage} alt="Booking" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đặt lịch</div>
+                      )}
+                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              setSaveStatus("saving");
+                              const uploaded = await uploadMediaFile(file, {
+                                title: "Đặt lịch tư vấn",
+                                sectionLabel: "booking",
+                                suggestedName: "booking-image",
+                              });
+                              updateSettings({ bookingConsultationImage: uploaded.url });
+                              
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { bookingConsultationImage: uploaded.url } 
+                                }),
+                              });
+                              setSaveStatus("saved");
+                              setTimeout(() => setSaveStatus("idle"), 2000);
+                            } catch (err) {
+                              setSaveStatus("error");
+                            } finally {
+                              e.currentTarget.value = "";
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <input
+                      value={settings.bookingConsultationImage || ""}
+                      onChange={e => updateSettings({ bookingConsultationImage: e.target.value })}
+                      placeholder="URL ảnh..."
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
-                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu ảnh Giải pháp"}
+                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}
                   </button>
                 </div>
 
@@ -2020,17 +2286,47 @@ export default function AdminPage() {
                             const files = Array.from(e.target.files || []);
                             if (!files.length) return;
                             const uploadedUrls: string[] = [];
-                            for (const file of files) {
-                              const uploaded = await uploadMediaFile(file, {
-                                title: `${selectedPlatform} slideshow`,
-                                sectionLabel: "slideshow",
-                                suggestedName: `${selectedPlatform}-slideshow`,
+                            try {
+                              setSaveStatus("saving");
+                              for (const file of files) {
+                                const uploaded = await uploadMediaFile(file, {
+                                  title: `${selectedPlatform} slideshow`,
+                                  sectionLabel: "slideshow",
+                                  suggestedName: `${selectedPlatform}-slideshow`,
+                                });
+                                uploadedUrls.push(uploaded.url);
+                              }
+                              const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
+                              const nextImages = [...existing, ...uploadedUrls];
+                              setSlideshowImages(selectedPlatform, nextImages);
+                              
+                              // Auto save after upload
+                              const cleanSettings = sanitizeSettingsForSave(settings);
+                              const updatedMedia = {
+                                ...cleanSettings.media,
+                                [selectedPlatform]: {
+                                  ...mergeMediaSection(cleanSettings.media[selectedPlatform]),
+                                  slideshow: nextImages
+                                }
+                              };
+                              
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { media: updatedMedia } 
+                                }),
                               });
-                              uploadedUrls.push(uploaded.url);
+                              setSaveStatus("saved");
+                              setTimeout(() => setSaveStatus("idle"), 2000);
+                            } catch (err) {
+                              console.error("Upload failed", err);
+                              setSaveStatus("error");
+                              setSaveError("Không thể tải ảnh lên.");
+                            } finally {
+                              e.currentTarget.value = "";
                             }
-                            const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
-                            setSlideshowImages(selectedPlatform, [...existing, ...uploadedUrls]);
-                            e.currentTarget.value = "";
                           }}
                         />
                       </label>
