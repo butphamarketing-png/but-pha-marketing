@@ -127,7 +127,7 @@ export interface AdminContextType {
   updateMediaVideo: (platform: string, videoUrl: string) => void;
 }
 
-const SETTINGS_KEY = "admin_settings";
+export const SETTINGS_KEY = "admin_settings";
 const MEDIA_KEYS = ["home", "facebook", "tiktok", "instagram", "zalo", "googlemaps", "website"] as const;
 const COLOR_DEFAULTS: Record<string, string> = {
   primary: "#7C3AED",

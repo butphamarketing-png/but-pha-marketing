@@ -8,9 +8,9 @@ import {
   Bell, Globe, Image, Search, Settings, LogOut,
   Trash2, Plus, Edit3,
   BarChart2, Code, Copy,
-  Calendar, Lock, Sparkles, MessageCircle, type LucideIcon
+  Calendar, Lock, Sparkles, MessageCircle, Star, type LucideIcon
 } from "lucide-react";
-import { useAdmin } from "@/lib/AdminContext";
+import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
@@ -2144,7 +2144,7 @@ export default function AdminPage() {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             try {
-                              setSaveStatus("saving");
+                              // setSaveStatus("saving");
                               const uploaded = await uploadMediaFile(file, {
                                 title: "Giải pháp Marketing toàn diện",
                                 sectionLabel: "marketing-solution",
@@ -2161,12 +2161,12 @@ export default function AdminPage() {
                                   value: { marketingSolutionImage: uploaded.url } 
                                 }),
                               });
-                              setSaveStatus("saved");
-                              setTimeout(() => setSaveStatus("idle"), 2000);
+                              // setSaveStatus("saved");
+                              setTimeout(() => {}, 2000);
                             } catch (err) {
                               console.error("Upload failed", err);
-                              setSaveStatus("error");
-                              setSaveError("Không thể tải ảnh lên.");
+                              // setSaveStatus("error");
+                              // setSaveError("Không thể tải ảnh lên.");
                             } finally {
                               e.currentTarget.value = "";
                             }
@@ -2200,7 +2200,7 @@ export default function AdminPage() {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             try {
-                              setSaveStatus("saving");
+                              // setSaveStatus("saving");
                               const uploaded = await uploadMediaFile(file, {
                                 title: "Đặt lịch tư vấn",
                                 sectionLabel: "booking",
@@ -2216,10 +2216,10 @@ export default function AdminPage() {
                                   value: { bookingConsultationImage: uploaded.url } 
                                 }),
                               });
-                              setSaveStatus("saved");
-                              setTimeout(() => setSaveStatus("idle"), 2000);
+                              // setSaveStatus("saved");
+                              setTimeout(() => {}, 2000);
                             } catch (err) {
-                              setSaveStatus("error");
+                              // setSaveStatus("error");
                             } finally {
                               e.currentTarget.value = "";
                             }
@@ -2287,7 +2287,7 @@ export default function AdminPage() {
                             if (!files.length) return;
                             const uploadedUrls: string[] = [];
                             try {
-                              setSaveStatus("saving");
+                              // setSaveStatus("saving");
                               for (const file of files) {
                                 const uploaded = await uploadMediaFile(file, {
                                   title: `${selectedPlatform} slideshow`,
@@ -2301,11 +2301,10 @@ export default function AdminPage() {
                               setSlideshowImages(selectedPlatform, nextImages);
                               
                               // Auto save after upload
-                              const cleanSettings = sanitizeSettingsForSave(settings);
                               const updatedMedia = {
-                                ...cleanSettings.media,
+                                ...settings.media,
                                 [selectedPlatform]: {
-                                  ...mergeMediaSection(cleanSettings.media[selectedPlatform]),
+                                  ...(settings.media[selectedPlatform] || { videoUrl: "", slideshow: [], cases: [] }),
                                   slideshow: nextImages
                                 }
                               };
@@ -2318,12 +2317,12 @@ export default function AdminPage() {
                                   value: { media: updatedMedia } 
                                 }),
                               });
-                              setSaveStatus("saved");
-                              setTimeout(() => setSaveStatus("idle"), 2000);
+                              // setSaveStatus("saved");
+                              setTimeout(() => {}, 2000);
                             } catch (err) {
                               console.error("Upload failed", err);
-                              setSaveStatus("error");
-                              setSaveError("Không thể tải ảnh lên.");
+                              // setSaveStatus("error");
+                              // setSaveError("Không thể tải ảnh lên.");
                             } finally {
                               e.currentTarget.value = "";
                             }
