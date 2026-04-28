@@ -1935,7 +1935,8 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu Logo & Favicon"}</button>
-                </d                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white flex items-center gap-2"><Sparkles size={18} className="text-primary" /> Giải pháp Marketing toàn diện</h3>
                   <div className="space-y-2">
                     <p className="text-xs font-semibold text-gray-400">Ảnh đại diện phần Giải pháp</p>

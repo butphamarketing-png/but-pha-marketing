@@ -569,7 +569,8 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:            <div className="mb-8 text-center space-y-4">
+          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+            <div className="mb-8 text-center space-y-4">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
               {settings.marketingSolutionImage && (
                 <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
@@ -603,7 +604,9 @@ export default function HomePageClient() {
 
           <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
             <div className="mb-6 text-center">
-              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứ            <div className="relative group">
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
+            </div>
+            <div className="relative group">
               <div className="flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-2 xl:grid-cols-4 md:overflow-visible scrollbar-hide snap-x snap-mandatory scroll-smooth" id="why-choose-slider">
                 {whyChooseUs.map((item) => (
                   <div key={item.title} className="min-w-[85%] md:min-w-0 snap-center rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center transition-transform duration-300 hover:scale-[1.02]">
