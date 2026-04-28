@@ -1924,9 +1924,9 @@ export default function AdminPage() {
                             <input type="file" accept="image/*" className="hidden" onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const uploaded = await uploadMediaFile(file, { title: proj.title, sectionLabel: "project" });
+                              const imageUrl = await fileToDataUrl(file);
                               const next = [...(settings.featuredProjects || [])];
-                              next[idx] = { ...next[idx], thumbnail: uploaded.url };
+                              next[idx] = { ...next[idx], thumbnail: imageUrl };
                               updateSettings({ featuredProjects: next });
                             }} />
                           </label>
@@ -2012,9 +2012,9 @@ export default function AdminPage() {
                               <input type="file" accept="image/*" className="hidden" onChange={async e => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
-                                const uploaded = await uploadMediaFile(file, { title: fb.clientName, sectionLabel: "feedback-logo" });
+                                const imageUrl = await fileToDataUrl(file);
                                 const next = [...(settings.customerFeedbacks || [])];
-                                next[idx] = { ...next[idx], clientLogo: uploaded.url };
+                                next[idx] = { ...next[idx], clientLogo: imageUrl };
                                 updateSettings({ customerFeedbacks: next });
                               }} />
                             </label>
@@ -2034,9 +2034,9 @@ export default function AdminPage() {
                               <input type="file" accept="image/*" className="hidden" onChange={async e => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
-                                const uploaded = await uploadMediaFile(file, { title: fb.clientName, sectionLabel: "feedback-content" });
+                                const imageUrl = await fileToDataUrl(file);
                                 const next = [...(settings.customerFeedbacks || [])];
-                                next[idx] = { ...next[idx], contentImage: uploaded.url };
+                                next[idx] = { ...next[idx], contentImage: imageUrl };
                                 updateSettings({ customerFeedbacks: next });
                               }} />
                             </label>
@@ -2144,13 +2144,8 @@ export default function AdminPage() {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             try {
-                              // setSaveStatus("saving");
-                              const uploaded = await uploadMediaFile(file, {
-                                title: "Giải pháp Marketing toàn diện",
-                                sectionLabel: "marketing-solution",
-                                suggestedName: "marketing-solution-image",
-                              });
-                              updateSettings({ marketingSolutionImage: uploaded.url });
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ marketingSolutionImage: imageUrl });
                               
                               // Auto save after upload
                               await fetch("/api/settings", {
@@ -2158,15 +2153,11 @@ export default function AdminPage() {
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ 
                                   key: SETTINGS_KEY, 
-                                  value: { marketingSolutionImage: uploaded.url } 
+                                  value: { marketingSolutionImage: imageUrl } 
                                 }),
                               });
-                              // setSaveStatus("saved");
-                              setTimeout(() => {}, 2000);
                             } catch (err) {
                               console.error("Upload failed", err);
-                              // setSaveStatus("error");
-                              // setSaveError("Không thể tải ảnh lên.");
                             } finally {
                               e.currentTarget.value = "";
                             }
@@ -2200,26 +2191,19 @@ export default function AdminPage() {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             try {
-                              // setSaveStatus("saving");
-                              const uploaded = await uploadMediaFile(file, {
-                                title: "Đặt lịch tư vấn",
-                                sectionLabel: "booking",
-                                suggestedName: "booking-image",
-                              });
-                              updateSettings({ bookingConsultationImage: uploaded.url });
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ bookingConsultationImage: imageUrl });
                               
                               await fetch("/api/settings", {
                                 method: "PATCH",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ 
                                   key: SETTINGS_KEY, 
-                                  value: { bookingConsultationImage: uploaded.url } 
+                                  value: { bookingConsultationImage: imageUrl } 
                                 }),
                               });
-                              // setSaveStatus("saved");
-                              setTimeout(() => {}, 2000);
                             } catch (err) {
-                              // setSaveStatus("error");
+                              console.error("Upload failed", err);
                             } finally {
                               e.currentTarget.value = "";
                             }
@@ -2287,14 +2271,9 @@ export default function AdminPage() {
                             if (!files.length) return;
                             const uploadedUrls: string[] = [];
                             try {
-                              // setSaveStatus("saving");
                               for (const file of files) {
-                                const uploaded = await uploadMediaFile(file, {
-                                  title: `${selectedPlatform} slideshow`,
-                                  sectionLabel: "slideshow",
-                                  suggestedName: `${selectedPlatform}-slideshow`,
-                                });
-                                uploadedUrls.push(uploaded.url);
+                                const imageUrl = await fileToDataUrl(file);
+                                uploadedUrls.push(imageUrl);
                               }
                               const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
                               const nextImages = [...existing, ...uploadedUrls];
@@ -2317,12 +2296,8 @@ export default function AdminPage() {
                                   value: { media: updatedMedia } 
                                 }),
                               });
-                              // setSaveStatus("saved");
-                              setTimeout(() => {}, 2000);
                             } catch (err) {
                               console.error("Upload failed", err);
-                              // setSaveStatus("error");
-                              // setSaveError("Không thể tải ảnh lên.");
                             } finally {
                               e.currentTarget.value = "";
                             }
