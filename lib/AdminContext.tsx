@@ -74,6 +74,7 @@ export interface SiteSettings {
   aiKtp: string;
   seoPages: Record<string, { title: string; desc: string; keywords: string }>;
   media: Record<string, MediaSection>;
+  marketingSolutionImage: string;
   cms: Record<string, PlatformCMS>;
   seoIntegrations: {
     searchConsole: SeoIntegrationConfig;
@@ -194,6 +195,7 @@ const defaultSettings: SiteSettings = {
   aiKtp: "",
   seoPages: {},
   media: createDefaultMedia(),
+  marketingSolutionImage: "",
   cms: {},
   seoIntegrations: {
     searchConsole: createSeoIntegration("Google Search Console"),
@@ -303,6 +305,7 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     aiKtp: parsed.aiKtp ?? "",
     logo: parsed.logo ?? defaultSettings.logo,
     favicon: parsed.favicon ?? defaultSettings.favicon,
+    marketingSolutionImage: parsed.marketingSolutionImage ?? "",
     seoPages: parsed.seoPages ?? {},
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
@@ -365,7 +368,7 @@ function sanitizeSlideshowItems(items: string[] | undefined): string[] {
     .map((item) => item.trim())
     .filter((item) => {
       if (!item) return false;
-      if (item.startsWith("data:image/")) return false;
+      // Allow Base64 images for temporary persistence
       if (seen.has(item)) return false;
       seen.add(item);
       return true;

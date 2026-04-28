@@ -569,13 +569,16 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-            <div className="mb-6 text-center">
+          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:            <div className="mb-8 text-center space-y-4">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
+              {settings.marketingSolutionImage && (
+                <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+                  <img src={settings.marketingSolutionImage} alt="Giải pháp Marketing toàn diện" className="w-full h-auto object-cover aspect-video" />
+                </div>
+              )}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-3">
-              {serviceCards.map((card) => (
+            <div className="grid gap-4 lg:grid-cols-3">      {serviceCards.map((card) => (
                 <Link
                   key={card.key}
                   href={card.href}
@@ -600,18 +603,40 @@ export default function HomePageClient() {
 
           <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
             <div className="mb-6 text-center">
-              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {whyChooseUs.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center">
-                  <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-500/12 text-fuchsia-200 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
-                    <item.icon className="h-7 w-7" />
-                  </span>
-                  <h3 className="mt-4 text-xl font-black text-white">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
-                </div>
-              ))}
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứ            <div className="relative group">
+              <div className="flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-2 xl:grid-cols-4 md:overflow-visible scrollbar-hide snap-x snap-mandatory scroll-smooth" id="why-choose-slider">
+                {whyChooseUs.map((item) => (
+                  <div key={item.title} className="min-w-[85%] md:min-w-0 snap-center rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center transition-transform duration-300 hover:scale-[1.02]">
+                    <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-500/12 text-fuchsia-200 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
+                      <item.icon className="h-7 w-7" />
+                    </span>
+                    <h3 className="mt-4 text-xl font-black text-white">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Mobile Arrows */}
+              <div className="flex md:hidden items-center justify-center gap-4 mt-2">
+                <button 
+                  onClick={() => {
+                    const el = document.getElementById('why-choose-slider');
+                    if (el) el.scrollLeft -= el.offsetWidth * 0.8;
+                  }}
+                  className="p-3 rounded-full border border-white/10 bg-white/5 text-white active:scale-95 transition"
+                >
+                  <ArrowRight className="h-5 w-5 rotate-180" />
+                </button>
+                <button 
+                  onClick={() => {
+                    const el = document.getElementById('why-choose-slider');
+                    if (el) el.scrollLeft += el.offsetWidth * 0.8;
+                  }}
+                  className="p-3 rounded-full border border-white/10 bg-white/5 text-white active:scale-95 transition"
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+              </div>
             </div>
           </section>
 

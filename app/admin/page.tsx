@@ -1935,6 +1935,42 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu Logo & Favicon"}</button>
+                </d                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                  <h3 className="font-bold text-white flex items-center gap-2"><Sparkles size={18} className="text-primary" /> Giải pháp Marketing toàn diện</h3>
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-400">Ảnh đại diện phần Giải pháp</p>
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                      {settings.marketingSolutionImage ? (
+                        <img src={settings.marketingSolutionImage} alt="Marketing Solution" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đại diện</div>
+                      )}
+                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const url = await fileToDataUrl(file);
+                            updateSettings({ marketingSolutionImage: url });
+                            e.currentTarget.value = "";
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <input
+                      value={settings.marketingSolutionImage || ""}
+                      onChange={e => updateSettings({ marketingSolutionImage: e.target.value })}
+                      placeholder="URL hoặc dán Base64..."
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
+                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu ảnh Giải pháp"}
+                  </button>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
