@@ -418,20 +418,14 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
   const platformMedia = settings?.media?.[platformKey] ?? { slideshow: [], cases: [], videoUrl: "" };
   const customSlides = platformMedia.slideshow || [];
   
-  const defaultSlides = [
-    { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" },
-    { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "https://images.unsplash.com/photo-1557838923-2985c318be48?w=1200&q=80" },
-    { title: "Kết Quả Thực Sự", sub: "Cam kết mang lại hiệu quả đo lường được", url: "https://images.unsplash.com/photo-1551288049-bbbda5366392?w=1200&q=80" },
-  ];
-
-  const slides = customSlides.length > 0 
-    ? customSlides.map(url => ({ title: "", sub: "", url }))
-    : defaultSlides;
+  const slides = customSlides.map(url => ({ title: "", sub: "", url }));
 
   useEffect(() => {
     const t = setInterval(() => setCurrent(p => (p + 1) % slides.length), 4000);
     return () => clearInterval(t);
   }, [slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <section

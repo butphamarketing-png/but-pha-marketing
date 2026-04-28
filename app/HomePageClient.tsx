@@ -78,24 +78,19 @@ export default function HomePageClient() {
   );
 
   const homeMedia = settings?.media?.home;
-  const heroVisual =
-    homeMedia?.slideshow?.[0] ||
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80";
-  const teamImage =
-    homeMedia?.slideshow?.[1] ||
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1400&q=80";
-  const bookingVisual =
-    homeMedia?.slideshow?.[2] ||
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80";
-  const heroSlides = useMemo(
-    () => [
-      {
+  const heroVisual = homeMedia?.slideshow?.[0] || "";
+  const teamImage = homeMedia?.slideshow?.[1] || "";
+  const bookingVisual = homeMedia?.slideshow?.[2] || "";
+  const heroSlides = useMemo(() => {
+    const slides = [];
+    if (homeMedia?.slideshow?.[0]) {
+      slides.push({
         eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
         middle: "KHÔNG TẠO RA DOANH THU",
         accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
         description:
           "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
-        visual: homeMedia?.slideshow?.[0] || heroVisual,
+        visual: homeMedia.slideshow[0],
         revenue: "+215%",
         growth: "+150%",
         newClients: "+180%",
@@ -105,14 +100,16 @@ export default function HomePageClient() {
           { label: "Facebook", icon: SiFacebook },
           { label: "Google Maps", icon: MapPinned },
         ],
-      },
-      {
+      });
+    }
+    if (homeMedia?.slideshow?.[1]) {
+      slides.push({
         eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
         middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
         accent: "VÀ DOANH THU THẬT!",
         description:
           "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
-        visual: homeMedia?.slideshow?.[1] || teamImage,
+        visual: homeMedia.slideshow[1],
         revenue: "+168%",
         growth: "+132%",
         newClients: "+145%",
@@ -122,14 +119,16 @@ export default function HomePageClient() {
           { label: "Messenger", icon: MessageCircleMore },
           { label: "Zalo", icon: SiZalo },
         ],
-      },
-      {
+      });
+    }
+    if (homeMedia?.slideshow?.[2]) {
+      slides.push({
         eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
         middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
         accent: "VÀ TĂNG CUỘC GỌI THẬT!",
         description:
           "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
-        visual: homeMedia?.slideshow?.[2] || bookingVisual,
+        visual: homeMedia.slideshow[2],
         revenue: "Top 1",
         growth: "+120%",
         newClients: "+95%",
@@ -139,10 +138,10 @@ export default function HomePageClient() {
           { label: "Website", icon: LayoutTemplate },
           { label: "Facebook", icon: SiFacebook },
         ],
-      },
-    ],
-    [bookingVisual, heroVisual, homeMedia?.slideshow, teamImage],
-  );
+      });
+    }
+    return slides;
+  }, [homeMedia?.slideshow]);
   const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0];
 
   useEffect(() => {
@@ -475,47 +474,55 @@ export default function HomePageClient() {
         </header>
 
         <main>
-          <section id="hero" className="mx-auto max-w-[1180px] px-4 pb-8 pt-8 lg:px-5 lg:pt-9">
-            <div className="relative overflow-hidden rounded-[32px] border border-fuchsia-400/14 bg-[#090412] shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
-              <img
-                key={currentHeroSlide.visual}
-                src={currentHeroSlide.visual}
-                alt="Slideshow marketing"
-                className="absolute inset-0 h-full w-full object-cover transition duration-700"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,4,18,0.08),rgba(9,4,18,0.22))]" />
-              <div className="relative min-h-[540px] sm:min-h-[620px]">
-                <button
-                  type="button"
-                  onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-                  className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
-                  aria-label="Slide trước"
-                >
-                  <ChevronRight className="h-5 w-5 rotate-180" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
-                  className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
-                  aria-label="Slide tiếp theo"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
+          {heroSlides.length > 0 && (
+            <section id="hero" className="mx-auto max-w-[1180px] px-4 pb-8 pt-8 lg:px-5 lg:pt-9">
+              <div className="relative overflow-hidden rounded-[32px] border border-fuchsia-400/14 bg-[#090412] shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
+                <img
+                  key={currentHeroSlide?.visual}
+                  src={currentHeroSlide?.visual}
+                  alt="Slideshow marketing"
+                  className="absolute inset-0 h-full w-full object-cover transition duration-700"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,4,18,0.08),rgba(9,4,18,0.22))]" />
+                <div className="relative min-h-[540px] sm:min-h-[620px]">
+                  {heroSlides.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+                        className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
+                        aria-label="Slide trước"
+                      >
+                        <ChevronRight className="h-5 w-5 rotate-180" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
+                        className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
+                        aria-label="Slide tiếp theo"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </>
+                  )}
+                </div>
 
-              <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
-                {heroSlides.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setActiveHeroSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${index === activeHeroSlide ? "w-10 bg-fuchsia-400" : "w-2.5 bg-white/30"}`}
-                    aria-label={`Chọn slide ${index + 1}`}
-                  />
-                ))}
+                {heroSlides.length > 1 && (
+                  <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+                    {heroSlides.map((_, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => setActiveHeroSlide(index)}
+                        className={`h-2.5 rounded-full transition-all ${index === activeHeroSlide ? "w-10 bg-fuchsia-400" : "w-2.5 bg-white/30"}`}
+                        aria-label={`Chọn slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           <section className="mx-auto max-w-[1180px] px-4 py-6 lg:px-5">
             <div className="grid gap-7 lg:grid-cols-[0.76fr_1.24fr] lg:items-center">
