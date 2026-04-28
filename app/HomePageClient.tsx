@@ -909,11 +909,13 @@ export default function HomePageClient() {
             <div className="grid gap-4 xl:grid-cols-4">
               {topBlogs.map((blog) => {
                 const href = `/blog/${blog.slug || slugify(blog.title) || blog.id}`;
+                // Fallback for image field names
+                const displayImage = (blog as any).image_url || blog.imageUrl || heroVisual;
                 return (
                   <Link key={blog.id} href={href} className="group overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.32)]">
                     <div className="overflow-hidden">
                       <img
-                        src={blog.imageUrl || heroVisual}
+                        src={displayImage}
                         alt={blog.title}
                         className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                       />
