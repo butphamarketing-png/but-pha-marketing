@@ -258,6 +258,8 @@ export default function AdminPage() {
     published: true,
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+  const [slideshowUploadingProgress, setSlideshowUploadingProgress] = useState(0);
+  const [slideshowUploadError, setSlideshowUploadError] = useState<string | null>(null);
 
   const setPanelFeedback = (message: string | null, error: string | null = null) => {
     setBlogSaveMessage(message);
@@ -1972,32 +1974,66 @@ export default function AdminPage() {
                       >
                         Thêm URL
                     </button>
-                    <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white">
-                      Tải ảnh
+                    <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50" style={{ opacity: slideshowUploadingProgress > 0 ? 0.6 : 1, pointerEvents: slideshowUploadingProgress > 0 ? 'none' : 'auto' }}>
+                      {slideshowUploadingProgress > 0 ? `Đang tải... (${slideshowUploadingProgress}%)` : 'Tải ảnh'}
                       <input
                           type="file"
                           accept="image/*"
                           multiple
                           className="hidden"
+                          disabled={slideshowUploadingProgress > 0}
                           onChange={async e => {
                             const files = Array.from(e.target.files || []);
                             if (!files.length) return;
+                            setSlideshowUploadError(null);
+                            setSlideshowUploadingProgress(1);
                             const uploadedUrls: string[] = [];
-                            for (const file of files) {
-                              const uploaded = await uploadMediaFile(file, {
-                                title: `${selectedPlatform} slideshow`,
-                                sectionLabel: "slideshow",
-                                suggestedName: `${selectedPlatform}-slideshow`,
-                              });
-                              uploadedUrls.push(uploaded.url);
+                            const totalFiles = files.length;
+                            
+                            try {
+                              for (let index = 0; index < files.length; index += 1) {
+                                try {
+                                  const file = files[index];
+                                  const uploaded = await uploadMediaFile(file, {
+                                    title: `${selectedPlatform} slideshow`,
+                                    sectionLabel: "slideshow",
+                                    suggestedName: `${selectedPlatform}-slideshow`,
+                                  });
+                                  uploadedUrls.push(uploaded.url);
+                                  setSlideshowUploadingProgress(Math.round(((index + 1) / totalFiles) * 100));
+                                } catch (err) {
+                                  const errorMsg = err instanceof Error ? err.message : 'Lỗi không xác định';
+                                  setSlideshowUploadError(`File ${files[index].name}: ${errorMsg}`);
+                                  console.error("[v0] Slideshow upload error:", err);
+                                }
+                              }
+                              
+                              if (uploadedUrls.length > 0) {
+                                const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
+                                setSlideshowImages(selectedPlatform, [...existing, ...uploadedUrls]);
+                                if (uploadedUrls.length === totalFiles) {
+                                  setSlideshowUploadError(null);
+                                }
+                              } else {
+                                setSlideshowUploadError('Không có ảnh nào được tải lên thành công');
+                              }
+                            } catch (err) {
+                              setSlideshowUploadError(err instanceof Error ? err.message : 'Lỗi tải ảnh');
+                              console.error("[v0] Slideshow upload error:", err);
+                            } finally {
+                              setSlideshowUploadingProgress(0);
+                              e.currentTarget.value = "";
                             }
-                            const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
-                            setSlideshowImages(selectedPlatform, [...existing, ...uploadedUrls]);
-                            e.currentTarget.value = "";
                           }}
                         />
                       </label>
                     </div>
+                    {slideshowUploadError && (
+                      <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+                        <p className="font-semibold">Lỗi tải ảnh:</p>
+                        <p className="break-words text-xs">{slideshowUploadError}</p>
+                      </div>
+                    )}
                     <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/70">
                       Chỉ dùng ảnh cho slideshow. Ưu tiên tải ảnh từ máy, hoặc dán thêm 1 URL ảnh nếu cần.
                     </p>
@@ -2628,7 +2664,7 @@ export default function AdminPage() {
                         <input value={mascotErrorPack.login} onChange={e => updateMascotErrorPack("login", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
                       </div>
                       <div className="space-y-1">
-                        <p className="text-[10px] uppercase text-gray-500">Sai số điện thoại</p>
+                        <p className="text-[10px] uppercase text-gray-500">Sai số điện tho��i</p>
                         <input value={mascotErrorPack.phone} onChange={e => updateMascotErrorPack("phone", e.target.value)} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white" />
                       </div>
                       <div className="space-y-1">

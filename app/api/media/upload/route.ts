@@ -27,8 +27,27 @@ export async function POST(request: Request) {
     const sectionLabel = cleanText(formData.get("sectionLabel")) || "upload";
     const suggestedName = cleanText(formData.get("suggestedName"));
 
+    // Validate file
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Thieu file anh de tai len." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Không có file ảnh được gửi lên" },
+        { status: 400 }
+      );
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json(
+        { error: "Chỉ hỗ trợ file ảnh (JPG, PNG, WebP, GIF)" },
+        { status: 400 }
+      );
+    }
+
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json(
+        { error: `File quá lớn. Tối đa ${MAX_SIZE / 1024 / 1024}MB` },
+        { status: 400 }
+      );
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -54,7 +73,7 @@ export async function POST(request: Request) {
       .from("media")
       .insert({
         url: publicUrl,
-        name: suggestedName || file.name || `${title || "Anh"} - ${sectionLabel}`,
+        name: suggestedName || file.name || `${title || "Ảnh"} - ${sectionLabel}`,
         type: "image",
         timestamp: Date.now(),
       })
@@ -62,8 +81,19 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      console.error("POST /api/media/upload Supabase error", error);
-      return NextResponse.json({ error: "Da tai file len nhung chua ghi duoc vao media." }, { status: 500 });
+      console.error("[v0] POST /api/media/upload - Supabase insert error", error);
+      // Still return success with the local URL if Supabase fails
+      // This allows local uploads to work even if database is unavailable
+      return NextResponse.json({
+        ok: true,
+        item: {
+          id: `local-${Date.now()}`,
+          name: suggestedName || file.name,
+        },
+        url: publicUrl,
+        path: absolutePath,
+        warning: "Ảnh đã tải lên nhưng chưa được lưu vào cơ sở dữ liệu",
+      });
     }
 
     return NextResponse.json({
@@ -73,7 +103,11 @@ export async function POST(request: Request) {
       path: absolutePath,
     });
   } catch (error) {
-    console.error("POST /api/media/upload failed", error);
-    return NextResponse.json({ error: "Khong the tai anh len luc nay." }, { status: 500 });
+    console.error("[v0] POST /api/media/upload - Error", error);
+    const errorMsg = error instanceof Error ? error.message : "Lỗi không xác định";
+    return NextResponse.json(
+      { error: `Lỗi tải ảnh: ${errorMsg}` },
+      { status: 500 }
+    );
   }
 }
