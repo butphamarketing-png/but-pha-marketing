@@ -8,7 +8,7 @@ import {
   Bell, Globe, Image, Search, Settings, LogOut,
   Trash2, Plus, Edit3,
   BarChart2, Code, Copy,
-  Calendar, Lock, Sparkles, type LucideIcon
+  Calendar, Lock, Sparkles, MessageCircle, type LucideIcon
 } from "lucide-react";
 import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
@@ -26,7 +26,7 @@ const NAV = [
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
   { id: "projects", label: "Dự án tiêu biểu", icon: Package },
-  { id: "feedback", label: "Feedback khách hàng", icon: MessageCircleMore },
+  { id: "feedback", label: "Feedback khách hàng", icon: MessageCircle },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },

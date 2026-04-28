@@ -9,7 +9,7 @@ import {
   ChevronRight,
   LayoutTemplate,
   MapPinned,
-  MessageCircleMore,
+  MessageCircle,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -116,7 +116,7 @@ export default function HomePageClient() {
         highlight: "Tăng trưởng Fanpage",
         pills: [
           { label: "Facebook", icon: SiFacebook },
-          { label: "Messenger", icon: MessageCircleMore },
+          { label: "Messenger", icon: MessageCircle },
           { label: "Zalo", icon: SiZalo },
         ],
       });
