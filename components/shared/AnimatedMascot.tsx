@@ -527,10 +527,9 @@ export function AnimatedMascot() {
             prefersReducedMotion
               ? { duration: 0 }
               : {
-                  duration: isMobileViewport ? 18 : 10,
+                  duration: isMobileViewport ? 25 : 18,
                   repeat: Infinity,
-                  ease: "easeInOut",
-                  times: [0, 0.16, 0.34, 0.52, 0.7, 0.86, 1],
+                  ease: "linear",
                 }
           }
           data-mascot="dragon"
