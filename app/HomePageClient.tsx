@@ -80,7 +80,7 @@ export default function HomePageClient() {
   const homeMedia = settings?.media?.home;
   
   const heroSlides = useMemo(() => {
-    const slides = [];
+    const slides: any[] = [];
     const slideshowImages = homeMedia?.slideshow || [];
     
     if (slideshowImages.length > 0) {
