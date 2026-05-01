@@ -415,22 +415,11 @@ function ConsultationModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; pl
 function Slideshow({ color, platformKey }: { color: string; platformKey: string }) {
   const { settings } = useAdmin();
   const [current, setCurrent] = useState(0);
-  const platformMedia = settings?.media?.[platformKey] ?? { slideshow: [], cases: [], videoUrl: "" };
-  const customSlides = platformMedia.slideshow || [];
   
-  const defaultSlides = platformKey === "website" ? [
-    { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png" },
-    { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png" },
-    { title: "Kết Quả Thực Sự", sub: "Cam kết mang lại hiệu quả đo lường được", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593308940/25d911b327b744d08183049b49e836ec.png" },
-  ] : [
-    { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" },
-    { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "https://images.unsplash.com/photo-1557838923-2985c318be48?w=1200&q=80" },
-    { title: "Kết Quả Thực Sự", sub: "Cam kết mang lại hiệu quả đo lường được", url: "https://images.unsplash.com/photo-1551288049-bbbda5366392?w=1200&q=80" },
+  const slides = [
+    { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "/slideshow.jpg" },
+    { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "/slideshow1.jpg" },
   ];
-
-  const slides = customSlides.length > 0 
-    ? customSlides.map(url => ({ title: "", sub: "", url }))
-    : defaultSlides;
 
   useEffect(() => {
     const t = setInterval(() => setCurrent(p => (p + 1) % slides.length), 5000);

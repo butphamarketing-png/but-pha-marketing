@@ -26,7 +26,6 @@ import { LoginModal } from "@/components/shared/LoginModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
-import { getBrandingAssetUrl } from "@/lib/branding";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
@@ -93,15 +92,11 @@ export default function HomePageClient() {
   
   const heroSlides = useMemo(() => {
     const slides: any[] = [];
-    const slideshowImages = homeMedia?.slideshow || [];
     
-    const fallbackImages = [
-      "/logo.png",
-      "/mascot-home.png",
-      "/mascot-home.png"
+    const imagesToUse = [
+      "/slideshow.jpg",
+      "/slideshow1.jpg"
     ];
-
-    const imagesToUse = slideshowImages.length > 0 ? slideshowImages : fallbackImages;
 
     imagesToUse.forEach((img, index) => {
       if (index === 0) {
@@ -176,7 +171,7 @@ export default function HomePageClient() {
     });
     
     return slides;
-  }, [homeMedia?.slideshow]);
+  }, []);
 
   const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0] || {
     eyebrow: "Bứt Phá Marketing",
@@ -417,7 +412,7 @@ export default function HomePageClient() {
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
                 <img 
-                  src="/logo.png" 
+                  src="/mascot-home.png" 
                   alt="Về chúng tôi" 
                   className="h-full w-full object-cover" 
                 />

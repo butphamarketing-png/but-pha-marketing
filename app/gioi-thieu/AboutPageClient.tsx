@@ -21,7 +21,6 @@ import { SiFacebook } from "react-icons/si";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAdmin } from "@/lib/AdminContext";
-import { getBrandingAssetUrl } from "@/lib/branding";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
@@ -35,17 +34,10 @@ export default function AboutPageClient() {
   }, []);
 
   const brandName = settings?.title || "Bứt Phá Marketing";
-  const logoSrc = useMemo(
-    () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
-    [settings?.favicon, settings?.logo],
-  );
+  const logoSrc = "/logo.png";
   const homeMedia = settings?.media?.home;
-  const teamImage =
-    homeMedia?.slideshow?.[0] ||
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1400&q=80";
-  const heroVisual =
-    homeMedia?.slideshow?.[1] ||
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80";
+  const teamImage = "/slideshow.jpg";
+  const heroVisual = "/slideshow1.jpg";
   const mascotImage = settings?.mascotImage || "/mascot-home.png";
 
   const serviceHighlights = useMemo(() => {

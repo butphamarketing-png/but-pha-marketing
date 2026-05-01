@@ -8,7 +8,6 @@ import { PresentationButton } from "./PresentationButton";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
-import { getBrandingAssetUrl } from "@/lib/branding";
 import { usePathname } from "next/navigation";
 
 interface SubPageLayoutProps {
@@ -38,7 +37,7 @@ function useClickSound() {
 
 export function SubPageLayout({ platformName, primaryColor, children }: SubPageLayoutProps) {
   const { settings } = useAdmin();
-  const logoSrc = getBrandingAssetUrl("logo", settings.logo || settings.favicon || "");
+  const logoSrc = "/logo.png";
   const pathname = usePathname();
   const [showConsult, setShowConsult] = useState(false);
   const { scrollYProgress } = useScroll();

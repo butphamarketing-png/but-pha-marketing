@@ -19,7 +19,6 @@ import { SiFacebook, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAdmin } from "@/lib/AdminContext";
-import { getBrandingAssetUrl } from "@/lib/branding";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
@@ -64,10 +63,7 @@ export default function ContactPageClient() {
   }, []);
 
   const brandName = settings?.title || "Bứt Phá Marketing";
-  const logoSrc = useMemo(
-    () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
-    [settings?.favicon, settings?.logo],
-  );
+  const logoSrc = "/logo.png";
   const mascotImage = settings?.mascotImage || "/mascot-home.png";
 
   const navigation = [

@@ -4,9 +4,7 @@ import { AdminProvider } from "@/lib/AdminContext";
 import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
-import { DynamicFavicon } from "@/components/shared/DynamicFavicon";
 import { VisitorTracker } from "@/components/shared/VisitorTracker";
-import { createServerClient } from "@/lib/supabase";
 import NextTopLoader from "nextjs-toploader";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
@@ -15,29 +13,8 @@ const DEFAULT_DESCRIPTION =
   "Agency marketing toan dien tai Viet Nam. Dich vu Facebook, TikTok, Instagram, Website, Local SEO va chien luoc tang truong doanh thu.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let siteTitle = DEFAULT_TITLE;
-  const favicon = "/api/branding/favicon";
-
-  try {
-    const data = await Promise.race([
-      (async () => {
-        const supabase = createServerClient();
-        const result = await supabase
-          .from("site_settings")
-          .select("value")
-          .eq("key", "admin_settings")
-          .maybeSingle();
-        return result.data;
-      })(),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
-    ]);
-
-    if (typeof data?.value?.title === "string" && data.value.title.trim()) {
-      siteTitle = data.value.title.trim();
-    }
-  } catch (error) {
-    console.error("[layout metadata] Failed to load dynamic branding", error);
-  }
+  const siteTitle = DEFAULT_TITLE;
+  const favicon = "/favicon.png";
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -97,7 +74,6 @@ export default function RootLayout({
         <NextTopLoader color="#7C3AED" showSpinner={false} shadow="0 0 10px #7C3AED,0 0 5px #7C3AED" />
         <AuthProvider>
           <AdminProvider>
-            <DynamicFavicon />
             <ExternalScripts />
             <VisitorTracker />
             {children}
