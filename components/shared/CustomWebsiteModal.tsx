@@ -94,6 +94,17 @@ const BASE_PRICE = 3000000;
 
 export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: boolean; onClose: () => void; primaryColor: string }) {
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set());
+  const [step, setStep] = useState<"select" | "contact" | "success">("select");
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    consultTime: "",
+    note: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const toggleFeature = (id: string) => {
     const next = new Set(selectedFeatures);
@@ -111,6 +122,38 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
     });
     return sum;
   }, [selectedFeatures]);
+
+  const handleSubmit = async () => {
+    if (!form.name.trim() || !form.phone.trim()) {
+      setError("Vui lòng điền đầy đủ Họ tên và Số điện thoại");
+      return;
+    }
+    setIsSubmitting(true);
+    setError("");
+
+    const featureNames = [];
+    FEATURE_CATEGORIES.forEach(cat => {
+      cat.features.forEach(f => {
+        if (selectedFeatures.has(f.id)) featureNames.push(f.name);
+      });
+    });
+
+    const result = await db.leads.add({
+      type: "contact",
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      service: "Website Custom",
+      note: `Gói: Website Custom\nTính năng: ${featureNames.join(", ")}\nTổng giá: ${formatPrice(totalPrice)}\nEmail: ${form.email}\nĐịa chỉ: ${form.address}\nThời gian: ${form.consultTime}\nGhi chú: ${form.note}`,
+      platform: "website"
+    });
+
+    setIsSubmitting(false);
+    if (result.error) {
+      setError("Lỗi gửi thông tin, vui lòng thử lại");
+    } else {
+      setStep("success");
+    }
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN").format(price) + "đ";
@@ -140,84 +183,165 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
 
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6 md:p-10">
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {/* Default Package Info */}
-              <div className="rounded-3xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-6 lg:col-span-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-400">
-                    <Check size={20} />
+            {step === "select" ? (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {/* Default Package Info */}
+                <div className="rounded-3xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-6 lg:col-span-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-400">
+                      <Check size={20} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white">Gói cơ bản + Responsive (Mặc định)</h3>
+                      <p className="text-sm text-gray-400">Đã bao gồm trong chi phí khởi tạo ban đầu</p>
+                    </div>
+                    <div className="ml-auto text-xl font-black text-fuchsia-400">{formatPrice(BASE_PRICE)}</div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-white">Gói cơ bản + Responsive (Mặc định)</h3>
-                    <p className="text-sm text-gray-400">Đã bao gồm trong chi phí khởi tạo ban đầu</p>
+                </div>
+
+                {FEATURE_CATEGORIES.map((cat, idx) => (
+                  <div key={idx} className="space-y-4">
+                    <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+                      <cat.icon size={18} style={{ color: primaryColor }} />
+                      <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">{cat.title}</h4>
+                    </div>
+                    <div className="grid gap-2">
+                      {cat.features.map(f => (
+                        <button
+                          key={f.id}
+                          onClick={() => toggleFeature(f.id)}
+                          className={`group flex items-center justify-between rounded-2xl border p-4 transition-all ${
+                            selectedFeatures.has(f.id)
+                              ? "border-primary/50 bg-primary/10"
+                              : "border-white/5 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]"
+                          }`}
+                          style={selectedFeatures.has(f.id) ? { borderColor: `${primaryColor}50`, backgroundColor: `${primaryColor}10` } : {}}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
+                              selectedFeatures.has(f.id) ? "bg-primary border-primary" : "border-white/20"
+                            }`} style={selectedFeatures.has(f.id) ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}>
+                              {selectedFeatures.has(f.id) && <Check size={12} className="text-white" />}
+                            </div>
+                            <span className="text-sm font-medium text-gray-300 group-hover:text-white">{f.name}</span>
+                          </div>
+                          <span className="text-xs font-bold text-gray-500">{formatPrice(f.price)}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="ml-auto text-xl font-black text-fuchsia-400">{formatPrice(BASE_PRICE)}</div>
+                ))}
+              </div>
+            ) : step === "contact" ? (
+              <div className="mx-auto max-w-lg space-y-6 py-10">
+                <div className="text-center">
+                  <h3 className="text-2xl font-black text-white">Nhập thông tin tư vấn</h3>
+                  <p className="mt-2 text-sm text-gray-400">Đội ngũ sẽ liên hệ tư vấn chi tiết về các tính năng bạn đã chọn</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      placeholder="Họ và tên *"
+                      value={form.name}
+                      onChange={e => setForm({ ...form, name: e.target.value })}
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                    />
+                    <input
+                      placeholder="Số điện thoại *"
+                      value={form.phone}
+                      onChange={e => setForm({ ...form, phone: e.target.value })}
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                    />
+                  </div>
+                  <input
+                    placeholder="Gmail (Email)"
+                    value={form.email}
+                    onChange={e => setForm({ ...form, email: e.target.value })}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                  />
+                  <input
+                    placeholder="Địa chỉ tư vấn"
+                    value={form.address}
+                    onChange={e => setForm({ ...form, address: e.target.value })}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                  />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Thời gian tư vấn mong muốn</label>
+                    <input
+                      type="datetime-local"
+                      value={form.consultTime}
+                      onChange={e => setForm({ ...form, consultTime: e.target.value })}
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Nội dung cần tư vấn thêm..."
+                    value={form.note}
+                    onChange={e => setForm({ ...form, note: e.target.value })}
+                    rows={3}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30 resize-none"
+                  />
+                  {error && <p className="text-center text-xs font-bold text-rose-500">{error}</p>}
                 </div>
               </div>
-
-              {FEATURE_CATEGORIES.map((cat, idx) => (
-                <div key={idx} className="space-y-4">
-                  <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-                    <cat.icon size={18} style={{ color: primaryColor }} />
-                    <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">{cat.title}</h4>
-                  </div>
-                  <div className="grid gap-2">
-                    {cat.features.map(f => (
-                      <button
-                        key={f.id}
-                        onClick={() => toggleFeature(f.id)}
-                        className={`group flex items-center justify-between rounded-2xl border p-4 transition-all ${
-                          selectedFeatures.has(f.id)
-                            ? "border-primary/50 bg-primary/10"
-                            : "border-white/5 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]"
-                        }`}
-                        style={selectedFeatures.has(f.id) ? { borderColor: `${primaryColor}50`, backgroundColor: `${primaryColor}10` } : {}}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
-                            selectedFeatures.has(f.id) ? "bg-primary border-primary" : "border-white/20"
-                          }`} style={selectedFeatures.has(f.id) ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}>
-                            {selectedFeatures.has(f.id) && <Check size={12} className="text-white" />}
-                          </div>
-                          <span className="text-sm font-medium text-gray-300 group-hover:text-white">{f.name}</span>
-                        </div>
-                        <span className="text-xs font-bold text-gray-500">{formatPrice(f.price)}</span>
-                      </button>
-                    ))}
-                  </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-green-500/20 text-green-500">
+                  <Check size={48} />
                 </div>
-              ))}
-            </div>
+                <h3 className="text-3xl font-black text-white">Đã nhận yêu cầu!</h3>
+                <p className="mt-4 text-gray-400">Đội ngũ Bứt Phá Marketing sẽ liên hệ với bạn sớm nhất.</p>
+                <button
+                  onClick={onClose}
+                  className="mt-8 rounded-2xl bg-white/5 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-white/10"
+                >
+                  Đóng cửa sổ
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Footer / Total */}
-          <div className="border-t border-white/5 bg-black/40 p-6 md:px-10">
-            <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-white">
-                  <Calculator size={28} />
-                </div>
-                <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-gray-500">Tổng chi phí ước tính</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-white" style={{ color: primaryColor }}>{formatPrice(totalPrice)}</span>
-                    <span className="text-sm text-gray-500">({selectedFeatures.size + 1} tính năng)</span>
+          {step !== "success" && (
+            <div className="border-t border-white/5 bg-black/40 p-6 md:px-10">
+              <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-white">
+                    <Calculator size={28} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-widest text-gray-500">Tổng chi phí ước tính</p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-black text-white" style={{ color: primaryColor }}>{formatPrice(totalPrice)}</span>
+                      <span className="text-sm text-gray-500">({selectedFeatures.size + 1} tính năng)</span>
+                    </div>
                   </div>
                 </div>
+                <div className="flex gap-4">
+                  {step === "contact" && (
+                    <button
+                      onClick={() => setStep("select")}
+                      className="rounded-2xl border border-white/10 px-8 py-5 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-white/5"
+                    >
+                      Quay lại
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      if (step === "select") setStep("contact");
+                      else handleSubmit();
+                    }}
+                    disabled={isSubmitting}
+                    className="group relative flex items-center gap-3 overflow-hidden rounded-2xl px-10 py-5 text-sm font-black uppercase tracking-widest text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+                    {isSubmitting ? "Đang gửi..." : step === "select" ? "Đăng ký tư vấn gói này" : "Xác nhận gửi yêu cầu"}
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={() => {
-                  alert("Chúng tôi đã nhận được yêu cầu của bạn. Đội ngũ sẽ liên hệ tư vấn chi tiết hơn!");
-                  onClose();
-                }}
-                className="group relative flex items-center gap-3 overflow-hidden rounded-2xl px-10 py-5 text-sm font-black uppercase tracking-widest text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                style={{ backgroundColor: primaryColor }}
-              >
-                <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                Đăng ký tư vấn gói này
-              </button>
             </div>
-          </div>
+          )}
         </motion.div>
       </div>
     </AnimatePresence>

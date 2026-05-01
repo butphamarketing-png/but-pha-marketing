@@ -229,7 +229,8 @@ function ConsultationModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; pl
   );
 }
 
-function Stats({ stats, color }: { stats: { label: string; value: string }[]; color: string }) {
+function Stats({ stats, color, isWebsite }: { stats: { label: string; value: string }[]; color: string; isWebsite?: boolean }) {
+  if (isWebsite) return null;
   return (
     <section data-section="stats" id="stats" className="relative py-24 px-4 overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full opacity-10 pointer-events-none">
@@ -574,18 +575,22 @@ function ContactForm({ color }: { color: string }) {
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [service, setService] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [consultTime, setConsultTime] = useState("");
+  const [platform, setPlatform] = useState("website");
   const [note, setNote] = useState("");
+
   return (
     <section data-section="contact" id="contact" className="relative py-24 px-4 overflow-hidden">
       <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-20 pointer-events-none">
         <div className="absolute top-1/4 right-0 h-[500px] w-[500px] rounded-full blur-[150px]" style={{ backgroundColor: `${color}30` }} />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-2xl">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-black text-white md:text-5xl">Liên Hệ Tư Vấn</h2>
-          <p className="text-gray-400">Hãy để chúng tôi đồng hành cùng sự phát triển của doanh nghiệp bạn</p>
+          <h2 className="mb-4 text-4xl font-black text-white md:text-5xl">Đặt lịch tư vấn trực tiếp</h2>
+          <p className="text-gray-400">Để ngũ chuyên gia sẽ tư vấn giải pháp phù hợp nhất cho bạn</p>
         </div>
 
         {sent ? (
@@ -602,42 +607,76 @@ function ContactForm({ color }: { color: string }) {
           </motion.div>
         ) : (
           <form 
-            onSubmit={e => { e.preventDefault(); db.leads.add({ type: "contact", name, phone, service, note }); setSent(true); }} 
-            className="group relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-xl md:p-12"
+            onSubmit={e => { 
+              e.preventDefault(); 
+              db.leads.add({ 
+                type: "contact", 
+                name, 
+                phone, 
+                service: `Tư vấn ${platform}`, 
+                note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}` 
+              }); 
+              setSent(true); 
+            }} 
+            className="group relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 backdrop-blur-xl md:p-14"
           >
-            <div className="grid gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
-                <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
-                <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="090 123 4567" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Dịch vụ quan tâm</label>
-                <div className="relative">
-                  <select value={service} onChange={e => setService(e.target.value)} className="w-full appearance-none rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10">
-                    <option value="" className="bg-neutral-900">Chọn dịch vụ...</option>
-                    <option className="bg-neutral-900">Xây dựng trang/kênh</option>
-                    <option className="bg-neutral-900">Chăm sóc nội dung</option>
-                    <option className="bg-neutral-900">Quảng cáo</option>
-                  </select>
-                  <ChevronDown size={18} className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+            <div className="grid gap-8">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
+                  <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nhập họ và tên" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
+                  <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="Nhập số điện thoại" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
                 </div>
               </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Địa điểm</label>
+                  <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Chọn địa điểm" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Thời gian</label>
+                  <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nền tảng</label>
+                <div className="flex flex-wrap gap-3">
+                  {["Website", "Facebook", "Google Maps"].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPlatform(p.toLowerCase())}
+                      className={`rounded-xl px-6 py-3 text-xs font-bold transition-all border ${
+                        platform === p.toLowerCase() 
+                        ? "bg-white text-black border-white" 
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Ghi chú thêm</label>
-                <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả nhu cầu của bạn..." rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nội dung</label>
+                <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Bạn muốn tư vấn về vấn đề gì?" rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
               </div>
               
               <button 
                 type="submit" 
-                className="group relative mt-4 w-full overflow-hidden rounded-2xl py-5 text-sm font-black text-white transition-all hover:scale-[1.02] active:scale-95 shadow-2xl" 
+                className="group relative mt-4 w-full overflow-hidden rounded-2xl py-6 text-sm font-black text-white transition-all hover:scale-[1.01] active:scale-95 shadow-2xl" 
                 style={{ backgroundColor: color }}
               >
                 <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="relative">Gửi Yêu Cầu Tư Vấn Ngay</span>
+                <span className="relative flex items-center justify-center gap-2">
+                  ✨ Đặt lịch tư vấn ngay
+                </span>
               </button>
             </div>
           </form>
@@ -682,7 +721,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {children}
 
-      <Stats stats={config.stats} color={platformColor} />
+      <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />
       
       <ContactForm color={platformColor} />
 
