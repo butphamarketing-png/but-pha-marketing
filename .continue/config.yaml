@@ -1,0 +1,7 @@
+models:
+  - title: Llama3 Local
+    provider: ollama
+    model: llama3
+    apiBase: http://localhost:11434
+
+defaultModel: Llama3 Local
