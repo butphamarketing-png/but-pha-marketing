@@ -201,7 +201,6 @@ const defaultSettings: SiteSettings = {
   hotline: "0937 417 982",
   address: "",
   email: "",
-  zalo: "",
   fanpage: "",
   googleAnalytics: "G-D0XPZGPZNG",
   headJs: "",
