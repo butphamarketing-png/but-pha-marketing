@@ -1320,7 +1320,7 @@ export default function AdminPage() {
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm rounded-2xl border border-white/10 bg-card p-8">
           <div className="mb-6 flex items-center gap-3">
-            <img src="https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593311234/58e2d46e969d4d98b417245763566160.png" alt="Logo" className="h-10 w-10 rounded-full" />
+            <img src="/logo.png" alt="Logo" className="h-10 w-10 rounded-full" />
             <div><p className="font-bold text-white">Bứt Phá Marketing</p><p className="text-xs text-gray-400">Trang quản trị hệ thống</p></div>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
