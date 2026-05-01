@@ -10,24 +10,21 @@ interface Message {
 
 const QUICK_REPLIES = [
   "Dịch vụ Facebook Marketing",
-  "Dịch vụ TikTok Marketing",
+  "Thiết kế Website chuyên nghiệp",
+  "Google Maps Marketing",
   "Xem bảng giá",
   "Liên hệ tư vấn",
   "Quy trình làm việc",
-  "Chính sách bảo hành",
 ];
 
 const BOT_RESPONSES: { pattern: RegExp; reply: string }[] = [
   { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi bao gồm: Xây dựng Fanpage chuyên nghiệp từ 2.000.000đ/tháng, Chăm sóc nội dung từ 3.500.000đ/tháng, và Quảng cáo Facebook Ads từ 5.000.000đ/tháng. Bạn muốn tư vấn gói nào?" },
-  { pattern: /tiktok/i, reply: "Dịch vụ TikTok Marketing gồm: Xây dựng kênh từ 3.000.000đ/tháng, Sản xuất content TikTok từ 5.000.000đ/tháng, TikTok Ads từ 7.000.000đ/tháng. TikTok đang là kênh viral mạnh nhất 2024!" },
-  { pattern: /instagram/i, reply: "Instagram Marketing: Xây dựng profile từ 2.500.000đ, Chăm sóc content từ 4.000.000đ/tháng, Ads from 6.000.000đ/tháng. Phù hợp cho thương hiệu thời trang, làm đẹp, F&B!" },
-  { pattern: /zalo/i, reply: "Zalo Marketing: Xây dựng OA từ 1.500.000đ, Quản lý chăm sóc từ 2.500.000đ/tháng, Zalo Ads from 4.000.000đ/tháng. Zalo có 75 triệu người dùng tại Việt Nam!" },
   { pattern: /google|maps|local|seo/i, reply: "Google Maps/Local SEO: Tạo & tối ưu Google Business từ 2.000.000đ, SEO Local từ 4.000.000đ/tháng. Giúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm!" },
   { pattern: /website|web/i, reply: "Dịch vụ Website: Thiết kế Landing Page từ 3.500.000đ, Website doanh nghiệp từ 7.000.000đ, E-commerce từ 15.000.000đ. SEO website từ 3.000.000đ/tháng!" },
-  { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dịch vụ dao động từ 1.500.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng trở lên giảm 5-20%. Bạn muốn tư vấn cụ thể gói nào?" },
-  { pattern: /liên hệ|gọi|phone|hotline|tư vấn/i, reply: "Bạn có thể liên hệ trực tiếp: ☎️ Hotline: 0937 417 982 | Zalo cùng số | Email: butphamarketing@gmail.com. Hoặc điền form tư vấn trên trang, đội ngũ sẽ gọi lại trong 30 phút!" },
+  { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dịch vụ dao động từ 2.000.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng trở lên giảm 5-20%. Bạn muốn tư vấn cụ thể gói nào?" },
+  { pattern: /liên hệ|gọi|phone|hotline|tư vấn/i, reply: "Bạn có thể liên hệ trực tiếp: ☎️ Hotline: 0937 417 982 | Email: butphamarketing@gmail.com. Hoặc điền form tư vấn trên trang, đội ngũ sẽ gọi lại trong 30 phút!" },
   { pattern: /quy trình|làm việc|process/i, reply: "Quy trình làm việc: 1️⃣ Tư vấn miễn phí → 2️⃣ Phân tích & lên chiến lược → 3️⃣ Ký hợp đồng → 4️⃣ Triển khai → 5️⃣ Báo cáo hàng tuần → 6️⃣ Tối ưu liên tục. Chúng tôi cam kết minh bạch 100%!" },
-  { pattern: /bảo hành|cam kết|guarantee/i, reply: "Chúng tôi cam kết: ✅ Báo cáo kết quả hàng tuần ✅ Hoàn tiền nếu không đạt KPI trong 30 ngày đầu ✅ Không tính phí ẩn ✅ Hỗ trợ 24/7 qua Zalo/Phone. Yên tâm đặt hàng!" },
+  { pattern: /bảo hành|cam kết|guarantee/i, reply: "Chúng tôi cam kết: ✅ Báo cáo kết quả hàng tuần ✅ Hoàn tiền nếu không đạt KPI trong 30 ngày đầu ✅ Không tính phí ẩn ✅ Hỗ trợ tận tâm qua Hotline. Yên tâm đặt hàng!" },
   { pattern: /xin chào|hello|hi|chào/i, reply: "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing. Tôi có thể giúp bạn tìm hiểu về các dịch vụ marketing, bảng giá và quy trình làm việc. Bạn cần hỗ trợ gì?" },
   { pattern: /cảm ơn|thank/i, reply: "Cảm ơn bạn đã quan tâm đến Bứt Phá Marketing! Nếu cần tư vấn thêm, đừng ngại nhắn tin nhé. Chúc bạn kinh doanh thuận lợi! 🚀" },
 ];

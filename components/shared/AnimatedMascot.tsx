@@ -8,9 +8,6 @@ import { Bot, EyeOff, MessageSquare } from "lucide-react";
 
 function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
-  if (pathname.startsWith("/tiktok")) return "tiktok";
-  if (pathname.startsWith("/instagram")) return "instagram";
-  if (pathname.startsWith("/zalo")) return "zalo";
   if (pathname.startsWith("/google-maps")) return "googlemaps";
   if (pathname.startsWith("/website")) return "website";
   return "home";
@@ -327,9 +324,6 @@ export function AnimatedMascot() {
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
-    tiktok: { filter: "hue-rotate(110deg) saturate(1.5) brightness(1)", scale: 1.05 },
-    instagram: { filter: "hue-rotate(80deg) saturate(1.3) brightness(1.1)", scale: 1 },
-    zalo: { filter: "hue-rotate(200deg) saturate(1.3) brightness(1.1)", scale: 1 },
     googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
     website: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
   };

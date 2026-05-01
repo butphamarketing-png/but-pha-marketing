@@ -15,7 +15,7 @@ import {
   Clock3,
   Users,
 } from "lucide-react";
-import { SiFacebook, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
+import { SiFacebook, SiMessenger } from "react-icons/si";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAdmin } from "@/lib/AdminContext";
@@ -350,8 +350,6 @@ export default function ContactPageClient() {
             <div className="mt-5 flex items-center gap-3 text-white">
               <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiFacebook /></a>
               <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiMessenger /></a>
-              <a href={settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiZalo /></a>
-              <a href="https://www.youtube.com" className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiYoutube /></a>
             </div>
           </div>
 
@@ -392,8 +390,6 @@ export default function ContactPageClient() {
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li><a href={settings?.fanpage || "#"}>Facebook</a></li>
               <li><a href={settings?.fanpage || "#"}>Messenger</a></li>
-              <li><a href={settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#"}>Zalo</a></li>
-              <li><a href="https://www.youtube.com">YouTube</a></li>
             </ul>
           </div>
         </div>

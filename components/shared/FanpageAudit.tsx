@@ -40,48 +40,6 @@ const AUDIT_CONFIGS: Record<string, {
     aiSummary: "Dựa trên phân tích AI, Fanpage của bạn đang có nền tảng tốt về hình ảnh nhưng gặp vấn đề nghiêm trọng về thuật toán phân phối do tần suất đăng bài không ổn định. Điều này dẫn đến việc lãng phí tệp khách hàng tiềm năng hiện có.",
     alertText: "Fanpage của bạn đang hoạt động dưới mức tối ưu! Liên hệ ngay để được tư vấn miễn phí.",
   },
-  tiktok: {
-    title: "Chuẩn Đoán Kênh TikTok",
-    cta: "Chuẩn Đoán Kênh TikTok Miễn Phí",
-    inputPlaceholder: "Link hoặc tên kênh TikTok",
-    loadingText: "Đang phân tích kênh TikTok...",
-    results: [
-      { label: "Tỷ lệ xem video (View Rate)", score: 52, color: "#f59e0b", desc: "Video có lượt xem ổn định nhưng chưa có sự đột phá viral." },
-      { label: "Tỷ lệ hoàn thành video", score: 38, color: "#ef4444", desc: "Người xem thường bỏ qua sau 3 giây đầu, cần tối ưu hóa hook." },
-      { label: "Mức độ tương tác (Like/Share)", score: 67, color: "#22c55e", desc: "Tương tác cộng đồng khá mạnh, là điểm sáng của kênh." },
-      { label: "Tiềm năng lên For You Page", score: 44, color: "#6366f1", desc: "Hashtag và âm nhạc chưa thực sự bắt trend thị trường." },
-    ],
-    aiSummary: "Kênh TikTok của bạn có tiềm năng xây dựng cộng đồng tốt. Tuy nhiên, nội dung hiện tại đang thiếu 'Hook' (điểm chạm 3 giây đầu) để giữ chân người xem, dẫn đến tỷ lệ hoàn thành thấp và không được AI TikTok đề xuất lên xu hướng.",
-    alertText: "Kênh TikTok của bạn chưa tối ưu thuật toán! Liên hệ ngay để được tư vấn chiến lược viral.",
-  },
-  instagram: {
-    title: "Chuẩn Đoán Tài Khoản Instagram",
-    cta: "Chuẩn Đoán Instagram Miễn Phí",
-    inputPlaceholder: "Link hoặc username Instagram",
-    loadingText: "Đang phân tích tài khoản Instagram...",
-    results: [
-      { label: "Mức độ tương tác (Engagement Rate)", score: 41, color: "#f59e0b", desc: "Lượt like đang giảm dần theo thời gian." },
-      { label: "Chất lượng hình ảnh & feed", score: 58, color: "#6366f1", desc: "Bố cục feed chưa thực sự bắt mắt để giữ chân người xem." },
-      { label: "Hiệu quả Reels & Stories", score: 35, color: "#ef4444", desc: "Chưa tận dụng tốt Reels để tiếp cận khách hàng mới." },
-      { label: "Tốc độ tăng trưởng followers", score: 49, color: "#22c55e", desc: "Tăng trưởng tự nhiên đang bị chững lại." },
-    ],
-    aiSummary: "Tài khoản Instagram của bạn đang gặp khó khăn trong việc thích nghi với định dạng video ngắn (Reels). Để tăng trưởng lại, bạn cần chuyển đổi chiến lược từ tập trung vào hình ảnh tĩnh sang nội dung video động có tính thẩm mỹ cao.",
-    alertText: "Tài khoản Instagram của bạn cần được tối ưu gấp! Liên hệ ngay để được tư vấn miễn phí.",
-  },
-  zalo: {
-    title: "Chuẩn Đoán Zalo Official Account",
-    cta: "Chuẩn Đoán Zalo OA Miễn Phí",
-    inputPlaceholder: "Tên hoặc link Zalo Official Account",
-    loadingText: "Đang phân tích Zalo OA...",
-    results: [
-      { label: "Tỷ lệ mở tin nhắn broadcast", score: 48, color: "#f59e0b", desc: "Tiêu đề tin nhắn chưa đủ hấp dẫn để người dùng click mở." },
-      { label: "Mức độ tương tác bài viết", score: 33, color: "#ef4444", desc: "Bài viết trên nhật ký OA có lượt tương tác rất thấp." },
-      { label: "Số lượng followers & tốc độ tăng", score: 61, color: "#22c55e", desc: "Tốc độ tăng trưởng ổn định nhưng chất lượng follower chưa cao." },
-      { label: "Hiệu quả chatbot auto-reply", score: 25, color: "#6366f1", desc: "Kịch bản chatbot còn đơn điệu, chưa cá nhân hóa được trải nghiệm." },
-    ],
-    aiSummary: "Zalo OA của bạn hiện chỉ đang đóng vai trò là một kênh thông báo thay vì là một phễu bán hàng. Việc thiếu kịch bản tương tác tự động thông minh đang khiến bạn mất đi một lượng lớn cơ hội chuyển đổi từ khách hàng trung thành.",
-    alertText: "Zalo OA của bạn chưa được tối ưu hóa! Liên hệ ngay để được tư vấn chiến lược Zalo Marketing.",
-  },
   googlemaps: {
     title: "Chuẩn Đoán Google Business",
     cta: "Chuẩn Đoán Google Business Miễn Phí",
@@ -171,9 +129,6 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
     if (!input) return false;
     if (platform === "website") return /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(input);
     if (platform === "facebook") return /(facebook\.com|fb\.com)/i.test(input);
-    if (platform === "tiktok") return /(tiktok\.com|vt\.tiktok\.com)/i.test(input);
-    if (platform === "instagram") return /(instagram\.com)/i.test(input);
-    if (platform === "zalo") return /(zalo\.me|zaloapp\.com)/i.test(input);
     if (platform === "googlemaps") return /(google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(input);
     return true;
   };

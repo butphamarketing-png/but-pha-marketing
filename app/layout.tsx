@@ -10,7 +10,7 @@ import NextTopLoader from "nextjs-toploader";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
 const DEFAULT_TITLE = "But Pha Marketing";
 const DEFAULT_DESCRIPTION =
-  "Agency marketing toan dien tai Viet Nam. Dich vu Facebook, TikTok, Instagram, Website, Local SEO va chien luoc tang truong doanh thu.";
+  "Agency marketing toan dien tai Viet Nam. Dich vu Facebook, Website, Local SEO va chien luoc tang truong doanh thu.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteTitle = DEFAULT_TITLE;
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${siteTitle}`,
     },
     description: DEFAULT_DESCRIPTION,
-    keywords: ["agency marketing", "facebook marketing", "tiktok marketing", "instagram marketing", "local seo", "website marketing"],
+    keywords: ["agency marketing", "facebook marketing", "local seo", "website marketing"],
     authors: [{ name: siteTitle }],
     creator: siteTitle,
     publisher: siteTitle,

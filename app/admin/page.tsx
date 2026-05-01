@@ -111,11 +111,8 @@ function StatCard({ value, label, icon: Icon, color }: { value: string | number;
 }
 
 const SEO_DEFAULTS: Record<string, { title: string; desc: string; keywords: string }> = {
-  home: { title: "Bứt Phá Marketing - Giải Pháp Đột Phá", desc: "Agency marketing toàn diện tại Việt Nam", keywords: "marketing, facebook ads, tiktok, seo" },
+  home: { title: "Bứt Phá Marketing - Giải Pháp Đột Phá", desc: "Agency marketing toàn diện tại Việt Nam", keywords: "marketing, facebook ads, seo" },
   facebook: { title: "Dịch Vụ Facebook Marketing", desc: "Xây dựng Fanpage, chạy quảng cáo Facebook hiệu quả", keywords: "facebook marketing, facebook ads, quảng cáo facebook" },
-  tiktok: { title: "Dịch Vụ TikTok Marketing", desc: "Sản xuất content TikTok, viral, TikTok Ads", keywords: "tiktok marketing, tiktok ads, content tiktok" },
-  instagram: { title: "Dịch Vụ Instagram Marketing", desc: "Xây dựng brand trên Instagram, Reels, Stories", keywords: "instagram marketing, instagram ads, reels" },
-  zalo: { title: "Dịch Vụ Zalo Marketing", desc: "Zalo OA, Zalo Ads, chăm sóc khách hàng qua Zalo", keywords: "zalo marketing, zalo ads, zalo oa" },
   "google-maps": { title: "Dịch Vụ Google Maps Marketing", desc: "Local SEO, Google Business, đánh giá 5 sao", keywords: "google maps, local seo, google business" },
   website: { title: "Dịch Vụ Website Marketing", desc: "Thiết kế web, SEO website, bảo trì", keywords: "thiết kế website, seo website, web marketing" },
 };
@@ -169,9 +166,6 @@ export default function AdminPage() {
 
   const PLATFORMS_DYNAMIC = [
     { key: "facebook", label: settings.platformNames?.facebook || "Facebook", path: "/facebook", color: settings.colors?.facebook || "#1877F2" },
-    { key: "tiktok", label: settings.platformNames?.tiktok || "TikTok", path: "/tiktok", color: settings.colors?.tiktok || "#FF0050" },
-    { key: "instagram", label: settings.platformNames?.instagram || "Instagram", path: "/instagram", color: settings.colors?.instagram || "#E1306C" },
-    { key: "zalo", label: settings.platformNames?.zalo || "Zalo", path: "/zalo", color: settings.colors?.zalo || "#0068FF" },
     { key: "googlemaps", label: settings.platformNames?.googlemaps || "Google Maps", path: "/google-maps", color: settings.colors?.googlemaps || "#EA4335" },
     { key: "website", label: settings.platformNames?.website || "Website", path: "/website", color: settings.colors?.website || "#34A853" },
   ];
@@ -2702,7 +2696,6 @@ export default function AdminPage() {
                 <h3 className="font-bold text-white">Thông tin liên hệ</h3>
                 <input value={settings.address || ""} onChange={e => updateSettings({ address: e.target.value })} placeholder="Địa chỉ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={settings.email || ""} onChange={e => updateSettings({ email: e.target.value })} placeholder="Email" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                <input value={settings.zalo || ""} onChange={e => updateSettings({ zalo: e.target.value })} placeholder="Zalo" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={settings.fanpage || ""} onChange={e => updateSettings({ fanpage: e.target.value })} placeholder="Fanpage URL" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
                   <h4 className="text-sm font-semibold text-white">Soft UI Sounds</h4>

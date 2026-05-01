@@ -4,7 +4,7 @@ import { getPublishedBlogs } from "@/lib/server-blog";
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/facebook", "/tiktok", "/instagram", "/zalo", "/google-maps", "/website", "/blog"];
+  const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/blog"];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),

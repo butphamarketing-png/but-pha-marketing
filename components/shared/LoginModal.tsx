@@ -27,9 +27,6 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const platforms = [
     { key: "facebook", label: settings?.platformNames?.facebook || "Facebook" },
-    { key: "tiktok", label: settings?.platformNames?.tiktok || "TikTok" },
-    { key: "instagram", label: settings?.platformNames?.instagram || "Instagram" },
-    { key: "zalo", label: settings?.platformNames?.zalo || "Zalo" },
     { key: "googlemaps", label: settings?.platformNames?.googlemaps || "Google Maps" },
     { key: "website", label: settings?.platformNames?.website || "Website" },
   ];

@@ -20,9 +20,10 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
-import { SiFacebook, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
+import { SiFacebook, SiMessenger } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
 import { LoginModal } from "@/components/shared/LoginModal";
+import { ConsultModal } from "@/components/shared/ConsultModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
@@ -59,6 +60,7 @@ export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [showConsult, setShowConsult] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [reviews, setReviews] = useState<ClientReview[]>([]);
@@ -130,7 +132,6 @@ export default function HomePageClient() {
           pills: [
             { label: "Facebook", icon: SiFacebook },
             { label: "Messenger", icon: MessageCircle },
-            { label: "Zalo", icon: SiZalo },
           ],
         });
       } else if (index === 2) {
@@ -271,7 +272,7 @@ export default function HomePageClient() {
     },
     {
       title: "Đa Nền Tảng",
-      description: "Hiện diện mạnh mẽ trên Website, Facebook, TikTok, Google Maps... bất cứ đâu khách hàng của bạn có mặt.",
+      description: "Hiện diện mạnh mẽ trên Website, Facebook, Google Maps... bất cứ đâu khách hàng của bạn có mặt.",
       icon: LayoutTemplate,
     },
     {
@@ -497,10 +498,18 @@ export default function HomePageClient() {
                     </div>
                     <h3 className="mt-5 text-2xl font-black text-white">{card.title}</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-300">{card.description}</p>
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-black text-fuchsia-300">
-                      Xem chi tiết
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        playClickSound();
+                        setShowConsult(true);
+                      }}
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-black text-fuchsia-300 hover:text-fuchsia-100 transition-colors"
+                    >
+                      Tư vấn trực tiếp
                       <ArrowRight className="h-4 w-4" />
-                    </div>
+                    </button>
                   </div>
                 </Link>
               ))}
@@ -603,15 +612,6 @@ export default function HomePageClient() {
                         <p className="text-xl font-black text-white">{settings.hotline}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400">
-                        <SiZalo className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-400">Zalo OA</p>
-                        <p className="text-xl font-black text-white">{settings.zalo || settings.hotline}</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -666,12 +666,6 @@ export default function HomePageClient() {
                   <a href={settings.fanpage} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
                     <SiFacebook className="h-5 w-5" />
                   </a>
-                  <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
-                    <SiYoutube className="h-5 w-5" />
-                  </a>
-                  <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
-                    <SiZalo className="h-5 w-5" />
-                  </a>
                 </div>
               </div>
               
@@ -712,6 +706,7 @@ export default function HomePageClient() {
       </div>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} />
     </div>
   );
 }

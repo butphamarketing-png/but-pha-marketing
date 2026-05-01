@@ -36,7 +36,6 @@ export function QuickActionBar() {
   }, [dismissed]);
 
   const hotline = settings.hotline || "0937417982";
-  const zalo = settings.zalo || hotline;
 
   return (
     <AnimatePresence>
@@ -55,18 +54,6 @@ export function QuickActionBar() {
               <Phone size={22} fill="currentColor" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-wider">Gọi điện</span>
-          </a>
-
-          <a
-            href={`https://zalo.me/${zalo.replace(/\s/g, "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1 text-white"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 shadow-lg shadow-blue-500/20">
-              <MessageCircle size={22} fill="currentColor" />
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider">Zalo</span>
           </a>
 
           <button

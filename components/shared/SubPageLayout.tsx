@@ -99,8 +99,6 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       { id: "audit", label: "Chuẩn Đoán Sức Khỏe Fanpage" },
       { id: "pricing", label: "Bảng Giá Dịch Vụ" },
       { id: "before-after", label: "Sự Thay Đổi Kỳ Diệu" },
-      { id: "process", label: "Quy Trình Triển Khai" },
-      { id: "faq", label: "Câu Hỏi Thường Gặp" },
       { id: "contact", label: "Liên Hệ Tư Vấn" },
     ],
     [platformName],

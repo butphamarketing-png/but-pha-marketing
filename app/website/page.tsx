@@ -25,7 +25,7 @@ const config: PlatformConfig = {
           price: "3.000.000đ", 
           features: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
           allFeatures: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
-          audioText: "Gói Giới thiệu cung cấp giải pháp website cơ bản, chuẩn SEO, tương thích hoàn toàn with thiết bị di động." 
+          audioText: "Gói Giới thiệu cung cấp giải pháp website cơ bản, chuẩn SEO, tương thích hoàn toàn với thiết bị di động." 
         },
         { 
           name: "Tối ưu", 
@@ -47,34 +47,17 @@ const config: PlatformConfig = {
           price: "12.000.000đ", 
           features: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
           allFeatures: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
-          audioText: "Gói Hệ thống dành cho doanh nghiệp cần tự động hóa vận hành và mở rộng quy mô with các tích hợp kỹ thuật chuyên sâu." 
+          audioText: "Gói Hệ thống dành cho doanh nghiệp cần tự động hóa vận hành và mở rộng quy mô với các tích hợp kỹ thuật chuyên sâu." 
         },
       ],
     },
-    {
-      label: "SEO Website",
-      packages: [
-        { name: "Gói Local SEO", price: "3.000.000đ", features: ["10 từ khóa địa phương", "On-page tối ưu", "10 backlink/tháng", "Báo cáo thứ hạng"], allFeatures: ["10 từ khóa địa phương", "30 từ khóa", "50+ từ khóa", "On-page tối ưu", "Content blog 4 bài", "Content blog 8 bài", "10 backlink/tháng", "30 backlink/tháng", "Báo cáo thứ hạng"], audioText: "Gói Local SEO với 10 từ khóa địa phương và 10 backlink mỗi tháng giúp website xuất hiện đúng lúc khách hàng cần." },
-        { name: "Gói National", price: "6.000.000đ", popular: true, features: ["30 từ khóa", "On-page tối ưu", "Content blog 4 bài", "30 backlink/tháng", "Báo cáo thứ hạng"], allFeatures: ["10 từ khóa địa phương", "30 từ khóa", "50+ từ khóa", "On-page tối ưu", "Content blog 4 bài", "Content blog 8 bài", "10 backlink/tháng", "30 backlink/tháng", "Báo cáo thứ hạng"], audioText: "Gói National SEO với 30 từ khóa và content blog 4 bài mỗi tháng giúp website bứt phá trong tìm kiếm toàn quốc." },
-        { name: "Gói Enterprise", price: "12.000.000đ", features: ["50+ từ khóa", "On-page tối ưu", "Content blog 8 bài", "30 backlink/tháng", "Báo cáo thứ hạng"], allFeatures: ["10 từ khóa địa phương", "30 từ khóa", "50+ từ khóa", "On-page tối ưu", "Content blog 4 bài", "Content blog 8 bài", "10 backlink/tháng", "30 backlink/tháng", "Báo cáo thứ hạng"], audioText: "Gói Enterprise SEO dành cho doanh nghiệp lớn muốn thống lĩnh tìm kiếm với 50+ từ khóa và 8 bài content chuyên sâu." },
-      ],
-    },
-    {
-      label: "Bảo Trì Web",
-      packages: [
-        { name: "Gói Basic", price: "500.000đ", features: ["Backup hàng tuần", "Cập nhật plugin", "Hỗ trợ qua Zalo"], allFeatures: ["Backup hàng tuần", "Backup hàng ngày", "Cập nhật plugin", "Cập nhật bảo mật", "Hỗ trợ qua Zalo", "Hỗ trợ 24/7", "Thay đổi nội dung nhỏ", "Chỉnh sửa không giới hạn"], audioText: "Gói Bảo Trì Basic đảm bảo website của bạn luôn hoạt động ổn định với backup tuần và cập nhật plugin định kỳ." },
-        { name: "Gói Standard", price: "1.200.000đ", popular: true, features: ["Backup hàng ngày", "Cập nhật plugin", "Cập nhật bảo mật", "Hỗ trợ 24/7", "Thay đổi nội dung nhỏ"], allFeatures: ["Backup hàng tuần", "Backup hàng ngày", "Cập nhật plugin", "Cập nhật bảo mật", "Hỗ trợ qua Zalo", "Hỗ trợ 24/7", "Thay đổi nội dung nhỏ", "Chỉnh sửa không giới hạn"], audioText: "Gói Standard với backup hàng ngày và hỗ trợ 24/7 đảm bảo website không bao giờ downtime và dữ liệu luôn an toàn." },
-        { name: "Gói Pro", price: "2.500.000đ", features: ["Backup hàng ngày", "Cập nhật plugin", "Cập nhật bảo mật", "Hỗ trợ 24/7", "Thay đổi nội dung nhỏ", "Chỉnh sửa không giới hạn"], allFeatures: ["Backup hàng tuần", "Backup hàng ngày", "Cập nhật plugin", "Cập nhật bảo mật", "Hỗ trợ qua Zalo", "Hỗ trợ 24/7", "Thay đổi nội dung nhỏ", "Chỉnh sửa không giới hạn"], audioText: "Gói Bảo Trì Pro với chỉnh sửa không giới hạn mỗi tháng — bạn chỉ cần yêu cầu, chúng tôi thực hiện ngay trong ngày." },
-      ],
-    },
   ],
-  stats: [{ label: "Website", value: "150+" }, { label: "Dự án SEO", value: "300+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
+  stats: [{ label: "Website", value: "150+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
   process: [
     { step: 1, title: "Khảo sát nhu cầu", desc: "Tư vấn chi tiết về mục đích, tính năng và design style phù hợp với thương hiệu của bạn." },
     { step: 2, title: "Thiết kế UI/UX", desc: "Tạo wireframe, thiết kế giao diện đẹp và trải nghiệm người dùng tối ưu cho mọi thiết bị." },
     { step: 3, title: "Lập trình", desc: "Code website theo thiết kế đã duyệt, tích hợp các tính năng và tối ưu tốc độ tải trang." },
     { step: 4, title: "Kiểm thử & Bàn giao", desc: "Test kỹ lưỡng trên nhiều thiết bị và trình duyệt, bàn giao tài khoản và hướng dẫn sử dụng." },
-    { step: 5, title: "SEO & Bảo trì", desc: "Tối ưu SEO On-page, theo dõi thứ hạng và bảo trì website định kỳ." },
   ],
   faqs: [
     { q: "Thời gian làm website mất bao lâu?", a: "Landing Page: 3-5 ngày. Website doanh nghiệp: 1-2 tuần. E-commerce: 3-4 tuần. Thời gian có thể thay đổi tùy yêu cầu." },

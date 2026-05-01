@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, MessageCircle } from "lucide-react";
-import { SiZalo } from "react-icons/si";
 import { db } from "@/lib/useData";
 
 export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { isOpen: boolean; onClose: () => void, platformColor?: string }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [note, setNote] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    consultTime: "",
+    note: "",
+  });
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
@@ -16,7 +20,13 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
     e.preventDefault();
     setLoading(true);
     try {
-      await db.leads.add({ type: "contact", name, phone, note });
+      const combinedNote = `Email: ${form.email} | Địa chỉ: ${form.address} | Thời gian: ${form.consultTime} | Nội dung: ${form.note}`;
+      await db.leads.add({ 
+        type: "contact", 
+        name: form.name, 
+        phone: form.phone, 
+        note: combinedNote 
+      });
       alert("Đã gửi yêu cầu tư vấn thành công! Chúng tôi sẽ liên hệ sớm nhất.");
       onClose();
     } catch (err) {
@@ -28,72 +38,86 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm overflow-y-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-2xl"
+          className="relative w-full max-w-lg my-auto overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-2xl"
           style={{ boxShadow: `0 10px 40px -10px ${platformColor}40` }}
         >
-          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-white">
+          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-white z-10">
             <X size={20} />
           </button>
           
-          <h2 className="mb-6 text-center text-2xl font-bold text-white">Nhận Tư Vấn Miễn Phí</h2>
+          <h2 className="mb-6 text-center text-2xl font-bold text-white">Đăng ký tư vấn trực tiếp</h2>
           
-          <div className="mb-6 grid grid-cols-3 gap-3">
-            <a href="https://zalo.me/0937417982" target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center rounded-xl bg-white/5 p-4 transition-colors hover:bg-green-500/20 hover:text-green-400">
-              <SiZalo className="mb-2 text-3xl text-green-500" />
-              <span className="text-xs font-medium">Chat Zalo</span>
-            </a>
-            <a href="tel:0937417982" className="flex flex-col items-center justify-center rounded-xl bg-white/5 p-4 transition-colors hover:bg-blue-500/20 hover:text-blue-400">
-              <Phone className="mb-2 text-3xl text-blue-500" />
-              <span className="text-xs font-medium">Gọi điện</span>
-            </a>
-            <a href="https://m.me/" target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center rounded-xl bg-white/5 p-4 transition-colors hover:bg-blue-600/20 hover:text-blue-500">
-              <MessageCircle className="mb-2 text-3xl text-blue-600" />
-              <span className="text-xs font-medium">Messenger</span>
-            </a>
-          </div>
-          
-          <div className="relative mb-6 flex items-center justify-center">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
-            <span className="relative bg-card px-4 text-sm text-gray-400">Hoặc để lại thông tin</span>
-          </div>
-
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input 
+                required 
+                type="text" 
+                placeholder="Họ và tên *" 
+                value={form.name}
+                onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              />
+              <input 
+                required 
+                type="tel" 
+                placeholder="Số điện thoại *" 
+                value={form.phone}
+                onChange={e => setForm(prev => ({ ...prev, phone: e.target.value }))}
+                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              />
+            </div>
+            
+            <input 
+              required 
+              type="email" 
+              placeholder="Gmail (Email) *" 
+              value={form.email}
+              onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+            />
+
             <input 
               required 
               type="text" 
-              placeholder="Họ và tên" 
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+              placeholder="Địa chỉ tư vấn *" 
+              value={form.address}
+              onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
+              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
             />
-            <input 
-              required 
-              type="tel" 
-              placeholder="Số điện thoại" 
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
-            />
+
+            <div className="space-y-1">
+              <label className="text-[10px] uppercase text-gray-500 font-bold ml-1">Thời gian tư vấn mong muốn *</label>
+              <input 
+                required 
+                type="datetime-local" 
+                value={form.consultTime}
+                onChange={e => setForm(prev => ({ ...prev, consultTime: e.target.value }))}
+                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              />
+            </div>
+
             <textarea 
-              placeholder="Ghi chú (Không bắt buộc)" 
-              value={note}
-              onChange={e => setNote(e.target.value)}
+              placeholder="Nội dung bạn cần tư vấn" 
+              value={form.note}
+              onChange={e => setForm(prev => ({ ...prev, note: e.target.value }))}
               rows={3} 
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
             />
+            
             <button 
               disabled={loading}
               type="submit" 
-              className="mt-2 w-full rounded-lg bg-primary py-3 font-medium text-white transition-all hover:bg-primary/90 disabled:opacity-50" 
+              className="mt-2 w-full rounded-lg bg-primary py-4 font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50" 
               style={{ backgroundColor: platformColor }}
             >
-              {loading ? "Đang gửi..." : "Gửi Yêu Cầu Tư Vấn"}
+              {loading ? "Đang xử lý..." : "Gửi yêu cầu tư vấn ngay"}
             </button>
+            <p className="text-center text-[10px] text-gray-500 italic">Chúng tôi sẽ bảo mật thông tin của bạn tuyệt đối.</p>
           </form>
         </motion.div>
       </div>

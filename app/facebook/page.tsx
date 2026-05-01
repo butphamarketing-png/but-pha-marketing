@@ -23,8 +23,8 @@ const config: PlatformConfig = {
         {
           name: "Gói Cơ Bản",
           price: "1.500.000đ",
-          features: ["Thiết kế ảnh bìa + avatar", "Tối ưu thông tin trang", "10 bài đăng/tháng", "Hỗ trợ qua Zalo"],
-          allFeatures: ["Thiết kế ảnh bìa + avatar", "Tối ưu thông tin trang", "10 bài đăng/tháng", "20 bài đăng/tháng", "Hỗ trợ qua Zalo", "Hỗ trợ 24/7", "Thiết kế album sản phẩm", "Chiến lược nội dung"],
+          features: ["Thiết kế ảnh bìa + avatar", "Tối ưu thông tin trang", "10 bài đăng/tháng", "Hỗ trợ 24/7"],
+          allFeatures: ["Thiết kế ảnh bìa + avatar", "Tối ưu thông tin trang", "10 bài đăng/tháng", "20 bài đăng/tháng", "Hỗ trợ 24/7", "Thiết kế album sản phẩm", "Chiến lược nội dung"],
           audioText: "Gói Cơ Bản dành cho doanh nghiệp mới bắt đầu. Chúng tôi sẽ thiết kế Fanpage chuyên nghiệp và đăng 10 bài mỗi tháng với chi phí tiết kiệm chỉ 1.5 triệu đồng.",
         },
         {
@@ -74,7 +74,7 @@ const config: PlatformConfig = {
     { q: "Fanpage cần bao nhiêu like mới chạy Ads hiệu quả?", a: "Không cần số lượng like tối thiểu. Tuy nhiên Fanpage có từ 1.000 like trở lên thường có độ tin cậy cao hơn và hiệu quả Ads tốt hơn." },
     { q: "Chi phí quảng cáo có được hoàn lại nếu không hiệu quả?", a: "Ngân sách Ads được chi trả trực tiếp cho Facebook. Chúng tôi cam kết tối ưu liên tục và báo cáo minh bạch, nếu không đạt KPI cam kết sẽ làm thêm 1 tháng miễn phí." },
     { q: "Có thể tự chạy Ads song song với gói dịch vụ không?", a: "Được. Chúng tôi sẽ tư vấn để tránh xung đột ngân sách và target, đảm bảo hiệu quả tổng thể tốt nhất." },
-    { q: "Báo cáo kết quả như thế nào?", a: "Báo cáo hàng tuần qua Zalo/Email bao gồm: số lượt tiếp cận, tương tác, chuyển đổi, chi phí/kết quả và đề xuất tuần tiếp theo." },
+    { q: "Báo cáo kết quả như thế nào?", a: "Báo cáo hàng tuần qua Email/Messenger bao gồm: số lượt tiếp cận, tương tác, chuyển đổi, chi phí/kết quả và đề xuất tuần tiếp theo." },
   ],
 };
 

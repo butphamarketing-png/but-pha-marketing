@@ -180,26 +180,6 @@ export default function AboutPageClient() {
       </header>
 
       <main className="relative overflow-hidden pt-12">
-        <section className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
-              <img 
-                src="/mascot-home.png" 
-                alt="Về chúng tôi" 
-                className="h-full w-full object-cover" 
-              />
-            </div>
-            <div className="space-y-8">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Về chúng tôi</p>
-                <h2 className="mt-4 text-4xl font-black text-white md:text-5xl">Bứt Phá Marketing</h2>
-              </div>
-              <p className="text-lg leading-8 text-slate-300">
-                Chúng tôi không chỉ làm marketing. Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
-              </p>
-            </div>
-          </div>
-        </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
           <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">

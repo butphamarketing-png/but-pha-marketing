@@ -72,10 +72,10 @@ export interface SiteSettings {
   favicon: string;
   content: string;
   hotline: string;
-  address: string;
   email: string;
-  zalo: string;
+  address: string;
   fanpage: string;
+  brandColor: string;
   googleAnalytics: string;
   headJs: string;
   presentationMode: boolean;
@@ -128,21 +128,15 @@ export interface AdminContextType {
 }
 
 export const SETTINGS_KEY = "admin_settings";
-const MEDIA_KEYS = ["home", "facebook", "tiktok", "instagram", "zalo", "googlemaps", "website"] as const;
+const MEDIA_KEYS = ["home", "facebook", "googlemaps", "website"] as const;
 const COLOR_DEFAULTS: Record<string, string> = {
   primary: "#7C3AED",
   facebook: "#1877F2",
-  tiktok: "#FF0050",
-  instagram: "#E1306C",
-  zalo: "#0068FF",
   googlemaps: "#EA4335",
   website: "#34A853",
 };
 const VISIBILITY_DEFAULTS: Record<string, boolean> = {
   facebook: true,
-  tiktok: true,
-  instagram: true,
-  zalo: true,
   googlemaps: true,
   website: true,
   intro: true,
@@ -152,9 +146,6 @@ const VISIBILITY_DEFAULTS: Record<string, boolean> = {
 };
 const PLATFORM_NAME_DEFAULTS: Record<string, string> = {
   facebook: "Facebook",
-  tiktok: "TikTok",
-  instagram: "Instagram",
-  zalo: "Zalo",
   googlemaps: "Google Maps",
   website: "Website",
 };
