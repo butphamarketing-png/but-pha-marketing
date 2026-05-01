@@ -368,92 +368,50 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative min-h-[90vh] w-full overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.12),transparent_70%)]" />
-            
-            <div className="mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 py-12 lg:flex-row lg:px-6">
-              <div className="relative z-10 flex-1 space-y-8 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-4 py-2 text-xs font-black tracking-widest text-fuchsia-300">
-                  <Sparkles className="h-3 w-3" />
-                  {currentHeroSlide.eyebrow}
-                </div>
-                
-                <h1 className="text-4xl font-black leading-tight text-white md:text-6xl lg:text-7xl">
-                  {currentHeroSlide.middle}
-                  <br />
-                  <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">{currentHeroSlide.accent}</span>
-                </h1>
+          <section id="hero" className="relative h-[400px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
+            <div className="absolute inset-0 z-20 flex items-center justify-between px-4 pointer-events-none">
+              <button
+                onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+                className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition hover:bg-black/40 lg:h-12 lg:w-12"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
+                className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition hover:bg-black/40 lg:h-12 lg:w-12"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </div>
 
-                <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-300 lg:mx-0">
-                  {currentHeroSlide.description}
-                </p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeHeroSlide}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className="absolute inset-0"
+              >
+                <img
+                  src={currentHeroSlide.visual}
+                  alt="Hero Slide"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#050308]" />
+              </motion.div>
+            </AnimatePresence>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="group flex items-center gap-3 rounded-[2rem] bg-white px-8 py-5 text-sm font-black text-black transition hover:bg-fuchsia-50 hover:scale-105 active:scale-95">
-                    Bắt đầu bứt phá ngay
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                  </button>
-                  <div className="flex -space-x-3">
-                    {[1, 2, 3, 4].map((i) => (
-                      <img key={i} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} className="h-12 w-12 rounded-full border-2 border-[#050308] object-cover" />
-                    ))}
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#050308] bg-fuchsia-500 text-[10px] font-black text-white">+500</div>
-                  </div>
-                  <div className="text-left">
-                    <div className="flex items-center gap-1 text-amber-400">
-                      {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="h-3 w-3 fill-current" />)}
-                    </div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Được tin dùng bởi 500+ doanh nghiệp</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/5">
-                  <div>
-                    <div className="text-3xl font-black text-white">{currentHeroSlide.revenue}</div>
-                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Doanh thu tăng</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-black text-white">{currentHeroSlide.growth}</div>
-                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Hiệu quả QC</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-black text-white">{currentHeroSlide.newClients}</div>
-                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Khách hàng mới</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative mt-16 flex-1 lg:mt-0 lg:pl-12">
-                <div className="relative aspect-square w-full">
-                  <div className="absolute inset-0 animate-pulse rounded-full bg-fuchsia-500/10 blur-[100px]" />
-                  <div className="absolute -inset-4 rounded-[3rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm" />
-                  <img src={currentHeroSlide.visual} alt="Hero" className="relative h-full w-full rounded-[2.5rem] object-cover shadow-2xl" />
-                  
-                  <div className="absolute -left-8 top-1/4 animate-bounce rounded-2xl border border-white/10 bg-[#0e0918]/90 p-4 backdrop-blur-xl shadow-2xl">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
-                        <TrendingUp className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase">Tỷ lệ chuyển đổi</p>
-                        <p className="text-lg font-black text-white">+85.4%</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="absolute -right-4 bottom-1/4 rounded-2xl border border-white/10 bg-[#0e0918]/90 p-4 backdrop-blur-xl shadow-2xl">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-400">
-                        <Users className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase">Khách hàng tiềm năng</p>
-                        <p className="text-lg font-black text-white">1,248+</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+              {heroSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveHeroSlide(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    activeHeroSlide === i ? "w-8 bg-white" : "w-2 bg-white/30"
+                  }`}
+                />
+              ))}
             </div>
           </section>
 
