@@ -47,6 +47,24 @@ export interface SeoIntegrationConfig {
   notes: string;
 }
 
+export interface FeaturedProject {
+  id: string;
+  title: string;
+  thumbnail: string;
+  description: string;
+  content: string;
+  result?: string;
+  note?: string;
+}
+
+export interface CustomerFeedback {
+  id: string;
+  clientName: string;
+  clientLogo: string;
+  contentImage: string;
+  rating: number;
+}
+
 export interface SiteSettings {
   title: string;
   heroTitle: string;
@@ -77,6 +95,10 @@ export interface SiteSettings {
   aiKtp: string;
   seoPages: Record<string, { title: string; desc: string; keywords: string }>;
   media: Record<string, MediaSection>;
+  marketingSolutionImage: string;
+  bookingConsultationImage: string;
+  featuredProjects: FeaturedProject[];
+  customerFeedbacks: CustomerFeedback[];
   cms: Record<string, PlatformCMS>;
   seoIntegrations: {
     searchConsole: SeoIntegrationConfig;
@@ -109,7 +131,7 @@ export interface AdminContextType {
   updateMarketingSolutionBanner: (platform: string, imageUrl: string) => void;
 }
 
-const SETTINGS_KEY = "admin_settings";
+export const SETTINGS_KEY = "admin_settings";
 const MEDIA_KEYS = ["home", "facebook", "tiktok", "instagram", "zalo", "googlemaps", "website"] as const;
 const COLOR_DEFAULTS: Record<string, string> = {
   primary: "#7C3AED",
@@ -208,6 +230,10 @@ const defaultSettings: SiteSettings = {
   aiKtp: "",
   seoPages: {},
   media: createDefaultMedia(),
+  marketingSolutionImage: "",
+  bookingConsultationImage: "",
+  featuredProjects: [],
+  customerFeedbacks: [],
   cms: {},
   seoIntegrations: {
     searchConsole: createSeoIntegration("Google Search Console"),
@@ -318,6 +344,10 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     aiKtp: parsed.aiKtp ?? "",
     logo: parsed.logo ?? defaultSettings.logo,
     favicon: parsed.favicon ?? defaultSettings.favicon,
+    marketingSolutionImage: parsed.marketingSolutionImage ?? "",
+    bookingConsultationImage: parsed.bookingConsultationImage ?? "",
+    featuredProjects: parsed.featuredProjects ?? [],
+    customerFeedbacks: parsed.customerFeedbacks ?? [],
     seoPages: parsed.seoPages ?? {},
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
@@ -380,7 +410,7 @@ function sanitizeSlideshowItems(items: string[] | undefined): string[] {
     .map((item) => item.trim())
     .filter((item) => {
       if (!item) return false;
-      if (item.startsWith("data:image/")) return false;
+      // Allow Base64 images for temporary persistence
       if (seen.has(item)) return false;
       seen.add(item);
       return true;

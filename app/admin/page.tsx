@@ -8,9 +8,9 @@ import {
   Bell, Globe, Image, Search, Settings, LogOut,
   Trash2, Plus, Edit3, MessageSquare,
   BarChart2, Code, Copy,
-  Calendar, Lock, Sparkles, type LucideIcon
+  Calendar, Lock, Sparkles, MessageCircle, Star, type LucideIcon
 } from "lucide-react";
-import { useAdmin } from "@/lib/AdminContext";
+import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
@@ -27,6 +27,7 @@ const NAV = [
   { id: "reviews", label: "Khách hàng Review", icon: MessageSquare },
   { id: "projects", label: "Dự án tiêu biểu", icon: BarChart2 },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
+  { id: "feedback", label: "Feedback khách hàng", icon: MessageCircle },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
@@ -1905,6 +1906,7 @@ export default function AdminPage() {
             </div>
           )}
 
+<<<<<<< HEAD
           {activeTab === "reviews" && (
             <div className="space-y-6">
               <div className="rounded-2xl border border-white/10 bg-card p-6">
@@ -2216,6 +2218,191 @@ export default function AdminPage() {
                   )}
                 </div>
               </div>
+=======
+          {activeTab === "projects" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Dự án tiêu biểu</h3>
+                <button 
+                  onClick={() => {
+                    const newProj = { id: Date.now().toString(), title: "Dự án mới", thumbnail: "", description: "", content: "", result: "+100%", note: "Tăng trưởng" };
+                    updateSettings({ featuredProjects: [...(settings.featuredProjects || []), newProj] });
+                  }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                >
+                  Thêm dự án
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {(settings.featuredProjects || []).map((proj, idx) => (
+                  <div key={proj.id} className="rounded-2xl border border-white/10 bg-card p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">Dự án #{idx + 1}</h4>
+                      <button 
+                        onClick={() => {
+                          const next = (settings.featuredProjects || []).filter(p => p.id !== proj.id);
+                          updateSettings({ featuredProjects: next });
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-gray-400">Hình ảnh Thumbnail</p>
+                        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                          {proj.thumbnail ? <img src={proj.thumbnail} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-xs text-gray-500">Chưa có ảnh</div>}
+                          <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                            <span className="text-xs font-bold text-white">Tải ảnh</span>
+                            <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              const next = [...(settings.featuredProjects || [])];
+                              next[idx] = { ...next[idx], thumbnail: imageUrl };
+                              updateSettings({ featuredProjects: next });
+                            }} />
+                          </label>
+                        </div>
+                        <input value={proj.thumbnail} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], thumbnail: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="URL ảnh..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
+                      </div>
+                      <input value={proj.title} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], title: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Tên dự án" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <input value={proj.description} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], description: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Mô tả ngắn" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={proj.result} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], result: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Kết quả (vd: +150%)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                        <input value={proj.note} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], note: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Ghi chú (vd: Doanh thu)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      </div>
+                      <textarea value={proj.content} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], content: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Nội dung chi tiết" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white disabled:opacity-50">Lưu tất cả dự án</button>
+            </div>
+          )}
+
+          {activeTab === "feedback" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Feedback khách hàng</h3>
+                <button 
+                  onClick={() => {
+                    const newFeedback = { id: Date.now().toString(), clientName: "Khách hàng mới", clientLogo: "", contentImage: "", rating: 5 };
+                    updateSettings({ customerFeedbacks: [...(settings.customerFeedbacks || []), newFeedback] });
+                  }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                >
+                  Thêm feedback
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {(settings.customerFeedbacks || []).map((fb, idx) => (
+                  <div key={fb.id} className="rounded-2xl border border-white/10 bg-card p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">Feedback #{idx + 1}</h4>
+                      <button 
+                        onClick={() => {
+                          const next = (settings.customerFeedbacks || []).filter(f => f.id !== fb.id);
+                          updateSettings({ customerFeedbacks: next });
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="grid gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <p className="text-xs font-semibold text-gray-400">Logo khách hàng</p>
+                          <div className="relative aspect-square w-20 overflow-hidden rounded-lg border border-white/10 bg-black/20">
+                            {fb.clientLogo ? <img src={fb.clientLogo} className="h-full w-full object-contain p-2" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Logo</div>}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-[10px] font-bold text-white">Đổi</span>
+                              <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const imageUrl = await fileToDataUrl(file);
+                                const next = [...(settings.customerFeedbacks || [])];
+                                next[idx] = { ...next[idx], clientLogo: imageUrl };
+                                updateSettings({ customerFeedbacks: next });
+                              }} />
+                            </label>
+                          </div>
+                          <input value={fb.clientLogo} onChange={e => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], clientLogo: e.target.value };
+                            updateSettings({ customerFeedbacks: next });
+                          }} placeholder="URL logo..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1 text-[10px] text-white" />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-xs font-semibold text-gray-400">Ảnh nội dung feedback</p>
+                          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-black/20">
+                            {fb.contentImage ? <img src={fb.contentImage} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Ảnh nội dung</div>}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-[10px] font-bold text-white">Tải ảnh</span>
+                              <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const imageUrl = await fileToDataUrl(file);
+                                const next = [...(settings.customerFeedbacks || [])];
+                                next[idx] = { ...next[idx], contentImage: imageUrl };
+                                updateSettings({ customerFeedbacks: next });
+                              }} />
+                            </label>
+                          </div>
+                          <input value={fb.contentImage} onChange={e => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], contentImage: e.target.value };
+                            updateSettings({ customerFeedbacks: next });
+                          }} placeholder="URL ảnh..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1 text-[10px] text-white" />
+                        </div>
+                      </div>
+                      <input value={fb.clientName} onChange={e => {
+                        const next = [...(settings.customerFeedbacks || [])];
+                        next[idx] = { ...next[idx], clientName: e.target.value };
+                        updateSettings({ customerFeedbacks: next });
+                      }} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">Đánh giá:</span>
+                        {[1,2,3,4,5].map(star => (
+                          <button key={star} onClick={() => {
+                            const next = [...(settings.customerFeedbacks || [])];
+                            next[idx] = { ...next[idx], rating: star };
+                            updateSettings({ customerFeedbacks: next });
+                          }} className={`${fb.rating >= star ? "text-yellow-400" : "text-gray-600"}`}><Star size={16} fill={fb.rating >= star ? "currentColor" : "none"} /></button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white disabled:opacity-50">Lưu tất cả feedback</button>
+>>>>>>> 69cabbb78bbfdf11c88bf433850c92cb2fdb0c6e
             </div>
           )}
 
@@ -2272,6 +2459,105 @@ export default function AdminPage() {
                   </div>
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu Logo & Favicon"}</button>
                 </div>
+                <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
+                  <h3 className="font-bold text-white flex items-center gap-2"><Sparkles size={18} className="text-primary" /> Giải pháp Marketing toàn diện</h3>
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-400">Ảnh đại diện phần Giải pháp</p>
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                      {settings.marketingSolutionImage ? (
+                        <img src={settings.marketingSolutionImage} alt="Marketing Solution" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đại diện</div>
+                      )}
+                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ marketingSolutionImage: imageUrl });
+                              
+                              // Auto save after upload
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { marketingSolutionImage: imageUrl } 
+                                }),
+                              });
+                            } catch (err) {
+                              console.error("Upload failed", err);
+                            } finally {
+                              e.currentTarget.value = "";
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <input
+                      value={settings.marketingSolutionImage || ""}
+                      onChange={e => updateSettings({ marketingSolutionImage: e.target.value })}
+                      placeholder="URL ảnh..."
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2 mt-4 pt-4 border-t border-white/5">
+                    <p className="text-xs font-semibold text-gray-400">Ảnh phần Đặt lịch tư vấn</p>
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                      {settings.bookingConsultationImage ? (
+                        <img src={settings.bookingConsultationImage} alt="Booking" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đặt lịch</div>
+                      )}
+                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              const imageUrl = await fileToDataUrl(file);
+                              updateSettings({ bookingConsultationImage: imageUrl });
+                              
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { bookingConsultationImage: imageUrl } 
+                                }),
+                              });
+                            } catch (err) {
+                              console.error("Upload failed", err);
+                            } finally {
+                              e.currentTarget.value = "";
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <input
+                      value={settings.bookingConsultationImage || ""}
+                      onChange={e => updateSettings({ bookingConsultationImage: e.target.value })}
+                      placeholder="URL ảnh..."
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
+                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}
+                  </button>
+                </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white">Chọn nền tảng đang sửa</h3>
@@ -2301,6 +2587,7 @@ export default function AdminPage() {
                           accept="image/*"
                           className="hidden"
                           onChange={async e => {
+<<<<<<< HEAD
                             const file = e.target.files?.[0];
                             if (!file) return;
                             const uploaded = await uploadMediaFile(file, {
@@ -2310,10 +2597,47 @@ export default function AdminPage() {
                             });
                             updateMarketingSolutionBanner(selectedPlatform, uploaded.url);
                             e.currentTarget.value = "";
+=======
+                            const files = Array.from(e.target.files || []);
+                            if (!files.length) return;
+                            const uploadedUrls: string[] = [];
+                            try {
+                              for (const file of files) {
+                                const imageUrl = await fileToDataUrl(file);
+                                uploadedUrls.push(imageUrl);
+                              }
+                              const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
+                              const nextImages = [...existing, ...uploadedUrls];
+                              setSlideshowImages(selectedPlatform, nextImages);
+                              
+                              // Auto save after upload
+                              const updatedMedia = {
+                                ...settings.media,
+                                [selectedPlatform]: {
+                                  ...(settings.media[selectedPlatform] || { videoUrl: "", slideshow: [], cases: [] }),
+                                  slideshow: nextImages
+                                }
+                              };
+                              
+                              await fetch("/api/settings", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ 
+                                  key: SETTINGS_KEY, 
+                                  value: { media: updatedMedia } 
+                                }),
+                              });
+                            } catch (err) {
+                              console.error("Upload failed", err);
+                            } finally {
+                              e.currentTarget.value = "";
+                            }
+>>>>>>> 69cabbb78bbfdf11c88bf433850c92cb2fdb0c6e
                           }}
                         />
                       </label>
                     </div>
+<<<<<<< HEAD
                     <input
                       value={settings.media[selectedPlatform]?.marketingSolutionBanner || ""}
                       onChange={e => updateMarketingSolutionBanner(selectedPlatform, e.target.value)}
@@ -2324,6 +2648,44 @@ export default function AdminPage() {
                   <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
                     {saveStatus === "saving" ? "Đang lưu..." : "Lưu ảnh bìa"}
                   </button>
+=======
+                    <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/70">
+                      Chỉ dùng ảnh cho slideshow. Ưu tiên tải ảnh từ máy, hoặc dán thêm 1 URL ảnh nếu cần.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+                      {(settings.media[selectedPlatform]?.slideshow || [])
+                        .filter(Boolean)
+                        .map((url, i) => (
+                        <div key={i} className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-2">
+                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10">
+                            <img src={url} className="h-full w-full object-cover" />
+                          </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm("Bạn có chắc chắn muốn xóa ảnh này?")) {
+                              removeSlideshowImage(selectedPlatform, i);
+                            }
+                          }}
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                        >
+                          <Trash2 size={15} />
+                          Xóa ảnh
+                        </button>
+                        </div>
+                      ))}
+                    </div>
+                    {(settings.media[selectedPlatform]?.slideshow || []).filter(Boolean).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSlideshowImages(selectedPlatform, [])}
+                        className="w-full rounded-lg border border-red-400/30 bg-red-500/10 py-2 text-sm font-bold text-red-200 transition hover:bg-red-500/20"
+                      >
+                        Xóa tất cả slideshow
+                      </button>
+                    )}
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu slideshow"}</button>
+>>>>>>> 69cabbb78bbfdf11c88bf433850c92cb2fdb0c6e
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">

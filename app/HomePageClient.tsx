@@ -10,7 +10,7 @@ import {
   ChevronRight,
   LayoutTemplate,
   MapPinned,
-  MessageCircleMore,
+  MessageCircle,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -72,6 +72,19 @@ export default function HomePageClient() {
   const { user } = useAuth();
   const { settings } = useAdmin();
 
+  const whyChooseUsRef = useRef<HTMLDivElement>(null);
+  const projectShowcaseRef = useRef<HTMLDivElement>(null);
+  const topReviewsRef = useRef<HTMLDivElement>(null);
+
+  const scrollContainer = (ref: React.RefObject<HTMLDivElement>, direction: "left" | "right") => {
+    if (!ref.current) return;
+    const scrollAmount = ref.current.clientWidth * 0.8;
+    ref.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = useMemo(
     () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
@@ -79,71 +92,88 @@ export default function HomePageClient() {
   );
 
   const homeMedia = settings?.media?.home;
-  const heroVisual =
-    homeMedia?.slideshow?.[0] ||
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80";
-  const teamImage =
-    homeMedia?.slideshow?.[1] ||
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1400&q=80";
-  const bookingVisual =
-    homeMedia?.slideshow?.[2] ||
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80";
-  const heroSlides = useMemo(
-    () => [
-      {
-        eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
-        middle: "KHÔNG TẠO RA DOANH THU",
-        accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
-        description:
-          "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
-        visual: homeMedia?.slideshow?.[0] || heroVisual,
-        revenue: "+215%",
-        growth: "+150%",
-        newClients: "+180%",
-        highlight: "Hiệu quả chiến dịch",
-        pills: [
-          { label: "Website", icon: LayoutTemplate },
-          { label: "Facebook", icon: SiFacebook },
-          { label: "Google Maps", icon: MapPinned },
-        ],
-      },
-      {
-        eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
-        middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
-        accent: "VÀ DOANH THU THẬT!",
-        description:
-          "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
-        visual: homeMedia?.slideshow?.[1] || teamImage,
-        revenue: "+168%",
-        growth: "+132%",
-        newClients: "+145%",
-        highlight: "Tăng trưởng Fanpage",
-        pills: [
-          { label: "Facebook", icon: SiFacebook },
-          { label: "Messenger", icon: MessageCircleMore },
-          { label: "Zalo", icon: SiZalo },
-        ],
-      },
-      {
-        eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
-        middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
-        accent: "VÀ TĂNG CUỘC GỌI THẬT!",
-        description:
-          "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
-        visual: homeMedia?.slideshow?.[2] || bookingVisual,
-        revenue: "Top 1",
-        growth: "+120%",
-        newClients: "+95%",
-        highlight: "Hiệu quả tìm kiếm",
-        pills: [
-          { label: "Google Maps", icon: MapPinned },
-          { label: "Website", icon: LayoutTemplate },
-          { label: "Facebook", icon: SiFacebook },
-        ],
-      },
-    ],
-    [bookingVisual, heroVisual, homeMedia?.slideshow, teamImage],
-  );
+  
+  const heroSlides = useMemo(() => {
+    const slides: any[] = [];
+    const slideshowImages = homeMedia?.slideshow || [];
+    
+    if (slideshowImages.length > 0) {
+      slideshowImages.forEach((img, index) => {
+        if (index === 0) {
+          slides.push({
+            eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
+            middle: "KHÔNG TẠO RA DOANH THU",
+            accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
+            description: "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
+            visual: img,
+            revenue: "+215%",
+            growth: "+150%",
+            newClients: "+180%",
+            highlight: "Hiệu quả chiến dịch",
+            pills: [
+              { label: "Website", icon: LayoutTemplate },
+              { label: "Facebook", icon: SiFacebook },
+              { label: "Google Maps", icon: MapPinned },
+            ],
+          });
+        } else if (index === 1) {
+          slides.push({
+            eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
+            middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
+            accent: "VÀ DOANH THU THẬT!",
+            description: "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
+            visual: img,
+            revenue: "+168%",
+            growth: "+132%",
+            newClients: "+145%",
+            highlight: "Tăng trưởng Fanpage",
+            pills: [
+              { label: "Facebook", icon: SiFacebook },
+              { label: "Messenger", icon: MessageCircle },
+              { label: "Zalo", icon: SiZalo },
+            ],
+          });
+        } else if (index === 2) {
+          slides.push({
+            eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
+            middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
+            accent: "VÀ TĂNG CUỘC GỌI THẬT!",
+            description: "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
+            visual: img,
+            revenue: "Top 1",
+            growth: "+120%",
+            newClients: "+95%",
+            highlight: "Hiệu quả tìm kiếm",
+            pills: [
+              { label: "Google Maps", icon: MapPinned },
+              { label: "Website", icon: LayoutTemplate },
+              { label: "Facebook", icon: SiFacebook },
+            ],
+          });
+        } else {
+          slides.push({
+            eyebrow: "GIẢI PHÁP MARKETING TOÀN DIỆN",
+            middle: "TĂNG TRƯỞNG DOANH THU ĐỘT PHÁ",
+            accent: "CHO DOANH NGHIỆP CỦA BẠN!",
+            description: "Chúng tôi đồng hành cùng bạn xây dựng thương hiệu và tối ưu hóa quy trình bán hàng trên đa nền tảng.",
+            visual: img,
+            revenue: "+180%",
+            growth: "+140%",
+            newClients: "+120%",
+            highlight: "Tăng trưởng bền vững",
+            pills: [
+              { label: "Marketing", icon: Target },
+              { label: "Branding", icon: Sparkles },
+              { label: "Automation", icon: Workflow },
+            ],
+          });
+        }
+      });
+    }
+    
+    return slides;
+  }, [homeMedia?.slideshow]);
+
   const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0];
 
   useEffect(() => {
@@ -202,373 +232,238 @@ export default function HomePageClient() {
     { label: "Website", href: "/website" },
     { label: "Facebook", href: "/facebook" },
     { label: "Google Maps", href: "/google-maps" },
-    { label: "Tin Tức", href: "#news" },
+    { label: "Tin Tức", href: "/blog" },
     { label: "Liên Hệ", href: "/lien-he" },
-  ];
-
-  const whyChooseUsRef = useRef<HTMLDivElement>(null);
-  const projectShowcaseRef = useRef<HTMLDivElement>(null);
-  const topReviewsRef = useRef<HTMLDivElement>(null);
-
-  const scrollContainer = (ref: React.RefObject<HTMLDivElement>, direction: "left" | "right") => {
-    if (!ref.current) return;
-    const scrollAmount = ref.current.clientWidth * 0.8;
-    ref.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
-
-  const serviceCards = useMemo(() => {
-    const preferredPlatforms = ["website", "facebook", "googlemaps"];
-
-    return preferredPlatforms.map((platformKey, index) => {
-      const match = services.find((item) => item.platform === platformKey);
-      const media = settings?.media?.[platformKey];
-      const image =
-        media?.marketingSolutionBanner ||
-        media?.slideshow?.[0] ||
-        media?.cases?.[0]?.after ||
-        media?.cases?.[0]?.before ||
-        heroVisual;
-
-      return {
-        key: platformKey,
-        title:
-          match?.name ||
-          (platformKey === "website"
-            ? "Thiết Kế Website"
-            : platformKey === "facebook"
-              ? "Quản trị Fanpage"
-              : "Google Maps Marketing"),
-        description:
-          match?.features?.slice(0, 2).join(", ") ||
-          (platformKey === "website"
-            ? "Website chuẩn SEO, giao diện đẹp, tối ưu chuyển đổi."
-            : platformKey === "facebook"
-              ? "Tăng hiện diện, tăng tương tác, tăng chuyển đổi."
-              : "Đưa doanh nghiệp vào top tìm kiếm địa phương."),
-        href:
-          platformKey === "website" ? "/website" : platformKey === "facebook" ? "/facebook" : "/google-maps",
-        image,
-        accent:
-          index === 0
-            ? "from-emerald-500/25 via-emerald-500/10"
-            : index === 1
-              ? "from-sky-500/25 via-sky-500/10"
-              : "from-orange-500/25 via-orange-500/10",
-      };
-    });
-  }, [heroVisual, services, settings?.media]);
-
-  const projectShowcase = useMemo(() => {
-    const seeds = [
-      { key: "website", label: "Website bán hàng", result: "+150%", note: "Tăng doanh thu" },
-      { key: "facebook", label: "Website bán hàng", result: "+120%", note: "Tăng đơn hàng" },
-      { key: "googlemaps", label: "Google Maps", result: "Top 1", note: "Google Maps" },
-      { key: "website", label: "Website chuẩn SEO", result: "+200%", note: "Lượt truy cập" },
-    ];
-
-    return seeds.map((seed, index) => {
-      const media = settings?.media?.[seed.key];
-      const caseItem = media?.cases?.[index] || media?.cases?.[0];
-      return {
-        title:
-          caseItem?.title ||
-          (seed.key === "website"
-            ? index === 0
-              ? "Nội Thất Xinh"
-              : "Spa & Clinic"
-            : seed.key === "facebook"
-              ? "Thời Trang Eva"
-              : "Nhà Hàng Sushi House"),
-        subtitle: seed.label,
-        image:
-          caseItem?.after ||
-          caseItem?.before ||
-          media?.slideshow?.[index] ||
-          media?.slideshow?.[0] ||
-          heroVisual,
-        result: seed.result,
-        note: seed.note,
-      };
-    });
-  }, [heroVisual, settings?.media]);
-
-  const topBlogs = blogs.slice(0, 4);
-  const topReviews = reviews.slice(0, 3);
-
-  const heroStats = [
-    { value: "300+", label: "Dự án hoàn thành" },
-    { value: "150%", label: "Tăng trưởng TB" },
-    { value: "98%", label: "Khách hàng hài lòng" },
-  ];
-
-  const whyChooseUs = [
-    {
-      title: "Tư duy marketing định hướng kết quả",
-      description: "Không chỉ làm web, chúng tôi xử lý hệ thống tạo nhiều khách hàng và doanh thu.",
-      icon: Target,
-    },
-    {
-      title: "Tối ưu chuyển đổi",
-      description: "Thiết kế chuẩn hành vi người dùng, tăng tỷ lệ chuyển đổi và hiệu quả kinh doanh.",
-      icon: TrendingUp,
-    },
-    {
-      title: "Hệ thống tự động",
-      description: "Ứng dụng AI & automation giúp tiết kiệm thời gian, chi phí và tối ưu hiệu suất.",
-      icon: Workflow,
-    },
-    {
-      title: "Đồng hành lâu dài",
-      description: "Hỗ trợ 24/7, nâng cấp và tối ưu cùng doanh nghiệp trên hành trình tăng trưởng.",
-      icon: Users,
-    },
   ];
 
   const valuePillars = [
     {
-      title: "Tầm nhìn",
-      description: "Trở thành đơn vị dẫn đầu trong việc tạo hệ thống marketing online tạo ra tăng trưởng bền vững.",
+      title: "Chiến Lược Tối Ưu",
+      description: "Chúng tôi không chỉ làm marketing, chúng tôi xây dựng lộ trình tăng trưởng dựa trên dữ liệu thật.",
       icon: Target,
     },
     {
-      title: "Sứ mệnh",
-      description: "Mang giải pháp marketing hiệu quả – minh bạch – bền vững cho mỗi doanh nghiệp.",
-      icon: Sparkles,
+      title: "Đội Ngũ Chuyên Gia",
+      description: "Quy tụ những chuyên gia thực chiến với nhiều năm kinh nghiệm trong lĩnh vực Digital Marketing.",
+      icon: Users,
     },
     {
-      title: "Trách nhiệm",
-      description: "Luôn đồng hành, hỗ trợ và cam kết hiệu quả, lấy thành công của khách hàng làm giá trị cốt lõi.",
+      title: "Cam Kết Hiệu Quả",
+      description: "Mọi hoạt động đều hướng tới mục tiêu cuối cùng là chuyển đổi và doanh thu cho khách hàng.",
       icon: ShieldCheck,
     },
   ];
 
-  const socialLinks = [
+  const whyChooseUs = [
     {
-      label: "Messenger",
-      href: settings?.fanpage || "#",
-      icon: SiMessenger,
-      bg: "bg-[#0078FF]",
+      title: "Tư Duy Hệ Thống",
+      description: "Xây dựng phễu khách hàng tự động, giúp tối ưu chi phí và tăng tỷ lệ chuyển đổi.",
+      icon: Workflow,
     },
     {
-      label: "Zalo",
-      href: settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#",
-      icon: SiZalo,
-      bg: "bg-[#0068FF]",
+      title: "Đa Nền Tảng",
+      description: "Hiện diện mạnh mẽ trên Website, Facebook, TikTok, Google Maps... bất cứ đâu khách hàng của bạn có mặt.",
+      icon: LayoutTemplate,
     },
     {
-      label: "Gọi ngay",
-      href: settings?.hotline ? `tel:${settings.hotline}` : "#",
-      icon: Phone,
-      bg: "bg-[#26C16A]",
+      title: "Dữ Liệu Thực",
+      description: "Báo cáo minh bạch, đo lường chính xác từng đồng chi phí quảng cáo và hiệu quả mang lại.",
+      icon: TrendingUp,
+    },
+    {
+      title: "Đồng Hành 24/7",
+      description: "Chúng tôi coi thành công của khách hàng là thành công của chính mình.",
+      icon: Sparkles,
     },
   ];
 
-  const scrollToSection = (href: string) => {
-    if (!href.startsWith("#")) return;
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
+  const serviceCards = useMemo(() => {
+    return services.map((s) => ({
+      key: s.id,
+      title: s.title,
+      description: s.description,
+      image: s.imageUrl || "/mascot-home.png",
+      href: `/${slugify(s.title)}`,
+      accent: s.title.toLowerCase().includes("website") ? "from-emerald-500/20" : s.title.toLowerCase().includes("facebook") ? "from-blue-500/20" : "from-fuchsia-500/20",
+    }));
+  }, [services]);
 
-  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (submittingContact) return;
+  const projectShowcase = useMemo(() => {
+    const cases = homeMedia?.cases || [];
+    return cases.map(c => ({
+      title: c.title,
+      subtitle: c.description || "Dự án tiêu biểu",
+      image: c.after,
+      result: c.content || "+150%",
+      note: "Tăng trưởng",
+    }));
+  }, [homeMedia?.cases]);
 
-    setSubmittingContact(true);
-    setContactState({ type: "idle", message: "" });
-
-    const result = await db.leads.add({
-      type: "contact",
-      name: contactForm.name,
-      phone: contactForm.phone,
-      service: contactForm.interest || "Tư vấn tổng thể",
-      note: [contactForm.location, contactForm.note].filter(Boolean).join(" | "),
-    });
-
-    if (result.error) {
-      setContactState({
-        type: "error",
-        message: "Chưa gửi được yêu cầu tư vấn. Vui lòng thử lại sau.",
-      });
-    } else {
-      setContactState({
-        type: "success",
-        message: "Đã nhận yêu cầu. Đội ngũ sẽ liên hệ với bạn sớm nhất.",
-      });
-      setContactForm(initialContactForm);
-    }
-
-    setSubmittingContact(false);
-  };
+  const topReviews = reviews.slice(0, 3);
+  const topBlogs = blogs.slice(0, 4);
 
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-        <div className="relative mb-8 flex h-36 w-36 items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-primary/20 border-t-primary shadow-[0_0_40px_rgba(139,92,246,0.3)] animate-spin" />
-          <div className="absolute inset-[18px] rounded-full bg-[radial-gradient(circle,_rgba(139,92,246,0.25)_0%,_transparent_70%)] blur-2xl" />
-          <img src={logoSrc} alt="Logo" className="relative h-20 w-20 rounded-full object-cover" />
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050308]">
+        <div className="relative h-24 w-24">
+          <div className="absolute inset-0 animate-ping rounded-full bg-fuchsia-500/20" />
+          <img src={logoSrc} alt="Loading" className="relative z-10 h-24 w-24 rounded-full object-cover shadow-[0_0_40px_rgba(168,85,247,0.4)]" />
         </div>
-        <div className="w-72 text-center">
-          <p className="mb-2 text-sm font-semibold tracking-[0.3em] text-purple-200">ĐANG TẢI HỆ THỐNG</p>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 transition-all duration-75 ease-linear"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+        <div className="mt-8 w-48 overflow-hidden rounded-full bg-white/5 p-1">
+          <div className="h-1 rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
+        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-fuchsia-300/60">Đang khởi tạo hệ thống...</p>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#07040d] text-white">
+    <div className="relative min-h-screen bg-[#050308] font-sans selection:bg-fuchsia-500/30">
       <ParticleBackground />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_28%),linear-gradient(180deg,rgba(9,5,17,0.82),rgba(6,3,12,0.98))]" />
-
-      <div className="relative z-10">
-        <header className="sticky top-0 z-50 bg-[#070b1b]/96 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-4 px-4 py-3.5 lg:px-5">
-            <Link href="/" className="flex items-center gap-3" onClick={playClickSound}>
-              <div className="relative">
-                <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-xl" />
-                <img src={logoSrc} alt={brandName} className="relative h-11 w-11 rounded-full object-cover" />
-              </div>
-              <div>
-                <p className="text-[13px] font-black uppercase tracking-[0.14em] text-white">{brandName}</p>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-purple-200/75">Marketing</p>
-              </div>
+      
+      <div className="relative z-10 flex flex-col">
+        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#050308]/80 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
+            <Link href="/" className="flex items-center gap-3 transition hover:opacity-90">
+              <img src={logoSrc} alt={brandName} className="h-10 w-10 rounded-full object-cover shadow-[0_0_20px_rgba(168,85,247,0.3)]" />
+              <span className="text-xl font-black uppercase tracking-wider text-white md:text-2xl">{brandName}</span>
             </Link>
 
-            <nav className="hidden items-center gap-5 xl:gap-6 lg:flex">
-              {navigation.map((item) =>
-                item.href.startsWith("#") ? (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => scrollToSection(item.href)}
-                    className="text-[12px] font-semibold uppercase tracking-[0.04em] text-white/80 transition hover:text-white"
-                  >
-                    {item.label}
-                  </button>
-                ) : (
-                  <Link key={item.label} href={item.href} className="text-[12px] font-semibold uppercase tracking-[0.04em] text-white/80 transition hover:text-white">
-                    {item.label}
-                  </Link>
-                ),
-              )}
+            <nav className="hidden items-center gap-8 lg:flex">
+              {navigation.map((item) => (
+                <Link key={item.label} href={item.href} className="text-sm font-black uppercase tracking-widest text-slate-300 transition hover:text-fuchsia-400">
+                  {item.label}
+                </Link>
+              ))}
             </nav>
 
-            <div className="hidden items-center gap-2 lg:flex">
-              <button
-                type="button"
-                onClick={() => {
-                  playClickSound();
-                  setShowLogin(true);
-                }}
-                className="rounded-xl border border-fuchsia-400/25 bg-[#0b1022] px-3.5 py-2.5 text-[12px] font-bold text-white transition hover:border-fuchsia-300/40 hover:bg-white/5"
-              >
+            <div className="flex items-center gap-3">
+              <Link href="/lo-trinh-du-an" className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-black text-white transition hover:bg-white/10 sm:flex">
                 Lộ trình dự án
-              </button>
+              </Link>
               <button
-                type="button"
-                onClick={() => {
-                  window.location.href = "/lien-he";
-                }}
-                className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-3.5 py-2.5 text-[12px] font-bold text-white shadow-[0_14px_30px_rgba(168,85,247,0.28)] transition hover:scale-[1.02]"
+                onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
+                className="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(168,85,247,0.3)] transition hover:scale-[1.03] active:scale-[0.97]"
               >
                 Liên hệ tư vấn
               </button>
             </div>
           </div>
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-fuchsia-500/70 to-transparent shadow-[0_0_22px_rgba(168,85,247,0.55)]" />
         </header>
 
-        <main>
-          <section id="hero" className="mx-auto max-w-[1180px] px-4 pb-8 pt-8 lg:px-5 lg:pt-9">
-            <div className="relative overflow-hidden rounded-[32px] border border-fuchsia-400/14 bg-[#090412] shadow-[0_28px_80px_rgba(4,2,10,0.46)]">
-              <img
-                key={currentHeroSlide.visual}
-                src={currentHeroSlide.visual}
-                alt="Slideshow marketing"
-                className="absolute inset-0 h-full w-full object-cover transition duration-700"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,4,18,0.08),rgba(9,4,18,0.22))]" />
-              <div className="relative min-h-[540px] sm:min-h-[620px]">
-                <button
-                  type="button"
-                  onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-                  className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
-                  aria-label="Slide trước"
-                >
-                  <ChevronRight className="h-5 w-5 rotate-180" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
-                  className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur transition hover:bg-black/35"
-                  aria-label="Slide tiếp theo"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
+        <main className="flex-1">
+          <section id="hero" className="relative min-h-[90vh] w-full overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.12),transparent_70%)]" />
+            
+            <div className="mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 py-12 lg:flex-row lg:px-6">
+              <div className="relative z-10 flex-1 space-y-8 text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-4 py-2 text-xs font-black tracking-widest text-fuchsia-300">
+                  <Sparkles className="h-3 w-3" />
+                  {currentHeroSlide.eyebrow}
+                </div>
+                
+                <h1 className="text-4xl font-black leading-tight text-white md:text-6xl lg:text-7xl">
+                  {currentHeroSlide.middle}
+                  <br />
+                  <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">{currentHeroSlide.accent}</span>
+                </h1>
+
+                <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-300 lg:mx-0">
+                  {currentHeroSlide.description}
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="group flex items-center gap-3 rounded-[2rem] bg-white px-8 py-5 text-sm font-black text-black transition hover:bg-fuchsia-50 hover:scale-105 active:scale-95">
+                    Bắt đầu bứt phá ngay
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </button>
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3, 4].map((i) => (
+                      <img key={i} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} className="h-12 w-12 rounded-full border-2 border-[#050308] object-cover" />
+                    ))}
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#050308] bg-fuchsia-500 text-[10px] font-black text-white">+500</div>
+                  </div>
+                  <div className="text-left">
+                    <div className="flex items-center gap-1 text-amber-400">
+                      {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="h-3 w-3 fill-current" />)}
+                    </div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Được tin dùng bởi 500+ doanh nghiệp</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/5">
+                  <div>
+                    <div className="text-3xl font-black text-white">{currentHeroSlide.revenue}</div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Doanh thu tăng</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-black text-white">{currentHeroSlide.growth}</div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Hiệu quả QC</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-black text-white">{currentHeroSlide.newClients}</div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Khách hàng mới</div>
+                  </div>
+                </div>
               </div>
 
-              <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
-                {heroSlides.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setActiveHeroSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${index === activeHeroSlide ? "w-10 bg-fuchsia-400" : "w-2.5 bg-white/30"}`}
-                    aria-label={`Chọn slide ${index + 1}`}
-                  />
-                ))}
+              <div className="relative mt-16 flex-1 lg:mt-0 lg:pl-12">
+                <div className="relative aspect-square w-full">
+                  <div className="absolute inset-0 animate-pulse rounded-full bg-fuchsia-500/10 blur-[100px]" />
+                  <div className="absolute -inset-4 rounded-[3rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm" />
+                  <img src={currentHeroSlide.visual} alt="Hero" className="relative h-full w-full rounded-[2.5rem] object-cover shadow-2xl" />
+                  
+                  <div className="absolute -left-8 top-1/4 animate-bounce rounded-2xl border border-white/10 bg-[#0e0918]/90 p-4 backdrop-blur-xl shadow-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+                        <TrendingUp className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">Tỷ lệ chuyển đổi</p>
+                        <p className="text-lg font-black text-white">+85.4%</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="absolute -right-4 bottom-1/4 rounded-2xl border border-white/10 bg-[#0e0918]/90 p-4 backdrop-blur-xl shadow-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-400">
+                        <Users className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">Khách hàng tiềm năng</p>
+                        <p className="text-lg font-black text-white">1,248+</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
-          <section className="mx-auto max-w-[1180px] px-4 py-6 lg:px-5">
-            <div className="grid gap-7 lg:grid-cols-[0.76fr_1.24fr] lg:items-center">
-              <div className="overflow-hidden rounded-[24px] border border-fuchsia-400/16 bg-[radial-gradient(circle_at_top,_rgba(146,64,255,0.22),_rgba(16,8,27,0.96)_64%)] shadow-[0_24px_70px_rgba(4,2,10,0.38)]">
-                <div className="flex min-h-[350px] items-center justify-center px-8 py-10">
-                  <img
-                    src="/mascot-home.png"
-                    alt="Robot But Pha Marketing"
-                    className="h-auto max-h-[390px] w-full max-w-[360px] object-contain drop-shadow-[0_24px_40px_rgba(168,85,247,0.28)]"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-5">
-                <div>
-                  <p className="text-[12px] font-black uppercase tracking-[0.28em] text-fuchsia-300">Về chúng tôi</p>
-                  <h2 className="mt-2 text-[40px] font-black tracking-[-0.045em] text-white lg:text-[44px]">Bứt Phá Marketing</h2>
-                  <p className="mt-3 max-w-3xl text-[15px] leading-7 text-slate-300">
-                    Chúng tôi không chỉ làm marketing.
+          <section id="intro" className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="relative overflow-hidden rounded-[3rem] border border-white/5 bg-white/[0.02] p-8 md:p-16">
+              <div className="absolute right-0 top-0 -mr-24 -mt-24 h-96 w-96 rounded-full bg-fuchsia-500/5 blur-[100px]" />
+              
+              <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+                <div className="space-y-6">
+                  <h2 className="text-3xl font-black text-white md:text-5xl leading-tight">
+                    Chúng tôi không chỉ làm marketing,
                     <br />
-                    Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
+                    <span className="text-fuchsia-400">chúng tôi đồng hành cùng bạn bứt phá.</span>
+                  </h2>
+                  <p className="text-lg leading-8 text-slate-300">
+                    Bứt Phá Marketing ra đời với sứ mệnh giúp doanh nghiệp vừa và nhỏ Việt Nam tiếp cận các giải pháp Digital Marketing chuyên nghiệp, hiệu quả và đo lường được. Chúng tôi tập trung vào việc tạo ra kết quả kinh doanh thực tế thay vì những con số ảo.
                   </p>
-                  <Link
-                    href="/gioi-thieu"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full border border-fuchsia-400/30 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300/50 hover:bg-fuchsia-500/10"
-                  >
-                    Xem tất cả
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
                 </div>
-
+                
                 <div className="grid gap-4 md:grid-cols-3">
                   {valuePillars.map((pillar) => (
                     <div key={pillar.title} className="rounded-[20px] border border-fuchsia-400/18 bg-[linear-gradient(180deg,rgba(21,11,34,0.98),rgba(12,7,22,0.98))] p-5 shadow-[0_18px_46px_rgba(6,2,14,0.24)]">
                       <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/14 text-fuchsia-200">
                         <pillar.icon className="h-4.5 w-4.5" />
                       </span>
-                      <h3 className="mt-4 text-[21px] font-black text-white">{pillar.title}</h3>
+                      <h3 className="mt-4 text-[18px] md:text-[21px] font-black text-white">{pillar.title}</h3>
                       <p className="mt-2 text-[13px] leading-7 text-slate-300">{pillar.description}</p>
                     </div>
                   ))}
@@ -578,11 +473,16 @@ export default function HomePageClient() {
           </section>
 
           <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-            <div className="mb-6 text-center">
+            <div className="mb-8 text-center space-y-4">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
+              {settings.marketingSolutionImage && (
+                <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+                  <img src={settings.marketingSolutionImage} alt="Giải pháp Marketing toàn diện" className="w-full h-auto object-cover aspect-video" />
+                </div>
+              )}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {serviceCards.map((card) => (
                 <Link
                   key={card.key}
@@ -646,6 +546,7 @@ export default function HomePageClient() {
             <div className="mb-6 flex items-end justify-between gap-4">
               <div className="flex-1">
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Dự án tiêu biểu</p>
+                <h2 className="mt-2 text-3xl font-black text-white">Thành quả từ sự tận tâm</h2>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex gap-2 lg:hidden">
@@ -674,19 +575,37 @@ export default function HomePageClient() {
               ref={projectShowcaseRef}
               className="no-scrollbar flex gap-4 overflow-x-auto pb-4 xl:grid xl:grid-cols-4 xl:overflow-visible"
             >
-              {projectShowcase.map((project) => (
-                <article key={`${project.title}-${project.subtitle}`} className="min-w-[300px] flex-shrink-0 overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] xl:min-w-0">
-                  <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
-                  <div className="space-y-3 p-5">
-                    <h3 className="text-xl font-black text-white">{project.title}</h3>
-                    <div className="text-sm text-slate-300">{project.subtitle}</div>
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="text-3xl font-black text-emerald-300">{project.result}</div>
-                      <div className="text-sm font-semibold text-slate-300">{project.note}</div>
-                    </div>
+              {(settings?.featuredProjects || []).length > 0 ? (
+                settings.featuredProjects.map((proj) => (
+                  <div key={proj.id} className="min-w-[300px] flex-shrink-0 snap-center xl:min-w-0">
+                    <article className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] h-full">
+                      <img src={proj.thumbnail} alt={proj.title} className="h-44 w-full object-cover" />
+                      <div className="space-y-3 p-5">
+                        <h3 className="text-xl font-black text-white">{proj.title}</h3>
+                        <div className="text-sm text-slate-400 line-clamp-2">{proj.description}</div>
+                        <div className="flex items-center justify-between gap-3 pt-2 border-t border-white/5">
+                          <div className="text-2xl font-black text-emerald-300">{proj.result || "+150%"}</div>
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{proj.note || "Tăng trưởng"}</div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                </article>
-              ))}
+                ))
+              ) : (
+                projectShowcase.map((project) => (
+                  <article key={`${project.title}-${project.subtitle}`} className="min-w-[300px] flex-shrink-0 overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] xl:min-w-0">
+                    <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
+                    <div className="space-y-3 p-5">
+                      <h3 className="text-xl font-black text-white">{project.title}</h3>
+                      <div className="text-sm text-slate-300">{project.subtitle}</div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-3xl font-black text-emerald-300">{project.result}</div>
+                        <div className="text-sm font-semibold text-slate-300">{project.note}</div>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              )}
             </div>
           </section>
 
@@ -714,7 +633,7 @@ export default function HomePageClient() {
               ref={topReviewsRef}
               className="no-scrollbar flex gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-3 lg:overflow-visible"
             >
-              {(topReviews.length ? topReviews : Array.from({ length: 3 }).map((_, index) => ({
+              {(reviews.length ? reviews.slice(0, 6) : Array.from({ length: 3 }).map((_, index) => ({
                 id: `fallback-${index}`,
                 clientName: index === 0 ? "Nguyễn Văn Hùng" : index === 1 ? "Trần Thị Mai" : "Lê Minh Tuấn",
                 rating: 5,
@@ -729,7 +648,7 @@ export default function HomePageClient() {
                 <div key={review.id} className="min-w-[300px] flex-shrink-0 rounded-[1.7rem] border border-white/10 bg-[#0e0918] p-6 shadow-[0_24px_70px_rgba(4,2,10,0.36)] lg:min-w-0">
                   <div className="flex items-center gap-4 mb-4">
                     <img
-                      src={("logoUrl" in review && review.logoUrl) ? (review.logoUrl as string) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${review.clientName}`}
+                      src={review.logoUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${review.clientName}`}
                       alt={review.clientName}
                       className="h-12 w-12 rounded-full border border-white/10 bg-white/5 object-cover"
                     />
@@ -748,112 +667,36 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section id="consultation" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-            <div className="grid gap-6 overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[linear-gradient(180deg,rgba(22,11,36,0.96),rgba(11,6,20,0.98))] p-6 shadow-[0_30px_80px_rgba(3,1,8,0.46)] lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Đặt lịch tư vấn trực tiếp</p>
-                <p className="mt-3 text-base leading-8 text-slate-300">
-                  Chọn thời gian phù hợp, chúng tôi sẽ liên hệ xác nhận trong vòng 15 phút!
-                </p>
+          <section id="reviews" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+            <div className="mb-8 text-center">
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Kết quả thực tế từ đối tác</p>
+              <h2 className="mt-2 text-3xl font-black text-white">Niềm tin từ khách hàng</h2>
+            </div>
 
-                <form className="mt-8 space-y-4" onSubmit={handleContactSubmit}>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <input
-                      value={contactForm.name}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, name: event.target.value }))}
-                      placeholder="Họ và tên"
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
-                    />
-                    <input
-                      value={contactForm.phone}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, phone: event.target.value }))}
-                      placeholder="Nhập số điện thoại"
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {(settings?.customerFeedbacks || []).length > 0 ? (
+                settings.customerFeedbacks.map((feedback) => (
+                  <div key={feedback.id} className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0e0918] shadow-xl">
+                    <img 
+                      src={feedback.contentImage} 
+                      alt={feedback.clientName || "Feedback khách hàng"} 
+                      className="w-full h-auto object-cover"
                     />
                   </div>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <input
-                      value={contactForm.location}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, location: event.target.value }))}
-                      placeholder="Địa điểm"
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
-                    />
-                    <select
-                      value={contactForm.interest}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, interest: event.target.value }))}
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition focus:border-fuchsia-400/50"
-                    >
-                      <option value="" className="bg-[#120b20]">
-                        Chọn nền tảng
-                      </option>
-                      <option value="Thiết kế Website" className="bg-[#120b20]">
-                        Thiết kế Website
-                      </option>
-                      <option value="Quản trị Fanpage" className="bg-[#120b20]">
-                        Quản trị Fanpage
-                      </option>
-                      <option value="Google Maps Marketing" className="bg-[#120b20]">
-                        Google Maps Marketing
-                      </option>
-                      <option value="SEO Website" className="bg-[#120b20]">
-                        SEO Website
-                      </option>
-                    </select>
-                  </div>
-                  <textarea
-                    value={contactForm.note}
-                    onChange={(event) => setContactForm((prev) => ({ ...prev, note: event.target.value }))}
-                    placeholder="Bạn muốn tư vấn về vấn đề gì?"
-                    rows={4}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-fuchsia-400/50"
-                  />
-                  <button
-                    type="submit"
-                    disabled={submittingContact}
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-4 text-sm font-black text-white shadow-[0_18px_40px_rgba(168,85,247,0.32)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70"
-                  >
-                    {submittingContact ? "Đang gửi..." : "Đặt lịch tư vấn ngay"}
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                  {contactState.type !== "idle" ? (
-                    <p className={`text-sm font-semibold ${contactState.type === "success" ? "text-emerald-300" : "text-rose-300"}`}>
-                      {contactState.message}
-                    </p>
-                  ) : null}
-                </form>
-              </div>
-
-              <div className="relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_45%),rgba(255,255,255,0.03)] p-6">
-                <div className="absolute right-4 top-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-right">
-                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Phản hồi</p>
-                  <div className="mt-2 text-3xl font-black text-white">15 phút</div>
+                ))
+              ) : (
+                <div className="col-span-full py-12 text-center text-slate-500 border border-dashed border-white/10 rounded-3xl">
+                  Chưa có hình ảnh phản hồi khách hàng nào được nhập.
                 </div>
-                <div className="mt-10 flex items-center justify-center">
-                  <div className="relative">
-                    <span className="absolute inset-0 rounded-full bg-fuchsia-500/25 blur-3xl" />
-                    <img src={bookingVisual} alt="Đặt lịch tư vấn" className="relative max-h-[360px] w-full rounded-[1.6rem] object-cover opacity-90" />
-                  </div>
-                </div>
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
-                    <CalendarDays className="mb-3 h-5 w-5 text-fuchsia-200" />
-                    <p className="text-sm font-black text-white">Lịch làm việc rõ ràng</p>
-                    <p className="mt-1 text-sm text-slate-300">Tư vấn đúng nhu cầu, đúng giai đoạn doanh nghiệp.</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
-                    <Phone className="mb-3 h-5 w-5 text-fuchsia-200" />
-                    <p className="text-sm font-black text-white">Liên hệ nhanh chóng</p>
-                    <p className="mt-1 text-sm text-slate-300">Đội ngũ hỗ trợ giúp bạn chốt bước tiếp theo rõ ràng.</p>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </section>
 
           <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-            <div className="mb-6 flex items-end justify-between gap-4">
+            <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Tin tức & kiến thức</p>
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Tin tức & Kiến thức</p>
+                <h2 className="mt-2 text-3xl font-black text-white">Cập nhật xu hướng Marketing</h2>
               </div>
               <Link href="/blog" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
                 Xem tất cả bài viết
@@ -861,146 +704,163 @@ export default function HomePageClient() {
               </Link>
             </div>
 
-            <div className="grid gap-4 xl:grid-cols-4">
-              {topBlogs.map((blog) => {
-                const href = `/blog/${blog.slug || slugify(blog.title) || blog.id}`;
-                return (
-                  <Link key={blog.id} href={href} className="group overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.32)]">
-                    <div className="overflow-hidden">
-                      <img
-                        src={blog.imageUrl || heroVisual}
-                        alt={blog.title}
-                        className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {topBlogs.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug || post.id}`} className="group block">
+                  <article className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0e0918] transition duration-300 hover:border-fuchsia-500/30 h-full">
+                    <div className="aspect-video overflow-hidden">
+                      <img 
+                        src={post.imageUrl || "/mascot-home.png"} 
+                        alt={post.title} 
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105" 
                       />
                     </div>
-                    <div className="space-y-3 p-5">
-                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-fuchsia-300">
-                        {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
-                      </p>
-                      <h3 className="line-clamp-2 text-xl font-black text-white">{blog.title}</h3>
-                      <p className="line-clamp-3 text-sm leading-7 text-slate-300">
-                        {blog.description || "Kiến thức thực chiến giúp doanh nghiệp làm marketing hiệu quả hơn."}
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-fuchsia-400">
+                        <CalendarDays className="h-3 w-3" />
+                        {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("vi-VN") : "Mới cập nhật"}
+                      </div>
+                      <h3 className="mt-3 text-lg font-black leading-tight text-white line-clamp-2 group-hover:text-fuchsia-300 transition">
+                        {post.title}
+                      </h3>
+                      <p className="mt-3 text-sm text-slate-400 line-clamp-2">
+                        {post.description || "Xem chi tiết bài viết để cập nhật những kiến thức marketing mới nhất."}
                       </p>
                     </div>
-                  </Link>
-                );
-              })}
+                  </article>
+                </Link>
+              ))}
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-            <div className="overflow-hidden rounded-[2rem] border border-fuchsia-400/15 bg-[linear-gradient(90deg,rgba(26,14,44,0.96),rgba(63,28,112,0.9))] px-6 py-8 shadow-[0_24px_70px_rgba(6,2,14,0.42)] md:px-10">
-              <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+          <section id="contact" className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
+            <div className="relative overflow-hidden rounded-[3rem] border border-fuchsia-500/20 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.15),transparent_40%),linear-gradient(180deg,rgba(16,8,27,0.96),rgba(12,6,20,0.98))] p-8 md:p-12">
+              <div className="grid gap-12 lg:grid-cols-2">
                 <div>
-                  <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-200">Sẵn sàng bứt phá doanh thu?</p>
-                  <h2 className="mt-2 text-4xl font-black tracking-[-0.05em] text-white">Chúng tôi sẵn sàng đồng hành cùng bạn chinh phục những đỉnh cao mới!</h2>
+                  <h2 className="text-4xl font-black text-white lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
+                  <p className="mt-6 text-lg leading-8 text-slate-300">
+                    Để lại thông tin, đội ngũ chuyên gia của chúng tôi sẽ liên hệ tư vấn lộ trình marketing tối ưu nhất cho doanh nghiệp của bạn.
+                  </p>
+                  
+                  <div className="mt-10 space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
+                        <Phone className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-400">Hotline tư vấn</p>
+                        <p className="text-xl font-black text-white">{settings.hotline}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400">
+                        <SiZalo className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-400">Zalo OA</p>
+                        <p className="text-xl font-black text-white">{settings.zalo || settings.hotline}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-wrap items-center justify-start gap-4 md:justify-end">
+
+                <form className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <input
+                      type="text"
+                      placeholder="Họ và tên"
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Số điện thoại"
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                    />
+                  </div>
+                  <select className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition appearance-none">
+                    <option value="" className="bg-[#0e0918]">Dịch vụ quan tâm</option>
+                    <option value="website" className="bg-[#0e0918]">Thiết kế Website</option>
+                    <option value="facebook" className="bg-[#0e0918]">Quản trị Fanpage</option>
+                    <option value="googlemaps" className="bg-[#0e0918]">Google Maps Marketing</option>
+                  </select>
+                  <textarea
+                    placeholder="Ghi chú thêm"
+                    rows={4}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                  ></textarea>
                   <button
-                    type="button"
-                    onClick={() => {
-                      window.location.href = "/lien-he";
-                    }}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-900 transition hover:scale-[1.02]"
+                    type="submit"
+                    className="w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99]"
                   >
-                    Liên hệ tư vấn ngay
-                    <ArrowRight className="h-4 w-4" />
+                    Gửi yêu cầu tư vấn
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playClickSound();
-                      setShowLogin(true);
-                    }}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15"
-                  >
-                    Lộ trình dự án
-                  </button>
-                </div>
+                </form>
               </div>
             </div>
           </section>
         </main>
 
-        <footer className="border-t border-white/10 bg-[#06030e]">
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_0.9fr] lg:px-6">
-            <div>
-              <div className="flex items-center gap-3">
-                <img src={logoSrc} alt={brandName} className="h-11 w-11 rounded-full object-cover" />
-                <div>
-                  <p className="text-sm font-black uppercase tracking-[0.18em] text-white">{brandName}</p>
-                  <p className="text-xs text-slate-400">Giải pháp marketing thực chiến</p>
+        <footer className="border-t border-white/5 bg-[#050308] py-12">
+          <div className="mx-auto max-w-7xl px-4 lg:px-6">
+            <div className="grid gap-12 lg:grid-cols-4">
+              <div className="col-span-2">
+                <Link href="/" className="flex items-center gap-3">
+                  <img src={logoSrc} alt={brandName} className="h-10 w-10 rounded-full object-cover" />
+                  <span className="text-xl font-black uppercase tracking-wider text-white">{brandName}</span>
+                </Link>
+                <p className="mt-6 max-w-md text-sm leading-7 text-slate-400">
+                  Bứt Phá Marketing - Agency cung cấp giải pháp Digital Marketing toàn diện, giúp doanh nghiệp tối ưu hóa hiện diện số và tăng trưởng doanh thu bền vững.
+                </p>
+                <div className="mt-8 flex gap-4">
+                  <a href={settings.fanpage} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
+                    <SiFacebook className="h-5 w-5" />
+                  </a>
+                  <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
+                    <SiYoutube className="h-5 w-5" />
+                  </a>
+                  <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
+                    <SiZalo className="h-5 w-5" />
+                  </a>
                 </div>
               </div>
-              <p className="mt-4 max-w-sm text-sm leading-7 text-slate-400">
-                Giúp doanh nghiệp online toàn diện, tiếp cận đúng khách hàng và bứt phá doanh thu.
-              </p>
-              <div className="mt-5 flex items-center gap-3 text-white">
-                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiFacebook /></a>
-                <a href={settings?.fanpage || "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiMessenger /></a>
-                <a href={settings?.zalo ? `https://zalo.me/${settings.zalo}` : "#"} className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiZalo /></a>
-                <a href="https://www.youtube.com" className="rounded-full border border-white/10 p-2 transition hover:border-fuchsia-400/40 hover:text-fuchsia-200"><SiYoutube /></a>
+              
+              <div>
+                <h4 className="text-sm font-black uppercase tracking-widest text-white">Dịch vụ</h4>
+                <ul className="mt-6 space-y-4 text-sm text-slate-400">
+                  <li><Link href="/website" className="hover:text-fuchsia-400 transition">Thiết kế Website</Link></li>
+                  <li><Link href="/facebook" className="hover:text-fuchsia-400 transition">Quản trị Fanpage</Link></li>
+                  <li><Link href="/google-maps" className="hover:text-fuchsia-400 transition">Google Maps Marketing</Link></li>
+                  <li><Link href="/lien-he" className="hover:text-fuchsia-400 transition">Tư vấn chiến lược</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-black uppercase tracking-widest text-white">Liên hệ</h4>
+                <ul className="mt-6 space-y-4 text-sm text-slate-400">
+                  <li className="flex items-start gap-3">
+                    <MapPinned className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <span>{settings.address || "Hồ Chí Minh, Việt Nam"}</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <span>{settings.hotline}</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <MessageCircle className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <span>{settings.email || "contact@butphamarketing.com"}</span>
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <div>
-              <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên hệ</h3>
-              <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li>{settings?.hotline || "090.143.8703"}</li>
-                <li>{settings?.email || "hello@butphamarketing.com"}</li>
-                <li>{settings?.address || "123 Đường ABC, TP. HCM"}</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Dịch vụ</h3>
-              <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li><Link href="/website">Thiết Kế Website</Link></li>
-                <li><Link href="/facebook">Quản trị Fanpage</Link></li>
-                <li><Link href="/google-maps">Google Maps Marketing</Link></li>
-                <li><Link href="/blog">AI Content / SEO</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên kết nhanh</h3>
-              <ul className="mt-4 space-y-3 text-sm text-slate-400">
-              <li><Link href="/">Trang Chủ</Link></li>
-              <li><Link href="/gioi-thieu">Giới Thiệu</Link></li>
-              <li><Link href="/blog">Tin Tức</Link></li>
-              <li><Link href="/lien-he">Liên Hệ</Link></li>
-            </ul>
-          </div>
-
-            <div>
-              <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Cam kết</h3>
-              <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-fuchsia-300" />Tối ưu theo chuyển đổi</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-fuchsia-300" />Đồng hành dài hạn</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-fuchsia-300" />Báo cáo rõ ràng</li>
-              </ul>
+            
+            <div className="mt-12 border-t border-white/5 pt-8 text-center text-xs text-slate-500">
+              <p>© {new Date().getFullYear()} {brandName}. All rights reserved.</p>
             </div>
           </div>
         </footer>
-
-        <div className="fixed right-4 top-40 z-30 hidden flex-col gap-3 xl:flex">
-          {socialLinks.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0f0918]/90 px-4 py-3 text-sm font-bold text-white shadow-[0_20px_40px_rgba(4,2,10,0.34)] backdrop-blur transition hover:border-fuchsia-400/35"
-            >
-              <span className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${item.bg}`}>
-                <item.icon className="h-5 w-5" />
-              </span>
-              <span className="hidden text-slate-200 2xl:block">{item.label}</span>
-            </a>
-          ))}
-        </div>
       </div>
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );
 }
-

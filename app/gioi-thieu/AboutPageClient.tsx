@@ -265,7 +265,7 @@ export default function AboutPageClient() {
               <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Bứt Phá Marketing là ai?</h2>
             </div>
 
-            <div className="mt-6 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className={`mt-6 grid gap-8 ${teamImage ? "lg:grid-cols-[1.1fr_0.9fr]" : "lg:grid-cols-1"}`}>
               <div className="space-y-5 text-base leading-8 text-slate-300">
                 <p>
                   Bứt Phá Marketing là đơn vị cung cấp giải pháp marketing toàn diện, chuyên sâu cho doanh nghiệp vừa và nhỏ, doanh nghiệp địa phương và thương hiệu đang trên hành trình phát triển.
@@ -278,9 +278,11 @@ export default function AboutPageClient() {
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.03]">
-                <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-cover" />
-              </div>
+              {teamImage && (
+                <div className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.03]">
+                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-cover" />
+                </div>
+              )}
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">

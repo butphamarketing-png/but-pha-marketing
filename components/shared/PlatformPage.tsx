@@ -437,6 +437,8 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
     return () => clearInterval(t);
   }, [slides.length]);
 
+  if (slides.length === 0) return null;
+
   return (
     <section
       data-section="slideshow"
