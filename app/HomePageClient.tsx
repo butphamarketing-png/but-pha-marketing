@@ -87,10 +87,7 @@ export default function HomePageClient() {
   };
 
   const brandName = settings?.title || "Bứt Phá Marketing";
-  const logoSrc = useMemo(
-    () => getBrandingAssetUrl("logo", settings?.logo || settings?.favicon || ""),
-    [settings?.favicon, settings?.logo],
-  );
+  const logoSrc = "/logo.png";
 
   const homeMedia = settings?.media?.home;
   

@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { createServerClient } from "@/lib/supabase";
 
-const DEFAULT_FAVICON_PATH = "/favicon.svg";
+const DEFAULT_FAVICON_PATH = "/logo.png";
 
 function guessContentTypeFromDataUrl(value: string): string {
   const match = value.match(/^data:([^;]+);base64,/i);
