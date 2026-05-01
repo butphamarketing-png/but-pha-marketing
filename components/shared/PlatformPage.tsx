@@ -647,7 +647,7 @@ function ContactForm({ color }: { color: string }) {
   );
 }
 
-export function PlatformPage({ config }: { config: PlatformConfig }) {
+export function PlatformPage({ config, children }: { config: PlatformConfig, children?: React.ReactNode }) {
   const pathname = usePathname() || "/";
   const [checkoutPkg, setCheckoutPkg] = useState<CheckoutPkg | null>(null);
   
@@ -679,6 +679,8 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} />
+
+      {children}
 
       <Stats stats={config.stats} color={platformColor} />
       

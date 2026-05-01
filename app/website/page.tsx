@@ -1,13 +1,10 @@
-import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
-import { getDynamicMetadata } from "@/lib/seo";
+"use client";
 
-export async function generateMetadata() {
-  return getDynamicMetadata("/website", {
-    title: "Dịch vụ Website Marketing, thiết kế web và SEO website",
-    description: "Dịch vụ Website Marketing bao gồm thiết kế website, tối ưu SEO website và bảo trì kỹ thuật để tăng tốc độ tải trang, trải nghiệm người dùng và chuyển đổi kinh doanh.",
-    keywords: ["dịch vụ website marketing", "thiết kế website", "seo website", "bảo trì website", "thiết kế web chuẩn seo"],
-  });
-}
+import { useState } from "react";
+import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
+import { StorageSlider } from "@/components/shared/StorageSlider";
+import { Settings, ChevronRight } from "lucide-react";
 
 const config: PlatformConfig = {
   name: "Website",
@@ -69,7 +66,47 @@ const config: PlatformConfig = {
 };
 
 export default function WebsitePage() {
-  return <PlatformPage config={config} />;
+  const [showCustomModal, setShowCustomModal] = useState(false);
+
+  return (
+    <PlatformPage config={config}>
+      <div className="mx-auto max-w-6xl px-4 pb-24">
+        <div className="grid gap-8">
+          {/* Custom Website Button Section */}
+          <button
+            onClick={() => setShowCustomModal(true)}
+            className="group relative flex w-full items-center justify-between overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.03] p-8 transition-all hover:bg-white/[0.06] md:p-10"
+          >
+            <div className="flex items-center gap-6">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-fuchsia-500/20 text-fuchsia-400 group-hover:scale-110 transition-transform">
+                <Settings size={32} />
+              </div>
+              <div className="text-left">
+                <h3 className="text-2xl font-black text-white">Website Custom</h3>
+                <p className="mt-1 text-gray-400">Dành cho doanh nghiệp cần hệ thống riêng, tính năng đặc thù</p>
+              </div>
+            </div>
+            <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
+          </button>
+
+          {/* Storage Slider Section */}
+          <div className="space-y-6">
+            <div className="px-4">
+              <h3 className="text-2xl font-black text-white">Dung lượng lưu trữ</h3>
+              <p className="mt-1 text-sm text-gray-400">Kéo thanh trượt để chọn dung lượng phù hợp</p>
+            </div>
+            <StorageSlider primaryColor={config.color} />
+          </div>
+        </div>
+      </div>
+
+      <CustomWebsiteModal
+        isOpen={showCustomModal}
+        onClose={() => setShowCustomModal(false)}
+        primaryColor={config.color}
+      />
+    </PlatformPage>
+  );
 }
 
 
