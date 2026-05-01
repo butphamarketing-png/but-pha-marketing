@@ -7,7 +7,7 @@ function parseNum(value: string): { num: number; suffix: string } {
   return { num: isNaN(num) ? 0 : num, suffix: match[2] || "" };
 }
 
-export function CountUp({ value, color }: { value: string; color: string }) {
+export function CountUp({ value, color, className }: { value: string; color: string; className?: string }) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
@@ -40,7 +40,7 @@ export function CountUp({ value, color }: { value: string; color: string }) {
   const display = num % 1 === 0 ? Math.round(count).toLocaleString("vi-VN") : count.toFixed(1);
 
   return (
-    <span ref={ref} className="text-3xl font-black" style={{ color }}>
+    <span ref={ref} className={className || "text-3xl font-black"} style={{ color }}>
       {started ? display : 0}{suffix}
     </span>
   );

@@ -76,7 +76,7 @@ export default function HomePageClient() {
   const projectShowcaseRef = useRef<HTMLDivElement>(null);
   const topReviewsRef = useRef<HTMLDivElement>(null);
 
-  const scrollContainer = (ref: React.RefObject<HTMLDivElement>, direction: "left" | "right") => {
+  const scrollContainer = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
     if (!ref.current) return;
     const scrollAmount = ref.current.clientWidth * 0.8;
     ref.current.scrollBy({
