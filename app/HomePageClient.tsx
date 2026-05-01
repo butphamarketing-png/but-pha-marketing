@@ -96,7 +96,7 @@ export default function HomePageClient() {
     const slideshowImages = homeMedia?.slideshow || [];
     
     const fallbackImages = [
-      "/slideshow.jpg",
+      "/logo.png",
       "/mascot-home.png",
       "/mascot-home.png"
     ];
@@ -183,7 +183,7 @@ export default function HomePageClient() {
     middle: "Giải Pháp Marketing",
     accent: "Đột Phá Doanh Thu",
     description: "Chúng tôi giúp doanh nghiệp tăng trưởng vượt bậc.",
-    visual: "/slideshow.jpg",
+    visual: "/logo.png",
     revenue: "100%",
     growth: "100%",
     newClients: "100%",
@@ -417,7 +417,7 @@ export default function HomePageClient() {
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
                 <img 
-                  src="/slideshow.jpg" 
+                  src="/logo.png" 
                   alt="Về chúng tôi" 
                   className="h-full w-full object-cover" 
                 />

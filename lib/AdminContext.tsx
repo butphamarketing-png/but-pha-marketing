@@ -180,13 +180,13 @@ function createDefaultMedia(): Record<string, MediaSection> {
 
   // Default slideshow for home platform
   media.home.slideshow = [
-    "/slideshow.jpg",
+    "/logo.png",
     "/mascot-home.png"
   ];
 
   // Default slideshow for website platform
   media.website.slideshow = [
-    "/slideshow.jpg",
+    "/logo.png",
     "/mascot-home.png"
   ];
 
