@@ -77,6 +77,8 @@ export interface Service {
   id: number;
   platform: string;
   name: string;
+  description?: string;
+  imageUrl?: string;
   price: string;
   period: "month" | "lifetime";
   popular: boolean;
@@ -289,6 +291,8 @@ function mapService(value: unknown): Service {
     id: toNumber(item.id),
     platform: toStringValue(item.platform),
     name: toStringValue(item.name),
+    description: toOptionalString(item.description),
+    imageUrl: toOptionalString(item.imageUrl ?? item.image_url),
     price: toStringValue(item.price),
     period: toStringValue(item.period, "month") as Service["period"],
     popular: typeof item.popular === "boolean" ? item.popular : false,

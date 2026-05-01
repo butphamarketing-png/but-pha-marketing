@@ -280,11 +280,11 @@ export default function HomePageClient() {
   const serviceCards = useMemo(() => {
     return services.map((s) => ({
       key: s.id,
-      title: s.title,
-      description: s.description,
+      title: s.name,
+      description: s.description || "Dịch vụ marketing chuyên nghiệp",
       image: s.imageUrl || "/mascot-home.png",
-      href: `/${slugify(s.title)}`,
-      accent: s.title.toLowerCase().includes("website") ? "from-emerald-500/20" : s.title.toLowerCase().includes("facebook") ? "from-blue-500/20" : "from-fuchsia-500/20",
+      href: `/${slugify(s.name)}`,
+      accent: s.name.toLowerCase().includes("website") ? "from-emerald-500/20" : s.name.toLowerCase().includes("facebook") ? "from-blue-500/20" : "from-fuchsia-500/20",
     }));
   }, [services]);
 
