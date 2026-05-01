@@ -168,7 +168,6 @@ export default function AdminPage() {
     addCase,
     removeCase,
     updateMediaVideo,
-    updateMarketingSolutionBanner,
   } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
