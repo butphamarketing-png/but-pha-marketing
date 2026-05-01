@@ -97,84 +97,100 @@ export default function HomePageClient() {
     const slides: any[] = [];
     const slideshowImages = homeMedia?.slideshow || [];
     
-    if (slideshowImages.length > 0) {
-      slideshowImages.forEach((img, index) => {
-        if (index === 0) {
-          slides.push({
-            eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
-            middle: "KHÔNG TẠO RA DOANH THU",
-            accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
-            description: "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
-            visual: img,
-            revenue: "+215%",
-            growth: "+150%",
-            newClients: "+180%",
-            highlight: "Hiệu quả chiến dịch",
-            pills: [
-              { label: "Website", icon: LayoutTemplate },
-              { label: "Facebook", icon: SiFacebook },
-              { label: "Google Maps", icon: MapPinned },
-            ],
-          });
-        } else if (index === 1) {
-          slides.push({
-            eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
-            middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
-            accent: "VÀ DOANH THU THẬT!",
-            description: "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
-            visual: img,
-            revenue: "+168%",
-            growth: "+132%",
-            newClients: "+145%",
-            highlight: "Tăng trưởng Fanpage",
-            pills: [
-              { label: "Facebook", icon: SiFacebook },
-              { label: "Messenger", icon: MessageCircle },
-              { label: "Zalo", icon: SiZalo },
-            ],
-          });
-        } else if (index === 2) {
-          slides.push({
-            eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
-            middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
-            accent: "VÀ TĂNG CUỘC GỌI THẬT!",
-            description: "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
-            visual: img,
-            revenue: "Top 1",
-            growth: "+120%",
-            newClients: "+95%",
-            highlight: "Hiệu quả tìm kiếm",
-            pills: [
-              { label: "Google Maps", icon: MapPinned },
-              { label: "Website", icon: LayoutTemplate },
-              { label: "Facebook", icon: SiFacebook },
-            ],
-          });
-        } else {
-          slides.push({
-            eyebrow: "GIẢI PHÁP MARKETING TOÀN DIỆN",
-            middle: "TĂNG TRƯỞNG DOANH THU ĐỘT PHÁ",
-            accent: "CHO DOANH NGHIỆP CỦA BẠN!",
-            description: "Chúng tôi đồng hành cùng bạn xây dựng thương hiệu và tối ưu hóa quy trình bán hàng trên đa nền tảng.",
-            visual: img,
-            revenue: "+180%",
-            growth: "+140%",
-            newClients: "+120%",
-            highlight: "Tăng trưởng bền vững",
-            pills: [
-              { label: "Marketing", icon: Target },
-              { label: "Branding", icon: Sparkles },
-              { label: "Automation", icon: Workflow },
-            ],
-          });
-        }
-      });
-    }
+    const fallbackImages = [
+      "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png",
+      "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png",
+      "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593308940/25d911b327b744d08183049b49e836ec.png"
+    ];
+
+    const imagesToUse = slideshowImages.length > 0 ? slideshowImages : fallbackImages;
+
+    imagesToUse.forEach((img, index) => {
+      if (index === 0) {
+        slides.push({
+          eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
+          middle: "KHÔNG TẠO RA DOANH THU",
+          accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
+          description: "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
+          visual: img,
+          revenue: "+215%",
+          growth: "+150%",
+          newClients: "+180%",
+          highlight: "Hiệu quả chiến dịch",
+          pills: [
+            { label: "Website", icon: LayoutTemplate },
+            { label: "Facebook", icon: SiFacebook },
+            { label: "Google Maps", icon: MapPinned },
+          ],
+        });
+      } else if (index === 1) {
+        slides.push({
+          eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
+          middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
+          accent: "VÀ DOANH THU THẬT!",
+          description: "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
+          visual: img,
+          revenue: "+168%",
+          growth: "+132%",
+          newClients: "+145%",
+          highlight: "Tăng trưởng Fanpage",
+          pills: [
+            { label: "Facebook", icon: SiFacebook },
+            { label: "Messenger", icon: MessageCircle },
+            { label: "Zalo", icon: SiZalo },
+          ],
+        });
+      } else if (index === 2) {
+        slides.push({
+          eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
+          middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
+          accent: "VÀ TĂNG CUỘC GỌI THẬT!",
+          description: "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
+          visual: img,
+          revenue: "Top 1",
+          growth: "+120%",
+          newClients: "+95%",
+          highlight: "Hiệu quả tìm kiếm",
+          pills: [
+            { label: "Google Maps", icon: MapPinned },
+            { label: "Website", icon: LayoutTemplate },
+            { label: "Facebook", icon: SiFacebook },
+          ],
+        });
+      } else {
+        slides.push({
+          eyebrow: "GIẢI PHÁP MARKETING TOÀN DIỆN",
+          middle: "TĂNG TRƯỞNG DOANH THU ĐỘT PHÁ",
+          accent: "CHO DOANH NGHIỆP CỦA BẠN!",
+          description: "Chúng tôi đồng hành cùng bạn xây dựng thương hiệu và tối ưu hóa quy trình bán hàng trên đa nền tảng.",
+          visual: img,
+          revenue: "+180%",
+          growth: "+140%",
+          newClients: "+120%",
+          highlight: "Tăng trưởng bền vững",
+          pills: [
+            { label: "Marketing", icon: Target },
+            { label: "Branding", icon: Sparkles },
+            { label: "Automation", icon: Workflow },
+          ],
+        });
+      }
+    });
     
     return slides;
   }, [homeMedia?.slideshow]);
 
-  const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0];
+  const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0] || {
+    eyebrow: "Bứt Phá Marketing",
+    middle: "Giải Pháp Marketing",
+    accent: "Đột Phá Doanh Thu",
+    description: "Chúng tôi giúp doanh nghiệp tăng trưởng vượt bậc.",
+    visual: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png",
+    revenue: "100%",
+    growth: "100%",
+    newClients: "100%",
+    pills: []
+  };
 
   useEffect(() => {
     void Promise.all([db.news.getAll(), db.clientReviews.getAll(), db.services.getAll()]).then(

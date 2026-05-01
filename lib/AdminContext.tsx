@@ -178,6 +178,13 @@ function createDefaultMedia(): Record<string, MediaSection> {
     return acc;
   }, {});
 
+  // Default slideshow for home platform
+  media.home.slideshow = [
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png",
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png",
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593308940/25d911b327b744d08183049b49e836ec.png"
+  ];
+
   // Default slideshow for website platform
   media.website.slideshow = [
     "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png",
