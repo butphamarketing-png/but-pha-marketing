@@ -418,7 +418,11 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
   const platformMedia = settings?.media?.[platformKey] ?? { slideshow: [], cases: [], videoUrl: "" };
   const customSlides = platformMedia.slideshow || [];
   
-  const defaultSlides = [
+  const defaultSlides = platformKey === "website" ? [
+    { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png" },
+    { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png" },
+    { title: "Kết Quả Thực Sự", sub: "Cam kết mang lại hiệu quả đo lường được", url: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593308940/25d911b327b744d08183049b49e836ec.png" },
+  ] : [
     { title: "Bứt Phá Doanh Số", sub: "Tăng trưởng vượt bậc với chiến lược Marketing tối ưu", url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" },
     { title: "Xây Dựng Thương Hiệu", sub: "Định vị thương hiệu mạnh mẽ trong tâm trí khách hàng", url: "https://images.unsplash.com/photo-1557838923-2985c318be48?w=1200&q=80" },
     { title: "Kết Quả Thực Sự", sub: "Cam kết mang lại hiệu quả đo lường được", url: "https://images.unsplash.com/photo-1551288049-bbbda5366392?w=1200&q=80" },
@@ -429,7 +433,7 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
     : defaultSlides;
 
   useEffect(() => {
-    const t = setInterval(() => setCurrent(p => (p + 1) % slides.length), 4000);
+    const t = setInterval(() => setCurrent(p => (p + 1) % slides.length), 5000);
     return () => clearInterval(t);
   }, [slides.length]);
 
@@ -437,53 +441,106 @@ function Slideshow({ color, platformKey }: { color: string; platformKey: string 
     <section
       data-section="slideshow"
       id="slideshow"
-      className="relative aspect-[16/11] min-h-[250px] overflow-hidden sm:aspect-[16/9] sm:min-h-[340px] md:min-h-[420px]"
+      className="relative aspect-[16/11] min-h-[400px] overflow-hidden sm:aspect-[16/9] sm:min-h-[450px] md:min-h-[550px]"
     >
-      {slides.map((slide, i) => (
-        <div 
-          key={i} 
-          className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-700" 
-          style={{ 
-            opacity: current === i ? 1 : 0, 
-            background: slide.url ? `url(${slide.url}) center/cover no-repeat` : `linear-gradient(135deg, ${color}40 0%, #1a0533 50%, ${color}30 100%)` 
-          }}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0"
         >
-          {slide.url && <div className="absolute inset-0 bg-black/40" />}
-          <div className="relative z-10">
-            {slide.title && <motion.h1 key={current} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 text-4xl font-black text-white md:text-6xl">{slide.title}</motion.h1>}
-            {slide.sub && <p className="max-w-xl text-lg text-gray-300">{slide.sub}</p>}
+          <div 
+            className="absolute inset-0 bg-center bg-cover bg-no-repeat transition-transform duration-[10000ms] scale-110"
+            style={{ 
+              backgroundImage: slides[current].url ? `url(${slides[current].url})` : "none",
+              background: !slides[current].url ? `linear-gradient(135deg, ${color}40 0%, #0a041a 50%, ${color}20 100%)` : undefined,
+              transform: "scale(1.1)",
+              animation: "kenburns 20s infinite alternate"
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-[#0a041a]" />
+          
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="max-w-4xl rounded-3xl border border-white/10 bg-black/20 p-8 backdrop-blur-md md:p-12"
+            >
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "80px" }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="mx-auto mb-6 h-1 rounded-full"
+                style={{ backgroundColor: color }}
+              />
+              <h1 className="mb-6 text-4xl font-black tracking-tight text-white md:text-7xl lg:text-8xl">
+                {slides[current].title || (platformKey === "website" ? "Thiết Kế Website" : platformKey === "facebook" ? "Facebook Marketing" : "Marketing Toàn Diện")}
+              </h1>
+              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-200 md:text-xl opacity-90">
+                {slides[current].sub || "Giải pháp đột phá giúp doanh nghiệp tiếp cận hàng triệu khách hàng mục tiêu và tối ưu chuyển đổi."}
+              </p>
+              <div className="mt-10 flex flex-wrap justify-center gap-4">
+                <button 
+                  onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
+                  className="rounded-full px-8 py-4 text-sm font-black text-white transition-all hover:scale-105 active:scale-95"
+                  style={{ backgroundColor: color }}
+                >
+                  Xem Bảng Giá Ngay
+                </button>
+                <button 
+                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                  className="rounded-full border border-white/20 bg-white/10 px-8 py-4 text-sm font-black text-white backdrop-blur-sm transition-all hover:bg-white/20"
+                >
+                  Tư Vấn Miễn Phí
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      ))}
+        </motion.div>
+      </AnimatePresence>
+
       {slides.length > 1 && (
         <>
           <button
             onClick={() => setCurrent(p => (p - 1 + slides.length) % slides.length)}
-            className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white hover:bg-black/50 sm:left-4 sm:h-10 sm:w-10"
+            className="absolute left-6 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:border-white/30 hidden md:flex"
             type="button"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={24} />
           </button>
           <button
             onClick={() => setCurrent(p => (p + 1) % slides.length)}
-            className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white hover:bg-black/50 sm:right-4 sm:h-10 sm:w-10"
+            className="absolute right-6 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:border-white/30 hidden md:flex"
             type="button"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={24} />
           </button>
-          <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
+          <div className="absolute bottom-10 left-1/2 z-20 flex -translate-x-1/2 gap-3">
             {slides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className="h-2 rounded-full transition-all"
-                style={{ width: current === i ? "24px" : "8px", backgroundColor: current === i ? color : "rgba(255,255,255,0.4)" }}
+                className="h-1.5 rounded-full transition-all duration-500"
+                style={{ 
+                  width: current === i ? "40px" : "12px", 
+                  backgroundColor: current === i ? color : "rgba(255,255,255,0.3)" 
+                }}
                 type="button"
               />
             ))}
           </div>
         </>
       )}
+      <style jsx>{`
+        @keyframes kenburns {
+          0% { transform: scale(1.1) translate(0, 0); }
+          100% { transform: scale(1.2) translate(-1%, -1%); }
+        }
+      `}</style>
     </section>
   );
 }
@@ -526,12 +583,36 @@ function Accordion({
 
 function Stats({ stats, color }: { stats: { label: string; value: string }[]; color: string }) {
   return (
-    <section data-section="stats" id="stats" className="py-16 px-4">
-      <div className="mx-auto grid max-w-4xl grid-cols-2 gap-6 md:grid-cols-4">
+    <section data-section="stats" id="stats" className="relative py-24 px-4 overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full opacity-10 pointer-events-none">
+        <div className="absolute top-0 left-0 w-64 h-64 rounded-full blur-[120px]" style={{ backgroundColor: color }} />
+        <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full blur-[120px]" style={{ backgroundColor: color }} />
+      </div>
+
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
         {stats.map((s, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="rounded-2xl border border-white/10 bg-card p-6 text-center">
-            <CountUp value={s.value} color={color} />
-            <p className="mt-1 text-sm text-gray-400">{s.label}</p>
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1, duration: 0.5 }}
+            className="group relative rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/20"
+          >
+            <div className="absolute -inset-px rounded-3xl opacity-0 transition-opacity group-hover:opacity-100" 
+              style={{ background: `radial-gradient(600px circle at center, ${color}20, transparent 40%)` }} 
+            />
+            
+            <div className="relative">
+              <div className="mb-4 inline-flex items-center justify-center">
+                <CountUp value={s.value} color={color} className="text-4xl font-black md:text-5xl" />
+              </div>
+              <div className="h-1 w-8 mx-auto mb-4 rounded-full opacity-50" style={{ backgroundColor: color }} />
+              <p className="text-sm font-bold uppercase tracking-wider text-gray-400 group-hover:text-gray-200 transition-colors">
+                {s.label}
+              </p>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -552,85 +633,168 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
   const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
 
   return (
-    <section data-section="pricing" id="pricing" className="py-20 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-5xl">
-        <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">Bảng Giá Dịch Vụ</h2>
-        <p className="mb-10 text-center text-gray-400">Đa dạng lựa chọn phù hợp với mọi nhu cầu</p>
-        <div className="mb-10 flex flex-wrap justify-center gap-3">
+    <section data-section="pricing" id="pricing" className="py-24 px-4 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
+        <div className="mb-16 text-center">
+          <motion.span 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-gray-400"
+          >
+            Bảng Giá Dịch Vụ
+          </motion.span>
+          <h2 className="mb-6 text-4xl font-black text-white md:text-5xl lg:text-6xl">
+            Lựa Chọn <span style={{ color }}>Tối Ưu</span>
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-400">
+            Chúng tôi cung cấp các gói dịch vụ linh hoạt, minh bạch và cam kết hiệu quả tối đa cho doanh nghiệp của bạn.
+          </p>
+        </div>
+
+        <div className="mb-12 flex flex-wrap justify-center gap-4">
           {tabs.map((t, i) => (
-            <button key={i} onClick={() => { setActiveTab(i); setHoveredIdx(null); setPage(0); }} className="rounded-full px-5 py-2 text-sm font-semibold transition-all" style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.07)", color: "#ccc" }}>
+            <button 
+              key={i} 
+              onClick={() => { setActiveTab(i); setHoveredIdx(null); setPage(0); }} 
+              className="relative overflow-hidden rounded-2xl px-8 py-3 text-sm font-black transition-all" 
+              style={activeTab === i 
+                ? { backgroundColor: color, color: "#fff", boxShadow: `0 10px 20px ${color}30` } 
+                : { backgroundColor: "rgba(255,255,255,0.05)", color: "#999" }
+              }
+            >
               {t.label}
+              {activeTab === i && (
+                <motion.div layoutId="tab-active" className="absolute inset-0 bg-white/10" />
+              )}
             </button>
           ))}
         </div>
+
         {showPager && (
-          <div className="mb-6 flex items-center justify-center gap-3">
+          <div className="mb-8 flex items-center justify-center gap-6">
             <button
               onClick={() => setPage(prev => Math.max(0, prev - 1))}
               disabled={page === 0}
-              className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Lướt trái"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={20} className="transition-transform group-hover:-translate-x-0.5" />
             </button>
-            <span className="text-xs text-gray-400">Trang {page + 1}/{maxPage + 1}</span>
+            <div className="flex gap-2">
+              {Array.from({ length: maxPage + 1 }).map((_, i) => (
+                <div 
+                  key={i} 
+                  className="h-1.5 rounded-full transition-all duration-300" 
+                  style={{ 
+                    width: page === i ? "24px" : "6px", 
+                    backgroundColor: page === i ? color : "rgba(255,255,255,0.2)" 
+                  }} 
+                />
+              ))}
+            </div>
             <button
               onClick={() => setPage(prev => Math.min(maxPage, prev + 1))}
               disabled={page === maxPage}
-              className="rounded-full border border-white/20 bg-white/5 p-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Lướt phải"
+              className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={20} className="transition-transform group-hover:translate-x-0.5" />
             </button>
           </div>
         )}
-        <div className="grid gap-6 md:grid-cols-3">
+
+        <div className="grid gap-8 md:grid-cols-3">
           {visiblePackages.map((pkg, i) => {
             const originalIndex = showPager ? start + i : i;
             const isHovered = hoveredIdx === i;
             const isPopular = !!pkg.popular;
             return (
-              <motion.div key={`${activeTab}-${originalIndex}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="relative flex flex-col rounded-2xl border p-6 cursor-pointer" style={{ borderColor: isHovered || isPopular ? color : "rgba(255,255,255,0.1)", backgroundColor: isHovered ? `${color}15` : isPopular ? "rgba(109,40,217,0.12)" : "var(--card)", boxShadow: isHovered ? `0 0 30px ${color}30, 0 8px 32px rgba(0,0,0,0.4)` : isPopular ? "0 8px 32px rgba(109,40,217,0.2)" : "none", transform: isHovered ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease" }}>
-                {isPopular && <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold text-white" style={{ backgroundColor: color }}>Phổ biến nhất</span>}
-                <h3 className="mb-2 text-lg font-bold text-white">{pkg.name}</h3>
-                <p className="mb-1 text-3xl font-black" style={{ color }}>{pkg.price}</p>
-                <p className="mb-4 text-xs text-gray-500">{pkg.period === "lifetime" ? "/vĩnh viễn" : "/tháng"}</p>
-                <ul className="mb-6 flex-1 space-y-2">
+              <motion.div 
+                key={`${activeTab}-${originalIndex}`} 
+                initial={{ opacity: 0, y: 30 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: i * 0.1 }} 
+                onMouseEnter={() => setHoveredIdx(i)} 
+                onMouseLeave={() => setHoveredIdx(null)} 
+                className="relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-500" 
+                style={{ 
+                  borderColor: isHovered || isPopular ? `${color}40` : "rgba(255,255,255,0.08)", 
+                  backgroundColor: isHovered ? "rgba(255,255,255,0.03)" : isPopular ? "rgba(255,255,255,0.02)" : "transparent",
+                  boxShadow: isHovered ? `0 30px 60px -12px rgba(0,0,0,0.5), 0 0 0 1px ${color}20` : "none",
+                  transform: isHovered ? "translateY(-10px)" : "translateY(0)"
+                }}
+              >
+                {isPopular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-6 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl" style={{ backgroundColor: color }}>
+                    Phổ biến nhất
+                  </div>
+                )}
+                
+                <div className="mb-8">
+                  <h3 className="mb-4 text-xl font-black text-white">{pkg.name}</h3>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-black text-white" style={{ color: isHovered ? color : "white" }}>{pkg.price}</span>
+                    <span className="text-sm text-gray-500 font-medium">{pkg.period === "lifetime" ? "/vĩnh viễn" : "/tháng"}</span>
+                  </div>
+                </div>
+
+                <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                <ul className="mb-10 flex-1 space-y-4">
                   {(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).map((rawFeature, fi) => {
                     const parsed = parseFeatureItem(rawFeature);
                     if (!parsed.title) return null;
                     const featureKey = `${activeTab}-${originalIndex}-${fi}`;
                     const isExpanded = expandedFeature === featureKey;
                     return (
-                      <li key={featureKey} className="rounded-lg border border-white/10 bg-black/15 px-3 py-2">
+                      <li key={featureKey} className="group/item">
                         <button
                           type="button"
                           onClick={() => setExpandedFeature(isExpanded ? null : featureKey)}
-                          className="flex w-full items-start justify-between gap-3 text-left text-sm text-gray-200"
+                          className="flex w-full items-start justify-between gap-3 text-left"
                         >
-                          <span className="flex items-start gap-2">
-                            <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/70" />
-                            <span>{parsed.title}</span>
+                          <span className="flex items-start gap-3">
+                            <div className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-white/5 transition-colors group-hover/item:bg-white/10">
+                              <Check size={10} style={{ color }} />
+                            </div>
+                            <span className="text-sm font-medium text-gray-300 transition-colors group-hover/item:text-white">{parsed.title}</span>
                           </span>
                           {parsed.details.length > 0 && (
-                            <ChevronDown size={16} className={`mt-0.5 flex-shrink-0 text-gray-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                            <ChevronDown size={14} className={`mt-1 shrink-0 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
                           )}
                         </button>
-                        {isExpanded && parsed.details.length > 0 && (
-                          <ul className="mt-2 list-disc space-y-1 pl-8 text-xs text-gray-400">
-                            {parsed.details.map((detail, detailIdx) => (
-                              <li key={`${featureKey}-detail-${detailIdx}`}>{detail}</li>
-                            ))}
-                          </ul>
-                        )}
+                        <AnimatePresence>
+                          {isExpanded && parsed.details.length > 0 && (
+                            <motion.ul 
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="mt-3 space-y-2 pb-2 pl-7">
+                                {parsed.details.map((detail, detailIdx) => (
+                                  <li key={`${featureKey}-detail-${detailIdx}`} className="text-xs leading-relaxed text-gray-500">
+                                    • {detail}
+                                  </li>
+                                ))}
+                              </div>
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
                       </li>
                     );
                   })}
                 </ul>
-                <AudioGuide text={pkg.audioText} color={color} />
-                <button onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} className="mt-3 w-full rounded-xl py-3 text-sm font-bold text-white transition-all" style={{ backgroundColor: isHovered ? color : isPopular ? color : "rgba(255,255,255,0.1)", transform: isHovered ? "scale(1.02)" : "scale(1)" }}>
-                  Nhận Tư Vấn Ngay
-                </button>
+
+                <div className="mt-auto space-y-4">
+                  <AudioGuide text={pkg.audioText} color={color} />
+                  <button 
+                    onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} 
+                    className="group relative w-full overflow-hidden rounded-2xl py-5 text-sm font-black text-white transition-all active:scale-95"
+                    style={{ backgroundColor: isHovered || isPopular ? color : "rgba(255,255,255,0.05)" }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+                    <span className="relative">Nhận Tư Vấn Ngay</span>
+                  </button>
+                </div>
               </motion.div>
             );
           })}
@@ -644,31 +808,76 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
   const [activeTab, setActiveTab] = useState(0);
   const tab = processTabs[activeTab];
   return (
-    <section data-section="process" id="process" className="py-20 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-5xl">
-        <h2 className="mb-8 text-center text-3xl font-black text-white md:text-4xl">Quy Trình Triển Khai</h2>
+    <section data-section="process" id="process" className="py-24 px-4">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
+        <div className="mb-16 text-center">
+          <h2 className="mb-6 text-4xl font-black text-white md:text-5xl">Quy Trình <span style={{ color }}>Chuyên Nghiệp</span></h2>
+          <p className="mx-auto max-w-2xl text-gray-400">Chúng tôi áp dụng quy trình làm việc khoa học, tối ưu hóa từng bước để mang lại kết quả tốt nhất.</p>
+        </div>
+
         {processTabs.length > 1 && (
-          <div className="mb-8 flex flex-wrap justify-center gap-2">
+          <div className="mb-12 flex flex-wrap justify-center gap-3">
             {processTabs.map((t, i) => (
-              <button key={i} onClick={() => setActiveTab(i)} className="rounded-full px-4 py-2 text-sm font-medium transition-all" style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.07)", color: "#ccc" }}>
+              <button 
+                key={i} 
+                onClick={() => setActiveTab(i)} 
+                className="rounded-full px-6 py-2.5 text-sm font-bold transition-all" 
+                style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.05)", color: "#999" }}
+              >
                 {t.label}
               </button>
             ))}
           </div>
         )}
-        <AnimatePresence mode="wait">
-          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="grid gap-4 md:grid-cols-2">
-            {tab.steps.map((p, i) => (
-              <div key={i} className="rounded-2xl border border-white/10 bg-card/80 p-5">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-black text-white" style={{ backgroundColor: color }}>{p.step}</div>
-                  <h4 className="font-bold text-white">{p.title}</h4>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-400">{p.desc}</p>
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+
+        <div className="relative">
+          {/* Timeline Line (Desktop) */}
+          <div className="absolute left-[50%] top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent md:block" />
+
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={activeTab} 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -20 }} 
+              className="space-y-8 md:space-y-0"
+            >
+              {tab.steps.map((p, i) => {
+                const isEven = i % 2 === 0;
+                return (
+                  <div key={i} className={`relative flex flex-col md:flex-row md:items-center ${isEven ? "md:flex-row-reverse" : ""}`}>
+                    {/* Content */}
+                    <div className="w-full md:w-1/2">
+                      <motion.div 
+                        initial={{ opacity: 0, x: isEven ? 50 : -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className={`rounded-[2rem] border border-white/10 bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.04] md:mx-8 ${isEven ? "md:text-left" : "md:text-right"}`}
+                      >
+                        <div className={`mb-4 flex items-center gap-4 ${isEven ? "flex-row" : "flex-row-reverse"}`}>
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl font-black text-white shadow-lg" style={{ backgroundColor: color }}>
+                            {p.step}
+                          </div>
+                          <h4 className="text-xl font-bold text-white">{p.title}</h4>
+                        </div>
+                        <p className="text-sm leading-relaxed text-gray-400">{p.desc}</p>
+                      </motion.div>
+                    </div>
+
+                    {/* Center Dot (Desktop) */}
+                    <div className="absolute left-1/2 top-1/2 z-10 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center md:flex">
+                      <div className="h-2 w-2 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" style={{ backgroundColor: color }} />
+                    </div>
+
+                    {/* Empty space for the other side */}
+                    <div className="hidden w-1/2 md:block" />
+                  </div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </motion.div>
     </section>
   );
@@ -688,11 +897,25 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
-    <section data-section="faq" id="faq" className="py-20 px-4">
+    <section data-section="faq" id="faq" className="py-24 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
-        <h2 className="mb-12 text-center text-3xl font-black text-white md:text-4xl">Câu Hỏi Thường Gặp</h2>
-        <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-card px-6 shadow-[0_20px_45px_rgba(0,0,0,0.25)]">
-          {faqs.map((faq, i) => <FAQItem key={i} q={faq.q} a={faq.a} />)}
+        <div className="mb-16 text-center">
+          <h2 className="mb-4 text-3xl font-black text-white md:text-5xl">Câu Hỏi Thường Gặp</h2>
+          <p className="text-gray-400">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
+        </div>
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-sm transition-all hover:bg-white/[0.04]"
+            >
+              <FAQItem q={faq.q} a={faq.a} />
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </section>
@@ -706,25 +929,70 @@ function ContactForm({ color }: { color: string }) {
   const [service, setService] = useState("");
   const [note, setNote] = useState("");
   return (
-    <section data-section="contact" id="contact" className="py-20 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-xl">
-        <h2 className="mb-3 text-center text-3xl font-black text-white md:text-4xl">Liên Hệ Tư Vấn</h2>
-        <p className="mb-10 text-center text-gray-400">Đội ngũ chuyên gia sẵn sàng hỗ trợ bạn 24/7</p>
+    <section data-section="contact" id="contact" className="relative py-24 px-4 overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-20 pointer-events-none">
+        <div className="absolute top-1/4 right-0 h-[500px] w-[500px] rounded-full blur-[150px]" style={{ backgroundColor: `${color}30` }} />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-2xl">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-4xl font-black text-white md:text-5xl">Liên Hệ Tư Vấn</h2>
+          <p className="text-gray-400">Hãy để chúng tôi đồng hành cùng sự phát triển của doanh nghiệp bạn</p>
+        </div>
+
         {sent ? (
-          <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-10 text-center">
-            <p className="text-3xl mb-3">✓</p>
-            <p className="text-lg font-bold text-white">Đã nhận thông tin!</p>
-            <p className="text-sm text-gray-400 mt-2">Chúng tôi sẽ liên hệ trong vòng 30 phút</p>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-[3rem] border border-green-500/30 bg-green-500/10 p-16 text-center backdrop-blur-md"
+          >
+            <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-green-500 text-white shadow-2xl shadow-green-500/40">
+              <Check size={40} />
+            </div>
+            <h3 className="mb-4 text-2xl font-black text-white">Đã Nhận Thông Tin!</h3>
+            <p className="text-gray-400">Chúng tôi sẽ liên hệ lại với bạn trong vòng 30 phút làm việc.</p>
+          </motion.div>
         ) : (
-          <form onSubmit={e => { e.preventDefault(); db.leads.add({ type: "contact", name, phone, service, note }); setSent(true); }} className="rounded-2xl border border-white/10 bg-card p-8 space-y-4">
-            <input required value={name} onChange={e => setName(e.target.value)} placeholder="Họ và tên" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
-            <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
-            <select value={service} onChange={e => setService(e.target.value)} className="w-full rounded-lg border border-white/10 bg-card px-4 py-3 text-sm text-gray-400 outline-none">
-              <option value="">Dịch vụ quan tâm</option><option>Xây dựng trang/kênh</option><option>Chăm sóc nội dung</option><option>Quảng cáo</option>
-            </select>
-            <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Ghi chú thêm..." rows={4} className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none resize-none" />
-            <button type="submit" className="w-full rounded-xl py-3 text-sm font-bold text-white transition-transform hover:scale-105" style={{ backgroundColor: color }}>Gửi Yêu Cầu Tư Vấn</button>
+          <form 
+            onSubmit={e => { e.preventDefault(); db.leads.add({ type: "contact", name, phone, service, note }); setSent(true); }} 
+            className="group relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-xl md:p-12"
+          >
+            <div className="grid gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
+                <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
+                <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="090 123 4567" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Dịch vụ quan tâm</label>
+                <div className="relative">
+                  <select value={service} onChange={e => setService(e.target.value)} className="w-full appearance-none rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10">
+                    <option value="" className="bg-neutral-900">Chọn dịch vụ...</option>
+                    <option className="bg-neutral-900">Xây dựng trang/kênh</option>
+                    <option className="bg-neutral-900">Chăm sóc nội dung</option>
+                    <option className="bg-neutral-900">Quảng cáo</option>
+                  </select>
+                  <ChevronDown size={18} className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Ghi chú thêm</label>
+                <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả nhu cầu của bạn..." rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
+              </div>
+              
+              <button 
+                type="submit" 
+                className="group relative mt-4 w-full overflow-hidden rounded-2xl py-5 text-sm font-black text-white transition-all hover:scale-[1.02] active:scale-95 shadow-2xl" 
+                style={{ backgroundColor: color }}
+              >
+                <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+                <span className="relative">Gửi Yêu Cầu Tư Vấn Ngay</span>
+              </button>
+            </div>
           </form>
         )}
       </motion.div>

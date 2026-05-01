@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Package, Newspaper,
   Bell, Globe, Image, Search, Settings, LogOut,
-  Trash2, Plus, Edit3,
+  Trash2, Plus, Edit3, MessageSquare,
   BarChart2, Code, Copy,
   Calendar, Lock, Sparkles, type LucideIcon
 } from "lucide-react";
@@ -14,7 +14,7 @@ import { useAdmin } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { buildDefaultComparisonTabs, getContent, saveContent, type ComparisonTabOverride, type ContentOverride, type PackageOverride, type TabOverride } from "@/lib/pageContent";
-import { db, type Order, type Lead, type NewsItem, type ClientPortal } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type ClientPortal, type ClientReview } from "@/lib/useData";
 import { uploadMediaFile } from "@/lib/client-media-upload";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -24,6 +24,8 @@ const NAV = [
   { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
   { id: "services", label: "Quản lý Dịch vụ", icon: Package },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
+  { id: "reviews", label: "Khách hàng Review", icon: MessageSquare },
+  { id: "projects", label: "Dự án tiêu biểu", icon: BarChart2 },
   { id: "media", label: "Quản lý hình ảnh", icon: Image },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
@@ -167,6 +169,8 @@ export default function AdminPage() {
     setSlideshowImages,
     addCase,
     removeCase,
+    updateMediaVideo,
+    updateMarketingSolutionBanner,
   } = useAdmin();
 
   const PLATFORMS_DYNAMIC = [
@@ -182,14 +186,22 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [visitors, setVisitors] = useState<VisitorRecord[]>([]);
   const [totalVisitorHits, setTotalVisitorHits] = useState(0);
+  const [clientReviews, setClientReviews] = useState<ClientReview[]>([]);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
+  const [newReview, setNewReview] = useState<Omit<ClientReview, "id" | "createdAt">>({
+    clientId: "",
+    clientName: "",
+    logoUrl: "",
+    rating: 5,
+    content: "",
+  });
   const [clientPortals, setClientPortals] = useState<ClientPortal[]>([]);
   const [progressArticles, setProgressArticles] = useState<Record<string, any[]>>({});
   const [selectedClient, setSelectedClient] = useState<ClientPortal | null>(null);
   const [newArticle, setNewArticle] = useState({ title: "", content: "", image: "" });
   const [selectedPlatform, setSelectedPlatform] = useState("home");
   const [selectedPkgPlatform, setSelectedPkgPlatform] = useState("facebook");
-  const [slideshowImageUrl, setSlideshowImageUrl] = useState("");
-  const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "" });
+  const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "", description: "", content: "" });
   const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
   const [blogSaveError, setBlogSaveError] = useState<string | null>(null);
   const [selectedProcessTab, setSelectedProcessTab] = useState(0);
@@ -959,6 +971,13 @@ export default function AdminPage() {
     if (result.error) console.error('Leads error:', result.error);
     else setLeads([...(result.data || [])].reverse());
   };
+  const refreshReviews = async () => {
+    setIsReviewsLoading(true);
+    const result = await db.clientReviews.getAll();
+    if (result.error) console.error('Reviews error:', result.error);
+    else setClientReviews([...(result.data || [])].reverse());
+    setIsReviewsLoading(false);
+  };
   const refreshPortals = async () => {
     const result = await db.clientPortals.getAll();
     if (result.error) console.error('Portals error:', result.error);
@@ -1137,7 +1156,10 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!authenticated) return;
-    refreshOrders(); refreshLeads(); refreshPortals(); refreshVisitors();
+    refreshOrders(); refreshLeads();
+    refreshPortals();
+    refreshReviews();
+    refreshVisitors();
     db.news.getAll().then((result) => {
       setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     });
@@ -1301,7 +1323,7 @@ export default function AdminPage() {
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm rounded-2xl border border-white/10 bg-card p-8">
           <div className="mb-6 flex items-center gap-3">
-            <img src="/logo.jpg" alt="Logo" className="h-10 w-10 rounded-full" />
+            <img src="https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593311234/58e2d46e969d4d98b417245763566160.png" alt="Logo" className="h-10 w-10 rounded-full" />
             <div><p className="font-bold text-white">Bứt Phá Marketing</p><p className="text-xs text-gray-400">Trang quản trị hệ thống</p></div>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -1883,6 +1905,320 @@ export default function AdminPage() {
             </div>
           )}
 
+          {activeTab === "reviews" && (
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <h3 className="mb-4 text-lg font-bold text-white">Thêm Review khách hàng mới</h3>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-4">
+                    <input
+                      value={newReview.clientName}
+                      onChange={e => setNewReview({ ...newReview, clientName: e.target.value })}
+                      placeholder="Tên khách hàng"
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                    />
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-full border border-white/10 bg-white/5">
+                        {newReview.logoUrl ? (
+                          <img src={newReview.logoUrl} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-500 text-center">Ảnh đại diện</div>
+                        )}
+                        <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                          <span className="text-[10px] font-bold text-white">Đổi</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const url = await fileToDataUrl(file);
+                              setNewReview({ ...newReview, logoUrl: url });
+                            }}
+                          />
+                        </label>
+                      </div>
+                      <input
+                        value={newReview.logoUrl || ""}
+                        onChange={e => setNewReview({ ...newReview, logoUrl: e.target.value })}
+                        placeholder="Hoặc dán URL ảnh..."
+                        className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-gray-400">Đánh giá sao (1-5)</p>
+                      <input
+                        type="number"
+                        min="1"
+                        max="5"
+                        value={newReview.rating}
+                        onChange={e => setNewReview({ ...newReview, rating: parseInt(e.target.value) || 5 })}
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <textarea
+                      value={newReview.content}
+                      onChange={e => setNewReview({ ...newReview, content: e.target.value })}
+                      placeholder="Nội dung review..."
+                      rows={5}
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                    />
+                    <button
+                      onClick={async () => {
+                        if (!newReview.clientName || !newReview.content) {
+                          alert("Vui lòng nhập tên và nội dung review");
+                          return;
+                        }
+                        const result = await db.clientReviews.add({
+                          ...newReview,
+                          clientId: "manual",
+                        });
+                        if (!result.error) {
+                          setNewReview({ clientId: "", clientName: "", logoUrl: "", rating: 5, content: "" });
+                          refreshReviews();
+                        }
+                      }}
+                      className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white"
+                    >
+                      Thêm Review
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
+                <div className="p-4 border-b border-white/10 bg-white/5">
+                  <h3 className="font-bold text-white">Danh sách Review</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-[720px] w-full text-left text-sm">
+                    <thead className="bg-white/5 text-gray-400">
+                      <tr>
+                        <th className="px-4 py-3">Khách hàng</th>
+                        <th className="px-4 py-3">Sao</th>
+                        <th className="px-4 py-3">Nội dung</th>
+                        <th className="px-4 py-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {isReviewsLoading ? (
+                        <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Đang tải...</td></tr>
+                      ) : clientReviews.length === 0 ? (
+                        <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Chưa có review nào</td></tr>
+                      ) : (
+                        clientReviews.map(r => (
+                          <tr key={r.id} className="text-gray-200">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-3">
+                                <img src={r.logoUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${r.clientName}`} className="h-8 w-8 rounded-full object-cover" />
+                                <span className="font-bold">{r.clientName}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-amber-400 font-bold">{r.rating} ★</td>
+                            <td className="px-4 py-3 text-xs text-gray-400 max-w-md truncate">{r.content}</td>
+                            <td className="px-4 py-3 text-right">
+                              <button
+                                onClick={async () => {
+                                  if (confirm("Xóa review này?")) {
+                                    await db.clientReviews.delete(r.id);
+                                    refreshReviews();
+                                  }
+                                }}
+                                className="text-red-400"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "projects" && (
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-card p-6">
+                <div className="mb-6 flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-white">Quản lý Dự án tiêu biểu</h3>
+                  <select
+                    value={selectedPlatform}
+                    onChange={(e) => setSelectedPlatform(e.target.value)}
+                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                  >
+                    <option value="home">Trang chủ</option>
+                    {PLATFORMS_DYNAMIC.map((p) => (
+                      <option key={p.key} value={p.key}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="space-y-4">
+                      <input
+                        value={newCase.title}
+                        onChange={(e) => setNewCase({ ...newCase, title: e.target.value })}
+                        placeholder="Tên dự án"
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <p className="text-xs text-gray-400">Ảnh Trước (Before)</p>
+                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                            {newCase.before ? (
+                              <img src={newCase.before} className="h-full w-full object-cover" />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-500">
+                                Chưa có ảnh
+                              </div>
+                            )}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-xs font-bold text-white">Đổi ảnh</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (!file) return;
+                                  const url = await fileToDataUrl(file);
+                                  setNewCase({ ...newCase, before: url });
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <input
+                            value={newCase.before}
+                            onChange={(e) => setNewCase({ ...newCase, before: e.target.value })}
+                            placeholder="URL ảnh trước..."
+                            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-xs text-gray-400">Ảnh Sau (After)</p>
+                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                            {newCase.after ? (
+                              <img src={newCase.after} className="h-full w-full object-cover" />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-500">
+                                Chưa có ảnh
+                              </div>
+                            )}
+                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                              <span className="text-xs font-bold text-white">Đổi ảnh</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (!file) return;
+                                  const url = await fileToDataUrl(file);
+                                  setNewCase({ ...newCase, after: url });
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <input
+                            value={newCase.after}
+                            onChange={(e) => setNewCase({ ...newCase, after: e.target.value })}
+                            placeholder="URL ảnh sau..."
+                            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <textarea
+                        value={newCase.description}
+                        onChange={(e) => setNewCase({ ...newCase, description: e.target.value })}
+                        placeholder="Mô tả ngắn dự án..."
+                        rows={2}
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                      <textarea
+                        value={newCase.content}
+                        onChange={(e) => setNewCase({ ...newCase, content: e.target.value })}
+                        placeholder="Nội dung chi tiết dự án..."
+                        rows={4}
+                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (!newCase.title || !newCase.before || !newCase.after) {
+                        alert("Vui lòng nhập tên dự án và đủ 2 ảnh Trước/Sau");
+                        return;
+                      }
+                      addCase(selectedPlatform, {
+                        title: newCase.title,
+                        before: newCase.before,
+                        after: newCase.after,
+                        description: newCase.description,
+                        content: newCase.content,
+                      });
+                      setNewCase({ id: 0, title: "", before: "", after: "", description: "", content: "" });
+                    }}
+                    className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white transition-all hover:bg-primary/90"
+                  >
+                    Thêm Dự án mới
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
+                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                  <h3 className="font-bold text-white">Danh sách Dự án ({selectedPlatform})</h3>
+                  <button
+                    onClick={saveSettingsPanel}
+                    disabled={!hasUnsavedChanges || saveStatus === "saving"}
+                    className="rounded-lg bg-primary px-4 py-1.5 text-xs font-bold text-white disabled:opacity-50"
+                  >
+                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
+                  {settings.media[selectedPlatform]?.cases?.length === 0 ? (
+                    <div className="col-span-full py-8 text-center text-gray-400">Chưa có dự án nào</div>
+                  ) : (
+                    settings.media[selectedPlatform].cases.map((c) => (
+                      <div key={c.id} className="group relative rounded-xl border border-white/10 bg-white/5 p-4 transition-all hover:border-primary/50">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-bold text-white truncate pr-8">{c.title}</h4>
+                          <button
+                            onClick={() => removeCase(selectedPlatform, c.id)}
+                            className="absolute top-4 right-4 text-red-400 opacity-0 transition group-hover:opacity-100"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                          <div className="aspect-video rounded-lg overflow-hidden border border-white/10">
+                            <img src={c.before} className="h-full w-full object-cover" />
+                          </div>
+                          <div className="aspect-video rounded-lg overflow-hidden border border-white/10">
+                            <img src={c.after} className="h-full w-full object-cover" />
+                          </div>
+                        </div>
+                        {c.description && <p className="text-xs text-gray-400 line-clamp-2 mb-1">{c.description}</p>}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "media" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1938,103 +2274,76 @@ export default function AdminPage() {
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Cấu hình Slideshow theo trang</h3>
+                  <h3 className="font-bold text-white">Chọn nền tảng đang sửa</h3>
                   <div className="flex flex-wrap gap-2">
                     <select value={selectedPlatform} onChange={e => setSelectedPlatform(e.target.value)} className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
                       <option value="home">Trang chủ</option>
                       {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                     </select>
-                    <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}</button>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                    <h3 className="font-bold text-white">Slideshow</h3>
-                    <div className="flex flex-wrap gap-2">
-                      <input
-                        value={slideshowImageUrl}
-                      onChange={e => setSlideshowImageUrl(e.target.value)}
-                      placeholder="Dán 1 URL ảnh nếu muốn thêm từ link"
-                      className="min-w-[260px] flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-                    />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const url = slideshowImageUrl.trim();
-                          if (!url) return;
-                          const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
-                          setSlideshowImages(selectedPlatform, [...existing, url]);
-                          setSlideshowImageUrl("");
-                        }}
-                        className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
-                      >
-                        Thêm URL
-                    </button>
-                    <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white">
-                      Tải ảnh
-                      <input
+                  <h3 className="font-bold text-white">Ảnh bìa "Giải pháp marketing toàn diện"</h3>
+                  <div className="space-y-4">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                      {settings.media[selectedPlatform]?.marketingSolutionBanner ? (
+                        <img src={settings.media[selectedPlatform].marketingSolutionBanner} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-xs text-gray-500">Chưa có ảnh bìa</div>
+                      )}
+                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                        <span className="text-sm font-bold text-white">Thay đổi ảnh</span>
+                        <input
                           type="file"
                           accept="image/*"
-                          multiple
                           className="hidden"
                           onChange={async e => {
-                            const files = Array.from(e.target.files || []);
-                            if (!files.length) return;
-                            const uploadedUrls: string[] = [];
-                            for (const file of files) {
-                              const uploaded = await uploadMediaFile(file, {
-                                title: `${selectedPlatform} slideshow`,
-                                sectionLabel: "slideshow",
-                                suggestedName: `${selectedPlatform}-slideshow`,
-                              });
-                              uploadedUrls.push(uploaded.url);
-                            }
-                            const existing = (settings.media[selectedPlatform]?.slideshow || []).filter(Boolean);
-                            setSlideshowImages(selectedPlatform, [...existing, ...uploadedUrls]);
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const uploaded = await uploadMediaFile(file, {
+                              title: `${selectedPlatform} solution banner`,
+                              sectionLabel: "solution-banner",
+                              suggestedName: `${selectedPlatform}-solution-banner`,
+                            });
+                            updateMarketingSolutionBanner(selectedPlatform, uploaded.url);
                             e.currentTarget.value = "";
                           }}
                         />
                       </label>
                     </div>
-                    <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/70">
-                      Chỉ dùng ảnh cho slideshow. Ưu tiên tải ảnh từ máy, hoặc dán thêm 1 URL ảnh nếu cần.
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-                      {(settings.media[selectedPlatform]?.slideshow || [])
-                        .filter(Boolean)
-                        .map((url, i) => (
-                        <div key={i} className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-2">
-                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10">
-                            <img src={url} className="h-full w-full object-cover" />
-                          </div>
-                        <button
-                          type="button"
-                          onClick={() => removeSlideshowImage(selectedPlatform, i)}
-                          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
-                        >
-                          <Trash2 size={15} />
-                          Xóa ảnh
-                        </button>
-                        </div>
-                      ))}
-                    </div>
-                    {(settings.media[selectedPlatform]?.slideshow || []).filter(Boolean).length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setSlideshowImages(selectedPlatform, [])}
-                        className="w-full rounded-lg border border-red-400/30 bg-red-500/10 py-2 text-sm font-bold text-red-200 transition hover:bg-red-500/20"
-                      >
-                        Xóa tất cả slideshow
-                      </button>
-                    )}
-                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saveStatus === "saving" ? "Đang lưu..." : "Lưu slideshow"}</button>
+                    <input
+                      value={settings.media[selectedPlatform]?.marketingSolutionBanner || ""}
+                      onChange={e => updateMarketingSolutionBanner(selectedPlatform, e.target.value)}
+                      placeholder="Hoặc dán URL ảnh tại đây..."
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                    />
+                  </div>
+                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
+                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu ảnh bìa"}
+                  </button>
                 </div>
+
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white">Case Study cho phần Sự Thay Đổi Kỳ Diệu</h3>
                   <div className="space-y-2">
-                    <input value={newCase.title} onChange={e => setNewCase({ ...newCase, title: e.target.value })} placeholder="Tên Case Study" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                    <input value={newCase.title} onChange={e => setNewCase({ ...newCase, title: e.target.value })} placeholder="Tên Case Study (Dự án)" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
+                    <textarea
+                      value={newCase.description || ""}
+                      onChange={e => setNewCase({ ...newCase, description: e.target.value })}
+                      placeholder="Mô tả dự án"
+                      rows={2}
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                    />
+                    <textarea
+                      value={newCase.content || ""}
+                      onChange={e => setNewCase({ ...newCase, content: e.target.value })}
+                      placeholder="Nội dung dự án (Kết quả, giải pháp...)"
+                      rows={3}
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                    />
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-2">
                         <input value={newCase.before} onChange={e => setNewCase({ ...newCase, before: e.target.value })} placeholder="URL Trước" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
@@ -2085,13 +2394,39 @@ export default function AdminPage() {
                         </div>
                       </div>
                     )}
-                    <button type="button" onClick={() => { if (newCase.title.trim()) { addCase(selectedPlatform, { title: newCase.title, before: newCase.before, after: newCase.after }); setNewCase({ id: 0, title: "", before: "", after: "" }); } }} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white">Thêm Case</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (newCase.title.trim()) {
+                          addCase(selectedPlatform, {
+                            title: newCase.title,
+                            before: newCase.before,
+                            after: newCase.after,
+                            description: newCase.description,
+                            content: newCase.content,
+                          });
+                          setNewCase({ id: 0, title: "", before: "", after: "", description: "", content: "" });
+                        }
+                      }}
+                      className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white"
+                    >
+                      Thêm Case
+                    </button>
                   </div>
                   <div className="space-y-2">
                     {(settings.media[selectedPlatform]?.cases || []).map(c => (
-                      <div key={c.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10">
-                        <span className="text-xs text-white">{c.title}</span>
-                        <button type="button" onClick={() => removeCase(selectedPlatform, c.id)} className="text-red-400"><Trash2 size={14} /></button>
+                      <div key={c.id} className="space-y-2 p-3 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-white">{c.title}</span>
+                          <button type="button" onClick={() => removeCase(selectedPlatform, c.id)} className="text-red-400">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                        {c.description && <p className="text-[10px] text-gray-400 line-clamp-1">{c.description}</p>}
+                        <div className="grid grid-cols-2 gap-1">
+                          {c.before && <img src={c.before} className="aspect-video rounded border border-white/5 object-cover" />}
+                          {c.after && <img src={c.after} className="aspect-video rounded border border-white/5 object-cover" />}
+                        </div>
                       </div>
                     ))}
                   </div>

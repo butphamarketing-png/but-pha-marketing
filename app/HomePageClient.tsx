@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
   CalendarDays,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   LayoutTemplate,
   MapPinned,
@@ -205,6 +206,19 @@ export default function HomePageClient() {
     { label: "Liên Hệ", href: "/lien-he" },
   ];
 
+  const whyChooseUsRef = useRef<HTMLDivElement>(null);
+  const projectShowcaseRef = useRef<HTMLDivElement>(null);
+  const topReviewsRef = useRef<HTMLDivElement>(null);
+
+  const scrollContainer = (ref: React.RefObject<HTMLDivElement>, direction: "left" | "right") => {
+    if (!ref.current) return;
+    const scrollAmount = ref.current.clientWidth * 0.8;
+    ref.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   const serviceCards = useMemo(() => {
     const preferredPlatforms = ["website", "facebook", "googlemaps"];
 
@@ -212,6 +226,7 @@ export default function HomePageClient() {
       const match = services.find((item) => item.platform === platformKey);
       const media = settings?.media?.[platformKey];
       const image =
+        media?.marketingSolutionBanner ||
         media?.slideshow?.[0] ||
         media?.cases?.[0]?.after ||
         media?.cases?.[0]?.before ||
@@ -592,12 +607,31 @@ export default function HomePageClient() {
           </section>
 
           <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-            <div className="mb-6 text-center">
-              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex-1 text-center">
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
+              </div>
+              <div className="flex gap-2 lg:hidden">
+                <button
+                  onClick={() => scrollContainer(whyChooseUsRef, "left")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => scrollContainer(whyChooseUsRef, "right")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div
+              ref={whyChooseUsRef}
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-4"
+            >
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center">
+                <div key={item.title} className="min-w-[280px] flex-shrink-0 rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center md:min-w-0">
                   <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-500/12 text-fuchsia-200 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
                     <item.icon className="h-7 w-7" />
                   </span>
@@ -610,18 +644,38 @@ export default function HomePageClient() {
 
           <section id="projects" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
             <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Dự án tiêu biểu</p>
               </div>
-              <Link href="/website" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
-                Xem tất cả dự án
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="flex items-center gap-3">
+                <div className="flex gap-2 lg:hidden">
+                  <button
+                    onClick={() => scrollContainer(projectShowcaseRef, "left")}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => scrollContainer(projectShowcaseRef, "right")}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+                <Link href="/website" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
+                  <span className="hidden sm:inline">Xem tất cả dự án</span>
+                  <span className="sm:hidden text-xs">Tất cả</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
 
-            <div className="grid gap-4 xl:grid-cols-4">
+            <div
+              ref={projectShowcaseRef}
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-4 xl:grid xl:grid-cols-4 xl:overflow-visible"
+            >
               {projectShowcase.map((project) => (
-                <article key={`${project.title}-${project.subtitle}`} className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)]">
+                <article key={`${project.title}-${project.subtitle}`} className="min-w-[300px] flex-shrink-0 overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#0e0918] shadow-[0_24px_70px_rgba(4,2,10,0.36)] xl:min-w-0">
                   <img src={project.image} alt={project.title} className="h-44 w-full object-cover" />
                   <div className="space-y-3 p-5">
                     <h3 className="text-xl font-black text-white">{project.title}</h3>
@@ -637,49 +691,58 @@ export default function HomePageClient() {
           </section>
 
           <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-            <div className="mb-6 text-center">
-              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Khách hàng nói gì về chúng tôi?</p>
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex-1 text-center">
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Khách hàng nói gì về chúng tôi?</p>
+              </div>
+              <div className="flex gap-2 lg:hidden">
+                <button
+                  onClick={() => scrollContainer(topReviewsRef, "left")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => scrollContainer(topReviewsRef, "right")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-            <div className="grid gap-4 lg:grid-cols-3">
+            <div
+              ref={topReviewsRef}
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-3 lg:overflow-visible"
+            >
               {(topReviews.length ? topReviews : Array.from({ length: 3 }).map((_, index) => ({
                 id: `fallback-${index}`,
                 clientName: index === 0 ? "Nguyễn Văn Hùng" : index === 1 ? "Trần Thị Mai" : "Lê Minh Tuấn",
                 rating: 5,
                 content:
                   index === 0
-                    ? "Từ ngày làm web bên em đơn nhiều hơn hẳn anh ơi. Chuẩn luôn! Doanh số tăng rõ."
+                    ? "Dịch vụ cực kỳ chuyên nghiệp. Đội ngũ hỗ trợ nhiệt tình, website chạy mượt mà và chuẩn SEO."
                     : index === 1
-                      ? "Fanpage lên đều, khách nhắn đông hơn trước rất nhiều. Dạ em cảm ơn chị, bên em sẽ hỗ trợ lâu dài."
-                      : "Google Maps lên top 1 luôn. Tuyệt vời! Chúc mừng anh.",
-                createdAt: "",
+                      ? "Tôi rất hài lòng với kết quả marketing mang lại. Doanh thu tăng trưởng rõ rệt sau 3 tháng."
+                      : "Giải pháp tối ưu, chi phí hợp lý. Đây là đối tác tin cậy để đồng hành lâu dài.",
+                logoUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${index}`,
               } as ClientReview))).map((review) => (
-                <div key={review.id} className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0e0918] shadow-[0_20px_60px_rgba(4,2,10,0.3)]">
-                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      {"logoUrl" in review && review.logoUrl ? (
-                        <img src={review.logoUrl} alt={review.clientName} className="h-12 w-12 rounded-full object-cover" />
-                      ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-fuchsia-500/15 font-black text-white">
-                          {review.clientName.slice(0, 1)}
-                        </div>
-                      )}
-                      <div>
-                        <div className="text-sm font-black text-white">{review.clientName}</div>
-                        <div className="text-xs text-slate-400">Khách hàng Bứt Phá Marketing</div>
+                <div key={review.id} className="min-w-[300px] flex-shrink-0 rounded-[1.7rem] border border-white/10 bg-[#0e0918] p-6 shadow-[0_24px_70px_rgba(4,2,10,0.36)] lg:min-w-0">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img
+                      src={("logoUrl" in review && review.logoUrl) ? (review.logoUrl as string) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${review.clientName}`}
+                      alt={review.clientName}
+                      className="h-12 w-12 rounded-full border border-white/10 bg-white/5 object-cover"
+                    />
+                    <div>
+                      <h4 className="font-black text-white">{review.clientName}</h4>
+                      <div className="flex gap-1 text-amber-400">
+                        {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, i) => (
+                          <Star key={i} className="h-3 w-3 fill-current" />
+                        ))}
                       </div>
                     </div>
-                    <div className="rounded-full bg-[#1677ff] px-3 py-1 text-xs font-black text-white">Zalo</div>
                   </div>
-                  <div className="space-y-4 px-5 py-5">
-                    <div className="rounded-2xl bg-[#e9f3ff] px-4 py-4 text-[15px] leading-7 text-slate-800">
-                      {review.content}
-                    </div>
-                    <div className="flex items-center gap-1 text-yellow-300">
-                      {Array.from({ length: Math.max(1, Math.min(5, review.rating || 5)) }).map((_, index) => (
-                        <Star key={`${review.id}-${index}`} className="h-4 w-4 fill-current" />
-                      ))}
-                    </div>
-                  </div>
+                  <p className="text-sm leading-7 text-slate-300 italic">"{review.content}"</p>
                 </div>
               ))}
             </div>

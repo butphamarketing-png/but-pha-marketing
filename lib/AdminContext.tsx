@@ -15,12 +15,15 @@ export interface CaseStudyItem {
   title: string;
   before: string;
   after: string;
+  description?: string;
+  content?: string;
 }
 
 export interface MediaSection {
   videoUrl: string;
   slideshow: string[];
   cases: CaseStudyItem[];
+  marketingSolutionBanner?: string;
 }
 
 export interface PackageConfig {
@@ -103,6 +106,7 @@ export interface AdminContextType {
   addCase: (platform: string, item: Omit<CaseStudyItem, "id">) => void;
   removeCase: (platform: string, id: string) => void;
   updateMediaVideo: (platform: string, videoUrl: string) => void;
+  updateMarketingSolutionBanner: (platform: string, imageUrl: string) => void;
 }
 
 const SETTINGS_KEY = "admin_settings";
@@ -142,14 +146,24 @@ function createMediaSection(): MediaSection {
     videoUrl: "",
     slideshow: [],
     cases: [],
+    marketingSolutionBanner: "",
   };
 }
 
 function createDefaultMedia(): Record<string, MediaSection> {
-  return MEDIA_KEYS.reduce<Record<string, MediaSection>>((acc, key) => {
+  const media = MEDIA_KEYS.reduce<Record<string, MediaSection>>((acc, key) => {
     acc[key] = createMediaSection();
     return acc;
   }, {});
+
+  // Default slideshow for website platform
+  media.website.slideshow = [
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png",
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png",
+    "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593308940/25d911b327b744d08183049b49e836ec.png"
+  ];
+
+  return media;
 }
 
 function createSeoIntegration(label: string): SeoIntegrationConfig {
@@ -168,8 +182,8 @@ const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   heroTitle: "Bứt Phá Marketing",
   heroSubtitle: "",
-  logo: "/logo.svg",
-  favicon: "/favicon.svg",
+  logo: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593311234/58e2d46e969d4d98b417245763566160.png",
+  favicon: "https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593311234/58e2d46e969d4d98b417245763566160.png",
   content: "",
   hotline: "0937 417 982",
   address: "",
@@ -220,6 +234,7 @@ function mergeMediaSection(parsed?: Partial<MediaSection>): MediaSection {
     videoUrl: parsed?.videoUrl ?? "",
     slideshow: parsed?.slideshow ?? [],
     cases: parsed?.cases ?? [],
+    marketingSolutionBanner: parsed?.marketingSolutionBanner ?? "",
   };
 }
 
@@ -799,6 +814,19 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const updateMarketingSolutionBanner = (platform: string, imageUrl: string) => {
+    setAndBroadcast((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
+        [platform]: {
+          ...mergeMediaSection(prev.media[platform]),
+          marketingSolutionBanner: imageUrl,
+        },
+      },
+    }));
+  };
+
   const contextValue = useMemo(
     () => ({
       settings,
@@ -817,6 +845,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       addCase,
       removeCase,
       updateMediaVideo,
+      updateMarketingSolutionBanner,
     }),
     [settings, saveStatus, saveError, hasUnsavedChanges],
   );
