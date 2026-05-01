@@ -409,52 +409,6 @@ export default function HomePageClient() {
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#050308]" />
-                
-                <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pt-12 text-center sm:pt-0">
-                  <div className="max-w-4xl space-y-4 sm:space-y-6">
-                    <motion.p
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-400 sm:text-sm"
-                    >
-                      {currentHeroSlide.eyebrow}
-                    </motion.p>
-                    <motion.h1
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                      className="text-3xl font-black leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-                    >
-                      {currentHeroSlide.middle} <br />
-                      <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
-                        {currentHeroSlide.accent}
-                      </span>
-                    </motion.h1>
-                    <motion.p
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-lg"
-                    >
-                      {currentHeroSlide.description}
-                    </motion.p>
-                    
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="flex flex-wrap justify-center gap-3 pt-4 sm:gap-4"
-                    >
-                      {currentHeroSlide.pills?.map((pill: any, i: number) => (
-                        <div key={i} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs">
-                          <pill.icon className="h-3 w-3 text-fuchsia-400 sm:h-4 sm:w-4" />
-                          {pill.label}
-                        </div>
-                      ))}
-                    </motion.div>
-                  </div>
-                </div>
               </motion.div>
             </AnimatePresence>
 
