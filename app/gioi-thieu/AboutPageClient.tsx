@@ -179,73 +179,24 @@ export default function AboutPageClient() {
         </div>
       </header>
 
-      <main className="relative overflow-hidden">
-        <section className="border-b border-fuchsia-400/12 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.28),transparent_38%),linear-gradient(180deg,#090512,#07040d)]">
-          <div className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-16">
-            <div className="mb-6 flex items-center gap-2 text-sm text-slate-400">
-              <Link href="/" className="transition hover:text-white">
-                Trang chủ
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <span className="text-white">Giới thiệu</span>
+      <main className="relative overflow-hidden pt-12">
+        <section className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
+              <img 
+                src="/mascot-home.png" 
+                alt="Về chúng tôi" 
+                className="h-full w-full object-cover" 
+              />
             </div>
-
-            <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="space-y-8">
               <div>
-                <div className="inline-flex items-center rounded-full border border-fuchsia-400/35 bg-fuchsia-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-fuchsia-200">
-                  Giới thiệu về Bứt Phá Marketing
-                </div>
-                <h1 className="mt-6 max-w-3xl text-4xl font-black tracking-[-0.05em] text-white md:text-6xl">
-                  Giải pháp marketing toàn diện đồng hành cùng doanh nghiệp tăng trưởng bền vững
-                </h1>
-                <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-                  Bứt Phá Marketing không chỉ là đơn vị cung cấp dịch vụ, chúng tôi là người đồng hành chiến lược trên hành trình tăng trưởng của doanh nghiệp.
-                </p>
-
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <button
-                    type="button"
-                    onClick={scrollToConsultation}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-4 text-sm font-black text-white shadow-[0_20px_45px_rgba(168,85,247,0.35)] transition hover:scale-[1.02]"
-                  >
-                    Liên hệ tư vấn ngay
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                  <Link
-                    href="/#services"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-fuchsia-400/30 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10"
-                  >
-                    Xem các dịch vụ
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Về chúng tôi</p>
+                <h2 className="mt-4 text-4xl font-black text-white md:text-5xl">Bứt Phá Marketing</h2>
               </div>
-
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_42%),rgba(255,255,255,0.03)] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.44)]">
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.03),transparent_50%)]" />
-                <div className="grid gap-4 md:grid-cols-[0.75fr_1fr]">
-                  <div className="flex items-end">
-                    <img src={mascotImage} alt="Mascot Bứt Phá Marketing" className="max-h-[320px] w-full object-contain drop-shadow-[0_24px_40px_rgba(168,85,247,0.35)]" />
-                  </div>
-                  <div className="space-y-4">
-                    <img src={heroVisual} alt="Hệ thống tăng trưởng của Bứt Phá Marketing" className="h-[260px] w-full rounded-[1.6rem] object-cover" />
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      {[
-                        { label: "Website", icon: LayoutTemplate },
-                        { label: "Facebook", icon: SiFacebook },
-                        { label: "Google Maps", icon: MapPinned },
-                      ].map((item) => (
-                        <div key={item.label} className="rounded-2xl border border-white/10 bg-[#0d0817] px-4 py-4 text-center">
-                          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/15 text-fuchsia-200">
-                            <item.icon className="h-5 w-5" />
-                          </div>
-                          <div className="text-sm font-black text-white">{item.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <p className="text-lg leading-8 text-slate-300">
+                Chúng tôi không chỉ làm marketing. Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
+              </p>
             </div>
           </div>
         </section>

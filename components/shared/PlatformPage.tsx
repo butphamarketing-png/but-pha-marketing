@@ -1111,78 +1111,11 @@ export function PlatformPage({ config }: { config: PlatformConfig }) {
   return (
     <SubPageLayout platformName={content.name} primaryColor={platformColor}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <Slideshow color={platformColor} platformKey={platformKey} />
-
-      <section className="border-b border-white/10 bg-black/20 px-4 py-8">
-        <div className="mx-auto max-w-5xl">
-          <nav aria-label="Breadcrumb" className="mb-4 text-sm text-gray-400">
-            <ol className="flex flex-wrap items-center gap-2">
-              <li><Link href="/" className="hover:text-white">Trang chủ</Link></li>
-              <li>/</li>
-              <li className="text-white">{heroTitle}</li>
-            </ol>
-          </nav>
-
-          <div className="max-w-4xl">
-            <h1 className="text-3xl font-black text-white md:text-5xl">{heroTitle}</h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-gray-300 md:text-lg">{content.mission}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#pricing" className="rounded-full px-5 py-3 text-sm font-bold text-white" style={{ backgroundColor: platformColor }}>
-                Xem bảng giá
-              </a>
-              <a href="#contact" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
-                Nhận tư vấn
-              </a>
-              <a href="#faq" className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white">
-                Câu hỏi thường gặp
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {visibility.intro !== false && (
-        <section data-section="intro" id="intro" className="py-20 px-4">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
-            <h2 className="mb-10 text-center text-3xl font-black text-white md:text-4xl">Giới Thiệu Về Dịch Vụ {content.name}</h2>
-            <div className="rounded-2xl border border-white/10 bg-card divide-y divide-white/10 px-6">
-              <Accordion
-                title="Tầm Nhìn"
-                content={content.vision}
-                open={openIntro === "vision"}
-                onToggle={() => setOpenIntro("vision")}
-              />
-              <Accordion
-                title="Sứ Mệnh"
-                content={content.mission}
-                open={openIntro === "mission"}
-                onToggle={() => setOpenIntro("mission")}
-              />
-              <Accordion
-                title="Trách Nhiệm"
-                content={content.responsibility}
-                open={openIntro === "responsibility"}
-                onToggle={() => setOpenIntro("responsibility")}
-                asBullets
-              />
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {visibility.audit !== false && (
-        <FanpageAudit
-          primaryColor={platformColor}
-          platform={content.auditPlatform ?? "facebook"}
-        />
-      )}
 
       {visibility.pricing !== false && (
         <PricingSection tabs={tabsForRender} color={platformColor} onCheckout={handleCheckout} />
       )}
 
-      <BeforeAfterSlider cases={cases} beforeImage={beforeAfterBefore} afterImage={beforeAfterAfter} />
-      
       {visibility.stats !== false && (
         <Stats stats={content.stats} color={platformColor} />
       )}
