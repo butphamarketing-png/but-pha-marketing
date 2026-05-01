@@ -420,7 +420,7 @@ export default function HomePageClient() {
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
                 <img 
-                  src="https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593307686/d0074f76f4904d9c8c9985957d1901a1.png" 
+                  src="https://trae-file-prod.s3.dualstack.ap-southeast-1.amazonaws.com/979695662138548224/1741593306538/e05b542017774e50882e9b9f9392f447.png" 
                   alt="Về chúng tôi" 
                   className="h-full w-full object-cover" 
                 />
