@@ -481,11 +481,9 @@ export default function HomePageClient() {
           <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
             <div className="mb-8 text-center space-y-4">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
-              {settings.marketingSolutionImage && (
-                <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
-                  <img src={settings.marketingSolutionImage} alt="Giải pháp Marketing toàn diện" className="w-full h-auto object-cover aspect-video" />
-                </div>
-              )}
+              <div className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+                <img src="/Website.png" alt="Giải pháp Marketing toàn diện" className="w-full h-auto object-cover aspect-video" />
+              </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

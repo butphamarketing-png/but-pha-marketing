@@ -23,7 +23,6 @@ export interface MediaSection {
   videoUrl: string;
   slideshow: string[];
   cases: CaseStudyItem[];
-  marketingSolutionBanner?: string;
 }
 
 export interface PackageConfig {
@@ -95,8 +94,6 @@ export interface SiteSettings {
   aiKtp: string;
   seoPages: Record<string, { title: string; desc: string; keywords: string }>;
   media: Record<string, MediaSection>;
-  marketingSolutionImage: string;
-  bookingConsultationImage: string;
   featuredProjects: FeaturedProject[];
   customerFeedbacks: CustomerFeedback[];
   cms: Record<string, PlatformCMS>;
@@ -128,7 +125,6 @@ export interface AdminContextType {
   addCase: (platform: string, item: Omit<CaseStudyItem, "id">) => void;
   removeCase: (platform: string, id: string) => void;
   updateMediaVideo: (platform: string, videoUrl: string) => void;
-  updateMarketingSolutionBanner: (platform: string, imageUrl: string) => void;
 }
 
 export const SETTINGS_KEY = "admin_settings";
@@ -168,7 +164,6 @@ function createMediaSection(): MediaSection {
     videoUrl: "",
     slideshow: [],
     cases: [],
-    marketingSolutionBanner: "",
   };
 }
 
@@ -235,8 +230,6 @@ const defaultSettings: SiteSettings = {
   aiKtp: "",
   seoPages: {},
   media: createDefaultMedia(),
-  marketingSolutionImage: "",
-  bookingConsultationImage: "",
   featuredProjects: [],
   customerFeedbacks: [],
   cms: {},
@@ -265,7 +258,6 @@ function mergeMediaSection(parsed?: Partial<MediaSection>): MediaSection {
     videoUrl: parsed?.videoUrl ?? "",
     slideshow: parsed?.slideshow ?? [],
     cases: parsed?.cases ?? [],
-    marketingSolutionBanner: parsed?.marketingSolutionBanner ?? "",
   };
 }
 
@@ -349,8 +341,6 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     aiKtp: parsed.aiKtp ?? "",
     logo: parsed.logo ?? defaultSettings.logo,
     favicon: parsed.favicon ?? defaultSettings.favicon,
-    marketingSolutionImage: parsed.marketingSolutionImage ?? "",
-    bookingConsultationImage: parsed.bookingConsultationImage ?? "",
     featuredProjects: parsed.featuredProjects ?? [],
     customerFeedbacks: parsed.customerFeedbacks ?? [],
     seoPages: parsed.seoPages ?? {},
@@ -849,19 +839,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const updateMarketingSolutionBanner = (platform: string, imageUrl: string) => {
-    setAndBroadcast((prev) => ({
-      ...prev,
-      media: {
-        ...prev.media,
-        [platform]: {
-          ...mergeMediaSection(prev.media[platform]),
-          marketingSolutionBanner: imageUrl,
-        },
-      },
-    }));
-  };
-
   const contextValue = useMemo(
     () => ({
       settings,
@@ -880,7 +857,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       addCase,
       removeCase,
       updateMediaVideo,
-      updateMarketingSolutionBanner,
     }),
     [settings, saveStatus, saveError, hasUnsavedChanges],
   );

@@ -2230,103 +2230,8 @@ export default function AdminPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white flex items-center gap-2"><Sparkles size={18} className="text-primary" /> Giải pháp Marketing toàn diện</h3>
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-gray-400">Ảnh đại diện phần Giải pháp</p>
-                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                      {settings.marketingSolutionImage ? (
-                        <img src={settings.marketingSolutionImage} alt="Marketing Solution" className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đại diện</div>
-                      )}
-                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={async e => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            try {
-                              const imageUrl = await fileToDataUrl(file);
-                              updateSettings({ marketingSolutionImage: imageUrl });
-                              
-                              // Auto save after upload
-                              await fetch("/api/settings", {
-                                method: "PATCH",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ 
-                                  key: SETTINGS_KEY, 
-                                  value: { marketingSolutionImage: imageUrl } 
-                                }),
-                              });
-                            } catch (err) {
-                              console.error("Upload failed", err);
-                            } finally {
-                              e.currentTarget.value = "";
-                            }
-                          }}
-                        />
-                      </label>
-                    </div>
-                    <input
-                      value={settings.marketingSolutionImage || ""}
-                      onChange={e => updateSettings({ marketingSolutionImage: e.target.value })}
-                      placeholder="URL ảnh..."
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2 mt-4 pt-4 border-t border-white/5">
-                    <p className="text-xs font-semibold text-gray-400">Ảnh phần Đặt lịch tư vấn</p>
-                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                      {settings.bookingConsultationImage ? (
-                        <img src={settings.bookingConsultationImage} alt="Booking" className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-[10px] text-gray-500">Chưa có ảnh đặt lịch</div>
-                      )}
-                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                        <span className="text-[10px] font-bold text-white">Thay đổi</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={async e => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            try {
-                              const imageUrl = await fileToDataUrl(file);
-                              updateSettings({ bookingConsultationImage: imageUrl });
-                              
-                              await fetch("/api/settings", {
-                                method: "PATCH",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ 
-                                  key: SETTINGS_KEY, 
-                                  value: { bookingConsultationImage: imageUrl } 
-                                }),
-                              });
-                            } catch (err) {
-                              console.error("Upload failed", err);
-                            } finally {
-                              e.currentTarget.value = "";
-                            }
-                          }}
-                        />
-                      </label>
-                    </div>
-                    <input
-                      value={settings.bookingConsultationImage || ""}
-                      onChange={e => updateSettings({ bookingConsultationImage: e.target.value })}
-                      placeholder="URL ảnh..."
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white"
-                    />
-                  </div>
-
-                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
-                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}
-                  </button>
+                  <h3 className="font-bold text-white flex items-center gap-2"><Sparkles size={18} className="text-primary" /> Thông tin hệ thống</h3>
+                  <p className="text-sm text-gray-400">Các hình ảnh hệ thống (Logo, Favicon, Slideshow, Banner) hiện được quản lý mặc định theo bộ nhận diện thương hiệu mới.</p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
@@ -2341,47 +2246,6 @@ export default function AdminPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                  <h3 className="font-bold text-white">Ảnh bìa "Giải pháp marketing toàn diện"</h3>
-                  <div className="space-y-4">
-                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
-                      {settings.media[selectedPlatform]?.marketingSolutionBanner ? (
-                        <img src={settings.media[selectedPlatform].marketingSolutionBanner} className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-xs text-gray-500">Chưa có ảnh bìa</div>
-                      )}
-                      <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                        <span className="text-sm font-bold text-white">Thay đổi ảnh</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={async e => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            const uploaded = await uploadMediaFile(file, {
-                              title: `${selectedPlatform} solution banner`,
-                              sectionLabel: "solution-banner",
-                              suggestedName: `${selectedPlatform}-solution-banner`,
-                            });
-                            updateMarketingSolutionBanner(selectedPlatform, uploaded.url);
-                            e.currentTarget.value = "";
-                          }}
-                        />
-                      </label>
-                    </div>
-                    <input
-                      value={settings.media[selectedPlatform]?.marketingSolutionBanner || ""}
-                      onChange={e => updateMarketingSolutionBanner(selectedPlatform, e.target.value)}
-                      placeholder="Hoặc dán URL ảnh tại đây..."
-                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-                    />
-                  </div>
-                  <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
-                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu ảnh bìa"}
-                  </button>
-                </div>
-
                 <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                   <h3 className="font-bold text-white">Case Study cho phần Sự Thay Đổi Kỳ Diệu</h3>
                   <div className="space-y-2">
