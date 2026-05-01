@@ -180,13 +180,13 @@ function createDefaultMedia(): Record<string, MediaSection> {
 
   // Default slideshow for home platform
   media.home.slideshow = [
-    "/slideshow-robots.jpg",
+    "/slideshow.jpg",
     "/mascot-home.png"
   ];
 
   // Default slideshow for website platform
   media.website.slideshow = [
-    "/slideshow-robots.jpg",
+    "/slideshow.jpg",
     "/mascot-home.png"
   ];
 
@@ -209,8 +209,8 @@ const defaultSettings: SiteSettings = {
   title: "Bứt Phá Marketing",
   heroTitle: "Bứt Phá Marketing",
   heroSubtitle: "",
-  logo: "/logo-new.png",
-  favicon: "/logo-new.png",
+  logo: "/logo.png",
+  favicon: "/logo.png",
   content: "",
   hotline: "0937 417 982",
   address: "",
