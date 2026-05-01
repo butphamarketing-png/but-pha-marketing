@@ -22,7 +22,6 @@ export async function generateMetadata(): Promise<Metadata> {
     const data = await Promise.race([
       (async () => {
         const supabase = createServerClient();
-        if (!supabase) return null;
         const result = await supabase
           .from("site_settings")
           .select("value")
