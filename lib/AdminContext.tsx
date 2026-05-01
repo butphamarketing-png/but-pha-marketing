@@ -202,6 +202,7 @@ const defaultSettings: SiteSettings = {
   address: "",
   email: "",
   fanpage: "",
+  brandColor: "#7C3AED",
   googleAnalytics: "G-D0XPZGPZNG",
   headJs: "",
   presentationMode: false,
