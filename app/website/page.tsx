@@ -11,18 +11,44 @@ export async function generateMetadata() {
 
 const config: PlatformConfig = {
   name: "Website",
-  color: "#34A853",
+  color: "#7C3AED",
   auditPlatform: "website",
   vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
   mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
   responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",
   tabs: [
     {
-      label: "Thiết Kế Web",
+      label: "Thiết kế Website",
       packages: [
-        { name: "Landing Page", price: "3.500.000đ", features: ["1 trang landing page", "Responsive mobile", "Form liên hệ", "Tốc độ tải nhanh"], allFeatures: ["1 trang landing page", "5-10 trang", "E-commerce đầy đủ", "Responsive mobile", "Form liên hệ", "Tích hợp thanh toán", "Admin panel", "SEO cơ bản"], audioText: "Landing Page chuyên nghiệp là công cụ chuyển đổi khách hàng hiệu quả nhất, được tối ưu tốc độ và responsive hoàn toàn." },
-        { name: "Website Doanh Nghiệp", price: "7.000.000đ", popular: true, features: ["5-10 trang", "Responsive mobile", "Form liên hệ", "Admin panel", "SEO cơ bản"], allFeatures: ["1 trang landing page", "5-10 trang", "E-commerce đầy đủ", "Responsive mobile", "Form liên hệ", "Tích hợp thanh toán", "Admin panel", "SEO cơ bản"], audioText: "Website Doanh Nghiệp 5-10 trang với Admin Panel giúp bạn tự cập nhật nội dung và SEO cơ bản được tích hợp sẵn." },
-        { name: "E-commerce", price: "15.000.000đ", features: ["E-commerce đầy đủ", "Responsive mobile", "Form liên hệ", "Tích hợp thanh toán", "Admin panel", "SEO cơ bản"], allFeatures: ["1 trang landing page", "5-10 trang", "E-commerce đầy đủ", "Responsive mobile", "Form liên hệ", "Tích hợp thanh toán", "Admin panel", "SEO cơ bản"], audioText: "Website E-commerce đầy đủ với tích hợp thanh toán đa dạng và quản lý kho hàng chuyên nghiệp." },
+        { 
+          name: "Giới thiệu", 
+          price: "3.000.000đ", 
+          features: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
+          allFeatures: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
+          audioText: "Gói Giới thiệu cung cấp giải pháp website cơ bản, chuẩn SEO, tương thích hoàn toàn with thiết bị di động." 
+        },
+        { 
+          name: "Tối ưu", 
+          price: "6.000.000đ", 
+          features: ["Chuẩn SEO + UX", "Giao diện chuyên nghiệp", "Chuẩn SEO nâng cao", "Tối ưu tốc độ", "Tích hợp công cụ marketing"], 
+          allFeatures: ["Chuẩn SEO + UX", "Giao diện chuyên nghiệp", "Chuẩn SEO nâng cao", "Tối ưu tốc độ", "Tích hợp công cụ marketing"], 
+          audioText: "Gói Tối ưu tập trung vào trải nghiệm người dùng và SEO nâng cao, giúp website tải nhanh và tích hợp đầy đủ công cụ marketing." 
+        },
+        { 
+          name: "Kinh doanh", 
+          price: "9.000.000đ", 
+          popular: true,
+          features: ["Tối ưu chuyển đổi", "Thiết kế độc quyền", "Tối ưu chuyển đổi (CRO)", "Tích hợp CRM, Chatbot", "Báo cáo & theo dõi dữ liệu"], 
+          allFeatures: ["Tối ưu chuyển đổi", "Thiết kế độc quyền", "Tối ưu chuyển đổi (CRO)", "Tích hợp CRM, Chatbot", "Báo cáo & theo dõi dữ liệu"], 
+          audioText: "Gói Kinh doanh là giải pháp hoàn hảo để tăng doanh thu với thiết kế độc quyền và các tính năng tối ưu chuyển đổi mạnh mẽ." 
+        },
+        { 
+          name: "Hệ thống", 
+          price: "12.000.000đ", 
+          features: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
+          allFeatures: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
+          audioText: "Gói Hệ thống dành cho doanh nghiệp cần tự động hóa vận hành và mở rộng quy mô with các tích hợp kỹ thuật chuyên sâu." 
+        },
       ],
     },
     {

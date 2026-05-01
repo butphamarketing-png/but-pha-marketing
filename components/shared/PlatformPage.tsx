@@ -618,7 +618,7 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
   const [page, setPage] = useState(0);
   const tab = tabs[activeTab];
   const showPager = tab.packages.length > 3;
-  const pageSize = 3;
+  const pageSize = 4;
   const maxPage = Math.max(0, Math.ceil(tab.packages.length / pageSize) - 1);
   const start = page * pageSize;
   const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
@@ -692,7 +692,7 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
           </div>
         )}
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {visiblePackages.map((pkg, i) => {
             const originalIndex = showPager ? start + i : i;
             const isHovered = hoveredIdx === i;
@@ -719,11 +719,11 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
                   </div>
                 )}
                 
-                <div className="mb-8">
-                  <h3 className="mb-4 text-xl font-black text-white">{pkg.name}</h3>
+                <div className="mb-6">
+                  <h3 className="mb-1 text-xl font-black text-white">{pkg.name}</h3>
+                  <p className="mb-4 text-[10px] text-gray-500 uppercase tracking-wider">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-black text-white" style={{ color: isHovered ? color : "white" }}>{pkg.price}</span>
-                    <span className="text-sm text-gray-500 font-medium">{pkg.period === "lifetime" ? "/vĩnh viễn" : "/tháng"}</span>
+                    <span className="text-3xl font-black text-white" style={{ color: isHovered ? color : "white" }}>{pkg.price}</span>
                   </div>
                 </div>
 
@@ -776,15 +776,16 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
                 </ul>
 
                 <div className="mt-auto space-y-4">
-                  <AudioGuide text={pkg.audioText} color={color} />
-                  <button 
-                    onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} 
-                    className="group relative w-full overflow-hidden rounded-2xl py-5 text-sm font-black text-white transition-all active:scale-95"
-                    style={{ backgroundColor: isHovered || isPopular ? color : "rgba(255,255,255,0.05)" }}
-                  >
-                    <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                    <span className="relative">Nhận Tư Vấn Ngay</span>
-                  </button>
+                  <div className="flex gap-2">
+                    <button className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3 text-xs font-bold text-white transition-all hover:bg-white/10">Xem chi tiết</button>
+                    <button 
+                      onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} 
+                      className="flex-1 rounded-xl py-3 text-xs font-black text-white transition-all active:scale-95"
+                      style={{ backgroundColor: isHovered || isPopular ? color : "rgba(255,255,255,0.05)" }}
+                    >
+                      Chọn gói
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             );
