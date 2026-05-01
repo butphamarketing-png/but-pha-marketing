@@ -2045,178 +2045,88 @@ export default function AdminPage() {
 
           {activeTab === "projects" && (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-white/10 bg-card p-6">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-white">Quản lý Dự án tiêu biểu</h3>
-                  <select
-                    value={selectedPlatform}
-                    onChange={(e) => setSelectedPlatform(e.target.value)}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-                  >
-                    <option value="home">Trang chủ</option>
-                    {PLATFORMS_DYNAMIC.map((p) => (
-                      <option key={p.key} value={p.key}>
-                        {p.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div className="space-y-4">
-                      <input
-                        value={newCase.title}
-                        onChange={(e) => setNewCase({ ...newCase, title: e.target.value })}
-                        placeholder="Tên dự án"
-                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
-                      />
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <p className="text-xs text-gray-400">Ảnh Trước (Before)</p>
-                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                            {newCase.before ? (
-                              <img src={newCase.before} className="h-full w-full object-cover" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-500">
-                                Chưa có ảnh
-                              </div>
-                            )}
-                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                              <span className="text-xs font-bold text-white">Đổi ảnh</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  const file = e.target.files?.[0];
-                                  if (!file) return;
-                                  const url = await fileToDataUrl(file);
-                                  setNewCase({ ...newCase, before: url });
-                                }}
-                              />
-                            </label>
-                          </div>
-                          <input
-                            value={newCase.before}
-                            onChange={(e) => setNewCase({ ...newCase, before: e.target.value })}
-                            placeholder="URL ảnh trước..."
-                            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <p className="text-xs text-gray-400">Ảnh Sau (After)</p>
-                          <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                            {newCase.after ? (
-                              <img src={newCase.after} className="h-full w-full object-cover" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-500">
-                                Chưa có ảnh
-                              </div>
-                            )}
-                            <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
-                              <span className="text-xs font-bold text-white">Đổi ảnh</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  const file = e.target.files?.[0];
-                                  if (!file) return;
-                                  const url = await fileToDataUrl(file);
-                                  setNewCase({ ...newCase, after: url });
-                                }}
-                              />
-                            </label>
-                          </div>
-                          <input
-                            value={newCase.after}
-                            onChange={(e) => setNewCase({ ...newCase, after: e.target.value })}
-                            placeholder="URL ảnh sau..."
-                            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] text-white"
-                          />
-                        </div>
-                      </div>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Dự án tiêu biểu (Trang chủ)</h3>
+                <button 
+                  onClick={() => {
+                    const newProj = { id: Date.now().toString(), title: "Dự án mới", thumbnail: "", description: "", content: "", result: "+100%", note: "Tăng trưởng" };
+                    updateSettings({ featuredProjects: [...(settings.featuredProjects || []), newProj] });
+                  }}
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white"
+                >
+                  Thêm dự án
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {(settings.featuredProjects || []).map((proj, idx) => (
+                  <div key={proj.id} className="rounded-2xl border border-white/10 bg-card p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-white">Dự án #{idx + 1}</h4>
+                      <button 
+                        onClick={() => {
+                          const next = (settings.featuredProjects || []).filter(p => p.id !== proj.id);
+                          updateSettings({ featuredProjects: next });
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
-                    <div className="space-y-4">
-                      <textarea
-                        value={newCase.description}
-                        onChange={(e) => setNewCase({ ...newCase, description: e.target.value })}
-                        placeholder="Mô tả ngắn dự án..."
-                        rows={2}
-                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
-                      />
-                      <textarea
-                        value={newCase.content}
-                        onChange={(e) => setNewCase({ ...newCase, content: e.target.value })}
-                        placeholder="Nội dung chi tiết dự án..."
-                        rows={4}
-                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white"
-                      />
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-gray-400">Hình ảnh Thumbnail</p>
+                        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                          {proj.thumbnail ? <img src={proj.thumbnail} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-xs text-gray-500">Chưa có ảnh</div>}
+                          <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition hover:opacity-100">
+                            <span className="text-xs font-bold text-white">Tải ảnh</span>
+                            <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const imageUrl = await fileToDataUrl(file);
+                              const next = [...(settings.featuredProjects || [])];
+                              next[idx] = { ...next[idx], thumbnail: imageUrl };
+                              updateSettings({ featuredProjects: next });
+                            }} />
+                          </label>
+                        </div>
+                        <input value={proj.thumbnail} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], thumbnail: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="URL ảnh..." className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white" />
+                      </div>
+                      <input value={proj.title} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], title: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Tên dự án" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <input value={proj.description} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], description: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Mô tả ngắn" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input value={proj.result} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], result: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Kết quả (vd: +150%)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                        <input value={proj.note} onChange={e => {
+                          const next = [...(settings.featuredProjects || [])];
+                          next[idx] = { ...next[idx], note: e.target.value };
+                          updateSettings({ featuredProjects: next });
+                        }} placeholder="Ghi chú (vd: Doanh thu)" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
+                      </div>
+                      <textarea value={proj.content} onChange={e => {
+                        const next = [...(settings.featuredProjects || [])];
+                        next[idx] = { ...next[idx], content: e.target.value };
+                        updateSettings({ featuredProjects: next });
+                      }} placeholder="Nội dung chi tiết" className="w-full h-24 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
                     </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (!newCase.title || !newCase.before || !newCase.after) {
-                        alert("Vui lòng nhập tên dự án và đủ 2 ảnh Trước/Sau");
-                        return;
-                      }
-                      addCase(selectedPlatform, {
-                        title: newCase.title,
-                        before: newCase.before,
-                        after: newCase.after,
-                        description: newCase.description,
-                        content: newCase.content,
-                      });
-                      setNewCase({ id: 0, title: "", before: "", after: "", description: "", content: "" });
-                    }}
-                    className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white transition-all hover:bg-primary/90"
-                  >
-                    Thêm Dự án mới
-                  </button>
-                </div>
+                ))}
               </div>
-
-              <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
-                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
-                  <h3 className="font-bold text-white">Danh sách Dự án ({selectedPlatform})</h3>
-                  <button
-                    onClick={saveSettingsPanel}
-                    disabled={!hasUnsavedChanges || saveStatus === "saving"}
-                    className="rounded-lg bg-primary px-4 py-1.5 text-xs font-bold text-white disabled:opacity-50"
-                  >
-                    {saveStatus === "saving" ? "Đang lưu..." : "Lưu thay đổi"}
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-                  {settings.media[selectedPlatform]?.cases?.length === 0 ? (
-                    <div className="col-span-full py-8 text-center text-gray-400">Chưa có dự án nào</div>
-                  ) : (
-                    settings.media[selectedPlatform].cases.map((c) => (
-                      <div key={c.id} className="group relative rounded-xl border border-white/10 bg-white/5 p-4 transition-all hover:border-primary/50">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-bold text-white truncate pr-8">{c.title}</h4>
-                          <button
-                            onClick={() => removeCase(selectedPlatform, c.id)}
-                            className="absolute top-4 right-4 text-red-400 opacity-0 transition group-hover:opacity-100"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 mb-3">
-                          <div className="aspect-video rounded-lg overflow-hidden border border-white/10">
-                            <img src={c.before} className="h-full w-full object-cover" />
-                          </div>
-                          <div className="aspect-video rounded-lg overflow-hidden border border-white/10">
-                            <img src={c.after} className="h-full w-full object-cover" />
-                          </div>
-                        </div>
-                        {c.description && <p className="text-xs text-gray-400 line-clamp-2 mb-1">{c.description}</p>}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
+              <button onClick={saveSettingsPanel} disabled={!hasUnsavedChanges || saveStatus === "saving"} className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white disabled:opacity-50">Lưu tất cả dự án</button>
             </div>
           )}
 
