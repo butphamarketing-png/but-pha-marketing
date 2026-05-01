@@ -18,14 +18,16 @@ export async function getDynamicMetadata(path: string, fallback: Partial<SeoInpu
 
   try {
     const supabase = createServerClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "admin_settings")
-      .maybeSingle();
+    if (supabase) {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "admin_settings")
+        .maybeSingle();
 
-    const seoPages = data?.value?.seoPages ?? {};
-    dynamicSeo = seoPages[key] || (key === "google-maps" ? seoPages.googlemaps : undefined) || null;
+      const seoPages = data?.value?.seoPages ?? {};
+      dynamicSeo = seoPages[key] || (key === "google-maps" ? seoPages.googlemaps : undefined) || null;
+    }
   } catch (error) {
     console.error(`[SEO] Failed to fetch dynamic metadata for ${path}:`, error);
   }

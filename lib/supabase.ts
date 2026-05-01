@@ -16,27 +16,29 @@ function getEnv(name: string): string {
           : process.env[name];
 
   if (!value || !value.trim()) {
-    if (name === "SUPABASE_SERVICE_ROLE_KEY") {
-      console.warn(`[Supabase] Missing SUPABASE_SERVICE_ROLE_KEY env var. API requests will fail gracefully with JSON error.`);
-      return "";
-    }
-    throw new Error(`Missing required environment variable: ${name}`);
+    console.warn(`[Supabase] Environment variable ${name} is missing.`);
+    return "";
   }
   return value;
 }
 
 function getSupabaseUrl(): string {
   const url = getEnv("NEXT_PUBLIC_SUPABASE_URL");
+  if (!url) return "";
   try {
     new URL(url);
     return url;
   } catch {
-    throw new Error("Invalid NEXT_PUBLIC_SUPABASE_URL. Expected a valid URL.");
+    console.warn("[Supabase] Invalid NEXT_PUBLIC_SUPABASE_URL.");
+    return "";
   }
 }
 
-function createSupabaseClient(key: string, isBrowser: boolean): SupabaseClient {
-  return createClient(getSupabaseUrl(), key, {
+function createSupabaseClient(key: string, isBrowser: boolean): SupabaseClient | null {
+  const url = getSupabaseUrl();
+  if (!url || !key) return null;
+  
+  return createClient(url, key, {
     auth: {
       persistSession: isBrowser,
       autoRefreshToken: isBrowser,
@@ -54,27 +56,22 @@ function createSupabaseClient(key: string, isBrowser: boolean): SupabaseClient {
   });
 }
 
-let browserClient: SupabaseClient | undefined;
+let browserClient: SupabaseClient | null = null;
 
-export function getSupabaseBrowserClient(): SupabaseClient {
-  if (typeof window === "undefined") {
-    throw new Error("getSupabaseBrowserClient() can only be used in the browser.");
-  }
+export function getSupabaseBrowserClient(): SupabaseClient | null {
+  if (typeof window === "undefined") return null;
   if (!browserClient) {
     browserClient = createSupabaseClient(getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"), true);
   }
   return browserClient;
 }
 
-export function createBrowserClient(): SupabaseClient {
+export function createBrowserClient(): SupabaseClient | null {
   return getSupabaseBrowserClient();
 }
 
-export function createServerClient(): SupabaseClient {
+export function createServerClient(): SupabaseClient | null {
   const key = getEnv("SUPABASE_SERVICE_ROLE_KEY");
-  if (!key) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY required but missing - check Vercel dashboard.");
-  }
   return createSupabaseClient(key, false);
 }
 
