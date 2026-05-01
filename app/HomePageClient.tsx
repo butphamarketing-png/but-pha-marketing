@@ -378,19 +378,19 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative h-[400px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
-            <div className="absolute inset-0 z-20 flex items-center justify-between px-4 pointer-events-none">
+          <section id="hero" className="relative h-[480px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
+            <div className="absolute inset-0 z-20 flex items-center justify-between px-2 pointer-events-none sm:px-4">
               <button
-                onClick={() => setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-                className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition hover:bg-black/40 lg:h-12 lg:w-12"
+                onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
+                className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white backdrop-blur-md transition hover:bg-black/50 sm:h-12 sm:w-12"
               >
-                <ChevronLeft className="h-6 w-6" />
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
               <button
-                onClick={() => setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length)}
-                className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition hover:bg-black/40 lg:h-12 lg:w-12"
+                onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length); }}
+                className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white backdrop-blur-md transition hover:bg-black/50 sm:h-12 sm:w-12"
               >
-                <ChevronRight className="h-6 w-6" />
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
@@ -408,17 +408,63 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#050308]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#050308]" />
+                
+                <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pt-12 text-center sm:pt-0">
+                  <div className="max-w-4xl space-y-4 sm:space-y-6">
+                    <motion.p
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-400 sm:text-sm"
+                    >
+                      {currentHeroSlide.eyebrow}
+                    </motion.p>
+                    <motion.h1
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-3xl font-black leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+                    >
+                      {currentHeroSlide.middle} <br />
+                      <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
+                        {currentHeroSlide.accent}
+                      </span>
+                    </motion.h1>
+                    <motion.p
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-lg"
+                    >
+                      {currentHeroSlide.description}
+                    </motion.p>
+                    
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="flex flex-wrap justify-center gap-3 pt-4 sm:gap-4"
+                    >
+                      {currentHeroSlide.pills?.map((pill: any, i: number) => (
+                        <div key={i} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs">
+                          <pill.icon className="h-3 w-3 text-fuchsia-400 sm:h-4 sm:w-4" />
+                          {pill.label}
+                        </div>
+                      ))}
+                    </motion.div>
+                  </div>
+                </div>
               </motion.div>
             </AnimatePresence>
 
-            <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+            <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3 sm:bottom-10">
               {heroSlides.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setActiveHeroSlide(i)}
+                  onClick={() => { playClickSound(); setActiveHeroSlide(i); }}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeHeroSlide === i ? "w-8 bg-white" : "w-2 bg-white/30"
+                    activeHeroSlide === i ? "w-10 bg-fuchsia-500" : "w-2.5 bg-white/30 hover:bg-white/50"
                   }`}
                 />
               ))}
@@ -516,23 +562,25 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex-1 text-center">
+          <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
+            <div className="mb-10 flex flex-col items-center gap-6 md:flex-row md:justify-between md:text-left">
+              <div className="text-center md:text-left">
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
               </div>
-              <div className="flex gap-2 lg:hidden">
+              <div className="flex gap-3">
                 <button
-                  onClick={() => scrollContainer(whyChooseUsRef, "left")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                  onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "left"); }}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 hover:border-fuchsia-500/30"
+                  aria-label="Previous"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-6 w-6" />
                 </button>
                 <button
-                  onClick={() => scrollContainer(whyChooseUsRef, "right")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                  onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "right"); }}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 hover:border-fuchsia-500/30"
+                  aria-label="Next"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-6 w-6" />
                 </button>
               </div>
             </div>
