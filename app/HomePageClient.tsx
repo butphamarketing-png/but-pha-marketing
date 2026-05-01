@@ -286,16 +286,32 @@ export default function HomePageClient() {
     },
   ];
 
-  const serviceCards = useMemo(() => {
-    return services.map((s) => ({
-      key: s.id,
-      title: s.name,
-      description: s.description || "Dịch vụ marketing chuyên nghiệp",
-      image: s.imageUrl || "/mascot-home.png",
-      href: `/${slugify(s.name)}`,
-      accent: s.name.toLowerCase().includes("website") ? "from-emerald-500/20" : s.name.toLowerCase().includes("facebook") ? "from-blue-500/20" : "from-fuchsia-500/20",
-    }));
-  }, [services]);
+  const serviceCards = [
+    {
+      key: "website",
+      title: "Website",
+      description: "Thiết kế website chuẩn SEO, tối ưu chuyển đổi và trải nghiệm người dùng.",
+      image: "/Website.png",
+      href: "/website",
+      accent: "from-emerald-500/20",
+    },
+    {
+      key: "facebook",
+      title: "Facebook",
+      description: "Quản trị Fanpage, chạy quảng cáo và xây dựng cộng đồng khách hàng trung thành.",
+      image: "/Facebook.png",
+      href: "/facebook",
+      accent: "from-blue-500/20",
+    },
+    {
+      key: "googlemaps",
+      title: "Google Maps",
+      description: "Tối ưu hiển thị địa phương, tăng lượt gọi và khách hàng ghé thăm cửa hàng.",
+      image: "/GoogleMaps.png",
+      href: "/google-maps",
+      accent: "from-fuchsia-500/20",
+    },
+  ];
 
   const projectShowcase = useMemo(() => {
     const cases = homeMedia?.cases || [];
