@@ -21,6 +21,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { SiFacebook, SiMessenger, SiYoutube, SiZalo } from "react-icons/si";
+import { AnimatePresence, motion } from "framer-motion";
 import { LoginModal } from "@/components/shared/LoginModal";
 import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
