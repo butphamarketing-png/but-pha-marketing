@@ -5,7 +5,6 @@ import { AnimatedMascot } from "@/components/shared/AnimatedMascot";
 import { SocialProofToast } from "@/components/shared/SocialProofToast";
 import { SoftUISounds } from "@/components/shared/SoftUISounds";
 import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
-import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
 import { QuickActionBar } from "@/components/shared/QuickActionBar";
 import { FloatingContactButtons } from "@/components/shared/FloatingContactButtons";
 
@@ -22,7 +21,6 @@ export function MarketingChrome() {
       <AnimatedMascot />
       <SocialProofToast />
       <ThemeToggleButton />
-      <VideoIntroButton />
       <QuickActionBar />
       <FloatingContactButtons />
     </>
