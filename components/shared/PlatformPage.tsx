@@ -742,11 +742,11 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
     <SubPageLayout platformName={config.name} primaryColor={platformColor} customSections={config.customSections}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
+      {children}
+
       {config.tabs && config.tabs.length > 0 && (
         <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} hideHeader={config.hidePricingHeader} />
       )}
-
-      {children}
 
       {!config.hideStats && <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />}
       

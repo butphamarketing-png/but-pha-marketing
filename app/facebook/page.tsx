@@ -19,7 +19,7 @@ const config: PlatformConfig = {
   hidePricingHeader: true,
   hideStats: true,
   hideContact: false,
-  robotFilter: "hue-rotate(220deg) brightness(1.1)",
+  robotFilter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)",
   customSections: [
     { id: "audit", label: "Chuẩn đoán Fanpage" },
     { id: "build", label: "Xây dựng Fanpage" },
@@ -113,10 +113,10 @@ export default function FacebookPage() {
                   className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
                 />
                 <button 
-                  className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+                  className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2 justify-center"
                   style={{ backgroundColor: config.color }}
                 >
-                  Phân tích ngay
+                  Phân tích ngay <ChevronRight size={18} />
                 </button>
               </div>
               
@@ -137,17 +137,28 @@ export default function FacebookPage() {
             </div>
             
             <div className="hidden lg:block w-1/3">
-              <div className="relative p-4 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm">
-                <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo cáo chi tiết</p>
-                  <ul className="space-y-3">
-                    {["Phân tích điểm mạnh & điểm yếu", "Đề xuất cải thiện cụ thể", "Tư vấn giải pháp phù hợp"].map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-3 text-sm text-gray-300">
-                        <Check size={16} className="text-green-500" /> {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="relative p-6 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm space-y-6">
+                <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo giá chi tiết qua Zalo</p>
+                <ul className="space-y-4">
+                  {[
+                    "Phân tích điểm mạnh & điểm yếu",
+                    "Đề xuất cải thiện cụ thể",
+                    "Tư vấn giải pháp phù hợp",
+                    "Báo giá chi tiết từng hạng mục"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-sm text-gray-300">
+                      <Check size={16} className="text-green-500" /> {item}
+                    </li>
+                  ))}
+                </ul>
+                <a 
+                  href="https://zalo.me/0937417982" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition-colors text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2"
+                >
+                   Nhận báo giá qua Zalo
+                </a>
               </div>
             </div>
           </div>
