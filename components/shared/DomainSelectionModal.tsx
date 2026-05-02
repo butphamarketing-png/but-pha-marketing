@@ -92,7 +92,7 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
     setIsSubmitting(true);
     setError("");
 
-    const domainExtensions = [];
+    const domainExtensions: string[] = [];
     DOMAIN_CATEGORIES.forEach(cat => {
       cat.domains.forEach(d => {
         if (selectedDomains.has(d.id)) domainExtensions.push(d.name);

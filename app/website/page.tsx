@@ -50,7 +50,7 @@ const config: PlatformConfig = {
       ],
     },
   ],
-  stats: [{ label: "Website", value: "150+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
+  stats: [],
   process: [
     { step: 1, title: "Khảo sát nhu cầu", desc: "Tư vấn chi tiết về mục đích, tính năng và design style phù hợp với thương hiệu của bạn." },
     { step: 2, title: "Thiết kế UI/UX", desc: "Tạo wireframe, thiết kế giao diện đẹp và trải nghiệm người dùng tối ưu cho mọi thiết bị." },

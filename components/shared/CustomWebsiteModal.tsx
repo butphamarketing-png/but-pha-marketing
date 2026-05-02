@@ -131,7 +131,7 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
     setIsSubmitting(true);
     setError("");
 
-    const featureNames = [];
+    const featureNames: string[] = [];
     FEATURE_CATEGORIES.forEach(cat => {
       cat.features.forEach(f => {
         if (selectedFeatures.has(f.id)) featureNames.push(f.name);
