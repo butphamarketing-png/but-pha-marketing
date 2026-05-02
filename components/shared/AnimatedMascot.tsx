@@ -324,7 +324,7 @@ export function AnimatedMascot() {
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)", scale: 1 },
-    googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
+    googlemaps: { filter: "hue-rotate(-240deg) saturate(1.5) brightness(1.1)", scale: 1.02 },
     website: { filter: "hue-rotate(90deg) saturate(1.4) brightness(1.1)", scale: 1 },
   };
   const customFilter = useMemo(() => {

@@ -7,6 +7,7 @@ import { SoftUISounds } from "@/components/shared/SoftUISounds";
 import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
 import { VideoIntroButton } from "@/components/shared/VideoIntroButton";
 import { QuickActionBar } from "@/components/shared/QuickActionBar";
+import { FloatingContactButtons } from "@/components/shared/FloatingContactButtons";
 
 export function MarketingChrome() {
   const pathname = usePathname();
@@ -23,6 +24,7 @@ export function MarketingChrome() {
       <ThemeToggleButton />
       <VideoIntroButton />
       <QuickActionBar />
+      <FloatingContactButtons />
     </>
   );
 }

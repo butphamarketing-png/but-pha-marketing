@@ -6,7 +6,7 @@ import { Check, Search, MessageSquare, Target, Zap, Sparkles, Wrench, Building2,
 
 const config: PlatformConfig = {
   name: "Google Maps",
-  color: "#9333EA", // Màu tím theo hình ảnh yêu cầu
+  color: "#EA580C", // Màu cam theo yêu cầu
   auditPlatform: "googlemaps",
   heroTitle: "Không lên Google Maps",
   heroSubtitle: "Bạn đang mất khách mỗi ngày",
@@ -18,7 +18,7 @@ const config: PlatformConfig = {
   hidePricingHeader: true,
   hideStats: true,
   hideContact: false,
-  robotFilter: "hue-rotate(250deg) brightness(1.2)", // Robot màu tím/xanh lá theo yêu cầu
+  robotFilter: "hue-rotate(-240deg) saturate(1.5) brightness(1.1)", // Robot màu cam theo yêu cầu
   customSections: [
     { id: "audit", label: "Kiểm tra vị trí" },
     { id: "gm-pricing", label: "Gói Google Maps" },
@@ -103,7 +103,7 @@ export default function GoogleMapsPage() {
             
             <div className="hidden lg:block w-1/3">
               <div className="relative p-6 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm space-y-6">
-                <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo cáo chi tiết qua Zalo</p>
+                <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo giá chi tiết qua Zalo</p>
                 <ul className="space-y-4">
                   {[
                     "Vị trí hiện tại của bạn",
@@ -116,9 +116,14 @@ export default function GoogleMapsPage() {
                     </li>
                   ))}
                 </ul>
-                <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
-                   Nhận báo cáo qua Zalo
-                </button>
+                <a 
+                  href="https://zalo.me/0937417982" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition-colors text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2"
+                >
+                   Nhận báo giá qua Zalo
+                </a>
               </div>
             </div>
           </div>
@@ -129,7 +134,7 @@ export default function GoogleMapsPage() {
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">GÓI GOOGLE MAPS</h2>
             <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Lựa chọn gói phù hợp với nhu cầu của bạn</p>
-            <div className="h-1.5 w-24 bg-purple-600 mx-auto rounded-full" />
+            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
@@ -154,33 +159,33 @@ export default function GoogleMapsPage() {
                 features: ["Tối ưu SEO Maps", "Viết mô tả chuẩn", "Tối ưu hiển thị tìm kiếm"] 
               }
             ].map((pkg, i) => (
-              <div key={i} className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${pkg.bestSeller ? 'border-purple-500 bg-purple-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
+              <div key={i} className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${pkg.bestSeller ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
                 {pkg.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-purple-500/40">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-orange-500/40">
                     <Sparkles size={12} /> BEST CHOICE
                   </div>
                 )}
                 <div className="space-y-6 flex-1 flex flex-col">
                   <div className="flex justify-center">
-                    <div className={`h-16 w-16 rounded-2xl flex items-center justify-center ${pkg.bestSeller ? 'bg-purple-600 text-white' : 'bg-white/5 text-purple-400'}`}>
+                    <div className={`h-16 w-16 rounded-2xl flex items-center justify-center ${pkg.bestSeller ? 'bg-orange-600 text-white' : 'bg-white/5 text-orange-400'}`}>
                       <pkg.icon size={32} />
                     </div>
                   </div>
                   <div className="text-center space-y-2">
                     <h3 className="text-xl font-black text-white">{pkg.title}</h3>
-                    <p className="text-3xl font-black text-purple-400">{pkg.price}</p>
+                    <p className="text-3xl font-black text-orange-400">{pkg.price}</p>
                   </div>
                   <ul className="space-y-4 flex-1">
                     {pkg.features.map((f, j) => (
                       <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
-                        <Check size={16} className="text-purple-500 flex-shrink-0" /> {f}
+                        <Check size={16} className="text-orange-500 flex-shrink-0" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-3 pt-8">
                     <button 
                       onClick={() => handleOpenConsult(pkg.title, pkg.price, "Gói Google Maps")}
-                      className="flex-1 bg-purple-600 hover:bg-purple-500 text-white py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-purple-600/20"
+                      className="flex-1 bg-orange-600 hover:bg-orange-500 text-white py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-600/20"
                     >
                       Đăng ký ngay
                     </button>
@@ -202,7 +207,7 @@ export default function GoogleMapsPage() {
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">GÓI QUẢNG CÁO GOOGLE MAPS</h2>
             <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Lựa chọn gói phù hợp với ngân sách của bạn</p>
-            <div className="h-1.5 w-24 bg-purple-600 mx-auto rounded-full" />
+            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
@@ -240,37 +245,37 @@ export default function GoogleMapsPage() {
                 fee: "/ tháng (chưa bao gồm ngân sách quảng cáo)"
               }
             ].map((ads, i) => (
-              <div key={i} className={`relative group flex flex-col rounded-[3rem] border p-10 transition-all hover:bg-white/[0.05] ${ads.bestSeller ? 'border-purple-500 bg-purple-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
+              <div key={i} className={`relative group flex flex-col rounded-[3rem] border p-10 transition-all hover:bg-white/[0.05] ${ads.bestSeller ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
                 {ads.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-purple-500/40">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-orange-500/40">
                     <Sparkles size={12} /> BEST SELLER
                   </div>
                 )}
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-8">
-                    <div className="h-16 w-16 rounded-2xl bg-purple-600 flex items-center justify-center text-white shadow-xl shadow-purple-500/20">
+                    <div className="h-16 w-16 rounded-2xl bg-orange-600 flex items-center justify-center text-white shadow-xl shadow-orange-500/20">
                       <ads.icon size={32} />
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-black text-purple-400">{ads.price}</p>
+                      <p className="text-2xl font-black text-orange-400">{ads.price}</p>
                       <p className="text-[10px] text-gray-500 font-bold">{ads.fee}</p>
                     </div>
                   </div>
                   <div className="mb-6">
                     <h3 className="text-2xl font-black text-white">{ads.title}</h3>
-                    <p className="text-sm text-purple-400 font-bold">{ads.note}</p>
+                    <p className="text-sm text-orange-400 font-bold">{ads.note}</p>
                   </div>
                   <ul className="space-y-4 mb-10 flex-1">
                     {ads.features.map((f, j) => (
                       <li key={j} className="flex items-center gap-3 text-sm text-gray-400">
-                        <Check size={16} className="text-purple-500" /> {f}
+                        <Check size={16} className="text-orange-500" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-4 pt-4">
                     <button 
                       onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                      className="flex-1 bg-purple-600 hover:bg-purple-500 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-purple-600/20"
+                      className="flex-1 bg-orange-600 hover:bg-orange-500 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-600/20"
                     >
                       Đăng ký quảng cáo
                     </button>
@@ -291,7 +296,7 @@ export default function GoogleMapsPage() {
         <section id="benefits" className="space-y-16 scroll-mt-24">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">BẠN NHẬN ĐƯỢC GÌ?</h2>
-            <div className="h-1.5 w-24 bg-purple-600 mx-auto rounded-full" />
+            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -302,7 +307,7 @@ export default function GoogleMapsPage() {
               { icon: Star, title: "Dễ dàng được khách tin tưởng", desc: "Nhiều đánh giá tốt giúp nâng cao uy tín thương hiệu" }
             ].map((item, idx) => (
               <div key={idx} className="p-8 rounded-[2.5rem] border border-white/10 bg-white/[0.03] space-y-4 hover:bg-white/[0.06] transition-all group">
-                <div className="h-12 w-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                <div className="h-12 w-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
                   <item.icon size={24} />
                 </div>
                 <h3 className="text-lg font-black text-white leading-tight">{item.title}</h3>
@@ -321,7 +326,7 @@ export default function GoogleMapsPage() {
           <p className="text-gray-400 max-w-2xl mx-auto">Kiểm tra ngay vị trí của bạn và đừng để mất khách hàng tiềm năng!</p>
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="px-12 py-5 rounded-2xl bg-purple-600 text-white text-sm font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-purple-600/30"
+            className="px-12 py-5 rounded-2xl bg-orange-600 text-white text-sm font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-orange-600/30"
           >
             Kiểm tra ngay
           </button>
