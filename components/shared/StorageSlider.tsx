@@ -58,7 +58,7 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             </div>
             <div className="rounded-[2rem] bg-white/[0.03] p-6 border border-white/10 transition-colors hover:bg-white/[0.05] md:p-8">
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Dự toán chi phí</p>
-              <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl leading-tight truncate">{formatPrice(price)}</div>
+              <div className="text-xl font-black text-white md:text-2xl lg:text-3xl leading-tight">{formatPrice(price)}</div>
             </div>
           </div>
 
