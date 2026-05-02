@@ -301,6 +301,8 @@ export default function FacebookPage() {
           </div>
         </section>
 
+      </div>
+
       {checkoutPkg && (
         <ConsultationModal 
           pkg={checkoutPkg} 
