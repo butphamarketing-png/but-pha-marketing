@@ -28,6 +28,9 @@ export interface PlatformConfig {
   name: string;
   color: string;
   auditPlatform?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroDescription?: string;
   tabs: PricingTab[];
   stats: { label: string; value: string }[];
   process: { step: number; title: string; desc: string }[];
