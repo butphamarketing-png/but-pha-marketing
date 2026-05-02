@@ -95,14 +95,16 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
 
   const sections = useMemo(
     () => customSections || [
-      { id: "slideshow", label: "Tổng quan" },
-      { id: "intro", label: `Giới Thiệu Về Dịch Vụ ${platformName}` },
-      { id: "audit", label: "Chuẩn Đoán Sức Khỏe Fanpage" },
-      { id: "pricing", label: "Bảng Giá Dịch Vụ" },
-      { id: "before-after", label: "Sự Thay Đổi Kỳ Diệu" },
-      { id: "contact", label: "Liên Hệ Tư Vấn" },
+      { id: "audit", label: "Chuẩn đoán" },
+      { id: "build", label: "Xây dựng Fanpage" },
+      { id: "care", label: "Chăm sóc Fanpage" },
+      { id: "ads", label: "Quảng cáo Fanpage" },
+      { id: "gm-pricing", label: "Gói Google Maps" },
+      { id: "ads-pricing", label: "Gói Quảng cáo" },
+      { id: "benefits", label: "Lợi ích" },
+      { id: "contact", label: "Liên hệ tư vấn" },
     ],
-    [platformName, customSections],
+    [customSections],
   );
 
   useEffect(() => {
