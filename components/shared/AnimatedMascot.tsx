@@ -323,9 +323,9 @@ export function AnimatedMascot() {
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
-    facebook: { filter: "hue-rotate(280deg) saturate(1.2) brightness(1.1)", scale: 1 },
+    facebook: { filter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)", scale: 1 },
     googlemaps: { filter: "hue-rotate(130deg) saturate(1.4) brightness(1)", scale: 1.02 },
-    website: { filter: "hue-rotate(220deg) saturate(1.2) brightness(1.1)", scale: 1 },
+    website: { filter: "hue-rotate(90deg) saturate(1.4) brightness(1.1)", scale: 1 },
   };
   const customFilter = useMemo(() => {
     return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;
@@ -390,9 +390,8 @@ export function AnimatedMascot() {
     if (!enabled || !isShown) return;
 
     const updatePos = () => {
-      const width = 118;
-      const height = 126;
-      const mobile = window.innerWidth < 768;
+      const width = mobile ? 80 : 118;
+      const height = mobile ? 85 : 126;
       const maxX = Math.max(24, window.innerWidth - width - 24);
       const maxY = Math.max(140, window.innerHeight - height - 24);
       const startX = Math.max(24, window.innerWidth - width - 40);
@@ -402,10 +401,10 @@ export function AnimatedMascot() {
       const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.26 : 0.16))));
       const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.66 : 0.68))));
       const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.82 : 0.88))));
-      const topY = Math.max(mobile ? 120 : 96, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.18 : 0.08))));
-      const midY = Math.max(mobile ? 180 : 120, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.42 : 0.3))));
-      const lowerY = Math.max(mobile ? 260 : 180, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.64 : 0.58))));
-      const bottomY = Math.max(mobile ? 320 : 220, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.78 : 0.82))));
+      const topY = Math.max(mobile ? 100 : 96, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.15 : 0.08))));
+      const midY = Math.max(mobile ? 160 : 120, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.35 : 0.3))));
+      const lowerY = Math.max(mobile ? 240 : 180, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.55 : 0.58))));
+      const bottomY = Math.max(mobile ? 280 : 220, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.65 : 0.82))));
 
       setIsMobileViewport(mobile);
       setPos({ x: startX, y: startY });
@@ -414,7 +413,7 @@ export function AnimatedMascot() {
           ? [startX, rightX, centerX, leftX, farLeftX, centerX, startX]
           : [startX, farLeftX, centerX, farRightX, leftX, rightX, startX],
         y: mobile
-          ? [startY, lowerY, midY, topY, midY, bottomY, startY]
+          ? [startY, lowerY, midY, topY, midY, lowerY, startY]
           : [startY, midY, bottomY, topY, lowerY, midY, startY],
       });
     };

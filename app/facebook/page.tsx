@@ -182,17 +182,17 @@ export default function FacebookPage() {
           <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-8 md:p-12 backdrop-blur-xl relative overflow-hidden group">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="space-y-8">
-                <div className="flex items-center gap-6">
-                  <div className="text-center p-6 rounded-[2.5rem] bg-blue-500/10 border border-blue-500/20 w-48">
-                    <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Số bài viết / tháng</p>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+                  <div className="text-center p-6 rounded-[2.5rem] bg-blue-500/10 border border-blue-500/20 w-full sm:w-48">
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Số bài viết / tháng</p>
                     <div className="flex items-baseline justify-center gap-1">
-                      <span className="text-5xl font-black text-blue-400">{postsPerMonth}</span>
+                      <span className="text-4xl sm:text-5xl font-black text-blue-400">{postsPerMonth}</span>
                       <span className="text-xs font-bold text-gray-500">bài</span>
                     </div>
                   </div>
                   <div className="text-center p-6 rounded-[2.5rem] bg-white/5 border border-white/10 flex-1">
-                    <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Dự toán ngân sách</p>
-                    <p className="text-3xl font-black text-white">{new Intl.NumberFormat("vi-VN").format(carePrice)}đ</p>
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Dự toán ngân sách</p>
+                    <p className="text-2xl sm:text-3xl font-black text-white">{new Intl.NumberFormat("vi-VN").format(carePrice)}đ</p>
                   </div>
                 </div>
                 <p className="text-gray-400 leading-relaxed italic border-l-4 border-blue-500 pl-6 text-sm">
@@ -201,7 +201,7 @@ export default function FacebookPage() {
               </div>
 
               <div className="space-y-12">
-                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500">
+                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500 px-2">
                   <span>10 bài</span>
                   <span>30 bài</span>
                   <span>60 bài</span>
@@ -214,16 +214,16 @@ export default function FacebookPage() {
                     className="absolute w-full appearance-none bg-transparent cursor-pointer z-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-12 [&::-webkit-slider-thumb]:w-12 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[6px] [&::-webkit-slider-thumb]:border-blue-500"
                   />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button 
                     onClick={() => handleOpenConsult(`Gói chăm sóc ${postsPerMonth} bài`, `${new Intl.NumberFormat("vi-VN").format(carePrice)}đ`, "Chăm sóc Fanpage")}
-                    className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20"
+                    className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20"
                   >
                     Đăng ký chăm sóc
                   </button>
                   <button 
                     onClick={() => handleOpenConsult(`Tư vấn gói chăm sóc`, `Theo nhu cầu`, "Chăm sóc Fanpage")}
-                    className="flex-1 border border-white/10 hover:bg-white/5 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
+                    className="flex-1 border border-white/10 hover:bg-white/5 text-white py-4 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all"
                   >
                     Tư vấn gói phù hợp
                   </button>
