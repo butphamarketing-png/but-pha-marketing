@@ -21,10 +21,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
-  { id: "cms", label: "Quản trị nội dung", icon: Edit3 },
-  { id: "services", label: "Quản lý Dịch vụ", icon: Package },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
-  { id: "media", label: "Quản lý hình ảnh", icon: Image },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
