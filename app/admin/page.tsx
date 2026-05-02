@@ -13,7 +13,7 @@ import {
 import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
-import { getContent, type ContentOverride } from "@/lib/pageContent";
+import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type ClientPortal, type ClientReview } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -541,6 +541,125 @@ export default function AdminPage() {
 
   const selectedProjects = normalizeProjects(selectedClient);
   const selectedProject = selectedProjects.find(p => p.id === selectedClientProjectId) || selectedProjects[0] || null;
+
+  const updatePageContentField = (field: keyof ContentOverride, value: any) => {
+    setPageContent((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const savePageContentManual = async () => {
+    const saved = await saveContent(selectedPlatform, pageContent);
+    alert(saved ? "Đã lưu nội dung trang con" : "Lưu nội dung trang con thất bại");
+  };
+
+  const updateResponsibilityIntro = (intro: string) => {
+    const editor = parseResponsibilityEditor(pageContent.responsibility || "");
+    const next = serializeResponsibilityEditor(intro, editor.bullets);
+    updatePageContentField("responsibility", next);
+  };
+
+  const updateResponsibilityBullet = (idx: number, bullet: string) => {
+    const editor = parseResponsibilityEditor(pageContent.responsibility || "");
+    const nextBullets = [...editor.bullets];
+    nextBullets[idx] = bullet;
+    const next = serializeResponsibilityEditor(editor.intro, nextBullets);
+    updatePageContentField("responsibility", next);
+  };
+
+  const addResponsibilityBullet = () => {
+    const editor = parseResponsibilityEditor(pageContent.responsibility || "");
+    const nextBullets = [...editor.bullets, ""];
+    const next = serializeResponsibilityEditor(editor.intro, nextBullets);
+    updatePageContentField("responsibility", next);
+  };
+
+  const removeResponsibilityBullet = (idx: number) => {
+    const editor = parseResponsibilityEditor(pageContent.responsibility || "");
+    const nextBullets = editor.bullets.filter((_, i) => i !== idx);
+    const next = serializeResponsibilityEditor(editor.intro, nextBullets);
+    updatePageContentField("responsibility", next);
+  };
+
+  const updateStat = (idx: number, field: "label" | "value", val: string) => {
+    const next = [...(pageContent.stats || [])];
+    if (!next[idx]) return;
+    next[idx] = { ...next[idx], [field]: val };
+    updatePageContentField("stats", next);
+  };
+
+  const addStat = () => {
+    const next = [...(pageContent.stats || []), { label: "", value: "" }];
+    updatePageContentField("stats", next);
+  };
+
+  const removeStat = (idx: number) => {
+    const next = (pageContent.stats || []).filter((_, i) => i !== idx);
+    updatePageContentField("stats", next);
+  };
+
+  const updateProcessTabLabel = (tabIdx: number, label: string) => {
+    const next = [...(pageContent.processTabs || [])];
+    if (!next[tabIdx]) return;
+    next[tabIdx] = { ...next[tabIdx], label };
+    updatePageContentField("processTabs", next);
+  };
+
+  const addProcessTab = () => {
+    const next = [...(pageContent.processTabs || []), { label: "Dịch vụ mới", steps: [{ step: 1, title: "", desc: "" }] }];
+    updatePageContentField("processTabs", next);
+    setSelectedProcessTab(next.length - 1);
+  };
+
+  const removeProcessTab = (tabIdx: number) => {
+    const next = (pageContent.processTabs || []).filter((_, i) => i !== tabIdx);
+    updatePageContentField("processTabs", next.length > 0 ? next : [{ label: "Xây dựng", steps: [{ step: 1, title: "", desc: "" }] }]);
+    setSelectedProcessTab(0);
+  };
+
+  const updateProcessStep = (stepIdx: number, field: "title" | "desc", val: string) => {
+    const nextTabs = [...(pageContent.processTabs || [])];
+    const tab = nextTabs[selectedProcessTab];
+    if (!tab) return;
+    const nextSteps = [...(tab.steps || [])];
+    if (!nextSteps[stepIdx]) return;
+    nextSteps[stepIdx] = { ...nextSteps[stepIdx], [field]: val };
+    nextTabs[selectedProcessTab] = { ...tab, steps: nextSteps };
+    updatePageContentField("processTabs", nextTabs);
+  };
+
+  const addProcessStep = () => {
+    const nextTabs = [...(pageContent.processTabs || [])];
+    const tab = nextTabs[selectedProcessTab];
+    if (!tab) return;
+    const nextSteps = [...(tab.steps || []), { step: (tab.steps || []).length + 1, title: "", desc: "" }];
+    nextTabs[selectedProcessTab] = { ...tab, steps: nextSteps };
+    updatePageContentField("processTabs", nextTabs);
+  };
+
+  const removeProcessStep = (stepIdx: number) => {
+    const nextTabs = [...(pageContent.processTabs || [])];
+    const tab = nextTabs[selectedProcessTab];
+    if (!tab) return;
+    const nextSteps = (tab.steps || []).filter((_, i) => i !== stepIdx).map((s, i) => ({ ...s, step: i + 1 }));
+    nextTabs[selectedProcessTab] = { ...tab, steps: nextSteps };
+    updatePageContentField("processTabs", nextTabs);
+  };
+
+  const updateFaq = (idx: number, field: "q" | "a", val: string) => {
+    const next = [...(pageContent.faqs || [])];
+    if (!next[idx]) return;
+    next[idx] = { ...next[idx], [field]: val };
+    updatePageContentField("faqs", next);
+  };
+
+  const addFaq = () => {
+    const next = [...(pageContent.faqs || []), { q: "", a: "" }];
+    updatePageContentField("faqs", next);
+  };
+
+  const removeFaq = (idx: number) => {
+    const next = (pageContent.faqs || []).filter((_, i) => i !== idx);
+    updatePageContentField("faqs", next);
+  };
 
   useEffect(() => {
     if (selectedPlatform === "home") return;
