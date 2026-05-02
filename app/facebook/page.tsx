@@ -48,15 +48,6 @@ export default function FacebookPage() {
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [postsPerMonth, setPostsPerMonth] = useState(30);
-  const [formSent, setFormSent] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    platform: "Fanpage",
-    time: "",
-    note: ""
-  });
   const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
 
   const carePrice = useMemo(() => {
@@ -70,23 +61,6 @@ export default function FacebookPage() {
       color: config.color,
       tabLabel: tabLabel
     });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.phone) return;
-    
-    setIsSubmitting(true);
-    await db.leads.add({
-      type: "contact",
-      name: formData.name,
-      phone: formData.phone,
-      service: `Tư vấn ${formData.platform}`,
-      note: `Thời gian: ${formData.time}\nGhi chú: ${formData.note}`,
-      platform: "facebook"
-    });
-    setIsSubmitting(false);
-    setFormSent(true);
   };
 
   return (

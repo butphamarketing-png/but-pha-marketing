@@ -96,6 +96,7 @@ export default function ContactPageClient() {
       phone: form.phone,
       service: form.service || "Tư vấn tổng thể",
       note: [form.email, form.budget, form.note].filter(Boolean).join(" | "),
+      platform: "contact_page"
     });
 
     if (result.error) {
