@@ -38,6 +38,7 @@ export interface PlatformConfig {
   vision: string;
   mission: string;
   responsibility: string;
+  hidePricingHeader?: boolean;
 }
 
 interface CheckoutPkg {
@@ -271,7 +272,7 @@ function Stats({ stats, color, isWebsite }: { stats: { label: string; value: str
   );
 }
 
-function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color: string; onCheckout: (pkg: CheckoutPkg) => void }) {
+function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: PricingTab[]; color: string; onCheckout: (pkg: CheckoutPkg) => void; hideHeader?: boolean }) {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
@@ -289,23 +290,25 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
   return (
     <section data-section="pricing" id="pricing" className="py-24 px-4 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
-        <div className="mb-16 text-center">
-          <motion.span 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-gray-400"
-          >
-            Bảng Giá Dịch Vụ
-          </motion.span>
-          <h2 className="mb-6 text-4xl font-black text-white md:text-5xl lg:text-6xl">
-            Lựa Chọn <span style={{ color }}>Tối Ưu</span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-400">
-            Chúng tôi cung cấp các gói dịch vụ linh hoạt, minh bạch và cam kết hiệu quả tối đa cho doanh nghiệp của bạn.
-          </p>
-        </div>
+        {!hideHeader && (
+          <div className="mb-16 text-center">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-gray-400"
+            >
+              Bảng Giá Dịch Vụ
+            </motion.span>
+            <h2 className="mb-6 text-4xl font-black text-white md:text-5xl lg:text-6xl">
+              Lựa Chọn <span style={{ color }}>Tối Ưu</span>
+            </h2>
+            <p className="mx-auto max-w-2xl text-lg text-gray-400">
+              Chúng tôi cung cấp các gói dịch vụ linh hoạt, minh bạch và cam kết hiệu quả tối đa cho doanh nghiệp của bạn.
+            </p>
+          </div>
+        )}
 
-        {tabs.length > 1 && (
+        {tabs.length > 1 && !hideHeader && (
           <div className="mb-12 flex flex-wrap justify-center gap-4">
             {tabs.map((t, i) => (
               <button 
@@ -724,7 +727,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       {config.tabs && config.tabs.length > 0 && (
-        <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} />
+        <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} hideHeader={config.hidePricingHeader} />
       )}
 
       {children}

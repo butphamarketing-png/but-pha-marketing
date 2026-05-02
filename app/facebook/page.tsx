@@ -16,6 +16,7 @@ const config: PlatformConfig = {
   mission: "Sứ mệnh của chúng tôi là mang lại giải pháp Facebook Marketing toàn diện, từ xây dựng Fanpage chuyên nghiệp đến triển khai chiến dịch quảng cáo hiệu quả, giúp doanh nghiệp tăng trưởng doanh thu bền vững.",
   responsibility: "Chúng tôi cam kết minh bạch trong từng đồng ngân sách, báo cáo kết quả thực tế hàng tuần, và chịu trách nhiệm hoàn toàn with hiệu quả mang lại cho khách hàng.",
   tabs: [],
+  hidePricingHeader: true,
   stats: [{ label: "Khách hàng", value: "500+" }, { label: "Dự án", value: "1.200+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
   process: [
     { step: 1, title: "Tư vấn & Phân tích", desc: "Chúng tôi lắng nghe nhu cầu, phân tích thị trường và đề xuất giải pháp phù hợp nhất cho doanh nghiệp của bạn." },
@@ -72,11 +73,6 @@ export default function FacebookPage() {
         
         {/* 1. DỊCH VỤ XÂY DỰNG FANPAGE */}
         <section className="space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black text-white">1. DỊCH VỤ XÂY DỰNG FANPAGE</h2>
-            <div className="h-1.5 w-24 bg-blue-500 mx-auto rounded-full" />
-          </div>
-
           <div className="grid gap-8 md:grid-cols-3">
             {[
               { 
@@ -134,11 +130,6 @@ export default function FacebookPage() {
 
         {/* 2. CHĂM SÓC FANPAGE */}
         <section className="space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase">2. Chăm sóc Fanpage (Theo số lượng bài viết)</h2>
-            <div className="h-1.5 w-24 bg-blue-500 mx-auto rounded-full" />
-          </div>
-
           <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-8 md:p-12 backdrop-blur-xl relative overflow-hidden group">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="space-y-8">
@@ -185,11 +176,6 @@ export default function FacebookPage() {
 
         {/* 3. QUẢNG CÁO FANPAGE */}
         <section className="space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase">3. Quảng cáo Fanpage</h2>
-            <div className="h-1.5 w-24 bg-blue-500 mx-auto rounded-full" />
-          </div>
-
           <div className="grid gap-8 md:grid-cols-2">
             {[
               {
