@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Calculator, Sparkles, ShoppingCart, ShieldCheck, Megaphone, Search, Bot } from "lucide-react";
+import { db } from "@/lib/useData";
 
 interface FeatureItem {
   id: string;
