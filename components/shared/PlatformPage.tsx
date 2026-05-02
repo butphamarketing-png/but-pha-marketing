@@ -39,6 +39,7 @@ export interface PlatformConfig {
   mission: string;
   responsibility: string;
   hidePricingHeader?: boolean;
+  customSections?: { id: string; label: string }[];
 }
 
 interface CheckoutPkg {
@@ -65,7 +66,7 @@ function parseFeatureItem(raw: string): ParsedFeatureItem {
   return { title, details };
 }
 
-function ConsultationModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platformKey: string; onClose: () => void }) {
+export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: CheckoutPkg; platformKey: string; onClose: () => void }) {
   const [step, setStep] = useState<"config" | "success">("config");
   const [form, setForm] = useState({
     name: "",
@@ -723,7 +724,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
   };
 
   return (
-    <SubPageLayout platformName={config.name} primaryColor={platformColor}>
+    <SubPageLayout platformName={config.name} primaryColor={platformColor} customSections={config.customSections}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       {config.tabs && config.tabs.length > 0 && (

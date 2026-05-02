@@ -14,6 +14,7 @@ interface SubPageLayoutProps {
   platformName: string;
   primaryColor: string;
   children: React.ReactNode;
+  customSections?: { id: string; label: string }[];
 }
 
 function useClickSound() {
@@ -35,7 +36,7 @@ function useClickSound() {
   return playClick;
 }
 
-export function SubPageLayout({ platformName, primaryColor, children }: SubPageLayoutProps) {
+export function SubPageLayout({ platformName, primaryColor, children, customSections }: SubPageLayoutProps) {
   const { settings } = useAdmin();
   const logoSrc = "/logo.png";
   const pathname = usePathname();
@@ -93,7 +94,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
   }, [playClick]);
 
   const sections = useMemo(
-    () => [
+    () => customSections || [
       { id: "slideshow", label: "Tổng quan" },
       { id: "intro", label: `Giới Thiệu Về Dịch Vụ ${platformName}` },
       { id: "audit", label: "Chuẩn Đoán Sức Khỏe Fanpage" },
@@ -101,7 +102,7 @@ export function SubPageLayout({ platformName, primaryColor, children }: SubPageL
       { id: "before-after", label: "Sự Thay Đổi Kỳ Diệu" },
       { id: "contact", label: "Liên Hệ Tư Vấn" },
     ],
-    [platformName],
+    [platformName, customSections],
   );
 
   useEffect(() => {
