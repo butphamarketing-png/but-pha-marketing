@@ -15,35 +15,7 @@ const config: PlatformConfig = {
   vision: "Chúng tôi hướng đến trở thành đối tác chiến lược số 1 về Marketing Facebook tại Việt Nam, giúp hàng nghìn doanh nghiệp xây dựng sự hiện diện mạnh mẽ và bền vững trên nền tảng mạng xã hội lớn nhất thế giới.",
   mission: "Sứ mệnh của chúng tôi là mang lại giải pháp Facebook Marketing toàn diện, từ xây dựng Fanpage chuyên nghiệp đến triển khai chiến dịch quảng cáo hiệu quả, giúp doanh nghiệp tăng trưởng doanh thu bền vững.",
   responsibility: "Chúng tôi cam kết minh bạch trong từng đồng ngân sách, báo cáo kết quả thực tế hàng tuần, và chịu trách nhiệm hoàn toàn with hiệu quả mang lại cho khách hàng.",
-  tabs: [
-    {
-      label: "Xây Dựng Fanpage",
-      packages: [
-        {
-          name: "Cải tạo Fanpage",
-          price: "500.000đ",
-          features: ["Thiết kế lại logo", "Thiết kế ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage cơ bản"],
-          allFeatures: ["Thiết kế lại logo", "Thiết kế ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage cơ bản"],
-          audioText: "Gói Cải tạo Fanpage giúp làm mới diện mạo trang của bạn với logo và ảnh bìa mới, tối ưu thông tin và SEO cơ bản chỉ với 500.000đ.",
-        },
-        {
-          name: "Fanpage cơ bản",
-          price: "1.000.000đ",
-          features: ["Khởi tạo Fanpage chuyên nghiệp", "Thiết kế logo, ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage cơ bản", "Hướng dẫn vận hành"],
-          allFeatures: ["Khởi tạo Fanpage chuyên nghiệp", "Thiết kế logo, ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage cơ bản", "Hướng dẫn vận hành"],
-          audioText: "Gói Fanpage cơ bản cung cấp giải pháp khởi tạo chuyên nghiệp, đầy đủ hình ảnh và hướng dẫn vận hành với giá 1 triệu đồng.",
-        },
-        {
-          name: "Fanpage nâng cao",
-          price: "1.500.000đ",
-          popular: true,
-          features: ["Khởi tạo Fanpage chuyên nghiệp", "Thiết kế logo, ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage chuẩn", "Chat tự động cơ bản", "Chiến lược nội dung ban đầu"],
-          allFeatures: ["Khởi tạo Fanpage chuyên nghiệp", "Thiết kế logo, ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage chuẩn", "Chat tự động cơ bản", "Chiến lược nội dung ban đầu"],
-          audioText: "Gói Fanpage nâng cao là lựa chọn tối ưu with chiến lược nội dung và hệ thống chat tự động cơ bản, giúp bạn bắt đầu kinh doanh hiệu quả.",
-        },
-      ],
-    },
-  ],
+  tabs: [],
   stats: [{ label: "Khách hàng", value: "500+" }, { label: "Dự án", value: "1.200+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
   process: [
     { step: 1, title: "Tư vấn & Phân tích", desc: "Chúng tôi lắng nghe nhu cầu, phân tích thị trường và đề xuất giải pháp phù hợp nhất cho doanh nghiệp của bạn." },

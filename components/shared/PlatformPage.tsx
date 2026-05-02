@@ -717,7 +717,9 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
     <SubPageLayout platformName={config.name} primaryColor={platformColor}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
-      <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} />
+      {config.tabs && config.tabs.length > 0 && (
+        <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} />
+      )}
 
       {children}
 
