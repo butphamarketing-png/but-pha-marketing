@@ -160,7 +160,14 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
       );
       return;
     }
-    await db.leads.add({ type: "audit", phone: form.phone, url: form.url, platform });
+    await db.leads.add({ 
+      type: "audit", 
+      phone: form.phone, 
+      url: form.url, 
+      platform,
+      service: `Chuẩn đoán ${platform}`,
+      note: `Phân tích ${platform} từ component FanpageAudit`
+    });
     setStep("loading");
     setCurrentAuditStep(0);
   };
@@ -182,8 +189,8 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
       await db.leads.add({ 
         type: "audit", 
         platform, 
-        service: pkgName, 
-        note: `Đăng ký sau khi chuẩn đoán. Điểm: ${score}/10.`,
+        service: `Đăng ký gói ${pkgName}`, 
+        note: `Đăng ký sau khi chuẩn đoán ${platform}. Điểm: ${score.toFixed(1)}/10. URL: ${form.url}`,
         phone: form.phone
       });
       alert("Đăng ký thành công! Chúng tôi sẽ liên hệ tư vấn ngay.");

@@ -105,7 +105,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
       type: "contact",
       name: form.name.trim(),
       phone: form.phone.trim(),
-      service: pkg.name,
+      service: `${pkg.tabLabel} - ${pkg.name}`,
       note: combinedNote,
       platform: platformKey,
       url: typeof window !== "undefined" ? window.location.pathname : undefined,
@@ -629,7 +629,8 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                     name, 
                     phone, 
                     service: `Tư vấn ${platform}`, 
-                    note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}` 
+                    note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}`,
+                    platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website"
                   }); 
                   setSent(true); 
                 }} 

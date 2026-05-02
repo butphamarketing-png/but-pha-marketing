@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
+import { AuditModal } from "@/components/shared/AuditModal";
 import { Check, Search, MessageSquare, Target, Zap, Sparkles, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
 
 const config: PlatformConfig = {
@@ -44,6 +45,8 @@ const config: PlatformConfig = {
 
 export default function GoogleMapsPage() {
   const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
+  const [auditUrl, setAuditUrl] = useState("");
+  const [isAuditOpen, setIsAuditOpen] = useState(false);
 
   const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
     setCheckoutPkg({
@@ -75,9 +78,12 @@ export default function GoogleMapsPage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <input 
                   placeholder="Nhập tên doanh nghiệp của bạn" 
+                  value={auditUrl}
+                  onChange={e => setAuditUrl(e.target.value)}
                   className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
                 />
                 <button 
+                  onClick={() => setIsAuditOpen(true)}
                   className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2 justify-center"
                   style={{ backgroundColor: config.color }}
                 >
@@ -333,6 +339,14 @@ export default function GoogleMapsPage() {
         </section>
 
       </div>
+
+      <AuditModal 
+        isOpen={isAuditOpen} 
+        onClose={() => setIsAuditOpen(false)} 
+        initialLink={auditUrl} 
+        source="Phân tích Google Maps"
+        platformColor={config.color}
+      />
 
       {checkoutPkg && (
         <ConsultationModal 

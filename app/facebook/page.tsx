@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap, Search } from "lucide-react";
 import { db } from "@/lib/useData";
+import { AuditModal } from "@/components/shared/AuditModal";
 
 const config: PlatformConfig = {
   name: "Facebook",
@@ -44,6 +45,8 @@ const config: PlatformConfig = {
 };
 
 export default function FacebookPage() {
+  const [auditUrl, setAuditUrl] = useState("");
+  const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [postsPerMonth, setPostsPerMonth] = useState(30);
   const [formSent, setFormSent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,9 +113,12 @@ export default function FacebookPage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <input 
                   placeholder="Nhập Link Fanpage của bạn (VD: facebook.com/yourpage)" 
+                  value={auditUrl}
+                  onChange={e => setAuditUrl(e.target.value)}
                   className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
                 />
                 <button 
+                  onClick={() => setIsAuditOpen(true)}
                   className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2 justify-center"
                   style={{ backgroundColor: config.color }}
                 >
@@ -377,6 +383,14 @@ export default function FacebookPage() {
         </section>
 
       </div>
+
+      <AuditModal 
+        isOpen={isAuditOpen} 
+        onClose={() => setIsAuditOpen(false)} 
+        initialLink={auditUrl} 
+        source="Phân tích Fanpage"
+        platformColor={config.color}
+      />
 
       {checkoutPkg && (
         <ConsultationModal 

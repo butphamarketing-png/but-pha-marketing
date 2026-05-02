@@ -5,6 +5,7 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
+import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, Search, Check } from "lucide-react";
 
 const config: PlatformConfig = {
@@ -77,6 +78,8 @@ const config: PlatformConfig = {
 export default function WebsitePage() {
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [showDomainModal, setShowDomainModal] = useState(false);
+  const [auditUrl, setAuditUrl] = useState("");
+  const [isAuditOpen, setIsAuditOpen] = useState(false);
 
   return (
     <PlatformPage config={config}>
@@ -102,9 +105,12 @@ export default function WebsitePage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <input 
                   placeholder="Nhập URL website của bạn (VD: yourdomain.com)" 
+                  value={auditUrl}
+                  onChange={e => setAuditUrl(e.target.value)}
                   className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
                 />
                 <button 
+                  onClick={() => setIsAuditOpen(true)}
                   className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2 justify-center"
                   style={{ backgroundColor: config.color }}
                 >
@@ -210,6 +216,14 @@ export default function WebsitePage() {
           </div>
         </div>
       </div>
+
+      <AuditModal 
+        isOpen={isAuditOpen} 
+        onClose={() => setIsAuditOpen(false)} 
+        initialLink={auditUrl} 
+        source="Phân tích Website"
+        platformColor={config.color}
+      />
 
       <CustomWebsiteModal
         isOpen={showCustomModal}

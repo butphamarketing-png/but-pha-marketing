@@ -63,11 +63,11 @@ export default async function BlogPage() {
               <span className="h-px w-20 bg-gradient-to-r from-fuchsia-500 to-transparent" />
             </div>
             <h1 className="text-4xl font-extrabold uppercase tracking-[-0.02em] text-white md:text-5xl">
-              Tin tuc &{" "}
-              <span className="bg-gradient-to-r from-fuchsia-400 to-violet-500 bg-clip-text text-transparent">Kien thuc</span>
+              Tin tức &{" "}
+              <span className="bg-gradient-to-r from-fuchsia-400 to-violet-500 bg-clip-text text-transparent">Kiến thức</span>
             </h1>
             <p className="mt-5 max-w-2xl text-[1.05rem] leading-8 text-white/72">
-              Cap nhat nhung xu huong, chien luoc va kien thuc marketing moi nhat giup ban tang truong ben vung.
+              Cập nhật những xu hướng, chiến lược và kiến thức marketing mới nhất giúp bạn tăng trưởng bền vững.
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export default async function BlogPage() {
             href="/blog"
             className="inline-flex items-center gap-3 self-start rounded-[1.35rem] border border-fuchsia-500/40 bg-[#12071f] px-7 py-4 text-lg font-semibold text-white transition hover:border-fuchsia-400 hover:bg-[#1b0a2d]"
           >
-            Xem tat ca bai viet
+            Xem tất cả bài viết
             <ArrowRight size={20} />
           </Link>
         </div>
@@ -89,7 +89,7 @@ export default async function BlogPage() {
             >
               <div className="relative overflow-hidden rounded-[1.4rem] border border-fuchsia-500/15 bg-[#12071f]">
                 <img
-                  src={blog.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80"}
+                  src={blog.imageUrl || "/mascot-home.png"}
                   alt={blog.title}
                   className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -109,14 +109,14 @@ export default async function BlogPage() {
                 <span className="mb-4 inline-flex self-start rounded-full bg-[#5c1ea8] px-4 py-2 text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-white">
                   {resolveBlogTag(blog.title, blog.slug || "")}
                 </span>
-                <h2 className="line-clamp-3 text-[2.05rem] font-extrabold leading-[1.22] tracking-[-0.025em] text-white md:text-[2.2rem]">
+                <h2 className="line-clamp-2 text-xl font-extrabold leading-tight text-white transition group-hover:text-fuchsia-300">
                   {blog.title}
                 </h2>
-                <p className="mt-4 line-clamp-4 text-[1.02rem] leading-8 text-white/68">{blog.description}</p>
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/60">{blog.description}</p>
                 <div className="mt-auto pt-8">
-                  <span className="inline-flex items-center gap-3 text-[1.85rem] font-semibold text-fuchsia-400 transition group-hover:text-fuchsia-300">
-                    Xem chi tiet
-                    <ArrowRight size={22} />
+                  <span className="inline-flex items-center gap-2 text-sm font-bold text-fuchsia-400 transition group-hover:text-fuchsia-300">
+                    Xem chi tiết
+                    <ArrowRight size={16} />
                   </span>
                 </div>
               </div>

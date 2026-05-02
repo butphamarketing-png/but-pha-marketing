@@ -71,6 +71,32 @@ export default function HomePageClient() {
     type: "idle",
     message: "",
   });
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submittingContact) return;
+    setSubmittingContact(true);
+    try {
+      const result = await (db as any).leads.add({
+        type: "contact",
+        name: contactForm.name,
+        phone: contactForm.phone,
+        service: contactForm.interest || "Tư vấn tổng thể",
+        note: [contactForm.location, contactForm.note].filter(Boolean).join(" | "),
+        platform: "home"
+      });
+      if (result.success) {
+        setContactState({ type: "success", message: "Gửi yêu cầu thành công!" });
+        setContactForm(initialContactForm);
+      } else {
+        setContactState({ type: "error", message: "Có lỗi xảy ra, vui lòng thử lại." });
+      }
+    } catch (err) {
+      setContactState({ type: "error", message: "Có lỗi xảy ra, vui lòng thử lại." });
+    } finally {
+      setSubmittingContact(false);
+    }
+  };
   const { user } = useAuth();
   const { settings } = useAdmin();
 
@@ -617,20 +643,53 @@ export default function HomePageClient() {
                   </div>
                 </div>
 
-                <form className="space-y-4">
+                <form 
+                  className="space-y-4"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (submittingContact) return;
+                    setSubmittingContact(true);
+                    try {
+                      await db.leads.add({
+                        type: "contact",
+                        name: contactForm.name,
+                        phone: contactForm.phone,
+                        service: contactForm.interest || "Tư vấn tổng thể",
+                        note: [contactForm.location, contactForm.note].filter(Boolean).join(" | "),
+                        platform: "home"
+                      });
+                      setContactState({ type: "success", message: "Gửi yêu cầu thành công! Chúng tôi sẽ liên hệ sớm nhất." });
+                      setContactForm(initialContactForm);
+                    } catch (err) {
+                      setContactState({ type: "error", message: "Có lỗi xảy ra, vui lòng thử lại." });
+                    } finally {
+                      setSubmittingContact(false);
+                    }
+                  }}
+                >
                   <div className="grid gap-4 md:grid-cols-2">
                     <input
+                      required
                       type="text"
                       placeholder="Họ và tên"
+                      value={contactForm.name}
+                      onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
                       className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
                     />
                     <input
+                      required
                       type="tel"
                       placeholder="Số điện thoại"
+                      value={contactForm.phone}
+                      onChange={e => setContactForm({ ...contactForm, phone: e.target.value })}
                       className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
                     />
                   </div>
-                  <select className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition appearance-none">
+                  <select 
+                    value={contactForm.interest}
+                    onChange={e => setContactForm({ ...contactForm, interest: e.target.value })}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition appearance-none"
+                  >
                     <option value="" className="bg-[#0e0918]">Dịch vụ quan tâm</option>
                     <option value="website" className="bg-[#0e0918]">Thiết kế Website</option>
                     <option value="facebook" className="bg-[#0e0918]">Quản trị Fanpage</option>
@@ -638,15 +697,23 @@ export default function HomePageClient() {
                   </select>
                   <textarea
                     placeholder="Ghi chú thêm"
+                    value={contactForm.note}
+                    onChange={e => setContactForm({ ...contactForm, note: e.target.value })}
                     rows={4}
                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
                   ></textarea>
                   <button
+                    disabled={submittingContact}
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99]"
+                    className="w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
                   >
-                    Gửi yêu cầu tư vấn
+                    {submittingContact ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>
+                  {contactState.message && (
+                    <p className={`text-center text-sm font-bold ${contactState.type === "success" ? "text-green-400" : "text-red-400"}`}>
+                      {contactState.message}
+                    </p>
+                  )}
                 </form>
               </div>
             </div>
