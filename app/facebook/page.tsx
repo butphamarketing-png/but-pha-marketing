@@ -17,11 +17,12 @@ const config: PlatformConfig = {
   responsibility: "Chúng tôi cam kết minh bạch trong từng đồng ngân sách, báo cáo kết quả thực tế hàng tuần, và chịu trách nhiệm hoàn toàn with hiệu quả mang lại cho khách hàng.",
   tabs: [],
   hidePricingHeader: true,
+  hideStats: true,
+  hideContact: true,
   customSections: [
     { id: "build", label: "Xây dựng Fanpage" },
     { id: "care", label: "Chăm sóc Fanpage" },
     { id: "ads", label: "Quảng cáo Fanpage" },
-    { id: "contact", label: "Liên hệ tư vấn" },
   ],
   stats: [{ label: "Khách hàng", value: "500+" }, { label: "Dự án", value: "1.200+" }, { label: "Hài lòng", value: "98%" }, { label: "Năm KN", value: "5+" }],
   process: [
@@ -298,89 +299,6 @@ export default function FacebookPage() {
             ))}
           </div>
         </section>
-
-        {/* 4. ĐẶT LỊCH TƯ VẤN MIỄN PHÍ */}
-        <section id="contact" className="space-y-16 scroll-mt-24">
-          <div className="text-center space-y-6">
-            <div className="flex flex-col items-center gap-3">
-              <div className="h-1 w-12 bg-blue-500 rounded-full" />
-              <span className="text-blue-500 text-xs font-black uppercase tracking-[0.3em]">Consultation</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
-              Đặt lịch <span className="text-blue-500">tư vấn</span> miễn phí
-            </h2>
-          </div>
-
-          <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-              <div className="space-y-8">
-                {formSent ? (
-                  <div className="text-center py-10 space-y-4">
-                    <div className="h-20 w-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-green-500/40">
-                      <Check size={40} />
-                    </div>
-                    <h3 className="text-3xl font-black text-white">Đã nhận yêu cầu!</h3>
-                    <p className="text-gray-400">Chuyên gia sẽ liên hệ tư vấn giải pháp Fanpage cho bạn trong vòng 30 phút.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
-                        <input required placeholder="Nhập họ và tên" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
-                        <input required placeholder="Nhập số điện thoại" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30" />
-                      </div>
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Nền tảng</label>
-                        <select value={formData.platform} onChange={e => setFormData({...formData, platform: e.target.value})} className="w-full appearance-none rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30">
-                          <option className="bg-neutral-900">Fanpage</option>
-                          <option className="bg-neutral-900">Website</option>
-                          <option className="bg-neutral-900">Google Maps</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Thời gian tư vấn</label>
-                        <input type="datetime-local" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Nội dung quan tâm</label>
-                      <textarea placeholder="Bạn muốn được tư vấn về vấn đề gì?" rows={4} value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30 resize-none" />
-                    </div>
-                    <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all shadow-2xl shadow-blue-500/30 flex items-center justify-center gap-3">
-                      <Send size={18} /> {isSubmitting ? "Đang gửi..." : "Đặt lịch tư vấn ngay"}
-                    </button>
-                  </form>
-                )}
-              </div>
-              
-              <div className="hidden lg:block">
-                <div className="relative">
-                  <div className="absolute -inset-10 bg-blue-500/20 blur-[100px] rounded-full" />
-                  <img src="/mascot-home.png" alt="Mascot" className="relative w-full max-w-md mx-auto animate-float" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer CTA */}
-        <section className="rounded-[3rem] bg-gradient-to-r from-blue-600 to-indigo-600 p-12 text-center space-y-8 shadow-2xl shadow-blue-500/20">
-          <div className="max-w-3xl mx-auto space-y-4">
-            <h2 className="text-3xl md:text-4xl font-black text-white">Bạn muốn Fanpage ra khách mỗi ngày?</h2>
-            <p className="text-blue-100 font-medium">Bứt Phá Marketing đồng hành cùng bạn tăng trưởng bền vững!</p>
-          </div>
-          <button className="bg-white text-blue-600 px-12 py-5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 flex items-center gap-3 mx-auto">
-            <Rocket size={20} /> Bắt đầu ngay <ChevronRight size={20} />
-          </button>
-        </section>
-
-      </div>
 
       {checkoutPkg && (
         <ConsultationModal 

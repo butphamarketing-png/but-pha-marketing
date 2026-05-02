@@ -39,6 +39,8 @@ export interface PlatformConfig {
   mission: string;
   responsibility: string;
   hidePricingHeader?: boolean;
+  hideStats?: boolean;
+  hideContact?: boolean;
   customSections?: { id: string; label: string }[];
 }
 
@@ -733,9 +735,9 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {children}
 
-      <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />
+      {!config.hideStats && <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />}
       
-      <ContactForm color={platformColor} />
+      {!config.hideContact && <ContactForm color={platformColor} />}
 
       <AnimatePresence>
       {checkoutPkg && <ConsultationModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}
