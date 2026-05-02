@@ -517,8 +517,8 @@ export default function HomePageClient() {
           </section>
 
           <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-            <div className="mb-10 flex flex-col items-center gap-6 md:flex-row md:justify-between md:text-left">
-              <div className="text-center md:text-left">
+            <div className="mb-10 flex flex-col items-start gap-6 md:flex-row md:justify-between md:text-left">
+              <div className="text-left">
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
               </div>
               <div className="flex gap-3">
@@ -540,15 +540,15 @@ export default function HomePageClient() {
             </div>
             <div
               ref={whyChooseUsRef}
-              className="no-scrollbar flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-4"
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-6 px-4 -mx-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-4"
             >
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="min-w-[280px] flex-shrink-0 rounded-[1.6rem] border border-white/10 bg-[#0e0918] p-5 text-center md:min-w-0">
-                  <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-500/12 text-fuchsia-200 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
-                    <item.icon className="h-7 w-7" />
+                <div key={item.title} className="min-w-[260px] flex-shrink-0 rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center md:min-w-0 transition-all hover:bg-white/[0.06]">
+                  <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
+                    <item.icon className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-4 text-xl font-black text-white">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
+                  <h3 className="mt-5 text-lg font-black text-white">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
                 </div>
               ))}
             </div>

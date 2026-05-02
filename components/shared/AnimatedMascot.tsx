@@ -390,12 +390,13 @@ export function AnimatedMascot() {
     if (!enabled || !isShown) return;
 
     const updatePos = () => {
+      const mobile = window.innerWidth < 768;
       const width = mobile ? 80 : 118;
       const height = mobile ? 85 : 126;
       const maxX = Math.max(24, window.innerWidth - width - 24);
-      const maxY = Math.max(140, window.innerHeight - height - 24);
+      const maxY = Math.max(140, window.innerHeight - height - (mobile ? 120 : 24));
       const startX = Math.max(24, window.innerWidth - width - 40);
-      const startY = Math.max(160, window.innerHeight - height - 36);
+      const startY = Math.max(160, window.innerHeight - height - (mobile ? 130 : 36));
       const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.52 : 0.44))));
       const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.12 : 0.03))));
       const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.26 : 0.16))));
@@ -499,7 +500,7 @@ export function AnimatedMascot() {
             setIsShown(true);
           }
         }}
-        className="fixed left-3 top-1/2 z-[94] flex -translate-y-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-2 text-white shadow-xl backdrop-blur transition-all hover:scale-105 active:scale-95"
+        className="fixed left-3 top-1/2 z-[55] flex -translate-y-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-2 text-white shadow-xl backdrop-blur transition-all hover:scale-105 active:scale-95"
         aria-label={isShown ? "Ẩn robot" : "Hiện robot"}
         title={isShown ? "Tắt linh vật" : "Bật linh vật"}
       >
@@ -509,7 +510,7 @@ export function AnimatedMascot() {
 
       {isShown && (
         <motion.div
-          className="fixed left-0 top-0 z-[93]"
+          className="fixed left-0 top-0 z-[54]"
           initial={{ x: pos.x, y: pos.y }}
           animate={
             prefersReducedMotion
@@ -607,7 +608,7 @@ export function AnimatedMascot() {
                 ? { duration: 0 }
                 : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
             }
-            className="flex h-[126px] w-[118px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
+            className="flex h-[90px] w-[85px] md:h-[126px] md:w-[118px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
             aria-label="AI Mascot"
           >
             <div
@@ -629,17 +630,17 @@ export function AnimatedMascot() {
                   animate={!prefersReducedMotion}
                   glowColor={mascotGlowColor}
                   filter={customFilter}
-                  scale={dragonStyle.scale}
+                  scale={isMobileViewport ? dragonStyle.scale * 0.75 : dragonStyle.scale}
                 />
               ) : (
                 <div className={prefersReducedMotion ? "" : "mascot-default-wave"}>
                   <img
                     src={mascotImg}
                     alt="AI Mascot"
-                    className="h-[118px] w-[118px] object-contain"
+                    className="h-[80px] w-[80px] md:h-[118px] md:w-[118px] object-contain"
                     style={{
                       filter: `${customFilter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`,
-                      transform: `scale(${dragonStyle.scale})`,
+                      transform: `scale(${isMobileViewport ? dragonStyle.scale * 0.75 : dragonStyle.scale})`,
                       transformBox: "fill-box",
                       transformOrigin: "center bottom",
                     }}
