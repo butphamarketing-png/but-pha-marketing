@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Search, CheckCircle2 } from "lucide-react";
 import { db } from "@/lib/useData";
@@ -15,8 +15,14 @@ export function AuditModal({ isOpen, onClose, initialLink, source, platformColor
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    link: initialLink,
+    link: "",
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      setForm(prev => ({ ...prev, link: initialLink }));
+    }
+  }, [isOpen, initialLink]);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"form" | "success">("form");
 

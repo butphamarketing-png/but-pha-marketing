@@ -1223,7 +1223,7 @@ export default function AdminPage() {
               {selectedPlatform === "home" ? (
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
-                    <h3 className="font-bold text-white">Thông tin chung</h3>
+                    <h3 className="font-bold text-white">Cài đặt Trang chủ</h3>
                     <input value={settings.title || ""} onChange={e => updateSettings({ title: e.target.value })} placeholder="Tiêu đề website" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <input value={settings.heroTitle || ""} onChange={e => updateSettings({ heroTitle: e.target.value })} placeholder="Tiêu đề Hero trang chủ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <textarea value={settings.heroSubtitle || ""} onChange={e => updateSettings({ heroSubtitle: e.target.value })} placeholder="Mô tả Hero trang chủ (ví dụ: Tăng trưởng doanh thu...)" className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
