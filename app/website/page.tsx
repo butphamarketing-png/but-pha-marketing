@@ -5,7 +5,7 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
-import { Settings, ChevronRight, Globe, Search } from "lucide-react";
+import { Settings, ChevronRight, Globe, Search, Check } from "lucide-react";
 
 const config: PlatformConfig = {
   name: "Website",
