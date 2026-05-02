@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
-import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap } from "lucide-react";
+import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap, Search } from "lucide-react";
 import { db } from "@/lib/useData";
 
 const config: PlatformConfig = {
