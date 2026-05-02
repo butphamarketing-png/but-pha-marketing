@@ -276,6 +276,9 @@ function PricingSection({ tabs, color, onCheckout }: { tabs: PricingTab[]; color
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+
+  if (!tabs || tabs.length === 0) return null;
+
   const tab = tabs[activeTab];
   const pageSize = 4;
   const showPager = tab.packages.length > pageSize;
