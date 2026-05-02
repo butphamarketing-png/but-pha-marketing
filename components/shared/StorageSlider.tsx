@@ -29,7 +29,7 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
   }, [gb]);
 
   const formatPrice = (p: number) => {
-    return new Intl.NumberFormat("vi-VN").format(p) + "đ";
+    return new Intl.NumberFormat("vi-VN").format(p) + " đ";
   };
 
   return (
@@ -49,16 +49,16 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <div className="rounded-[2rem] bg-white/[0.03] p-8 border border-white/10 transition-colors hover:bg-white/[0.05]">
-              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Dung lượng thực tế</p>
+            <div className="rounded-[2rem] bg-white/[0.03] p-6 border border-white/10 transition-colors hover:bg-white/[0.05] md:p-8">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">Dung lượng thực tế</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-black text-white" style={{ color: primaryColor }}>{gb}</span>
-                <span className="text-lg font-bold text-gray-400">GB</span>
+                <span className="text-4xl font-black text-white md:text-5xl" style={{ color: primaryColor }}>{gb}</span>
+                <span className="text-base font-bold text-gray-400">GB</span>
               </div>
             </div>
-            <div className="rounded-[2rem] bg-white/[0.03] p-8 border border-white/10 transition-colors hover:bg-white/[0.05]">
+            <div className="rounded-[2rem] bg-white/[0.03] p-6 border border-white/10 transition-colors hover:bg-white/[0.05] md:p-8">
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Dự toán chi phí</p>
-              <div className="text-3xl font-black text-white md:text-4xl leading-tight">{formatPrice(price)}</div>
+              <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl leading-tight truncate">{formatPrice(price)}</div>
             </div>
           </div>
 
