@@ -55,7 +55,7 @@ export function ThemeToggleButton() {
       whileTap={{ scale: 0.94 }}
       animate={shake ? { rotate: [0, -8, 8, -6, 6, 0] } : { rotate: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed bottom-44 right-4 z-[92] flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xl backdrop-blur-sm"
+      className="fixed left-3 top-[calc(50%+36px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-xl backdrop-blur-sm transition-all"
       title={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
       aria-label={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
     >
