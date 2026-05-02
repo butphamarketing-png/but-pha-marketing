@@ -18,7 +18,8 @@ const config: PlatformConfig = {
   tabs: [],
   hidePricingHeader: true,
   hideStats: true,
-  hideContact: true,
+  hideContact: false,
+  robotFilter: "hue-rotate(220deg) brightness(1.1)",
   customSections: [
     { id: "build", label: "Xây dựng Fanpage" },
     { id: "care", label: "Chăm sóc Fanpage" },

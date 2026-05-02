@@ -41,6 +41,7 @@ export interface PlatformConfig {
   hidePricingHeader?: boolean;
   hideStats?: boolean;
   hideContact?: boolean;
+  robotFilter?: string;
   customSections?: { id: string; label: string }[];
 }
 
@@ -583,7 +584,7 @@ function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   );
 }
 
-function ContactForm({ color }: { color: string }) {
+function ContactForm({ color, robotFilter }: { color: string; robotFilter?: string }) {
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -599,7 +600,7 @@ function ContactForm({ color }: { color: string }) {
         <div className="absolute top-1/4 right-0 h-[500px] w-[500px] rounded-full blur-[150px]" style={{ backgroundColor: `${color}30` }} />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-black text-white md:text-5xl">Đặt lịch tư vấn trực tiếp</h2>
           <p className="text-gray-400">Để ngũ chuyên gia sẽ tư vấn giải pháp phù hợp nhất cho bạn</p>
@@ -618,80 +619,92 @@ function ContactForm({ color }: { color: string }) {
             <p className="text-gray-400">Chúng tôi sẽ liên hệ lại với bạn trong vòng 30 phút làm việc.</p>
           </motion.div>
         ) : (
-          <form 
-            onSubmit={e => { 
-              e.preventDefault(); 
-              db.leads.add({ 
-                type: "contact", 
-                name, 
-                phone, 
-                service: `Tư vấn ${platform}`, 
-                note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}` 
-              }); 
-              setSent(true); 
-            }} 
-            className="group relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 backdrop-blur-xl md:p-14"
-          >
-            <div className="grid gap-8">
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
-                  <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nhập họ và tên" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
-                  <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="Nhập số điện thoại" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                </div>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Địa điểm</label>
-                  <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Chọn địa điểm" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Thời gian</label>
-                  <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nền tảng</label>
-                <div className="flex flex-wrap gap-3">
-                  {["Website", "Facebook", "Google Maps"].map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPlatform(p.toLowerCase())}
-                      className={`rounded-xl px-6 py-3 text-xs font-bold transition-all border ${
-                        platform === p.toLowerCase() 
-                        ? "bg-white text-black border-white" 
-                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nội dung</label>
-                <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Bạn muốn tư vấn về vấn đề gì?" rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
-              </div>
-              
-              <button 
-                type="submit" 
-                className="group relative mt-4 w-full overflow-hidden rounded-2xl py-6 text-sm font-black text-white transition-all hover:scale-[1.01] active:scale-95 shadow-2xl" 
-                style={{ backgroundColor: color }}
+          <div className="relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 backdrop-blur-xl md:p-14">
+            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+              <form 
+                onSubmit={e => { 
+                  e.preventDefault(); 
+                  db.leads.add({ 
+                    type: "contact", 
+                    name, 
+                    phone, 
+                    service: `Tư vấn ${platform}`, 
+                    note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}` 
+                  }); 
+                  setSent(true); 
+                }} 
+                className="space-y-6"
               >
-                <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="relative flex items-center justify-center gap-2">
-                  ✨ Đặt lịch tư vấn ngay
-                </span>
-              </button>
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
+                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nhập họ và tên" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
+                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="Nhập số điện thoại" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                  </div>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Địa điểm</label>
+                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Chọn địa điểm" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Thời gian</label>
+                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nền tảng</label>
+                  <div className="flex flex-wrap gap-3">
+                    {["Website", "Facebook", "Google Maps"].map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setPlatform(p.toLowerCase())}
+                        className={`rounded-xl px-6 py-3 text-xs font-bold transition-all border ${
+                          platform === p.toLowerCase() 
+                          ? "bg-white text-black border-white" 
+                          : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nội dung</label>
+                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Bạn muốn tư vấn về vấn đề gì?" rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
+                </div>
+                
+                <button 
+                  type="submit" 
+                  className="group relative mt-4 w-full overflow-hidden rounded-2xl py-6 text-sm font-black text-white transition-all hover:scale-[1.01] active:scale-95 shadow-2xl" 
+                  style={{ backgroundColor: color }}
+                >
+                  <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="relative flex items-center justify-center gap-2">
+                    ✨ Đặt lịch tư vấn ngay
+                  </span>
+                </button>
+              </form>
+
+              <div className="hidden lg:block relative">
+                <div className="absolute -inset-20 bg-white/5 blur-[100px] rounded-full" style={{ backgroundColor: `${color}10` }} />
+                <img 
+                  src="/mascot-home.png" 
+                  alt="Mascot" 
+                  className="relative w-full max-w-sm mx-auto animate-float drop-shadow-2xl" 
+                  style={{ filter: robotFilter }}
+                />
+              </div>
             </div>
-          </form>
+          </div>
         )}
       </motion.div>
     </section>
@@ -737,7 +750,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {!config.hideStats && <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />}
       
-      {!config.hideContact && <ContactForm color={platformColor} />}
+      {!config.hideContact && <ContactForm color={platformColor} robotFilter={config.robotFilter} />}
 
       <AnimatePresence>
       {checkoutPkg && <ConsultationModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}

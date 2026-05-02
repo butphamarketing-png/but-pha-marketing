@@ -9,11 +9,18 @@ import { Settings, ChevronRight, Globe, Search, Check } from "lucide-react";
 
 const config: PlatformConfig = {
   name: "Website",
-  color: "#7C3AED",
+  color: "#22C55E",
   auditPlatform: "website",
   vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
   mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
   responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",
+  robotFilter: "hue-rotate(100deg) brightness(1.1)",
+  customSections: [
+    { id: "audit", label: "Chuẩn đoán Website" },
+    { id: "pricing", label: "Bảng giá dịch vụ" },
+    { id: "storage", label: "Hạ tầng lưu trữ" },
+    { id: "contact", label: "Liên hệ tư vấn" },
+  ],
   tabs: [
     {
       label: "Thiết kế Website",
@@ -72,10 +79,10 @@ export default function WebsitePage() {
 
   return (
     <PlatformPage config={config}>
-      <div className="mx-auto max-w-6xl px-4 pb-24">
-        <div className="grid gap-12">
+      <div className="mx-auto max-w-6xl px-4 pb-24 space-y-32">
+        <div className="grid gap-32">
           {/* Audit Section */}
-          <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden group">
+          <div id="audit" className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden group scroll-mt-24">
             <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-10 pointer-events-none">
               <div className="absolute top-1/4 right-0 h-[400px] w-[400px] rounded-full blur-[120px]" style={{ backgroundColor: config.color }} />
             </div>
@@ -86,7 +93,7 @@ export default function WebsitePage() {
                   <Search size={16} className="text-white" style={{ color: config.color }} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Chuẩn đoán website miễn phí</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-black text-white">Phân tích website và nhận báo cáo chi tiết</h3>
+                <h3 className="text-3xl md:text-4xl font-black text-white">Phân tích <span style={{ color: config.color }}>website</span> và nhận báo cáo chi tiết</h3>
                 <p className="text-gray-400 leading-relaxed">
                   Nhập URL website của bạn để chúng tôi phân tích các yếu tố: Tốc độ, SEO Onpage, UX/UI và Khả năng chuyển đổi.
                 </p>
@@ -179,10 +186,16 @@ export default function WebsitePage() {
           </div>
 
           {/* Storage Slider Section */}
-          <div className="space-y-8">
-            <div className="text-center md:text-left">
-              <h3 className="text-3xl font-black text-white">Dung lượng lưu trữ</h3>
-              <p className="mt-2 text-gray-400">Kéo thanh trượt để dự toán hạ tầng phù hợp với quy mô doanh nghiệp</p>
+          <div id="storage" className="space-y-12 scroll-mt-24">
+            <div className="text-center space-y-6">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
+                <span className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: config.color }}>Infrastructure</span>
+              </div>
+              <h3 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
+                Dung lượng <span style={{ color: config.color }}>lưu trữ</span>
+              </h3>
+              <p className="mt-2 text-gray-400 max-w-2xl mx-auto">Kéo thanh trượt để dự toán hạ tầng phù hợp với quy mô doanh nghiệp</p>
             </div>
             <StorageSlider primaryColor={config.color} />
           </div>
