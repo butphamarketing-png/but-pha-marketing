@@ -5,7 +5,7 @@ import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
-import { Settings, ChevronRight, Globe } from "lucide-react";
+import { Settings, ChevronRight, Globe, Search } from "lucide-react";
 
 const config: PlatformConfig = {
   name: "Website",
@@ -74,6 +74,73 @@ export default function WebsitePage() {
     <PlatformPage config={config}>
       <div className="mx-auto max-w-6xl px-4 pb-24">
         <div className="grid gap-12">
+          {/* Audit Section */}
+          <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-10 pointer-events-none">
+              <div className="absolute top-1/4 right-0 h-[400px] w-[400px] rounded-full blur-[120px]" style={{ backgroundColor: config.color }} />
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center gap-10">
+              <div className="flex-1 space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                  <Search size={16} className="text-white" style={{ color: config.color }} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Chuẩn đoán website miễn phí</span>
+                </div>
+                <h3 className="text-3xl md:text-4xl font-black text-white">Phân tích website và nhận báo cáo chi tiết</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Nhập URL website của bạn để chúng tôi phân tích các yếu tố: Tốc độ, SEO Onpage, UX/UI và Khả năng chuyển đổi.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <input 
+                    placeholder="Nhập URL website của bạn (VD: yourdomain.com)" 
+                    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
+                  />
+                  <button 
+                    className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+                    style={{ backgroundColor: config.color }}
+                  >
+                    Phân tích ngay
+                  </button>
+                </div>
+                
+                <div className="flex flex-wrap gap-6 pt-6 opacity-60">
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Tốc độ
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> SEO Onpage
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> UX / UI
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Khả năng chuyển đổi
+                  </div>
+                </div>
+              </div>
+              
+              <div className="hidden lg:block w-1/3">
+                <div className="relative p-4 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm">
+                  <div className="space-y-4">
+                    <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo cáo chi tiết</p>
+                    <ul className="space-y-3">
+                      <li className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check size={16} className="text-green-500" /> Phân tích điểm mạnh & điểm yếu
+                      </li>
+                      <li className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check size={16} className="text-green-500" /> Đề xuất cải thiện cụ thể
+                      </li>
+                      <li className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check size={16} className="text-green-500" /> Tư vấn giải pháp phù hợp
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Custom & Domain Section */}
           <div className="grid gap-6 md:grid-cols-2">
             {/* Custom Website Button */}
