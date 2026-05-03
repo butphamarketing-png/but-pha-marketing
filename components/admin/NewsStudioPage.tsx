@@ -10,19 +10,19 @@ import { deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { db, type NewsItem } from "@/lib/useData";
 
 const SEOOverview = dynamic(() => import("@/components/admin/SEOOverview").then((module) => ({ default: module.SEOOverview })), {
-  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Dang tai tong quan SEO...</div>,
+  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Đang tải tổng quan SEO...</div>,
 });
 
 const SeoAutomationPanel = dynamic(() => import("@/components/admin/SeoAutomationPanel").then((module) => ({ default: module.SeoAutomationPanel })), {
-  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Dang tai SEO Autopilot...</div>,
+  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Đang tải SEO Autopilot...</div>,
 });
 
 const StudioSettings = dynamic(() => import("@/components/admin/StudioSettings").then((module) => ({ default: module.StudioSettings })), {
-  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Dang tai cai dat...</div>,
+  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Đang tải cài đặt...</div>,
 });
 
 const NewsPluginsPanel = dynamic(() => import("@/components/admin/NewsPluginsPanel").then((module) => ({ default: module.NewsPluginsPanel })), {
-  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Dang tai plugin...</div>,
+  loading: () => <div className="rounded-[28px] border border-slate-200 bg-white p-6 text-sm font-medium text-slate-500 shadow-sm">Đang tải plugin...</div>,
 });
 
 type BlogFormState = {
@@ -188,7 +188,7 @@ export function NewsStudioPage() {
       return;
     }
 
-    setBlogSaveMessage(editingBlogId ? "Da cap nhat bai viet." : "Da tao bai viet moi.");
+    setBlogSaveMessage(editingBlogId ? "Đã cập nhật bài viết." : "Đã tạo bài viết mới.");
     await refreshBlogs();
     resetBlogForm();
   }
@@ -218,17 +218,17 @@ export function NewsStudioPage() {
   }
 
   const sidebarItems = [
-    { label: "Tong quan", icon: LayoutDashboard, id: "dashboard" as const },
-    { label: "Viet bai AI", icon: Sparkles, id: "news" as const, href: "/studio/create" },
-    { label: "Co hoi noi dung", icon: Target, id: "news" as const, href: "/studio/opportunity-pro" },
-    { label: "Bai viet", icon: Newspaper, id: "news" as const },
+    { label: "Tổng quan", icon: LayoutDashboard, id: "dashboard" as const },
+    { label: "Viết bài AI", icon: Sparkles, id: "news" as const, href: "/studio/create" },
+    { label: "Cơ hội nội dung", icon: Target, id: "news" as const, href: "/studio/opportunity-pro" },
+    { label: "Bài viết", icon: Newspaper, id: "news" as const },
     { label: "Keyword & Rank", icon: Target, id: "news" as const, href: "/studio/keyword-rank" },
     { label: "AI Refresh", icon: RefreshCw, id: "news" as const, href: "/studio/dashboard" },
     { label: "Cluster & Topic", icon: Sparkles, id: "news" as const, href: "/studio/opportunity-pro" },
     { label: "Internal Links", icon: Link2, id: "news" as const, href: "/studio/dashboard" },
-    { label: "Phan tich doi thu", icon: ShieldCheck, id: "dashboard" as const },
+    { label: "Phân tích đối thủ", icon: ShieldCheck, id: "dashboard" as const },
     { label: "Plugin", icon: Puzzle, id: "plugins" as const },
-    { label: "Cai dat", icon: Settings, id: "settings" as const },
+    { label: "Cài đặt", icon: Settings, id: "settings" as const },
   ];
 
   return (
@@ -241,7 +241,7 @@ export function NewsStudioPage() {
             </div>
             <div>
               <p className="font-bold">Content Studio</p>
-              <p className="text-xs text-slate-400">Quan tri tin tuc & SEO</p>
+              <p className="text-xs text-slate-400">Quản trị tin tức & SEO</p>
             </div>
           </div>
 
@@ -298,7 +298,7 @@ export function NewsStudioPage() {
               </div>
               <Link href="/studio/create" className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-bold text-white">
                 <Sparkles size={14} />
-                Tao bai
+                Tạo bài
               </Link>
             </div>
             <div className="flex gap-2 overflow-x-auto pb-1">
@@ -357,7 +357,7 @@ export function NewsStudioPage() {
               </div>
             </div>
           )}
-          {loading ? <div className="text-xs font-medium text-slate-400">Dang tai du lieu bai viet...</div> : null}
+          {loading ? <div className="text-xs font-medium text-slate-400">Đang tải dữ liệu bài viết...</div> : null}
           {blogSaveError ? <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">{blogSaveError}</div> : null}
           {blogSaveMessage ? <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">{blogSaveMessage}</div> : null}
         </main>
