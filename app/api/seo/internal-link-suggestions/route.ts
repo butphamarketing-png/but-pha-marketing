@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { getPublishedBlogs } from "@/lib/server-blog";
 
 export const runtime = "nodejs";
@@ -29,6 +30,10 @@ function scoreBlog(candidateText: string, keywords: string[]) {
 
 export async function POST(request: Request) {
   try {
+    if (!isAdminRequest(request)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json().catch(() => null);
     const title = cleanText(body?.title);
     const content = cleanText(body?.content);

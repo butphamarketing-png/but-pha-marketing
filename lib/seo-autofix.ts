@@ -15,11 +15,6 @@ function countWords(text: string) {
   return stripHtml(text).split(/\s+/).filter(Boolean).length;
 }
 
-function ensureH1(content: string, title: string) {
-  if (/<h1[^>]*>/i.test(content)) return content;
-  return `<h1>${title}</h1>${content}`;
-}
-
 function ensureH3(content: string, keyword: string) {
   if (/<h3[^>]*>/i.test(content)) return content;
   return `${content}<h3 id="${slugify(`${keyword} thuc chien`)}">${keyword} thuc chien</h3><p>${keyword} can duoc trien khai dong bo voi noi dung, du lieu va toi uu chuyen doi de tao ket qua ben vung.</p>`;
@@ -91,7 +86,6 @@ export function autoFixSeoDraft(input: {
   });
 
   let content = input.content || "";
-  content = ensureH1(content, title);
   content = ensureH3(content, keyword);
   content = ensureKeywordDensity(content, keyword);
   content = ensureWordDepth(content, keyword);

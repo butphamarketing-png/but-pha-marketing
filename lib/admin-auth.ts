@@ -18,7 +18,11 @@ function base64UrlDecode(input: string): string {
 }
 
 function getAdminPassword(): string {
-  return (process.env.ADMIN_PASSWORD || "admin123").trim();
+  const password = (process.env.ADMIN_PASSWORD || "").trim();
+  if (!password && process.env.NODE_ENV === "production") {
+    throw new Error("Missing ADMIN_PASSWORD for production admin login.");
+  }
+  return password || "admin123";
 }
 
 function hashPassword(password: string) {

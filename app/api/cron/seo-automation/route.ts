@@ -10,15 +10,11 @@ function isAuthorized(request: Request) {
   const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length).trim() : "";
   const cronHeader = request.headers.get("x-vercel-cron");
 
-  if (expectedSecret && bearerToken === expectedSecret) {
-    return true;
+  if (expectedSecret) {
+    return bearerToken === expectedSecret;
   }
 
-  if (cronHeader === "1") {
-    return true;
-  }
-
-  return false;
+  return cronHeader === "1";
 }
 
 function jsonError(message: string, status = 500) {

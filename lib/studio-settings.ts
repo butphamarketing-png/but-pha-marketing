@@ -22,7 +22,7 @@ export function sanitizeStudioSettings(value: unknown): StudioSettingsValue {
     openaiKey: normalizeString(source.openaiKey),
     serpApiKey: normalizeString(source.serpApiKey),
     defaultLocation: normalizeString(source.defaultLocation) || "Vietnam",
-    aiModel: normalizeString(source.aiModel) || "gpt-4-turbo",
+    aiModel: normalizeString(source.aiModel) || "gpt-4o",
   };
 }
 

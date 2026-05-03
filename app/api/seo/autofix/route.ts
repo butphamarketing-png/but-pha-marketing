@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { autoFixSeoDraft } from "@/lib/seo-autofix";
 
 export const runtime = "nodejs";
@@ -9,6 +10,10 @@ function cleanText(value: unknown) {
 
 export async function POST(request: Request) {
   try {
+    if (!isAdminRequest(request)) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json().catch(() => null);
     const result = autoFixSeoDraft({
       title: cleanText(body?.title),

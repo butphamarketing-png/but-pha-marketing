@@ -47,6 +47,12 @@ function createSupabaseClient(key: string, isBrowser: boolean): SupabaseClient {
         update: () => Promise.resolve({ error: null }),
         delete: () => Promise.resolve({ error: null }),
       }),
+      storage: {
+        from: () => ({
+          upload: () => Promise.resolve({ error: { message: "Supabase not configured" } }),
+          getPublicUrl: () => ({ data: { publicUrl: "" } }),
+        }),
+      },
       auth: {
         getSession: () => Promise.resolve({ data: { session: null }, error: null }),
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),

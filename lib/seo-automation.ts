@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import npmSlugify from "slugify";
 import { createServerClient } from "@/lib/supabase";
 import { autoFixSeoDraft } from "@/lib/seo-autofix";
-import { buildExcerpt, buildMetaDescription, buildMetaTitle, buildReliableSlug, buildSeoFriendlyTitle, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
+import { buildMetaDescription, buildReliableSlug, buildSeoFriendlyTitle, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { getOpenAiRuntimeConfig, getSerpApiRuntimeConfig } from "@/lib/studio-settings";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
@@ -15,7 +15,7 @@ const AUTOMATION_RUNS_KEY = "seo_automation_runs";
 const AUTOMATION_LOCK_KEY = "seo_automation_lock";
 const MAX_RUN_LOGS = 30;
 const AUTOMATION_LOCK_TTL_MS = 1000 * 60 * 45;
-const AUTO_PUBLISH_MIN_SCORE = 65;
+const AUTO_PUBLISH_MIN_SCORE = 80;
 const PREFERRED_PUBLISH_SCORE = 80;
 const DEFAULT_TOPIC_SEEDS = [
   "thiết kế website",
@@ -120,6 +120,13 @@ type AutomationLock = {
   expiresAt: string;
 };
 
+type AutomationProgress = {
+  runId: string;
+  heartbeatAt: string;
+  processedCount: number;
+  totalCount: number;
+};
+
 function normalizeString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -179,16 +186,12 @@ function countWords(text: string) {
 
 function getQualityLabel(score: number) {
   if (score >= PREFERRED_PUBLISH_SCORE) return "ready" as const;
-  if (score >= AUTO_PUBLISH_MIN_SCORE) return "needs_optimization" as const;
+  if (score >= 65) return "needs_optimization" as const;
   return "weak" as const;
 }
 
 function sectionIdFromHeading(text: string) {
   return slugify(text || "");
-}
-
-function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function sanitizeSettings(value: unknown): SeoAutomationSettings {
@@ -282,6 +285,15 @@ async function writeSiteSetting(key: string, value: unknown) {
   if (error) throw new Error(error.message || `Khong the luu setting ${key}.`);
 }
 
+async function compareAndWriteSiteSetting(key: string, expectedValue: unknown, nextValue: unknown) {
+  const supabase = createServerClient();
+  const query = supabase.from(SETTINGS_TABLE).update({ value: nextValue }).eq("key", key);
+  const current = expectedValue === null ? query.is("value", null) : query.eq("value", expectedValue as any);
+  const { data, error } = await current.select("key").maybeSingle();
+  if (error) throw new Error(error.message || `Khong the cap nhat setting ${key}.`);
+  return !!data;
+}
+
 async function deleteSiteSetting(key: string) {
   const supabase = createServerClient();
   const { error } = await supabase.from(SETTINGS_TABLE).delete().eq("key", key);
@@ -333,7 +345,8 @@ async function releaseAutomationLock(runId?: string) {
 }
 
 async function acquireAutomationLock(runId: string, reason: SeoAutomationRunLog["reason"]) {
-  const current = await getAutomationLock();
+  const raw = await readSiteSetting(AUTOMATION_LOCK_KEY).catch(() => null);
+  const current = sanitizeAutomationLock(raw);
   if (current) {
     const expiresAt = new Date(current.expiresAt).getTime();
     if (Number.isFinite(expiresAt) && expiresAt > Date.now()) {
@@ -348,7 +361,27 @@ async function acquireAutomationLock(runId: string, reason: SeoAutomationRunLog[
     startedAt: new Date().toISOString(),
     expiresAt: new Date(Date.now() + AUTOMATION_LOCK_TTL_MS).toISOString(),
   };
-  await writeSiteSetting(AUTOMATION_LOCK_KEY, nextLock);
+  const written = raw === null
+    ? await writeSiteSetting(AUTOMATION_LOCK_KEY, nextLock).then(() => true)
+    : await compareAndWriteSiteSetting(AUTOMATION_LOCK_KEY, raw, nextLock);
+  if (!written) {
+    throw new Error("SEO Autopilot dang co mot luot chay khac. Vui long doi luot hien tai hoan tat.");
+  }
+}
+
+async function touchAutomationLock(runId: string, progress?: Partial<AutomationProgress>) {
+  const current = await getAutomationLock();
+  if (!current || current.runId !== runId) return;
+  await writeSiteSetting(AUTOMATION_LOCK_KEY, {
+    ...current,
+    expiresAt: new Date(Date.now() + AUTOMATION_LOCK_TTL_MS).toISOString(),
+    progress: {
+      runId,
+      heartbeatAt: new Date().toISOString(),
+      processedCount: progress?.processedCount ?? 0,
+      totalCount: progress?.totalCount ?? 0,
+    },
+  });
 }
 
 async function createRunLog(reason: SeoAutomationRunLog["reason"]) {
@@ -482,6 +515,7 @@ async function generateTitlePlans(
             `Hãy tạo ${count} ý tưởng bài SEO tiếng Việt thật chỉn chu cho website agency marketing.`,
             `Chủ đề dịch vụ bắt buộc phải bám theo: ${seedKeywords.join(", ")}`,
             `Những tiêu đề đã có: ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
+            settings.notes ? `Ghi chú vận hành từ admin: ${settings.notes}` : "",
             "Yêu cầu:",
             "- Không trùng ý giữa các bài",
             "- Chỉ viết quanh các dịch vụ marketing của website",
@@ -699,6 +733,7 @@ async function generateArticleContent(client: OpenAI | null, model: string, titl
             `Viết bài thật chỉnh chu cho tiêu đề: ${title}`,
             `Keyword chính: ${keyword}`,
             `Mục tiêu độ dài: khoảng ${settings.targetWordCount} từ`,
+            settings.notes ? `Ghi chú vận hành từ admin: ${settings.notes}` : "",
             "Yêu cầu:",
             "- Có mở bài rõ ràng",
             "- Bám đúng dàn ý",
@@ -946,7 +981,7 @@ function canAutoPublish(input: {
   if (input.evaluation.score < AUTO_PUBLISH_MIN_SCORE) {
     return {
       allowed: false,
-      reason: `Diem SEO ${input.evaluation.score}/100 con qua thap cho che do tu dang.`,
+      reason: `Diem SEO ${input.evaluation.score}/100 chua dat nguong ${AUTO_PUBLISH_MIN_SCORE}/100 de tu dang.`,
     };
   }
 
@@ -972,7 +1007,10 @@ function canAutoPublish(input: {
   }
 
   if (input.imageGenerationEnabled && !normalizeString(input.featuredImageUrl)) {
-    // Khong chan publish - anh la optional, bai van duoc dang neu dat diem SEO
+    return {
+      allowed: false,
+      reason: "Chua co anh dai dien that de tu dang.",
+    };
   }
 
   return {
@@ -980,7 +1018,7 @@ function canAutoPublish(input: {
     reason:
       input.evaluation.score >= PREFERRED_PUBLISH_SCORE
         ? "Bai da qua quality gate va san sang tu dang."
-        : "Bai dat muc kha, van duoc tu dang nhung can toi uu them.",
+        : "Bai dat nguong SEO toi thieu va san sang tu dang.",
   };
 }
 
@@ -990,39 +1028,43 @@ async function saveGeneratedImageToSupabase(input: {
   sectionLabel: string;
   suggestedName: string;
 }) {
-  // Fetch anh tu URL ve buffer
   const res = await fetch(input.imageUrl);
   if (!res.ok) throw new Error(`Failed to fetch image: ${res.status}`);
   const buffer = Buffer.from(await res.arrayBuffer());
 
-  const baseName =
-    npmSlugify(input.suggestedName || `${input.title}-${input.sectionLabel}`, {
-      lower: true,
-      strict: true,
-      trim: true,
-    }) || `seo-automation-${Date.now()}`;
-  const fileName = `${baseName}-${Date.now()}.jpg`;
-  const storagePath = `media/${fileName}`;
+  // Tao ten file an toan: dung timestamp lam fallback neu slug rong
+  const slugBase = npmSlugify(input.suggestedName, { lower: true, strict: true, trim: true });
+  const fileName = `${slugBase || "seo-img"}-${Date.now()}.jpg`;
+  const storagePath = `seo/${fileName}`;
 
   const supabase = createServerClient();
 
-  // Upload len Supabase Storage bucket "media"
-  const { error: uploadError } = await supabase.storage
+  // Kiem tra storage co ton tai khong truoc khi upload
+  const storageClient = (supabase as any).storage;
+  if (!storageClient || typeof storageClient.from !== "function") {
+    throw new Error("Supabase Storage chua duoc cau hinh.");
+  }
+
+  const { error: uploadError } = await storageClient
     .from("media")
     .upload(storagePath, buffer, { contentType: "image/jpeg", upsert: false });
 
   if (uploadError) throw new Error(uploadError.message || "Khong the upload anh len Supabase Storage.");
 
-  const { data: urlData } = supabase.storage.from("media").getPublicUrl(storagePath);
-  const publicUrl = urlData.publicUrl;
+  const { data: urlData } = storageClient.from("media").getPublicUrl(storagePath);
+  const publicUrl = urlData?.publicUrl || "";
+  if (!publicUrl) throw new Error("Khong lay duoc public URL cua anh.");
 
-  // Luu vao bang media
-  await supabase.from("media").insert({
+  // Luu vao bang media (optional - khong throw neu that bai)
+  const { error: mediaInsertError } = await supabase.from("media").insert({
     url: publicUrl,
     name: input.suggestedName,
     type: "image",
     timestamp: Date.now(),
-  }).catch(() => undefined); // Khong throw neu bang media khong ton tai
+  });
+  if (mediaInsertError) {
+    console.warn("[seo-automation] Could not save generated image metadata:", mediaInsertError.message);
+  }
 
   return publicUrl;
 }
@@ -1286,8 +1328,9 @@ export async function runSeoAutomation(options: RunOptions) {
   const items: SeoAutomationArticleResult[] = settings.autoBackfillMissingSeo ? await repairExistingSeoFields(rows, 3) : [];
   const batchId = run.id;
 
-  for (const plan of titlePlans) {
+  for (const [planIndex, plan] of titlePlans.entries()) {
     try {
+      await touchAutomationLock(run.id, { processedCount: planIndex, totalCount: titlePlans.length }).catch(() => undefined);
       const serpInsight = await fetchSerpInsight(plan.title).catch(() => ({
         source: "heuristic" as const,
         intent: guessIntent(plan.title),
@@ -1306,8 +1349,7 @@ export async function runSeoAutomation(options: RunOptions) {
       }
 
       const images = await generateImagesForArticle(client, plan.title, outlineResult.structure, settings);
-      // Fallback: neu khong tao duoc anh, dung placeholder
-      let featuredImageUrl = images[0]?.url || `https://placehold.co/1200x630/0a0614/ffffff/png?text=${encodeURIComponent(plan.keyword.slice(0, 30))}`;
+      let featuredImageUrl = images[0]?.url || "";
       if (images.length > 0) {
         for (const image of images.slice(1)) {
           content = insertImageBySection(content, image, outlineResult.structure);
@@ -1322,26 +1364,50 @@ export async function runSeoAutomation(options: RunOptions) {
         keyword: outlineResult.keywords[0] || plan.keyword,
         content,
       });
-      const qualityResult = await optimizeArticleQuality({
-        client,
-        model,
-        title: seoTitle,
-        keyword: outlineResult.keywords[0] || plan.keyword,
-        keywords: outlineResult.keywords,
-        content,
-        metaDescription: initialMetaDescription,
-        slug: buildReliableSlug({ title: seoTitle, keyword: outlineResult.keywords[0] || plan.keyword }),
-        serviceKeywords,
-        targetWordCount: settings.targetWordCount,
-      });
-      const autoFixed = autoFixSeoDraft({
-        title: seoTitle,
-        metaDescription: initialMetaDescription,
-        content: qualityResult.content,
-        keywords: outlineResult.keywords,
-        imageUrls: images.map((image) => image.url),
-        serviceKeywords,
-      });
+      const qualityResult = settings.autoOptimizeSeo
+        ? await optimizeArticleQuality({
+            client,
+            model,
+            title: seoTitle,
+            keyword: outlineResult.keywords[0] || plan.keyword,
+            keywords: outlineResult.keywords,
+            content,
+            metaDescription: initialMetaDescription,
+            slug: buildReliableSlug({ title: seoTitle, keyword: outlineResult.keywords[0] || plan.keyword }),
+            serviceKeywords,
+            targetWordCount: settings.targetWordCount,
+          })
+        : {
+            content,
+            evaluation: evaluateSeoArticle({
+              title: seoTitle,
+              metaDescription: initialMetaDescription,
+              slug: buildReliableSlug({ title: seoTitle, keyword: outlineResult.keywords[0] || plan.keyword }),
+              keywords: outlineResult.keywords,
+              content,
+              serviceKeywords,
+            }),
+          };
+      const autoFixed = settings.autoOptimizeSeo
+        ? autoFixSeoDraft({
+            title: seoTitle,
+            metaDescription: initialMetaDescription,
+            content: qualityResult.content,
+            keywords: outlineResult.keywords,
+            imageUrls: images.map((image) => image.url),
+            serviceKeywords,
+          })
+        : {
+            title: seoTitle,
+            slug: buildReliableSlug({ title: seoTitle, keyword: outlineResult.keywords[0] || plan.keyword }),
+            description: stripHtml(content).slice(0, 165),
+            metaTitle: seoTitle,
+            metaDescription: initialMetaDescription,
+            content: qualityResult.content,
+            keywords: outlineResult.keywords,
+            images: images.map((image) => ({ url: image.url, altText: image.altText })),
+            evaluation: qualityResult.evaluation,
+          };
       content = autoFixed.content;
       const metaTitle = autoFixed.metaTitle;
       const metaDescription = autoFixed.metaDescription;
@@ -1422,6 +1488,7 @@ export async function runSeoAutomation(options: RunOptions) {
       if (!shouldPublish && items[items.length - 1]) {
         items[items.length - 1]!.detail = `${items[items.length - 1]!.detail} ${publishDecision.reason}`.trim();
       }
+      await touchAutomationLock(run.id, { processedCount: planIndex + 1, totalCount: titlePlans.length }).catch(() => undefined);
     } catch (error) {
       items.push({
         title: plan.title,

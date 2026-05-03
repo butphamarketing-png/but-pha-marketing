@@ -49,6 +49,8 @@ const DEFAULT_SETTINGS: SeoAutomationSettings = {
   timezone: "Asia/Bangkok",
 };
 
+const AUTO_PUBLISH_SCORE = 80;
+
 function getErrorMessage(error: unknown) {
   if (error instanceof Error && error.message) return error.message;
   return "Không thể thao tác với SEO Autopilot lúc này.";
@@ -298,7 +300,7 @@ export function SeoAutomationPanel() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-black text-slate-900">Chuẩn bị refresh bài cũ</p>
-                  <p className="mt-1 text-xs text-slate-500">Giữ sẵn cờ này cho vòng nâng cấp tiếp theo về auto cập nhật nội dung.</p>
+                  <p className="mt-1 text-xs text-slate-500">Tính năng đang chuẩn bị, hiện chưa tự refresh nội dung bài cũ.</p>
                 </div>
                 <input
                   type="checkbox"
@@ -433,7 +435,7 @@ export function SeoAutomationPanel() {
               className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white transition hover:bg-indigo-500 disabled:opacity-60"
             >
               {running ? <RefreshCw size={16} className="animate-spin" /> : <Play size={16} />}
-              Chạy ngay 1 lượt
+              Chạy ngay {settings.dailyPostCount} bài
             </button>
           </div>
         </div>
@@ -463,15 +465,15 @@ export function SeoAutomationPanel() {
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
-                Chỉ tự publish khi điểm SEO nội bộ đạt từ 80/100, thấp hơn sẽ giữ ở nháp để tránh đăng bài yếu.
+                Chỉ tự publish khi điểm SEO nội bộ đạt từ {AUTO_PUBLISH_SCORE}/100, thấp hơn sẽ giữ ở nháp để tránh đăng bài yếu.
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-emerald-500" />
-                Quality gate má»›i: pháº£i vÆ°á»£t ngÆ°á»¡ng 80/100, khÃ´ng cÃ²n lá»—i critical vÃ  khÃ´ng thiáº¿u áº£nh Ä‘áº¡i diá»‡n má»›i Ä‘Æ°á»£c tá»± Ä‘Äƒng.
+                Quality gate mới: phải đạt từ {AUTO_PUBLISH_SCORE}/100, không còn lỗi critical và không thiếu ảnh đại diện thật mới được tự đăng.
               </li>
             </ul>
             <p className="mt-3 rounded-2xl bg-white px-3 py-3 text-xs font-bold leading-6 text-slate-600">
-              Quality gate moi: chi tu dang bai khi vuot 80/100, khong con loi critical va khong thieu anh dai dien.
+              Quality gate mới: chỉ tự đăng bài khi đạt từ {AUTO_PUBLISH_SCORE}/100, không còn lỗi critical và có ảnh đại diện thật.
             </p>
           </div>
 

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { evaluateSeoArticle } from "@/lib/seo-quality";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
+    if (!isAdminRequest(req)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json().catch(() => null);
     const title = typeof body?.title === "string" ? body.title.trim() : "";
     const metaDescription = typeof body?.metaDescription === "string" ? body.metaDescription.trim() : "";
