@@ -71,45 +71,29 @@ export function NewsStudioPage() {
     void refreshBlogs();
   }, []);
 
+  // Chỉ tự động điền slug/keyword khi title thay đổi VÀ các field đó đang trống
+  // Dùng ref để tránh re-render gây nhảy cursor
+  const titleRef = useRef(blogForm.title);
   useEffect(() => {
-    if (!blogForm.title.trim()) return;
+    const title = blogForm.title.trim();
+    if (!title || title === titleRef.current) return;
+    titleRef.current = title;
 
     setBlogForm((prev) => {
+      // Chỉ tự điền nếu field đang trống (không ghi đè khi user đã nhập)
+      if (prev.slug && prev.keywordsMain) return prev;
       const keywordCandidates = deriveKeywordCandidates(prev.title);
       const nextKeywordMain = prev.keywordsMain || keywordCandidates[0] || prev.title;
-      const nextKeywordSecondary = prev.keywordsSecondary || keywordCandidates.slice(1).join(", ");
       const nextSlug = prev.slug || slugify(prev.title);
-      const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
-      const nextMetaDescription =
-        prev.metaDescription ||
-        buildMetaDescription({
-          title: prev.title,
-          keyword: nextKeywordMain,
-          description: nextDescription,
-          content: prev.content,
-        });
-
-      if (
-        nextKeywordMain === prev.keywordsMain &&
-        nextKeywordSecondary === prev.keywordsSecondary &&
-        nextSlug === prev.slug &&
-        nextDescription === prev.description &&
-        nextMetaDescription === prev.metaDescription
-      ) {
-        return prev;
-      }
-
       return {
         ...prev,
         metaTitle: prev.metaTitle || prev.title,
         keywordsMain: nextKeywordMain,
-        keywordsSecondary: nextKeywordSecondary,
+        keywordsSecondary: prev.keywordsSecondary || keywordCandidates.slice(1).join(", "),
         slug: nextSlug,
-        description: nextDescription,
-        metaDescription: nextMetaDescription,
       };
     });
-  }, [blogForm.title, blogForm.content]);
+  }, [blogForm.title]);
 
   async function refreshBlogs() {
     setLoading(true);
@@ -149,55 +133,39 @@ export function NewsStudioPage() {
   function generateBlogDraftByAI() {
     const title = blogForm.title.trim();
     if (!title) {
-      alert("Nhap tieu de truoc khi dung AI.");
+      alert("Nhập tiêu đề trước khi dùng AI.");
       return;
     }
 
-    const readableTitle = title
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}\s-]/gu, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-    const readableKeywords = readableTitle
-      .split(" ")
-      .filter(Boolean)
-      .reduce<string[]>((result, word) => {
-        if (!result.includes(word)) result.push(word);
-        return result;
-      }, []);
-    const mainKeyword = blogForm.keywordsMain.trim() || readableKeywords.slice(0, 4).join(" ") || title;
-    const secondaryKeyword =
-      blogForm.keywordsSecondary.trim() ||
-      [readableKeywords.slice(0, 2).join(" "), "chien luoc tang truong", "marketing thuc chien"].filter(Boolean).join(", ");
+    const mainKeyword = blogForm.keywordsMain.trim() || deriveKeywordCandidates(title)[0] || title;
+    const secondaryKeyword = blogForm.keywordsSecondary.trim() || deriveKeywordCandidates(title).slice(1, 3).join(", ") || "chiến lược tăng trưởng, marketing thực chiến";
     const generatedSlug = slugify(title);
     const generatedImageUrl = blogForm.imageUrl.trim() || `https://placehold.co/1600x900/12081f/f8fafc/png?text=${encodeURIComponent(mainKeyword)}`;
 
-    const html = `
-      <h1>${title}</h1>
-      <figure>
-        <img src="${generatedImageUrl}" alt="${mainKeyword}" />
-        <figcaption>Hinh minh hoa tu dong cho chu de ${mainKeyword}.</figcaption>
-      </figure>
-      <p><strong>Tu khoa chinh:</strong> ${mainKeyword} · <strong>Tu khoa phu:</strong> ${secondaryKeyword}</p>
-      <h2>Muc luc</h2>
-      <ul>
-        <li><a href="#tong-quan">Tong quan</a></li>
-        <li><a href="#giai-phap">Giai phap trien khai</a></li>
-        <li><a href="#toi-uu-seo">Toi uu SEO thuc chien</a></li>
-      </ul>
-      <h2 id="tong-quan">Tong quan</h2>
-      <p>${mainKeyword} la trong tam giup doanh nghiep tang chuyen doi ben vung. Bai viet nay cung cap cach xay dung chien luoc noi dung va quang ba toan dien.</p>
-      <h2 id="giai-phap">Giai phap trien khai</h2>
-      <h3>1. Phan tich thi truong</h3>
-      <p>Nghien cuu chan dung khach hang, insight va doi thu de xac dinh thong diep ro rang.</p>
-      <h3>2. Xay dung noi dung chuan SEO</h3>
-      <p>Trien khai noi dung theo cum chu de, toi uu H1-H3, lien ket noi bo va CTA chuyen doi.</p>
-      <h3>3. Toi uu chuyen doi</h3>
-      <p>Ket hop landing page, tracking va test A/B de cai thien hieu qua theo du lieu thuc te.</p>
-      <h2 id="toi-uu-seo">Toi uu SEO thuc chien</h2>
-      <p>Dat tu khoa chinh o title, URL, 100 chu dau tien va meta description. Bo sung hinh anh co ALT de tang thoi gian o lai trang.</p>
-      <p>Internal link goi y: <a href="/facebook">Dich vu Facebook</a>, <a href="/website">Dich vu Website</a>.</p>
-    `.trim();
+    const html = [
+      `<h1>${title}</h1>`,
+      `<figure><img src="${generatedImageUrl}" alt="${mainKeyword}" /><figcaption>Hình minh họa cho chủ đề ${mainKeyword}.</figcaption></figure>`,
+      `<p><strong>Từ khóa chính:</strong> ${mainKeyword} &middot; <strong>Từ khóa phụ:</strong> ${secondaryKeyword}</p>`,
+      `<h2>Mục lục</h2>`,
+      `<ul><li><a href="#tong-quan">Tổng quan</a></li><li><a href="#giai-phap">Giải pháp triển khai</a></li><li><a href="#toi-uu-seo">Tối ưu SEO thực chiến</a></li></ul>`,
+      `<h2 id="tong-quan">Tổng quan về ${mainKeyword}</h2>`,
+      `<p>${mainKeyword} là trọng tâm giúp doanh nghiệp tăng chuyển đổi bền vững. Bài viết này cung cấp cách xây dựng chiến lược nội dung và quảng bá toàn diện.</p>`,
+      `<h2 id="giai-phap">Giải pháp triển khai ${mainKeyword}</h2>`,
+      `<h3>1. Phân tích thị trường</h3>`,
+      `<p>Nghiên cứu chân dung khách hàng, insight và đối thủ để xác định thông điệp rõ ràng.</p>`,
+      `<h3>2. Xây dựng nội dung chuẩn SEO</h3>`,
+      `<p>Triển khai nội dung theo cụm chủ đề, tối ưu H1–H3, liên kết nội bộ và CTA chuyển đổi.</p>`,
+      `<h3>3. Tối ưu chuyển đổi</h3>`,
+      `<p>Kết hợp landing page, tracking và test A/B để cải thiện hiệu quả theo dữ liệu thực tế.</p>`,
+      `<h2 id="toi-uu-seo">Tối ưu SEO thực chiến cho ${mainKeyword}</h2>`,
+      `<p>Đặt từ khóa chính ở title, URL, 100 chữ đầu tiên và meta description. Bổ sung hình ảnh có ALT để tăng thời gian ở lại trang.</p>`,
+      `<p>Internal link gợi ý: <a href="/facebook">Dịch vụ Facebook</a>, <a href="/website">Dịch vụ Website</a>.</p>`,
+      `<h2 id="ket-luan">Kết luận</h2>`,
+      `<p>Đầu tư đúng vào ${mainKeyword} sẽ giúp doanh nghiệp tăng trưởng bền vững. Liên hệ Bứt Phá Marketing để được tư vấn miễn phí!</p>`,
+    ].join("\n");
+
+    const metaDesc = `Giải pháp ${mainKeyword} chuyên sâu, tối ưu chuyển đổi và SEO bền vững cho doanh nghiệp.`;
+    const desc = `Tổng hợp chiến lược ${mainKeyword} từ nền tảng đến tối ưu hiệu quả thực tế.`;
 
     setBlogForm((prev) => ({
       ...prev,
@@ -206,8 +174,8 @@ export function NewsStudioPage() {
       keywordsMain: prev.keywordsMain || mainKeyword,
       keywordsSecondary: prev.keywordsSecondary || secondaryKeyword,
       imageUrl: prev.imageUrl || generatedImageUrl,
-      metaDescription: prev.metaDescription || `Giai phap ${mainKeyword} chuyen sau, toi uu chuyen doi va SEO ben vung cho doanh nghiep.`,
-      description: prev.description || `Tong hop chien luoc ${mainKeyword} tu nen tang den toi uu hieu qua thuc te.`,
+      metaDescription: prev.metaDescription || metaDesc,
+      description: prev.description || desc,
       content: html,
     }));
     editorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });

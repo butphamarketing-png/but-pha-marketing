@@ -594,6 +594,14 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
   const [platform, setPlatform] = useState("website");
   const [note, setNote] = useState("");
 
+  // Tự tính filter đúng theo màu platform nếu không có robotFilter truyền vào
+  const resolvedFilter = robotFilter || (() => {
+    if (color === "#22C55E") return "hue-rotate(150deg) saturate(1.8) brightness(1.05)";
+    if (color === "#1877F2") return "hue-rotate(-60deg) saturate(2) brightness(1.05)";
+    if (color === "#F97316") return "hue-rotate(120deg) saturate(3) brightness(1.1) sepia(0.3)";
+    return "none";
+  })();
+
   return (
     <section data-section="contact" id="contact" className="relative py-24 px-4 overflow-hidden">
       <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-20 pointer-events-none">
@@ -701,7 +709,7 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                   src="/mascot-home.png" 
                   alt="Mascot" 
                   className="relative w-full max-w-sm mx-auto animate-float drop-shadow-2xl" 
-                  style={{ filter: robotFilter }}
+                  style={{ filter: resolvedFilter }}
                 />
               </div>
             </div>
