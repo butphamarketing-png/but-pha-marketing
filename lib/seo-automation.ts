@@ -15,7 +15,6 @@ const AUTOMATION_RUNS_KEY = "seo_automation_runs";
 const AUTOMATION_LOCK_KEY = "seo_automation_lock";
 const MAX_RUN_LOGS = 30;
 const AUTOMATION_LOCK_TTL_MS = 1000 * 60 * 45;
-const AUTO_PUBLISH_MIN_SCORE = 80;
 const PREFERRED_PUBLISH_SCORE = 80;
 const DEFAULT_TOPIC_SEEDS = [
   "thiết kế website",
@@ -978,31 +977,10 @@ function canAutoPublish(input: {
     };
   }
 
-  if (input.evaluation.score < AUTO_PUBLISH_MIN_SCORE) {
-    return {
-      allowed: false,
-      reason: `Diem SEO ${input.evaluation.score}/100 chua dat nguong ${AUTO_PUBLISH_MIN_SCORE}/100 de tu dang.`,
-    };
-  }
-
   if (input.evaluation.issues.some((issue) => issue.status === "critical")) {
     return {
       allowed: false,
       reason: "Van con loi SEO muc critical.",
-    };
-  }
-
-  if (input.evaluation.metrics.titleLength < 30 || input.evaluation.metrics.metaLength < 120) {
-    return {
-      allowed: false,
-      reason: "Metadata chua dat chuan title/meta de tu dang.",
-    };
-  }
-
-  if (input.evaluation.metrics.wordCount < 900 || input.evaluation.metrics.h2Count < 2 || input.evaluation.metrics.h3Count < 1) {
-    return {
-      allowed: false,
-      reason: "Noi dung chua du do sau heading/depth de tu dang.",
     };
   }
 
@@ -1015,10 +993,7 @@ function canAutoPublish(input: {
 
   return {
     allowed: true,
-    reason:
-      input.evaluation.score >= PREFERRED_PUBLISH_SCORE
-        ? "Bai da qua quality gate va san sang tu dang."
-        : "Bai dat nguong SEO toi thieu va san sang tu dang.",
+    reason: "Bai da san sang tu dang theo cau hinh SEO Autopilot.",
   };
 }
 
