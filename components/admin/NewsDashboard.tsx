@@ -6,6 +6,7 @@ import { useDeferredValue, useMemo, useState } from "react";
 import { CheckCircle2, Eye, FilePlus2, PencilLine, Search, Sparkles, Target, Trash2 } from "lucide-react";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsItem } from "@/lib/useData";
+import { deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 
 type BlogFormState = {
   title: string;
@@ -297,7 +298,21 @@ export function NewsDashboard({
               <label className="text-sm font-bold text-slate-700">Tieu de bai viet</label>
               <input
                 value={blogForm.title}
-                onChange={(event) => setBlogForm((prev) => ({ ...prev, title: event.target.value }))}
+                onChange={(event) => {
+                  const newTitle = event.target.value;
+                  setBlogForm((prev) => {
+                    const updated: BlogFormState = { ...prev, title: newTitle };
+                    // Chỉ tự điền khi field đang trống và title có nội dung
+                    if (newTitle.trim() && !prev.slug && !prev.keywordsMain) {
+                      const kw = deriveKeywordCandidates(newTitle);
+                      updated.keywordsMain = kw[0] || newTitle;
+                      updated.keywordsSecondary = kw.slice(1).join(", ");
+                      updated.slug = slugify(newTitle);
+                      updated.metaTitle = prev.metaTitle || newTitle;
+                    }
+                    return updated;
+                  });
+                }}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white"
               />
             </div>

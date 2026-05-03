@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { LayoutDashboard, Link2, LogOut, Newspaper, Puzzle, RefreshCw, Settings, ShieldCheck, Sparkles, Target } from "lucide-react";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { mergeNewsContentMeta } from "@/lib/news-content-meta";
-import { buildExcerpt, buildMetaDescription, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
+import { deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { db, type NewsItem } from "@/lib/useData";
 
 const SEOOverview = dynamic(() => import("@/components/admin/SEOOverview").then((module) => ({ default: module.SEOOverview })), {
@@ -70,30 +70,6 @@ export function NewsStudioPage() {
   useEffect(() => {
     void refreshBlogs();
   }, []);
-
-  // Chỉ tự động điền slug/keyword khi title thay đổi VÀ các field đó đang trống
-  // Dùng ref để tránh re-render gây nhảy cursor
-  const titleRef = useRef(blogForm.title);
-  useEffect(() => {
-    const title = blogForm.title.trim();
-    if (!title || title === titleRef.current) return;
-    titleRef.current = title;
-
-    setBlogForm((prev) => {
-      // Chỉ tự điền nếu field đang trống (không ghi đè khi user đã nhập)
-      if (prev.slug && prev.keywordsMain) return prev;
-      const keywordCandidates = deriveKeywordCandidates(prev.title);
-      const nextKeywordMain = prev.keywordsMain || keywordCandidates[0] || prev.title;
-      const nextSlug = prev.slug || slugify(prev.title);
-      return {
-        ...prev,
-        metaTitle: prev.metaTitle || prev.title,
-        keywordsMain: nextKeywordMain,
-        keywordsSecondary: prev.keywordsSecondary || keywordCandidates.slice(1).join(", "),
-        slug: nextSlug,
-      };
-    });
-  }, [blogForm.title]);
 
   async function refreshBlogs() {
     setLoading(true);
