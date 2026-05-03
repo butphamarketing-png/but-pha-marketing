@@ -334,13 +334,18 @@ export function AnimatedMascot() {
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
-  // filter để tô màu ảnh PNG robot theo platform
-  // home/gioi-thieu/blog/lien-he: tím, website: xanh lá, facebook: xanh biển, googlemaps: cam
+  // Ảnh gốc mascot-home.png màu tím (~270deg)
+  // website  → xanh lá  (~120deg): xoay +150deg từ tím
+  // facebook → xanh biển (~210deg): xoay -60deg từ tím  
+  // googlemaps → cam    (~30deg):  xoay +120deg từ tím (ngược chiều)
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
-    home:       { filter: "hue-rotate(0deg) saturate(1)", scale: 1 },
-    facebook:   { filter: "hue-rotate(200deg) saturate(2.5) brightness(1.1)", scale: 1 },
-    googlemaps: { filter: "hue-rotate(280deg) saturate(3) brightness(1.1)", scale: 1.02 },
-    website:    { filter: "hue-rotate(100deg) saturate(2) brightness(1.1)", scale: 1 },
+    home:       { filter: "none", scale: 1 },
+    gioi_thieu: { filter: "none", scale: 1 },
+    blog:       { filter: "none", scale: 1 },
+    lien_he:    { filter: "none", scale: 1 },
+    website:    { filter: "hue-rotate(150deg) saturate(1.8) brightness(1.05)", scale: 1 },
+    facebook:   { filter: "hue-rotate(-60deg) saturate(2) brightness(1.05)", scale: 1 },
+    googlemaps: { filter: "hue-rotate(120deg) saturate(3) brightness(1.1) sepia(0.3)", scale: 1.02 },
   };
   const customFilter = useMemo(() => {
     return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;
