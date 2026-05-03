@@ -57,6 +57,14 @@ interface ParsedFeatureItem {
   details: string[];
 }
 
+function notifyMascot(message: string, durationMs = 6000) {
+  window.dispatchEvent(new CustomEvent("mascot-alert", { detail: { message, durationMs } }));
+}
+
+function isValidVNPhone(value: string) {
+  return /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
+}
+
 function parseFeatureItem(raw: string): ParsedFeatureItem {
   const [titlePart, detailsPart] = raw.split("::");
   const title = (titlePart || "").trim();
@@ -82,9 +90,37 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      notifyMascot(`Bạn đang đăng ký gói ${pkg.name}. Nhập đầy đủ thông tin để đội ngũ Bứt Phá Marketing tư vấn chính xác nhất nhé!`);
+    }, 450);
+    return () => window.clearTimeout(timer);
+  }, [pkg.name]);
+
   const handleSubmit = async () => {
-    if (!form.name.trim() || !form.phone.trim() || !form.email.trim() || !form.address.trim() || !form.consultTime) {
-      setError("Vui lòng điền đầy đủ các thông tin bắt buộc (*)");
+    if (!form.name.trim()) {
+      setError("Vui lòng nhập họ và tên.");
+      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+      return;
+    }
+    if (!isValidVNPhone(form.phone)) {
+      setError("Số điện thoại chưa đúng định dạng Việt Nam.");
+      notifyMascot("Số điện thoại chưa đúng rồi. Bạn kiểm tra lại để đội ngũ có thể gọi hoặc nhắn Zalo tư vấn nhé!");
+      return;
+    }
+    if (!form.email.trim()) {
+      setError("Vui lòng nhập email.");
+      notifyMascot("Bạn chưa nhập email. Nhập giúp mình email để nhận thông tin tư vấn chi tiết nhé!");
+      return;
+    }
+    if (!form.address.trim()) {
+      setError("Vui lòng nhập địa chỉ tư vấn.");
+      notifyMascot("Bạn chưa nhập địa chỉ tư vấn. Nhập giúp mình khu vực để đội ngũ tư vấn sát hơn nhé!");
+      return;
+    }
+    if (!form.consultTime) {
+      setError("Vui lòng chọn thời gian tư vấn.");
+      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
       return;
     }
 
@@ -115,10 +151,12 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 
     if (result.error) {
       setError("Không gửi được yêu cầu tư vấn lúc này. Vui lòng thử lại sau.");
+      notifyMascot("Hiện chưa gửi được yêu cầu tư vấn. Bạn thử lại giúp mình hoặc gọi trực tiếp cho đội ngũ nhé!");
       return;
     }
 
     setStep("success");
+    notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
   };
 
   return (
@@ -594,13 +632,37 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
   const [platform, setPlatform] = useState("website");
   const [note, setNote] = useState("");
 
-  // Tự tính filter đúng theo màu platform nếu không có robotFilter truyền vào
-  const resolvedFilter = robotFilter || (() => {
-    if (color === "#22C55E") return "hue-rotate(150deg) saturate(1.8) brightness(1.05)";
-    if (color === "#1877F2") return "hue-rotate(-60deg) saturate(2) brightness(1.05)";
-    if (color === "#F97316") return "hue-rotate(120deg) saturate(3) brightness(1.1) sepia(0.3)";
-    return "none";
-  })();
+  const resolvedFilter = "none";
+
+  const handleInlineContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+      return;
+    }
+    if (!isValidVNPhone(phone)) {
+      notifyMascot("Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ gọi hoặc nhắn Zalo tư vấn nhé!");
+      return;
+    }
+    if (!address.trim()) {
+      notifyMascot("Bạn chưa nhập địa điểm. Nhập giúp mình khu vực để đội ngũ tư vấn sát nhu cầu hơn nhé!");
+      return;
+    }
+    if (!consultTime) {
+      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
+      return;
+    }
+    await db.leads.add({
+      type: "contact",
+      name,
+      phone,
+      service: `Tư vấn ${platform}`,
+      note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}`,
+      platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website"
+    });
+    setSent(true);
+    notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
+  };
 
   return (
     <section data-section="contact" id="contact" className="relative py-24 px-4 overflow-hidden">
@@ -630,18 +692,7 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
           <div className="relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 backdrop-blur-xl md:p-14">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <form 
-                onSubmit={e => { 
-                  e.preventDefault(); 
-                  db.leads.add({ 
-                    type: "contact", 
-                    name, 
-                    phone, 
-                    service: `Tư vấn ${platform}`, 
-                    note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}`,
-                    platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website"
-                  }); 
-                  setSent(true); 
-                }} 
+                onSubmit={handleInlineContactSubmit} 
                 className="space-y-6"
               >
                 <div className="grid gap-6 md:grid-cols-2">

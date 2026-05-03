@@ -334,10 +334,7 @@ export function AnimatedMascot() {
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
-  // Ảnh gốc mascot-home.png màu tím (~270deg)
-  // website  → xanh lá  (~120deg): xoay +150deg từ tím
-  // facebook → xanh biển (~210deg): xoay -60deg từ tím  
-  // googlemaps → cam    (~30deg):  xoay +120deg từ tím (ngược chiều)
+  // Ảnh gốc mascot-home.png đổi màu theo từng trang dịch vụ.
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home:       { filter: "none", scale: 1 },
     gioi_thieu: { filter: "none", scale: 1 },

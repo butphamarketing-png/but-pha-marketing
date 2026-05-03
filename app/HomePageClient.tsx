@@ -48,6 +48,14 @@ const initialContactForm: ContactFormState = {
   note: "",
 };
 
+function notifyMascot(message: string, durationMs = 6000) {
+  window.dispatchEvent(new CustomEvent("mascot-alert", { detail: { message, durationMs } }));
+}
+
+function isValidVNPhone(value: string) {
+  return /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -77,6 +85,21 @@ export default function HomePageClient() {
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submittingContact) return;
+    if (!contactForm.name.trim()) {
+      setContactState({ type: "error", message: "Vui lòng nhập họ và tên." });
+      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+      return;
+    }
+    if (!isValidVNPhone(contactForm.phone)) {
+      setContactState({ type: "error", message: "Số điện thoại chưa đúng định dạng Việt Nam." });
+      notifyMascot("Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ gọi hoặc nhắn Zalo tư vấn nhé!");
+      return;
+    }
+    if (!contactForm.interest.trim()) {
+      setContactState({ type: "error", message: "Vui lòng chọn dịch vụ quan tâm." });
+      notifyMascot("Bạn chọn giúp mình dịch vụ đang quan tâm để đội ngũ tư vấn đúng nhu cầu nhé!");
+      return;
+    }
     setSubmittingContact(true);
     try {
       const result = await (db as any).leads.add({
@@ -90,17 +113,28 @@ export default function HomePageClient() {
       if (result.success) {
         setContactState({ type: "success", message: "Gửi yêu cầu thành công!" });
         setContactForm(initialContactForm);
+        notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
       } else {
         setContactState({ type: "error", message: "Có lỗi xảy ra, vui lòng thử lại." });
+        notifyMascot("Hiện chưa gửi được thông tin. Bạn thử lại giúp mình hoặc gọi trực tiếp cho đội ngũ tư vấn nhé!");
       }
     } catch (err) {
       setContactState({ type: "error", message: "Có lỗi xảy ra, vui lòng thử lại." });
+      notifyMascot("Hiện chưa gửi được thông tin. Bạn thử lại giúp mình hoặc gọi trực tiếp cho đội ngũ tư vấn nhé!");
     } finally {
       setSubmittingContact(false);
     }
   };
   const { user } = useAuth();
   const { settings } = useAdmin();
+
+  useEffect(() => {
+    if (!showConsult) return;
+    const timer = window.setTimeout(() => {
+      notifyMascot("Bạn vui lòng nhập thông tin tư vấn. Nếu điền số điện thoại hoặc thông tin chưa đúng, mình sẽ nhắc để bạn sửa ngay nhé!");
+    }, 450);
+    return () => window.clearTimeout(timer);
+  }, [showConsult]);
 
   const whyChooseUsRef = useRef<HTMLDivElement>(null);
   const projectShowcaseRef = useRef<HTMLDivElement>(null);
@@ -553,7 +587,7 @@ export default function HomePageClient() {
               <div className="text-left">
                 <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
               </div>
-              <div className="flex gap-3">
+              <div className="hidden gap-3 md:flex">
                 <button
                   onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "left"); }}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 hover:border-fuchsia-500/30"
@@ -572,10 +606,10 @@ export default function HomePageClient() {
             </div>
             <div
               ref={whyChooseUsRef}
-              className="no-scrollbar flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory"
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
             >
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="snap-start min-w-[75vw] flex-shrink-0 rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center sm:min-w-[260px] md:min-w-0 md:flex-1 transition-all hover:bg-white/[0.06]">
+                <div key={item.title} className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center transition-all hover:bg-white/[0.06]">
                   <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
                     <item.icon className="h-6 w-6" />
                   </span>

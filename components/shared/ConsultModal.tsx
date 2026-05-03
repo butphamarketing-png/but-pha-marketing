@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, MessageCircle } from "lucide-react";
 import { db } from "@/lib/useData";
@@ -14,10 +14,44 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
   });
   const [loading, setLoading] = useState(false);
 
+  const notifyMascot = (message: string, durationMs = 6000) => {
+    window.dispatchEvent(new CustomEvent("mascot-alert", { detail: { message, durationMs } }));
+  };
+
+  const isValidVNPhone = (value: string) => /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const timer = window.setTimeout(() => {
+      notifyMascot("Bạn vui lòng nhập họ tên, số điện thoại, email và thời gian tư vấn để đội ngũ Bứt Phá Marketing hỗ trợ nhanh nhất nhé!");
+    }, 450);
+    return () => window.clearTimeout(timer);
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.name.trim()) {
+      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+      return;
+    }
+    if (!isValidVNPhone(form.phone)) {
+      notifyMascot("Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ có thể gọi tư vấn nhé!");
+      return;
+    }
+    if (!form.email.trim()) {
+      notifyMascot("Bạn chưa nhập email. Nhập giúp mình email để nhận thông tin tư vấn chi tiết nhé!");
+      return;
+    }
+    if (!form.address.trim()) {
+      notifyMascot("Bạn chưa nhập địa chỉ tư vấn. Nhập giúp mình khu vực để đội ngũ tư vấn sát hơn nhé!");
+      return;
+    }
+    if (!form.consultTime) {
+      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
+      return;
+    }
     setLoading(true);
     try {
       const combinedNote = `Email: ${form.email} | Địa chỉ: ${form.address} | Thời gian: ${form.consultTime} | Nội dung: ${form.note}`;
@@ -27,10 +61,10 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
         phone: form.phone, 
         note: combinedNote 
       });
-      alert("Đã gửi yêu cầu tư vấn thành công! Chúng tôi sẽ liên hệ sớm nhất.");
+      notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
       onClose();
     } catch (err) {
-      alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+      notifyMascot("Hiện chưa gửi được thông tin. Bạn thử lại giúp mình hoặc gọi trực tiếp cho đội ngũ tư vấn nhé!");
     } finally {
       setLoading(false);
     }
