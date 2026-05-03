@@ -393,9 +393,13 @@ export default function HomePageClient() {
               <Link href="/lo-trinh-du-an" className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-black text-white transition hover:bg-white/10 sm:flex">
                 Lộ trình dự án
               </Link>
+              {/* Mobile: hiện nút lộ trình, ẩn nút liên hệ tư vấn */}
+              <Link href="/lo-trinh-du-an" className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-black text-white transition hover:bg-white/10 sm:hidden">
+                Lộ trình dự án
+              </Link>
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
-                className="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(168,85,247,0.3)] transition hover:scale-[1.03] active:scale-[0.97]"
+                className="hidden rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(168,85,247,0.3)] transition hover:scale-[1.03] active:scale-[0.97] sm:block"
               >
                 Liên hệ tư vấn
               </button>
@@ -404,19 +408,19 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative h-[480px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
+          <section id="hero" className="relative h-[56vw] min-h-[280px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
             <div className="absolute inset-0 z-20 flex items-center justify-between px-2 pointer-events-none sm:px-4">
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
-                className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white backdrop-blur-md transition hover:bg-black/50 sm:h-12 sm:w-12"
+                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 sm:h-12 sm:w-12"
               >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
               </button>
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length); }}
-                className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white backdrop-blur-md transition hover:bg-black/50 sm:h-12 sm:w-12"
+                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 sm:h-12 sm:w-12"
               >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
               </button>
             </div>
 
@@ -566,10 +570,10 @@ export default function HomePageClient() {
             </div>
             <div
               ref={whyChooseUsRef}
-              className="no-scrollbar flex gap-4 overflow-x-auto pb-6 px-4 -mx-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-4"
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory"
             >
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="min-w-[260px] flex-shrink-0 rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center md:min-w-0 transition-all hover:bg-white/[0.06]">
+                <div key={item.title} className="snap-start min-w-[75vw] flex-shrink-0 rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center sm:min-w-[260px] md:min-w-0 md:flex-1 transition-all hover:bg-white/[0.06]">
                   <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
                     <item.icon className="h-6 w-6" />
                   </span>

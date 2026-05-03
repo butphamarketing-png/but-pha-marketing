@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAdmin } from "@/lib/AdminContext";
-import { Bot, EyeOff, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
@@ -324,7 +324,7 @@ export function AnimatedMascot() {
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home: { filter: "none", scale: 1 },
     facebook: { filter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)", scale: 1 },
-    googlemaps: { filter: "hue-rotate(-240deg) saturate(1.5) brightness(1.1)", scale: 1.02 },
+    googlemaps: { filter: "hue-rotate(-30deg) saturate(2.0) brightness(1.05)", scale: 1.02 },
     website: { filter: "hue-rotate(90deg) saturate(1.4) brightness(1.1)", scale: 1 },
   };
   const customFilter = useMemo(() => {
@@ -484,30 +484,6 @@ export function AnimatedMascot() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => {
-          if (isShown) {
-            setBursting(true);
-            window.setTimeout(() => {
-              setIsShown(false);
-              setBursting(false);
-              stopSpeaking();
-              clickCountRef.current = 0;
-            }, 420);
-          } else {
-            clickCountRef.current = 0;
-            setIsShown(true);
-          }
-        }}
-        className="fixed left-3 top-1/2 z-[55] flex -translate-y-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-2 text-white shadow-xl backdrop-blur transition-all hover:scale-105 active:scale-95"
-        aria-label={isShown ? "Ẩn robot" : "Hiện robot"}
-        title={isShown ? "Tắt linh vật" : "Bật linh vật"}
-      >
-        {isShown ? <EyeOff size={18} className="text-cyan-300" /> : <Bot size={18} className="text-white/70" />}
-        <span className="text-xs font-semibold">{isShown ? "Ẩn robot" : "Hiện robot"}</span>
-      </button>
-
       {isShown && (
         <motion.div
           className="fixed left-0 top-0 z-[54]"

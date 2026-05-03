@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageCircle, Send, Bot } from "lucide-react";
+import { X, MessageCircle, Send, Bot, Phone } from "lucide-react";
 
 interface Message {
   id: number;
@@ -8,28 +10,32 @@ interface Message {
   text: string;
 }
 
+const ZALO_NUMBER = "0937417982";
+const ZALO_URL = `https://zalo.me/${ZALO_NUMBER}`;
+
 const QUICK_REPLIES = [
   "Dịch vụ Facebook Marketing",
-  "Thiết kế Website chuyên nghiệp",
+  "Thiết kế Website",
   "Google Maps Marketing",
   "Xem bảng giá",
-  "Liên hệ tư vấn",
   "Quy trình làm việc",
 ];
 
+// Đếm số tin nhắn để biết khi nào nên gợi ý để lại SĐT
+let msgId = 0;
+
 const BOT_RESPONSES: { pattern: RegExp; reply: string }[] = [
-  { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi bao gồm: Xây dựng Fanpage chuyên nghiệp từ 2.000.000đ/tháng, Chăm sóc nội dung từ 3.500.000đ/tháng, và Quảng cáo Facebook Ads từ 5.000.000đ/tháng. Bạn muốn tư vấn gói nào?" },
-  { pattern: /google|maps|local|seo/i, reply: "Google Maps/Local SEO: Tạo & tối ưu Google Business từ 2.000.000đ, SEO Local từ 4.000.000đ/tháng. Giúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm!" },
-  { pattern: /website|web/i, reply: "Dịch vụ Website: Thiết kế Landing Page từ 3.500.000đ, Website doanh nghiệp từ 7.000.000đ, E-commerce từ 15.000.000đ. SEO website từ 3.000.000đ/tháng!" },
-  { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dịch vụ dao động từ 2.000.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng trở lên giảm 5-20%. Bạn muốn tư vấn cụ thể gói nào?" },
-  { pattern: /liên hệ|gọi|phone|hotline|tư vấn/i, reply: "Bạn có thể liên hệ trực tiếp: ☎️ Hotline: 0937 417 982 | Email: butphamarketing@gmail.com. Hoặc điền form tư vấn trên trang, đội ngũ sẽ gọi lại trong 30 phút!" },
-  { pattern: /quy trình|làm việc|process/i, reply: "Quy trình làm việc: 1️⃣ Tư vấn miễn phí → 2️⃣ Phân tích & lên chiến lược → 3️⃣ Ký hợp đồng → 4️⃣ Triển khai → 5️⃣ Báo cáo hàng tuần → 6️⃣ Tối ưu liên tục. Chúng tôi cam kết minh bạch 100%!" },
-  { pattern: /bảo hành|cam kết|guarantee/i, reply: "Chúng tôi cam kết: ✅ Báo cáo kết quả hàng tuần ✅ Hoàn tiền nếu không đạt KPI trong 30 ngày đầu ✅ Không tính phí ẩn ✅ Hỗ trợ tận tâm qua Hotline. Yên tâm đặt hàng!" },
-  { pattern: /xin chào|hello|hi|chào/i, reply: "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing. Tôi có thể giúp bạn tìm hiểu về các dịch vụ marketing, bảng giá và quy trình làm việc. Bạn cần hỗ trợ gì?" },
-  { pattern: /cảm ơn|thank/i, reply: "Cảm ơn bạn đã quan tâm đến Bứt Phá Marketing! Nếu cần tư vấn thêm, đừng ngại nhắn tin nhé. Chúc bạn kinh doanh thuận lợi! 🚀" },
+  { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi:\n• Xây dựng Fanpage: từ 2.000.000đ/tháng\n• Chăm sóc nội dung: từ 3.500.000đ/tháng\n• Quảng cáo Facebook Ads: từ 5.000.000đ/tháng\n\nBạn muốn tư vấn gói nào?" },
+  { pattern: /google|maps|local|seo/i, reply: "Google Maps/Local SEO:\n• Tạo & tối ưu Google Business: từ 2.000.000đ\n• SEO Local: từ 4.000.000đ/tháng\n\nGiúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm!" },
+  { pattern: /website|web/i, reply: "Dịch vụ Website:\n• Landing Page: từ 3.500.000đ\n• Website doanh nghiệp: từ 7.000.000đ\n• E-commerce: từ 15.000.000đ\n• SEO website: từ 3.000.000đ/tháng" },
+  { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dao động từ 2.000.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng giảm 5-20%.\n\nĐể báo giá chính xác, bạn cho mình biết nhu cầu cụ thể nhé?" },
+  { pattern: /quy trình|làm việc|process/i, reply: "Quy trình làm việc:\n1️⃣ Tư vấn miễn phí\n2️⃣ Phân tích & lên chiến lược\n3️⃣ Ký hợp đồng\n4️⃣ Triển khai\n5️⃣ Báo cáo hàng tuần\n6️⃣ Tối ưu liên tục\n\nCam kết minh bạch 100%!" },
+  { pattern: /xin chào|hello|hi|chào/i, reply: "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing 🤖\nTôi có thể tư vấn về dịch vụ, bảng giá và hỗ trợ bạn 24/7. Bạn cần hỗ trợ gì?" },
+  { pattern: /cảm ơn|thank/i, reply: "Cảm ơn bạn đã quan tâm đến Bứt Phá Marketing! Chúc bạn kinh doanh thuận lợi! 🚀" },
+  { pattern: /(\d{9,11})/i, reply: "Cảm ơn bạn đã để lại số điện thoại! Đội ngũ tư vấn sẽ liên hệ lại trong vòng 30 phút (giờ hành chính). Bạn có thể nhắn thêm nhu cầu cụ thể để được tư vấn nhanh hơn nhé!" },
 ];
 
-const DEFAULT_REPLY = "Cảm ơn bạn đã nhắn tin! Câu hỏi của bạn sẽ được chuyển đến chuyên gia tư vấn. Hoặc liên hệ ngay hotline 0937 417 982 để được hỗ trợ nhanh nhất! 🙏";
+const DEFAULT_REPLY = "Cảm ơn bạn đã nhắn tin! Để được tư vấn chi tiết và nhanh nhất, bạn có thể để lại số điện thoại hoặc kết bạn Zalo với mình nhé 😊";
 
 function getBotReply(msg: string): string {
   for (const { pattern, reply } of BOT_RESPONSES) {
@@ -38,7 +44,26 @@ function getBotReply(msg: string): string {
   return DEFAULT_REPLY;
 }
 
-let msgId = 0;
+// Lưu conversation vào leads API
+async function saveConversation(messages: Message[], phone?: string) {
+  try {
+    const conversation = messages
+      .map(m => `[${m.role === "bot" ? "Bot" : "Khách"}]: ${m.text}`)
+      .join("\n");
+    await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "chatbot",
+        name: "Khách chat",
+        phone: phone || "Chưa để lại",
+        service: "Chatbot tư vấn",
+        note: conversation,
+        platform: "chatbot",
+      }),
+    });
+  } catch (_) {}
+}
 
 export function ChatbotWidget({ color }: { color: string }) {
   const [open, setOpen] = useState(false);
@@ -48,7 +73,11 @@ export function ChatbotWidget({ color }: { color: string }) {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [unread, setUnread] = useState(1);
+  const [userPhone, setUserPhone] = useState<string | undefined>();
+  const [ctaShown, setCtaShown] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const userMsgCountRef = useRef(0);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -57,18 +86,57 @@ export function ChatbotWidget({ color }: { color: string }) {
     }
   }, [open, messages]);
 
+  // Auto-save conversation sau 30s không hoạt động
+  const scheduleSave = (msgs: Message[], phone?: string) => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => saveConversation(msgs, phone), 30000);
+  };
+
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
+
+    // Detect phone number
+    const phoneMatch = text.match(/(\d{9,11})/);
+    if (phoneMatch) setUserPhone(phoneMatch[1]);
+
     const userMsg: Message = { id: msgId++, role: "user", text };
-    setMessages(m => [...m, userMsg]);
+    userMsgCountRef.current += 1;
+    const newMessages = (prev: Message[]) => [...prev, userMsg];
+
+    setMessages(prev => {
+      const updated = [...prev, userMsg];
+      scheduleSave(updated, phoneMatch?.[1] || userPhone);
+      return updated;
+    });
     setInput("");
     setTyping(true);
+
     setTimeout(() => {
       const reply = getBotReply(text);
-      setMessages(m => [...m, { id: msgId++, role: "bot", text: reply }]);
+      let extraCta = "";
+
+      // Sau 3 tin nhắn user, gợi ý 1 lần để lại SĐT hoặc Zalo (không spam)
+      if (userMsgCountRef.current === 3 && !ctaShown && !userPhone) {
+        extraCta = `\n\n💬 Để được tư vấn chi tiết hơn, bạn có thể:\n• Để lại số điện thoại ngay tại đây\n• Hoặc kết bạn Zalo: ${ZALO_NUMBER}`;
+        setCtaShown(true);
+      }
+
+      const botMsg: Message = { id: msgId++, role: "bot", text: reply + extraCta };
+      setMessages(prev => {
+        const updated = [...prev, botMsg];
+        scheduleSave(updated, userPhone);
+        return updated;
+      });
       setTyping(false);
       if (!open) setUnread(u => u + 1);
-    }, 900 + Math.random() * 500);
+    }, 800 + Math.random() * 400);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    // Lưu ngay khi đóng nếu có tin nhắn
+    if (messages.length > 1) saveConversation(messages, userPhone);
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
   };
 
   return (
@@ -81,8 +149,9 @@ export function ChatbotWidget({ color }: { color: string }) {
             exit={{ opacity: 0, scale: 0.85, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="fixed bottom-20 right-4 z-[80] flex w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl"
-            style={{ maxHeight: "500px" }}
+            style={{ maxHeight: "520px" }}
           >
+            {/* Header */}
             <div className="flex items-center justify-between px-4 py-3" style={{ backgroundColor: color }}>
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
@@ -96,11 +165,22 @@ export function ChatbotWidget({ color }: { color: string }) {
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white">
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <a href={ZALO_URL} target="_blank" rel="noreferrer" title="Chat Zalo ngay"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="h-4 w-4" />
+                </a>
+                <a href={`tel:${ZALO_NUMBER}`} title="Gọi ngay"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition">
+                  <Phone size={13} className="text-white" />
+                </a>
+                <button onClick={handleClose} className="text-white/70 hover:text-white">
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
+            {/* Messages */}
             <div className="flex-1 overflow-y-auto space-y-3 p-4" style={{ maxHeight: "300px" }}>
               {messages.map(m => (
                 <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -129,6 +209,17 @@ export function ChatbotWidget({ color }: { color: string }) {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* Zalo CTA banner - chỉ hiện sau khi ctaShown */}
+            {ctaShown && !userPhone && (
+              <div className="mx-3 mb-2 flex items-center gap-2 rounded-xl bg-[#0068FF]/20 border border-[#0068FF]/30 px-3 py-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="h-5 w-5 flex-shrink-0" />
+                <a href={ZALO_URL} target="_blank" rel="noreferrer" className="text-[11px] text-blue-300 hover:text-blue-200 font-semibold">
+                  Kết bạn Zalo {ZALO_NUMBER} để tư vấn nhanh hơn →
+                </a>
+              </div>
+            )}
+
+            {/* Input */}
             <div className="border-t border-white/10 p-3">
               <div className="mb-2 flex flex-wrap gap-1">
                 {QUICK_REPLIES.slice(0, 3).map(q => (
@@ -141,7 +232,7 @@ export function ChatbotWidget({ color }: { color: string }) {
                 <input
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="Nhập câu hỏi..."
+                  placeholder="Nhập câu hỏi hoặc số điện thoại..."
                   className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white outline-none focus:border-white/30"
                 />
                 <button type="submit" className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl text-white transition-transform hover:scale-110" style={{ backgroundColor: color }}>
@@ -175,4 +266,3 @@ export function ChatbotWidget({ color }: { color: string }) {
     </>
   );
 }
-
