@@ -408,7 +408,7 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative h-[56vw] min-h-[280px] w-full overflow-hidden sm:h-[500px] md:h-[600px] lg:h-[700px]">
+          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "min(56vw, 700px)", minHeight: "260px" }}>
             <div className="absolute inset-0 z-20 flex items-center justify-between px-2 pointer-events-none sm:px-4">
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}

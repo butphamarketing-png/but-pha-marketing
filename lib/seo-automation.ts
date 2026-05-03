@@ -470,36 +470,32 @@ async function generateTitlePlans(
   }
 
   try {
-    const response = await client.responses.create({
+    const response = await client.chat.completions.create({
       model,
-      input: [
+      response_format: { type: "json_object" },
+      messages: [
         {
           role: "system",
-          content: [{ type: "input_text", text: "Bạn là tổng biên tập SEO cho agency marketing. Trả về JSON hợp lệ duy nhất." }],
+          content: "Bạn là tổng biên tập SEO cho agency marketing. Trả về JSON hợp lệ duy nhất.",
         },
         {
           role: "user",
           content: [
-            {
-              type: "input_text",
-              text: [
-                `Hãy tạo ${count} ý tưởng bài SEO tiếng Việt thật chỉn chu cho website agency marketing.`,
-                `Chủ đề dịch vụ bắt buộc phải bám theo: ${seedKeywords.join(", ")}`,
-                `Những tiêu đề đã có: ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
-                "Yêu cầu:",
-                "- Không trùng ý giữa các bài",
-                "- Chỉ viết quanh các dịch vụ marketing của website",
-                "- Tiêu đề phải có khả năng tìm kiếm thật, bám intent dịch vụ hoặc nhu cầu chuyển đổi",
-                "- Có thể đăng ngay trên site agency",
-                '- Trả về JSON: {"items":[{"title":"...","keyword":"...","angle":"..."}]}',
-              ].join("\n"),
-            },
-          ],
+            `Hãy tạo ${count} ý tưởng bài SEO tiếng Việt thật chỉn chu cho website agency marketing.`,
+            `Chủ đề dịch vụ bắt buộc phải bám theo: ${seedKeywords.join(", ")}`,
+            `Những tiêu đề đã có: ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
+            "Yêu cầu:",
+            "- Không trùng ý giữa các bài",
+            "- Chỉ viết quanh các dịch vụ marketing của website",
+            "- Tiêu đề phải có khả năng tìm kiếm thật, bám intent dịch vụ hoặc nhu cầu chuyển đổi",
+            "- Có thể đăng ngay trên site agency",
+            '- Trả về JSON: {"items":[{"title":"...","keyword":"...","angle":"..."}]}',
+          ].join("\n"),
         },
       ],
     });
 
-    const raw = response.output_text || "";
+    const raw = response.choices[0]?.message?.content || "";
     const parsed = JSON.parse(raw.replace(/^```json\s*/i, "").replace(/\s*```$/, "")) as { items?: Array<Record<string, unknown>> };
     const items = Array.isArray(parsed.items) ? parsed.items : [];
     const plans = items
@@ -601,35 +597,31 @@ async function generateOutline(client: OpenAI | null, model: string, title: stri
   }
 
   try {
-    const response = await client.responses.create({
+    const response = await client.chat.completions.create({
       model,
-      input: [
+      response_format: { type: "json_object" },
+      messages: [
         {
           role: "system",
-          content: [{ type: "input_text", text: "Bạn là chiến lược gia SEO tiếng Việt. Trả về JSON hợp lệ duy nhất." }],
+          content: "Bạn là chiến lược gia SEO tiếng Việt. Trả về JSON hợp lệ duy nhất.",
         },
         {
           role: "user",
           content: [
-            {
-              type: "input_text",
-              text: [
-                `Tiêu đề: ${title}`,
-                `Keyword chính: ${keyword}`,
-                `Search intent: ${serpInsight.intent}`,
-                `Related keywords: ${serpInsight.relatedKeywords.join(", ")}`,
-                `Top headlines SERP: ${serpInsight.headlines.join(" | ") || "không có"}`,
-                "Tạo dàn ý SEO 6-8 mục thật chỉnh chu cho bài agency marketing.",
-                '- Trả về JSON: {"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
-              ].join("\n"),
-            },
-          ],
+            `Tiêu đề: ${title}`,
+            `Keyword chính: ${keyword}`,
+            `Search intent: ${serpInsight.intent}`,
+            `Related keywords: ${serpInsight.relatedKeywords.join(", ")}`,
+            `Top headlines SERP: ${serpInsight.headlines.join(" | ") || "không có"}`,
+            "Tạo dàn ý SEO 6-8 mục thật chỉnh chu cho bài agency marketing.",
+            '- Trả về JSON: {"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
+          ].join("\n"),
         },
       ],
     });
 
     const parsed = JSON.parse(
-      (response.output_text || "").replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, ""),
+      (response.choices[0]?.message?.content || "").replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, ""),
     ) as { keywords?: unknown; structure?: unknown };
     const keywords = dedupeKeywords([
       keyword,

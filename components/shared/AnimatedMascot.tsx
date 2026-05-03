@@ -10,6 +10,9 @@ function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
   if (pathname.startsWith("/google-maps")) return "googlemaps";
   if (pathname.startsWith("/website")) return "website";
+  if (pathname.startsWith("/gioi-thieu")) return "gioi_thieu";
+  if (pathname.startsWith("/blog") || pathname.startsWith("/tin-tuc")) return "blog";
+  if (pathname.startsWith("/lien-he")) return "lien_he";
   return "home";
 }
 
@@ -56,7 +59,8 @@ function mixHex(base: string, target: string, amount: number) {
 }
 
 function buildMascotPalette(platformColor: string, platform: string): MascotPalette {
-  if (platform === "home") {
+  const purplePages = ["home", "gioi_thieu", "blog", "lien_he"];
+  if (purplePages.includes(platform)) {
     return {
       bodyTop: "#A78BFA",
       bodyMid: "#7C3AED",
@@ -304,7 +308,16 @@ export function AnimatedMascot() {
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
   const hidden = useMemo(() => pathname.startsWith("/admin"), [pathname]);
   const enabled = settings.mascotEnabled !== false && !hidden;
-  const mascotGlowColor = settings.colors?.[platform] || settings.colors?.primary || "#7C3AED";
+  const PLATFORM_COLORS: Record<string, string> = {
+    home: "#7C3AED",
+    gioi_thieu: "#7C3AED",
+    blog: "#7C3AED",
+    lien_he: "#7C3AED",
+    website: "#22C55E",
+    facebook: "#1877F2",
+    googlemaps: "#F97316",
+  };
+  const mascotGlowColor = PLATFORM_COLORS[platform] ?? "#7C3AED";
   const mascotPalette = useMemo(
     () => buildMascotPalette(mascotGlowColor, platform),
     [mascotGlowColor, platform],
@@ -321,11 +334,13 @@ export function AnimatedMascot() {
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
+  // filter để tô màu ảnh PNG robot theo platform
+  // home/gioi-thieu/blog/lien-he: tím, website: xanh lá, facebook: xanh biển, googlemaps: cam
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
-    home: { filter: "none", scale: 1 },
-    facebook: { filter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)", scale: 1 },
-    googlemaps: { filter: "hue-rotate(-30deg) saturate(2.0) brightness(1.05)", scale: 1.02 },
-    website: { filter: "hue-rotate(90deg) saturate(1.4) brightness(1.1)", scale: 1 },
+    home:       { filter: "hue-rotate(0deg) saturate(1)", scale: 1 },
+    facebook:   { filter: "hue-rotate(200deg) saturate(2.5) brightness(1.1)", scale: 1 },
+    googlemaps: { filter: "hue-rotate(280deg) saturate(3) brightness(1.1)", scale: 1.02 },
+    website:    { filter: "hue-rotate(100deg) saturate(2) brightness(1.1)", scale: 1 },
   };
   const customFilter = useMemo(() => {
     return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;
