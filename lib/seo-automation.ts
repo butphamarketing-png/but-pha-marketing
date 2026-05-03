@@ -1,5 +1,3 @@
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import OpenAI from "openai";
 import npmSlugify from "slugify";
 import { createServerClient } from "@/lib/supabase";
@@ -688,39 +686,34 @@ async function generateArticleContent(client: OpenAI | null, model: string, titl
       .map((item) => `- H${item.level}: ${item.text}${item.summary ? ` | tóm tắt: ${item.summary}` : ""}`)
       .join("\n");
 
-    const response = await client.responses.create({
+    const response = await client.chat.completions.create({
       model,
-      input: [
+      messages: [
         {
           role: "system",
-          content: [{ type: "input_text", text: "Bạn là senior SEO copywriter tiếng Việt. Chỉ trả về HTML fragment hợp lệ, không markdown." }],
+          content: "Bạn là senior SEO copywriter tiếng Việt. Chỉ trả về HTML fragment hợp lệ, không markdown, không giải thích.",
         },
         {
           role: "user",
           content: [
-            {
-              type: "input_text",
-              text: [
-                `Viết bài thật chỉnh chu cho tiêu đề: ${title}`,
-                `Keyword chính: ${keyword}`,
-                `Mục tiêu độ dài: khoảng ${settings.targetWordCount} từ`,
-                "Yêu cầu:",
-                "- Có mở bài rõ ràng",
-                "- Bám đúng dàn ý",
-                "- Mỗi H2/H3 cần có nội dung thật",
-                "- Văn phong chuyên nghiệp, chuyển đổi tốt nhưng không phô",
-                "- Mỗi heading cần có id slug-friendly theo heading",
-                "- Cuối bài có kết luận và CTA nhẹ",
-                "Dàn ý:",
-                outlineText,
-              ].join("\n"),
-            },
-          ],
+            `Viết bài thật chỉnh chu cho tiêu đề: ${title}`,
+            `Keyword chính: ${keyword}`,
+            `Mục tiêu độ dài: khoảng ${settings.targetWordCount} từ`,
+            "Yêu cầu:",
+            "- Có mở bài rõ ràng",
+            "- Bám đúng dàn ý",
+            "- Mỗi H2/H3 cần có nội dung thật",
+            "- Văn phong chuyên nghiệp, chuyển đổi tốt nhưng không phô",
+            "- Mỗi heading cần có id slug-friendly",
+            "- Cuối bài có kết luận và CTA nhẹ",
+            "Dàn ý:",
+            outlineText,
+          ].join("\n"),
         },
       ],
     });
 
-    const content = (response.output_text || "").replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
+    const content = (response.choices[0]?.message?.content || "").replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
     if (!content) {
       throw new Error("No content");
     }
@@ -892,39 +885,33 @@ async function optimizeArticleQuality(input: {
   }
 
   try {
-    const response = await input.client.responses.create({
+    const response = await input.client.chat.completions.create({
       model: input.model,
-      input: [
+      messages: [
         {
           role: "system",
-          content: [{ type: "input_text", text: "Bạn là chuyên gia tối ưu bài SEO. Chỉ trả về HTML fragment hợp lệ, không markdown." }],
+          content: "Bạn là chuyên gia tối ưu bài SEO. Chỉ trả về HTML fragment hợp lệ, không markdown.",
         },
         {
           role: "user",
           content: [
-            {
-              type: "input_text",
-              text: [
-                `Tối ưu bài viết sau để điểm SEO nội bộ đạt trên 80/100.`,
-                `Tiêu đề: ${input.title}`,
-                `Keyword chính: ${input.keyword}`,
-                `Các lỗi cần sửa: ${evaluation.issues.map((item) => item.label).join(" | ")}`,
-                `Nhóm dịch vụ phải bám: ${input.serviceKeywords.join(", ") || input.keyword}`,
-                "Yêu cầu:",
-                "- Giữ đúng chủ đề dịch vụ marketing",
-                "- Không lan man ngoài intent người tìm dịch vụ",
-                "- Cần có internal links, outbound link, FAQ, chiều sâu nội dung, H2/H3 rõ ràng",
-                "- Không bỏ mất nội dung tốt sẵn có",
-                "HTML hiện tại:",
-                nextContent,
-              ].join("\n"),
-            },
-          ],
+            `Tối ưu bài viết sau để điểm SEO nội bộ đạt trên 80/100.`,
+            `Tiêu đề: ${input.title}`,
+            `Keyword chính: ${input.keyword}`,
+            `Các lỗi cần sửa: ${evaluation.issues.map((item) => item.label).join(" | ")}`,
+            `Nhóm dịch vụ phải bám: ${input.serviceKeywords.join(", ") || input.keyword}`,
+            "Yêu cầu:",
+            "- Giữ đúng chủ đề dịch vụ marketing",
+            "- Cần có internal links, outbound link, FAQ, chiều sâu nội dung, H2/H3 rõ ràng",
+            "- Không bỏ mất nội dung tốt sẵn có",
+            "HTML hiện tại:",
+            nextContent,
+          ].join("\n"),
         },
       ],
     });
 
-    const improved = (response.output_text || "").replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
+    const improved = (response.choices[0]?.message?.content || "").replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
     if (improved) {
       nextContent = ensureMinimumDepth(ensureOutboundLink(ensureFaqBlock(improved, input.keyword), input.keyword), input.keyword, input.targetWordCount);
       evaluation = evaluateSeoArticle({
@@ -985,10 +972,7 @@ function canAutoPublish(input: {
   }
 
   if (input.imageGenerationEnabled && !normalizeString(input.featuredImageUrl)) {
-    return {
-      allowed: false,
-      reason: "Chua tao duoc anh dai dien cho bai viet.",
-    };
+    // Khong chan publish - anh la optional, bai van duoc dang neu dat diem SEO
   }
 
   return {
@@ -1000,46 +984,45 @@ function canAutoPublish(input: {
   };
 }
 
-function getExtensionFromMime(mimeType: string) {
-  if (mimeType.includes("jpeg")) return "jpg";
-  if (mimeType.includes("webp")) return "webp";
-  if (mimeType.includes("gif")) return "gif";
-  return "png";
-}
-
-async function saveGeneratedImageToMedia(input: {
-  b64Json: string;
+async function saveGeneratedImageToSupabase(input: {
+  imageUrl: string;
   title: string;
   sectionLabel: string;
   suggestedName: string;
 }) {
-  const buffer = Buffer.from(input.b64Json, "base64");
-  const extension = getExtensionFromMime("image/png");
+  // Fetch anh tu URL ve buffer
+  const res = await fetch(input.imageUrl);
+  if (!res.ok) throw new Error(`Failed to fetch image: ${res.status}`);
+  const buffer = Buffer.from(await res.arrayBuffer());
+
   const baseName =
     npmSlugify(input.suggestedName || `${input.title}-${input.sectionLabel}`, {
       lower: true,
       strict: true,
       trim: true,
     }) || `seo-automation-${Date.now()}`;
-  const fileName = `${baseName}-${Date.now()}.${extension}`;
-  const relativeDir = path.join("uploads", "media");
-  const absoluteDir = path.join(process.cwd(), "public", relativeDir);
-  const absolutePath = path.join(absoluteDir, fileName);
-  const publicUrl = `/${relativeDir.replace(/\\/g, "/")}/${fileName}`;
-
-  await mkdir(absoluteDir, { recursive: true });
-  await writeFile(absolutePath, buffer);
+  const fileName = `${baseName}-${Date.now()}.jpg`;
+  const storagePath = `media/${fileName}`;
 
   const supabase = createServerClient();
-  const { error } = await supabase.from("media").insert({
+
+  // Upload len Supabase Storage bucket "media"
+  const { error: uploadError } = await supabase.storage
+    .from("media")
+    .upload(storagePath, buffer, { contentType: "image/jpeg", upsert: false });
+
+  if (uploadError) throw new Error(uploadError.message || "Khong the upload anh len Supabase Storage.");
+
+  const { data: urlData } = supabase.storage.from("media").getPublicUrl(storagePath);
+  const publicUrl = urlData.publicUrl;
+
+  // Luu vao bang media
+  await supabase.from("media").insert({
     url: publicUrl,
     name: input.suggestedName,
     type: "image",
     timestamp: Date.now(),
-  });
-  if (error) {
-    throw new Error(error.message || "Khong the luu anh vao media.");
-  }
+  }).catch(() => undefined); // Khong throw neu bang media khong ton tai
 
   return publicUrl;
 }
@@ -1056,32 +1039,30 @@ async function generateImagesForArticle(client: OpenAI | null, title: string, ou
     })),
   ].slice(0, settings.imagesPerArticle);
 
-  const model = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+  const imageModel = process.env.OPENAI_IMAGE_MODEL || "dall-e-3";
   const images: GeneratedImageAsset[] = [];
 
   for (const section of sections) {
     try {
       const prompt = [
-        `Tạo ảnh editorial photorealistic cao cấp cho bài viết tiếng Việt "${title}".`,
-        `Ngữ cảnh chính: ${section.promptSuffix}.`,
-        "Ảnh phù hợp website agency marketing chuyên nghiệp, tươi sáng, hiện đại, tỷ lệ ngang 3:2.",
-        "Không chữ, không watermark, không bố cục rối, ưu tiên cảm giác đáng tin cậy và chuyển đổi.",
-      ].join("\n");
+        `Create a professional editorial photorealistic image for a Vietnamese marketing article titled "${title}".`,
+        `Context: ${section.promptSuffix}.`,
+        "Style: clean, modern, professional agency website, bright and trustworthy, no text, no watermark.",
+      ].join(" ");
 
       const response = await client.images.generate({
-        model,
+        model: imageModel,
         prompt,
         n: 1,
-        size: "1536x1024",
-        quality: "medium",
-        output_format: "png",
-        background: "auto",
+        size: "1024x1024",
       });
       const first = response.data?.[0];
-      if (!first?.b64_json) continue;
+      // dall-e-3 tra ve URL, fetch ve de upload Supabase
+      const imageUrl = first?.url;
+      if (!imageUrl) continue;
 
-      const url = await saveGeneratedImageToMedia({
-        b64Json: first.b64_json,
+      const url = await saveGeneratedImageToSupabase({
+        imageUrl,
         title,
         sectionLabel: section.sectionLabel,
         suggestedName: `${title} ${section.sectionLabel}`,
@@ -1325,7 +1306,8 @@ export async function runSeoAutomation(options: RunOptions) {
       }
 
       const images = await generateImagesForArticle(client, plan.title, outlineResult.structure, settings);
-      let featuredImageUrl = images[0]?.url || "";
+      // Fallback: neu khong tao duoc anh, dung placeholder
+      let featuredImageUrl = images[0]?.url || `https://placehold.co/1200x630/0a0614/ffffff/png?text=${encodeURIComponent(plan.keyword.slice(0, 30))}`;
       if (images.length > 0) {
         for (const image of images.slice(1)) {
           content = insertImageBySection(content, image, outlineResult.structure);
