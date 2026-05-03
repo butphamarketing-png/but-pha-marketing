@@ -159,7 +159,7 @@ export function NewsStudioPage() {
 
   async function saveBlog() {
     if (!blogForm.title.trim()) {
-      alert("Nhap tieu de bai viet.");
+      alert("Nhập tiêu đề bài viết.");
       return;
     }
 
@@ -205,7 +205,7 @@ export function NewsStudioPage() {
   }
 
   async function handleDeleteBlog(item: NewsItem) {
-    if (!confirm("Xoa bai viet nay?")) return;
+    if (!confirm("Xóa bài viết này?")) return;
     setBlogSaveError(null);
     setBlogSaveMessage(null);
     const result = await db.news.delete(item.id);
@@ -294,7 +294,7 @@ export function NewsStudioPage() {
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">Admin News</p>
-                <h2 className="text-lg font-black text-slate-900">Quan ly bai viet</h2>
+                <h2 className="text-lg font-black text-slate-900">Quản lý bài viết</h2>
               </div>
               <Link href="/studio/create" className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-bold text-white">
                 <Sparkles size={14} />

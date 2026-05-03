@@ -58,20 +58,20 @@ function getSimpleSeoState(item: NewsItem) {
   return {
     issues,
     contentLength,
-    label: issues === 0 ? "On dinh" : issues <= 2 ? "Can xem lai" : "Can toi uu",
+    label: issues === 0 ? "Ổn định" : issues <= 2 ? "Cần xem lại" : "Cần tối ưu",
   };
 }
 
 function getQualityLabel(item: NewsItem) {
-  if (item.qualityLabel === "ready") return "Tot";
-  if (item.qualityLabel === "needs_optimization") return "Can toi uu";
-  if (item.qualityLabel === "weak") return "Yeu";
+  if (item.qualityLabel === "ready") return "Tốt";
+  if (item.qualityLabel === "needs_optimization") return "Cần tối ưu";
+  if (item.qualityLabel === "weak") return "Yếu";
   return null;
 }
 
 function getIndexLabel(item: NewsItem) {
-  if (item.indexStatus === "pending_indexing") return "Chua lap chi muc";
-  if (item.indexStatus === "indexed") return "Da index";
+  if (item.indexStatus === "pending_indexing") return "Chưa lập chỉ mục";
+  if (item.indexStatus === "indexed") return "Đã index";
   return null;
 }
 
@@ -115,9 +115,9 @@ export function NewsDashboard({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">SEO Content Admin</p>
-            <h2 className="mt-2 text-2xl font-black text-slate-900">Quan ly bai viet</h2>
+            <h2 className="mt-2 text-2xl font-black text-slate-900">Quản lý bài viết</h2>
             <p className="mt-2 text-sm text-slate-500">
-              Chi hien thi ban nhap va bai da dang. Sua noi dung, thumbnail, slug, SEO title, keyword va mo ta ngay tai day.
+              Chỉ hiển thị bản nháp và bài đã đăng. Sửa nội dung, thumbnail, slug, SEO title, keyword và mô tả ngay tại đây.
             </p>
           </div>
 
@@ -135,7 +135,7 @@ export function NewsDashboard({
               className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
             >
               <FilePlus2 size={16} />
-              Bai moi
+              Bài mới
             </button>
           </div>
         </div>
@@ -148,7 +148,7 @@ export function NewsDashboard({
               filter === "published" ? "border-emerald-300 bg-emerald-50" : "border-slate-200 bg-slate-50 hover:bg-slate-100"
             }`}
           >
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Da dang</p>
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Đã đăng</p>
             <p className="mt-2 text-3xl font-black text-slate-900">{counts.published}</p>
           </button>
           <button
@@ -158,7 +158,7 @@ export function NewsDashboard({
               filter === "draft" ? "border-amber-300 bg-amber-50" : "border-slate-200 bg-slate-50 hover:bg-slate-100"
             }`}
           >
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Ban nhap</p>
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Bản nháp</p>
             <p className="mt-2 text-3xl font-black text-slate-900">{counts.drafts}</p>
           </button>
         </div>
@@ -171,7 +171,7 @@ export function NewsDashboard({
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder={`Tim trong ${filter === "published" ? "bai da dang" : "ban nhap"}...`}
+              placeholder={`Tìm trong ${filter === "published" ? "bài đã đăng" : "bản nháp"}...`}
               className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
             />
           </div>
@@ -193,14 +193,14 @@ export function NewsDashboard({
                         item.published ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
                       }`}
                     >
-                      {item.published ? "Da dang" : "Nhap"}
+                      {item.published ? "Đã đăng" : "Nháp"}
                     </span>
                   </div>
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">
                       <Target size={12} className="mr-1 inline" />
-                      {item.keywordsMain || "Chua co keyword"}
+                      {item.keywordsMain || "Chưa có keyword"}
                     </span>
                     <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">
                       SEO: {seoState.label}
@@ -215,7 +215,7 @@ export function NewsDashboard({
                       <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">{getIndexLabel(item)}</span>
                     ) : null}
                     <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-600">
-                      {seoState.contentLength} ky tu
+                      {seoState.contentLength} ký tự
                     </span>
                   </div>
 
@@ -226,7 +226,7 @@ export function NewsDashboard({
                       className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100"
                     >
                       <PencilLine size={14} />
-                      Sua
+                      Sửa
                     </button>
                     <Link
                       href={`/studio/create?newsId=${item.id}`}
@@ -250,7 +250,7 @@ export function NewsDashboard({
                       onClick={() => void onTogglePublished(item)}
                       className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100"
                     >
-                      {item.published ? "Chuyen ve nhap" : "Dang bai"}
+                      {item.published ? "Chuyển về nháp" : "Đăng bài"}
                     </button>
                     <button
                       type="button"
@@ -258,7 +258,7 @@ export function NewsDashboard({
                       className="inline-flex items-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-100"
                     >
                       <Trash2 size={14} />
-                      Xoa
+                      Xóa
                     </button>
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export function NewsDashboard({
 
             {filteredBlogs.length === 0 ? (
               <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 px-5 py-8 text-center text-sm font-medium text-slate-500">
-                Chua co bai nao trong nhom nay.
+                Chưa có bài nào trong nhóm này.
               </div>
             ) : null}
           </div>
@@ -277,10 +277,10 @@ export function NewsDashboard({
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">
-                {editingBlogId ? "Dang sua bai viet" : "Tao hoac sua nhanh"}
+                {editingBlogId ? "Đang sửa bài viết" : "Tạo hoặc sửa nhanh"}
               </p>
               <h3 className="mt-2 text-xl font-black text-slate-900">
-                {editingBlogId ? "Cap nhat bai viet" : "Bai viet moi"}
+                {editingBlogId ? "Cập nhật bài viết" : "Bài viết mới"}
               </h3>
             </div>
             <button
@@ -289,13 +289,13 @@ export function NewsDashboard({
               className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
             >
               <Sparkles size={16} />
-              AI viet nhap
+              AI viết nháp
             </button>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-bold text-slate-700">Tieu de bai viet</label>
+              <label className="text-sm font-bold text-slate-700">Tiêu đề bài viết</label>
               <input
                 value={blogForm.title}
                 onChange={(event) => {
@@ -346,7 +346,7 @@ export function NewsDashboard({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Keyword chinh</label>
+              <label className="text-sm font-bold text-slate-700">Keyword chính</label>
               <input
                 value={blogForm.keywordsMain}
                 onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsMain: event.target.value }))}
@@ -355,7 +355,7 @@ export function NewsDashboard({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Keyword phu</label>
+              <label className="text-sm font-bold text-slate-700">Keyword phụ</label>
               <input
                 value={blogForm.keywordsSecondary}
                 onChange={(event) => setBlogForm((prev) => ({ ...prev, keywordsSecondary: event.target.value }))}
@@ -374,7 +374,7 @@ export function NewsDashboard({
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-bold text-slate-700">Mo ta ngan</label>
+              <label className="text-sm font-bold text-slate-700">Mô tả ngắn</label>
               <textarea
                 rows={3}
                 value={blogForm.description}
@@ -384,7 +384,7 @@ export function NewsDashboard({
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-bold text-slate-700">Noi dung bai viet</label>
+              <label className="text-sm font-bold text-slate-700">Nội dung bài viết</label>
               <div className="rounded-3xl border border-slate-200 bg-white p-2">
                 <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm((prev) => ({ ...prev, content: html }))} minHeight={360} />
               </div>
@@ -398,7 +398,7 @@ export function NewsDashboard({
                 checked={blogForm.published}
                 onChange={(event) => setBlogForm((prev) => ({ ...prev, published: event.target.checked }))}
               />
-              Dang cong khai
+              Đăng công khai
             </label>
           </div>
 
@@ -409,14 +409,14 @@ export function NewsDashboard({
               className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-indigo-500"
             >
               <CheckCircle2 size={16} />
-              {editingBlogId ? "Cap nhat bai viet" : "Luu bai viet"}
+              {editingBlogId ? "Cập nhật bài viết" : "Lưu bài viết"}
             </button>
             <button
               type="button"
               onClick={onReset}
               className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
             >
-              Huy
+              Hủy
             </button>
           </div>
         </div>
