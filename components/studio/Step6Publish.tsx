@@ -53,7 +53,7 @@ export function Step6Publish({
         featuredImageUrl: result.url,
       });
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Khong the tai anh len luc nay.");
+      setUploadError(error instanceof Error ? error.message : "Không thể tải ảnh lên lúc này.");
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -66,10 +66,10 @@ export function Step6Publish({
         <div>
           <h2 className="flex items-center gap-3 text-2xl font-black text-slate-900">
             <Rocket className="text-indigo-600" />
-            Kiem tra lan cuoi va xuat ban
+            Kiểm tra lần cuối và xuất bản
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Chot slug, meta va thumbnail truoc khi dua bai viet len website.
+            Chốt slug, meta và thumbnail trước khi đưa bài viết lên website.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -78,7 +78,7 @@ export function Step6Publish({
             className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50"
           >
             <ArrowLeft size={18} />
-            Quay lai
+            Quay lại
           </button>
           <button
             onClick={onSaveDraft}
@@ -86,14 +86,14 @@ export function Step6Publish({
             className="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
           >
             {savingDraft ? <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" /> : <Save size={18} />}
-            Luu nhap
+            Lưu nháp
           </button>
           <button
             onClick={() => setPreviewOpen(true)}
             className="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
           >
             <Eye size={18} />
-            Xem truoc
+            Xem trước
           </button>
           <button
             onClick={onPublish}
@@ -101,7 +101,7 @@ export function Step6Publish({
             className="flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 transition-all hover:bg-indigo-500 disabled:opacity-60"
           >
             {publishing ? <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Send size={18} />}
-            Xuat ban ngay
+            Xuất bản ngay
           </button>
         </div>
       </div>
@@ -121,8 +121,8 @@ export function Step6Publish({
           <div className="mx-auto flex h-full max-w-5xl flex-col overflow-hidden rounded-[32px] bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preview</p>
-                <h3 className="text-lg font-black text-slate-900">{data.title || "Xem truoc bai viet"}</h3>
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Xem trước</p>
+                <h3 className="text-lg font-black text-slate-900">{data.title || "Xem trước bài viết"}</h3>
               </div>
               <button onClick={() => setPreviewOpen(false)} className="rounded-xl border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50">
                 <X size={18} />
@@ -130,10 +130,10 @@ export function Step6Publish({
             </div>
             <div className="overflow-y-auto px-8 py-8">
               <article className="mx-auto max-w-3xl">
-                <h1 className="text-4xl font-black leading-tight text-slate-900">{data.metaTitle || data.title || "Chua co tieu de"}</h1>
-                <p className="mt-3 text-sm text-slate-500">{data.metaDescription || "Chua co meta description"}</p>
+                <h1 className="text-4xl font-black leading-tight text-slate-900">{data.metaTitle || data.title || "Chưa có tiêu đề"}</h1>
+                <p className="mt-3 text-sm text-slate-500">{data.metaDescription || "Chưa có meta description"}</p>
                 {thumbnailUrl ? <img src={thumbnailUrl} alt={data.title || "Thumbnail"} className="mt-6 h-72 w-full rounded-3xl object-cover" /> : null}
-                <div className="prose mt-8 max-w-none prose-slate" dangerouslySetInnerHTML={{ __html: data.content || "<p>Chua co noi dung de xem truoc.</p>" }} />
+                <div className="prose mt-8 max-w-none prose-slate" dangerouslySetInnerHTML={{ __html: data.content || "<p>Chưa có nội dung để xem trước.</p>" }} />
               </article>
             </div>
           </div>
@@ -145,7 +145,7 @@ export function Step6Publish({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-slate-900">Anh dai dien</h3>
+            <h3 className="text-lg font-black text-slate-900">Ảnh đại diện</h3>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -153,25 +153,25 @@ export function Step6Publish({
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
             >
               {uploading ? <Loader2 size={16} className="animate-spin" /> : <ImagePlus size={16} />}
-              {uploading ? "Dang tai..." : "Tai tu may"}
+              {uploading ? "Đang tải..." : "Tải từ máy"}
             </button>
           </div>
 
           <div className="relative flex aspect-video flex-col justify-between overflow-hidden rounded-[32px] border-4 border-white bg-gradient-to-br from-indigo-600 to-violet-700 p-10 shadow-2xl">
             {thumbnailUrl ? (
               <>
-                <img src={thumbnailUrl} alt={data.title || "Thumbnail bai viet"} className="absolute inset-0 h-full w-full object-cover" />
+                <img src={thumbnailUrl} alt={data.title || "Thumbnail bài viết"} className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-slate-950/45" />
               </>
             ) : null}
 
             <div className="relative z-10 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-xs font-black text-white backdrop-blur-md">BPM</div>
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-white">But Pha Marketing</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-white">Bứt Phá Marketing</span>
             </div>
 
             <h2 className="relative z-10 text-3xl font-black leading-tight text-white drop-shadow-lg">
-              {data.metaTitle || data.title || "Tieu de bai viet cua ban"}
+              {data.metaTitle || data.title || "Tiêu đề bài viết của bạn"}
             </h2>
 
             <div className="relative z-10 flex items-center justify-between border-t border-white/20 pt-6">
@@ -201,7 +201,7 @@ export function Step6Publish({
                     <img src={image.url} alt={image.altText || image.name} className="h-full w-full object-cover" />
                   </div>
                   <div className="px-3 py-2 text-left text-[11px] font-bold text-slate-700">
-                    {thumbnailUrl === image.url ? "Dang la thumbnail" : image.name}
+                    {thumbnailUrl === image.url ? "Đang là thumbnail" : image.name}
                   </div>
                 </button>
               ))}
@@ -210,7 +210,7 @@ export function Step6Publish({
         </div>
 
         <div className="space-y-6 rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
-          <h3 className="text-lg font-black text-slate-900">Cau hinh hien thi</h3>
+          <h3 className="text-lg font-black text-slate-900">Cấu hình hiển thị</h3>
 
           <div className="space-y-4">
             <div className="space-y-2">
@@ -221,7 +221,7 @@ export function Step6Publish({
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white"
               />
               <p className="text-[11px] text-slate-400">
-                Link bai viet se la: <span className="font-bold text-slate-600">/blog/{data.slug || "tu-dong-theo-tieu-de"}</span>. Neu trung, he thong tu them hau to `-2`, `-3`...
+                Link bài viết sẽ là: <span className="font-bold text-slate-600">/blog/{data.slug || "tu-dong-theo-tieu-de"}</span>. Nếu trùng, hệ thống tự thêm hậu tố `-2`, `-3`...
               </p>
             </div>
 
@@ -232,7 +232,7 @@ export function Step6Publish({
                 onChange={(event) => setData({ ...data, metaTitle: event.target.value })}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white"
               />
-              <p className="text-[11px] text-slate-400">{(data.metaTitle || "").length}/60 ky tu goi y</p>
+              <p className="text-[11px] text-slate-400">{(data.metaTitle || "").length}/60 ký tự gợi ý</p>
             </div>
 
             <div className="space-y-2">
@@ -243,11 +243,11 @@ export function Step6Publish({
                 onChange={(event) => setData({ ...data, metaDescription: event.target.value })}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-sm font-medium outline-none transition focus:border-indigo-300 focus:bg-white"
               />
-              <p className="text-[11px] text-slate-400">{(data.metaDescription || "").length}/160 ky tu goi y</p>
+              <p className="text-[11px] text-slate-400">{(data.metaDescription || "").length}/160 ký tự gợi ý</p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Mo ta ngan</label>
+              <label className="text-sm font-bold text-slate-700">Mô tả ngắn</label>
               <textarea
                 rows={3}
                 value={data.description}
@@ -264,8 +264,8 @@ export function Step6Publish({
                 onChange={(event) => setData({ ...data, published: event.target.checked })}
               />
               <div className="flex-1">
-                <p className="text-sm font-bold text-slate-800">Hien thi cong khai</p>
-                <p className="mt-0.5 text-[11px] text-slate-400">Bai viet se hien tren website sau khi xuat ban.</p>
+                <p className="text-sm font-bold text-slate-800">Hiển thị công khai</p>
+                <p className="mt-0.5 text-[11px] text-slate-400">Bài viết sẽ hiện trên website sau khi xuất bản.</p>
               </div>
               <Globe size={20} className="text-slate-300" />
             </label>
@@ -278,14 +278,14 @@ export function Step6Publish({
                 onChange={(event) => setData({ ...data, hot: event.target.checked })}
               />
               <div className="flex-1">
-                <p className="text-sm font-bold text-slate-800">Danh dau bai viet hot</p>
-                <p className="mt-0.5 text-[11px] text-slate-400">Ghim bai viet len khu noi bat neu can.</p>
+                <p className="text-sm font-bold text-slate-800">Đánh dấu bài viết hot</p>
+                <p className="mt-0.5 text-[11px] text-slate-400">Ghim bài viết lên khu nổi bật nếu cần.</p>
               </div>
               <Newspaper size={20} className="text-slate-300" />
             </label>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Ngay xuat ban</label>
+              <label className="text-sm font-bold text-slate-700">Ngày xuất bản</label>
               <input
                 type="date"
                 value={data.publishedAt}
@@ -298,7 +298,7 @@ export function Step6Publish({
           <div className="flex items-start gap-3 rounded-2xl bg-emerald-50 p-4">
             <CheckCircle2 size={18} className="mt-0.5 text-emerald-500" />
             <p className="text-xs font-medium leading-relaxed text-emerald-700">
-              Ban co the luu nhap de quay lai sua tiep, hoac xuat ban ngay khi slug, meta, anh dai dien va noi dung da san sang.
+              Bạn có thể lưu nháp để quay lại sửa tiếp, hoặc xuất bản ngay khi slug, meta, ảnh đại diện và nội dung đã sẵn sàng.
             </p>
           </div>
         </div>

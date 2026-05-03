@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -22,13 +23,14 @@ import {
 } from "lucide-react";
 import { SiFacebook, SiMessenger } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
-import { LoginModal } from "@/components/shared/LoginModal";
-import { ConsultModal } from "@/components/shared/ConsultModal";
-import { ParticleBackground } from "@/components/shared/ParticleBackground";
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
+
+const LoginModal = dynamic(() => import("@/components/shared/LoginModal").then((mod) => mod.LoginModal), { ssr: false });
+const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
+const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
 
 type ContactFormState = {
   name: string;
@@ -234,7 +236,7 @@ export default function HomePageClient() {
 
   useEffect(() => {
     let raf = 0;
-    const durationMs = 900;
+    const durationMs = 250;
     const startedAt = performance.now();
 
     const tick = (now: number) => {

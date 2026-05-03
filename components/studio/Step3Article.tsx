@@ -32,7 +32,7 @@ export function Step3Article({ data, setData, onNext, onPrev }: any) {
           url: result.url,
           name: result.item?.name || file.name,
           altText: data.title || file.name,
-          sectionLabel: "Noi dung bai viet",
+          sectionLabel: "Nội dung bài viết",
         },
       ];
 
@@ -43,7 +43,7 @@ export function Step3Article({ data, setData, onNext, onPrev }: any) {
         featuredImageUrl: data.featuredImageUrl || result.url,
       });
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Khong the tai anh len luc nay.");
+      setUploadError(error instanceof Error ? error.message : "Không thể tải ảnh lên lúc này.");
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -75,7 +75,7 @@ export function Step3Article({ data, setData, onNext, onPrev }: any) {
             className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-60"
           >
             {uploading ? <Loader2 size={18} className="animate-spin" /> : <ImagePlus size={18} />}
-            Chen anh tu may
+            Chèn ảnh từ máy
           </button>
           <button 
             onClick={onNext}

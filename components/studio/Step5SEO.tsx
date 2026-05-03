@@ -52,7 +52,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
 
       if (!analyzeRes.ok) {
         const result = await analyzeRes.json().catch(() => null);
-        throw new Error(result?.error || "Khong the phan tich SEO luc nay.");
+        throw new Error(result?.error || "Kh?ng th? ph?n t?ch SEO l?c n?y.");
       }
 
       const analyzeResult = await analyzeRes.json();
@@ -65,7 +65,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "Khong the phan tich SEO luc nay.");
+      setError(err instanceof Error ? err.message : "Kh?ng th? ph?n t?ch SEO l?c n?y.");
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       });
       const result = await response.json().catch(() => null);
       if (!response.ok || !result?.ok) {
-        throw new Error(result?.error || "Khong the tu sua SEO luc nay.");
+        throw new Error(result?.error || "Kh?ng th? t? s?a SEO l?c n?y.");
       }
 
       const nextImages = Array.isArray(data.images)
@@ -129,7 +129,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       });
       setMetrics(result.evaluation?.metrics || {});
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Khong the tu sua SEO luc nay.");
+      setError(err instanceof Error ? err.message : "Kh?ng th? t? s?a SEO l?c n?y.");
     } finally {
       setAutoFixing(false);
     }
@@ -141,29 +141,29 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
         <div>
           <h2 className="flex items-center gap-3 text-2xl font-black text-slate-900">
             <Target className="text-indigo-600" />
-            Toi uu hoa SEO Checklist
+            Tối ưu hoá SEO Checklist
           </h2>
-          <p className="mt-1 text-sm text-slate-500">He thong phan tich title, meta, heading, anh, link va noi dung de dua ra diem SEO thuc te hon.</p>
+          <p className="mt-1 text-sm text-slate-500">Hệ thống phân tích title, meta, heading, ảnh, link và nội dung để đưa ra điểm SEO thực tế hơn.</p>
           {error ? <p className="mt-2 text-sm font-medium text-rose-600">{error}</p> : null}
         </div>
         <div className="flex items-center gap-3">
           <button onClick={onPrev} className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
             <ArrowLeft size={18} />
-            Quay lai
+            Quay lại
           </button>
           <button onClick={handleAnalyze} className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
             <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
-            Phan tich lai
+            Phân tích lại
           </button>
           <button onClick={handleAutoFix} className="flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-700 transition-colors hover:bg-indigo-100">
             <Sparkles size={18} className={autoFixing ? "animate-pulse" : ""} />
-            {autoFixing ? "Dang tu sua" : "Tu sua tat ca"}
+            {autoFixing ? "Đang tự sửa" : "Tự sửa tất cả"}
           </button>
           <button
             onClick={onNext}
             className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500"
           >
-            Hoan tat
+            Hoàn tất
             <ArrowRight size={18} />
           </button>
         </div>
@@ -172,7 +172,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
           <div className="space-y-4">
-            <h3 className="text-lg font-black text-slate-900">Checklist van de ({data.seoIssues.length})</h3>
+            <h3 className="text-lg font-black text-slate-900">Checklist vấn đề ({data.seoIssues.length})</h3>
             {data.seoIssues.map((issue: any) => (
               <div key={issue.id} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
                 <div className="flex items-center gap-4">
@@ -181,11 +181,11 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-slate-800">{issue.label}</p>
-                    <p className="mt-0.5 text-[11px] text-slate-400">Uu tien: {issue.status === "critical" ? "Cao" : "Trung binh"}</p>
+                    <p className="mt-0.5 text-[11px] text-slate-400">Ưu tiên: {issue.status === "critical" ? "Cao" : "Trung bình"}</p>
                   </div>
                 </div>
                 {issue.fixable ? (
-                  <span className="rounded-xl bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600">Co the sua</span>
+                  <span className="rounded-xl bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600">Có thể sửa</span>
                 ) : null}
               </div>
             ))}
@@ -193,17 +193,17 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-black text-slate-900">Internal link suggestions</h3>
+              <h3 className="text-lg font-black text-slate-900">Gợi ý internal link</h3>
               <Link2 size={18} className="text-slate-300" />
             </div>
             {internalLinks.length === 0 ? (
-              <p className="text-sm text-slate-400">Chua tim thay internal link phu hop hoac bai viet da co du link.</p>
+              <p className="text-sm text-slate-400">Chưa tìm thấy internal link phù hợp hoặc bài viết đã có đủ link.</p>
             ) : (
               <div className="space-y-3">
                 {internalLinks.map((item) => (
                   <div key={`${item.slug}-${item.anchorText}`} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                     <p className="text-sm font-bold text-slate-900">{item.title}</p>
-                    <p className="mt-1 text-xs text-slate-500">Anchor goi y: {item.anchorText}</p>
+                    <p className="mt-1 text-xs text-slate-500">Anchor gợi ý: {item.anchorText}</p>
                     <p className="mt-1 text-xs text-slate-500">{item.reason}</p>
                     <button
                       type="button"
@@ -211,7 +211,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
                       className="mt-3 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-slate-800"
                     >
                       <Sparkles size={14} />
-                      Chen vao noi dung
+                      Chèn vào nội dung
                     </button>
                   </div>
                 ))}
@@ -225,17 +225,17 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
             <h3 className="mb-4 text-lg font-black text-slate-900">Metrics SEO</h3>
             <div className="grid grid-cols-2 gap-3 text-sm">
               {[
-                { label: "Title", value: `${metrics.titleLength || 0} ky tu` },
-                { label: "Meta", value: `${metrics.metaLength || 0} ky tu` },
-                { label: "So tu", value: metrics.wordCount || 0 },
+                { label: "Title", value: `${metrics.titleLength || 0} ký tự` },
+                { label: "Meta", value: `${metrics.metaLength || 0} ký tự` },
+                { label: "Số từ", value: metrics.wordCount || 0 },
                 { label: "H1", value: metrics.h1Count || 0 },
                 { label: "H2", value: metrics.h2Count || 0 },
                 { label: "H3", value: metrics.h3Count || 0 },
-                { label: "Anh", value: metrics.imageCount || 0 },
-                { label: "Anh co alt", value: metrics.imagesWithAlt || 0 },
+                { label: "Ảnh", value: metrics.imageCount || 0 },
+                { label: "Ảnh có alt", value: metrics.imagesWithAlt || 0 },
                 { label: "Internal links", value: metrics.blogInternalLinks || 0 },
                 { label: "Outbound links", value: metrics.outboundLinks || 0 },
-                { label: "Mat do tu khoa", value: `${metrics.density || 0}%` },
+                { label: "Mật độ từ khoá", value: `${metrics.density || 0}%` },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl border border-slate-100 bg-white p-4">
                   <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">{item.label}</p>
@@ -246,7 +246,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-slate-50/50 p-8">
-            <h3 className="mb-4 text-lg font-black text-slate-900">Goi y tu khoa lien quan</h3>
+            <h3 className="mb-4 text-lg font-black text-slate-900">Gợi ý từ khoá liên quan</h3>
             <div className="flex flex-wrap gap-3">
               {relatedKeywords.map((kw: string) => (
                 <div key={kw} className="flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm">
@@ -254,16 +254,16 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
                   {kw}
                 </div>
               ))}
-              {relatedKeywords.length === 0 ? <p className="text-xs italic text-slate-400">Chua co goi y tu khoa de hien thi.</p> : null}
+              {relatedKeywords.length === 0 ? <p className="text-xs italic text-slate-400">Chưa có gợi ý từ khoá để hiển thị.</p> : null}
             </div>
           </div>
 
           <div className="rounded-[32px] border border-indigo-100 bg-indigo-50/30 p-8">
-            <h3 className="mb-2 text-lg font-black text-indigo-900">Tom tat SEO Score</h3>
+            <h3 className="mb-2 text-lg font-black text-indigo-900">Tóm tắt SEO Score</h3>
             <p className="text-sm leading-relaxed text-indigo-700">
-              Diem SEO hien tai cua ban la <strong>{data.seoScore}/100</strong>. He thong dang uu tien title, meta, heading, do dai bai, alt anh va internal links.
+              Điểm SEO hiện tại của bạn là <strong>{data.seoScore}/100</strong>. Hệ thống đang ưu tiên title, meta, heading, độ dài bài, alt ảnh và internal links.
             </p>
-            {data.searchIntent ? <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-indigo-600">Intent uu tien: {data.searchIntent}</p> : null}
+            {data.searchIntent ? <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-indigo-600">Intent ưu tiên: {data.searchIntent}</p> : null}
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
 
   const handleAddSection = (index: number) => {
     const newOutline = [...data.outline];
-    newOutline.splice(index + 1, 0, { level: 2, text: "Tieu de moi" });
+    newOutline.splice(index + 1, 0, { level: 2, text: "Tiêu đề mới" });
     setData({ ...data, outline: newOutline, aiError: null });
   };
 
@@ -45,7 +45,7 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
       const result = await res.json().catch(() => null);
       if (!res.ok) {
         throw {
-          message: result?.error || "Khong the viet bai bang AI.",
+          message: result?.error || "Không thể viết bài bằng AI.",
           detail: result?.detail || "",
           hint: result?.hint || "",
           provider: result?.provider || "openai",
@@ -58,7 +58,7 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
       onNext();
     } catch (err: any) {
       console.error(err);
-      const nextError = err?.message || "Khong the viet bai bang AI.";
+      const nextError = err?.message || "Không thể viết bài bằng AI.";
       const nextDetail = err?.detail || "";
       const nextHint = err?.hint || "";
       setError(nextError);
@@ -88,16 +88,16 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
           <div>
             <h2 className="flex items-center gap-3 text-2xl font-black text-slate-900">
               <GripVertical className="text-indigo-600" />
-              Kiem tra dan y bai viet
+              Kiểm tra dàn ý bài viết
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Ban co the chinh sua, them hoac xoa cac de muc truoc khi AI viet bai.
+              Bạn có thể chỉnh sửa, thêm hoặc xoá các đề mục trước khi AI viết bài.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={onPrev} className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
               <ArrowLeft size={18} />
-              Quay lai
+              Quay lại
             </button>
             <button
               onClick={handleGenerateArticle}
@@ -105,7 +105,7 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
               className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500 disabled:opacity-50"
             >
               {loading ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Sparkles size={18} />}
-              Viet bai chi tiet
+              Viết bài chi tiết
             </button>
           </div>
         </div>
@@ -114,10 +114,10 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
           <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4">
             <p className="flex items-center gap-2 text-sm font-black text-rose-700">
               <AlertCircle size={16} />
-              {error || "Khong the viet bai bang AI."}
+              {error || "Không thể viết bài bằng AI."}
             </p>
             {detail ? <p className="mt-2 text-sm leading-6 text-rose-700">{detail}</p> : null}
-            {hint ? <p className="mt-3 text-xs font-semibold text-rose-800">Goi y: {hint}</p> : null}
+            {hint ? <p className="mt-3 text-xs font-semibold text-rose-800">Gợi ý: {hint}</p> : null}
           </div>
         )}
 
@@ -126,10 +126,10 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Search Intent</p>
               <p className="mt-2 text-sm font-bold capitalize text-slate-800">{data.searchIntent || "commercial"}</p>
-              {data.serpInsight ? <p className="mt-1 text-xs text-slate-500">Nguon: {data.serpInsight.source}</p> : null}
+              {data.serpInsight ? <p className="mt-1 text-xs text-slate-500">Nguồn: {data.serpInsight.source}</p> : null}
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Keyword goi y</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Keyword gợi ý</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {(data.serpInsight?.relatedKeywords || data.keywords || []).slice(0, 6).map((item: string, index: number) => (
                   <span key={`${item}-${index}`} className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-700">
@@ -187,7 +187,7 @@ export function Step2Outline({ data, setData, onNext, onPrev, onHistoryChange }:
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200 py-4 text-sm font-bold text-slate-400 transition-all hover:border-indigo-200 hover:bg-indigo-50/30 hover:text-indigo-600"
         >
           <Plus size={18} />
-          Them de muc moi
+          Thêm đề mục mới
         </button>
       </div>
     </div>

@@ -23,6 +23,7 @@ export function ParticleBackground() {
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
+    if (window.innerWidth < 768) return;
 
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const mouse = {

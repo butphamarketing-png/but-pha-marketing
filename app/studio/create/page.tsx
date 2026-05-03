@@ -30,12 +30,12 @@ import { Step5SEO } from "@/components/studio/Step5SEO";
 import { Step6Publish } from "@/components/studio/Step6Publish";
 
 const STEPS = [
-  { id: 1, name: "Nhap tieu de", icon: FileText },
-  { id: 2, name: "Xem dan y", icon: ListOrdered },
-  { id: 3, name: "Viet bai", icon: Sparkles },
-  { id: 4, name: "Chen hinh anh", icon: ImageIcon },
-  { id: 5, name: "Toi uu SEO", icon: Target },
-  { id: 6, name: "Xuat ban", icon: Rocket },
+  { id: 1, name: "Nh?p ti?u ??", icon: FileText },
+  { id: 2, name: "Xem d?n ?", icon: ListOrdered },
+  { id: 3, name: "Vi?t b?i", icon: Sparkles },
+  { id: 4, name: "Ch?n h?nh ?nh", icon: ImageIcon },
+  { id: 5, name: "T?i ?u SEO", icon: Target },
+  { id: 6, name: "Xu?t b?n", icon: Rocket },
 ];
 
 type HistoryItem = {
@@ -136,7 +136,7 @@ function CreateArticlePageContent() {
         const payload = (await response.json().catch(() => null)) as { items?: HistoryItem[]; error?: string } | null;
 
         if (!response.ok) {
-          throw new Error(payload?.error || "Khong the tai lich su SEO Studio.");
+          throw new Error(payload?.error || "Kh?ng th? t?i l?ch s? SEO Studio.");
         }
 
         if (!cancelled) {
@@ -144,7 +144,7 @@ function CreateArticlePageContent() {
         }
       } catch (error) {
         if (!cancelled) {
-          setHistoryError(error instanceof Error ? error.message : "Khong the tai lich su SEO Studio.");
+          setHistoryError(error instanceof Error ? error.message : "Kh?ng th? t?i l?ch s? SEO Studio.");
         }
       } finally {
         if (!cancelled) {
@@ -169,7 +169,7 @@ function CreateArticlePageContent() {
           setLoadingExisting(true);
           const result = await db.news.get(newsId);
           if (result.error || !result.data) {
-            throw new Error(result.error || "Khong the tai bai viet de chinh sua.");
+            throw new Error(result.error || "Kh?ng th? t?i b?i vi?t ?? ch?nh s?a.");
           }
 
           if (!cancelled) {
@@ -193,11 +193,11 @@ function CreateArticlePageContent() {
               savedNewsId: item.id,
             }));
             setCurrentStep(3);
-            setActionMessage("Da mo bai viet de chinh sua trong SEO Studio.");
+            setActionMessage("?? m? b?i vi?t ?? ch?nh s?a trong SEO Studio.");
           }
         } catch (error) {
           if (!cancelled) {
-            setActionError(error instanceof Error ? error.message : "Khong the tai bai viet de chinh sua.");
+            setActionError(error instanceof Error ? error.message : "Kh?ng th? t?i b?i vi?t ?? ch?nh s?a.");
           }
         } finally {
           if (!cancelled) setLoadingExisting(false);
@@ -212,7 +212,7 @@ function CreateArticlePageContent() {
         const snapshot = JSON.parse(savedDraft) as typeof INITIAL_DATA;
         if (!cancelled && snapshot?.title) {
           setArticleData((prev) => ({ ...prev, ...snapshot }));
-          setActionMessage("Da phuc hoi ban nhap tu dong tren may nay.");
+          setActionMessage("?? ph?c h?i b?n nh?p t? ??ng tr?n m?y n?y.");
         }
       } catch {
         // ignore bad local draft
@@ -242,9 +242,9 @@ function CreateArticlePageContent() {
 
     setArticleData((prev) => {
       const nextKeywords = prev.keywords.length > 0 ? prev.keywords : deriveKeywordCandidates(prev.title);
-      const nextTitle = prev.title ? buildSeoFriendlyTitle({ title: prev.title, keyword: nextKeywords[0] }) : prev.title;
+      const nextTitle = prev.title;
       const nextSlug = prev.slug || buildReliableSlug({ title: nextTitle, keyword: nextKeywords[0] });
-      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: nextTitle, keyword: nextKeywords[0] });
+      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: buildSeoFriendlyTitle({ title: nextTitle, keyword: nextKeywords[0] }), keyword: nextKeywords[0] });
       const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
       const nextMetaDescription =
         prev.metaDescription || buildMetaDescription({ title: nextTitle, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
@@ -262,7 +262,6 @@ function CreateArticlePageContent() {
 
       return {
         ...prev,
-        title: nextTitle,
         keywords: nextKeywords,
         slug: nextSlug,
         metaTitle: nextMetaTitle,
@@ -279,7 +278,7 @@ function CreateArticlePageContent() {
     const response = await fetch("/api/ai/history", { cache: "no-store" });
     const payload = (await response.json().catch(() => null)) as { items?: HistoryItem[]; error?: string } | null;
     if (!response.ok) {
-      throw new Error(payload?.error || "Khong the tai lich su SEO Studio.");
+      throw new Error(payload?.error || "Kh?ng th? t?i l?ch s? SEO Studio.");
     }
     setHistory(Array.isArray(payload?.items) ? payload.items : []);
   };
@@ -298,7 +297,7 @@ function CreateArticlePageContent() {
       : null;
 
     setActionError("");
-    setActionMessage("Da mo lai ket qua tu lich su.");
+    setActionMessage("?? m? l?i k?t qu? t? l?ch s?.");
     setArticleData((prev) => ({
       ...prev,
       title: buildSeoFriendlyTitle({ title: snapshot.title || prev.title, keyword: snapshot.keywords?.[0] || prev.keywords?.[0] }),
@@ -334,7 +333,7 @@ function CreateArticlePageContent() {
 
   const saveStudioArticle = async (mode: "draft" | "publish") => {
     if (!articleData.title.trim()) {
-      setActionError("Nhap tieu de bai viet truoc khi luu.");
+      setActionError("Nh?p ti?u ?? b?i vi?t tr??c khi l?u.");
       return;
     }
 
@@ -346,14 +345,14 @@ function CreateArticlePageContent() {
               const heading = item?.text || item?.heading || "";
               if (!heading) return "";
               const tag = item?.level === 3 ? "h3" : "h2";
-              return `<${tag} id="${slugify(heading)}">${heading}</${tag}><p>${item?.summary || `Noi dung nhap cho phan ${heading}.`}</p>`;
+              return `<${tag} id="${slugify(heading)}">${heading}</${tag}><p>${item?.summary || `N?i dung nh?p cho ph?n ${heading}.`}</p>`;
             })
             .filter(Boolean)
             .join("")
         : "");
 
     if (!derivedContent.trim()) {
-      setActionError("Can co noi dung hoac it nhat mot dan y de luu nhap.");
+      setActionError("C?n c? n?i dung ho?c ?t nh?t m?t d?n ? ?? l?u nh?p.");
       return;
     }
 
@@ -418,7 +417,7 @@ function CreateArticlePageContent() {
       } else {
         const result = await db.news.add(payload);
         if (result.error || !result.data) {
-          throw new Error(result.error || "Khong the luu bai viet.");
+          throw new Error(result.error || "Kh?ng th? l?u b?i vi?t.");
         }
         setArticleData((prev) => ({ ...prev, savedNewsId: result.data?.id || "", published: payload.published }));
       }
@@ -442,10 +441,10 @@ function CreateArticlePageContent() {
         mode === "publish"
           ? allowPublish
             ? autoFixed.evaluation.score >= 80
-              ? "Da xuat ban bai viet thanh cong."
-              : `Bai da dang voi ${autoFixed.evaluation.score}/100 va duoc danh dau can toi uu them.`
-            : `Bai viet van con loi critical, he thong da luu nhap de ban xem lai.`
-          : "Da luu nhap bai viet.",
+              ? "?? xu?t b?n b?i vi?t th?nh c?ng."
+              : `B?i ?? ??ng v?i ${autoFixed.evaluation.score}/100 v? ???c ??nh d?u c?n t?i ?u th?m.`
+            : `B?i vi?t v?n c?n l?i critical, h? th?ng ?? l?u nh?p ?? b?n xem l?i.`
+          : "?? l?u nh?p b?i vi?t.",
       );
       await refreshHistory().catch(() => undefined);
       if (mode === "publish" && allowPublish) {
@@ -455,7 +454,7 @@ function CreateArticlePageContent() {
         router.push("/admin/news");
       }
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : "Khong the luu bai viet luc nay.");
+      setActionError(error instanceof Error ? error.message : "Kh?ng th? l?u b?i vi?t l?c n?y.");
     } finally {
       setDraftSaving(false);
       setPublishing(false);
@@ -480,7 +479,7 @@ function CreateArticlePageContent() {
     });
     const payload = (await response.json().catch(() => null)) as { items?: HistoryItem[]; error?: string } | null;
     if (!response.ok) {
-      throw new Error(payload?.error || "Khong the xoa lich su.");
+      throw new Error(payload?.error || "Kh?ng th? xo? l?ch s?.");
     }
     setHistory(Array.isArray(payload?.items) ? payload.items : []);
   };
@@ -531,9 +530,9 @@ function CreateArticlePageContent() {
               <ArrowLeft size={20} />
             </Link>
             <div>
-              <h1 className="text-lg font-black tracking-tight">{articleData.savedNewsId ? "Chinh Sua Bai Viet" : "Tao Bai Viet Moi"}</h1>
+              <h1 className="text-lg font-black tracking-tight">{articleData.savedNewsId ? "Ch?nh s?a b?i vi?t" : "T?o b?i vi?t m?i"}</h1>
               <p className="text-xs text-slate-500">
-                {articleData.savedNewsId ? "Dang mo bai viet de chinh sua trong SEO Studio" : "Quy trinh tao noi dung chuan SEO voi AI"}
+                {articleData.savedNewsId ? "?ang m? b?i vi?t ?? ch?nh s?a trong SEO Studio" : "Quy tr?nh t?o n?i dung chu?n SEO v?i AI"}
               </p>
             </div>
           </div>
@@ -545,13 +544,13 @@ function CreateArticlePageContent() {
               className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-60"
             >
               {draftSaving ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" /> : <Save size={18} />}
-              Luu nhap
+              L?u nh?p
             </button>
             <button
               onClick={handleReset}
               className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition-all hover:bg-indigo-500"
             >
-              Huy bo
+              Hu? b?
             </button>
           </div>
         </div>
@@ -560,7 +559,7 @@ function CreateArticlePageContent() {
       <div className="mx-auto mt-8 max-w-7xl px-8">
         {loadingExisting ? (
           <div className="mb-6 rounded-2xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-sm font-semibold text-indigo-700">
-            Dang tai bai viet de chinh sua...
+            ?ang t?i b?i vi?t ?? ch?nh s?a...
           </div>
         ) : null}
         {actionMessage && !actionError ? (
@@ -620,16 +619,16 @@ function CreateArticlePageContent() {
                 <div className="rounded-[32px] border border-rose-200 bg-rose-50 p-6 shadow-sm">
                   <h3 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-rose-700">
                     <AlertCircle size={16} />
-                    Loi AI moi nhat
+                    L?i AI m?i nh?t
                   </h3>
                   <p className="text-sm font-bold text-rose-800">{articleData.aiError.message}</p>
                   {articleData.aiError.detail ? <p className="mt-2 text-xs leading-6 text-rose-700">{articleData.aiError.detail}</p> : null}
-                  {articleData.aiError.hint ? <p className="mt-3 text-xs font-semibold text-rose-800">Goi y: {articleData.aiError.hint}</p> : null}
+                  {articleData.aiError.hint ? <p className="mt-3 text-xs font-semibold text-rose-800">G?i ?: {articleData.aiError.hint}</p> : null}
                 </div>
               ) : null}
 
               <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-widest text-slate-500">Tong ket SEO</h3>
+                <h3 className="mb-6 text-sm font-bold uppercase tracking-widest text-slate-500">T?ng k?t SEO</h3>
                 <div className="flex flex-col items-center">
                   <div className="relative flex h-32 w-32 items-center justify-center">
                     <svg className="h-full w-full -rotate-90 transform">
@@ -654,7 +653,7 @@ function CreateArticlePageContent() {
                     </div>
                   </div>
                   <p className="mt-4 px-4 text-center text-xs font-bold text-slate-400">
-                    {articleData.seoScore === 0 ? "Bat dau tao noi dung de xem diem SEO" : "Tiep tuc toi uu de dat diem cao nhat"}
+                    {articleData.seoScore === 0 ? "B?t ??u t?o n?i dung ?? xem ?i?m SEO" : "Ti?p t?c t?i ?u ?? ??t ?i?m cao nh?t"}
                   </p>
                 </div>
               </div>
@@ -664,21 +663,21 @@ function CreateArticlePageContent() {
                 <div className="space-y-3 text-sm">
                   <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Slug</p>
-                    <p className="mt-2 font-bold text-slate-800">{articleData.slug || "Chua co slug"}</p>
+                    <p className="mt-2 font-bold text-slate-800">{articleData.slug || "Ch?a c? slug"}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Meta Title</p>
-                    <p className="mt-2 font-bold text-slate-800">{articleData.metaTitle || "Chua co meta title"}</p>
+                    <p className="mt-2 font-bold text-slate-800">{articleData.metaTitle || "Ch?a c? meta title"}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Meta Description</p>
-                    <p className="mt-2 text-xs leading-6 text-slate-700">{articleData.metaDescription || "Chua co meta description"}</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-700">{articleData.metaDescription || "Ch?a c? meta description"}</p>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">Tu khoa muc tieu</h3>
+                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">T? kho? m?c ti?u</h3>
                 <div className="flex flex-wrap gap-2">
                   {articleData.keywords.length > 0 ? (
                     articleData.keywords.map((kw, i) => (
@@ -687,20 +686,20 @@ function CreateArticlePageContent() {
                       </span>
                     ))
                   ) : (
-                    <p className="text-xs italic text-slate-400">Chua co tu khoa nao</p>
+                    <p className="text-xs italic text-slate-400">Ch?a c? t? kho? n?o</p>
                   )}
                 </div>
                 {articleData.searchIntent ? (
                   <div className="mt-4 rounded-2xl bg-slate-50 p-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Search Intent</p>
                     <p className="mt-2 text-sm font-bold capitalize text-slate-800">{articleData.searchIntent}</p>
-                    {articleData.serpInsight ? <p className="mt-1 text-xs text-slate-500">Nguon: {articleData.serpInsight.source} • Khu vuc: {articleData.serpInsight.location}</p> : null}
+                    {articleData.serpInsight ? <p className="mt-1 text-xs text-slate-500">Ngu?n: {articleData.serpInsight.source} • Khu v?c: {articleData.serpInsight.location}</p> : null}
                   </div>
                 ) : null}
               </div>
 
               <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">Canh bao</h3>
+                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">C?nh b?o</h3>
                 <div className="space-y-3">
                   {articleData.seoIssues.length > 0 ? (
                     articleData.seoIssues.map((issue: any) => (
@@ -712,21 +711,21 @@ function CreateArticlePageContent() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-xs italic text-slate-400">Chua phat hien van de nao</p>
+                    <p className="text-xs italic text-slate-400">Ch?a ph?t hi?n v?n ?? n?o</p>
                   )}
                 </div>
               </div>
 
               <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">Lich su AI</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">L?ch s? AI</h3>
                   <Clock3 size={16} className="text-slate-300" />
                 </div>
                 <div className="mb-4 flex gap-2">
                   {[
-                    { id: "all", label: "Tat ca" },
-                    { id: "outline", label: "Dan y" },
-                    { id: "article", label: "Bai viet" },
+                    { id: "all", label: "T?t c?" },
+                    { id: "outline", label: "D?n ?" },
+                    { id: "article", label: "B?i vi?t" },
                   ].map((item) => (
                     <button
                       key={item.id}
@@ -741,11 +740,11 @@ function CreateArticlePageContent() {
                   ))}
                 </div>
                 {historyLoading ? (
-                  <p className="text-xs text-slate-400">Dang tai lich su...</p>
+                  <p className="text-xs text-slate-400">?ang t?i l?ch s?...</p>
                 ) : historyError ? (
                   <p className="text-xs font-semibold text-rose-600">{historyError}</p>
                 ) : history.length === 0 ? (
-                  <p className="text-xs text-slate-400">Chua co lan tao dan y hoac bai viet nao.</p>
+                  <p className="text-xs text-slate-400">Ch?a c? l?n t?o d?n ? ho?c b?i vi?t n?o.</p>
                 ) : (
                   <div className="space-y-3">
                     {history
@@ -756,7 +755,7 @@ function CreateArticlePageContent() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-xs font-black uppercase tracking-wider text-slate-500">
-                              {item.type === "outline" ? "Dan y" : "Bai viet"} • {item.status === "success" ? "Thanh cong" : "Loi"}
+                              {item.type === "outline" ? "D?n ?" : "B?i vi?t"} • {item.status === "success" ? "Th?nh c?ng" : "L?i"}
                             </p>
                             <p className="mt-1 text-sm font-bold text-slate-800">{item.title}</p>
                           </div>
@@ -768,8 +767,8 @@ function CreateArticlePageContent() {
                             {item.provider}
                           </span>
                         </div>
-                        <p className="mt-2 text-[11px] leading-5 text-slate-500">{item.detail || "Khong co mo ta them."}</p>
-                        {item.hint ? <p className="mt-2 text-[11px] font-semibold text-slate-700">Goi y: {item.hint}</p> : null}
+                        <p className="mt-2 text-[11px] leading-5 text-slate-500">{item.detail || "Kh?ng c? m? t? th?m."}</p>
+                        {item.hint ? <p className="mt-2 text-[11px] font-semibold text-slate-700">G?i ?: {item.hint}</p> : null}
                         <div className="mt-3 flex items-center justify-between gap-3">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{formatTime(item.createdAt)}</p>
                           <div className="flex items-center gap-2">
@@ -780,15 +779,15 @@ function CreateArticlePageContent() {
                                 className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-100"
                               >
                                 <Eye size={12} />
-                                Mo lai
+                                M? l?i
                               </button>
                             ) : null}
                             <button
                               type="button"
-                              onClick={() => void handleDeleteHistory(item.id).catch((error) => setHistoryError(error instanceof Error ? error.message : "Khong the xoa lich su."))}
+                              onClick={() => void handleDeleteHistory(item.id).catch((error) => setHistoryError(error instanceof Error ? error.message : "Kh?ng th? xo? l?ch s?."))}
                               className="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-600 transition hover:bg-rose-50"
                             >
-                              Xoa
+                              Xo?
                             </button>
                           </div>
                         </div>
