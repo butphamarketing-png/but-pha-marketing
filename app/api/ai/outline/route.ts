@@ -64,6 +64,17 @@ function fallbackOutline(title: string) {
   };
 }
 
+function buildFallbackPayload(title: string, serpInsight: SerpInsight, source = "fallback") {
+  const fallback = fallbackOutline(title);
+  return {
+    ...fallback,
+    keywords: normalizeKeywords(title, fallback.keywords, serpInsight.relatedKeywords),
+    intent: serpInsight.intent,
+    serpInsight,
+    source,
+  };
+}
+
 function parseJson<T>(raw: string): T | null {
   try {
     return JSON.parse(stripCodeFences(raw)) as T;
@@ -201,14 +212,7 @@ export async function POST(req: Request) {
     const { apiKey, model } = await getOpenAiRuntimeConfig();
 
     if (!apiKey) {
-      const fallback = fallbackOutline(title);
-      const payload = {
-        ...fallback,
-        keywords: normalizeKeywords(title, fallback.keywords, serpInsight.relatedKeywords),
-        intent: serpInsight.intent,
-        serpInsight,
-        source: "fallback",
-      };
+      const payload = buildFallbackPayload(title, serpInsight);
 
       await appendSeoStudioHistory({
         type: "outline",
@@ -237,42 +241,45 @@ export async function POST(req: Request) {
     }
 
     const client = new OpenAI({ apiKey });
-    const response = await client.responses.create({
-      model,
-      input: [
-        {
-          role: "system",
-          content: [
-            {
-              type: "input_text",
-              text: "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
-            },
-          ],
-        },
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_text",
-              text: [
-                `Tieu de bai viet: ${title}`,
-                `Search intent uu tien: ${serpInsight.intent}`,
-                `Keyword goi y tu du lieu SERP: ${serpInsight.relatedKeywords.join(", ") || title}`,
-                `Top headline tham khao: ${serpInsight.headlines.join(" | ") || "khong co"}`,
-                "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
-                "Yeu cau:",
-                "- Tao 6-8 muc chinh",
-                "- level chi dung 2 hoac 3",
-                "- text la tieu de hien thi ro rang bang tieng Viet co dau",
-                "- keywords la danh sach tu khoa muc tieu lien quan",
-                "Schema JSON:",
-                '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
-              ].join("\n"),
-            },
-          ],
-        },
-      ],
-    });
+    const response = await Promise.race([
+      client.responses.create({
+        model,
+        input: [
+          {
+            role: "system",
+            content: [
+              {
+                type: "input_text",
+                text: "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
+              },
+            ],
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: [
+                  `Tieu de bai viet: ${title}`,
+                  `Search intent uu tien: ${serpInsight.intent}`,
+                  `Keyword goi y tu du lieu SERP: ${serpInsight.relatedKeywords.join(", ") || title}`,
+                  `Top headline tham khao: ${serpInsight.headlines.join(" | ") || "khong co"}`,
+                  "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
+                  "Yeu cau:",
+                  "- Tao 6-8 muc chinh",
+                  "- level chi dung 2 hoac 3",
+                  "- text la tieu de hien thi ro rang bang tieng Viet co dau",
+                  "- keywords la danh sach tu khoa muc tieu lien quan",
+                  "Schema JSON:",
+                  '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
+                ].join("\n"),
+              },
+            ],
+          },
+        ],
+      }),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("OpenAI tao dan y qua lau.")), 25000)),
+    ]);
 
     const raw = response.output_text ?? "";
     const parsed = parseJson<{ keywords?: unknown; structure?: unknown }>(raw);
@@ -327,27 +334,35 @@ export async function POST(req: Request) {
           ? "OpenAI dang het quota hoac bi gioi han toc do. Thu lai sau it phut."
           : "Thu luu lai cau hinh AI/SerpAPI roi tao dan y lai.";
 
+    const fallbackPayload = buildFallbackPayload(title, serpInsight, "fallback");
+
     await appendSeoStudioHistory({
       type: "outline",
-      status: "error",
+      status: "success",
       title,
-      provider: "openai",
-      keywords: serpInsight.relatedKeywords,
-      intent: serpInsight.intent,
-      source: "openai",
-      detail,
-      hint,
+      provider: "fallback",
+      keywords: fallbackPayload.keywords,
+      intent: fallbackPayload.intent,
+      source: fallbackPayload.source,
+      detail: `OpenAI chua tao duoc dan y (${detail}), he thong da dung dan y fallback.`,
+      hint: "Ban co the tiep tuc viet bai bang dan y fallback hoac kiem tra OpenAI key sau.",
       snapshot: {
         title,
         slug: slugify(title),
-        metaTitle: buildMetaTitle({ title, keyword: serpInsight.relatedKeywords[0] }),
-        metaDescription: buildMetaDescription({ title, keyword: serpInsight.relatedKeywords[0] }),
-        keywords: serpInsight.relatedKeywords,
-        searchIntent: serpInsight.intent,
+        metaTitle: buildMetaTitle({ title, keyword: fallbackPayload.keywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: fallbackPayload.keywords[0] }),
+        keywords: fallbackPayload.keywords,
+        outline: fallbackPayload.structure,
+        searchIntent: fallbackPayload.intent,
         serpInsight,
       },
     }).catch(() => undefined);
 
-    return buildErrorResponse("Khong the tao dan y AI luc nay.", detail, hint, 500, "openai", "outline_failed");
+    return NextResponse.json({
+      ...fallbackPayload,
+      warning: "OpenAI chua tao duoc dan y, he thong da dung dan y fallback.",
+      detail,
+      hint,
+    });
   }
 }
