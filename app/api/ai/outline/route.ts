@@ -147,7 +147,9 @@ async function fetchSerpInsight(title: string): Promise<SerpInsight> {
   url.searchParams.set("location", location);
   url.searchParams.set("api_key", apiKey);
 
-  const response = await fetch(url.toString(), { cache: "no-store" });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  const response = await fetch(url.toString(), { cache: "no-store", signal: controller.signal }).finally(() => clearTimeout(timeout));
   if (!response.ok) {
     throw new Error(`SerpAPI ${response.status}: ${response.statusText}`);
   }
