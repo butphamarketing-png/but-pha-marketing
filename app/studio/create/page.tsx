@@ -97,6 +97,11 @@ function getLocalDraftKey(newsId?: string, slug?: string) {
   return `seo-studio-local-draft:${newsId || slug || "new"}`;
 }
 
+function isMetadataReadyTitle(value: string) {
+  const normalized = value.trim();
+  return normalized.length >= 8 && normalized.split(/\s+/).filter(Boolean).length >= 2;
+}
+
 function formatTime(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
@@ -238,9 +243,26 @@ function CreateArticlePageContent() {
   }, [articleData, localDraftKey]);
 
   useEffect(() => {
-    if (!articleData.title.trim()) return;
+    if (!isMetadataReadyTitle(articleData.title)) {
+      setArticleData((prev) => {
+        if (prev.slug || prev.metaTitle || prev.metaDescription || prev.description || prev.keywords.length > 0) {
+          return {
+            ...prev,
+            slug: "",
+            metaTitle: "",
+            metaDescription: "",
+            description: "",
+            keywords: [],
+          };
+        }
+        return prev;
+      });
+      return;
+    }
 
     setArticleData((prev) => {
+      if (!isMetadataReadyTitle(prev.title)) return prev;
+
       const nextKeywords = prev.keywords.length > 0 ? prev.keywords : deriveKeywordCandidates(prev.title);
       const nextTitle = prev.title;
       const nextSlug = prev.slug || buildReliableSlug({ title: nextTitle, keyword: nextKeywords[0] });
