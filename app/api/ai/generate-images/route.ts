@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getOpenAiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
 
@@ -55,9 +56,11 @@ function buildAltText(input: { title: string; sectionLabel: string }) {
 
 export async function POST(request: Request) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
+    const { apiKey } = await getOpenAiRuntimeConfig();
+
+    if (!apiKey) {
       return NextResponse.json(
-        { error: "Thiếu OPENAI_API_KEY trên server nên chưa thể tạo ảnh AI." },
+        { error: "Thiếu OpenAI key trong Studio Settings hoặc biến OPENAI_API_KEY nên chưa thể tạo ảnh AI." },
         { status: 500 },
       );
     }
@@ -89,9 +92,10 @@ export async function POST(request: Request) {
       brief,
     });
 
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const imageModel = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+    const client = new OpenAI({ apiKey });
     const response = await client.images.generate({
-      model: process.env.OPENAI_IMAGE_MODEL || "gpt-image-1.5",
+      model: imageModel,
       prompt,
       n: variantCount,
       size: "1536x1024",
@@ -122,7 +126,7 @@ export async function POST(request: Request) {
       prompt,
       sectionLabel,
       sectionSummary,
-      model: process.env.OPENAI_IMAGE_MODEL || "gpt-image-1.5",
+      model: imageModel,
       images,
     });
   } catch (error) {

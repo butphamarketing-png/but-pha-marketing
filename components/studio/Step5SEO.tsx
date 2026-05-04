@@ -52,7 +52,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
 
       if (!analyzeRes.ok) {
         const result = await analyzeRes.json().catch(() => null);
-        throw new Error(result?.error || "Kh?ng th? ph?n t?ch SEO l?c n?y.");
+        throw new Error(result?.error || "Không thể phân tích SEO lúc này.");
       }
 
       const analyzeResult = await analyzeRes.json();
@@ -65,7 +65,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "Kh?ng th? ph?n t?ch SEO l?c n?y.");
+      setError(err instanceof Error ? err.message : "Không thể phân tích SEO lúc này.");
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       });
       const result = await response.json().catch(() => null);
       if (!response.ok || !result?.ok) {
-        throw new Error(result?.error || "Kh?ng th? t? s?a SEO l?c n?y.");
+        throw new Error(result?.error || "Không thể tự sửa SEO lúc này.");
       }
 
       const nextImages = Array.isArray(data.images)
@@ -129,7 +129,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       });
       setMetrics(result.evaluation?.metrics || {});
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Kh?ng th? t? s?a SEO l?c n?y.");
+      setError(err instanceof Error ? err.message : "Không thể tự sửa SEO lúc này.");
     } finally {
       setAutoFixing(false);
     }

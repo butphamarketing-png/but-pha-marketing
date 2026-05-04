@@ -41,7 +41,7 @@ function normalizeOutline(items: unknown) {
 }
 
 function fallbackParagraph(title: string, section: { text: string }) {
-  return `<p>${title} la chu de quan trong voi doanh nghiep dang muon tang hien dien so va cai thien chuyen doi. Phan "${section.text}" giup nguoi doc hieu ro gia tri thuc te, cach trien khai va cac luu y can co de ap dung hieu qua hon.</p>`;
+  return `<p>${title} là chủ đề quan trọng với doanh nghiệp đang muốn tăng hiện diện số và cải thiện chuyển đổi. Phần "${section.text}" giúp người đọc hiểu rõ giá trị thực tế, cách triển khai và các lưu ý cần có để áp dụng hiệu quả hơn.</p>`;
 }
 
 function fallbackContent(title: string, outline: Array<{ level: number; text: string }>) {
@@ -50,11 +50,22 @@ function fallbackContent(title: string, outline: Array<{ level: number; text: st
       const tag = item.level === 3 ? "h3" : "h2";
       const intro =
         index === 0
-          ? `<p>${title} can duoc trien khai theo huong ro search intent, giau gia tri thuc tien va co loi keu goi hanh dong phu hop.</p>`
+          ? `<p>${title} cần được triển khai theo hướng rõ search intent, giàu giá trị thực tiễn và có lời kêu gọi hành động phù hợp.</p>`
           : "";
       return `<${tag}>${item.text}</${tag}>${intro}${fallbackParagraph(title, item)}`;
     })
     .join("");
+}
+
+function buildFallbackArticlePayload(title: string, outline: Array<{ level: number; text: string }>, source = "fallback") {
+  const content = fallbackContent(title, outline);
+  const wordCount = content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  return {
+    content,
+    wordCount,
+    estimatedTime: `${Math.max(3, Math.round(wordCount / 220))} phút đọc`,
+    source,
+  };
 }
 
 function buildPrompt(input: {
@@ -133,8 +144,7 @@ export async function POST(req: Request) {
     const { apiKey, model } = await getOpenAiRuntimeConfig();
 
     if (!apiKey) {
-      const content = fallbackContent(title, outline);
-      const wordCount = content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+      const payload = buildFallbackArticlePayload(title, outline);
 
       await appendSeoStudioHistory({
         type: "article",
@@ -150,46 +160,44 @@ export async function POST(req: Request) {
           title,
           slug: slugify(title),
           metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
-          metaDescription: buildMetaDescription({ title, keyword: keywords[0], content }),
-          description: buildExcerpt({ content, maxLength: 170 }),
-          content,
+          metaDescription: buildMetaDescription({ title, keyword: keywords[0], content: payload.content }),
+          description: buildExcerpt({ content: payload.content, maxLength: 170 }),
+          content: payload.content,
           keywords,
           outline,
         },
       }).catch(() => undefined);
 
-      return NextResponse.json({
-        content,
-        wordCount,
-        estimatedTime: "5 phut doc",
-        source: "fallback",
-      });
+      return NextResponse.json(payload);
     }
 
     const client = new OpenAI({ apiKey });
-    const response = await client.responses.create({
-      model,
-      input: [
-        {
-          role: "system",
-          content: [
-            {
-              type: "input_text",
-              text: "Ban viet landing article SEO bang tieng Viet. Chi tra ve HTML fragment hop le, khong giai thich, khong dung placeholder.",
-            },
-          ],
-        },
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_text",
-              text: buildPrompt({ title, keywords, outline }),
-            },
-          ],
-        },
-      ],
-    });
+    const response = await Promise.race([
+      client.responses.create({
+        model,
+        input: [
+          {
+            role: "system",
+            content: [
+              {
+                type: "input_text",
+                text: "Ban viet landing article SEO bang tieng Viet. Chi tra ve HTML fragment hop le, khong giai thich, khong dung placeholder.",
+              },
+            ],
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: buildPrompt({ title, keywords, outline }),
+              },
+            ],
+          },
+        ],
+      }),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("OpenAI viet bai qua lau.")), 45000)),
+    ]);
 
     const content = stripCodeFences(response.output_text ?? "");
     if (!content) {
@@ -235,25 +243,34 @@ export async function POST(req: Request) {
           ? "OpenAI dang het quota hoac bi gioi han toc do. Thu lai sau it phut."
           : "Thu giam do dai dan y hoac tao lai sau khi luu cau hinh AI.";
 
+    const fallbackPayload = buildFallbackArticlePayload(title, outline);
+
     await appendSeoStudioHistory({
       type: "article",
-      status: "error",
+      status: "success",
       title,
-      provider: "openai",
+      provider: "fallback",
       keywords,
-      source: "openai",
-      detail,
-      hint,
+      source: fallbackPayload.source,
+      detail: `OpenAI chua viet duoc bai (${detail}), he thong da dung bai viet fallback.`,
+      hint: "Ban co the tiep tuc chinh sua ban fallback hoac kiem tra OpenAI key/quota sau.",
       snapshot: {
         title,
         slug: slugify(title),
         metaTitle: buildMetaTitle({ title, keyword: keywords[0] }),
-        metaDescription: buildMetaDescription({ title, keyword: keywords[0] }),
+        metaDescription: buildMetaDescription({ title, keyword: keywords[0], content: fallbackPayload.content }),
+        description: buildExcerpt({ content: fallbackPayload.content, maxLength: 170 }),
+        content: fallbackPayload.content,
         keywords,
         outline,
       },
     }).catch(() => undefined);
 
-    return buildErrorResponse("Khong the tao bai viet AI luc nay.", detail, hint, 500, "openai", "article_failed");
+    return NextResponse.json({
+      ...fallbackPayload,
+      warning: "OpenAI chua viet duoc bai, he thong da dung bai viet fallback.",
+      detail,
+      hint,
+    });
   }
 }
