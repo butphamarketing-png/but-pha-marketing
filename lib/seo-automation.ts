@@ -1239,7 +1239,7 @@ export async function runSeoAutomation(options: RunOptions) {
   if (options.reason === "cron" && !options.force) {
     const expectedHour = parseConfiguredHour(settings.publishTimeLabel);
     const currentHour = localHour(new Date(), settings.timezone);
-    if (expectedHour !== currentHour) {
+    if (currentHour < expectedHour) {
       return {
         settings,
         run: null,
