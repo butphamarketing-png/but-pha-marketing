@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { appendSeoStudioHistory } from "@/lib/seo-studio-history";
-import { buildMetaDescription, buildMetaTitle, slugify } from "@/lib/seo-studio-draft";
+import { buildMetaDescription, buildMetaTitle, deriveKeywordCandidates, slugify } from "@/lib/seo-studio-draft";
 import { getOpenAiRuntimeConfig, getSerpApiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
@@ -37,6 +37,25 @@ function dedupeKeywords(items: string[]) {
     .slice(0, 10);
 }
 
+function tokenizeVietnamese(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .split(/\s+/)
+    .filter((item) => item.length >= 3);
+}
+
+function isKeywordRelevant(title: string, keyword: string) {
+  const titleTokens = new Set(tokenizeVietnamese(title));
+  const keywordTokens = tokenizeVietnamese(keyword);
+  if (keywordTokens.length === 0) return false;
+  if (keywordTokens.some((token) => titleTokens.has(token))) return true;
+  return /marketing|seo|website|web|thiet|ke|xay|dung|dich|vu|bao|gia|chi|phi/i.test(keywordTokens.join(" "));
+}
+
 function guessIntent(title: string) {
   const normalized = title.toLowerCase();
   if (/(gia|bao gia|chi phi|bang gia|gia re)/i.test(normalized)) return "commercial";
@@ -47,20 +66,20 @@ function guessIntent(title: string) {
 
 function fallbackOutline(title: string) {
   const structure: OutlineItem[] = [
-    { level: 2, text: `Gioi thieu ve ${title}`, summary: "", keyPoints: [] },
-    { level: 2, text: "Nhu cau thuc te cua khach hang", summary: "", keyPoints: [] },
-    { level: 2, text: `Giai phap ${title}`, summary: "", keyPoints: [] },
-    { level: 2, text: "Quy trinh trien khai", summary: "", keyPoints: [] },
-    { level: 2, text: "Kinh nghiem thuc chien", summary: "", keyPoints: [] },
-    { level: 2, text: "Bang gia va luu y", summary: "", keyPoints: [] },
-    { level: 2, text: "Cau hoi thuong gap", summary: "", keyPoints: [] },
-    { level: 2, text: "Ket luan", summary: "", keyPoints: [] },
+    { level: 2, text: `Giới thiệu về ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Nhu cầu thực tế của khách hàng", summary: "", keyPoints: [] },
+    { level: 2, text: `Giải pháp ${title}`, summary: "", keyPoints: [] },
+    { level: 2, text: "Quy trình triển khai", summary: "", keyPoints: [] },
+    { level: 2, text: "Kinh nghiệm thực chiến", summary: "", keyPoints: [] },
+    { level: 2, text: "Bảng giá và lưu ý", summary: "", keyPoints: [] },
+    { level: 2, text: "Câu hỏi thường gặp", summary: "", keyPoints: [] },
+    { level: 2, text: "Kết luận", summary: "", keyPoints: [] },
   ];
 
   return {
     h1: title,
     structure,
-    keywords: [title, "dich vu marketing", "SEO", "chuyen doi"],
+    keywords: [title, "dịch vụ marketing", "SEO", "chuyển đổi"],
   };
 }
 
@@ -87,8 +106,12 @@ function normalizeKeywords(title: string, keywords: unknown, serpKeywords: strin
   const aiKeywords = Array.isArray(keywords)
     ? keywords.map((item) => (typeof item === "string" ? item.trim() : "")).filter(Boolean)
     : [];
-  const merged = dedupeKeywords([...serpKeywords, ...aiKeywords, title, "dich vu marketing", "SEO"]);
-  return merged.length > 0 ? merged : [title, "dich vu marketing", "SEO"];
+  const derivedKeywords = deriveKeywordCandidates(title);
+  const relevant = dedupeKeywords([...derivedKeywords, ...serpKeywords, ...aiKeywords, title, "dịch vụ marketing", "SEO"]).filter((item) =>
+    isKeywordRelevant(title, item),
+  );
+  const merged = dedupeKeywords([...(relevant.length > 0 ? relevant : derivedKeywords), title, "dịch vụ marketing", "SEO"]);
+  return merged.length > 0 ? merged.slice(0, 6) : [title, "dịch vụ marketing", "SEO"];
 }
 
 function normalizeStructure(items: unknown, title: string): OutlineItem[] {
@@ -193,9 +216,9 @@ export async function POST(req: Request) {
 
   if (!title) {
     return buildErrorResponse(
-      "Thieu tieu de de tao dan y AI.",
-      "Ban chua nhap tieu de bai viet.",
-      "Nhap tieu de ro rang, co chua tu khoa chinh roi thu lai.",
+      "Thiếu tiêu đề để tạo dàn ý AI.",
+      "Bạn chưa nhập tiêu đề bài viết.",
+      "Nhập tiêu đề rõ ràng, có chứa từ khoá chính rồi thử lại.",
       400,
       "system",
       "missing_title",
@@ -252,7 +275,7 @@ export async function POST(req: Request) {
             content: [
               {
                 type: "input_text",
-                text: "Ban la chuyen gia SEO content tieng Viet. Hay tra ve JSON hop le, khong markdown, khong giai thich them.",
+                text: "Bạn là chuyên gia SEO content tiếng Việt. Hãy trả về JSON hợp lệ, không markdown, không giải thích thêm.",
               },
             ],
           },
@@ -262,16 +285,16 @@ export async function POST(req: Request) {
               {
                 type: "input_text",
                 text: [
-                  `Tieu de bai viet: ${title}`,
-                  `Search intent uu tien: ${serpInsight.intent}`,
-                  `Keyword goi y tu du lieu SERP: ${serpInsight.relatedKeywords.join(", ") || title}`,
-                  `Top headline tham khao: ${serpInsight.headlines.join(" | ") || "khong co"}`,
-                  "Hay phan tich search intent va de xuat dan y bai viet chuan SEO cho landing article dich vu marketing.",
-                  "Yeu cau:",
-                  "- Tao 6-8 muc chinh",
-                  "- level chi dung 2 hoac 3",
-                  "- text la tieu de hien thi ro rang bang tieng Viet co dau",
-                  "- keywords la danh sach tu khoa muc tieu lien quan",
+                  `Tiêu đề bài viết: ${title}`,
+                  `Search intent ưu tiên: ${serpInsight.intent}`,
+                  `Keyword gợi ý từ dữ liệu SERP: ${serpInsight.relatedKeywords.join(", ") || title}`,
+                  `Top headline tham khảo: ${serpInsight.headlines.join(" | ") || "không có"}`,
+                  "Hãy phân tích search intent và đề xuất dàn ý bài viết chuẩn SEO cho landing article dịch vụ marketing.",
+                  "Yêu cầu:",
+                  "- Tạo 6-8 mục chính",
+                  "- level chỉ dùng 2 hoặc 3",
+                  "- text là tiêu đề hiển thị rõ ràng bằng tiếng Việt có dấu",
+                  "- keywords là danh sách từ khoá mục tiêu liên quan trực tiếp tới tiêu đề, không lấy keyword lạc chủ đề từ SERP",
                   "Schema JSON:",
                   '{"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
                 ].join("\n"),

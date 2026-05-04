@@ -97,7 +97,20 @@ export function Step1Title({ data, setData, onNext, onHistoryChange }: any) {
           <input
             type="text"
             value={data.title}
-            onChange={(e) => setData({ ...data, title: e.target.value, aiError: null })}
+            onChange={(e) =>
+              setData({
+                ...data,
+                title: e.target.value,
+                slug: "",
+                metaTitle: "",
+                metaDescription: "",
+                description: "",
+                keywords: [],
+                searchIntent: "",
+                serpInsight: null,
+                aiError: null,
+              })
+            }
             placeholder="VD: Dịch vụ chạy quảng cáo Facebook giá rẻ..."
             className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-4 text-lg font-bold text-slate-900 shadow-sm outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-500/5"
           />
