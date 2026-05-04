@@ -62,7 +62,14 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error("POST /api/media/generated Storage error", uploadError);
-      return NextResponse.json({ error: `Không thể lưu ảnh vào Supabase Storage bucket "${STORAGE_BUCKET}".` }, { status: 500 });
+      return NextResponse.json({
+        ok: true,
+        fallback: true,
+        item: null,
+        url: imageBase64.startsWith("data:image/") ? imageBase64 : `data:${mimeType};base64,${base64}`,
+        path: "",
+        warning: `Ảnh AI đã được thêm vào bài viết, nhưng chưa lưu được vào Supabase Storage bucket "${STORAGE_BUCKET}".`,
+      });
     }
 
     const { data: publicData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);

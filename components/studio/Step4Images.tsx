@@ -239,7 +239,12 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         };
       });
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : "Không thể lưu ảnh vào media.");
+      const message = saveError instanceof Error ? saveError.message : "Không thể lưu ảnh vào media.";
+      setError(
+        /Supabase Storage bucket/i.test(message)
+          ? "Ảnh AI đã được thêm vào bài viết, nhưng chưa lưu được vào thư viện media vì thiếu Supabase Storage bucket. Hãy tạo bucket \"media\" trong Supabase Storage."
+          : message,
+      );
     } finally {
       if (showSaving) setSavingId(null);
     }
