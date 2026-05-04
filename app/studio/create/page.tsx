@@ -106,6 +106,17 @@ function looksLikeGeneratedMetaDescription(value: string) {
   return /thuc chien|toi uu SEO|Phu hop|trien khai|tang truong|thực chiến|tối ưu SEO|Phù hợp|triển khai|tăng trưởng/i.test(value);
 }
 
+function isDataImageUrl(value: unknown) {
+  return typeof value === "string" && /^data:image\//i.test(value);
+}
+
+function removeInlineDataImages(content: string) {
+  return (content || "")
+    .replace(/<figure[^>]*>\s*<img[^>]+src=["']data:image\/[^"']+["'][\s\S]*?<\/figure>/gi, "")
+    .replace(/<img[^>]+src=["']data:image\/[^"']+["'][^>]*>/gi, "")
+    .trim();
+}
+
 function formatTime(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
@@ -364,8 +375,12 @@ function CreateArticlePageContent() {
       return;
     }
 
+    const safeImages = Array.isArray(articleData.images) ? articleData.images.filter((item: any) => item?.url && !isDataImageUrl(item.url)) : [];
+    const safeFeaturedImageUrl = isDataImageUrl(articleData.featuredImageUrl) ? safeImages[0]?.url || "" : articleData.featuredImageUrl;
+    const safeArticleContent = removeInlineDataImages(articleData.content);
+
     const derivedContent =
-      articleData.content.trim() ||
+      safeArticleContent.trim() ||
       (Array.isArray(articleData.outline) && articleData.outline.length > 0
         ? articleData.outline
             .map((item: any) => {
@@ -395,7 +410,7 @@ function CreateArticlePageContent() {
       slug: articleData.slug,
       content: derivedContent,
       keywords: articleData.keywords,
-      imageUrls: Array.isArray(articleData.images) ? articleData.images.map((item: any) => item?.url).filter(Boolean) : [],
+      imageUrls: safeImages.map((item: any) => item.url),
       serviceKeywords: articleData.serpInsight?.relatedKeywords || articleData.keywords,
     });
 
@@ -419,9 +434,7 @@ function CreateArticlePageContent() {
       category: "blog",
       published: allowPublish,
       description: autoFixed.description || buildExcerpt({ content: autoFixed.content, maxLength: 170 }),
-      imageUrl:
-        articleData.featuredImageUrl ||
-        (Array.isArray(articleData.images) && articleData.images.length > 0 ? articleData.images[0]?.url || "" : ""),
+      imageUrl: safeFeaturedImageUrl || safeImages[0]?.url || "",
       slug: autoFixed.slug || buildReliableSlug({ title: autoFixed.title, keyword: autoFixed.keywords[0] }),
       hot: articleData.hot,
       metaDescription: autoFixed.metaDescription || buildMetaDescription({
@@ -459,6 +472,7 @@ function CreateArticlePageContent() {
         metaTitle: autoFixed.metaTitle,
         content: autoFixed.content,
         keywords: autoFixed.keywords,
+        images: safeImages,
         seoScore: autoFixed.evaluation.score,
         seoIssues: autoFixed.evaluation.issues,
         published: payload.published,
