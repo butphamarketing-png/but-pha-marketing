@@ -176,8 +176,31 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     };
   }, [savedImages.length]);
 
+  function applySavedImage(nextImage: SavedImage) {
+    setData((prev: any) => {
+      const prevImages = Array.isArray(prev.images) ? (prev.images as SavedImage[]) : [];
+      return {
+        ...prev,
+        images: [...prevImages.filter((item) => item.url !== nextImage.url && item.name !== nextImage.name), nextImage],
+        featuredImageUrl: prev.featuredImageUrl || nextImage.url,
+        content: insertImageBySection(prev.content || "", nextImage, outlineSections),
+      };
+    });
+  }
+
   async function saveGeneratedVariant(variant: GeneratedVariant, promptValue: string, showSaving = true) {
     if (showSaving) setSavingId(variant.id);
+    const optimisticImage: SavedImage = {
+      id: variant.id,
+      url: variant.dataUrl,
+      name: variant.suggestedName,
+      altText: variant.altText,
+      prompt: promptValue,
+      sectionLabel: getSectionLabel(selectedSection),
+      sectionId: getSectionId(selectedSection),
+    };
+    applySavedImage(optimisticImage);
+
     try {
       const res = await fetch("/api/media/generated", {
         method: "POST",
@@ -207,13 +230,16 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
 
       setData((prev: any) => {
         const prevImages = Array.isArray(prev.images) ? (prev.images as SavedImage[]) : [];
+        const contentWithPermanentUrl = (prev.content || "").replaceAll(variant.dataUrl, nextImage.url);
         return {
           ...prev,
-          images: [...prevImages.filter((item) => item.url !== nextImage.url), nextImage],
-          featuredImageUrl: prevImages.length === 0 ? nextImage.url : prev.featuredImageUrl || nextImage.url,
-          content: insertImageBySection(prev.content || "", nextImage, outlineSections),
+          images: [...prevImages.filter((item) => item.url !== variant.dataUrl && item.url !== nextImage.url && item.name !== nextImage.name), nextImage],
+          featuredImageUrl: prev.featuredImageUrl === variant.dataUrl ? nextImage.url : prev.featuredImageUrl || nextImage.url,
+          content: insertImageBySection(contentWithPermanentUrl, nextImage, outlineSections),
         };
       });
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Không thể lưu ảnh vào media.");
     } finally {
       if (showSaving) setSavingId(null);
     }
@@ -253,7 +279,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       setVariants(generatedImages);
 
       if (generatedImages[0]) {
-        await saveGeneratedVariant(generatedImages[0], nextPrompt, false);
+        await saveGeneratedVariant(generatedImages[0], nextPrompt, true);
       }
     } catch (generationError) {
       setError(generationError instanceof Error ? generationError.message : "Không thể tạo ảnh AI.");
@@ -302,11 +328,14 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         }),
       );
 
-      setData({
-        ...data,
-        images: [...savedImages, ...uploaded.filter((item) => !savedImages.some((saved) => saved.url === item.url))],
-        featuredImageUrl: savedImages.length === 0 ? uploaded[0]?.url || "" : data.featuredImageUrl || uploaded[0]?.url || "",
-        content: uploaded.reduce((currentContent, image) => insertImageBySection(currentContent, image, outlineSections), data.content || ""),
+      setData((prev: any) => {
+        const prevImages = Array.isArray(prev.images) ? (prev.images as SavedImage[]) : [];
+        return {
+          ...prev,
+          images: [...prevImages, ...uploaded.filter((item) => !prevImages.some((saved) => saved.url === item.url))],
+          featuredImageUrl: prev.featuredImageUrl || uploaded[0]?.url || "",
+          content: uploaded.reduce((currentContent, image) => insertImageBySection(currentContent, image, outlineSections), prev.content || ""),
+        };
       });
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Không thể tải ảnh lên lúc này.");
@@ -317,10 +346,10 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
   }
 
   function setAsThumbnail(image: SavedImage) {
-    setData({
-      ...data,
+    setData((prev: any) => ({
+      ...prev,
       featuredImageUrl: image.url,
-    });
+    }));
   }
 
   function addFromLibrary(item: MediaLibraryItem) {
@@ -333,19 +362,14 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
       sectionId: getSectionId(selectedSection),
     };
 
-    setData({
-      ...data,
-      images: [...savedImages.filter((saved) => saved.url !== item.url), nextImage],
-      featuredImageUrl: savedImages.length === 0 ? item.url : data.featuredImageUrl || item.url,
-      content: insertImageBySection(data.content || "", nextImage, outlineSections),
-    });
+    applySavedImage(nextImage);
   }
 
   function insertIntoContent(image: SavedImage) {
-    setData({
-      ...data,
-      content: insertImageBySection(data.content || "", image, outlineSections),
-    });
+    setData((prev: any) => ({
+      ...prev,
+      content: insertImageBySection(prev.content || "", image, outlineSections),
+    }));
   }
 
   return (

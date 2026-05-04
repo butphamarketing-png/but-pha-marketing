@@ -102,6 +102,10 @@ function isMetadataReadyTitle(value: string) {
   return normalized.length >= 8 && normalized.split(/\s+/).filter(Boolean).length >= 2;
 }
 
+function looksLikeGeneratedMetaDescription(value: string) {
+  return /thuc chien|toi uu SEO|Phu hop|trien khai|tang truong|thực chiến|tối ưu SEO|Phù hợp|triển khai|tăng trưởng/i.test(value);
+}
+
 function formatTime(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
@@ -263,13 +267,14 @@ function CreateArticlePageContent() {
     setArticleData((prev) => {
       if (!isMetadataReadyTitle(prev.title)) return prev;
 
-      const nextKeywords = prev.keywords.length > 0 ? prev.keywords : deriveKeywordCandidates(prev.title);
+      const derivedKeywords = deriveKeywordCandidates(prev.title);
+      const nextKeywords = prev.keywords.length > 0 ? prev.keywords : derivedKeywords;
       const nextTitle = prev.title;
-      const nextSlug = prev.slug || buildReliableSlug({ title: nextTitle, keyword: nextKeywords[0] });
-      const nextMetaTitle = prev.metaTitle || buildMetaTitle({ title: buildSeoFriendlyTitle({ title: nextTitle, keyword: nextKeywords[0] }), keyword: nextKeywords[0] });
+      const nextSlug = buildReliableSlug({ title: nextTitle, keyword: nextKeywords[0] });
+      const nextMetaTitle = buildMetaTitle({ title: buildSeoFriendlyTitle({ title: nextTitle, keyword: nextKeywords[0] }), keyword: nextKeywords[0] });
       const nextDescription = prev.description || buildExcerpt({ description: prev.description, content: prev.content, maxLength: 170 });
-      const nextMetaDescription =
-        prev.metaDescription || buildMetaDescription({ title: nextTitle, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
+      const generatedMetaDescription = buildMetaDescription({ title: nextTitle, keyword: nextKeywords[0], description: nextDescription, content: prev.content });
+      const nextMetaDescription = !prev.metaDescription || looksLikeGeneratedMetaDescription(prev.metaDescription) ? generatedMetaDescription : prev.metaDescription;
 
       if (
         nextTitle === prev.title &&

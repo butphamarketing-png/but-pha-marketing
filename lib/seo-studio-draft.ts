@@ -34,19 +34,29 @@ export function normalizePlainText(value: string) {
     .trim();
 }
 
-function toAsciiWords(value: string) {
+function toWords(value: string) {
   return normalizePlainText(value)
     .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
     .split(/\s+/)
     .filter((item) => item.length >= 2);
 }
 
+function toAsciiWords(value: string) {
+  return toWords(value)
+    .map((item) =>
+      item
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/[^a-z0-9-]/g, ""),
+    )
+    .filter(Boolean);
+}
+
 export function titleLooksWeak(value: string) {
   const normalized = normalizePlainText(value);
-  const words = toAsciiWords(normalized);
+  const words = toWords(normalized);
   if (!normalized) return true;
   if (normalized.length < 18) return true;
   if (words.length < 3) return true;
@@ -73,7 +83,7 @@ export function buildSeoFriendlyTitle(input: { title?: string; keyword?: string;
     return rawTitle.length <= 65 ? rawTitle : `${rawTitle.slice(0, 62).trim()}...`;
   }
 
-  const title = toSentenceCase(`${baseKeyword} chuyen nghiep cho doanh nghiep`);
+  const title = toSentenceCase(`${baseKeyword} chuyên nghiệp cho doanh nghiệp`);
   return title.length <= 65 ? title : `${title.slice(0, 62).trim()}...`;
 }
 
@@ -89,7 +99,7 @@ export function slugify(text: string) {
 }
 
 export function deriveKeywordCandidates(title: string) {
-  const cleaned = toAsciiWords(title).join(" ");
+  const cleaned = toWords(title).join(" ");
 
   if (!cleaned) return [];
 
@@ -103,8 +113,8 @@ export function deriveKeywordCandidates(title: string) {
   const related = [
     mainKeyword,
     uniqueWords.slice(0, 2).join(" ").trim(),
-    `${mainKeyword} chuyen nghiep`.trim(),
-    `${mainKeyword} hieu qua`.trim(),
+    `${mainKeyword} chuyên nghiệp`.trim(),
+    `${mainKeyword} hiệu quả`.trim(),
   ]
     .map((item) => item.replace(/\s+/g, " ").trim())
     .filter(Boolean)
@@ -151,13 +161,13 @@ export function buildMetaDescription(input: {
 
   const title = buildSeoFriendlyTitle({ title: input.title, keyword: input.keyword });
   const keyword = normalizePlainText(input.keyword || "");
-  const subject = keyword || title || "giai phap marketing";
-  const fallback = `${subject} thuc chien, toi uu SEO, de xuat ro rang va huong toi chuyen doi cho doanh nghiep.`;
+  const subject = keyword || title || "giải pháp marketing";
+  const fallback = `${subject} thực chiến, tối ưu SEO, đề xuất rõ ràng và hướng tới chuyển đổi cho doanh nghiệp.`;
   const normalized = fallback.replace(/\s+/g, " ").trim();
 
   if (normalized.length >= 120 && normalized.length <= 160) return normalized;
   if (normalized.length < 120) {
-    return `${normalized} Phu hop de trien khai ben vung va tang truong hieu qua.`.slice(0, 160).trim();
+    return `${normalized} Phù hợp để triển khai bền vững và tăng trưởng hiệu quả.`.slice(0, 160).trim();
   }
   return `${normalized.slice(0, 157).trim()}...`;
 }
