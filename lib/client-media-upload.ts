@@ -28,7 +28,7 @@ export async function uploadMediaFile(file: File, options: UploadMediaOptions = 
   const payload = (await response.json().catch(() => null)) as UploadedMediaResult & { error?: string } | null;
 
   if (!response.ok || !payload?.url) {
-    throw new Error(payload?.error || "Khong the tai anh len luc nay.");
+    throw new Error(payload?.error || "Không thể tải ảnh lên lúc này.");
   }
 
   return payload;

@@ -176,6 +176,49 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     };
   }, [savedImages.length]);
 
+  async function saveGeneratedVariant(variant: GeneratedVariant, promptValue: string, showSaving = true) {
+    if (showSaving) setSavingId(variant.id);
+    try {
+      const res = await fetch("/api/media/generated", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageBase64: variant.dataUrl,
+          title: data.title,
+          sectionLabel: getSectionLabel(selectedSection),
+          suggestedName: variant.suggestedName,
+        }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result?.error || "Không thể lưu ảnh vào media.");
+      }
+
+      const nextImage: SavedImage = {
+        id: result?.item?.id,
+        url: result.url,
+        name: variant.suggestedName,
+        altText: variant.altText,
+        prompt: promptValue,
+        sectionLabel: getSectionLabel(selectedSection),
+        sectionId: getSectionId(selectedSection),
+      };
+
+      setData((prev: any) => {
+        const prevImages = Array.isArray(prev.images) ? (prev.images as SavedImage[]) : [];
+        return {
+          ...prev,
+          images: [...prevImages.filter((item) => item.url !== nextImage.url), nextImage],
+          featuredImageUrl: prevImages.length === 0 ? nextImage.url : prev.featuredImageUrl || nextImage.url,
+          content: insertImageBySection(prev.content || "", nextImage, outlineSections),
+        };
+      });
+    } finally {
+      if (showSaving) setSavingId(null);
+    }
+  }
+
   async function handleGenerate() {
     if (!data.title?.trim()) {
       setError("Cần có tiêu đề bài viết trước khi tạo ảnh.");
@@ -204,8 +247,14 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         throw new Error(result?.error || "Không thể tạo ảnh AI.");
       }
 
+      const generatedImages = Array.isArray(result.images) ? result.images : [];
+      const nextPrompt = result.prompt || "";
       setPrompt(result.prompt || "");
-      setVariants(Array.isArray(result.images) ? result.images : []);
+      setVariants(generatedImages);
+
+      if (generatedImages[0]) {
+        await saveGeneratedVariant(generatedImages[0], nextPrompt, false);
+      }
     } catch (generationError) {
       setError(generationError instanceof Error ? generationError.message : "Không thể tạo ảnh AI.");
     } finally {
@@ -218,38 +267,7 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     setError(null);
 
     try {
-      const res = await fetch("/api/media/generated", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          imageBase64: variant.dataUrl,
-          title: data.title,
-          sectionLabel: getSectionLabel(selectedSection),
-          suggestedName: variant.suggestedName,
-        }),
-      });
-
-      const result = await res.json();
-      if (!res.ok) {
-        throw new Error(result?.error || "Không thể lưu ảnh vào media.");
-      }
-
-      const nextImage: SavedImage = {
-        id: result?.item?.id,
-        url: result.url,
-        name: variant.suggestedName,
-        altText: variant.altText,
-        prompt,
-        sectionLabel: getSectionLabel(selectedSection),
-        sectionId: getSectionId(selectedSection),
-      };
-
-      setData({
-        ...data,
-        images: [...savedImages.filter((item) => item.url !== nextImage.url), nextImage],
-        featuredImageUrl: savedImages.length === 0 ? nextImage.url : data.featuredImageUrl || nextImage.url,
-        content: insertImageBySection(data.content || "", nextImage, outlineSections),
-      });
+      await saveGeneratedVariant(variant, prompt, false);
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Không thể lưu ảnh vào media.");
     } finally {

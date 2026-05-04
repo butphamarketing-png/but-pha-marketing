@@ -36,6 +36,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
             metaDescription: data.metaDescription,
             slug: data.slug,
             keywords: data.keywords,
+            serviceKeywords: data.serpInsight?.relatedKeywords || data.keywords || [],
           }),
         }),
         fetch("/api/seo/internal-link-suggestions", {
@@ -56,7 +57,7 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
       }
 
       const analyzeResult = await analyzeRes.json();
-      setData({ ...data, seoScore: analyzeResult.score, seoIssues: analyzeResult.issues });
+      setData((prev: any) => ({ ...prev, seoScore: analyzeResult.score, seoIssues: analyzeResult.issues }));
       setMetrics(analyzeResult.metrics || {});
 
       if (linksRes.ok) {
@@ -74,10 +75,10 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
   const insertInternalLink = (item: InternalLinkItem) => {
     const anchor = item.anchorText || item.title;
     const linkHtml = `<a href="/blog/${item.slug}">${anchor}</a>`;
-    setData({
-      ...data,
-      content: `${data.content || ""}<p>${linkHtml}</p>`,
-    });
+    setData((prev: any) => ({
+      ...prev,
+      content: `${prev.content || ""}<p>${linkHtml}</p>`,
+    }));
   };
 
   const relatedKeywords = (data.serpInsight?.relatedKeywords?.length ? data.serpInsight.relatedKeywords : data.keywords || []).slice(0, 8);
@@ -114,8 +115,8 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
           }))
         : [];
 
-      setData({
-        ...data,
+      setData((prev: any) => ({
+        ...prev,
         title: result.title,
         slug: result.slug,
         description: result.description,
@@ -124,9 +125,9 @@ export function Step5SEO({ data, setData, onNext, onPrev }: any) {
         content: result.content,
         keywords: result.keywords,
         images: nextImages,
-        seoScore: result.evaluation?.score || data.seoScore,
-        seoIssues: result.evaluation?.issues || data.seoIssues,
-      });
+        seoScore: result.evaluation?.score || prev.seoScore,
+        seoIssues: result.evaluation?.issues || prev.seoIssues,
+      }));
       setMetrics(result.evaluation?.metrics || {});
     } catch (err) {
       setError(err instanceof Error ? err.message : "Không thể tự sửa SEO lúc này.");

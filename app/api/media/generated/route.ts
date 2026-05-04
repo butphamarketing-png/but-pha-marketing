@@ -1,10 +1,11 @@
-import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import slugify from "slugify";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 
 export const runtime = "nodejs";
+
+const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || "media";
 
 function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -51,15 +52,22 @@ export async function POST(request: Request) {
       trim: true,
     }) || `ai-image-${Date.now()}`;
     const fileName = `${safeBaseName}-${Date.now()}.${extension}`;
-    const relativeDir = path.join("generated", "ai");
-    const absoluteDir = path.join(process.cwd(), "public", relativeDir);
-    const absolutePath = path.join(absoluteDir, fileName);
-    const publicUrl = `/${relativeDir.replace(/\\/g, "/")}/${fileName}`;
-
-    await mkdir(absoluteDir, { recursive: true });
-    await writeFile(absolutePath, Buffer.from(base64, "base64"));
-
     const supabase = createServerClient();
+    const storagePath = `generated/ai/${fileName}`;
+    const buffer = Buffer.from(base64, "base64");
+    const { error: uploadError } = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, buffer, {
+      contentType: mimeType,
+      upsert: false,
+    });
+
+    if (uploadError) {
+      console.error("POST /api/media/generated Storage error", uploadError);
+      return NextResponse.json({ error: `Không thể lưu ảnh vào Supabase Storage bucket "${STORAGE_BUCKET}".` }, { status: 500 });
+    }
+
+    const { data: publicData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
+    const publicUrl = publicData.publicUrl;
+
     const { data, error } = await supabase
       .from("media")
       .insert({
@@ -80,7 +88,7 @@ export async function POST(request: Request) {
       ok: true,
       item: data,
       url: publicUrl,
-      path: absolutePath,
+      path: storagePath,
     });
   } catch (error) {
     console.error("POST /api/media/generated failed", error);
