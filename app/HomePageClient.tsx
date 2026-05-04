@@ -582,10 +582,10 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-            <div className="mb-10 flex flex-col items-start gap-6 md:flex-row md:justify-between md:text-left">
+          <section className="mx-auto max-w-7xl px-4 py-10 pb-24 lg:px-6 lg:py-12">
+            <div className="mb-6 flex flex-col items-start gap-6 md:mb-10 md:flex-row md:justify-between md:text-left">
               <div className="text-left">
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Vì sao chọn Bứt Phá Marketing?</p>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-fuchsia-300 sm:text-sm sm:tracking-[0.3em]">Vì sao chọn Bứt Phá Marketing?</p>
               </div>
               <div className="hidden gap-3 md:flex">
                 <button
@@ -606,15 +606,15 @@ export default function HomePageClient() {
             </div>
             <div
               ref={whyChooseUsRef}
-              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+              className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
             >
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center transition-all hover:bg-white/[0.06]">
-                  <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
-                    <item.icon className="h-6 w-6" />
+                <div key={item.title} className="rounded-[1.35rem] border border-white/10 bg-white/[0.03] p-3 text-center transition-all hover:bg-white/[0.06] sm:rounded-[2rem] sm:p-6">
+                  <span className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/10 text-fuchsia-400 sm:h-14 sm:w-14 sm:rounded-2xl">
+                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </span>
-                  <h3 className="mt-5 text-lg font-black text-white">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
+                  <h3 className="mt-3 text-sm font-black leading-snug text-white sm:mt-5 sm:text-lg">{item.title}</h3>
+                  <p className="mt-2 line-clamp-3 text-[11px] leading-5 text-slate-400 sm:mt-3 sm:text-sm sm:leading-relaxed">{item.description}</p>
                 </div>
               ))}
             </div>
