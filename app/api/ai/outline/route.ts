@@ -56,6 +56,26 @@ function isKeywordRelevant(title: string, keyword: string) {
   return /marketing|seo|website|web|thiet|ke|xay|dung|dich|vu|bao|gia|chi|phi/i.test(keywordTokens.join(" "));
 }
 
+function repairVietnameseOutlineText(value: string) {
+  const normalized = value.trim();
+  const lower = normalized.toLowerCase();
+  const replacements: Array<[RegExp, string]> = [
+    [/^gioi thieu ve /i, "Giới thiệu về "],
+    [/^nhu cau thuc te cua khach hang$/i, "Nhu cầu thực tế của khách hàng"],
+    [/^giai phap /i, "Giải pháp "],
+    [/^quy trinh trien khai$/i, "Quy trình triển khai"],
+    [/^quy trinh trien khai tung buoc$/i, "Quy trình triển khai từng bước"],
+    [/^kinh nghiem thuc chien$/i, "Kinh nghiệm thực chiến"],
+    [/^bang gia va luu y$/i, "Bảng giá và lưu ý"],
+    [/^chi phi va luu y quan trong$/i, "Chi phí và lưu ý quan trọng"],
+    [/^cau hoi thuong gap$/i, "Câu hỏi thường gặp"],
+    [/^ket luan$/i, "Kết luận"],
+    [/^tong quan ve /i, "Tổng quan về "],
+  ];
+  const found = replacements.find(([pattern]) => pattern.test(lower));
+  return found ? normalized.replace(found[0], found[1]) : normalized;
+}
+
 function guessIntent(title: string) {
   const normalized = title.toLowerCase();
   if (/(gia|bao gia|chi phi|bang gia|gia re)/i.test(normalized)) return "commercial";
@@ -120,7 +140,7 @@ function normalizeStructure(items: unknown, title: string): OutlineItem[] {
     .map((item) => {
       if (!item || typeof item !== "object") return null;
       const candidate = item as Record<string, unknown>;
-      const text = normalizeTitle(candidate.text ?? candidate.heading ?? candidate.title);
+      const text = repairVietnameseOutlineText(normalizeTitle(candidate.text ?? candidate.heading ?? candidate.title));
       if (!text) return null;
       const level = Number(candidate.level ?? 2);
       return {
@@ -228,7 +248,7 @@ export async function POST(req: Request) {
   const serpInsight = await fetchSerpInsight(title).catch(() => ({
     source: "heuristic" as const,
     intent: guessIntent(title),
-    relatedKeywords: [title, `${title} la gi`, `${title} bao gia`],
+    relatedKeywords: [title, `${title} là gì`, `${title} báo giá`],
     headlines: [],
     location: "Vietnam",
   }));
@@ -248,8 +268,8 @@ export async function POST(req: Request) {
         keywords: payload.keywords,
         intent: payload.intent,
         source: payload.source,
-        detail: "Khong co OpenAI key, da dung dan y fallback.",
-        hint: "Luu OpenAI key trong admin de co dan y AI chat luong cao hon.",
+        detail: "Không có OpenAI key, đã dùng dàn ý fallback.",
+        hint: "Lưu OpenAI key trong admin để có dàn ý AI chất lượng cao hơn.",
         snapshot: {
           title,
           slug: slugify(title),
@@ -303,7 +323,7 @@ export async function POST(req: Request) {
           },
         ],
       }),
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("OpenAI tao dan y qua lau.")), 25000)),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("OpenAI tạo dàn ý quá lâu.")), 25000)),
     ]);
 
     const raw = response.output_text ?? "";
@@ -333,8 +353,8 @@ export async function POST(req: Request) {
       source: payload.source,
       detail:
         serpInsight.source === "serpapi"
-          ? "Da ket hop OpenAI voi du lieu tu SerpAPI de de xuat keyword va intent."
-          : "Da tao dan y bang OpenAI voi intent heuristic.",
+          ? "Đã kết hợp OpenAI với dữ liệu từ SerpAPI để đề xuất keyword và intent."
+          : "Đã tạo dàn ý bằng OpenAI với intent heuristic.",
       hint: "",
       snapshot: {
         title,
@@ -350,14 +370,14 @@ export async function POST(req: Request) {
 
     return NextResponse.json(payload);
   } catch (error) {
-    const message = error instanceof Error && error.message ? error.message : "Khong the tao dan y AI luc nay.";
+    const message = error instanceof Error && error.message ? error.message : "Không thể tạo dàn ý AI lúc này.";
     const detail = message;
     const hint =
       /api key|401|403/i.test(message)
-        ? "Kiem tra lai OpenAI key trong admin va bam Kiem tra ket noi."
+        ? "Kiểm tra lại OpenAI key trong admin và bấm Kiểm tra kết nối."
         : /rate|quota|429/i.test(message)
-          ? "OpenAI dang het quota hoac bi gioi han toc do. Thu lai sau it phut."
-          : "Thu luu lai cau hinh AI/SerpAPI roi tao dan y lai.";
+          ? "OpenAI đang hết quota hoặc bị giới hạn tốc độ. Thử lại sau ít phút."
+          : "Thử lưu lại cấu hình AI/SerpAPI rồi tạo dàn ý lại.";
 
     const fallbackPayload = buildFallbackPayload(title, serpInsight, "fallback");
 
@@ -369,8 +389,8 @@ export async function POST(req: Request) {
       keywords: fallbackPayload.keywords,
       intent: fallbackPayload.intent,
       source: fallbackPayload.source,
-      detail: `OpenAI chua tao duoc dan y (${detail}), he thong da dung dan y fallback.`,
-      hint: "Ban co the tiep tuc viet bai bang dan y fallback hoac kiem tra OpenAI key sau.",
+      detail: `OpenAI chưa tạo được dàn ý (${detail}), hệ thống đã dùng dàn ý fallback.`,
+      hint: "Bạn có thể tiếp tục viết bài bằng dàn ý fallback hoặc kiểm tra OpenAI key sau.",
       snapshot: {
         title,
         slug: slugify(title),
@@ -385,7 +405,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       ...fallbackPayload,
-      warning: "OpenAI chua tao duoc dan y, he thong da dung dan y fallback.",
+      warning: "OpenAI chưa tạo được dàn ý, hệ thống đã dùng dàn ý fallback.",
       detail,
       hint,
     });

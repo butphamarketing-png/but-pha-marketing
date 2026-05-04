@@ -255,18 +255,21 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
     setError(null);
 
     try {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 45000);
       const res = await fetch("/api/ai/generate-images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           title: data.title,
           keywords: data.keywords || [],
           outline: outlineSections,
           sectionLabel: getSectionLabel(selectedSection),
           brief,
-          variantCount: 4,
+          variantCount: 1,
         }),
-      });
+      }).finally(() => window.clearTimeout(timeout));
 
       const result = await res.json();
       if (!res.ok) {
@@ -282,7 +285,13 @@ export function Step4Images({ data, setData, onNext, onPrev }: any) {
         await saveGeneratedVariant(generatedImages[0], nextPrompt, true);
       }
     } catch (generationError) {
-      setError(generationError instanceof Error ? generationError.message : "Không thể tạo ảnh AI.");
+      setError(
+        generationError instanceof DOMException && generationError.name === "AbortError"
+          ? "Tạo ảnh AI quá lâu. Vui lòng thử lại hoặc tải ảnh từ máy để tiếp tục."
+          : generationError instanceof Error
+            ? generationError.message
+            : "Không thể tạo ảnh AI.",
+      );
     } finally {
       setLoading(false);
     }
