@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { getOpenAiRuntimeConfig } from "@/lib/studio-settings";
 
 export const runtime = "nodejs";
+const IMAGE_GENERATION_TIMEOUT_MS = 45000;
 
 type OutlineItem = {
   level?: number;
@@ -54,6 +55,14 @@ function buildAltText(input: { title: string; sectionLabel: string }) {
   return `Ảnh minh họa cho bài viết "${input.title}" ở phần ${input.sectionLabel}`;
 }
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === "object" && error && "message" in error && typeof (error as { message?: unknown }).message === "string") {
+    return (error as { message: string }).message;
+  }
+  return "Không thể tạo ảnh AI lúc này.";
+}
+
 export async function POST(request: Request) {
   try {
     const { apiKey } = await getOpenAiRuntimeConfig();
@@ -71,7 +80,7 @@ export async function POST(request: Request) {
     const keywords = Array.isArray(body?.keywords) ? body.keywords.map((item: unknown) => cleanText(item)).filter(Boolean) : [];
     const outline = normalizeOutline(body?.outline);
     const requestedSection = cleanText(body?.sectionLabel);
-    const variantCount = Math.max(1, Math.min(Number(body?.variantCount) || 4, 4));
+    const variantCount = Math.max(1, Math.min(Number(body?.variantCount) || 1, 2));
 
     if (!title) {
       return NextResponse.json({ error: "Thiếu tiêu đề bài viết để tạo ảnh." }, { status: 400 });
@@ -94,24 +103,28 @@ export async function POST(request: Request) {
 
     const imageModel = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
     const client = new OpenAI({ apiKey });
-    const response = await client.images.generate({
-      model: imageModel,
-      prompt,
-      n: variantCount,
-      size: "1536x1024",
-      quality: "medium",
-      output_format: "png",
-      background: "auto",
-    });
+    const response = await Promise.race([
+      client.images.generate({
+        model: imageModel,
+        prompt,
+        n: variantCount,
+        size: "1024x1024",
+        quality: "low",
+      }),
+      new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error("Tạo ảnh AI quá lâu.")), IMAGE_GENERATION_TIMEOUT_MS);
+      }),
+    ]);
 
     const images = (response.data || [])
       .map((item, index) => {
         const b64 = typeof item.b64_json === "string" ? item.b64_json : "";
-        if (!b64) return null;
+        const url = typeof item.url === "string" ? item.url : "";
+        if (!b64 && !url) return null;
         return {
           id: `variant-${index + 1}`,
           b64Json: b64,
-          dataUrl: `data:image/png;base64,${b64}`,
+          dataUrl: b64 ? `data:image/png;base64,${b64}` : url,
           altText: buildAltText({ title, sectionLabel }),
           suggestedName: `${title} ${sectionLabel} phương án ${index + 1}`,
         };
@@ -131,6 +144,17 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("POST /api/ai/generate-images failed", error);
-    return NextResponse.json({ error: "Không thể tạo ảnh AI lúc này." }, { status: 500 });
+    const detail = getErrorMessage(error);
+    const hint =
+      /api key|401|403|authentication/i.test(detail)
+        ? "Kiểm tra OpenAI key trong Studio Settings."
+        : /quota|billing|rate|429/i.test(detail)
+          ? "OpenAI đang hết quota hoặc bị giới hạn tốc độ."
+          : /model|unsupported|invalid/i.test(detail)
+            ? "Model tạo ảnh hoặc tham số tạo ảnh chưa được hỗ trợ."
+            : detail === "Tạo ảnh AI quá lâu."
+              ? "Tạo ảnh AI quá lâu. Vui lòng thử lại hoặc tải ảnh từ máy."
+              : "Vui lòng thử lại hoặc tải ảnh từ máy để tiếp tục.";
+    return NextResponse.json({ error: hint, detail }, { status: 500 });
   }
 }
