@@ -160,62 +160,73 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 backdrop-blur-xl overflow-y-auto">
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 20 }}
-        className="relative w-full max-w-lg my-auto overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0e0918] shadow-2xl"
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative w-full max-w-lg my-auto overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0c0c0e] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)]"
       >
-        <button onClick={onClose} className="absolute right-6 top-6 z-10 text-gray-400 hover:text-white transition-colors">
-          <X size={24} />
+        <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: pkg.color }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full blur-[100px] opacity-20 pointer-events-none" style={{ backgroundColor: pkg.color }} />
+        
+        <button onClick={onClose} className="absolute right-6 top-6 z-20 text-gray-500 hover:text-white transition-all hover:rotate-90">
+          <X size={20} />
         </button>
+
         {step === "success" ? (
-          <div className="flex flex-col items-center justify-center px-8 py-14 text-center">
+          <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="mb-6 flex h-20 w-20 items-center justify-center rounded-full"
-              style={{ backgroundColor: `${pkg.color}20` }}
+              initial={{ scale: 0, rotate: -45 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", damping: 12, stiffness: 200 }}
+              className="mb-8 flex h-24 w-24 items-center justify-center rounded-full shadow-2xl"
+              style={{ background: `linear-gradient(135deg, ${pkg.color}, ${pkg.color}dd)` }}
             >
-              <Check className="h-10 w-10" style={{ color: pkg.color }} />
+              <Check className="h-12 w-12 text-white" strokeWidth={3} />
             </motion.div>
-            <h3 className="mb-2 text-2xl font-black text-white">Đã gửi yêu cầu tư vấn!</h3>
-            <p className="mb-6 text-sm text-gray-400">
-              Đội ngũ sẽ liên hệ với bạn trong vòng 30 phút để tư vấn gói phù hợp và báo giá chi tiết.
+            <h3 className="mb-3 text-3xl font-black text-white tracking-tight">Tuyệt vời!</h3>
+            <p className="mb-10 text-gray-400 leading-relaxed max-w-[280px] mx-auto">
+              Yêu cầu của bạn đã được tiếp nhận. Đội ngũ chuyên gia sẽ liên hệ tư vấn trong thời gian sớm nhất.
             </p>
             <button
               onClick={onClose}
-              className="w-full rounded-2xl py-4 text-sm font-bold text-white transition-transform hover:scale-105"
+              className="w-full max-w-[200px] rounded-2xl py-4 text-sm font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/20"
               style={{ backgroundColor: pkg.color }}
             >
-              Đóng
+              Hoàn tất
             </button>
           </div>
         ) : (
-          <div className="p-8 sm:p-10">
-            <div className="mb-8">
-              <h3 className="text-2xl font-black text-white">Đăng ký tư vấn trực tiếp</h3>
-              <p className="mt-1 text-sm text-gray-500">{pkg.tabLabel} · {pkg.name}</p>
+          <div className="relative p-8 sm:p-12">
+            <div className="mb-10">
+              <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-white/50 border border-white/10 mb-4 bg-white/5">
+                Đăng ký ngay
+              </span>
+              <h3 className="text-3xl font-black text-white leading-tight">Nhận tư vấn <span style={{ color: pkg.color }}>{pkg.name}</span></h3>
+              <p className="mt-2 text-sm text-gray-500 font-medium">Chúng tôi sẽ thiết kế lộ trình tối ưu cho riêng bạn.</p>
             </div>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Họ và tên *"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30"
-                />
-                <input
-                  required
-                  value={form.phone}
-                  onChange={(e) => setForm(prev => ({ ...prev, phone: e.target.value }))}
-                  placeholder="Số điện thoại *"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30"
-                />
+            <div className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <input
+                    required
+                    value={form.name}
+                    onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Họ và tên *"
+                    className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <input
+                    required
+                    value={form.phone}
+                    onChange={(e) => setForm(prev => ({ ...prev, phone: e.target.value }))}
+                    placeholder="Số điện thoại (Zalo) *"
+                    className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                  />
+                </div>
               </div>
 
               <input
@@ -223,38 +234,47 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="Gmail (Email) *"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30"
+                placeholder="Địa chỉ Email *"
+                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
               />
 
               <input
                 required
                 value={form.address}
                 onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))}
-                placeholder="Địa chỉ tư vấn *"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30"
+                placeholder="Khu vực / Tỉnh thành *"
+                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
               />
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-black tracking-widest text-gray-500 ml-1">Thời gian tư vấn mong muốn *</label>
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase font-black tracking-widest text-gray-500 ml-1 opacity-70">Thời gian gọi tư vấn *</label>
                 <input
                   required
                   type="datetime-local"
                   value={form.consultTime}
                   onChange={(e) => setForm(prev => ({ ...prev, consultTime: e.target.value }))}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30"
+                  className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] [color-scheme:dark]"
                 />
               </div>
 
               <textarea
                 value={form.note}
                 onChange={(e) => setForm(prev => ({ ...prev, note: e.target.value }))}
-                placeholder="Nội dung bạn cần tư vấn"
+                placeholder="Bạn cần chúng tôi hỗ trợ cụ thể về điều gì? (Không bắt buộc)"
                 rows={3}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none focus:border-white/30 resize-none"
+                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] resize-none placeholder:text-gray-600"
               />
 
-              {error && <p className="text-xs font-bold text-rose-500 ml-1">{error}</p>}
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }} 
+                  animate={{ opacity: 1, x: 0 }} 
+                  className="flex items-center gap-2 px-1 text-xs font-bold text-rose-500"
+                >
+                  <div className="h-1 w-1 rounded-full bg-rose-500" />
+                  {error}
+                </motion.div>
+              )}
 
               <button
                 onClick={handleSubmit}
@@ -263,10 +283,12 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                 style={{ backgroundColor: pkg.color }}
               >
                 <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="relative">{submitting ? "Đang gửi..." : "Gửi yêu cầu tư vấn ngay"}</span>
+                <span className="relative flex items-center justify-center gap-2">
+                  {submitting ? "Đang xử lý..." : "Xác nhận gửi thông tin"}
+                </span>
               </button>
               
-              <p className="text-center text-[10px] text-gray-600 italic">Thông tin của bạn được bảo mật tuyệt đối 100%</p>
+              <p className="text-center text-[10px] text-gray-600 font-medium italic">Chúng tôi cam kết bảo mật thông tin khách hàng tuyệt đối.</p>
             </div>
           </div>
         )}
@@ -278,32 +300,32 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 function Stats({ stats, color, isWebsite }: { stats: { label: string; value: string }[]; color: string; isWebsite?: boolean }) {
   if (isWebsite) return null;
   return (
-    <section data-section="stats" id="stats" className="relative py-24 px-4 overflow-hidden">
+    <section data-section="stats" id="stats" className="relative py-32 px-4 overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full opacity-10 pointer-events-none">
-        <div className="absolute top-0 left-0 w-64 h-64 rounded-full blur-[120px]" style={{ backgroundColor: color }} />
-        <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full blur-[120px]" style={{ backgroundColor: color }} />
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px] animate-pulse" style={{ backgroundColor: color }} />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-[120px] animate-pulse" style={{ backgroundColor: color, animationDelay: "1s" }} />
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 gap-6 md:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="group relative rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/20"
+            transition={{ delay: i * 0.1, duration: 0.6, type: "spring", stiffness: 100 }}
+            className="group relative rounded-[2.5rem] border border-white/5 bg-white/[0.03] p-10 text-center backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-white/10 hover:shadow-2xl"
           >
-            <div className="absolute -inset-px rounded-3xl opacity-0 transition-opacity group-hover:opacity-100" 
-              style={{ background: `radial-gradient(600px circle at center, ${color}20, transparent 40%)` }} 
+            <div className="absolute -inset-px rounded-[2.5rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100" 
+              style={{ background: `radial-gradient(400px circle at center, ${color}15, transparent 60%)` }} 
             />
             
             <div className="relative">
-              <div className="mb-4 inline-flex items-center justify-center">
-                <CountUp value={s.value} color={color} className="text-4xl font-black md:text-5xl" />
+              <div className="mb-6 inline-flex items-center justify-center">
+                <CountUp value={s.value} color={color} className="text-5xl font-black md:text-6xl tracking-tighter" />
               </div>
-              <div className="h-1 w-8 mx-auto mb-4 rounded-full opacity-50" style={{ backgroundColor: color }} />
-              <p className="text-sm font-bold uppercase tracking-wider text-gray-400 group-hover:text-gray-200 transition-colors">
+              <div className="h-1.5 w-10 mx-auto mb-6 rounded-full opacity-30 group-hover:w-16 group-hover:opacity-100 transition-all duration-500" style={{ backgroundColor: color }} />
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-hover:text-gray-300 transition-colors">
                 {s.label}
               </p>
             </div>
@@ -330,39 +352,51 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
   const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
 
   return (
-    <section data-section="pricing" id="pricing" className="py-24 px-4 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
+    <section data-section="pricing" id="pricing" className="py-32 px-4 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full opacity-5 pointer-events-none">
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
         {!hideHeader && (
-          <div className="mb-16 text-center">
-            <motion.span 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-gray-400"
+          <div className="mb-20 text-center">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
             >
+              <div className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: color }} />
               Bảng Giá Dịch Vụ
-            </motion.span>
-            <h2 className="mb-6 text-4xl font-black text-white md:text-5xl lg:text-6xl">
-              Lựa Chọn <span style={{ color }}>Tối Ưu</span>
+            </motion.div>
+            <h2 className="mb-8 text-5xl font-black text-white md:text-6xl lg:text-7xl tracking-tight">
+              Lựa Chọn <span className="relative inline-block">
+                Tối Ưu
+                <div className="absolute -bottom-2 left-0 h-1.5 w-full rounded-full opacity-30" style={{ backgroundColor: color }} />
+              </span>
             </h2>
-            <p className="mx-auto max-w-2xl text-lg text-gray-400">
-              Chúng tôi cung cấp các gói dịch vụ linh hoạt, minh bạch và cam kết hiệu quả tối đa cho doanh nghiệp của bạn.
+            <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium leading-relaxed">
+              Các gói giải pháp được may đo riêng biệt, giúp doanh nghiệp bứt phá doanh thu và tối ưu chi phí vận hành.
             </p>
           </div>
         )}
 
         {tabs.length > 1 && !hideHeader && (
-          <div className="mb-12 flex flex-wrap justify-center gap-4">
+          <div className="mb-16 flex flex-wrap justify-center gap-4">
             {tabs.map((t, i) => (
               <button 
                 key={i} 
                 onClick={() => { setActiveTab(i); setHoveredIdx(null); setPage(0); }} 
-                className="relative overflow-hidden rounded-2xl px-8 py-3 text-sm font-black transition-all" 
+                className="group relative overflow-hidden rounded-2xl px-10 py-4 text-sm font-black transition-all" 
                 style={activeTab === i 
-                  ? { backgroundColor: color, color: "#fff", boxShadow: `0 10px 20px ${color}30` } 
-                  : { backgroundColor: "rgba(255,255,255,0.05)", color: "#999" }
+                  ? { backgroundColor: color, color: "#fff", boxShadow: `0 20px 40px ${color}30` } 
+                  : { backgroundColor: "rgba(255,255,255,0.03)", color: "#777" }
                 }
               >
-                {t.label}
+                <span className="relative z-10">{t.label}</span>
+                {activeTab !== i && (
+                  <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+                )}
                 {activeTab === i && (
                   <motion.div layoutId="tab-active" className="absolute inset-0 bg-white/10" />
                 )}
@@ -372,22 +406,23 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
         )}
 
         {showPager && (
-          <div className="mb-8 flex items-center justify-center gap-6">
+          <div className="mb-12 flex items-center justify-center gap-8">
             <button
               onClick={() => setPage(prev => Math.max(0, prev - 1))}
               disabled={page === 0}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
             >
-              <ChevronLeft size={20} className="transition-transform group-hover:-translate-x-0.5" />
+              <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-1" />
             </button>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               {Array.from({ length: maxPage + 1 }).map((_, i) => (
-                <div 
+                <button 
                   key={i} 
-                  className="h-1.5 rounded-full transition-all duration-300" 
+                  onClick={() => setPage(i)}
+                  className="h-2 rounded-full transition-all duration-500" 
                   style={{ 
-                    width: page === i ? "24px" : "6px", 
-                    backgroundColor: page === i ? color : "rgba(255,255,255,0.2)" 
+                    width: page === i ? "40px" : "8px", 
+                    backgroundColor: page === i ? color : "rgba(255,255,255,0.15)" 
                   }} 
                 />
               ))}
@@ -395,9 +430,9 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
             <button
               onClick={() => setPage(prev => Math.min(maxPage, prev + 1))}
               disabled={page === maxPage}
-              className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
             >
-              <ChevronRight size={20} className="transition-transform group-hover:translate-x-0.5" />
+              <ChevronRight size={24} className="transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         )}
@@ -410,41 +445,46 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
             return (
               <motion.div 
                 key={`${activeTab}-${originalIndex}`} 
-                initial={{ opacity: 0, y: 30 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ delay: i * 0.1 }} 
+                initial={{ opacity: 0, y: 40 }} 
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }} 
                 onMouseEnter={() => setHoveredIdx(i)} 
                 onMouseLeave={() => setHoveredIdx(null)} 
-                className="relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-500" 
+                className="group relative flex flex-col rounded-[3rem] border p-10 transition-all duration-700 ease-out" 
                 style={{ 
-                  borderColor: isHovered || isPopular ? `${color}40` : "rgba(255,255,255,0.08)", 
-                  backgroundColor: isHovered ? "rgba(255,255,255,0.03)" : isPopular ? "rgba(255,255,255,0.02)" : "transparent",
-                  boxShadow: isHovered ? `0 30px 60px -12px rgba(0,0,0,0.5), 0 0 0 1px ${color}20` : "none",
-                  transform: isHovered ? "translateY(-10px)" : "translateY(0)"
+                  borderColor: isHovered || isPopular ? `${color}40` : "rgba(255,255,255,0.06)", 
+                  backgroundColor: isHovered ? "rgba(255,255,255,0.04)" : isPopular ? "rgba(255,255,255,0.02)" : "transparent",
+                  boxShadow: isHovered ? `0 40px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px ${color}15` : "none",
+                  transform: isHovered ? "translateY(-16px) scale(1.02)" : "translateY(0) scale(1)"
                 }}
               >
                 {isPopular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-6 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl" style={{ backgroundColor: color }}>
+                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white shadow-2xl" style={{ backgroundColor: color }}>
+                    <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
                     Phổ biến nhất
                   </div>
                 )}
                 
-                <div className="mb-6">
-                  <h3 className="mb-1 text-xl font-black text-white">{pkg.name}</h3>
-                  <p className="mb-4 text-[10px] text-gray-500 uppercase tracking-wider">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-black text-white" style={{ color: isHovered || isPopular ? color : "white" }}>{pkg.price}</span>
+                <div className="mb-8">
+                  <h3 className="mb-2 text-2xl font-black text-white tracking-tight">{pkg.name}</h3>
+                  <div className="mb-6 flex items-center gap-2">
+                    <div className="h-1 w-8 rounded-full" style={{ backgroundColor: color, opacity: isHovered || isPopular ? 1 : 0.3 }} />
+                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-black text-white transition-colors duration-500" style={{ color: isHovered || isPopular ? "white" : "white" }}>{pkg.price}</span>
                     {pkg.period && (
-                      <span className="text-sm text-gray-500 font-medium">
-                        / {pkg.period === "month" ? "tháng" : "trọn đời"}
+                      <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">
+                        / {pkg.period === "month" ? "Tháng" : "Trọn đời"}
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                <div className="mb-10 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                <ul className="mb-10 flex-1 space-y-4">
+                <ul className="mb-12 flex-1 space-y-5">
                   {(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).map((rawFeature, fi) => {
                     const parsed = parseFeatureItem(rawFeature);
                     if (!parsed.title) return null;
@@ -457,14 +497,16 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                           onClick={() => setExpandedFeature(isExpanded ? null : featureKey)}
                           className="flex w-full items-start justify-between gap-3 text-left"
                         >
-                          <span className="flex items-start gap-3">
-                            <div className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-white/5 transition-colors group-hover/item:bg-white/10">
-                              <Check size={10} style={{ color }} />
+                          <span className="flex items-start gap-3.5">
+                            <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-white/5 transition-all group-hover/item:scale-110" style={{ border: `1px solid ${isHovered || isPopular ? color + "30" : "transparent"}` }}>
+                              <Check size={12} strokeWidth={3} style={{ color }} />
                             </div>
-                            <span className="text-sm font-medium text-gray-300 transition-colors group-hover/item:text-white">{parsed.title}</span>
+                            <span className="text-[13px] font-semibold text-gray-300 transition-colors group-hover/item:text-white leading-snug">{parsed.title}</span>
                           </span>
                           {parsed.details.length > 0 && (
-                            <ChevronDown size={14} className={`mt-1 shrink-0 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+                            <div className={`mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-white/5 transition-all ${isExpanded ? "rotate-180" : ""}`}>
+                              <ChevronDown size={12} className="text-gray-500" />
+                            </div>
                           )}
                         </button>
                         <AnimatePresence>
@@ -475,10 +517,11 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <div className="mt-3 space-y-2 pb-2 pl-7">
+                              <div className="mt-4 space-y-2.5 pb-2 pl-9 border-l border-white/5 ml-2.5">
                                 {parsed.details.map((detail, detailIdx) => (
-                                  <li key={`${featureKey}-detail-${detailIdx}`} className="text-xs leading-relaxed text-gray-500">
-                                    • {detail}
+                                  <li key={`${featureKey}-detail-${detailIdx}`} className="text-[11px] font-medium leading-relaxed text-gray-500 flex items-start gap-2">
+                                    <div className="h-1 w-1 rounded-full bg-gray-600 mt-1.5 shrink-0" />
+                                    {detail}
                                   </li>
                                 ))}
                               </div>
@@ -490,13 +533,14 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                   })}
                 </ul>
 
-                <div className="mt-auto">
+                <div className="mt-auto pt-6">
                   <button 
                     onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} 
-                    className="w-full rounded-2xl py-4 text-sm font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+                    className="group/btn relative w-full overflow-hidden rounded-[1.5rem] py-5 text-xs font-black uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl"
                     style={{ backgroundColor: isHovered || isPopular ? color : "rgba(255,255,255,0.08)" }}
                   >
-                    Tư vấn trực tiếp
+                    <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover/btn:opacity-100" />
+                    <span className="relative z-10">Tư vấn ngay</span>
                   </button>
                 </div>
               </motion.div>
@@ -512,21 +556,35 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
   const [activeTab, setActiveTab] = useState(0);
   const tab = processTabs[activeTab];
   return (
-    <section data-section="process" id="process" className="py-24 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
-        <div className="mb-16 text-center">
-          <h2 className="mb-6 text-4xl font-black text-white md:text-5xl">Quy Trình <span style={{ color }}>Chuyên Nghiệp</span></h2>
-          <p className="mx-auto max-w-2xl text-gray-400">Chúng tôi áp dụng quy trình làm việc khoa học, tối ưu hóa từng bước để mang lại kết quả tốt nhất.</p>
+    <section data-section="process" id="process" className="py-32 px-4 relative">
+      <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+        <div className="absolute top-1/2 left-0 w-[300px] h-[300px] rounded-full blur-[100px]" style={{ backgroundColor: color }} />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-20 text-center">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+          >
+            Quy trình làm việc
+          </motion.div>
+          <h2 className="mb-6 text-5xl font-black text-white md:text-6xl tracking-tight">Quy Trình <span style={{ color }}>Chuyên Nghiệp</span></h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium">Chúng tôi áp dụng mô hình triển khai bài bản, đảm bảo tính minh bạch và hiệu quả cao nhất cho từng dự án.</p>
         </div>
 
         {processTabs.length > 1 && (
-          <div className="mb-12 flex flex-wrap justify-center gap-3">
+          <div className="mb-16 flex flex-wrap justify-center gap-4">
             {processTabs.map((t, i) => (
               <button 
                 key={i} 
                 onClick={() => setActiveTab(i)} 
-                className="rounded-full px-6 py-2.5 text-sm font-bold transition-all" 
-                style={activeTab === i ? { backgroundColor: color, color: "#fff" } : { backgroundColor: "rgba(255,255,255,0.05)", color: "#999" }}
+                className="rounded-2xl px-8 py-4 text-sm font-black transition-all border shadow-lg" 
+                style={activeTab === i 
+                  ? { backgroundColor: color, color: "#fff", borderColor: color, boxShadow: `0 20px 40px ${color}30` } 
+                  : { backgroundColor: "rgba(255,255,255,0.03)", color: "#777", borderColor: "rgba(255,255,255,0.05)" }
+                }
               >
                 {t.label}
               </button>
@@ -543,7 +601,7 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               exit={{ opacity: 0, y: -20 }} 
-              className="space-y-8 md:space-y-0"
+              className="space-y-12 md:space-y-24"
             >
               {tab.steps.map((p, i) => {
                 const isEven = i % 2 === 0;
@@ -551,24 +609,26 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
                   <div key={i} className={`relative flex flex-col md:flex-row md:items-center ${isEven ? "md:flex-row-reverse" : ""}`}>
                     <div className="w-full md:w-1/2">
                       <motion.div 
-                        initial={{ opacity: 0, x: isEven ? 50 : -50 }}
+                        initial={{ opacity: 0, x: isEven ? 60 : -60 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className={`rounded-[2rem] border border-white/10 bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.04] md:mx-8 ${isEven ? "md:text-left" : "md:text-right"}`}
+                        transition={{ delay: i * 0.1, duration: 0.8, type: "spring", damping: 15 }}
+                        className={`group relative rounded-[3rem] border border-white/5 bg-white/[0.02] p-10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 md:mx-12 ${isEven ? "md:text-left" : "md:text-right"}`}
                       >
-                        <div className={`mb-4 flex items-center gap-4 ${isEven ? "flex-row" : "flex-row-reverse"}`}>
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl font-black text-white shadow-lg" style={{ backgroundColor: color }}>
+                        <div className={`mb-6 flex items-center gap-6 ${isEven ? "flex-row" : "flex-row-reverse"}`}>
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.5rem] text-2xl font-black text-white shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" style={{ background: `linear-gradient(135deg, ${color}, ${color}dd)` }}>
                             {p.step}
                           </div>
-                          <h4 className="text-xl font-bold text-white">{p.title}</h4>
+                          <h4 className="text-2xl font-black text-white tracking-tight">{p.title}</h4>
                         </div>
-                        <p className="text-sm leading-relaxed text-gray-400">{p.desc}</p>
+                        <p className="text-[15px] leading-relaxed text-gray-400 font-medium">{p.desc}</p>
+                        
+                        <div className={`absolute top-1/2 -translate-y-1/2 hidden md:block w-12 h-px bg-white/10 ${isEven ? "-left-12" : "-right-12"}`} />
                       </motion.div>
                     </div>
 
-                    <div className="absolute left-1/2 top-1/2 z-10 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center md:flex">
-                      <div className="h-2 w-2 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" style={{ backgroundColor: color }} />
+                    <div className="absolute left-1/2 top-1/2 z-10 hidden h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center md:flex">
+                      <div className="h-3 w-3 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] animate-pulse" style={{ backgroundColor: color }} />
                     </div>
 
                     <div className="hidden w-1/2 md:block" />
@@ -665,70 +725,80 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
   };
 
   return (
-    <section data-section="contact" id="contact" className="relative py-24 px-4 overflow-hidden">
-      <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 right-0 h-[500px] w-[500px] rounded-full blur-[150px]" style={{ backgroundColor: `${color}30` }} />
+    <section data-section="contact" id="contact" className="relative py-32 px-4 overflow-hidden">
+      <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-10 pointer-events-none">
+        <div className="absolute top-1/4 right-0 h-[600px] w-[600px] rounded-full blur-[150px] animate-pulse" style={{ backgroundColor: `${color}40` }} />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-black text-white md:text-5xl">Đặt lịch tư vấn trực tiếp</h2>
-          <p className="text-gray-400">Để ngũ chuyên gia sẽ tư vấn giải pháp phù hợp nhất cho bạn</p>
+      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-16 text-center">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+          >
+            <Phone size={12} style={{ color }} />
+            Kết Nối Ngay
+          </motion.div>
+          <h2 className="mb-6 text-5xl font-black text-white md:text-6xl tracking-tight">Đặt Lịch Tư Vấn <span style={{ color }}>Trực Tiếp</span></h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium">Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</p>
         </div>
 
         {sent ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-[3rem] border border-green-500/30 bg-green-500/10 p-16 text-center backdrop-blur-md"
+            className="rounded-[3rem] border border-green-500/20 bg-green-500/5 p-20 text-center backdrop-blur-xl shadow-2xl"
           >
-            <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-green-500 text-white shadow-2xl shadow-green-500/40">
-              <Check size={40} />
+            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full bg-green-500 text-white shadow-[0_20px_40px_rgba(34,197,94,0.3)]">
+              <Check size={48} strokeWidth={3} />
             </div>
-            <h3 className="mb-4 text-2xl font-black text-white">Đã Nhận Thông Tin!</h3>
-            <p className="text-gray-400">Chúng tôi sẽ liên hệ lại với bạn trong vòng 30 phút làm việc.</p>
+            <h3 className="mb-4 text-3xl font-black text-white tracking-tight">Gửi Thông Tin Thành Công!</h3>
+            <p className="text-gray-400 text-lg font-medium leading-relaxed">Chúng tôi sẽ liên hệ với bạn trong vòng 30 phút tới. <br/>Vui lòng giữ điện thoại hoặc kiểm tra Zalo nhé!</p>
           </motion.div>
         ) : (
-          <div className="relative rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 backdrop-blur-xl md:p-14">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="relative rounded-[4rem] border border-white/10 bg-white/[0.02] p-8 backdrop-blur-2xl md:p-16 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)] overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: color }} />
+            
+            <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
               <form 
                 onSubmit={handleInlineContactSubmit} 
-                className="space-y-6"
+                className="space-y-8"
               >
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Họ và tên</label>
-                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nhập họ và tên" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                <div className="grid gap-8 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Họ và tên</label>
+                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Số điện thoại</label>
-                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="Nhập số điện thoại" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                  </div>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Địa điểm</label>
-                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Chọn địa điểm" className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Thời gian</label>
-                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10" />
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Số điện thoại (Zalo)</label>
+                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0901 234 567" className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nền tảng</label>
-                  <div className="flex flex-wrap gap-3">
+                <div className="grid gap-8 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Khu vực / Tỉnh thành</label>
+                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Thời gian gọi tư vấn</label>
+                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] [color-scheme:dark] shadow-inner" />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Nền tảng bạn quan tâm</label>
+                  <div className="flex flex-wrap gap-4">
                     {["Website", "Facebook", "Google Maps"].map((p) => (
                       <button
                         key={p}
                         type="button"
                         onClick={() => setPlatform(p.toLowerCase())}
-                        className={`rounded-xl px-6 py-3 text-xs font-bold transition-all border ${
+                        className={`rounded-2xl px-8 py-4 text-xs font-black uppercase tracking-widest transition-all border shadow-lg ${
                           platform === p.toLowerCase() 
-                          ? "bg-white text-black border-white" 
-                          : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                          ? "bg-white text-black border-white scale-105" 
+                          : "bg-white/5 text-gray-400 border-white/5 hover:border-white/20 hover:bg-white/10"
                         }`}
                       >
                         {p}
@@ -737,31 +807,37 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-4">Nội dung</label>
-                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Bạn muốn tư vấn về vấn đề gì?" rows={4} className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none transition-all focus:border-white/30 focus:bg-white/10 resize-none" />
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Nội dung yêu cầu</label>
+                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả ngắn gọn nhu cầu của bạn để chúng tôi chuẩn bị tốt hơn..." rows={4} className="w-full rounded-[2rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] resize-none placeholder:text-gray-600 shadow-inner" />
                 </div>
                 
                 <button 
                   type="submit" 
-                  className="group relative mt-4 w-full overflow-hidden rounded-2xl py-6 text-sm font-black text-white transition-all hover:scale-[1.01] active:scale-95 shadow-2xl" 
+                  className="group relative mt-6 w-full overflow-hidden rounded-[2rem] py-7 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.01] active:scale-95 shadow-[0_20px_40px_rgba(0,0,0,0.4)]" 
                   style={{ backgroundColor: color }}
                 >
                   <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="relative flex items-center justify-center gap-2">
-                    ✨ Đặt lịch tư vấn ngay
+                  <span className="relative flex items-center justify-center gap-3">
+                    ✨ Đặt Lịch Tư Vấn Ngay
                   </span>
                 </button>
               </form>
 
               <div className="hidden lg:block relative">
-                <div className="absolute -inset-20 bg-white/5 blur-[100px] rounded-full" style={{ backgroundColor: `${color}10` }} />
-                <img 
-                  src="/mascot-home.png" 
-                  alt="Mascot" 
-                  className="relative w-full max-w-sm mx-auto animate-float drop-shadow-2xl" 
-                  style={{ filter: resolvedFilter }}
-                />
+                <div className="absolute -inset-24 bg-white/5 blur-[120px] rounded-full animate-pulse" style={{ backgroundColor: `${color}20` }} />
+                <div className="relative p-12 rounded-[4rem] border border-white/5 bg-white/[0.01] backdrop-blur-md">
+                  <img 
+                    src="/mascot-home.png" 
+                    alt="Mascot" 
+                    className="w-full max-w-sm mx-auto animate-float drop-shadow-[0_32px_64px_rgba(0,0,0,0.6)]" 
+                    style={{ filter: resolvedFilter }}
+                  />
+                  <div className="mt-12 text-center">
+                    <p className="text-xl font-bold text-white mb-2">Đội ngũ chuyên gia</p>
+                    <p className="text-sm text-gray-500 font-medium">Sẵn sàng đồng hành cùng sự phát triển <br/> của doanh nghiệp bạn.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
