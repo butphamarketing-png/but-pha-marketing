@@ -57,6 +57,13 @@ function parseCookies(cookieHeader: string | null): Record<string, string> {
 
 export async function validateAdminPassword(password: string): Promise<boolean> {
   try {
+    // Ưu tiên 1: Kiểm tra mật khẩu từ biến môi trường (Environment Variable)
+    const envPassword = (process.env.ADMIN_PASSWORD || "").trim();
+    if (envPassword && password === envPassword) {
+      return true;
+    }
+
+    // Ưu tiên 2: Kiểm tra mật khẩu tùy chỉnh từ Database (Supabase)
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("site_settings")
@@ -66,7 +73,6 @@ export async function validateAdminPassword(password: string): Promise<boolean> 
 
     if (error) {
       console.error("[admin-auth] Failed to load custom admin password", error);
-      return false;
     }
 
     const passwordHash = typeof data?.value?.passwordHash === "string" ? data.value.passwordHash : "";
@@ -74,6 +80,7 @@ export async function validateAdminPassword(password: string): Promise<boolean> 
       return hashPassword(password) === passwordHash;
     }
 
+    // Ưu tiên 3: Mật khẩu mặc định nếu không có cấu hình nào khác
     return password === getAdminPassword();
   } catch (error) {
     console.error("[admin-auth] validateAdminPassword failed", error);
