@@ -437,10 +437,13 @@ export default function HomePageClient() {
             </nav>
 
             <div className="flex items-center gap-4">
-              <Link href="/lo-trinh-du-an" className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:flex">
+              <button
+                onClick={() => { playClickSound(); setShowLogin(true); }}
+                className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:flex"
+              >
                 <Workflow size={14} className="text-fuchsia-500" />
                 Lộ trình
-              </Link>
+              </button>
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
                 className="group relative hidden overflow-hidden rounded-2xl bg-white px-8 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] text-black transition-all hover:scale-105 active:scale-95 sm:block"
@@ -450,8 +453,11 @@ export default function HomePageClient() {
               </button>
               
               {/* Mobile Menu Button - Placeholder for future implementation */}
-              <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white lg:hidden">
-                <LayoutTemplate size={20} />
+              <button 
+                onClick={() => { playClickSound(); setShowLogin(true); }}
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white lg:hidden"
+              >
+                <Workflow size={20} className="text-fuchsia-500" />
               </button>
             </div>
           </div>
