@@ -410,63 +410,77 @@ export default function HomePageClient() {
       <ParticleBackground />
       
       <div className="relative z-10 flex flex-col">
-        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#050308]/80 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-            <Link href="/" className="flex items-center gap-3 transition hover:opacity-90">
-              <img src={logoSrc} alt={brandName} className="h-10 w-10 rounded-full object-cover shadow-[0_0_20px_rgba(168,85,247,0.3)]" />
-              <span className="text-xl font-black uppercase tracking-wider text-white md:text-2xl">{brandName}</span>
+        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#050308]/60 backdrop-blur-2xl transition-all duration-500">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+            <Link href="/" className="group flex items-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
+              <div className="relative">
+                <div className="absolute -inset-2 rounded-full bg-fuchsia-500/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-white/10 object-cover shadow-2xl" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-black uppercase tracking-[0.15em] text-white md:text-2xl leading-none">{brandName}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-fuchsia-500/80 mt-1">Bứt Phá Để Dẫn Đầu</span>
+              </div>
             </Link>
 
-            <nav className="hidden items-center gap-8 lg:flex">
+            <nav className="hidden items-center gap-10 lg:flex">
               {navigation.map((item) => (
-                <Link key={item.label} href={item.href} className="text-sm font-black uppercase tracking-widest text-slate-300 transition hover:text-fuchsia-400">
+                <Link 
+                  key={item.label} 
+                  href={item.href} 
+                  className="relative text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 transition-all hover:text-white group"
+                >
                   {item.label}
+                  <span className="absolute -bottom-2 left-0 h-px w-0 bg-fuchsia-500 transition-all group-hover:w-full" />
                 </Link>
               ))}
             </nav>
 
-            <div className="flex items-center gap-3">
-              <Link href="/lo-trinh-du-an" className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-black text-white transition hover:bg-white/10 sm:flex">
-                Lộ trình dự án
-              </Link>
-              {/* Mobile: hiện nút lộ trình, ẩn nút liên hệ tư vấn */}
-              <Link href="/lo-trinh-du-an" className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-black text-white transition hover:bg-white/10 sm:hidden">
-                Lộ trình dự án
+            <div className="flex items-center gap-4">
+              <Link href="/lo-trinh-du-an" className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:flex">
+                <Workflow size={14} className="text-fuchsia-500" />
+                Lộ trình
               </Link>
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
-                className="hidden rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-[0_8px_24px_rgba(168,85,247,0.3)] transition hover:scale-[1.03] active:scale-[0.97] sm:block"
+                className="group relative hidden overflow-hidden rounded-2xl bg-white px-8 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] text-black transition-all hover:scale-105 active:scale-95 sm:block"
               >
-                Liên hệ tư vấn
+                <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-violet-500 opacity-0 transition-opacity group-hover:opacity-10 group-active:opacity-20" />
+                Tư vấn ngay
+              </button>
+              
+              {/* Mobile Menu Button - Placeholder for future implementation */}
+              <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white lg:hidden">
+                <LayoutTemplate size={20} />
               </button>
             </div>
           </div>
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "min(56vw, 700px)", minHeight: "260px" }}>
-            <div className="absolute inset-0 z-20 flex items-center justify-between px-2 pointer-events-none sm:px-4">
+          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "min(60vw, 800px)", minHeight: "500px" }}>
+            <div className="absolute inset-0 z-30 flex items-center justify-between px-6 pointer-events-none lg:px-12">
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
-                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 sm:h-12 sm:w-12"
+                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
               >
-                <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
+                <ChevronLeft size={28} />
               </button>
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length); }}
-                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 sm:h-12 sm:w-12"
+                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
               >
-                <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+                <ChevronRight size={28} />
               </button>
             </div>
 
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeHeroSlide}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8 }}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0"
               >
                 <img
@@ -474,148 +488,284 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#050308]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050308] via-[#050308]/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050308]" />
+                
+                <div className="absolute inset-0 flex items-center px-8 lg:px-24">
+                  <div className="max-w-3xl">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4, duration: 0.8 }}
+                      className="mb-6 inline-flex items-center gap-3 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-fuchsia-300"
+                    >
+                      <Sparkles size={14} className="animate-pulse" />
+                      {currentHeroSlide.eyebrow}
+                    </motion.div>
+                    <motion.h1
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5, duration: 0.8 }}
+                      className="text-5xl font-black leading-[1.1] text-white md:text-7xl lg:text-8xl tracking-tight"
+                    >
+                      {currentHeroSlide.middle} <br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">
+                        {currentHeroSlide.accent}
+                      </span>
+                    </motion.h1>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6, duration: 0.8 }}
+                      className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400 font-medium"
+                    >
+                      {currentHeroSlide.description}
+                    </motion.p>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.7, duration: 0.8 }}
+                      className="mt-12 flex flex-wrap gap-5"
+                    >
+                      <button
+                        onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
+                        className="group relative overflow-hidden rounded-[2rem] bg-white px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-black transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
+                      >
+                        Khám phá giải pháp
+                      </button>
+                      <button
+                        onClick={() => { playClickSound(); (document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })) }}
+                        className="group flex items-center gap-3 rounded-[2rem] border border-white/10 bg-white/5 px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95"
+                      >
+                        Dịch vụ của chúng tôi
+                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </motion.div>
+                  </div>
+                </div>
               </motion.div>
             </AnimatePresence>
 
-            <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3 sm:bottom-10">
+            <div className="absolute bottom-12 right-12 z-30 flex gap-4 lg:bottom-16 lg:right-24">
               {heroSlides.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => { playClickSound(); setActiveHeroSlide(i); }}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeHeroSlide === i ? "w-10 bg-fuchsia-500" : "w-2.5 bg-white/30 hover:bg-white/50"
-                  }`}
-                />
+                  className="group relative h-12 w-1 bg-transparent overflow-hidden rounded-full"
+                >
+                  <div className={`absolute inset-0 bg-white/10 transition-all duration-300 ${activeHeroSlide === i ? "bg-fuchsia-500" : "group-hover:bg-white/30"}`} />
+                  {activeHeroSlide === i && (
+                    <motion.div 
+                      layoutId="hero-pager"
+                      className="absolute inset-0 bg-fuchsia-500 shadow-[0_0_20px_rgba(168,85,247,0.8)]"
+                    />
+                  )}
+                </button>
               ))}
             </div>
           </section>
 
-          <section id="intro" className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-              <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02]">
-                <img 
-                  src="/mascot-home.png" 
-                  alt="Về chúng tôi" 
-                  className="h-full w-full object-cover" 
-                />
-              </div>
+          <section id="intro" className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
+            <div className="grid gap-20 lg:grid-cols-2 lg:items-center">
+              <motion.div 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="absolute -inset-10 bg-fuchsia-500/10 blur-[100px] rounded-full animate-pulse" />
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.02] shadow-2xl">
+                  <img 
+                    src="/mascot-home.png" 
+                    alt="Về chúng tôi" 
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" 
+                  />
+                </div>
+                <div className="absolute -bottom-10 -right-10 hidden rounded-[2rem] border border-white/10 bg-[#0e0918]/80 p-8 backdrop-blur-xl md:block shadow-2xl">
+                  <p className="text-4xl font-black text-white">+500</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-fuchsia-400 mt-1">Dự án hoàn thành</p>
+                </div>
+              </motion.div>
 
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Về chúng tôi</p>
-                  <h2 className="text-4xl font-black text-white md:text-5xl">Bứt Phá Marketing</h2>
-                  <p className="text-lg leading-relaxed text-slate-300">
-                    Chúng tôi không chỉ làm marketing. Chúng tôi xây dựng hệ thống giúp doanh nghiệp tăng trưởng bền vững, tự động và có thể đo lường.
-                  </p>
+              <div className="space-y-10">
+                <div className="space-y-6">
+                  <motion.p 
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+                  >
+                    Tầm nhìn & Sứ mệnh
+                  </motion.p>
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-5xl font-black text-white md:text-6xl tracking-tight leading-tight"
+                  >
+                    Đồng hành cùng sự <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-violet-400">Bứt Phá</span> của bạn
+                  </motion.h2>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-lg leading-relaxed text-slate-400 font-medium"
+                  >
+                    Chúng tôi không chỉ cung cấp dịch vụ marketing rời rạc. Bứt Phá Marketing xây dựng hệ thống tăng trưởng toàn diện, giúp doanh nghiệp tối ưu hóa từng điểm chạm trên hành trình khách hàng.
+                  </motion.p>
                 </div>
 
-                <Link 
-                  href="/gioi-thieu" 
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-black text-white transition hover:bg-white/10"
-                >
-                  Xem tất cả
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-
-                <div className="grid gap-4 pt-8 border-t border-white/5 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/10 text-fuchsia-400">
-                      <Target className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-bold text-white">Tư duy marketing định hướng kết quả</h3>
-                    <p className="text-xs text-slate-400">Không chỉ làm web, chúng tôi xử lý hệ thống tạo nhiều khách hàng và doanh thu.</p>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
-                      <TrendingUp className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-bold text-white">Tối ưu chuyển đổi</h3>
-                    <p className="text-xs text-slate-400">Thiết kế chuẩn hành vi người dùng, tăng tỷ lệ chuyển đổi và hiệu quả kinh doanh.</p>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
-                      <Workflow className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-bold text-white">Hệ thống tự động</h3>
-                    <p className="text-xs text-slate-400">Ứng dụng AI & automation giúp tiết kiệm thời gian, chi phí và vận hành chuyên nghiệp.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="services" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
-            <div className="mb-8 text-center space-y-4">
-              <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Giải pháp marketing toàn diện</p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {serviceCards.map((card) => (
-                <Link
-                  key={card.key}
-                  href={card.href}
-                  className={`group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(16,8,27,0.96),rgba(12,6,20,0.98))] p-5 shadow-[0_24px_70px_rgba(4,2,10,0.36)]`}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${card.accent} to-transparent opacity-70`} />
-                  <div className="relative z-10">
-                    <div className="overflow-hidden rounded-[1.3rem] border border-white/10 bg-black/20">
-                      <img src={card.image} alt={card.title} className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
-                    </div>
-                    <h3 className="mt-5 text-2xl font-black text-white">{card.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{card.description}</p>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        playClickSound();
-                        setShowConsult(true);
-                      }}
-                      className="mt-4 inline-flex items-center gap-2 text-sm font-black text-fuchsia-300 hover:text-fuchsia-100 transition-colors"
+                <div className="grid gap-6 md:grid-cols-2">
+                  {[
+                    { title: "Chiến lược", desc: "Tư duy marketing dựa trên dữ liệu thật.", icon: Target, color: "text-fuchsia-400" },
+                    { title: "Công nghệ", desc: "Ứng dụng AI & Automation tối ưu vận hành.", icon: Workflow, color: "text-violet-400" },
+                  ].map((item, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="group rounded-[2rem] border border-white/5 bg-white/[0.02] p-6 transition-all hover:bg-white/[0.05]"
                     >
-                      Tư vấn trực tiếp
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                </Link>
+                      <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 ${item.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
+                        <item.icon size={24} />
+                      </div>
+                      <h3 className="text-lg font-black text-white">{item.title}</h3>
+                      <p className="mt-2 text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <Link 
+                    href="/gioi-thieu" 
+                    className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-white/10 hover:border-white/20"
+                  >
+                    Tìm hiểu thêm về chúng tôi
+                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          <section id="services" className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
+            <div className="mb-16 text-center space-y-4">
+              <motion.p 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+              >
+                Giải pháp cốt lõi
+              </motion.p>
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl font-black text-white md:text-5xl lg:text-6xl tracking-tight"
+              >
+                Dịch vụ <span className="text-fuchsia-500">Chiến lược</span>
+              </motion.h2>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {serviceCards.map((card, i) => (
+                <motion.div
+                  key={card.key}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Link
+                    href={card.href}
+                    className="group relative block h-full overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#0e0918] p-4 transition-all hover:border-fuchsia-500/30 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-white/5">
+                      <img src={card.image} alt={card.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0e0918] via-transparent to-transparent opacity-60" />
+                    </div>
+                    <div className="p-6">
+                      <div className="mb-4 flex items-center justify-between">
+                        <h3 className="text-2xl font-black text-white group-hover:text-fuchsia-400 transition-colors">{card.title}</h3>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition-all group-hover:bg-fuchsia-500 group-hover:text-white group-hover:rotate-45">
+                          <ArrowRight size={20} />
+                        </div>
+                      </div>
+                      <p className="text-[15px] leading-relaxed text-slate-400 font-medium">{card.description}</p>
+                      
+                      <div className="mt-8 flex items-center gap-4 border-t border-white/5 pt-6 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-fuchsia-500">Khám phá chi tiết</span>
+                        <div className="h-px flex-1 bg-gradient-to-r from-fuchsia-500/50 to-transparent" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 py-10 pb-24 lg:px-6 lg:py-12">
-            <div className="mb-6 flex flex-col items-start gap-6 md:mb-10 md:flex-row md:justify-between md:text-left">
-              <div className="text-left">
-                <p className="text-xs font-black uppercase tracking-[0.22em] text-fuchsia-300 sm:text-sm sm:tracking-[0.3em]">Vì sao chọn Bứt Phá Marketing?</p>
+          <section className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
+            <div className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
+              <div className="space-y-4">
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+                >
+                  Giá trị cốt lõi
+                </motion.p>
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-4xl font-black text-white md:text-5xl tracking-tight"
+                >
+                  Tại sao chọn chúng tôi?
+                </motion.h2>
               </div>
-              <div className="hidden gap-3 md:flex">
+              <div className="hidden gap-4 md:flex">
                 <button
                   onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "left"); }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 hover:border-fuchsia-500/30"
-                  aria-label="Previous"
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft size={24} />
                 </button>
                 <button
                   onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "right"); }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 hover:border-fuchsia-500/30"
-                  aria-label="Next"
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight size={24} />
                 </button>
               </div>
             </div>
             <div
               ref={whyChooseUsRef}
-              className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
             >
-              {whyChooseUs.map((item) => (
-                <div key={item.title} className="rounded-[1.35rem] border border-white/10 bg-white/[0.03] p-3 text-center transition-all hover:bg-white/[0.06] sm:rounded-[2rem] sm:p-6">
-                  <span className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/10 text-fuchsia-400 sm:h-14 sm:w-14 sm:rounded-2xl">
-                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </span>
-                  <h3 className="mt-3 text-sm font-black leading-snug text-white sm:mt-5 sm:text-lg">{item.title}</h3>
-                  <p className="mt-2 line-clamp-3 text-[11px] leading-5 text-slate-400 sm:mt-3 sm:text-sm sm:leading-relaxed">{item.description}</p>
-                </div>
+              {whyChooseUs.map((item, i) => (
+                <motion.div 
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group relative rounded-[2.5rem] border border-white/5 bg-white/[0.02] p-8 transition-all hover:bg-white/[0.04] hover:border-white/10"
+                >
+                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-fuchsia-500/10 text-fuchsia-500 transition-all group-hover:scale-110 group-hover:rotate-6 group-hover:bg-fuchsia-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+                    <item.icon size={32} />
+                  </div>
+                  <h3 className="text-xl font-black text-white tracking-tight">{item.title}</h3>
+                  <p className="mt-4 text-[15px] leading-relaxed text-slate-500 font-medium">{item.description}</p>
+                </motion.div>
               ))}
             </div>
           </section>
