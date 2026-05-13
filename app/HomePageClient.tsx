@@ -581,10 +581,6 @@ export default function HomePageClient() {
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" 
                   />
                 </div>
-                <div className="absolute -bottom-10 -right-10 hidden rounded-[2rem] border border-white/10 bg-[#0e0918]/80 p-8 backdrop-blur-xl md:block shadow-2xl">
-                  <p className="text-4xl font-black text-white">+500</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-fuchsia-400 mt-1">Dự án hoàn thành</p>
-                </div>
               </motion.div>
 
               <div className="space-y-10">
