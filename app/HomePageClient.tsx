@@ -494,61 +494,7 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#050308] via-[#050308]/60 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050308]" />
-                
-                <div className="absolute inset-0 flex items-center px-8 lg:px-24">
-                  <div className="max-w-3xl">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, duration: 0.8 }}
-                      className="mb-6 inline-flex items-center gap-3 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-fuchsia-300"
-                    >
-                      <Sparkles size={14} className="animate-pulse" />
-                      {currentHeroSlide.eyebrow}
-                    </motion.div>
-                    <motion.h1
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5, duration: 0.8 }}
-                      className="text-5xl font-black leading-[1.1] text-white md:text-7xl lg:text-8xl tracking-tight"
-                    >
-                      {currentHeroSlide.middle} <br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">
-                        {currentHeroSlide.accent}
-                      </span>
-                    </motion.h1>
-                    <motion.p
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6, duration: 0.8 }}
-                      className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400 font-medium"
-                    >
-                      {currentHeroSlide.description}
-                    </motion.p>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7, duration: 0.8 }}
-                      className="mt-12 flex flex-wrap gap-5"
-                    >
-                      <button
-                        onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
-                        className="group relative overflow-hidden rounded-[2rem] bg-white px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-black transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
-                      >
-                        Khám phá giải pháp
-                      </button>
-                      <button
-                        onClick={() => { playClickSound(); (document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })) }}
-                        className="group flex items-center gap-3 rounded-[2rem] border border-white/10 bg-white/5 px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95"
-                      >
-                        Dịch vụ của chúng tôi
-                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                      </button>
-                    </motion.div>
-                  </div>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050308]/40" />
               </motion.div>
             </AnimatePresence>
 
