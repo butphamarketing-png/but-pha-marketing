@@ -7,6 +7,7 @@ import {
   Plus,
   Save,
   Trash2,
+  Copy,
   RefreshCw,
   MessageCircle,
   Bell,
@@ -129,6 +130,25 @@ export function CustomerManagement() {
   const addRow = () => {
     dirtyRef.current = true;
     setCustomers((prev) => [...prev, createEmptyCustomer()]);
+  };
+
+  const duplicateRow = (source: CustomerRecord) => {
+    dirtyRef.current = true;
+    const now = new Date().toISOString();
+    const clone: CustomerRecord = {
+      ...source,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      lastRenewalReminderAt: null,
+      createdAt: now,
+      updatedAt: now,
+    };
+    setCustomers((prev) => {
+      const index = prev.findIndex((row) => row.id === source.id);
+      if (index < 0) return [...prev, clone];
+      const next = [...prev];
+      next.splice(index + 1, 0, clone);
+      return next;
+    });
   };
 
   const removeRow = (id: string) => {
@@ -297,7 +317,7 @@ export function CustomerManagement() {
                 <th className="px-2 py-3 min-w-[160px]">Link nền tảng</th>
                 <th className="px-2 py-3 min-w-[110px]">Số tiền</th>
                 <th className="px-2 py-3 min-w-[100px] text-center">Nhắc gia hạn</th>
-                <th className="px-2 py-3 w-24 text-center">Thao tác</th>
+                <th className="px-2 py-3 w-28 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -459,6 +479,14 @@ export function CustomerManagement() {
                       </td>
                       <td className="px-2 py-2">
                         <div className="flex flex-col items-center gap-1">
+                          <button
+                            type="button"
+                            title="Nhân bản dòng (chèn ngay bên dưới)"
+                            onClick={() => duplicateRow(row)}
+                            className="rounded-md border border-violet-500/30 bg-violet-500/10 p-1.5 text-violet-300 hover:bg-violet-500/20"
+                          >
+                            <Copy size={14} />
+                          </button>
                           <button
                             type="button"
                             title="Nhắc Zalo ngay"
