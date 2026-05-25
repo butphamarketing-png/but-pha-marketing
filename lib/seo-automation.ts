@@ -506,20 +506,22 @@ async function generateTitlePlans(
       messages: [
         {
           role: "system",
-          content: "Bạn là tổng biên tập SEO cho agency marketing. Trả về JSON hợp lệ duy nhất.",
+          content: `Bạn là Chuyên gia Chiến lược Content Marketing tại Bứt Phá Marketing. 
+          Nhiệm vụ của bạn là tạo ra những tiêu đề bài viết không chỉ để lên Top Google mà còn phải đánh trúng tâm lý "muốn tăng trưởng doanh thu" của chủ doanh nghiệp.
+          Văn phong: Tự tin, chuyên nghiệp, thực chiến, không dùng từ ngữ sáo rỗng.
+          Chỉ trả về JSON hợp lệ duy nhất.`,
         },
         {
           role: "user",
           content: [
-            `Hãy tạo ${count} ý tưởng bài SEO tiếng Việt thật chỉn chu cho website agency marketing.`,
-            `Chủ đề dịch vụ bắt buộc phải bám theo: ${seedKeywords.join(", ")}`,
-            `Những tiêu đề đã có: ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
-            settings.notes ? `Ghi chú vận hành từ admin: ${settings.notes}` : "",
-            "Yêu cầu:",
-            "- Không trùng ý giữa các bài",
-            "- Chỉ viết quanh các dịch vụ marketing của website",
-            "- Tiêu đề phải có khả năng tìm kiếm thật, bám intent dịch vụ hoặc nhu cầu chuyển đổi",
-            "- Có thể đăng ngay trên site agency",
+            `Hãy tạo ${count} ý tưởng bài viết SEO đỉnh cao cho website Agency Marketing.`,
+            `Dịch vụ trọng tâm: ${seedKeywords.join(", ")}`,
+            `Các tiêu đề đã có (tránh trùng): ${existingTitles.slice(0, 50).join(" | ") || "chưa có"}`,
+            settings.notes ? `Ghi chú đặc biệt từ Admin: ${settings.notes}` : "",
+            "Yêu cầu cho mỗi tiêu đề:",
+            "1. Phải có tính 'Viral' hoặc 'Chuyên sâu' (VD: Bí mật, Quy trình, Lộ trình, Sai lầm cần tránh).",
+            "2. Gắn liền với lợi ích kinh doanh thực tế (Tăng khách hàng, Tối ưu chi phí, Bứt phá doanh thu).",
+            "3. Ngôn ngữ tự nhiên, phù hợp với thị trường Việt Nam.",
             '- Trả về JSON: {"items":[{"title":"...","keyword":"...","angle":"..."}]}',
           ].join("\n"),
         },
@@ -634,17 +636,24 @@ async function generateOutline(client: OpenAI | null, model: string, title: stri
       messages: [
         {
           role: "system",
-          content: "Bạn là chiến lược gia SEO tiếng Việt. Trả về JSON hợp lệ duy nhất.",
+          content: `Bạn là Chuyên gia Chiến lược SEO tại Bứt Phá Marketing.
+          Nhiệm vụ của bạn là lập dàn ý bài viết cực kỳ chi tiết, logic và đánh trúng tâm lý khách hàng.
+          Dàn ý phải bám sát xu hướng marketing 2024-2025.
+          Trả về JSON hợp lệ duy nhất.`,
         },
         {
           role: "user",
           content: [
-            `Tiêu đề: ${title}`,
-            `Keyword chính: ${keyword}`,
+            `Lập dàn ý SEO chuyên sâu cho tiêu đề: "${title}"`,
+            `Từ khóa mục tiêu: "${keyword}"`,
             `Search intent: ${serpInsight.intent}`,
             `Related keywords: ${serpInsight.relatedKeywords.join(", ")}`,
             `Top headlines SERP: ${serpInsight.headlines.join(" | ") || "không có"}`,
-            "Tạo dàn ý SEO 6-8 mục thật chỉnh chu cho bài agency marketing.",
+            "Yêu cầu dàn ý:",
+            "1. Cấu trúc bài viết phải dẫn dắt người đọc từ: Nhận thức vấn đề -> Giải pháp chuyên môn -> Lợi ích khi làm cùng chuyên gia.",
+            "2. Mỗi mục H2/H3 phải có tóm tắt nội dung cần viết để hướng dẫn Copywriter.",
+            "3. Phải có ít nhất 6-8 mục để đảm bảo độ sâu nội dung.",
+            "4. Phải có mục 'Câu hỏi thường gặp' và 'Kết luận'.",
             '- Trả về JSON: {"keywords":["..."],"structure":[{"level":2,"text":"...","summary":"...","keyPoints":["..."]}]}',
           ].join("\n"),
         },
@@ -724,23 +733,28 @@ async function generateArticleContent(client: OpenAI | null, model: string, titl
       messages: [
         {
           role: "system",
-          content: "Bạn là senior SEO copywriter tiếng Việt. Chỉ trả về HTML fragment hợp lệ, không markdown, không giải thích.",
+          content: `Bạn là Chuyên gia SEO Copywriter xuất sắc tại Bứt Phá Marketing.
+          Phong cách viết: Chuyên sâu, thuyết phục, bám sát hành trình khách hàng.
+          Cấu trúc bài viết: Phải có H1, H2, H3, H4, Danh sách, Bảng biểu và Lời kêu gọi hành động (CTA) cực kỳ mạnh mẽ.
+          Nội dung phải có tính "giải quyết vấn đề" thực sự cho doanh nghiệp Việt Nam.
+          Chỉ trả về HTML fragment hợp lệ, không markdown, không giải thích.`,
         },
         {
           role: "user",
           content: [
-            `Viết bài thật chỉnh chu cho tiêu đề: ${title}`,
+            `Viết bài thật chuyên sâu cho tiêu đề: ${title}`,
             `Keyword chính: ${keyword}`,
             `Mục tiêu độ dài: khoảng ${settings.targetWordCount} từ`,
-            settings.notes ? `Ghi chú vận hành từ admin: ${settings.notes}` : "",
-            "Yêu cầu:",
-            "- Có mở bài rõ ràng",
-            "- Bám đúng dàn ý",
-            "- Mỗi H2/H3 cần có nội dung thật",
-            "- Văn phong chuyên nghiệp, chuyển đổi tốt nhưng không phô",
-            "- Mỗi heading cần có id slug-friendly",
-            "- Cuối bài có kết luận và CTA nhẹ",
-            "Dàn ý:",
+            settings.notes ? `Ghi chú vận hành từ Admin: ${settings.notes}` : "",
+            "Yêu cầu nội dung:",
+            "- Mở bài (Intro): Phải nêu bật được nỗi đau hoặc cơ hội của doanh nghiệp ngay lập tức.",
+            "- Thân bài: Phân tích kỹ thuật chuyên sâu nhưng diễn đạt dễ hiểu. Phải lồng ghép sự uy tín của Bứt Phá Marketing.",
+            "- Chuyên môn: Đề cập đến các xu hướng marketing mới nhất năm 2024-2025.",
+            "- Mỗi H2/H3 cần có nội dung thật, mỗi heading phải có id slug-friendly.",
+            "- Kết luận: Tổng kết và đưa ra lời khuyên thực chiến.",
+            "- CTA: Khuyên người đọc nên liên hệ Bứt Phá Marketing qua Zalo/Hotline để được tư vấn lộ trình riêng biệt.",
+            "- Định dạng: HTML (chỉ dùng các thẻ p, h2, h3, h4, ul, li, strong, table).",
+            "Dàn ý chi tiết:",
             outlineText,
           ].join("\n"),
         },

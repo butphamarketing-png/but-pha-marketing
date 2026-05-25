@@ -198,7 +198,7 @@ const defaultSettings: SiteSettings = {
   logo: "/logo.png",
   favicon: "/logo.png",
   content: "",
-  hotline: "0937 417 982",
+  hotline: "090 143 8703",
   address: "",
   email: "",
   fanpage: "",

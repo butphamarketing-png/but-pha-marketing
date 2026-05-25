@@ -4,29 +4,26 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Database, HardDrive, Zap, TrendingUp, Rocket, ShieldCheck, Cpu, Globe, Share2, Award } from "lucide-react";
 
-const STAGES = [
-  { min: 2, max: 10, label: "Giai đoạn khởi đầu", icon: Database },
-  { min: 10, max: 20, label: "Phát triển nhỏ", icon: HardDrive },
-  { min: 20, max: 30, label: "Phát triển vừa", icon: TrendingUp },
-  { min: 30, max: 40, label: "Phát triển ổn định", icon: ShieldCheck },
-  { min: 40, max: 50, label: "Phát triển mạnh", icon: Zap },
-  { min: 50, max: 60, label: "Tăng trưởng nhanh", icon: Rocket },
-  { min: 60, max: 70, label: "Kinh doanh chuyên nghiệp", icon: Globe },
-  { min: 70, max: 80, label: "Mở rộng quy mô", icon: Share2 },
-  { min: 80, max: 90, label: "Tự động hóa marketing", icon: Cpu },
-  { min: 90, max: 100, label: "Doanh nghiệp dẫn đầu", icon: Award },
+const HOSTING_PACKAGES = [
+  { gb: 3, price: 3348000, label: "Doanh nghiệp nhỏ, website cá nhân", icon: Database },
+  { gb: 5, price: 4872000, label: "Website giới thiệu, landing page", icon: HardDrive },
+  { gb: 7, price: 6000000, label: "Blog, website tin tức nhỏ", icon: TrendingUp },
+  { gb: 8, price: 6504000, label: "Cửa hàng online nhỏ", icon: ShieldCheck },
+  { gb: 10, price: 7200000, label: "Website doanh nghiệp vừa & nhỏ", icon: HardDrive },
+  { gb: 16, price: 10080000, label: "Website doanh nghiệp chuyên nghiệp", icon: Award },
+  { gb: 20, price: 12000000, label: "Website TMĐT, nhiều sản phẩm", icon: Globe },
+  { gb: 30, price: 16080000, label: "Website nhiều truy cập, dữ liệu lớn", icon: Zap },
+  { gb: 50, price: 24000000, label: "Website hệ thống, nhiều tính năng", icon: Rocket },
+  { gb: 60, price: 28008000, label: "Website có lượng truy cập cao", icon: Zap },
+  { gb: 70, price: 32040000, label: "Dự án lớn, hệ thống web phức tạp", icon: Globe },
+  { gb: 80, price: 36000000, label: "Enterprise, hệ thống đa site", icon: Share2 },
+  { gb: 90, price: 39960000, label: "Hệ thống lớn, lưu trữ dữ liệu nhiều", icon: Cpu },
+  { gb: 100, price: 43200000, label: "Giải pháp cao cấp, hiệu suất tối đa", icon: Award },
 ];
 
 export function StorageSlider({ primaryColor }: { primaryColor: string }) {
-  const [gb, setGb] = useState(2);
-
-  const price = useMemo(() => {
-    return Math.round(271429 * gb + 857142);
-  }, [gb]);
-
-  const currentStage = useMemo(() => {
-    return STAGES.find((s) => gb >= s.min && gb <= s.max) || STAGES[0];
-  }, [gb]);
+  const [index, setIndex] = useState(0);
+  const currentPackage = HOSTING_PACKAGES[index];
 
   const formatPrice = (p: number) => {
     return new Intl.NumberFormat("vi-VN").format(p) + " đ";
@@ -42,23 +39,23 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
         <div className="space-y-10">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/5 border border-white/10">
-              <currentStage.icon size={18} className="text-white" style={{ color: primaryColor }} />
+              <currentPackage.icon size={18} className="text-white" style={{ color: primaryColor }} />
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Hạ tầng hệ thống</p>
             </div>
-            <h3 className="text-4xl font-black text-white md:text-5xl tracking-tight">{currentStage.label}</h3>
+            <h3 className="text-2xl font-black text-white md:text-3xl tracking-tight leading-tight min-h-[4rem] flex items-center">{currentPackage.label}</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="rounded-[2rem] bg-white/[0.03] p-6 border border-white/10 transition-colors hover:bg-white/[0.05] md:p-8">
-              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">Dung lượng thực tế</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">Gói dung lượng</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-black text-white md:text-5xl" style={{ color: primaryColor }}>{gb}</span>
+                <span className="text-4xl font-black text-white md:text-5xl" style={{ color: primaryColor }}>{currentPackage.gb}</span>
                 <span className="text-base font-bold text-gray-400">GB</span>
               </div>
             </div>
             <div className="rounded-[2rem] bg-white/[0.03] p-6 border border-white/10 transition-colors hover:bg-white/[0.05] md:p-8">
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Dự toán chi phí</p>
-              <div className="text-xl font-black text-white md:text-2xl lg:text-3xl leading-tight">{formatPrice(price)}</div>
+              <div className="text-xl font-black text-white md:text-2xl lg:text-3xl leading-tight">{formatPrice(currentPackage.price)}</div>
             </div>
           </div>
 
@@ -78,7 +75,7 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             <div 
               className="absolute h-3 rounded-full transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.2)]"
               style={{ 
-                width: `${((gb - 2) / 98) * 100}%`,
+                width: `${(index / (HOSTING_PACKAGES.length - 1)) * 100}%`,
                 background: `linear-gradient(90deg, ${primaryColor}40, ${primaryColor})`,
                 boxShadow: `0 0 30px ${primaryColor}60`
               }} 
@@ -86,10 +83,10 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             
             <input
               type="range"
-              min="2"
-              max="100"
-              value={gb}
-              onChange={(e) => setGb(parseInt(e.target.value))}
+              min="0"
+              max={HOSTING_PACKAGES.length - 1}
+              value={index}
+              onChange={(e) => setIndex(parseInt(e.target.value))}
               className="absolute w-full appearance-none bg-transparent cursor-pointer z-10 
                 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-12 [&::-webkit-slider-thumb]:w-12 
                 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[6px] 
@@ -99,11 +96,11 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             />
           </div>
 
-          <div className="grid grid-cols-5 gap-4 px-4">
-            {[2, 25, 50, 75, 100].map((val) => (
+          <div className="grid grid-cols-4 gap-4 px-4">
+            {[0, Math.floor(HOSTING_PACKAGES.length / 3), Math.floor(2 * HOSTING_PACKAGES.length / 3), HOSTING_PACKAGES.length - 1].map((val) => (
               <div key={val} className="flex flex-col items-center gap-3">
-                <div className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${gb >= val ? 'scale-150 shadow-[0_0_10px_white]' : 'opacity-20'}`} style={{ backgroundColor: gb >= val ? 'white' : 'gray' }} />
-                <span className={`text-[10px] font-black transition-colors duration-500 ${gb >= val ? 'text-white' : 'text-gray-600'}`}>{val}GB</span>
+                <div className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${index >= val ? 'scale-150 shadow-[0_0_10px_white]' : 'opacity-20'}`} style={{ backgroundColor: index >= val ? 'white' : 'gray' }} />
+                <span className={`text-[10px] font-black transition-colors duration-500 ${index >= val ? 'text-white' : 'text-gray-600'}`}>{HOSTING_PACKAGES[val].gb}GB</span>
               </div>
             ))}
           </div>
