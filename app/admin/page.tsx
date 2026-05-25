@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Newspaper,
-  Bell, Globe, Search, Settings, LogOut,
+  Bell, Globe, Search, Settings, LogOut, Users,
   Trash2, Plus,
   BarChart2, Code, Copy,
   Calendar, Lock, Sparkles, Star, type LucideIcon
@@ -21,6 +21,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
+  { id: "customers", label: "Quản lý khách hàng", icon: Users },
   { id: "seo", label: "SEO Page", icon: Search },
   { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
@@ -1049,7 +1050,15 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button
               key={n.id}
-              onClick={() => n.id === "news" ? router.push("/admin/news") : n.id === "portals" ? router.push("/admin/portals") : setActiveTab(n.id)}
+              onClick={() =>
+                n.id === "news"
+                  ? router.push("/admin/news")
+                  : n.id === "portals"
+                    ? router.push("/admin/portals")
+                    : n.id === "customers"
+                      ? router.push("/khachhang")
+                      : setActiveTab(n.id)
+              }
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                 activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"
               }`}

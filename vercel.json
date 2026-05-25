@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/seo-automation",
       "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/customer-renewals",
+      "schedule": "0 8 * * *"
     }
   ]
 }
