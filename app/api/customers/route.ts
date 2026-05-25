@@ -18,7 +18,9 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
     id: typeof item.id === "string" && item.id.trim() ? item.id : `${Date.now()}-${index}`,
     fullName: typeof item.fullName === "string" ? item.fullName : "",
     industry: typeof item.industry === "string" ? item.industry : "",
+    establishmentName: typeof item.establishmentName === "string" ? item.establishmentName : "",
     phone: typeof item.phone === "string" ? item.phone : "",
+    email: typeof item.email === "string" ? item.email : "",
     platform: typeof item.platform === "string" ? item.platform : base.platform,
     service: typeof item.service === "string" ? item.service : "",
     registeredAt:

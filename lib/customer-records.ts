@@ -4,7 +4,9 @@ export type CustomerRecord = {
   id: string;
   fullName: string;
   industry: string;
+  establishmentName: string;
   phone: string;
+  email: string;
   platform: string;
   service: string;
   registeredAt: string | null;
@@ -32,7 +34,9 @@ export function createEmptyCustomer(): CustomerRecord {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
     fullName: "",
     industry: "",
+    establishmentName: "",
     phone: "",
+    email: "",
     platform: "facebook",
     service: "",
     registeredAt: new Date().toISOString().slice(0, 10),
