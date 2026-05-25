@@ -14,6 +14,14 @@ import {
   ExternalLink,
 } from "lucide-react";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   CUSTOMER_PLATFORMS,
   buildRenewalMessage,
   buildZaloRenewalUrl,
@@ -26,6 +34,249 @@ import {
 const cellInput =
   "w-full min-w-[120px] rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-white outline-none focus:border-primary";
 
+const modalFieldInput =
+  "w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500";
+
+function stopRowClick(e: React.MouseEvent) {
+  e.stopPropagation();
+}
+
+function CustomerDetailDialog({
+  customer,
+  rowIndex,
+  open,
+  onOpenChange,
+  onUpdate,
+  onDuplicate,
+  onDelete,
+  onZaloReminder,
+}: {
+  customer: CustomerRecord | null;
+  rowIndex: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onUpdate: (patch: Partial<CustomerRecord>) => void;
+  onDuplicate: () => void;
+  onDelete: () => void;
+  onZaloReminder: () => void;
+}) {
+  if (!customer) return null;
+
+  const daysLeft = daysUntilExpiry(customer.expiresAt);
+  const platformLabel =
+    CUSTOMER_PLATFORMS.find((p) => p.key === customer.platform)?.label || customer.platform;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto border-white/10 bg-[#111827] text-white sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-left text-white">Chi tiết khách hàng #{rowIndex + 1}</DialogTitle>
+          <DialogDescription className="text-left text-gray-400">
+            Chỉnh sửa thông tin theo chiều dọc — thay đổi được lưu tự động.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 py-2">
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Họ và tên</span>
+            <input
+              className={modalFieldInput}
+              value={customer.fullName}
+              onChange={(e) => onUpdate({ fullName: e.target.value })}
+              placeholder="Họ và tên khách hàng"
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Ngành nghề</span>
+            <input
+              className={modalFieldInput}
+              value={customer.industry || ""}
+              onChange={(e) => onUpdate({ industry: e.target.value })}
+              placeholder="VD: Nha khoa, Spa, TMĐT..."
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Tên cơ sở</span>
+            <input
+              className={modalFieldInput}
+              value={customer.establishmentName || ""}
+              onChange={(e) => onUpdate({ establishmentName: e.target.value })}
+              placeholder="Tên phòng khám, cửa hàng..."
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Số liên hệ</span>
+            <input
+              className={modalFieldInput}
+              value={customer.phone}
+              onChange={(e) => onUpdate({ phone: e.target.value })}
+              placeholder="09xx xxx xxx"
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Gmail</span>
+            <input
+              type="email"
+              className={modalFieldInput}
+              value={customer.email || ""}
+              onChange={(e) => onUpdate({ email: e.target.value })}
+              placeholder="email@gmail.com"
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Nền tảng</span>
+            <select
+              className={modalFieldInput}
+              value={customer.platform}
+              onChange={(e) => onUpdate({ platform: e.target.value })}
+            >
+              {CUSTOMER_PLATFORMS.map((p) => (
+                <option key={p.key} value={p.key}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Dịch vụ đăng ký</span>
+            <input
+              className={modalFieldInput}
+              value={customer.service}
+              onChange={(e) => onUpdate({ service: e.target.value })}
+              placeholder="VD: Viết bài FB 15 ngày, Xây dựng website..."
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Ngày đăng ký</span>
+            <input
+              type="date"
+              className={modalFieldInput}
+              value={customer.registeredAt || ""}
+              onChange={(e) => onUpdate({ registeredAt: e.target.value || null })}
+            />
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Ngày hết hạn</span>
+            <input
+              type="date"
+              className={modalFieldInput}
+              value={customer.expiresAt || ""}
+              onChange={(e) => onUpdate({ expiresAt: e.target.value || null })}
+            />
+            <button
+              type="button"
+              onClick={() => onUpdate({ expiresAt: null })}
+              className={`rounded-lg border px-3 py-2 text-xs font-bold ${
+                customer.expiresAt
+                  ? "border-white/10 text-gray-400 hover:bg-white/5"
+                  : "border-violet-500/40 bg-violet-500/20 text-violet-200"
+              }`}
+            >
+              Không có ngày hết hạn
+            </button>
+            {daysLeft !== null && (
+              <p className={`text-xs ${daysLeft <= 3 ? "font-bold text-amber-400" : "text-gray-500"}`}>
+                Còn {daysLeft} ngày
+              </p>
+            )}
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Link nền tảng</span>
+            <input
+              className={modalFieldInput}
+              value={customer.platformLink}
+              onChange={(e) => onUpdate({ platformLink: e.target.value })}
+              placeholder="https://..."
+            />
+            {customer.platformLink.trim() && (
+              <a
+                href={customer.platformLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-violet-300 hover:underline"
+              >
+                Mở link <ExternalLink size={12} />
+              </a>
+            )}
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Số tiền</span>
+            <input
+              type="number"
+              min={0}
+              className={modalFieldInput}
+              value={customer.amount || ""}
+              onChange={(e) => onUpdate({ amount: Number(e.target.value) || 0 })}
+            />
+            <p className="text-sm text-gray-400">{formatVnd(customer.amount)}</p>
+          </label>
+
+          <label className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-3">
+            <input
+              type="checkbox"
+              checked={customer.renewalReminderEnabled}
+              onChange={(e) => onUpdate({ renewalReminderEnabled: e.target.checked })}
+              className="h-4 w-4"
+            />
+            <span className="text-sm text-gray-200">Nhắc gia hạn qua Zalo (trước 3 ngày hết hạn)</span>
+          </label>
+
+          <div className="rounded-lg border border-white/5 bg-black/20 px-3 py-2 text-[11px] text-gray-500">
+            <p>Nền tảng: {platformLabel}</p>
+            {customer.lastRenewalReminderAt && (
+              <p className="mt-1">
+                Đã nhắc Zalo: {new Date(customer.lastRenewalReminderAt).toLocaleString("vi-VN")}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <DialogFooter className="flex-col gap-2 sm:flex-col sm:space-x-0">
+          <button
+            type="button"
+            onClick={onZaloReminder}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-sky-500/40 bg-sky-500/10 py-2.5 text-sm font-bold text-sky-200 hover:bg-sky-500/20"
+          >
+            <MessageCircle size={16} /> Nhắc Zalo
+          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                onDuplicate();
+                onOpenChange(false);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-violet-500/40 bg-violet-500/10 py-2.5 text-sm font-bold text-violet-200"
+            >
+              <Copy size={16} /> Nhân bản
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onDelete();
+                onOpenChange(false);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 py-2.5 text-sm font-bold text-red-300"
+            >
+              <Trash2 size={16} /> Xóa
+            </button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function CustomerManagement() {
   const [authenticated, setAuthenticated] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
@@ -37,7 +288,18 @@ export function CustomerManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const dirtyRef = useRef(false);
+
+  const selectedRowIndex = useMemo(
+    () => (selectedRowId ? customers.findIndex((row) => row.id === selectedRowId) : -1),
+    [customers, selectedRowId],
+  );
+
+  const selectedCustomer = useMemo(
+    () => (selectedRowId ? customers.find((row) => row.id === selectedRowId) ?? null : null),
+    [customers, selectedRowId],
+  );
 
   const dueReminders = useMemo(
     () =>
@@ -155,6 +417,7 @@ export function CustomerManagement() {
     if (!confirm("Xóa dòng khách hàng này?")) return;
     dirtyRef.current = true;
     setCustomers((prev) => prev.filter((row) => row.id !== id));
+    if (selectedRowId === id) setSelectedRowId(null);
   };
 
   const openZaloReminder = (customer: CustomerRecord) => {
@@ -248,7 +511,7 @@ export function CustomerManagement() {
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
             <h1 className="text-lg font-black sm:text-xl">Quản lý khách hàng</h1>
-            <p className="text-xs text-gray-400">Nhập dữ liệu như bảng Excel — tự lưu sau vài giây</p>
+            <p className="text-xs text-gray-400">Nhập dữ liệu như bảng Excel — bấm dòng để xem chi tiết — tự lưu sau vài giây</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -334,13 +597,21 @@ export function CustomerManagement() {
                   return (
                     <tr
                       key={row.id}
-                      className={isUrgent && row.renewalReminderEnabled ? "bg-amber-500/5" : "hover:bg-white/[0.02]"}
+                      onClick={() => setSelectedRowId(row.id)}
+                      className={`cursor-pointer transition-colors ${
+                        selectedRowId === row.id
+                          ? "bg-violet-500/10"
+                          : isUrgent && row.renewalReminderEnabled
+                            ? "bg-amber-500/5 hover:bg-amber-500/10"
+                            : "hover:bg-white/[0.04]"
+                      }`}
                     >
                       <td className="px-2 py-2 text-center font-mono text-gray-400">{index + 1}</td>
                       <td className="px-2 py-2">
                         <input
                           className={cellInput}
                           value={row.fullName}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { fullName: e.target.value })}
                           placeholder="Họ và tên"
                         />
@@ -349,6 +620,7 @@ export function CustomerManagement() {
                         <input
                           className={cellInput}
                           value={row.industry || ""}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { industry: e.target.value })}
                           placeholder="VD: Nha khoa, Spa, TMĐT..."
                         />
@@ -357,6 +629,7 @@ export function CustomerManagement() {
                         <input
                           className={cellInput}
                           value={row.establishmentName || ""}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { establishmentName: e.target.value })}
                           placeholder="Tên phòng khám, cửa hàng..."
                         />
@@ -365,6 +638,7 @@ export function CustomerManagement() {
                         <input
                           className={cellInput}
                           value={row.phone}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { phone: e.target.value })}
                           placeholder="09xx xxx xxx"
                         />
@@ -374,6 +648,7 @@ export function CustomerManagement() {
                           type="email"
                           className={cellInput}
                           value={row.email || ""}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { email: e.target.value })}
                           placeholder="email@gmail.com"
                         />
@@ -383,6 +658,7 @@ export function CustomerManagement() {
                           <select
                             className={cellInput}
                             value={row.platform}
+                            onClick={stopRowClick}
                             onChange={(e) => updateRow(row.id, { platform: e.target.value })}
                           >
                             {CUSTOMER_PLATFORMS.map((p) => (
@@ -394,6 +670,7 @@ export function CustomerManagement() {
                           <input
                             className={cellInput}
                             value={row.service}
+                            onClick={stopRowClick}
                             onChange={(e) => updateRow(row.id, { service: e.target.value })}
                             placeholder="VD: Viết bài FB 15 ngày, Xây dựng website..."
                           />
@@ -404,6 +681,7 @@ export function CustomerManagement() {
                           type="date"
                           className={cellInput}
                           value={row.registeredAt || ""}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { registeredAt: e.target.value || null })}
                         />
                       </td>
@@ -413,11 +691,15 @@ export function CustomerManagement() {
                             type="date"
                             className={cellInput}
                             value={row.expiresAt || ""}
+                            onClick={stopRowClick}
                             onChange={(e) => updateRow(row.id, { expiresAt: e.target.value || null })}
                           />
                           <button
                             type="button"
-                            onClick={() => updateRow(row.id, { expiresAt: null })}
+                            onClick={(e) => {
+                              stopRowClick(e);
+                              updateRow(row.id, { expiresAt: null });
+                            }}
                             className={`rounded-md border px-2 py-1 text-[10px] font-bold ${
                               row.expiresAt
                                 ? "border-white/10 text-gray-400 hover:bg-white/5"
@@ -440,6 +722,7 @@ export function CustomerManagement() {
                           <input
                             className={cellInput}
                             value={row.platformLink}
+                            onClick={stopRowClick}
                             onChange={(e) => updateRow(row.id, { platformLink: e.target.value })}
                             placeholder="https://..."
                           />
@@ -448,6 +731,7 @@ export function CustomerManagement() {
                               href={row.platformLink}
                               target="_blank"
                               rel="noreferrer"
+                              onClick={stopRowClick}
                               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 text-gray-400 hover:text-white"
                             >
                               <ExternalLink size={14} />
@@ -461,12 +745,13 @@ export function CustomerManagement() {
                           min={0}
                           className={cellInput}
                           value={row.amount || ""}
+                          onClick={stopRowClick}
                           onChange={(e) => updateRow(row.id, { amount: Number(e.target.value) || 0 })}
                           placeholder="0"
                         />
                         <p className="mt-1 text-[10px] text-gray-500">{formatVnd(row.amount)}</p>
                       </td>
-                      <td className="px-2 py-2 text-center">
+                      <td className="px-2 py-2 text-center" onClick={stopRowClick}>
                         <label className="inline-flex cursor-pointer flex-col items-center gap-1">
                           <input
                             type="checkbox"
@@ -477,7 +762,7 @@ export function CustomerManagement() {
                           <span className="text-[10px] text-gray-500">T-3 ngày</span>
                         </label>
                       </td>
-                      <td className="px-2 py-2">
+                      <td className="px-2 py-2" onClick={stopRowClick}>
                         <div className="flex flex-col items-center gap-1">
                           <button
                             type="button"
@@ -513,10 +798,31 @@ export function CustomerManagement() {
           </table>
         </div>
         <p className="mt-4 text-[11px] text-gray-500">
-          Cột &quot;Nhắc gia hạn&quot;: cron chạy mỗi ngày lúc 8:00, tự gửi nhắc khi còn đúng 3 ngày (cần cấu hình Zalo OA
-          hoặc webhook). Nút chat mở Zalo với nội dung nhắc sẵn.
+          Bấm vào dòng (không phải ô nhập) để mở popup chi tiết. Cột &quot;Nhắc gia hạn&quot;: cron 8:00 hàng ngày, tự nhắc
+          khi còn 3 ngày.
         </p>
       </main>
+
+      <CustomerDetailDialog
+        customer={selectedCustomer}
+        rowIndex={selectedRowIndex >= 0 ? selectedRowIndex : 0}
+        open={!!selectedRowId && !!selectedCustomer}
+        onOpenChange={(open) => {
+          if (!open) setSelectedRowId(null);
+        }}
+        onUpdate={(patch) => {
+          if (selectedRowId) updateRow(selectedRowId, patch);
+        }}
+        onDuplicate={() => {
+          if (selectedCustomer) duplicateRow(selectedCustomer);
+        }}
+        onDelete={() => {
+          if (selectedRowId) removeRow(selectedRowId);
+        }}
+        onZaloReminder={() => {
+          if (selectedCustomer) openZaloReminder(selectedCustomer);
+        }}
+      />
     </div>
   );
 }
