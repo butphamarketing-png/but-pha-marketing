@@ -22,8 +22,6 @@ import {
   type CustomerRecord,
 } from "@/lib/customer-records";
 
-type ServiceOption = { id: number; platform: string; name: string };
-
 const cellInput =
   "w-full min-w-[120px] rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-white outline-none focus:border-primary";
 
@@ -34,7 +32,6 @@ export function CustomerManagement() {
   const [loginError, setLoginError] = useState("");
 
   const [customers, setCustomers] = useState<CustomerRecord[]>([]);
-  const [services, setServices] = useState<ServiceOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
@@ -69,23 +66,6 @@ export function CustomerManagement() {
     }
   }, []);
 
-  const loadServices = useCallback(async () => {
-    try {
-      const res = await fetch("/api/services", { cache: "no-store" });
-      const data = await res.json().catch(() => []);
-      const list = Array.isArray(data) ? data : [];
-      setServices(
-        list.map((item: Record<string, unknown>) => ({
-          id: Number(item.id) || 0,
-          platform: String(item.platform || ""),
-          name: String(item.name || ""),
-        })),
-      );
-    } catch {
-      setServices([]);
-    }
-  }, []);
-
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -94,7 +74,7 @@ export function CustomerManagement() {
         const data = await res.json().catch(() => null);
         if (mounted && data?.authenticated) {
           setAuthenticated(true);
-          await Promise.all([loadCustomers(), loadServices()]);
+          await loadCustomers();
         }
       } finally {
         if (mounted) setIsAuthChecking(false);
@@ -103,7 +83,7 @@ export function CustomerManagement() {
     return () => {
       mounted = false;
     };
-  }, [loadCustomers, loadServices]);
+  }, [loadCustomers]);
 
   const saveAll = async () => {
     setIsSaving(true);
@@ -148,7 +128,7 @@ export function CustomerManagement() {
 
   const addRow = () => {
     dirtyRef.current = true;
-    setCustomers((prev) => [createEmptyCustomer(), ...prev]);
+    setCustomers((prev) => [...prev, createEmptyCustomer()]);
   };
 
   const removeRow = (id: string) => {
@@ -184,7 +164,7 @@ export function CustomerManagement() {
       }
       setAuthenticated(true);
       setPassword("");
-      await Promise.all([loadCustomers(), loadServices()]);
+      await loadCustomers();
     } catch {
       setLoginError("Không thể đăng nhập.");
     }
@@ -198,9 +178,6 @@ export function CustomerManagement() {
       setCustomers([]);
     }
   };
-
-  const serviceOptionsForPlatform = (platform: string) =>
-    services.filter((s) => s.platform === platform).map((s) => s.name);
 
   if (isAuthChecking) {
     return <div className="flex min-h-screen items-center justify-center bg-[#0b0f19]" />;
@@ -331,8 +308,6 @@ export function CustomerManagement() {
                 customers.map((row, index) => {
                   const daysLeft = daysUntilExpiry(row.expiresAt);
                   const isUrgent = daysLeft !== null && daysLeft <= 3 && daysLeft >= 0;
-                  const platformServices = serviceOptionsForPlatform(row.platform);
-
                   return (
                     <tr
                       key={row.id}
@@ -360,7 +335,7 @@ export function CustomerManagement() {
                           <select
                             className={cellInput}
                             value={row.platform}
-                            onChange={(e) => updateRow(row.id, { platform: e.target.value, service: "" })}
+                            onChange={(e) => updateRow(row.id, { platform: e.target.value })}
                           >
                             {CUSTOMER_PLATFORMS.map((p) => (
                               <option key={p.key} value={p.key}>
@@ -368,23 +343,11 @@ export function CustomerManagement() {
                               </option>
                             ))}
                           </select>
-                          <select
-                            className={cellInput}
-                            value={platformServices.includes(row.service) ? row.service : ""}
-                            onChange={(e) => updateRow(row.id, { service: e.target.value })}
-                          >
-                            <option value="">— Chọn dịch vụ —</option>
-                            {platformServices.map((name) => (
-                              <option key={name} value={name}>
-                                {name}
-                              </option>
-                            ))}
-                          </select>
                           <input
                             className={cellInput}
                             value={row.service}
                             onChange={(e) => updateRow(row.id, { service: e.target.value })}
-                            placeholder="Hoặc nhập dịch vụ (VD: Viết bài FB 15 ngày)"
+                            placeholder="VD: Viết bài FB 15 ngày, Xây dựng website..."
                           />
                         </div>
                       </td>
