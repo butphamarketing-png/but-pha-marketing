@@ -7,14 +7,19 @@ export function VisitorTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Tạm dừng theo dõi khách truy cập để tiết kiệm băng thông Supabase (Egress)
-    // Hệ thống sẽ không gửi yêu cầu POST đến /api/visitors nữa
-    return;
-
-    /* Logic cũ đã tạm dừng:
     if (!pathname || pathname.startsWith("/admin")) return;
-    ...
-    */
+
+    const controller = new AbortController();
+
+    fetch("/api/visitors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: pathname }),
+      keepalive: true,
+      signal: controller.signal,
+    }).catch(() => null);
+
+    return () => controller.abort();
   }, [pathname]);
 
   return null;

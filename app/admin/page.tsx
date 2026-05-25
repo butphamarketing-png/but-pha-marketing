@@ -1113,7 +1113,7 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <button type="button" onClick={() => refreshVisitors()} className="text-left">
-                  <StatCard value={visitors.length} label="Truy cập" icon={BarChart2} color="#10B981" />
+                  <StatCard value={totalVisitorHits} label="Truy cập" icon={BarChart2} color="#10B981" />
                 </button>
                 <button type="button" onClick={() => setActiveTab("settings")} className="text-left">
                   <StatCard value="Đổi" label="Mật khẩu" icon={Lock} color="#F59E0B" />
