@@ -3,6 +3,7 @@ export const CUSTOMER_RECORDS_KEY = "customer_records";
 export type CustomerRecord = {
   id: string;
   fullName: string;
+  industry: string;
   phone: string;
   platform: string;
   service: string;
@@ -30,6 +31,7 @@ export function createEmptyCustomer(): CustomerRecord {
   return {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
     fullName: "",
+    industry: "",
     phone: "",
     platform: "facebook",
     service: "",

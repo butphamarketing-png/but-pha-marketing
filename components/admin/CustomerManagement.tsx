@@ -282,11 +282,12 @@ export function CustomerManagement() {
 
       <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6">
         <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#111827]">
-          <table className="min-w-[1400px] w-full border-collapse text-left text-xs">
+          <table className="min-w-[1520px] w-full border-collapse text-left text-xs">
             <thead>
               <tr className="border-b border-white/10 bg-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                 <th className="px-2 py-3 w-12 text-center">STT</th>
                 <th className="px-2 py-3 min-w-[140px]">Họ và Tên</th>
+                <th className="px-2 py-3 min-w-[130px]">Ngành nghề</th>
                 <th className="px-2 py-3 min-w-[120px]">Số liên hệ</th>
                 <th className="px-2 py-3 min-w-[220px]">Dịch vụ đăng ký</th>
                 <th className="px-2 py-3 min-w-[130px]">Ngày đăng ký</th>
@@ -300,7 +301,7 @@ export function CustomerManagement() {
             <tbody className="divide-y divide-white/5">
               {customers.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="px-4 py-10 text-center text-gray-500">
+                  <td colSpan={11} className="px-4 py-10 text-center text-gray-500">
                     Chưa có khách hàng. Bấm &quot;Thêm dòng&quot; để bắt đầu nhập.
                   </td>
                 </tr>
@@ -320,6 +321,14 @@ export function CustomerManagement() {
                           value={row.fullName}
                           onChange={(e) => updateRow(row.id, { fullName: e.target.value })}
                           placeholder="Họ và tên"
+                        />
+                      </td>
+                      <td className="px-2 py-2">
+                        <input
+                          className={cellInput}
+                          value={row.industry || ""}
+                          onChange={(e) => updateRow(row.id, { industry: e.target.value })}
+                          placeholder="VD: Nha khoa, Spa, TMĐT..."
                         />
                       </td>
                       <td className="px-2 py-2">
