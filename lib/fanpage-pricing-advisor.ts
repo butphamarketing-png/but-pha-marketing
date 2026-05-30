@@ -139,7 +139,7 @@ function pickFanpageBuildId(
   businessGoal: string,
 ): string | null {
   if (hasFanpage) {
-    return tier === "starter" ? "fb-build-basic" : null;
+    return "fb-build-basic";
   }
   if (tier === "professional" || profile.preferredBuild === "fb-build-pro") {
     if (businessGoal.includes("thương hiệu") || profile.visualHeavy) return "fb-build-pro";

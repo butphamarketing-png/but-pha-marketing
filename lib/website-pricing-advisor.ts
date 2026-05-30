@@ -5,6 +5,7 @@ import {
   HOSTING_PACKAGES,
   WEBSITE_BUILD_PACKAGES,
   WEBSITE_CARE_PACKAGES,
+  WEBSITE_RENOVATION,
 } from "./service-pricing";
 
 export type WebsiteStackRecommendation = {
@@ -253,6 +254,6 @@ export function recommendWebsiteCareOnly(input: {
     careId,
     carePosts: care.posts,
     carePrice: care.price,
-    reason: `Đã có Website → chăm sóc ${care.posts} bài/tháng (${formatPriceVnd(care.price)}) cho SEO & cập nhật nội dung.`,
+    reason: `Đã có Website → cải tạo giao diện ${formatPriceVnd(WEBSITE_RENOVATION.price)} (một lần, khớp /website) + chăm sóc ${care.posts} bài/th (${formatPriceVnd(care.price)}).`,
   };
 }

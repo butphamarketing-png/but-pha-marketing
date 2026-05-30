@@ -239,6 +239,50 @@ export const GOOGLE_MAPS_PACKAGES = [
   },
 ] as const;
 
+/**
+ * Gói setup khi khách ĐÃ CÓ kênh — khớp bảng giá /website, /facebook, /google-maps
+ * Website cải tạo giao diện: 3.000.000đ | Fanpage: 500.000đ (fb-build-basic) | Maps: 300.000đ (gm-rebuild)
+ */
+export const WEBSITE_RENOVATION = {
+  id: "web-renovation",
+  name: "Cải tạo giao diện Website",
+  price: 3_000_000,
+  quantity: "1 lần cải tạo giao diện",
+  works: [
+    "Thiết kế lại giao diện theo thương hiệu",
+    "Tối ưu mobile & tốc độ",
+    "Cập nhật CTA liên hệ / đặt lịch",
+    "Chuẩn SEO cơ bản sau cải tạo",
+  ],
+} as const;
+
+export const CHANNEL_OWNED_SETUP = {
+  website: {
+    itemId: WEBSITE_RENOVATION.id,
+    price: WEBSITE_RENOVATION.price,
+    label: WEBSITE_RENOVATION.name,
+    pricingPath: "/website",
+  },
+  fanpage: {
+    itemId: "fb-build-basic" as const,
+    price: FANPAGE_BUILD_PACKAGES[0].price,
+    label: FANPAGE_BUILD_PACKAGES[0].name,
+    pricingPath: "/facebook",
+  },
+  maps: {
+    itemId: "gm-rebuild" as const,
+    price: GOOGLE_MAPS_PACKAGES[0].price,
+    label: GOOGLE_MAPS_PACKAGES[0].name,
+    pricingPath: "/google-maps",
+  },
+} as const;
+
+export type OwnedChannelKey = keyof typeof CHANNEL_OWNED_SETUP;
+
+export function getOwnedChannelSetup(channel: OwnedChannelKey) {
+  return CHANNEL_OWNED_SETUP[channel];
+}
+
 export const GOOGLE_MAPS_ADS_PACKAGES = [
   {
     id: "gm-ads-under-10",

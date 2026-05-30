@@ -9,6 +9,9 @@ import {
   HOSTING_PACKAGES,
   parseFanpageCarePosts,
   getFanpageCareTierLabel,
+  CHANNEL_OWNED_SETUP,
+  WEBSITE_RENOVATION,
+  type OwnedChannelKey,
 } from "./service-pricing";
 import {
   buildWebsiteStackItemIds,
@@ -53,6 +56,7 @@ export const ITEM_BILLING: Record<string, BillingPeriod> = {
   "gm-rebuild": "once",
   "gm-build": "once",
   "gm-optimize": "once",
+  "web-renovation": "once",
   "gm-ads-under-10": "month",
   "gm-ads-over-10": "month",
 };
@@ -83,9 +87,33 @@ export function buildDynamicPricingItem(id: string): StrategyPricingItem | null 
   };
 }
 
+export function buildOwnedChannelPricingItem(channel: OwnedChannelKey): StrategyPricingItem {
+  if (channel === "website") {
+    return {
+      id: WEBSITE_RENOVATION.id,
+      label: WEBSITE_RENOVATION.name,
+      price: formatPriceVnd(WEBSITE_RENOVATION.price),
+      quantity: WEBSITE_RENOVATION.quantity,
+      works: [...WEBSITE_RENOVATION.works],
+    };
+  }
+  const setup = CHANNEL_OWNED_SETUP[channel];
+  const item = getAllPricingItems().find((i) => i.id === setup.itemId);
+  if (item) return item;
+  return buildRenovationPricingItem(channel);
+}
+
+/** @deprecated use buildOwnedChannelPricingItem */
+function buildRenovationPricingItem(channel: OwnedChannelKey): StrategyPricingItem {
+  return buildOwnedChannelPricingItem(channel);
+}
+
 export function getPricingItemById(id: string) {
+  if (id === WEBSITE_RENOVATION.id) return buildOwnedChannelPricingItem("website");
   return getAllPricingItems().find((item) => item.id === id) ?? buildDynamicPricingItem(id);
 }
+
+export { CHANNEL_OWNED_SETUP, WEBSITE_RENOVATION } from "./service-pricing";
 
 export type BudgetFilter = "all" | "under5" | "5to15" | "over15";
 
@@ -139,11 +167,42 @@ export const SCALE_OPTIONS = ["1 cơ sở", "2–5 cơ sở", "Trên 5 cơ sở"
 export const BUDGET_OPTIONS = ["Dưới 5 triệu/tháng", "5–15 triệu/tháng", "Trên 15 triệu/tháng"] as const;
 
 export const EXISTING_ASSET_OPTIONS = [
-  { id: "website", label: "Đã có Website" },
-  { id: "fanpage", label: "Đã có Fanpage" },
-  { id: "maps", label: "Đã có Google Maps" },
-  { id: "ads", label: "Đang chạy quảng cáo" },
+  { id: "website", label: "Website", renovationLabel: "Cải tạo giao diện Website" },
+  { id: "fanpage", label: "Fanpage Facebook", renovationLabel: "Cải tạo Fanpage" },
+  { id: "maps", label: "Google Maps", renovationLabel: "Cải tạo Google Maps" },
+  { id: "ads", label: "Đang chạy quảng cáo", renovationLabel: null },
 ] as const;
+
+export type PlatformFocus = "strategy" | "website" | "fanpage" | "maps";
+
+export const PLATFORM_FOCUS_OPTIONS: {
+  id: PlatformFocus;
+  label: string;
+  desc: string;
+}[] = [
+  {
+    id: "strategy",
+    label: "Tư vấn chiến lược tổng thể",
+    desc: "Cân bằng Website + Fanpage + Maps theo ngành & ngân sách",
+  },
+  {
+    id: "maps",
+    label: "Google Maps",
+    desc: "Ưu tiên khách tìm kiếm gần tôi & review local",
+  },
+  {
+    id: "fanpage",
+    label: "Fanpage Facebook",
+    desc: "Ưu tiên content, inbox & cộng đồng",
+  },
+  {
+    id: "website",
+    label: "Website",
+    desc: "Ưu tiên kênh sở hữu, SEO & chuyển đổi",
+  },
+];
+
+export const CHANNEL_ASSET_IDS = ["website", "fanpage", "maps"] as const;
 
 const PROFILES: IndustryProfile[] = [
   {
@@ -699,7 +758,10 @@ function resolvePackageTier(budget: BudgetTier, scale: ScaleTier): PackageTier {
 }
 
 const DISPLAY_ORDER = [
-  "gm-",
+  "gm-rebuild",
+  "gm-build",
+  "gm-optimize",
+  "web-renovation",
   "web-build",
   "web-domain",
   "web-data",
@@ -759,10 +821,67 @@ function trimComboToMonthlyBudget(itemIds: string[], budgetRange: string): strin
   return ids;
 }
 
+function injectOwnedChannelSetup(
+  itemIds: string[],
+  existingAssets: string[],
+): string[] {
+  const has = (key: string) => existingAssets.includes(key);
+  let ids = [...itemIds];
+
+  if (has("maps")) {
+    const setup = CHANNEL_OWNED_SETUP.maps;
+    ids = ids.filter((id) => !id.startsWith("gm-") || id.startsWith("gm-ads"));
+    if (!ids.includes(setup.itemId)) ids.unshift(setup.itemId);
+  }
+  if (has("website")) {
+    const setup = CHANNEL_OWNED_SETUP.website;
+    ids = ids.filter(
+      (id) =>
+        id !== setup.itemId &&
+        !id.startsWith("web-build") &&
+        !id.startsWith("web-data") &&
+        id !== "web-domain-com",
+    );
+    ids.unshift(setup.itemId);
+  }
+  if (has("fanpage")) {
+    const setup = CHANNEL_OWNED_SETUP.fanpage;
+    ids = ids.filter((id) => id !== setup.itemId && !id.startsWith("fb-build"));
+    if (!ids.includes(setup.itemId)) ids.unshift(setup.itemId);
+  }
+
+  return sortComboIds([...new Set(ids)]);
+}
+
+function applyPlatformFocus(
+  itemIds: string[],
+  focus: PlatformFocus,
+  reasons: string[],
+): string[] {
+  if (focus === "strategy") return itemIds;
+
+  const label = PLATFORM_FOCUS_OPTIONS.find((o) => o.id === focus)?.label ?? focus;
+  reasons.unshift(`Khách ưu tiên đẩy mạnh ${label} — combo xoay quanh kênh này.`);
+
+  const prefix = focus === "maps" ? "gm-" : focus === "fanpage" ? "fb-" : "web-";
+  const focused = itemIds.filter((id) => id.startsWith(prefix));
+  if (focused.length === 0) return itemIds;
+
+  const others = itemIds.filter((id) => !id.startsWith("gm-") && !id.startsWith("fb-") && !id.startsWith("web-"));
+  const secondary = itemIds.filter(
+    (id) =>
+      (id.startsWith("gm-") || id.startsWith("fb-") || id.startsWith("web-")) &&
+      !id.startsWith(prefix) &&
+      (id.includes("care") || id.includes("ads")),
+  );
+
+  return sortComboIds([...focused, ...secondary, ...others]);
+}
+
 function buildComboLabel(itemIds: string[]): string {
   const parts: string[] = [];
   if (itemIds.some((id) => id.startsWith("gm-") && !id.includes("ads"))) parts.push("Google Maps");
-  if (itemIds.some((id) => id.startsWith("web-build"))) parts.push("Website");
+  if (itemIds.some((id) => id.startsWith("web-build") || id === "web-renovation")) parts.push("Website");
   if (itemIds.some((id) => id.startsWith("web-care"))) parts.push("Chăm sóc Website");
   if (itemIds.some((id) => id.startsWith("fb-build"))) parts.push("Xây Fanpage");
   if (itemIds.some((id) => id.startsWith("fb-care"))) parts.push("Chăm sóc Fanpage");
@@ -772,10 +891,13 @@ function buildComboLabel(itemIds: string[]): string {
 
 export function buildRecommendedCombo(
   profile: IndustryProfile,
-  form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+  form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets"> & {
+    platformFocus?: PlatformFocus;
+  },
   options?: { forceTier?: PackageTier },
 ): ComboRecommendation {
   const has = (key: string) => form.existingAssets.includes(key);
+  const focus = form.platformFocus ?? "strategy";
   const budgetTier = getBudgetTier(form.budgetRange);
   const scaleTier = getScaleTier(form.scale);
   const tier = options?.forceTier ?? resolvePackageTier(budgetTier, scaleTier);
@@ -798,6 +920,19 @@ export function buildRecommendedCombo(
   };
 
   reasons.push(`Gói ${TIER_LABELS[tier]} phù hợp ngân sách ${form.budgetRange.toLowerCase()} và quy mô ${form.scale}.`);
+
+  if (has("website")) {
+    const s = CHANNEL_OWNED_SETUP.website;
+    reasons.push(`Đã có Website → ${s.label} ${formatVnd(s.price)} (một lần, khớp ${s.pricingPath}) + chăm sóc content/tháng.`);
+  }
+  if (has("fanpage")) {
+    const s = CHANNEL_OWNED_SETUP.fanpage;
+    reasons.push(`Đã có Fanpage → ${s.label} ${formatVnd(s.price)} (một lần, khớp ${s.pricingPath}) + chăm sóc bài viết.`);
+  }
+  if (has("maps")) {
+    const s = CHANNEL_OWNED_SETUP.maps;
+    reasons.push(`Đã có Google Maps → ${s.label} ${formatVnd(s.price)} (một lần, khớp ${s.pricingPath}).`);
+  }
 
   if (channels.needsMaps) {
     mapsStack = recommendMapsStack({
@@ -837,6 +972,23 @@ export function buildRecommendedCombo(
       });
       ids.push(careOnly.careId);
       reasons.push(careOnly.reason);
+      const owned = CHANNEL_OWNED_SETUP.website;
+      websiteStack = {
+        buildId: owned.itemId,
+        buildName: owned.label,
+        buildPrice: owned.price,
+        hostingGb: 0,
+        hostingId: "",
+        hostingLabel: "Khách đã có hosting",
+        hostingPrice: 0,
+        careId: careOnly.careId,
+        carePosts: careOnly.carePosts,
+        carePrice: careOnly.carePrice,
+        includeDomain: false,
+        reasons: [careOnly.reason],
+        firstYearSetup: owned.price,
+        monthlyRecurring: careOnly.carePrice,
+      };
     }
   }
 
@@ -866,12 +1018,13 @@ export function buildRecommendedCombo(
         if (adsReason) reasons.push(adsReason);
       }
       if (fanpageStack) {
+        const owned = CHANNEL_OWNED_SETUP.fanpage;
         fanpageStack = {
           ...fanpageStack,
-          buildId: null,
-          buildName: null,
-          buildPrice: 0,
-          setupOnce: 0,
+          buildId: owned.itemId,
+          buildName: owned.label,
+          buildPrice: owned.price,
+          setupOnce: owned.price,
         };
       }
     }
@@ -884,6 +1037,8 @@ export function buildRecommendedCombo(
   }
 
   let itemIds = sortComboIds([...new Set(ids)]);
+  itemIds = injectOwnedChannelSetup(itemIds, form.existingAssets);
+  itemIds = applyPlatformFocus(itemIds, focus, reasons);
   itemIds = trimComboToMonthlyBudget(itemIds, form.budgetRange);
 
   const monthTotal = calculatePlanTotals(itemIds).month;
@@ -931,6 +1086,37 @@ export function buildRecommendedCombo(
   }
   if (mapsStack?.adsId && !itemIds.includes(mapsStack.adsId)) {
     mapsStack = { ...mapsStack, adsId: null, adsName: null, adsPrice: 0, monthlyRecurring: 0 };
+  }
+
+  if (mapsStack && has("maps")) {
+    const s = CHANNEL_OWNED_SETUP.maps;
+    mapsStack = {
+      ...mapsStack,
+      serviceId: s.itemId,
+      serviceName: s.label,
+      servicePrice: s.price,
+      setupOnce: s.price,
+    };
+  }
+  if (websiteStack && has("website")) {
+    const s = CHANNEL_OWNED_SETUP.website;
+    websiteStack = {
+      ...websiteStack,
+      buildId: s.itemId,
+      buildName: s.label,
+      buildPrice: s.price,
+      firstYearSetup: s.price,
+    };
+  }
+  if (fanpageStack && has("fanpage")) {
+    const s = CHANNEL_OWNED_SETUP.fanpage;
+    fanpageStack = {
+      ...fanpageStack,
+      buildId: s.itemId,
+      buildName: s.label,
+      buildPrice: s.price,
+      setupOnce: s.price,
+    };
   }
 
   const finalReasons = [...reasons];
@@ -999,7 +1185,7 @@ export function adjustComboForAssets(comboIds: string[], existingAssets: string[
   return comboIds.filter((id) => {
     if (has("website") && (id.startsWith("web-build") || id.startsWith("web-data") || id === "web-domain-com")) return false;
     if (has("fanpage") && id.startsWith("fb-build")) return false;
-    if (has("maps") && (id === "gm-build" || id === "gm-rebuild")) return false;
+    if (has("maps") && (id === "gm-build" || id === "gm-rebuild" || id === "gm-optimize")) return false;
     if (has("ads") && id.includes("ads")) return false;
     return true;
   });
@@ -1017,10 +1203,18 @@ export function buildWhyBullets(profile: IndustryProfile, businessGoal: string, 
     bullets.unshift("Mục tiêu giữ chân → content đều, CSKH inbox và remarketing quan trọng hơn kéo khách lạ.");
   }
   if (existingAssets.length > 0) {
-    const labels = existingAssets.map(
-      (id) => EXISTING_ASSET_OPTIONS.find((a) => a.id === id)?.label || id,
-    );
-    bullets.push(`Bạn đã có: ${labels.join(", ")} — lộ trình sẽ tập trung bổ sung phần còn thiếu, không làm trùng.`);
+    const ownedNotes = (["website", "fanpage", "maps"] as const)
+      .filter((ch) => existingAssets.includes(ch))
+      .map((ch) => {
+        const s = CHANNEL_OWNED_SETUP[ch];
+        return `${s.label} ${formatVnd(s.price)}`;
+      });
+    if (ownedNotes.length) {
+      bullets.push(`Đã có kênh → cải tạo theo bảng giá: ${ownedNotes.join(" · ")} — tập trung phần còn thiếu.`);
+    }
+    if (existingAssets.includes("ads")) {
+      bullets.push("Đang chạy ads → bỏ phí quản lý quảng cáo, ưu tiên tối ưu nội dung.");
+    }
   }
   return bullets.slice(0, 4);
 }
@@ -1108,6 +1302,7 @@ export type StrategyFormSnapshot = {
   businessGoal: string;
   scale: string;
   budgetRange: string;
+  platformFocus: PlatformFocus;
   existingAssets: string[];
 };
 

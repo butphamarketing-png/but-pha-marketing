@@ -331,6 +331,7 @@ export function buildFormProgress(form: StrategyFormSnapshot): { percent: number
     form.businessGoal,
     form.scale,
     form.budgetRange,
+    form.platformFocus ?? "strategy",
   ];
   const filled = fields.filter((v) => String(v).trim().length > 0).length;
   return { percent: Math.round((filled / fields.length) * 100), filled, total: fields.length };

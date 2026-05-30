@@ -30,7 +30,6 @@ import {
   Share2,
   ShoppingCart,
   GitCompare,
-  CalendarDays,
   X,
   TrendingUp,
   Layers,
@@ -40,9 +39,23 @@ import {
 import { db } from "@/lib/useData";
 import { STRATEGY_FOOTER, STRATEGY_PRICING, type StrategyPricingItem } from "@/lib/marketing-strategy-pricing";
 import { DOMAIN_COM_PRICE } from "@/lib/service-pricing";
-import { IndustryAutocomplete, StrategyIndustryPreview } from "@/components/marketing/StrategyIndustryPreview";
+import { IndustryAutocomplete } from "@/components/marketing/StrategyIndustryPreview";
 import {
+  FormNavButtons,
+  FormStepIndicator,
+  GoalCards,
+  FormIntroPanel,
+  PlatformFocusCards,
+  OwnedChannelCards,
+  DeploymentTimelinePanel,
+  DraftRestoredBanner,
+  RememberCookieToggle,
+  FieldError,
+  SharedPreviewBanner,
   FormProgressBar,
+  TOTAL_FORM_STEPS,
+} from "@/components/marketing/StrategyFormWizard";
+import {
   StrategyActionPlanPanel,
   StrategyAdsAdviceBanner,
   StrategyCostBreakdown,
@@ -51,14 +64,6 @@ import {
   StrategyRoiPanel,
   StrategyTierComparison,
 } from "@/components/marketing/StrategyUpgradePanels";
-import {
-  FormNavButtons,
-  FormStepIndicator,
-  GoalCards,
-  LiveStrategySidebar,
-  BudgetSimulator,
-  DraftRestoredBanner,
-} from "@/components/marketing/StrategyFormWizard";
 import {
   StrategyBenchmarkPanel,
   StrategyExecutiveSummary,
@@ -72,15 +77,20 @@ import { buildFormProgress, buildDigitalReadiness, buildRoiEstimate } from "@/li
 import {
   clearStrategyDraft,
   hasStrategyDraftContent,
+  loadRememberPreference,
   loadStrategyDraft,
+  saveRememberPreference,
   saveStrategyDraft,
+  type StrategyDraftSource,
 } from "@/lib/strategy-storage";
-import { buildStrategyShareUrl, decodeStrategyShare, isStrategyFormComplete } from "@/lib/strategy-share";
+import { buildStrategyShareUrl, decodeStrategyShare, isStrategyFormComplete, isStrategyViewReady, mergeSharedFormWithContact } from "@/lib/strategy-share";
+import { readContactFromCookie } from "@/lib/strategy-cookies";
+import { getContactFieldErrors, isContactStepValid, firstContactError } from "@/lib/strategy-validation";
 import { analyzeBusinessLocation } from "@/lib/location-intelligence";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
-  EXISTING_ASSET_OPTIONS,
+  PLATFORM_FOCUS_OPTIONS,
   SCALE_OPTIONS,
   buildDeploymentTimeline,
   buildRecommendedCombo,
@@ -94,9 +104,9 @@ import {
   getIndustryCount,
   getPricingItemById,
   itemFitsBudgetFilter,
-  parsePriceVnd,
   resolveIndustryProfile,
   type BudgetFilter,
+  type PlatformFocus,
   type StrategyFormSnapshot,
 } from "@/lib/marketing-strategy-profiles";
 
@@ -112,6 +122,7 @@ const initialForm: LeadForm = {
   businessGoal: BUSINESS_GOALS[0],
   scale: SCALE_OPTIONS[0],
   budgetRange: BUDGET_OPTIONS[1],
+  platformFocus: "strategy" as PlatformFocus,
   existingAssets: [],
 };
 
@@ -296,42 +307,74 @@ export function StrategyMarketingPage() {
   const [formStep, setFormStep] = useState(1);
   const [draftRestored, setDraftRestored] = useState(false);
   const [draftSavedAt, setDraftSavedAt] = useState<string | undefined>();
+  const [draftSource, setDraftSource] = useState<StrategyDraftSource | undefined>();
+  const [rememberEnabled, setRememberEnabled] = useState(true);
   const [storageReady, setStorageReady] = useState(false);
+  const [sharedPreview, setSharedPreview] = useState(false);
+  const [leadCaptured, setLeadCaptured] = useState(false);
+  const [contactTouched, setContactTouched] = useState(false);
 
   useEffect(() => {
+    setRememberEnabled(loadRememberPreference());
+
     const params = new URLSearchParams(window.location.search);
     const shared = params.get("s");
+    const isViewMode = params.get("view") === "1";
 
     if (shared) {
       const sharedForm = decodeStrategyShare(shared);
       if (sharedForm) {
-        setForm(sharedForm);
+        const merged = mergeSharedFormWithContact(sharedForm, readContactFromCookie());
+        setForm(merged);
         setDraftRestored(true);
-        if (params.get("view") === "1" && isStrategyFormComplete(sharedForm)) {
+        if (isViewMode && isStrategyViewReady(merged)) {
           setShowStrategy(true);
+          setSharedPreview(true);
+          setLeadCaptured(isStrategyFormComplete(merged));
         }
         setStorageReady(true);
         return;
       }
     }
 
-    const draft = loadStrategyDraft();
-    if (draft) {
-      setForm(draft.form);
-      setFormStep(draft.step);
+    const loaded = loadStrategyDraft();
+    if (loaded) {
+      setForm(loaded.draft.form);
+      setFormStep(loaded.draft.step);
       setDraftRestored(true);
-      setDraftSavedAt(draft.savedAt);
+      setDraftSavedAt(loaded.draft.savedAt);
+      setDraftSource(loaded.source);
     }
     setStorageReady(true);
   }, []);
 
   useEffect(() => {
-    if (!storageReady) return;
+    if (!storageReady || !rememberEnabled) return;
     saveStrategyDraft(form, formStep);
     if (hasStrategyDraftContent(form)) {
       setDraftSavedAt(new Date().toISOString());
     }
-  }, [form, formStep, storageReady]);
+  }, [form, formStep, storageReady, rememberEnabled]);
+
+  useEffect(() => {
+    if (!actionMessage) return;
+    const timer = window.setTimeout(() => setActionMessage(null), 4500);
+    return () => window.clearTimeout(timer);
+  }, [actionMessage]);
+
+  const handleRememberChange = (enabled: boolean) => {
+    setRememberEnabled(enabled);
+    saveRememberPreference(enabled);
+    if (!enabled) {
+      clearStrategyDraft();
+      setDraftRestored(false);
+      setDraftSavedAt(undefined);
+      setDraftSource(undefined);
+    } else if (hasStrategyDraftContent(form)) {
+      saveStrategyDraft(form, formStep);
+      setDraftSavedAt(new Date().toISOString());
+    }
+  };
 
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
   const industryAnalysis = useMemo(
@@ -351,11 +394,14 @@ export function StrategyMarketingPage() {
     [planIds, comboIds],
   );
   const formProgress = useMemo(() => buildFormProgress(form), [form]);
+  const contactErrors = useMemo(() => getContactFieldErrors(form), [form]);
 
-  const step1Valid = [form.fullName, form.companyName, form.phone, form.address, form.email].every((v) => String(v).trim());
+  const step1Valid = isContactStepValid(form);
   const step2Valid = form.industry.trim().length >= 2 && !!form.businessGoal;
-  const step3Valid = !!form.scale && !!form.budgetRange;
-  const canAdvance = formStep === 1 ? step1Valid : formStep === 2 ? step2Valid : step3Valid;
+  const step3Valid = !!form.platformFocus;
+  const step4Valid = !!form.scale && !!form.budgetRange;
+  const canAdvance =
+    formStep === 1 ? step1Valid : formStep === 2 ? step2Valid : formStep === 3 ? step3Valid : step4Valid;
 
   useEffect(() => {
     if (!showStrategy) return;
@@ -363,7 +409,7 @@ export function StrategyMarketingPage() {
     setPlanIds(comboIds);
     const first = getPricingItemById(comboIds[0]) || getAllPricingItems()[0];
     setActiveItem(first);
-  }, [showStrategy, comboIds, form.budgetRange]);
+  }, [showStrategy]);
 
   const updateField = <K extends keyof LeadForm>(field: K, value: LeadForm[K]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -399,18 +445,36 @@ export function StrategyMarketingPage() {
     event?.preventDefault();
     if (submitting) return;
 
-    if (!step1Valid || !step2Valid || !step3Valid) {
-      setError("Vui lòng điền đầy đủ thông tin trước khi xem chiến lược.");
+    if (!step1Valid || !step2Valid || !step3Valid || !step4Valid) {
+      if (formStep === 1) setContactTouched(true);
+      setError(
+        formStep === 1
+          ? firstContactError(form) ?? "Vui lòng kiểm tra lại thông tin liên hệ."
+          : formStep === 2
+            ? "Vui lòng chọn ngành nghề và mục tiêu."
+            : formStep === 3
+              ? "Vui lòng chọn nền tảng ưu tiên."
+              : "Vui lòng chọn quy mô và ngân sách.",
+      );
       return;
     }
 
     setSubmitting(true);
+    const totals = calculatePlanTotals(comboIds);
     const result = await db.leads.add({
       type: "contact",
       name: form.fullName.trim(),
       phone: form.phone.trim(),
       service: "Chiến lược Marketing",
-      note: JSON.stringify({ kind: "strategy_marketing", ...form, existingAssets: form.existingAssets }),
+      note: JSON.stringify({
+        kind: "strategy_marketing",
+        ...form,
+        existingAssets: form.existingAssets,
+        tierLabel: comboRecommendation.tierLabel,
+        monthTotal: totals.month,
+        setupTotal: totals.once,
+        itemCount: comboIds.length,
+      }),
       platform: "chienluocmarketing",
     });
     setSubmitting(false);
@@ -420,6 +484,8 @@ export function StrategyMarketingPage() {
       return;
     }
     saveStrategyDraft(form, formStep);
+    setLeadCaptured(true);
+    setSharedPreview(false);
     setShowStrategy(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -470,7 +536,7 @@ export function StrategyMarketingPage() {
     try {
       const url = buildStrategyShareUrl(form, { view: true });
       await navigator.clipboard.writeText(url);
-      setActionMessage("Đã sao chép link chiến lược — gửi cho khách hoặc mở trên thiết bị khác.");
+      setActionMessage("Đã sao chép link chiến lược (không chứa SĐT/email) — an toàn để gửi khách.");
     } catch {
       setActionMessage("Không sao chép được link.");
     }
@@ -502,19 +568,21 @@ export function StrategyMarketingPage() {
                   </div>
                 ))}
               </div>
-              <LiveStrategySidebar form={form} />
+              <FormIntroPanel />
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
               {draftRestored && (
                 <DraftRestoredBanner
                   savedAt={draftSavedAt}
+                  source={draftSource}
                   onClear={() => {
                     clearStrategyDraft();
                     setForm(initialForm);
                     setFormStep(1);
                     setDraftRestored(false);
                     setDraftSavedAt(undefined);
+                    setDraftSource(undefined);
                   }}
                 />
               )}
@@ -522,22 +590,25 @@ export function StrategyMarketingPage() {
               <FormStepIndicator currentStep={formStep} />
               <p className="mb-5 flex items-center gap-2 text-sm font-bold text-violet-800">
                 <Info size={16} />
-                {formStep === 1 ? "Thông tin liên hệ" : formStep === 2 ? "Ngành nghề & mục tiêu" : "Quy mô & ngân sách"}
+                {formStep === 1
+                  ? "Bước 1 — Thông tin liên hệ"
+                  : formStep === 2
+                    ? "Bước 2 — Ngành nghề & mục tiêu"
+                    : formStep === 3
+                      ? "Bước 3 — Nền tảng & tài sản hiện có"
+                      : "Bước 4 — Quy mô & ngân sách"}
               </p>
 
               {formStep === 1 && (
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <p className="sm:col-span-2 rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2 text-[11px] text-violet-700">
-                    💾 Thông tin tự lưu trên thiết bị này — quay lại sau vẫn còn dữ liệu.
-                  </p>
-                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} autoComplete="name" /></label>
-                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} autoComplete="organization" /></label>
-                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} autoComplete="tel" inputMode="tel" /></label>
-                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} autoComplete="email" /></label>
-                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} autoComplete="street-address" placeholder="VD: 123 Nguyễn Huệ, P. Bến Nghé, Q.1, TP. Hồ Chí Minh" /></label>
                   <div className="sm:col-span-2">
-                    <StrategyLocationPreview address={form.address} scale={form.scale} profile={profile} businessGoal={form.businessGoal} />
+                    <RememberCookieToggle enabled={rememberEnabled} onChange={handleRememberChange} />
                   </div>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="name" /><FieldError message={contactTouched ? contactErrors.fullName : null} /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="organization" /><FieldError message={contactTouched ? contactErrors.companyName : null} /></label>
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="tel" inputMode="tel" /><FieldError message={contactTouched ? contactErrors.phone : null} /></label>
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="email" /><FieldError message={contactTouched ? contactErrors.email : null} /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="street-address" placeholder="VD: 123 Nguyễn Huệ, P. Bến Nghé, Q.1, TP. Hồ Chí Minh" /><FieldError message={contactTouched ? contactErrors.address : null} /></label>
                 </div>
               )}
 
@@ -546,7 +617,6 @@ export function StrategyMarketingPage() {
                   <div className="space-y-2">
                     <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
                     <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} inputClass={inputClass} />
-                    {form.industry.trim() && <StrategyIndustryPreview form={form} />}
                   </div>
                   <div className="space-y-2">
                     <span className="text-xs font-bold uppercase text-slate-500"><Target size={14} className="inline" /> Mục tiêu kinh doanh *</span>
@@ -556,6 +626,16 @@ export function StrategyMarketingPage() {
               )}
 
               {formStep === 3 && (
+                <div className="space-y-6">
+                  <PlatformFocusCards
+                    value={form.platformFocus}
+                    onChange={(focus) => updateField("platformFocus", focus)}
+                  />
+                  <OwnedChannelCards ownedIds={form.existingAssets} onToggle={toggleAsset} />
+                </div>
+              )}
+
+              {formStep === 4 && (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Quy mô *</span>
                     <select className={selectClass} value={form.scale} onChange={(e) => updateField("scale", e.target.value)}>{SCALE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}</select>
@@ -563,30 +643,31 @@ export function StrategyMarketingPage() {
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Ngân sách/tháng *</span>
                     <select className={selectClass} value={form.budgetRange} onChange={(e) => updateField("budgetRange", e.target.value)}>{BUDGET_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}</select>
                   </label>
-                  <div className="space-y-2 sm:col-span-2">
-                    <BudgetSimulator form={form} onSelectBudget={(b) => updateField("budgetRange", b)} />
-                  </div>
-                  <div className="space-y-2 sm:col-span-2">
-                    <span className="text-xs font-bold uppercase text-slate-500">Đã có gì? (chọn nếu có)</span>
-                    <div className="flex flex-wrap gap-2">
-                      {EXISTING_ASSET_OPTIONS.map((asset) => (
-                        <button key={asset.id} type="button" onClick={() => toggleAsset(asset.id)} className={`rounded-full border px-3 py-1.5 text-[11px] font-bold ${form.existingAssets.includes(asset.id) ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-slate-50 text-slate-600"}`}>{asset.label}</button>
-                      ))}
-                    </div>
-                  </div>
-                  {form.industry.trim() && <div className="sm:col-span-2"><StrategyIndustryPreview form={form} /></div>}
+                  <p className="sm:col-span-2 rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2 text-[11px] text-violet-700">
+                    Sau bước này hệ thống sẽ hiển thị chiến lược, báo giá từng kênh và timeline triển khai chi tiết.
+                  </p>
                 </div>
               )}
 
               {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
               <FormNavButtons
                 step={formStep}
+                totalSteps={TOTAL_FORM_STEPS}
                 canNext={canAdvance}
                 submitting={submitting}
                 onBack={() => { setFormStep((s) => s - 1); setError(null); }}
                 onNext={() => {
                   if (!canAdvance) {
-                    setError(formStep === 1 ? "Vui lòng điền đủ thông tin liên hệ." : "Vui lòng chọn ngành nghề và mục tiêu.");
+                    if (formStep === 1) {
+                      setContactTouched(true);
+                      setError(firstContactError(form) ?? "Vui lòng điền đủ thông tin liên hệ.");
+                    } else if (formStep === 2) {
+                      setError("Vui lòng chọn ngành nghề và mục tiêu.");
+                    } else if (formStep === 3) {
+                      setError("Vui lòng chọn nền tảng ưu tiên.");
+                    } else {
+                      setError("Vui lòng chọn quy mô và ngân sách.");
+                    }
                     return;
                   }
                   setError(null);
@@ -607,15 +688,24 @@ export function StrategyMarketingPage() {
     <div className="min-h-screen bg-[#ece6f7] px-3 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto max-w-[1600px]">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
-          <button type="button" onClick={() => { setShowStrategy(false); setFormStep(1); }} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
+          <button type="button" onClick={() => setShowStrategy(false)} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={copyShareLink} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Share2 size={14} /> Chia sẻ link</button>
             <button type="button" onClick={sendEmail} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Send size={14} /> Gửi Gmail</button>
             <button type="button" onClick={copySummary} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Copy size={14} /> Sao chép</button>
             <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Printer size={14} /> In/PDF</button>
-            <a href={`https://zalo.me/0901438703?msg=${encodeURIComponent(`Xin tư vấn chiến lược cho ${form.companyName} — ${form.industry}`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-violet-700 px-4 py-2 text-xs font-bold text-white"><MessageCircle size={14} /> Tư vấn Zalo</a>
+            <a href={`https://zalo.me/0901438703?msg=${encodeURIComponent(`Xin tư vấn chiến lược — ${form.companyName} · ${form.industry} · ${form.budgetRange}\n${buildStrategyShareUrl(form, { view: true })}`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-violet-700 px-4 py-2 text-xs font-bold text-white"><MessageCircle size={14} /> Tư vấn Zalo</a>
           </div>
         </div>
+        {sharedPreview && !leadCaptured && (
+          <SharedPreviewBanner
+            onCompleteContact={() => {
+              setShowStrategy(false);
+              setFormStep(1);
+              setContactTouched(true);
+            }}
+          />
+        )}
         {actionMessage && <p className="mb-4 text-sm text-emerald-600 print:hidden">{actionMessage}</p>}
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-violet-100 bg-white shadow-2xl">
@@ -642,7 +732,9 @@ export function StrategyMarketingPage() {
               )}
             </div>
             <p className="mx-auto mt-2 max-w-xl text-[11px] leading-relaxed text-slate-500">{industryAnalysis.insight}</p>
-            <p className="mx-auto mt-2 text-xs font-bold uppercase tracking-wide text-violet-600">{form.businessGoal} · {form.budgetRange}</p>
+            <p className="mx-auto mt-2 text-xs font-bold uppercase tracking-wide text-violet-600">
+              {form.businessGoal} · {PLATFORM_FOCUS_OPTIONS.find((o) => o.id === form.platformFocus)?.label ?? "Chiến lược"} · {form.budgetRange}
+            </p>
             {(() => {
               const loc = analyzeBusinessLocation(form.address, form.scale, profile, form.businessGoal);
               if (!loc) return null;
@@ -1024,10 +1116,7 @@ export function StrategyMarketingPage() {
                 <BudgetFitBar monthTotal={planTotals.month} budgetRange={form.budgetRange} />
                 <button type="button" onClick={() => setPlanIds(comboIds)} className="mt-3 w-full rounded-xl border border-violet-300 py-2 text-xs font-bold text-violet-700 print:hidden">Dùng combo đề xuất</button>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <p className="flex items-center gap-2 text-sm font-black text-slate-800"><CalendarDays size={16} /> Timeline triển khai</p>
-                <ul className="mt-3 space-y-2">{timeline.map((t) => (<li key={t.week} className="text-xs"><strong className="text-violet-700">{t.week}:</strong> {t.task}</li>))}</ul>
-              </div>
+              <DeploymentTimelinePanel timeline={timeline} />
             </div>
           </div>
 

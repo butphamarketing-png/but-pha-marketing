@@ -51,9 +51,6 @@ function pickMapsServiceId(
   businessGoal: string,
 ): string {
   if (hasMaps) {
-    if (businessGoal.includes("Tăng khách") || businessGoal.includes("doanh thu") || tier !== "starter") {
-      return "gm-optimize";
-    }
     return "gm-rebuild";
   }
 
@@ -117,11 +114,7 @@ export function recommendMapsStack(input: {
   const reasons: string[] = [];
 
   if (input.hasMaps) {
-    if (serviceId === "gm-rebuild") {
-      reasons.push(`Đã có Maps → Cải tạo (${formatPriceVnd(service.price)}) sửa thông tin, danh mục & ảnh cơ bản — gói /google-maps.`);
-    } else {
-      reasons.push(`Đã có Maps → Tối ưu (${formatPriceVnd(service.price)}) nâng SEO Maps, mô tả chuẩn & hiển thị tìm kiếm.`);
-    }
+    reasons.push(`Đã có Maps → Cải tạo (${formatPriceVnd(service.price)}) — khớp gói /google-maps, sửa thông tin, danh mục & ảnh.`);
   } else if (serviceId === "gm-build") {
     reasons.push(`Chưa có Maps → Xây dựng (${formatPriceVnd(service.price)}): tạo profile, xác minh DN & setup đầy đủ.`);
   } else {

@@ -15,6 +15,7 @@ import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { NewsDashboard } from "@/components/admin/NewsDashboard";
 import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type ClientPortal, type ClientReview } from "@/lib/useData";
+import { formatStrategyLeadDetail, formatStrategyLeadSummary, isStrategyLead, parseStrategyLeadNote } from "@/lib/strategy-lead";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 
@@ -1396,15 +1397,30 @@ export default function AdminPage() {
                   <tr><th className="px-4 py-3">Loại</th><th className="px-4 py-3">Khách</th><th className="px-4 py-3">SĐT</th><th className="px-4 py-3">Ghi chú</th><th className="px-4 py-3"></th></tr>
                 </thead>
                 <tbody className="divide-y divide-white/10">
-                  {leads.map(l => (
-                    <tr key={l.id} className="text-gray-200">
-                      <td className="px-4 py-3 text-xs uppercase font-bold">{l.type === "audit" ? "Chuẩn đoán" : "Tư vấn"}</td>
-                      <td className="px-4 py-3 font-bold">{l.name}</td>
+                  {leads.map(l => {
+                    const strategy = parseStrategyLeadNote(l.note);
+                    const leadType = l.type === "audit" ? "Chuẩn đoán" : isStrategyLead(l) ? "Chiến lược" : "Tư vấn";
+                    const noteText = strategy
+                      ? formatStrategyLeadSummary(strategy)
+                      : l.note || l.service || "-";
+                    return (
+                    <tr key={l.id} className="text-gray-200 align-top">
+                      <td className="px-4 py-3 text-xs uppercase font-bold">{leadType}</td>
+                      <td className="px-4 py-3 font-bold">{strategy?.companyName || l.name}</td>
                       <td className="px-4 py-3">{l.phone}</td>
-                      <td className="px-4 py-3 text-xs text-gray-400">{l.note || l.service || "-"}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">
+                        <p>{noteText}</p>
+                        {strategy && (
+                          <details className="mt-1">
+                            <summary className="cursor-pointer text-[10px] font-bold text-violet-400">Chi tiết chiến lược</summary>
+                            <pre className="mt-1 whitespace-pre-wrap text-[10px] text-gray-500">{formatStrategyLeadDetail(strategy)}</pre>
+                          </details>
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-right"><button onClick={async () => { await db.leads.delete(l.id.toString()); refreshLeads(); }} className="text-red-400"><Trash2 size={16} /></button></td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
               </div>
