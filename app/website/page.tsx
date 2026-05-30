@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
+import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Search, Check } from "lucide-react";
+import { Settings, ChevronRight, Globe, Search, Check, FileText, Sparkles, MessageSquare } from "lucide-react";
 
 const config: PlatformConfig = {
   name: "Website",
@@ -20,6 +20,7 @@ const config: PlatformConfig = {
   customSections: [
     { id: "audit", label: "Chuẩn đoán Website" },
     { id: "pricing", label: "Bảng giá dịch vụ" },
+    { id: "care", label: "Chăm sóc Website" },
     { id: "storage", label: "Hạ tầng lưu trữ" },
     { id: "contact", label: "Liên hệ tư vấn" },
   ],
@@ -80,6 +81,16 @@ export default function WebsitePage() {
   const [showDomainModal, setShowDomainModal] = useState(false);
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
+  const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
+
+  const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
+    setCheckoutPkg({
+      name: pkgName,
+      price: pkgPrice,
+      color: config.color,
+      tabLabel,
+    });
+  };
 
   return (
     <PlatformPage config={config}>
@@ -200,6 +211,103 @@ export default function WebsitePage() {
             </button>
           </div>
 
+          {/* CHĂM SÓC WEBSITE */}
+          <section id="care" className="space-y-16 scroll-mt-24">
+            <div className="text-center space-y-6">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
+                <span className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: config.color }}>
+                  Premium Care
+                </span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
+                <span style={{ color: config.color }}>Chăm sóc</span> Website
+              </h2>
+              <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Theo số lượng bài viết mỗi tháng</p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-3">
+              {[
+                {
+                  title: "10 bài viết/tháng",
+                  price: "1.000.000đ",
+                  features: ["Viết & đăng bài SEO", "Tối ưu Onpage cơ bản", "Cập nhật hình ảnh minh họa", "Báo cáo tiến độ hàng tháng"],
+                },
+                {
+                  title: "20 bài viết/tháng",
+                  price: "2.000.000đ",
+                  popular: true,
+                  features: ["Viết & đăng bài SEO chuyên sâu", "Tối ưu từ khóa & meta", "Internal link trong website", "Báo cáo & đề xuất cải thiện"],
+                },
+                {
+                  title: "30 bài viết/tháng",
+                  price: "2.500.000đ",
+                  features: ["Chiến lược content theo tháng", "Viết bài chuẩn SEO + CTA", "Tối ưu hiển thị & tốc độ", "Hỗ trợ ưu tiên khi cần chỉnh sửa"],
+                },
+              ].map((pkg, i) => (
+                <div
+                  key={i}
+                  className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${
+                    pkg.popular ? "border-green-500/50 bg-green-500/5" : "border-white/10 bg-white/[0.03]"
+                  }`}
+                >
+                  {pkg.popular && (
+                    <div
+                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black text-white shadow-xl"
+                      style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
+                    >
+                      <Sparkles size={12} /> PHỔ BIẾN
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col space-y-6">
+                    <div className="flex justify-center">
+                      <div
+                        className="flex h-16 w-16 items-center justify-center rounded-2xl"
+                        style={
+                          pkg.popular
+                            ? { backgroundColor: config.color, color: "#fff" }
+                            : { backgroundColor: `${config.color}15`, color: config.color }
+                        }
+                      >
+                        <FileText size={32} />
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-center">
+                      <h3 className="text-xl font-black text-white">{pkg.title}</h3>
+                      <p className="text-3xl font-black" style={{ color: config.color }}>
+                        {pkg.price}
+                      </p>
+                    </div>
+                    <ul className="flex-1 space-y-4">
+                      {pkg.features.map((feature, j) => (
+                        <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
+                          <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(pkg.title, pkg.price, "Chăm sóc Website")}
+                        className="flex-1 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all shadow-lg"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        Đăng ký ngay
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(pkg.title, pkg.price, "Chăm sóc Website")}
+                        className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                      >
+                        <MessageSquare size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* Storage Slider Section */}
           <div id="storage" className="space-y-12 scroll-mt-24">
             <div className="text-center space-y-6">
@@ -236,6 +344,10 @@ export default function WebsitePage() {
         onClose={() => setShowDomainModal(false)}
         primaryColor={config.color}
       />
+
+      {checkoutPkg && (
+        <ConsultationModal pkg={checkoutPkg} platformKey="website" onClose={() => setCheckoutPkg(null)} />
+      )}
     </PlatformPage>
   );
 }
