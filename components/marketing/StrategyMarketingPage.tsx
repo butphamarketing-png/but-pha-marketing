@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -39,6 +39,11 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/useData";
 import { STRATEGY_FOOTER, STRATEGY_PRICING, type StrategyPricingItem } from "@/lib/marketing-strategy-pricing";
+import { DOMAIN_COM_PRICE } from "@/lib/service-pricing";
+import {
+  getIndustrySuggestionGroups,
+  searchIndustrySuggestions,
+} from "@/lib/industry-suggestions";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
@@ -77,22 +82,13 @@ const initialForm: LeadForm = {
   existingAssets: [],
 };
 
-const INDUSTRY_GROUPS = [
-  { label: "Y tế & Sức khỏe", items: ["Nha khoa", "Spa / Thẩm mỹ", "Nhà thuốc"] },
-  { label: "Ăn uống & Lưu trú", items: ["Nhà hàng / F&B", "Khách sạn / Lưu trú"] },
-  { label: "Bán hàng & TMĐT", items: ["TMĐT / Bán lẻ", "Thời trang / Mỹ phẩm", "Nông sản / Thực phẩm"] },
-  {
-    label: "Dịch vụ & B2B",
-    items: ["Bất động sản", "Xây dựng / Nội thất", "Luật / Kế toán / Tư vấn", "Công nghệ / IT", "Logistics / Vận chuyển", "Dịch vụ doanh nghiệp"],
-  },
-  { label: "Giải trí & Lifestyle", items: ["Giáo dục / Đào tạo", "Gym / Yoga / Fitness", "Du lịch / Tour", "Sự kiện / Wedding", "Ô tô / Garage"] },
-] as const;
-
 const TRUST_STATS = [
-  { icon: Layers, label: `${getIndustryCount()}+ ngành`, sub: "Profile riêng" },
+  { icon: Layers, label: `${getIndustryCount()}+ ngành`, sub: "Gợi ý thông minh" },
   { icon: Zap, label: "Combo tự động", sub: "Theo ngân sách" },
   { icon: BadgeCheck, label: "Báo giá rõ", sub: "Minh bạch 100%" },
 ] as const;
+
+const INDUSTRY_GROUP_HINTS = getIndustrySuggestionGroups();
 
 const COLUMN_THEME = {
   website: { color: "#22C55E", bg: "from-emerald-500/10 to-emerald-500/5", border: "border-emerald-200" },
@@ -114,6 +110,111 @@ const inputClass =
   "w-full rounded-xl border border-violet-200/80 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20";
 
 const selectClass = inputClass;
+
+function IndustryAutocomplete({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const suggestions = useMemo(() => searchIndustrySuggestions(value, 10), [value]);
+  const showDropdown = open && value.trim().length >= 1 && suggestions.length > 0;
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [value]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const pick = (label: string) => {
+    onChange(label);
+    setOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter" && suggestions[activeIndex]) {
+      e.preventDefault();
+      pick(suggestions[activeIndex].label);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <input
+        className={inputClass}
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => value.trim().length >= 1 && setOpen(true)}
+        onKeyDown={handleKeyDown}
+        placeholder="Gõ ngành nghề — VD: cafe, nha khoa, shop thời trang..."
+        autoComplete="off"
+        role="combobox"
+        aria-expanded={showDropdown}
+        aria-autocomplete="list"
+      />
+      {!value.trim() && (
+        <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+          {getIndustryCount()}+ ngành gợi ý — gõ vài ký tự để tìm:{" "}
+          {INDUSTRY_GROUP_HINTS.slice(0, 4).map((g) => g.label).join(" · ")}…
+        </p>
+      )}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.ul
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            className="absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-xl border border-violet-200 bg-white py-1 shadow-xl shadow-violet-900/10"
+            role="listbox"
+          >
+            {suggestions.map((item, index) => (
+              <li key={item.label} role="option" aria-selected={index === activeIndex}>
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => pick(item.label)}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left transition ${index === activeIndex ? "bg-violet-50 text-violet-900" : "text-slate-700 hover:bg-violet-50/60"}`}
+                >
+                  <span className="text-sm font-bold">{item.label}</span>
+                  <span className="shrink-0 rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-bold text-violet-600">{item.group}</span>
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+      {value.trim().length >= 1 && suggestions.length === 0 && open && (
+        <p className="mt-2 text-[11px] text-slate-500">Không tìm thấy gợi ý — bạn có thể nhập tự do, hệ thống vẫn tư vấn theo mô tả.</p>
+      )}
+    </div>
+  );
+}
 
 function PhaseStepper({ phases }: { phases: { title: string; duration: string; focus: string }[] }) {
   return (
@@ -409,26 +510,7 @@ export function StrategyMarketingPage() {
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} /></label>
                 <div className="space-y-2 sm:col-span-2">
                   <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
-                  <input className={inputClass} value={form.industry} onChange={(e) => updateField("industry", e.target.value)} placeholder="VD: Nha khoa, Quán cafe, Shop thời trang..." />
-                  <div className="max-h-48 space-y-3 overflow-y-auto rounded-xl border border-violet-100 bg-violet-50/40 p-3">
-                    {INDUSTRY_GROUPS.map((group) => (
-                      <div key={group.label}>
-                        <p className="mb-1.5 text-[10px] font-black uppercase tracking-wide text-violet-600">{group.label}</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {group.items.map((item) => (
-                            <button
-                              key={item}
-                              type="button"
-                              onClick={() => updateField("industry", item)}
-                              className={`rounded-full border px-2.5 py-1 text-[10px] font-bold transition ${form.industry === item ? "border-violet-500 bg-violet-600 text-white shadow-sm" : "border-violet-200 bg-white text-violet-700 hover:border-violet-400"}`}
-                            >
-                              {item}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} />
                   {previewProfile && previewCombo && (
                     <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4">
                       <p className="flex items-center gap-2 text-xs font-black text-emerald-800">
@@ -437,8 +519,49 @@ export function StrategyMarketingPage() {
                       <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{previewProfile.summary.slice(0, 120)}…</p>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-black text-violet-700">{previewCombo.tierLabel}</span>
-                        <span className="text-[10px] font-bold text-slate-500">{previewCombo.itemIds.length} gói gợi ý · ~{formatVnd(calculatePlanTotals(previewCombo.itemIds).month)}/tháng</span>
+                        <span className="text-[10px] font-bold text-slate-500">{previewCombo.itemIds.length} gói · ~{formatVnd(calculatePlanTotals(previewCombo.itemIds).month)}/tháng</span>
                       </div>
+                      {previewCombo.websiteStack && !form.existingAssets.includes("website") && (
+                        <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
+                          <p className="font-black text-emerald-800">Gói Website gợi ý</p>
+                          <p className="mt-1">
+                            {previewCombo.websiteStack.buildName} ({formatVnd(previewCombo.websiteStack.buildPrice)}) + Hosting {previewCombo.websiteStack.hostingGb}GB ({formatVnd(previewCombo.websiteStack.hostingPrice)}/năm) + Chăm sóc {previewCombo.websiteStack.carePosts} bài/th
+                          </p>
+                          <p className="mt-1 font-bold text-emerald-700">
+                            Năm đầu ~{formatVnd(previewCombo.websiteStack.firstYearSetup)} · Duy trì {formatVnd(previewCombo.websiteStack.monthlyRecurring)}/tháng
+                          </p>
+                        </div>
+                      )}
+                      {previewCombo.fanpageStack && (
+                        <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
+                          <p className="font-black text-blue-800">Fanpage — 150.000đ/bài</p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {previewCombo.fanpageStack.careAlternatives.map((t) => (
+                              <span
+                                key={t.posts}
+                                className={`rounded-lg px-2 py-1 text-[10px] font-bold ${t.selected ? "bg-blue-600 text-white" : "bg-white text-blue-700 border border-blue-200"}`}
+                              >
+                                {t.posts} bài = {formatVnd(t.price)}
+                              </span>
+                            ))}
+                          </div>
+                          {!form.existingAssets.includes("fanpage") && previewCombo.fanpageStack.buildName && (
+                            <p className="mt-2">+ Setup {previewCombo.fanpageStack.buildName} ({formatVnd(previewCombo.fanpageStack.buildPrice)})</p>
+                          )}
+                        </div>
+                      )}
+                      {previewCombo.mapsStack && !form.existingAssets.includes("maps") && (
+                        <div className="mt-3 rounded-lg border border-orange-200 bg-orange-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
+                          <p className="font-black text-orange-800">Google Maps gợi ý</p>
+                          <p className="mt-1">
+                            {previewCombo.mapsStack.serviceName} ({formatVnd(previewCombo.mapsStack.servicePrice)})
+                            {previewCombo.mapsStack.adsName ? ` + ${previewCombo.mapsStack.adsName}` : ""}
+                          </p>
+                          {previewCombo.mapsStack.multiLocationNote && (
+                            <p className="mt-1 text-orange-700">{previewCombo.mapsStack.multiLocationNote}</p>
+                          )}
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </div>
@@ -580,6 +703,119 @@ export function StrategyMarketingPage() {
               </div>
               <p className="mt-2 text-xs opacity-80 italic">Case tham khảo: {profile.caseStudy.title} — {profile.caseStudy.result}</p>
             </div>
+
+            {comboRecommendation.websiteStack && (
+              <div className="mt-4 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5">
+                <p className="flex items-center gap-2 text-sm font-black text-emerald-800">
+                  <Globe size={16} /> Tư vấn Website (khớp bảng giá /website)
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {[
+                    { label: "Thiết kế", value: comboRecommendation.websiteStack.buildName, price: comboRecommendation.websiteStack.buildPrice },
+                    { label: "Hosting/năm", value: `${comboRecommendation.websiteStack.hostingGb}GB`, price: comboRecommendation.websiteStack.hostingPrice, sub: comboRecommendation.websiteStack.hostingLabel },
+                    { label: "Tên miền .com", value: "1 năm", price: DOMAIN_COM_PRICE },
+                    { label: "Chăm sóc/tháng", value: `${comboRecommendation.websiteStack.carePosts} bài SEO`, price: comboRecommendation.websiteStack.carePrice },
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-xl border border-emerald-100 bg-white p-3">
+                      <p className="text-[10px] font-black uppercase text-emerald-600">{row.label}</p>
+                      <p className="mt-0.5 text-sm font-bold text-slate-800">{row.value}</p>
+                      {"sub" in row && row.sub && <p className="text-[10px] text-slate-500">{row.sub}</p>}
+                      <p className="mt-1 text-base font-black text-emerald-700">{formatVnd(row.price)}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs font-bold text-slate-600">
+                  Năm đầu (setup): {formatVnd(comboRecommendation.websiteStack.firstYearSetup)} · Duy trì content web: {formatVnd(comboRecommendation.websiteStack.monthlyRecurring)}/tháng
+                </p>
+              </div>
+            )}
+
+            {comboRecommendation.fanpageStack && (
+              <div className="mt-4 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-5">
+                <p className="flex items-center gap-2 text-sm font-black text-blue-800">
+                  <Facebook size={16} /> Tư vấn Fanpage (khớp bảng giá /facebook)
+                </p>
+                <p className="mt-1 text-[11px] font-bold text-blue-600">
+                  Công thức: 150.000đ × số bài/tháng — kéo slider 10–60 trên /facebook
+                </p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                  {comboRecommendation.fanpageStack.careAlternatives.map((tier) => (
+                    <div
+                      key={tier.posts}
+                      className={`rounded-xl border p-3 text-center transition ${tier.selected ? "border-blue-500 bg-blue-100 ring-2 ring-blue-300" : "border-blue-100 bg-white opacity-75"}`}
+                    >
+                      <p className="text-[10px] font-black uppercase text-blue-600">{tier.label}</p>
+                      <p className="mt-1 text-2xl font-black text-slate-800">{tier.posts}</p>
+                      <p className="text-[10px] font-bold text-slate-500">bài/tháng</p>
+                      <p className="mt-1 text-sm font-black text-blue-700">{formatVnd(tier.price)}</p>
+                      <p className="text-[9px] text-slate-400">{tier.posts} × 150.000đ</p>
+                      {tier.selected && (
+                        <span className="mt-1 inline-block rounded-full bg-blue-600 px-2 py-0.5 text-[9px] font-black text-white">Đề xuất</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {[
+                    ...(comboRecommendation.fanpageStack.buildName
+                      ? [{ label: "Setup Fanpage", value: comboRecommendation.fanpageStack.buildName, price: comboRecommendation.fanpageStack.buildPrice }]
+                      : []),
+                    {
+                      label: "Chăm sóc/tháng",
+                      value: `${comboRecommendation.fanpageStack.carePosts} bài · ${comboRecommendation.fanpageStack.careTierLabel}`,
+                      price: comboRecommendation.fanpageStack.carePrice,
+                    },
+                    ...(comboRecommendation.fanpageStack.adsName
+                      ? [{ label: "Quảng cáo FB", value: comboRecommendation.fanpageStack.adsName, price: comboRecommendation.fanpageStack.adsPrice }]
+                      : []),
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-xl border border-blue-100 bg-white p-3">
+                      <p className="text-[10px] font-black uppercase text-blue-600">{row.label}</p>
+                      <p className="mt-0.5 text-sm font-bold text-slate-800">{row.value}</p>
+                      <p className="mt-1 text-base font-black text-blue-700">
+                        {formatVnd(row.price)}
+                        {row.label.includes("Quảng cáo") || row.label.includes("Chăm sóc") ? "/tháng" : ""}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs font-bold text-slate-600">
+                  Setup: {formatVnd(comboRecommendation.fanpageStack.setupOnce)} · Duy trì Fanpage: {formatVnd(comboRecommendation.fanpageStack.monthlyRecurring)}/tháng
+                </p>
+              </div>
+            )}
+
+            {comboRecommendation.mapsStack && (
+              <div className="mt-4 rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-white p-5">
+                <p className="flex items-center gap-2 text-sm font-black text-orange-800">
+                  <MapPin size={16} /> Tư vấn Google Maps (khớp bảng giá /google-maps)
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {[
+                    { label: "Dịch vụ Maps", value: comboRecommendation.mapsStack.serviceName, price: comboRecommendation.mapsStack.servicePrice },
+                    ...(comboRecommendation.mapsStack.adsName
+                      ? [{ label: "Quảng cáo Local", value: comboRecommendation.mapsStack.adsName, price: comboRecommendation.mapsStack.adsPrice }]
+                      : []),
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-xl border border-orange-100 bg-white p-3">
+                      <p className="text-[10px] font-black uppercase text-orange-600">{row.label}</p>
+                      <p className="mt-0.5 text-sm font-bold text-slate-800">{row.value}</p>
+                      <p className="mt-1 text-base font-black text-orange-700">{formatVnd(row.price)}{row.label.includes("Quảng cáo") ? "/tháng" : ""}</p>
+                    </div>
+                  ))}
+                </div>
+                {comboRecommendation.mapsStack.multiLocationNote && (
+                  <p className="mt-3 flex items-start gap-2 text-xs font-bold text-orange-700">
+                    <Info size={14} className="mt-0.5 shrink-0" />
+                    {comboRecommendation.mapsStack.multiLocationNote}
+                  </p>
+                )}
+                <p className="mt-3 text-xs font-bold text-slate-600">
+                  Setup Maps: {formatVnd(comboRecommendation.mapsStack.setupOnce)}
+                  {comboRecommendation.mapsStack.monthlyRecurring > 0 && ` · Quảng cáo: ${formatVnd(comboRecommendation.mapsStack.monthlyRecurring)}/tháng`}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Pricing toolbar */}

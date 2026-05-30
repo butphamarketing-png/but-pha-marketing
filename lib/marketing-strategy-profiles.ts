@@ -1,4 +1,34 @@
 import { STRATEGY_PRICING, type StrategyPricingItem } from "./marketing-strategy-pricing";
+import {
+  DOMAIN_COM_PRICE,
+  fanpageCareItemId,
+  fanpageCarePrice,
+  formatPriceVnd,
+  FANPAGE_CARE_PRICE_PER_POST,
+  getFanpageCareWorks,
+  HOSTING_PACKAGES,
+  parseFanpageCarePosts,
+  getFanpageCareTierLabel,
+} from "./service-pricing";
+import {
+  buildWebsiteStackItemIds,
+  recommendWebsiteCareOnly,
+  recommendWebsiteStack,
+  type WebsiteStackRecommendation,
+} from "./website-pricing-advisor";
+import {
+  buildFanpageStackItemIds,
+  buildFanpageCareAlternatives,
+  recommendFanpageCareOnly,
+  recommendFanpageStack,
+  type FanpageStackRecommendation,
+} from "./fanpage-pricing-advisor";
+import { findIndustrySuggestion, getIndustrySuggestionCount } from "./industry-suggestions";
+import {
+  buildMapsStackItemIds,
+  recommendMapsStack,
+  type MapsStackRecommendation,
+} from "./googlemaps-pricing-advisor";
 
 export type BillingPeriod = "once" | "month" | "year";
 
@@ -7,9 +37,7 @@ export const ITEM_BILLING: Record<string, BillingPeriod> = {
   "web-build-6": "once",
   "web-build-9": "once",
   "web-build-12": "once",
-  "web-data-3": "year",
-  "web-data-10": "year",
-  "web-data-20": "year",
+  ...Object.fromEntries(HOSTING_PACKAGES.map((p) => [`web-data-${p.gb}`, "year"] as const)),
   "web-domain-com": "year",
   "web-care-10": "month",
   "web-care-20": "month",
@@ -37,8 +65,26 @@ export function getAllPricingItems(): StrategyPricingItem[] {
   return STRATEGY_PRICING.flatMap((column) => column.groups.flatMap((group) => group.items));
 }
 
+export function getItemBilling(itemId: string): BillingPeriod {
+  if (ITEM_BILLING[itemId]) return ITEM_BILLING[itemId];
+  if (parseFanpageCarePosts(itemId) !== null) return "month";
+  return "once";
+}
+
+export function buildDynamicPricingItem(id: string): StrategyPricingItem | null {
+  const posts = parseFanpageCarePosts(id);
+  if (posts === null) return null;
+  return {
+    id,
+    label: `${posts} bài / tháng`,
+    price: formatPriceVnd(fanpageCarePrice(posts)),
+    quantity: `${posts} × ${formatPriceVnd(FANPAGE_CARE_PRICE_PER_POST)}/bài`,
+    works: getFanpageCareWorks(posts),
+  };
+}
+
 export function getPricingItemById(id: string) {
-  return getAllPricingItems().find((item) => item.id === id) ?? null;
+  return getAllPricingItems().find((item) => item.id === id) ?? buildDynamicPricingItem(id);
 }
 
 export type BudgetFilter = "all" | "under5" | "5to15" | "over15";
@@ -47,7 +93,7 @@ export function itemFitsBudgetFilter(itemId: string, filter: BudgetFilter) {
   if (filter === "all") return true;
   const item = getPricingItemById(itemId);
   if (!item) return true;
-  const billing = ITEM_BILLING[itemId] ?? "once";
+  const billing = getItemBilling(itemId);
   const price = parsePriceVnd(item.price);
 
   if (billing === "month") {
@@ -560,6 +606,13 @@ const PROFILES: IndustryProfile[] = [
 
 export function resolveIndustryProfile(industry: string) {
   const text = industry.trim();
+  if (!text) return PROFILES[PROFILES.length - 1];
+
+  const suggestion = findIndustrySuggestion(text);
+  if (suggestion) {
+    return PROFILES.find((p) => p.id === suggestion.profileId) ?? PROFILES[PROFILES.length - 1];
+  }
+
   return PROFILES.find((profile) => profile.id !== "default" && profile.match.test(text)) ?? PROFILES[PROFILES.length - 1];
 }
 
@@ -578,6 +631,9 @@ export type ComboRecommendation = {
   label: string;
   reasons: string[];
   itemIds: string[];
+  websiteStack: WebsiteStackRecommendation | null;
+  fanpageStack: FanpageStackRecommendation | null;
+  mapsStack: MapsStackRecommendation | null;
 };
 
 type BudgetTier = 0 | 1 | 2;
@@ -637,67 +693,6 @@ function resolvePackageTier(budget: BudgetTier, scale: ScaleTier): PackageTier {
   return "starter";
 }
 
-function pickWebsiteBuild(tier: PackageTier, scale: ScaleTier): string {
-  if (scale >= 2 || tier === "professional") return "web-build-12";
-  if (tier === "growth") return "web-build-6";
-  return "web-build-3";
-}
-
-function pickWebData(buildId: string): string {
-  if (buildId === "web-build-12") return "web-data-20";
-  if (buildId === "web-build-9" || buildId === "web-build-6") return "web-data-10";
-  return "web-data-3";
-}
-
-function pickWebCare(tier: PackageTier, businessGoal: string): string {
-  if (tier === "professional" || businessGoal.includes("thương hiệu")) return "web-care-20";
-  if (tier === "growth") return "web-care-10";
-  return "web-care-10";
-}
-
-function pickFanpageBuild(tier: PackageTier): string {
-  if (tier === "professional") return "fb-build-pro";
-  if (tier === "growth") return "fb-build-advanced";
-  return "fb-build-basic";
-}
-
-function pickFanpageCare(tier: PackageTier, businessGoal: string): string {
-  if (tier === "professional") return "fb-care-pro";
-  if (tier === "growth" || businessGoal.includes("Tăng khách")) return "fb-care-advanced";
-  return "fb-care-basic";
-}
-
-function pickMapsService(hasMaps: boolean, tier: PackageTier): string {
-  if (hasMaps) return tier === "starter" ? "gm-rebuild" : "gm-optimize";
-  return tier === "starter" ? "gm-build" : "gm-optimize";
-}
-
-function pickAdsId(tier: PackageTier, adsType: "fb" | "gm"): string {
-  const high = tier === "professional";
-  if (adsType === "gm") return high ? "gm-ads-over-10" : "gm-ads-under-10";
-  return high ? "fb-ads-over-10" : "fb-ads-under-10";
-}
-
-function shouldRecommendAds(
-  businessGoal: string,
-  budgetTier: BudgetTier,
-  tier: PackageTier,
-  hasAds: boolean,
-  channels: IndustryChannelConfig,
-): boolean {
-  if (hasAds) return false;
-  if (businessGoal.includes("Giữ chân")) return false;
-  if (businessGoal.includes("thương hiệu")) return tier === "professional";
-  if (businessGoal.includes("Tăng khách") || businessGoal.includes("doanh thu")) return budgetTier >= 1;
-  return budgetTier >= 2 && (channels.needsFanpage || channels.needsMaps);
-}
-
-function resolveAdsType(channels: IndustryChannelConfig, profileId: string): "fb" | "gm" {
-  if (channels.adsPreference === "fb") return "fb";
-  if (channels.adsPreference === "gm") return "gm";
-  return profileId === "ecommerce" ? "fb" : "gm";
-}
-
 const DISPLAY_ORDER = [
   "gm-",
   "web-build",
@@ -722,11 +717,19 @@ function trimComboToMonthlyBudget(itemIds: string[], budgetRange: string): strin
   let ids = [...itemIds];
 
   const downgradeCare = () => {
+    for (let i = 0; i < ids.length; i++) {
+      const posts = parseFanpageCarePosts(ids[i]);
+      if (posts !== null && posts > 10) {
+        ids[i] = fanpageCareItemId(posts - 5);
+        return true;
+      }
+    }
     const careDown: Record<string, string> = {
       "web-care-30": "web-care-20",
       "web-care-20": "web-care-10",
-      "fb-care-pro": "fb-care-advanced",
-      "fb-care-advanced": "fb-care-basic",
+      "fb-care-pro": "fb-care-35",
+      "fb-care-advanced": "fb-care-25",
+      "fb-care-basic": "fb-care-10",
     };
     for (let i = 0; i < ids.length; i++) {
       const next = careDown[ids[i]];
@@ -775,41 +778,103 @@ export function buildRecommendedCombo(
   const ids: string[] = [];
   const reasons: string[] = [];
 
+  let websiteStack: WebsiteStackRecommendation | null = null;
+  let fanpageStack: FanpageStackRecommendation | null = null;
+  let mapsStack: MapsStackRecommendation | null = null;
+
+  const stackInput = {
+    profileId: profile.id,
+    businessGoal: form.businessGoal,
+    scale: form.scale,
+    tier,
+    budgetTier,
+    scaleTier,
+  };
+
   reasons.push(`Gói ${TIER_LABELS[tier]} phù hợp ngân sách ${form.budgetRange.toLowerCase()} và quy mô ${form.scale}.`);
 
   if (channels.needsMaps) {
-    ids.push(pickMapsService(has("maps"), tier));
-    reasons.push(has("maps") ? "Đã có Maps → tối ưu/cải tạo thay vì tạo mới." : "Ngành local cần Google Maps để khách tìm thấy nhanh.");
+    mapsStack = recommendMapsStack({
+      ...stackInput,
+      hasMaps: has("maps"),
+      hasAds: has("ads"),
+    });
+    if (mapsStack) {
+      ids.push(...buildMapsStackItemIds(mapsStack));
+      reasons.push(mapsStack.reasons[0]);
+      if (mapsStack.multiLocationNote) reasons.push(mapsStack.multiLocationNote);
+    }
   }
 
   if (channels.needsWebsite) {
     if (!has("website")) {
-      const buildId = pickWebsiteBuild(tier, scaleTier);
-      ids.push(buildId, "web-domain-com", pickWebData(buildId));
-      reasons.push("Chưa có Website → gói xây dựng kèm tên miền & hosting chuẩn.");
+      websiteStack = recommendWebsiteStack({
+        profileId: profile.id,
+        businessGoal: form.businessGoal,
+        scale: form.scale,
+        budgetRange: form.budgetRange,
+        tier,
+        budgetTier,
+        scaleTier,
+        hasWebsite: false,
+      });
+      if (websiteStack) {
+        ids.push(...buildWebsiteStackItemIds(websiteStack));
+        reasons.push(websiteStack.reasons[0], websiteStack.reasons[2]);
+      }
+    } else {
+      const careOnly = recommendWebsiteCareOnly({
+        profileId: profile.id,
+        businessGoal: form.businessGoal,
+        tier,
+        budgetTier,
+      });
+      ids.push(careOnly.careId);
+      reasons.push(careOnly.reason);
     }
-    ids.push(pickWebCare(tier, form.businessGoal));
   }
 
   if (channels.needsFanpage) {
     if (!has("fanpage")) {
-      ids.push(pickFanpageBuild(tier));
-      reasons.push("Chưa có Fanpage → setup chuẩn thương hiệu trước khi chăm sóc.");
+      fanpageStack = recommendFanpageStack({
+        ...stackInput,
+        hasFanpage: false,
+        hasAds: has("ads"),
+      });
+      if (fanpageStack) {
+        ids.push(...buildFanpageStackItemIds(fanpageStack));
+        reasons.push(fanpageStack.reasons[0], fanpageStack.reasons[1]);
+      }
+    } else {
+      const careOnly = recommendFanpageCareOnly({ ...stackInput, hasAds: has("ads") });
+      ids.push(careOnly.careId);
+      reasons.push(careOnly.reason);
+      fanpageStack = recommendFanpageStack({
+        ...stackInput,
+        hasFanpage: true,
+        hasAds: has("ads"),
+      });
+      if (fanpageStack?.adsId) {
+        ids.push(fanpageStack.adsId);
+        const adsReason = fanpageStack.reasons.find((r) => r.includes("Quảng cáo"));
+        if (adsReason) reasons.push(adsReason);
+      }
+      if (fanpageStack) {
+        fanpageStack = {
+          ...fanpageStack,
+          buildId: null,
+          buildName: null,
+          buildPrice: 0,
+          setupOnce: 0,
+        };
+      }
     }
-    ids.push(pickFanpageCare(tier, form.businessGoal));
-  }
-
-  if (shouldRecommendAds(form.businessGoal, budgetTier, tier, has("ads"), channels)) {
-    ids.push(pickAdsId(tier, resolveAdsType(channels, profile.id)));
-    if (form.businessGoal.includes("Tăng khách") || form.businessGoal.includes("doanh thu")) {
-      reasons.push(`Mục tiêu "${form.businessGoal}" → bổ sung quảng cáo có đo lường.`);
-    }
-  } else if (has("ads")) {
-    reasons.push("Đã chạy quảng cáo → bỏ phí quản lý ads, tập trung nội dung & tối ưu kênh.");
   }
 
   if (form.businessGoal.includes("thương hiệu")) {
     reasons.push("Mục tiêu thương hiệu → ưu tiên content Website/Fanpage trước khi scale ads.");
+  } else if (has("ads")) {
+    reasons.push("Đã chạy quảng cáo → bỏ phí quản lý ads, tập trung nội dung & tối ưu kênh.");
   }
 
   let itemIds = sortComboIds([...new Set(ids)]);
@@ -827,15 +892,67 @@ export function buildRecommendedCombo(
       label: profile.comboLabel,
       reasons: ["Gói mặc định theo ngành nghề."],
       itemIds: sortComboIds(adjustComboForAssets(profile.comboItemIds, form.existingAssets)),
+      websiteStack: null,
+      fanpageStack: null,
+      mapsStack: null,
     };
+  }
+
+  if (websiteStack && !itemIds.includes(websiteStack.buildId)) {
+    websiteStack = null;
+  }
+  if (fanpageStack?.buildId && !itemIds.includes(fanpageStack.buildId)) {
+    fanpageStack = { ...fanpageStack, buildId: null, buildName: null, buildPrice: 0, setupOnce: 0 };
+  }
+  if (fanpageStack?.adsId && !itemIds.includes(fanpageStack.adsId)) {
+    fanpageStack = { ...fanpageStack, adsId: null, adsName: null, adsPrice: 0, monthlyRecurring: fanpageStack.carePrice };
+  }
+  const fbCareId = itemIds.find((id) => id.startsWith("fb-care"));
+  if (fanpageStack && fbCareId) {
+    const posts = parseFanpageCarePosts(fbCareId);
+    if (posts !== null) {
+      const carePrice = fanpageCarePrice(posts);
+      fanpageStack = {
+        ...fanpageStack,
+        careId: fbCareId,
+        carePosts: posts,
+        carePrice,
+        careTierLabel: getFanpageCareTierLabel(posts),
+        careAlternatives: buildFanpageCareAlternatives(posts),
+        monthlyRecurring: carePrice + fanpageStack.adsPrice,
+      };
+    }
+  }
+  if (mapsStack?.adsId && !itemIds.includes(mapsStack.adsId)) {
+    mapsStack = { ...mapsStack, adsId: null, adsName: null, adsPrice: 0, monthlyRecurring: 0 };
+  }
+
+  const finalReasons = [...reasons];
+  if (websiteStack) {
+    finalReasons.push(
+      `Tổng setup năm đầu (web + domain + hosting): ${formatVnd(websiteStack.firstYearSetup)} · Chăm sóc web: ${formatVnd(websiteStack.monthlyRecurring)}/tháng.`,
+    );
+  }
+  if (fanpageStack) {
+    finalReasons.push(
+      `Fanpage — setup: ${formatVnd(fanpageStack.setupOnce)} · Chăm sóc ${fanpageStack.carePosts} bài: ${formatVnd(fanpageStack.monthlyRecurring)}/tháng.`,
+    );
+  }
+  if (mapsStack) {
+    finalReasons.push(
+      `Google Maps — ${mapsStack.serviceName}: ${formatVnd(mapsStack.setupOnce)}${mapsStack.monthlyRecurring ? ` · Ads: ${formatVnd(mapsStack.monthlyRecurring)}/tháng` : ""}.`,
+    );
   }
 
   return {
     tier,
     tierLabel: TIER_LABELS[tier],
     label: buildComboLabel(itemIds),
-    reasons: reasons.slice(0, 4),
+    reasons: finalReasons.slice(0, 6),
     itemIds,
+    websiteStack,
+    fanpageStack,
+    mapsStack,
   };
 }
 
@@ -878,7 +995,7 @@ export function calculatePlanTotals(itemIds: string[]) {
     const item = getPricingItemById(id);
     if (!item) continue;
     const price = parsePriceVnd(item.price);
-    const billing = ITEM_BILLING[id] ?? "once";
+    const billing = getItemBilling(id);
     if (billing === "month") month += price;
     else if (billing === "year") year += price;
     else once += price;
@@ -928,7 +1045,7 @@ export function getBudgetFitAssessment(monthTotal: number, budgetRange: string) 
 }
 
 export function getIndustryCount() {
-  return PROFILES.filter((p) => p.id !== "default").length;
+  return getIndustrySuggestionCount();
 }
 
 export function buildDeploymentTimeline(itemCount: number) {
@@ -970,6 +1087,43 @@ export function buildStrategySummaryText(form: StrategyFormSnapshot, profile: In
     "",
     `${rec.tierLabel} — ${rec.label}`,
     ...rec.reasons.map((r) => `• ${r}`),
+    ...(rec.websiteStack
+      ? [
+          "",
+          "GÓI WEBSITE CHI TIẾT (theo /website):",
+          `• Thiết kế: ${rec.websiteStack.buildName} — ${formatVnd(rec.websiteStack.buildPrice)}`,
+          `• Hosting: ${rec.websiteStack.hostingGb}GB/năm — ${formatVnd(rec.websiteStack.hostingPrice)} (${rec.websiteStack.hostingLabel})`,
+          `• Tên miền .com — ${formatVnd(DOMAIN_COM_PRICE)}`,
+          `• Chăm sóc: ${rec.websiteStack.carePosts} bài/tháng — ${formatVnd(rec.websiteStack.carePrice)}`,
+          `• Setup năm đầu: ${formatVnd(rec.websiteStack.firstYearSetup)} | Chăm sóc: ${formatVnd(rec.websiteStack.monthlyRecurring)}/tháng`,
+        ]
+      : []),
+    ...(rec.fanpageStack
+      ? [
+          "",
+          "GÓI FANPAGE CHI TIẾT (theo /facebook):",
+          ...(rec.fanpageStack.buildName
+            ? [`• Setup: ${rec.fanpageStack.buildName} — ${formatVnd(rec.fanpageStack.buildPrice)}`]
+            : []),
+          `• Chăm sóc: ${rec.fanpageStack.carePosts} bài/th — ${formatVnd(rec.fanpageStack.carePrice)} (${formatVnd(FANPAGE_CARE_PRICE_PER_POST)}/bài, mức "${rec.fanpageStack.careTierLabel}")`,
+          `• Tham chiếu: ${rec.fanpageStack.careAlternatives.map((a) => `${a.posts} bài = ${formatVnd(a.price)}`).join(" · ")}`,
+          ...(rec.fanpageStack.adsName
+            ? [`• Quảng cáo: ${rec.fanpageStack.adsName} — ${formatVnd(rec.fanpageStack.adsPrice)}/tháng`]
+            : []),
+          `• Setup: ${formatVnd(rec.fanpageStack.setupOnce)} | Duy trì: ${formatVnd(rec.fanpageStack.monthlyRecurring)}/tháng`,
+        ]
+      : []),
+    ...(rec.mapsStack
+      ? [
+          "",
+          "GÓI GOOGLE MAPS CHI TIẾT (theo /google-maps):",
+          `• Dịch vụ: ${rec.mapsStack.serviceName} — ${formatVnd(rec.mapsStack.servicePrice)}`,
+          ...(rec.mapsStack.adsName
+            ? [`• Quảng cáo: ${rec.mapsStack.adsName} — ${formatVnd(rec.mapsStack.adsPrice)}/tháng`]
+            : []),
+          ...(rec.mapsStack.multiLocationNote ? [`• Lưu ý: ${rec.mapsStack.multiLocationNote}`] : []),
+        ]
+      : []),
     "",
     "LỘ TRÌNH 3 GIAI ĐOẠN:",
     ...profile.phases.map((p, i) => `${i + 1}. ${p.title} (${p.duration}): ${p.focus}`),

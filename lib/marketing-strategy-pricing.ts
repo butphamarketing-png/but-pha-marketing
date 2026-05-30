@@ -2,14 +2,16 @@ import {
   DOMAIN_COM_PRICE,
   FANPAGE_ADS_PACKAGES,
   FANPAGE_BUILD_PACKAGES,
-  FANPAGE_CARE_PACKAGES,
+  FANPAGE_CARE_PRICE_PER_POST,
+  FANPAGE_CARE_SHOWCASE_POSTS,
+  fanpageCarePrice,
   formatPriceVnd,
-  getHostingPriceByGb,
+  getFanpageCareWorks,
   GOOGLE_MAPS_ADS_PACKAGES,
   GOOGLE_MAPS_PACKAGES,
   WEBSITE_BUILD_PACKAGES,
   WEBSITE_CARE_PACKAGES,
-  WEBSITE_HOSTING_STRATEGY_GB,
+  HOSTING_PACKAGES,
 } from "./service-pricing";
 
 export type StrategyPricingItem = {
@@ -54,18 +56,13 @@ export const STRATEGY_PRICING: StrategyPricingColumn[] = [
         })),
       },
       {
-        title: "Data / năm",
-        items: WEBSITE_HOSTING_STRATEGY_GB.map((gb) => ({
-          id: `web-data-${gb}`,
-          label: `${gb}GB`,
-          price: formatPriceVnd(getHostingPriceByGb(gb)),
-          quantity: `${gb}GB dung lượng / năm`,
-          works: [
-            "Hosting SSD tốc độ cao",
-            "Backup định kỳ",
-            "SSL miễn phí",
-            "Giám sát uptime",
-          ],
+        title: "Data / năm (theo /website)",
+        items: HOSTING_PACKAGES.map((pkg) => ({
+          id: `web-data-${pkg.gb}`,
+          label: `${pkg.gb}GB`,
+          price: formatPriceVnd(pkg.price),
+          quantity: `${pkg.gb}GB dung lượng / năm`,
+          works: [pkg.label, "Hosting SSD tốc độ cao", "Backup định kỳ", "SSL miễn phí"],
         })),
       },
       {
@@ -108,12 +105,12 @@ export const STRATEGY_PRICING: StrategyPricingColumn[] = [
       },
       {
         title: "Chăm sóc Fanpage / tháng",
-        items: FANPAGE_CARE_PACKAGES.map((pkg) => ({
-          id: pkg.id,
-          label: `${pkg.posts} bài / tháng`,
-          price: formatPriceVnd(pkg.price),
-          quantity: `${pkg.posts} bài · ${formatPriceVnd(150_000)}/bài`,
-          works: [...pkg.works],
+        items: FANPAGE_CARE_SHOWCASE_POSTS.map((posts) => ({
+          id: `fb-care-${posts}`,
+          label: `${posts} bài / tháng`,
+          price: formatPriceVnd(fanpageCarePrice(posts)),
+          quantity: `${posts} × ${formatPriceVnd(FANPAGE_CARE_PRICE_PER_POST)}/bài`,
+          works: getFanpageCareWorks(posts),
         })),
       },
       {
