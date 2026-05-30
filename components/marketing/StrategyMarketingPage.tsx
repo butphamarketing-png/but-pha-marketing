@@ -43,8 +43,8 @@ import {
   BUSINESS_GOALS,
   EXISTING_ASSET_OPTIONS,
   SCALE_OPTIONS,
-  adjustComboForAssets,
   buildDeploymentTimeline,
+  buildRecommendedCombo,
   buildStrategySummaryText,
   buildWhyBullets,
   budgetFilterFromForm,
@@ -78,11 +78,23 @@ const INDUSTRY_SUGGESTIONS = [
   "Nha khoa",
   "Spa / Thẩm mỹ",
   "Nhà hàng / F&B",
+  "Khách sạn / Lưu trú",
   "Bất động sản",
   "TMĐT / Bán lẻ",
+  "Thời trang / Mỹ phẩm",
   "Giáo dục / Đào tạo",
+  "Gym / Yoga / Fitness",
+  "Xây dựng / Nội thất",
+  "Ô tô / Garage",
+  "Du lịch / Tour",
+  "Luật / Kế toán / Tư vấn",
+  "Công nghệ / IT",
+  "Nhà thuốc",
+  "Sự kiện / Wedding",
+  "Logistics / Vận chuyển",
+  "Nông sản / Thực phẩm",
   "Dịch vụ doanh nghiệp",
-];
+] as const;
 
 const COLUMN_THEME = {
   website: { color: "#22C55E", bg: "from-emerald-500/10 to-emerald-500/5", border: "border-emerald-200" },
@@ -210,7 +222,11 @@ export function StrategyMarketingPage() {
   const [pricingColumnTab, setPricingColumnTab] = useState<"website" | "fanpage" | "googlemaps">("website");
 
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
-  const comboIds = useMemo(() => adjustComboForAssets(profile.comboItemIds, form.existingAssets), [profile, form.existingAssets]);
+  const comboRecommendation = useMemo(
+    () => buildRecommendedCombo(profile, form),
+    [profile, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
+  );
+  const comboIds = comboRecommendation.itemIds;
   const whyBullets = useMemo(() => buildWhyBullets(profile, form.businessGoal, form.existingAssets), [profile, form.businessGoal, form.existingAssets]);
   const planTotals = useMemo(() => calculatePlanTotals(planIds.length ? planIds : comboIds), [planIds, comboIds]);
   const timeline = useMemo(() => buildDeploymentTimeline(planIds.length || comboIds.length), [planIds.length, comboIds.length]);
@@ -420,8 +436,21 @@ export function StrategyMarketingPage() {
               ))}
             </div>
             <div className="mt-6 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-600 to-fuchsia-600 p-5 text-white">
-              <p className="text-xs font-black uppercase tracking-wide opacity-80">Combo đề xuất cho {form.companyName}</p>
-              <p className="mt-1 text-lg font-black">{profile.comboLabel}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-white/20 px-3 py-1 text-[11px] font-black uppercase tracking-wide">
+                  {comboRecommendation.tierLabel}
+                </span>
+                <p className="text-xs font-black uppercase tracking-wide opacity-80">Combo đề xuất cho {form.companyName}</p>
+              </div>
+              <p className="mt-2 text-lg font-black">{comboRecommendation.label}</p>
+              <ul className="mt-3 space-y-1">
+                {comboRecommendation.reasons.map((reason) => (
+                  <li key={reason} className="flex gap-2 text-xs opacity-90">
+                    <CheckCircle2 size={14} className="mt-0.5 shrink-0" />
+                    {reason}
+                  </li>
+                ))}
+              </ul>
               <div className="mt-3 flex flex-wrap gap-2">
                 {comboIds.map((id) => { const item = getPricingItemById(id); return item ? <span key={id} className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold">{item.label} — {item.price}</span> : null; })}
               </div>

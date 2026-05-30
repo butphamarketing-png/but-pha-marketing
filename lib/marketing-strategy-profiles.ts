@@ -103,7 +103,7 @@ const PROFILES: IndustryProfile[] = [
   {
     id: "health-beauty",
     label: "Nha khoa / Spa / Thẩm mỹ",
-    match: /nha khoa|spa|thẩm mỹ|y tế|phòng khám|nha khoa/i,
+    match: /nha khoa|spa|thẩm mỹ|phòng khám|làm đẹp|y khoa thẩm mỹ/i,
     summary:
       "Ngành dịch vụ tại chỗ cần xuất hiện mạnh trên Google Maps, website chuyên nghiệp và Fanpage nuôi niềm tin trước khi khách đặt lịch.",
     comboLabel: "Combo đề xuất: Maps + Website + Chăm sóc Fanpage",
@@ -185,7 +185,7 @@ const PROFILES: IndustryProfile[] = [
   {
     id: "ecommerce",
     label: "TMĐT / Bán lẻ",
-    match: /tmđt|bán lẻ|shop|thương mại|kinh doanh online/i,
+    match: /tmđt|ecommerce|bán lẻ|thương mại điện tử|kinh doanh online|shop online|sàn thương mại/i,
     summary: "Bán hàng online cần website chuyển đổi tốt, Fanpage content mạnh và quảng cáo scale đơn hàng.",
     comboLabel: "Combo đề xuất: Website KD + Fanpage Pro + Ads",
     comboItemIds: ["web-build-9", "fb-care-pro", "fb-ads-over-10", "web-care-20"],
@@ -253,6 +253,272 @@ const PROFILES: IndustryProfile[] = [
     caseStudy: { title: "Môi giới / sàn nhỏ", result: "Tăng lead inbox form sau 60 ngày content + ads" },
   },
   {
+    id: "education",
+    label: "Giáo dục / Đào tạo",
+    match: /giáo dục|đào tạo|trung tâm|khóa học|dạy|học viện|education/i,
+    summary:
+      "Ngành đào tạo cần website giới thiệu khóa học, Fanpage tuyển sinh và quảng cáo thu lead — Maps hỗ trợ nếu có cơ sở offline.",
+    comboLabel: "Combo đề xuất: Website + Fanpage + Ads tuyển sinh",
+    comboItemIds: ["web-build-6", "fb-care-advanced", "fb-ads-under-10", "web-care-10"],
+    phases: [
+      {
+        title: "Giai đoạn 1 — Nền tảng tuyển sinh",
+        duration: "Tuần 1–4",
+        focus: "Website + Fanpage",
+        tasks: ["Landing khóa học", "Setup Fanpage tuyển sinh", "Form đăng ký / Zalo"],
+      },
+      {
+        title: "Giai đoạn 2 — Nuôi quan tâm",
+        duration: "Tuần 5–8",
+        focus: "Content & review",
+        tasks: ["Bài chia sẻ kiến thức", "Feedback học viên", "Livestream/Q&A"],
+      },
+      {
+        title: "Giai đoạn 3 — Kéo học viên",
+        duration: "Tuần 9+",
+        focus: "Quảng cáo lead",
+        tasks: ["Ads form/inbox", "Retarget học viên quan tâm", "Tối ưu chi phí/lead"],
+      },
+    ],
+    whyBullets: [
+      "Phụ huynh/học viên tìm hiểu online trước khi đăng ký — website & Fanpage là bắt buộc",
+      "Content đều giúp xây uy tín giảng viên & chương trình",
+      "Ads giúp chủ động thu lead theo mùa khai giảng",
+    ],
+    risks: ["Không có landing rõ ràng → lead rớt giữa chừng", "Fanpage không cập nhật → mất niềm tin phụ huynh"],
+    expectedResults: ["4–6 tuần: tăng inbox & form đăng ký", "2–3 tháng: pipeline tuyển sinh ổn định"],
+    clientPrep: ["Chương trình & học phí", "Ảnh lớp học / giảng viên", "Lịch khai giảng"],
+    caseStudy: { title: "Trung tâm đào tạo", result: "Tăng lead đăng ký khóa học sau 60 ngày landing + ads" },
+  },
+  {
+    id: "hotel",
+    label: "Khách sạn / Lưu trú",
+    match: /khách sạn|lưu trú|homestay|resort|villa|motel|hostel|bnb/i,
+    summary:
+      "Ngành lưu trú cần Maps & OTA visibility, website đặt phòng/trải nghiệm và Fanpage nuôi review, ưu đãi theo mùa.",
+    comboLabel: "Combo đề xuất: Maps + Website + Fanpage + Ads mùa vụ",
+    comboItemIds: ["gm-optimize", "web-build-6", "fb-care-advanced", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Hiện diện & niềm tin", duration: "Tuần 1–4", focus: "Maps + ảnh cơ sở", tasks: ["Tối ưu Maps", "Ảnh phòng & tiện ích", "Thu thập review Google"] },
+      { title: "Giai đoạn 2 — Kênh đặt phòng", duration: "Tuần 5–8", focus: "Website + Fanpage", tasks: ["Website giới thiệu & form đặt phòng", "Fanpage ưu đãi", "CTA Zalo/hotline"] },
+      { title: "Giai đoạn 3 — Lấp phòng", duration: "Tuần 9+", focus: "Ads & content", tasks: ["Ads theo mùa/lễ", "Content trải nghiệm", "Retarget khách đã xem"] },
+    ],
+    whyBullets: ["Khách du lịch tìm 'khách sạn gần đây' trên Maps trước", "Website giúp kể câu chuyện thương hiệu & chính sách rõ ràng", "Fanpage + ads giúp lấp phòng ngày thường & mùa thấp điểm"],
+    risks: ["Maps thiếu ảnh/review → tỷ lệ chọn đối thủ cao hơn", "Không có kênh sở hữu → phụ thuộc OTA, margin thấp"],
+    expectedResults: ["3–5 tuần: tăng lượt xem Maps & inbox", "2–3 tháng: cải thiện direct booking & nhận diện"],
+    clientPrep: ["Ảnh phòng, sảnh, view", "Bảng giá & chính sách hủy", "Ưu đãi theo mùa"],
+    caseStudy: { title: "Homestay / Khách sạn boutique", result: "Tăng inbox đặt phòng trực tiếp sau 60 ngày Maps + content" },
+  },
+  {
+    id: "construction",
+    label: "Xây dựng / Nội thất",
+    match: /xây dựng|nội thất|kiến trúc|thiết kế nội thất|xưởng mộc|thi công|renovation/i,
+    summary:
+      "Ngành xây dựng & nội thất cần portfolio website, Fanpage showcase công trình và lead ads để thu khách có nhu cầu rõ.",
+    comboLabel: "Combo đề xuất: Website portfolio + Fanpage + Ads lead",
+    comboItemIds: ["web-build-9", "fb-care-advanced", "fb-ads-under-10", "gm-optimize"],
+    phases: [
+      { title: "Giai đoạn 1 — Portfolio uy tín", duration: "Tuần 1–5", focus: "Website + Maps", tasks: ["Website công trình tiêu biểu", "Maps văn phòng/xưởng", "Form báo giá"] },
+      { title: "Giai đoạn 2 — Nuôi tin", duration: "Tuần 6–10", focus: "Fanpage", tasks: ["Before/after công trình", "Video tiến độ", "Tư vấn inbox"] },
+      { title: "Giai đoạn 3 — Thu lead", duration: "Tuần 11+", focus: "Quảng cáo", tasks: ["Ads lead theo khu vực", "Retarget khách xem portfolio", "Tối ưu chi phí/lead"] },
+    ],
+    whyBullets: ["Khách cần xem công trình thực tế trước khi liên hệ", "Fanpage giúp cập nhật dự án đang thi công — tăng tin tưởng", "Ads giúp chủ động tiếp cận khách có nhu cầu thi công/nội thất"],
+    risks: ["Không có portfolio online → mất cơ hội với khách so sánh 3–5 nhà thầu", "Lead không phản hồi nhanh → rớt đơn cho đối thủ"],
+    expectedResults: ["4–8 tuần: tăng lead chất lượng", "3 tháng: pipeline báo giá ổn định hơn"],
+    clientPrep: ["Ảnh công trình before/after", "Quy trình & bảo hành", "Khu vực phục vụ"],
+    caseStudy: { title: "Công ty nội thất", result: "Tăng lead báo giá sau 75 ngày website portfolio + ads" },
+  },
+  {
+    id: "professional-services",
+    label: "Luật / Kế toán / Tư vấn",
+    match: /luật|kế toán|tư vấn|kiểm toán|đại lý thuế|law|accounting|consulting/i,
+    summary:
+      "Dịch vụ chuyên môn cần website uy tín, content giải thích dịch vụ và Fanpage/ads thu lead doanh nghiệp có nhu cầu rõ.",
+    comboLabel: "Combo đề xuất: Website uy tín + Fanpage + Ads B2B",
+    comboItemIds: ["web-build-6", "fb-care-basic", "web-care-10", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Uy tín số", duration: "Tuần 1–4", focus: "Website", tasks: ["Website giới thiệu & dịch vụ", "Case study / quy trình", "Form tư vấn"] },
+      { title: "Giai đoạn 2 — Thought leadership", duration: "Tuần 5–8", focus: "Content", tasks: ["Bài chia sẻ chuyên môn", "Fanpage cập nhật chính sách", "SEO từ khóa dịch vụ"] },
+      { title: "Giai đoạn 3 — Thu lead B2B", duration: "Tuần 9+", focus: "Ads & nurture", tasks: ["Ads lead doanh nghiệp", "Retarget", "Nuôi lead qua inbox/email"] },
+    ],
+    whyBullets: ["Khách B2B tìm đối tác uy tín qua Google & website trước", "Content chuyên môn giúp phân biệt với đối thủ giá rẻ", "Ads giúp chủ động tiếp cận DN mới thành lập / cần dịch vụ"],
+    risks: ["Website sơ sài → khách nghi ngờ năng lực chuyên môn", "Không có content → khó SEO & khó thuyết phục"],
+    expectedResults: ["6–8 tuần: tăng form tư vấn", "3 tháng: pipeline lead B2B ổn định"],
+    clientPrep: ["Hồ sơ năng lực / chứng chỉ", "Bảng dịch vụ & phí tham khảo", "Case study khách hàng"],
+    caseStudy: { title: "Công ty kế toán / luật", result: "Tăng lead tư vấn sau 90 ngày website + content SEO" },
+  },
+  {
+    id: "automotive",
+    label: "Ô tô / Garage",
+    match: /ô tô|oto|garage|sửa xe|rửa xe|detailing|car wash|workshop xe/i,
+    summary:
+      "Ngành ô tô local cần Maps để bắt khách quanh khu vực, Fanpage show dịch vụ/khuyến mãi và ads khi cần tăng lịch hẹn.",
+    comboLabel: "Combo đề xuất: Maps + Fanpage + Ads local",
+    comboItemIds: ["gm-optimize", "fb-care-advanced", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Local discovery", duration: "Tuần 1–3", focus: "Google Maps", tasks: ["Tối ưu Maps", "Ảnh xưởng & dịch vụ", "Thu thập review"] },
+      { title: "Giai đoạn 2 — Nuôi khách quen", duration: "Tuần 4–8", focus: "Fanpage", tasks: ["Bài bảo dưỡng / tips", "Khuyến mãi combo", "Inbox đặt lịch"] },
+      { title: "Giai đoạn 3 — Tăng lịch hẹn", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads bán kính", "Retarget khách cũ", "Tối ưu chi phí/inbox"] },
+    ],
+    whyBullets: ["Khách tìm 'garage gần đây' trên Maps rất nhiều", "Fanpage giúp nhắc bảo dưỡng & khuyến mãi theo mùa", "Ads giúp lấp lịch ngày vắng"],
+    risks: ["Maps thiếu review → khách chọn xưởng đối thủ", "Không nhắc khách cũ online → mất doanh thu tái mua"],
+    expectedResults: ["3–4 tuần: tăng cuộc gọi & chỉ đường Maps", "2 tháng: tăng inbox đặt lịch"],
+    clientPrep: ["Bảng dịch vụ & giá", "Ảnh xưởng, thiết bị", "Chương trình khuyến mãi"],
+    caseStudy: { title: "Garage / Detailing", result: "Tăng lịch hẹn inbox sau 45 ngày Maps + Fanpage" },
+  },
+  {
+    id: "fashion-retail",
+    label: "Thời trang / Mỹ phẩm",
+    match: /thời trang|quần áo|mỹ phẩm|cosmetic|fashion|làm đẹp bán lẻ|skincare/i,
+    summary:
+      "Bán thời trang & mỹ phẩm cần Fanpage content sản phẩm mạnh, website/catalog chuyển đổi và ads scale đơn hàng.",
+    comboLabel: "Combo đề xuất: Website + Fanpage Pro + Ads",
+    comboItemIds: ["web-build-6", "fb-care-pro", "fb-ads-under-10", "web-care-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Showcase sản phẩm", duration: "Tuần 1–5", focus: "Website + Fanpage", tasks: ["Website/catalog", "Fanpage chuẩn visual", "CTA inbox/Zalo"] },
+      { title: "Giai đoạn 2 — Content bán hàng", duration: "Tuần 6–10", focus: "Content", tasks: ["Lookbook / review SP", "Livestream / flash sale", "CSKH inbox nhanh"] },
+      { title: "Giai đoạn 3 — Scale đơn", duration: "Tuần 11+", focus: "Quảng cáo", tasks: ["Ads conversion", "Retarget khách xem SP", "Tối ưu ROAS"] },
+    ],
+    whyBullets: ["Visual content quyết định 80% quyết định mua với ngành này", "Website giúp sở hữu catalog & SEO sản phẩm", "Ads giúp test nhanh mẫu bán chạy"],
+    risks: ["Chỉ bán inbox không hệ thống → khó scale & dễ sót đơn", "Content không đều → fan không quay lại"],
+    expectedResults: ["4–6 tuần: tăng inbox & đơn", "3 tháng: funnel ads ổn định"],
+    clientPrep: ["Catalog & giá sản phẩm", "Ảnh chụp / video SP", "Chính sách đổi trả"],
+    caseStudy: { title: "Shop thời trang / mỹ phẩm", result: "Tăng đơn inbox sau 60 ngày content + ads" },
+  },
+  {
+    id: "travel",
+    label: "Du lịch / Tour",
+    match: /du lịch|tour|lữ hành|travel|vé máy bay|booking tour/i,
+    summary:
+      "Ngành du lịch cần website tour/landing hấp dẫn, Fanpage nuôi cảm hứng đi & ads theo mùa để thu booking.",
+    comboLabel: "Combo đề xuất: Website tour + Fanpage + Ads mùa vụ",
+    comboItemIds: ["web-build-6", "fb-care-advanced", "fb-ads-under-10", "web-care-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Landing tour", duration: "Tuần 1–4", focus: "Website", tasks: ["Landing tour hot", "Form booking / Zalo", "Tích hợp FAQ & lịch trình"] },
+      { title: "Giai đoạn 2 — Nuôi cảm hứng", duration: "Tuần 5–8", focus: "Fanpage", tasks: ["Ảnh/video điểm đến", "Review khách đi tour", "Tương tác inbox tư vấn"] },
+      { title: "Giai đoạn 3 — Booking mùa cao", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads theo mùa/lễ", "Retarget khách xem tour", "Tối ưu chi phí/booking"] },
+    ],
+    whyBullets: ["Khách đặt tour sau khi xem hình ảnh & review — Fanpage rất quan trọng", "Website giúp chốt tour cụ thể với lịch trình rõ", "Ads mùa vụ giúp lấp chỗ tour trước peak season"],
+    risks: ["Không có landing rõ → khách hỏi nhiều nhưng không chốt", "Content cũ → mất niềm tin về tour hiện tại"],
+    expectedResults: ["4–6 tuần: tăng inbox tư vấn tour", "2–3 tháng: booking ổn định theo mùa"],
+    clientPrep: ["Lịch trình & giá tour", "Ảnh/video điểm đến", "Chính sách hủy/đổi"],
+    caseStudy: { title: "Công ty tour local", result: "Tăng booking inbox trước mùa cao điểm sau 60 ngày" },
+  },
+  {
+    id: "fitness",
+    label: "Gym / Yoga / Fitness",
+    match: /gym|yoga|fitness|pilates| võ|võ thuật|crossfit|pt cá nhân/i,
+    summary:
+      "Phòng gym & yoga cần Maps local, Fanpage nuôi cộng đồng và ads thu học viên mới, website giới thiệu gói tập.",
+    comboLabel: "Combo đề xuất: Maps + Website + Fanpage + Ads",
+    comboItemIds: ["gm-optimize", "web-build-3", "fb-care-advanced", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Local & niềm tin", duration: "Tuần 1–4", focus: "Maps + Website", tasks: ["Tối ưu Maps", "Website gói tập/lịch", "CTA đăng ký thử"] },
+      { title: "Giai đoạn 2 — Cộng đồng", duration: "Tuần 5–8", focus: "Fanpage", tasks: ["Content transformation", "Lịch lớp học", "Inbox tư vấn gói"] },
+      { title: "Giai đoạn 3 — Tuyển hội viên", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads lead thử buổi", "Retarget khách quan tâm", "Tối ưu chi phí/lead"] },
+    ],
+    whyBullets: ["Khách tìm phòng tập gần nhà trên Maps", "Fanpage show kết quả học viên — thúc đẩy quyết định", "Ads giúp tuyển hội viên mới ổn định hàng tháng"],
+    risks: ["Maps không cập nhật giờ/lớp → khách đến sai", "Không có content transformation → khó bán gói cao"],
+    expectedResults: ["3–5 tuần: tăng inbox & đăng ký thử", "2–3 tháng: hội viên mới ổn định hơn"],
+    clientPrep: ["Bảng gói tập & giá", "Ảnh cơ sở, HLV", "Chương trình thử / ưu đãi"],
+    caseStudy: { title: "Phòng gym / Yoga", result: "Tăng đăng ký thử & inbox sau 45 ngày Maps + ads" },
+  },
+  {
+    id: "events",
+    label: "Sự kiện / Wedding",
+    match: /sự kiện|wedding|tiệc cưới|nhiếp ảnh|studio ảnh|trang trí tiệc|event planner/i,
+    summary:
+      "Ngành sự kiện & cưới cần portfolio website/Fanpage visual mạnh và ads thu lead theo mùa cưới/lễ.",
+    comboLabel: "Combo đề xuất: Website portfolio + Fanpage + Ads",
+    comboItemIds: ["web-build-6", "fb-care-pro", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Portfolio", duration: "Tuần 1–4", focus: "Website + Fanpage", tasks: ["Website album tiêu biểu", "Fanpage visual chuẩn", "Form báo giá nhanh"] },
+      { title: "Giai đoạn 2 — Social proof", duration: "Tuần 5–8", focus: "Content", tasks: ["Ảnh/video sự kiện mới", "Review khách hàng", "Behind the scenes"] },
+      { title: "Giai đoạn 3 — Thu lead mùa vụ", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads lead wedding/event", "Retarget cặp đôi quan tâm", "Tối ưu chi phí/lead"] },
+    ],
+    whyBullets: ["Khách chọn vendor dựa 90% vào portfolio visual", "Fanpage giúp cập nhật style mới nhất", "Ads giúp chủ động tiếp cận cặp đôi đang lên kế hoạch"],
+    risks: ["Portfolio cũ → khách nghĩ bạn không còn active", "Phản hồi chậm → mất lead cho studio khác"],
+    expectedResults: ["4–6 tuần: tăng inbox báo giá", "2–3 tháng: pipeline booking mùa vụ"],
+    clientPrep: ["Album tiêu biểu", "Bảng gói & giá", "Lịch trống theo mùa"],
+    caseStudy: { title: "Studio wedding / Event", result: "Tăng lead báo giá trước mùa cưới sau 60 ngày" },
+  },
+  {
+    id: "tech",
+    label: "Công nghệ / IT",
+    match: /công nghệ|phần mềm|\bit\b|saas|startup|thiết kế app|digital agency/i,
+    summary:
+      "Công ty công nghệ cần website chuyên nghiệp showcase sản phẩm/dịch vụ, content thought leadership và ads B2B lead.",
+    comboLabel: "Combo đề xuất: Website chuyên sâu + Content + Ads B2B",
+    comboItemIds: ["web-build-9", "fb-care-advanced", "web-care-20", "fb-ads-over-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Product showcase", duration: "Tuần 1–6", focus: "Website", tasks: ["Website sản phẩm/dịch vụ", "Case study khách hàng", "Form demo/liên hệ"] },
+      { title: "Giai đoạn 2 — Authority", duration: "Tuần 7–10", focus: "Content", tasks: ["Blog kỹ thuật / insight", "Fanpage cập nhật sản phẩm", "SEO từ khóa ngành"] },
+      { title: "Giai đoạn 3 — Lead B2B", duration: "Tuần 11+", focus: "Ads", tasks: ["Ads lead doanh nghiệp", "Retarget visitor website", "Tối ưu chi phí/demo"] },
+    ],
+    whyBullets: ["Khách B2B đánh giá năng lực qua website & case study trước", "Content kỹ thuật giúp SEO & xây uy tín chuyên gia", "Ads giúp tiếp cận DN đang tìm giải pháp số"],
+    risks: ["Website lỗi thời → mất niềm tin với khách enterprise", "Không có case study → khó chốt deal giá cao"],
+    expectedResults: ["6–10 tuần: tăng demo request", "3 tháng: pipeline B2B ổn định"],
+    clientPrep: ["Mô tả sản phẩm/dịch vụ", "Case study & logo khách hàng", "Đối tượng khách mục tiêu"],
+    caseStudy: { title: "Công ty phần mềm SME", result: "Tăng demo request sau 90 ngày website + content SEO" },
+  },
+  {
+    id: "pharmacy",
+    label: "Nhà thuốc / Dược",
+    match: /nhà thuốc|dược phẩm|thuốc tân dược|pharmacy|drug store/i,
+    summary:
+      "Nhà thuốc cần Maps để khách tìm gần nhất, Fanpage tư vấn sản phẩm & website giới thiệu dịch vụ/chính sách.",
+    comboLabel: "Combo đề xuất: Maps + Fanpage + Website giới thiệu",
+    comboItemIds: ["gm-optimize", "web-build-3", "fb-care-basic"],
+    phases: [
+      { title: "Giai đoạn 1 — Hiện diện local", duration: "Tuần 1–3", focus: "Google Maps", tasks: ["Tối ưu Maps", "Giờ mở cửa & dịch vụ", "Thu thập review"] },
+      { title: "Giai đoạn 2 — Tư vấn online", duration: "Tuần 4–7", focus: "Fanpage + Website", tasks: ["Website giới thiệu", "Fanpage tips sức khỏe", "Inbox tư vấn SP"] },
+      { title: "Giai đoạn 3 — Giữ chân khách", duration: "Tuần 8+", focus: "Content", tasks: ["Chương trình khách quen", "Content theo mùa bệnh", "Tối ưu hiển thị Maps"] },
+    ],
+    whyBullets: ["Khách tìm 'nhà thuốc gần đây' trên Maps khi cần gấp", "Fanpage giúp tư vấn SP & chương trình khuyến mãi", "Website tăng uy tín với khách mua thuốc định kỳ"],
+    risks: ["Maps sai giờ/địa chỉ → mất khách cấp bách", "Không phản hồi inbox → khách mua ở nhà thuốc khác"],
+    expectedResults: ["2–4 tuần: tăng lượt tìm Maps", "2 tháng: tăng inbox & khách quen online"],
+    clientPrep: ["Danh mục SP chủ lực", "Giờ mở cửa chính xác", "Chương trình khuyến mãi"],
+    caseStudy: { title: "Nhà thuốc chuỗi nhỏ", result: "Tăng lượt chỉ đường Maps & inbox sau 30 ngày" },
+  },
+  {
+    id: "logistics",
+    label: "Logistics / Vận chuyển",
+    match: /logistics|vận chuyển|giao hàng|freight|kho bãi|ship hàng|fulfillment/i,
+    summary:
+      "Logistics cần website giới thiệu dịch vụ & báo giá, Fanpage cập nhật uy tín và ads thu lead doanh nghiệp cần vận chuyển.",
+    comboLabel: "Combo đề xuất: Website + Fanpage + Ads B2B",
+    comboItemIds: ["web-build-6", "fb-care-basic", "fb-ads-under-10", "gm-optimize"],
+    phases: [
+      { title: "Giai đoạn 1 — Dịch vụ rõ ràng", duration: "Tuần 1–4", focus: "Website + Maps", tasks: ["Website dịch vụ & bảng giá", "Maps văn phòng/kho", "Form báo giá"] },
+      { title: "Giai đoạn 2 — Uy tín vận hành", duration: "Tuần 5–8", focus: "Fanpage", tasks: ["Cập nhật quy trình giao nhận", "Feedback khách hàng", "Tuyển dụng / mở rộng tuyến"] },
+      { title: "Giai đoạn 3 — Thu lead B2B", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads lead DN", "Retarget", "Tối ưu chi phí/lead"] },
+    ],
+    whyBullets: ["Khách B2B so sánh 3–5 đơn vị vận chuyển qua website trước", "Fanpage giúp show quy mô & uy tín vận hành", "Ads giúp tiếp cận shop/ DN mới cần ship"],
+    risks: ["Không có báo giá/minh bạch online → khách chọn đối thủ rõ ràng hơn", "Lead chậm phản hồi → mất hợp đồng"],
+    expectedResults: ["4–8 tuần: tăng form báo giá", "3 tháng: pipeline B2B ổn định"],
+    clientPrep: ["Bảng giá theo tuyến/trọng lượng", "Quy trình giao nhận", "Khu vực phục vụ"],
+    caseStudy: { title: "Công ty giao hàng nội thành", result: "Tăng lead báo giá B2B sau 60 ngày website + ads" },
+  },
+  {
+    id: "agriculture",
+    label: "Nông sản / Thực phẩm",
+    match: /nông sản|thực phẩm sạch|nông nghiệp|farm|trang trại|thủy sản|đặc sản/i,
+    summary:
+      "Nông sản & thực phẩm cần Fanpage show sản phẩm tươi, website đặt hàng/ giới thiệu nguồn gốc và ads mở rộng kênh bán.",
+    comboLabel: "Combo đề xuất: Fanpage + Website + Ads",
+    comboItemIds: ["web-build-3", "fb-care-advanced", "fb-ads-under-10"],
+    phases: [
+      { title: "Giai đoạn 1 — Story nguồn gốc", duration: "Tuần 1–4", focus: "Fanpage + Website", tasks: ["Fanpage ảnh farm/thu hoạch", "Website giới thiệu & đặt hàng", "CTA Zalo/inbox"] },
+      { title: "Giai đoạn 2 — Nuôi khách quen", duration: "Tuần 5–8", focus: "Content", tasks: ["Bài mùa vụ", "Combo gia đình", "Giao hàng & feedback"] },
+      { title: "Giai đoạn 3 — Mở rộng bán", duration: "Tuần 9+", focus: "Ads", tasks: ["Ads theo mùa vụ", "Retarget khách cũ", "Tối ưu chi phí/đơn"] },
+    ],
+    whyBullets: ["Khách muốn thấy nguồn gốc & quy trình trước khi mua online", "Fanpage giúp bán theo mùa vụ nhanh", "Website giúp đặt hàng có hệ thống hơn inbox lẻ"],
+    risks: ["Không show nguồn gốc → khách nghi chất lượng", "Chỉ bán word-of-mouth → khó mở rộng"],
+    expectedResults: ["4–6 tuần: tăng inbox & đơn lẻ", "3 tháng: khách quen & đơn định kỳ"],
+    clientPrep: ["Catalog sản phẩm theo mùa", "Ảnh farm/quy trình", "Chính sách giao hàng"],
+    caseStudy: { title: "Farm / Đặc sản vùng miền", result: "Tăng đơn inbox & website sau 60 ngày content + ads" },
+  },
+  {
     id: "default",
     label: "Doanh nghiệp dịch vụ",
     match: /.*/,
@@ -304,10 +570,279 @@ export function budgetFilterFromForm(budget: string): BudgetFilter {
   return "all";
 }
 
+export type PackageTier = "starter" | "growth" | "professional";
+
+export type ComboRecommendation = {
+  tier: PackageTier;
+  tierLabel: string;
+  label: string;
+  reasons: string[];
+  itemIds: string[];
+};
+
+type BudgetTier = 0 | 1 | 2;
+type ScaleTier = 0 | 1 | 2;
+
+type IndustryChannelConfig = {
+  needsWebsite: boolean;
+  needsFanpage: boolean;
+  needsMaps: boolean;
+  adsPreference: "fb" | "gm" | "auto";
+  localBusiness: boolean;
+};
+
+const TIER_LABELS: Record<PackageTier, string> = {
+  starter: "Gói Khởi đầu",
+  growth: "Gói Tăng trưởng",
+  professional: "Gói Chuyên sâu",
+};
+
+const INDUSTRY_CHANNELS: Record<string, IndustryChannelConfig> = {
+  "health-beauty": { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
+  fnb: { needsWebsite: false, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
+  ecommerce: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  realestate: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: true },
+  education: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: true },
+  hotel: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: true },
+  construction: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: true },
+  "professional-services": { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  automotive: { needsWebsite: false, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
+  "fashion-retail": { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  travel: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  fitness: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
+  events: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  tech: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  pharmacy: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
+  logistics: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: false },
+  agriculture: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
+  default: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "auto", localBusiness: true },
+};
+
+function getBudgetTier(budgetRange: string): BudgetTier {
+  if (budgetRange.includes("Dưới 5")) return 0;
+  if (budgetRange.includes("Trên 15")) return 2;
+  return 1;
+}
+
+function getScaleTier(scale: string): ScaleTier {
+  if (scale.includes("Trên 5")) return 2;
+  if (scale.includes("2–5") || scale.includes("2-5")) return 1;
+  return 0;
+}
+
+function resolvePackageTier(budget: BudgetTier, scale: ScaleTier): PackageTier {
+  const score = budget + (scale >= 2 ? 1 : 0);
+  if (score >= 3) return "professional";
+  if (score >= 1) return "growth";
+  return "starter";
+}
+
+function pickWebsiteBuild(tier: PackageTier, scale: ScaleTier): string {
+  if (scale >= 2 || tier === "professional") return "web-build-12";
+  if (tier === "growth") return "web-build-6";
+  return "web-build-3";
+}
+
+function pickWebData(buildId: string): string {
+  if (buildId === "web-build-12") return "web-data-20";
+  if (buildId === "web-build-9" || buildId === "web-build-6") return "web-data-10";
+  return "web-data-3";
+}
+
+function pickWebCare(tier: PackageTier, businessGoal: string): string {
+  if (tier === "professional" || businessGoal.includes("thương hiệu")) return "web-care-20";
+  if (tier === "growth") return "web-care-10";
+  return "web-care-10";
+}
+
+function pickFanpageBuild(tier: PackageTier): string {
+  if (tier === "professional") return "fb-build-pro";
+  if (tier === "growth") return "fb-build-advanced";
+  return "fb-build-basic";
+}
+
+function pickFanpageCare(tier: PackageTier, businessGoal: string): string {
+  if (tier === "professional") return "fb-care-pro";
+  if (tier === "growth" || businessGoal.includes("Tăng khách")) return "fb-care-advanced";
+  return "fb-care-basic";
+}
+
+function pickMapsService(hasMaps: boolean, tier: PackageTier): string {
+  if (hasMaps) return tier === "starter" ? "gm-rebuild" : "gm-optimize";
+  return tier === "starter" ? "gm-build" : "gm-optimize";
+}
+
+function pickAdsId(tier: PackageTier, adsType: "fb" | "gm"): string {
+  const high = tier === "professional";
+  if (adsType === "gm") return high ? "gm-ads-over-10" : "gm-ads-under-10";
+  return high ? "fb-ads-over-10" : "fb-ads-under-10";
+}
+
+function shouldRecommendAds(
+  businessGoal: string,
+  budgetTier: BudgetTier,
+  tier: PackageTier,
+  hasAds: boolean,
+  channels: IndustryChannelConfig,
+): boolean {
+  if (hasAds) return false;
+  if (businessGoal.includes("Giữ chân")) return false;
+  if (businessGoal.includes("thương hiệu")) return tier === "professional";
+  if (businessGoal.includes("Tăng khách") || businessGoal.includes("doanh thu")) return budgetTier >= 1;
+  return budgetTier >= 2 && (channels.needsFanpage || channels.needsMaps);
+}
+
+function resolveAdsType(channels: IndustryChannelConfig, profileId: string): "fb" | "gm" {
+  if (channels.adsPreference === "fb") return "fb";
+  if (channels.adsPreference === "gm") return "gm";
+  return profileId === "ecommerce" ? "fb" : "gm";
+}
+
+const DISPLAY_ORDER = [
+  "gm-",
+  "web-build",
+  "web-domain",
+  "web-data",
+  "web-care",
+  "fb-build",
+  "fb-care",
+  "fb-ads",
+  "gm-ads",
+];
+
+function sortComboIds(ids: string[]) {
+  return [...ids].sort((a, b) => {
+    const rank = (id: string) => DISPLAY_ORDER.findIndex((prefix) => id.startsWith(prefix));
+    return (rank(a) === -1 ? 99 : rank(a)) - (rank(b) === -1 ? 99 : rank(b));
+  });
+}
+
+function trimComboToMonthlyBudget(itemIds: string[], budgetRange: string): string[] {
+  const maxMonthly = budgetRange.includes("Dưới 5") ? 5_000_000 : budgetRange.includes("Trên 15") ? Number.POSITIVE_INFINITY : 15_000_000;
+  let ids = [...itemIds];
+
+  const downgradeCare = () => {
+    const careDown: Record<string, string> = {
+      "web-care-30": "web-care-20",
+      "web-care-20": "web-care-10",
+      "fb-care-pro": "fb-care-advanced",
+      "fb-care-advanced": "fb-care-basic",
+    };
+    for (let i = 0; i < ids.length; i++) {
+      const next = careDown[ids[i]];
+      if (next) {
+        ids[i] = next;
+        return true;
+      }
+    }
+    return false;
+  };
+
+  while (calculatePlanTotals(ids).month > maxMonthly) {
+    const adsId = ids.find((id) => id.includes("ads"));
+    if (adsId) {
+      ids = ids.filter((id) => id !== adsId);
+      continue;
+    }
+    if (downgradeCare()) continue;
+    break;
+  }
+
+  return ids;
+}
+
+function buildComboLabel(itemIds: string[]): string {
+  const parts: string[] = [];
+  if (itemIds.some((id) => id.startsWith("gm-") && !id.includes("ads"))) parts.push("Google Maps");
+  if (itemIds.some((id) => id.startsWith("web-build"))) parts.push("Website");
+  if (itemIds.some((id) => id.startsWith("web-care"))) parts.push("Chăm sóc Website");
+  if (itemIds.some((id) => id.startsWith("fb-build"))) parts.push("Xây Fanpage");
+  if (itemIds.some((id) => id.startsWith("fb-care"))) parts.push("Chăm sóc Fanpage");
+  if (itemIds.some((id) => id.includes("ads"))) parts.push("Quảng cáo");
+  return parts.length ? `Combo: ${parts.join(" + ")}` : "Combo đề xuất";
+}
+
+export function buildRecommendedCombo(
+  profile: IndustryProfile,
+  form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+): ComboRecommendation {
+  const has = (key: string) => form.existingAssets.includes(key);
+  const budgetTier = getBudgetTier(form.budgetRange);
+  const scaleTier = getScaleTier(form.scale);
+  const tier = resolvePackageTier(budgetTier, scaleTier);
+  const channels = INDUSTRY_CHANNELS[profile.id] ?? INDUSTRY_CHANNELS.default;
+
+  const ids: string[] = [];
+  const reasons: string[] = [];
+
+  reasons.push(`Gói ${TIER_LABELS[tier]} phù hợp ngân sách ${form.budgetRange.toLowerCase()} và quy mô ${form.scale}.`);
+
+  if (channels.needsMaps) {
+    ids.push(pickMapsService(has("maps"), tier));
+    reasons.push(has("maps") ? "Đã có Maps → tối ưu/cải tạo thay vì tạo mới." : "Ngành local cần Google Maps để khách tìm thấy nhanh.");
+  }
+
+  if (channels.needsWebsite) {
+    if (!has("website")) {
+      const buildId = pickWebsiteBuild(tier, scaleTier);
+      ids.push(buildId, "web-domain-com", pickWebData(buildId));
+      reasons.push("Chưa có Website → gói xây dựng kèm tên miền & hosting chuẩn.");
+    }
+    ids.push(pickWebCare(tier, form.businessGoal));
+  }
+
+  if (channels.needsFanpage) {
+    if (!has("fanpage")) {
+      ids.push(pickFanpageBuild(tier));
+      reasons.push("Chưa có Fanpage → setup chuẩn thương hiệu trước khi chăm sóc.");
+    }
+    ids.push(pickFanpageCare(tier, form.businessGoal));
+  }
+
+  if (shouldRecommendAds(form.businessGoal, budgetTier, tier, has("ads"), channels)) {
+    ids.push(pickAdsId(tier, resolveAdsType(channels, profile.id)));
+    if (form.businessGoal.includes("Tăng khách") || form.businessGoal.includes("doanh thu")) {
+      reasons.push(`Mục tiêu "${form.businessGoal}" → bổ sung quảng cáo có đo lường.`);
+    }
+  } else if (has("ads")) {
+    reasons.push("Đã chạy quảng cáo → bỏ phí quản lý ads, tập trung nội dung & tối ưu kênh.");
+  }
+
+  if (form.businessGoal.includes("thương hiệu")) {
+    reasons.push("Mục tiêu thương hiệu → ưu tiên content Website/Fanpage trước khi scale ads.");
+  }
+
+  let itemIds = sortComboIds([...new Set(ids)]);
+  itemIds = trimComboToMonthlyBudget(itemIds, form.budgetRange);
+
+  const monthTotal = calculatePlanTotals(itemIds).month;
+  if (monthTotal > 0 && form.budgetRange.includes("Dưới 5") && monthTotal <= 5_000_000) {
+    reasons.push(`Tổng phí hàng tháng ~${formatVnd(monthTotal)} — nằm trong ngân sách đã khai.`);
+  }
+
+  if (itemIds.length === 0) {
+    return {
+      tier,
+      tierLabel: TIER_LABELS[tier],
+      label: profile.comboLabel,
+      reasons: ["Gói mặc định theo ngành nghề."],
+      itemIds: sortComboIds(adjustComboForAssets(profile.comboItemIds, form.existingAssets)),
+    };
+  }
+
+  return {
+    tier,
+    tierLabel: TIER_LABELS[tier],
+    label: buildComboLabel(itemIds),
+    reasons: reasons.slice(0, 4),
+    itemIds,
+  };
+}
+
 export function adjustComboForAssets(comboIds: string[], existingAssets: string[]) {
   const has = (key: string) => existingAssets.includes(key);
   return comboIds.filter((id) => {
-    if (has("website") && id.startsWith("web-build")) return false;
+    if (has("website") && (id.startsWith("web-build") || id.startsWith("web-data") || id === "web-domain-com")) return false;
     if (has("fanpage") && id.startsWith("fb-build")) return false;
     if (has("maps") && (id === "gm-build" || id === "gm-rebuild")) return false;
     if (has("ads") && id.includes("ads")) return false;
@@ -381,7 +916,8 @@ export type StrategyFormSnapshot = {
 };
 
 export function buildStrategySummaryText(form: StrategyFormSnapshot, profile: IndustryProfile, planIds: string[]) {
-  const comboIds = adjustComboForAssets(profile.comboItemIds, form.existingAssets);
+  const rec = buildRecommendedCombo(profile, form);
+  const comboIds = rec.itemIds;
   const totals = calculatePlanTotals(planIds.length ? planIds : comboIds);
   const lines = [
     `CHIẾN LƯỢC MARKETING — ${form.companyName}`,
@@ -390,6 +926,9 @@ export function buildStrategySummaryText(form: StrategyFormSnapshot, profile: In
     `Mục tiêu: ${form.businessGoal} | Ngân sách: ${form.budgetRange}`,
     "",
     profile.summary,
+    "",
+    `${rec.tierLabel} — ${rec.label}`,
+    ...rec.reasons.map((r) => `• ${r}`),
     "",
     "LỘ TRÌNH 3 GIAI ĐOẠN:",
     ...profile.phases.map((p, i) => `${i + 1}. ${p.title} (${p.duration}): ${p.focus}`),
