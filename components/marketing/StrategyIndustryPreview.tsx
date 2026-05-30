@@ -13,6 +13,7 @@ import {
 import { formatVnd, getIndustryCount } from "@/lib/marketing-strategy-profiles";
 import type { StrategyFormSnapshot } from "@/lib/marketing-strategy-profiles";
 import { buildDigitalReadiness } from "@/lib/strategy-intelligence";
+import { StrategyLocationPanel } from "@/components/marketing/StrategyLocationPanel";
 
 function useDebouncedValue<T>(value: T, delay = 180) {
   const [debounced, setDebounced] = useState(value);
@@ -204,7 +205,7 @@ export function IndustryAutocomplete({
 export function StrategyIndustryPreview({
   form,
 }: {
-  form: Pick<StrategyFormSnapshot, "industry" | "businessGoal" | "scale" | "budgetRange" | "existingAssets">;
+  form: Pick<StrategyFormSnapshot, "industry" | "businessGoal" | "scale" | "budgetRange" | "existingAssets" | "address">;
 }) {
   const live = useMemo(
     () => buildLiveStrategyPreview(form.industry, form),
@@ -323,6 +324,12 @@ export function StrategyIndustryPreview({
                 </span>
               ))}
             </div>
+          </div>
+        )}
+
+        {form.address.trim().length >= 8 && (
+          <div className="mt-3 border-t border-violet-100 pt-3">
+            <StrategyLocationPanel form={form} profile={analysis.profile} compact />
           </div>
         )}
       </div>

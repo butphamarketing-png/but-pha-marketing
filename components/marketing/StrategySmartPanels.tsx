@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Award, Lightbulb, Swords, Zap } from "lucide-react";
+import { Award, Building2, ExternalLink, Lightbulb, Swords, Zap } from "lucide-react";
 import { formatVnd, type IndustryProfile, type StrategyFormSnapshot } from "@/lib/marketing-strategy-profiles";
 import {
   buildCompetitiveBenchmark,
   buildExecutiveSummary,
+  buildMultiLocationAdvisory,
   buildWhatIfScenarios,
 } from "@/lib/strategy-intelligence";
 
@@ -173,6 +175,54 @@ export function StrategyWhatIfPanel({
           </button>
         ))}
       </div>
+    </div>
+  );
+}
+
+const PRICING_PAGES = {
+  website: { href: "/website", label: "Xem bảng giá Website", color: "text-emerald-700 hover:text-emerald-900" },
+  fanpage: { href: "/facebook", label: "Xem bảng giá Fanpage", color: "text-blue-700 hover:text-blue-900" },
+  maps: { href: "/google-maps", label: "Xem bảng giá Google Maps", color: "text-orange-700 hover:text-orange-900" },
+} as const;
+
+export function PricingDeepLink({ channel }: { channel: keyof typeof PRICING_PAGES }) {
+  const page = PRICING_PAGES[channel];
+  return (
+    <Link
+      href={page.href}
+      target="_blank"
+      className={`mt-3 inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wide print:hidden ${page.color}`}
+    >
+      {page.label} <ExternalLink size={12} />
+    </Link>
+  );
+}
+
+export function StrategyMultiLocationPanel({
+  form,
+  mapsSetupOnce,
+  baseMonthTotal,
+}: {
+  form: Pick<StrategyFormSnapshot, "scale" | "budgetRange">;
+  mapsSetupOnce: number | null;
+  baseMonthTotal: number;
+}) {
+  const advisory = buildMultiLocationAdvisory(form, mapsSetupOnce, baseMonthTotal);
+  if (!advisory) return null;
+
+  return (
+    <div className="rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-5">
+      <p className="flex items-center gap-2 text-sm font-black text-sky-900">
+        <Building2 size={16} /> {advisory.locationLabel} — {advisory.locationCount}
+      </p>
+      <p className="mt-1 text-[11px] text-slate-600">
+        Dự toán 1 cơ sở ~{formatVnd(baseMonthTotal)}/th · Chuỗi có thể cần thêm ~{formatVnd(advisory.estimatedExtraMonth)}/th
+      </p>
+      <ul className="mt-3 space-y-2">
+        {advisory.bullets.map((b) => (
+          <li key={b} className="text-xs leading-relaxed text-slate-700">• {b}</li>
+        ))}
+      </ul>
     </div>
   );
 }

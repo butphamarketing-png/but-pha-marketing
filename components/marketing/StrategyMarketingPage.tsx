@@ -27,6 +27,7 @@ import {
   ClipboardList,
   Copy,
   Send,
+  Share2,
   ShoppingCart,
   GitCompare,
   CalendarDays,
@@ -61,8 +62,11 @@ import {
 import {
   StrategyBenchmarkPanel,
   StrategyExecutiveSummary,
+  StrategyMultiLocationPanel,
   StrategyWhatIfPanel,
+  PricingDeepLink,
 } from "@/components/marketing/StrategySmartPanels";
+import { StrategyLocationPanel, StrategyLocationPreview } from "@/components/marketing/StrategyLocationPanel";
 import { analyzeIndustryInput, getProfileShortLabel } from "@/lib/industry-intelligence";
 import { buildFormProgress, buildDigitalReadiness, buildRoiEstimate } from "@/lib/strategy-intelligence";
 import {
@@ -71,6 +75,8 @@ import {
   loadStrategyDraft,
   saveStrategyDraft,
 } from "@/lib/strategy-storage";
+import { buildStrategyShareUrl, decodeStrategyShare, isStrategyFormComplete } from "@/lib/strategy-share";
+import { analyzeBusinessLocation } from "@/lib/location-intelligence";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
@@ -293,6 +299,22 @@ export function StrategyMarketingPage() {
   const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shared = params.get("s");
+
+    if (shared) {
+      const sharedForm = decodeStrategyShare(shared);
+      if (sharedForm) {
+        setForm(sharedForm);
+        setDraftRestored(true);
+        if (params.get("view") === "1" && isStrategyFormComplete(sharedForm)) {
+          setShowStrategy(true);
+        }
+        setStorageReady(true);
+        return;
+      }
+    }
+
     const draft = loadStrategyDraft();
     if (draft) {
       setForm(draft.form);
@@ -421,6 +443,11 @@ export function StrategyMarketingPage() {
     }
     const roi = buildRoiEstimate(profile, form, planIds.length ? planIds : comboIds);
     extras.push(`ROI ước tính: ${roi.estimatedRoi >= 0 ? "+" : ""}${roi.estimatedRoi}% · ~${roi.monthlyLeads} lead/th · CPL ${formatVnd(roi.costPerLead)}`);
+    const loc = analyzeBusinessLocation(form.address, form.scale, profile, form.businessGoal);
+    if (loc) {
+      extras.push(`Khu vực: ${loc.breadthLabel} · Bán kính ${loc.catchmentRange}`);
+      extras.push(`Tệp khách: ${loc.targetAudiences.map((a) => a.segment).join("; ")}`);
+    }
     return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
   }, [form, profile, planIds, industryAnalysis, comboIds]);
 
@@ -436,6 +463,16 @@ export function StrategyMarketingPage() {
       setActionMessage("Đã sao chép chiến lược vào clipboard.");
     } catch {
       setActionMessage("Không sao chép được. Vui lòng dùng Gửi Gmail.");
+    }
+  };
+
+  const copyShareLink = async () => {
+    try {
+      const url = buildStrategyShareUrl(form, { view: true });
+      await navigator.clipboard.writeText(url);
+      setActionMessage("Đã sao chép link chiến lược — gửi cho khách hoặc mở trên thiết bị khác.");
+    } catch {
+      setActionMessage("Không sao chép được link.");
     }
   };
 
@@ -490,11 +527,17 @@ export function StrategyMarketingPage() {
 
               {formStep === 1 && (
                 <div className="grid gap-4 sm:grid-cols-2">
+                  <p className="sm:col-span-2 rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2 text-[11px] text-violet-700">
+                    💾 Thông tin tự lưu trên thiết bị này — quay lại sau vẫn còn dữ liệu.
+                  </p>
                   <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} autoComplete="name" /></label>
                   <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} autoComplete="organization" /></label>
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} autoComplete="tel" inputMode="tel" /></label>
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} autoComplete="email" /></label>
-                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} autoComplete="street-address" /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} autoComplete="street-address" placeholder="VD: 123 Nguyễn Huệ, P. Bến Nghé, Q.1, TP. Hồ Chí Minh" /></label>
+                  <div className="sm:col-span-2">
+                    <StrategyLocationPreview address={form.address} scale={form.scale} profile={profile} businessGoal={form.businessGoal} />
+                  </div>
                 </div>
               )}
 
@@ -566,6 +609,7 @@ export function StrategyMarketingPage() {
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
           <button type="button" onClick={() => { setShowStrategy(false); setFormStep(1); }} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
           <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={copyShareLink} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Share2 size={14} /> Chia sẻ link</button>
             <button type="button" onClick={sendEmail} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Send size={14} /> Gửi Gmail</button>
             <button type="button" onClick={copySummary} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Copy size={14} /> Sao chép</button>
             <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Printer size={14} /> In/PDF</button>
@@ -599,6 +643,15 @@ export function StrategyMarketingPage() {
             </div>
             <p className="mx-auto mt-2 max-w-xl text-[11px] leading-relaxed text-slate-500">{industryAnalysis.insight}</p>
             <p className="mx-auto mt-2 text-xs font-bold uppercase tracking-wide text-violet-600">{form.businessGoal} · {form.budgetRange}</p>
+            {(() => {
+              const loc = analyzeBusinessLocation(form.address, form.scale, profile, form.businessGoal);
+              if (!loc) return null;
+              return (
+                <p className="mx-auto mt-2 max-w-xl text-[11px] text-indigo-700">
+                  📍 {loc.city ?? "Khu vực"} · {loc.breadthLabel} · {loc.catchmentRange}
+                </p>
+              );
+            })()}
           </div>
 
           {/* KPI summary */}
@@ -631,15 +684,16 @@ export function StrategyMarketingPage() {
             <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
             <div className="grid gap-4 lg:grid-cols-2">
               <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} />
-              <StrategyWhatIfPanel
-                profile={profile}
-                form={form}
-                onApplyAssets={(assets) => {
-                  setForm((prev) => ({ ...prev, existingAssets: assets }));
-                  setActionMessage("Đã áp dụng kịch bản — combo tính lại theo tài sản mới.");
-                }}
-              />
+              <StrategyLocationPanel form={form} profile={profile} />
             </div>
+            <StrategyWhatIfPanel
+              profile={profile}
+              form={form}
+              onApplyAssets={(assets) => {
+                setForm((prev) => ({ ...prev, existingAssets: assets }));
+                setActionMessage("Đã áp dụng kịch bản — combo tính lại theo tài sản mới.");
+              }}
+            />
             <div className="grid gap-4 lg:grid-cols-2">
               <StrategyReadinessPanel profileId={profile.id} existingAssets={form.existingAssets} />
               <StrategyKpiPanel profile={profile} form={form} />
@@ -649,6 +703,11 @@ export function StrategyMarketingPage() {
               <StrategyRoiPanel profile={profile} form={form} itemIds={planIds.length ? planIds : comboIds} />
             </div>
             <StrategyTierComparison profile={profile} form={form} onSelectTier={setPlanIds} />
+            <StrategyMultiLocationPanel
+              form={form}
+              mapsSetupOnce={comboRecommendation.mapsStack?.setupOnce ?? null}
+              baseMonthTotal={planTotals.month}
+            />
             <StrategyActionPlanPanel profile={profile} form={form} combo={comboRecommendation} />
           </div>
 
@@ -751,6 +810,7 @@ export function StrategyMarketingPage() {
                 <p className="mt-3 text-xs font-bold text-slate-600">
                   Năm đầu (setup): {formatVnd(comboRecommendation.websiteStack.firstYearSetup)} · Duy trì content web: {formatVnd(comboRecommendation.websiteStack.monthlyRecurring)}/tháng
                 </p>
+                <PricingDeepLink channel="website" />
               </div>
             )}
 
@@ -806,6 +866,7 @@ export function StrategyMarketingPage() {
                 <p className="mt-3 text-xs font-bold text-slate-600">
                   Setup: {formatVnd(comboRecommendation.fanpageStack.setupOnce)} · Duy trì Fanpage: {formatVnd(comboRecommendation.fanpageStack.monthlyRecurring)}/tháng
                 </p>
+                <PricingDeepLink channel="fanpage" />
               </div>
             )}
 
@@ -838,6 +899,7 @@ export function StrategyMarketingPage() {
                   Setup Maps: {formatVnd(comboRecommendation.mapsStack.setupOnce)}
                   {comboRecommendation.mapsStack.monthlyRecurring > 0 && ` · Quảng cáo: ${formatVnd(comboRecommendation.mapsStack.monthlyRecurring)}/tháng`}
                 </p>
+                <PricingDeepLink channel="maps" />
               </div>
             )}
           </div>
@@ -979,7 +1041,7 @@ export function StrategyMarketingPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 border-t border-violet-100 bg-[#faf8ff] p-4 sm:grid-cols-2 lg:grid-cols-4 md:p-6">
+          <div className="grid gap-4 border-t border-violet-100 bg-[#faf8ff] p-4 sm:grid-cols-2 lg:grid-cols-4 md:p-6 print:hidden">
             {STRATEGY_FOOTER.map((item, index) => {
               const Icon = FOOTER_ICONS[index];
               return (
@@ -989,6 +1051,21 @@ export function StrategyMarketingPage() {
                 </div>
               );
             })}
+          </div>
+
+          <div className="hidden print:block border-t border-slate-300 p-6 text-sm text-slate-900">
+            <p className="text-xs font-black uppercase text-violet-700">Bản in chiến lược marketing</p>
+            <h2 className="mt-1 text-xl font-black">{form.companyName}</h2>
+            <p className="mt-1 text-slate-600">{form.fullName} · {form.phone} · {form.email}</p>
+            <p className="mt-1 text-slate-600">{industryAnalysis.suggestion?.label ?? form.industry} · {form.businessGoal} · {form.budgetRange}</p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+              <p><strong>Gói:</strong> {comboRecommendation.tierLabel}</p>
+              <p><strong>Dịch vụ:</strong> {planItems.length} gói</p>
+              <p><strong>Setup:</strong> {formatVnd(planTotals.once)}</p>
+              <p><strong>Hàng tháng:</strong> {formatVnd(planTotals.month)}</p>
+            </div>
+            <p className="mt-4 text-xs leading-relaxed whitespace-pre-wrap">{summaryText}</p>
+            <p className="mt-6 text-[10px] text-slate-500">butphamarketing.com · Hotline/Zalo 0901438703</p>
           </div>
         </motion.div>
       </div>

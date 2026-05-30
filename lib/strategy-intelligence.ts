@@ -661,3 +661,47 @@ export function buildExecutiveSummary(
     headline,
   };
 }
+
+export type MultiLocationAdvisory = {
+  locationLabel: string;
+  locationCount: string;
+  mapsPerLocation: number | null;
+  contentMultiplier: number;
+  bullets: string[];
+  estimatedExtraMonth: number;
+};
+
+export function buildMultiLocationAdvisory(
+  form: Pick<StrategyFormSnapshot, "scale" | "budgetRange">,
+  mapsSetupOnce: number | null,
+  baseMonthTotal: number,
+): MultiLocationAdvisory | null {
+  if (form.scale.includes("1 cơ sở")) return null;
+
+  const locationLabel = form.scale.includes("Trên 5") ? "Chuỗi / multi-brand" : "Đa chi nhánh";
+  const locationCount = form.scale.includes("Trên 5") ? "6+ cơ sở" : "2–5 cơ sở";
+  const branchFactor = form.scale.includes("Trên 5") ? 1.35 : 1.2;
+  const mapsPerLocation = mapsSetupOnce && mapsSetupOnce > 0 ? mapsSetupOnce : null;
+
+  const bullets = [
+    mapsPerLocation
+      ? `Google Maps: tính ~${formatVnd(mapsPerLocation)}/cơ sở setup (tối ưu hoặc xây mới) — ${locationCount} cần profile riêng.`
+      : `Google Maps: mỗi cơ sở nên có profile riêng để khách tìm đúng chi nhánh.`,
+    "Fanpage: 1 trang trung tâm + content local theo từng khu vực, hoặc page phụ nếu thương hiệu con.",
+    "Website: landing theo chi nhánh / schema LocalBusiness cho SEO khu vực.",
+    form.scale.includes("Trên 5")
+      ? "Ngân sách ads: chia theo vùng — đo lead riêng từng chi nhánh, tránh trộn data."
+      : "Ngân sách ads: ưu tiên chi nhánh có doanh thu cao nhất trước, scale dần.",
+  ];
+
+  const estimatedExtraMonth = Math.round(baseMonthTotal * (branchFactor - 1));
+
+  return {
+    locationLabel,
+    locationCount,
+    mapsPerLocation,
+    contentMultiplier: branchFactor,
+    bullets,
+    estimatedExtraMonth,
+  };
+}

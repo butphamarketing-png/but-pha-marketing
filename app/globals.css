@@ -441,3 +441,33 @@
     border-radius: 1.25rem;
   }
 }
+
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .hidden.print\:block,
+  .print-only {
+    display: block !important;
+  }
+
+  .shadow-2xl,
+  .shadow-xl,
+  .shadow-md,
+  .shadow-sm {
+    box-shadow: none !important;
+  }
+}
