@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -40,10 +40,17 @@ import {
 import { db } from "@/lib/useData";
 import { STRATEGY_FOOTER, STRATEGY_PRICING, type StrategyPricingItem } from "@/lib/marketing-strategy-pricing";
 import { DOMAIN_COM_PRICE } from "@/lib/service-pricing";
+import { IndustryAutocomplete, StrategyIndustryPreview } from "@/components/marketing/StrategyIndustryPreview";
 import {
-  getIndustrySuggestionGroups,
-  searchIndustrySuggestions,
-} from "@/lib/industry-suggestions";
+  FormProgressBar,
+  StrategyActionPlanPanel,
+  StrategyAdsAdviceBanner,
+  StrategyKpiPanel,
+  StrategyReadinessPanel,
+  StrategyTierComparison,
+} from "@/components/marketing/StrategyUpgradePanels";
+import { analyzeIndustryInput, getProfileShortLabel } from "@/lib/industry-intelligence";
+import { buildFormProgress, buildDigitalReadiness } from "@/lib/strategy-intelligence";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
@@ -83,12 +90,10 @@ const initialForm: LeadForm = {
 };
 
 const TRUST_STATS = [
-  { icon: Layers, label: `${getIndustryCount()}+ ngành`, sub: "Gợi ý thông minh" },
+  { icon: Layers, label: `${getIndustryCount()}+ ngành`, sub: "Theo masothue" },
   { icon: Zap, label: "Combo tự động", sub: "Theo ngân sách" },
   { icon: BadgeCheck, label: "Báo giá rõ", sub: "Minh bạch 100%" },
 ] as const;
-
-const INDUSTRY_GROUP_HINTS = getIndustrySuggestionGroups();
 
 const COLUMN_THEME = {
   website: { color: "#22C55E", bg: "from-emerald-500/10 to-emerald-500/5", border: "border-emerald-200" },
@@ -110,111 +115,6 @@ const inputClass =
   "w-full rounded-xl border border-violet-200/80 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20";
 
 const selectClass = inputClass;
-
-function IndustryAutocomplete({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const suggestions = useMemo(() => searchIndustrySuggestions(value, 10), [value]);
-  const showDropdown = open && value.trim().length >= 1 && suggestions.length > 0;
-
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [value]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const pick = (label: string) => {
-    onChange(label);
-    setOpen(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showDropdown) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter" && suggestions[activeIndex]) {
-      e.preventDefault();
-      pick(suggestions[activeIndex].label);
-    } else if (e.key === "Escape") {
-      setOpen(false);
-    }
-  };
-
-  return (
-    <div ref={wrapRef} className="relative">
-      <input
-        className={inputClass}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => value.trim().length >= 1 && setOpen(true)}
-        onKeyDown={handleKeyDown}
-        placeholder="Gõ ngành nghề — VD: cafe, nha khoa, shop thời trang..."
-        autoComplete="off"
-        role="combobox"
-        aria-expanded={showDropdown}
-        aria-autocomplete="list"
-      />
-      {!value.trim() && (
-        <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-          {getIndustryCount()}+ ngành gợi ý — gõ vài ký tự để tìm:{" "}
-          {INDUSTRY_GROUP_HINTS.slice(0, 4).map((g) => g.label).join(" · ")}…
-        </p>
-      )}
-      <AnimatePresence>
-        {showDropdown && (
-          <motion.ul
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            className="absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-xl border border-violet-200 bg-white py-1 shadow-xl shadow-violet-900/10"
-            role="listbox"
-          >
-            {suggestions.map((item, index) => (
-              <li key={item.label} role="option" aria-selected={index === activeIndex}>
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => pick(item.label)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left transition ${index === activeIndex ? "bg-violet-50 text-violet-900" : "text-slate-700 hover:bg-violet-50/60"}`}
-                >
-                  <span className="text-sm font-bold">{item.label}</span>
-                  <span className="shrink-0 rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-bold text-violet-600">{item.group}</span>
-                </button>
-              </li>
-            ))}
-          </motion.ul>
-        )}
-      </AnimatePresence>
-      {value.trim().length >= 1 && suggestions.length === 0 && open && (
-        <p className="mt-2 text-[11px] text-slate-500">Không tìm thấy gợi ý — bạn có thể nhập tự do, hệ thống vẫn tư vấn theo mô tả.</p>
-      )}
-    </div>
-  );
-}
 
 function PhaseStepper({ phases }: { phases: { title: string; duration: string; focus: string }[] }) {
   return (
@@ -369,6 +269,10 @@ export function StrategyMarketingPage() {
   const [pricingColumnTab, setPricingColumnTab] = useState<"website" | "fanpage" | "googlemaps">("website");
 
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
+  const industryAnalysis = useMemo(
+    () => analyzeIndustryInput(form.industry, form),
+    [form.industry, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
+  );
   const comboRecommendation = useMemo(
     () => buildRecommendedCombo(profile, form),
     [profile, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
@@ -381,12 +285,7 @@ export function StrategyMarketingPage() {
     () => (planIds.length ? planIds : comboIds).map((id) => getPricingItemById(id)).filter(Boolean) as StrategyPricingItem[],
     [planIds, comboIds],
   );
-
-  const previewProfile = useMemo(() => (form.industry.trim() ? resolveIndustryProfile(form.industry) : null), [form.industry]);
-  const previewCombo = useMemo(
-    () => (previewProfile ? buildRecommendedCombo(previewProfile, form) : null),
-    [previewProfile, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
-  );
+  const formProgress = useMemo(() => buildFormProgress(form), [form]);
 
   useEffect(() => {
     if (!showStrategy) return;
@@ -455,7 +354,25 @@ export function StrategyMarketingPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const summaryText = buildStrategySummaryText(form, profile, planIds);
+  const summaryText = useMemo(() => {
+    const base = buildStrategySummaryText(form, profile, planIds);
+    const extras: string[] = [];
+    if (industryAnalysis.suggestion?.vsicCode) {
+      extras.push(`Mã VSIC: ${industryAnalysis.suggestion.vsicCode}`);
+    }
+    if (industryAnalysis.confidence > 0) {
+      extras.push(`Độ khớp ngành: ${industryAnalysis.confidenceLabel} (${industryAnalysis.confidence}%)`);
+    }
+    if (industryAnalysis.insight) {
+      extras.push(`Ghi chú AI: ${industryAnalysis.insight}`);
+    }
+    const readiness = buildDigitalReadiness(profile.id, form.existingAssets);
+    extras.push(`Điểm sẵn sàng số: ${readiness.score}/100 (${readiness.grade})`);
+    if (readiness.gaps.length) {
+      extras.push(`Cần bổ sung: ${readiness.gaps.map((g) => g.label).join(", ")}`);
+    }
+    return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
+  }, [form, profile, planIds, industryAnalysis]);
 
   const sendEmail = () => {
     const subject = encodeURIComponent(`Chiến lược Marketing — ${form.companyName}`);
@@ -501,6 +418,7 @@ export function StrategyMarketingPage() {
             </motion.div>
 
             <motion.form initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
+              <FormProgressBar percent={formProgress.percent} />
               <p className="mb-5 flex items-center gap-2 text-sm font-bold text-violet-800"><Info size={16} /> Thông tin & mục tiêu</p>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} /></label>
@@ -510,60 +428,8 @@ export function StrategyMarketingPage() {
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} /></label>
                 <div className="space-y-2 sm:col-span-2">
                   <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
-                  <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} />
-                  {previewProfile && previewCombo && (
-                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4">
-                      <p className="flex items-center gap-2 text-xs font-black text-emerald-800">
-                        <Sparkles size={14} /> Xem trước: {previewProfile.label}
-                      </p>
-                      <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{previewProfile.summary.slice(0, 120)}…</p>
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-black text-violet-700">{previewCombo.tierLabel}</span>
-                        <span className="text-[10px] font-bold text-slate-500">{previewCombo.itemIds.length} gói · ~{formatVnd(calculatePlanTotals(previewCombo.itemIds).month)}/tháng</span>
-                      </div>
-                      {previewCombo.websiteStack && !form.existingAssets.includes("website") && (
-                        <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
-                          <p className="font-black text-emerald-800">Gói Website gợi ý</p>
-                          <p className="mt-1">
-                            {previewCombo.websiteStack.buildName} ({formatVnd(previewCombo.websiteStack.buildPrice)}) + Hosting {previewCombo.websiteStack.hostingGb}GB ({formatVnd(previewCombo.websiteStack.hostingPrice)}/năm) + Chăm sóc {previewCombo.websiteStack.carePosts} bài/th
-                          </p>
-                          <p className="mt-1 font-bold text-emerald-700">
-                            Năm đầu ~{formatVnd(previewCombo.websiteStack.firstYearSetup)} · Duy trì {formatVnd(previewCombo.websiteStack.monthlyRecurring)}/tháng
-                          </p>
-                        </div>
-                      )}
-                      {previewCombo.fanpageStack && (
-                        <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
-                          <p className="font-black text-blue-800">Fanpage — 150.000đ/bài</p>
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {previewCombo.fanpageStack.careAlternatives.map((t) => (
-                              <span
-                                key={t.posts}
-                                className={`rounded-lg px-2 py-1 text-[10px] font-bold ${t.selected ? "bg-blue-600 text-white" : "bg-white text-blue-700 border border-blue-200"}`}
-                              >
-                                {t.posts} bài = {formatVnd(t.price)}
-                              </span>
-                            ))}
-                          </div>
-                          {!form.existingAssets.includes("fanpage") && previewCombo.fanpageStack.buildName && (
-                            <p className="mt-2">+ Setup {previewCombo.fanpageStack.buildName} ({formatVnd(previewCombo.fanpageStack.buildPrice)})</p>
-                          )}
-                        </div>
-                      )}
-                      {previewCombo.mapsStack && !form.existingAssets.includes("maps") && (
-                        <div className="mt-3 rounded-lg border border-orange-200 bg-orange-50/80 p-3 text-[11px] leading-relaxed text-slate-700">
-                          <p className="font-black text-orange-800">Google Maps gợi ý</p>
-                          <p className="mt-1">
-                            {previewCombo.mapsStack.serviceName} ({formatVnd(previewCombo.mapsStack.servicePrice)})
-                            {previewCombo.mapsStack.adsName ? ` + ${previewCombo.mapsStack.adsName}` : ""}
-                          </p>
-                          {previewCombo.mapsStack.multiLocationNote && (
-                            <p className="mt-1 text-orange-700">{previewCombo.mapsStack.multiLocationNote}</p>
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
+                  <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} inputClass={inputClass} />
+                  {form.industry.trim() && <StrategyIndustryPreview form={form} />}
                 </div>
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Target size={14} className="inline" /> Mục tiêu kinh doanh *</span>
                   <select className={selectClass} value={form.businessGoal} onChange={(e) => updateField("businessGoal", e.target.value)}>{BUSINESS_GOALS.map((g) => <option key={g} value={g}>{g}</option>)}</select>
@@ -616,8 +482,24 @@ export function StrategyMarketingPage() {
             <Image src="/logo.png" alt="Logo" width={88} height={88} className="mx-auto" />
             <h1 className="mt-4 text-3xl font-black text-[#4c1d95] md:text-5xl">BỨT PHÁ MARKETING</h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-600">
-              <strong className="text-violet-800">{form.companyName}</strong> · {form.industry} · {form.fullName} · {form.scale}
+              <strong className="text-violet-800">{form.companyName}</strong> · {industryAnalysis.suggestion?.label ?? form.industry} · {form.fullName} · {form.scale}
             </p>
+            <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-2">
+              <span className="rounded-full bg-violet-100 px-3 py-1 text-[10px] font-black text-violet-700">
+                {getProfileShortLabel(profile.id)}
+              </span>
+              {industryAnalysis.confidence > 0 && (
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-black text-emerald-700">
+                  {industryAnalysis.confidenceLabel} {industryAnalysis.confidence}%
+                </span>
+              )}
+              {industryAnalysis.suggestion?.vsicCode && (
+                <span className="rounded-full bg-slate-100 px-3 py-1 font-mono text-[10px] font-bold text-slate-600">
+                  VSIC {industryAnalysis.suggestion.vsicCode}
+                </span>
+              )}
+            </div>
+            <p className="mx-auto mt-2 max-w-xl text-[11px] leading-relaxed text-slate-500">{industryAnalysis.insight}</p>
             <p className="mx-auto mt-2 text-xs font-bold uppercase tracking-wide text-violet-600">{form.businessGoal} · {form.budgetRange}</p>
           </div>
 
@@ -637,11 +519,31 @@ export function StrategyMarketingPage() {
             ))}
           </div>
 
+          {/* Smart strategy panels */}
+          <div className="space-y-4 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8 print:hidden">
+            <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyReadinessPanel profileId={profile.id} existingAssets={form.existingAssets} />
+              <StrategyKpiPanel profile={profile} form={form} />
+            </div>
+            <StrategyTierComparison profile={profile} form={form} onSelectTier={setPlanIds} />
+            <StrategyActionPlanPanel profile={profile} form={form} combo={comboRecommendation} />
+          </div>
+
           {/* Consultation blocks */}
           <div className="grid gap-4 border-b border-violet-100 bg-[#faf8ff] p-4 md:grid-cols-2 md:p-8">
             <div className="rounded-2xl border border-violet-100 bg-white p-5">
               <p className="flex items-center gap-2 text-sm font-black text-violet-800"><Sparkles size={16} /> Tư vấn cho {profile.label}</p>
               <p className="mt-3 text-sm leading-relaxed text-slate-600">{profile.summary}</p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {industryAnalysis.channels.filter((ch) => ch.active).map((ch) => (
+                  <div key={ch.id} className="rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2">
+                    <p className="text-[10px] font-black uppercase text-violet-700">{ch.label}</p>
+                    <p className="text-[10px] font-bold text-amber-500">{"★".repeat(ch.stars)}{"☆".repeat(3 - ch.stars)}</p>
+                    <p className="mt-0.5 text-[10px] text-slate-500">{ch.reason}</p>
+                  </div>
+                ))}
+              </div>
               <ul className="mt-4 space-y-2">{whyBullets.map((b) => (<li key={b} className="flex gap-2 text-sm text-slate-700"><CheckCircle2 size={16} className="shrink-0 text-emerald-500" />{b}</li>))}</ul>
             </div>
             <div className="space-y-4">

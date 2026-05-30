@@ -1,0 +1,1346 @@
+Tra cứu mã số thuế theo ngành nghề kinh doanh - Masothue
+
+Tra cứu mã số thuế
+
+1.340 ngành
+
+- 01NÔNG NGHIỆP VÀ HOẠT ĐỘNG DỊCH VỤ CÓ LIÊN QUAN
+- 011Trồng cây hàng năm
+- 0111Trồng lúa
+- 01110Trồng lúa
+- 0112Trồng ngô và cây lương thực có hạt khác
+- 01120Trồng ngô và cây lương thực có hạt khác
+- 0113Trồng cây lấy củ có chất bột
+- 01130Trồng cây lấy củ có chất bột
+- 0114Trồng cây mía
+- 01140Trồng cây mía
+- 0115Trồng cây thuốc lá, thuốc lào
+- 01150Trồng cây thuốc lá, thuốc lào
+- 0116Trồng cây lấy sợi
+- 01160Trồng cây lấy sợi
+- 0117Trồng cây có hạt chứa dầu
+- 01170Trồng cây có hạt chứa dầu
+- 0118Trồng rau, đậu các loại và trồng hoa, cây cảnh
+- 01181Trồng rau các loại
+- 01182Trồng đậu các loại
+- 01183Trồng hoa, cây cảnh
+- 0119Trồng cây hàng năm khác
+- 01190(Mã ngành cũ) - Trồng cây hàng năm khác
+- 012Trồng cây lâu năm
+- 0121Trồng cây ăn quả
+- 01211Trồng nho
+- 01212Trồng cây ăn quả vùng nhiệt đới và cận nhiệt đới
+- 01213Trồng cam, quít và các loại quả có múi khác
+- 01214Trồng táo, mận và các loại quả có hạt như táo
+- 01215Trồng nhãn, vải, chôm chôm
+- 01219Trồng cây ăn quả khác
+- 0122Trồng cây lấy quả chứa dầu
+- 01220Trồng cây lấy quả chứa dầu
+- 0123Trồng cây điều
+- 01230Trồng cây điều
+- 0124Trồng cây hồ tiêu
+- 01240Trồng cây hồ tiêu
+- 0125Trồng cây cao su
+- 01250Trồng cây cao su
+- 0126Trồng cây cà phê
+- 01260Trồng cây cà phê
+- 0127Trồng cây chè
+- 01270Trồng cây chè
+- 0128Trồng cây gia vị, cây dược liệu
+- 01281Trồng cây gia vị lâu năm
+- 01282Trồng cây dược liệu
+- 0129Trồng cây lâu năm khác
+- 01290(Mã ngành cũ) - Trồng cây lâu năm khác
+- 013Nhân và chăm sóc cây giống nông nghiệp
+- 0130Nhân và chăm sóc cây giống nông nghiệp
+- 01300Nhân và chăm sóc cây giống nông nghiệp
+- 0131Nhân và chăm sóc cây giống hàng năm
+- 0132Nhân và chăm sóc cây giống lâu năm
+- 014Chăn nuôi
+- 0141Chăn nuôi trâu, bò
+- 01410(Mã ngành cũ) - Chăn nuôi trâu, bò
+- 0142Chăn nuôi ngựa, lừa, la
+- 01420(Mã ngành cũ) - Chăn nuôi ngựa, lừa, la
+- 0144Chăn nuôi dê, cừu
+- 01440(Mã ngành cũ) - Chăn nuôi dê, cừu
+- 0145Chăn nuôi lợn
+- 01450Chăn nuôi lợn
+- 0146Chăn nuôi gia cầm
+- 01461Hoạt động ấp trứng và sản xuất giống gia cầm
+- 01462Chăn nuôi gà
+- 01463Chăn nuôi vịt, ngan, ngỗng
+- 01469Chăn nuôi gia cầm khác
+- 0149Chăn nuôi khác
+- 01490Chăn nuôi khác
+- 0150Trồng trọt, chăn nuôi hỗn hợp
+- 01500Trồng trọt, chăn nuôi hỗn hợp
+- 016Hoạt động dịch vụ nông nghiệp
+- 0161Hoạt động dịch vụ trồng trọt
+- 01610Hoạt động dịch vụ trồng trọt
+- 0162Hoạt động dịch vụ chăn nuôi
+- 01620Hoạt động dịch vụ chăn nuôi
+- 0163Hoạt động dịch vụ sau thu hoạch
+- 01630Hoạt động dịch vụ sau thu hoạch
+- 0164Xử lý hạt giống để nhân giống
+- 01640Xử lý hạt giống để nhân giống
+- 0170Săn bắt, đánh bẫy và hoạt động dịch vụ có liên quan
+- 01700Săn bắt, đánh bẫy và hoạt động dịch vụ có liên quan
+- 02LÂM NGHIỆP VÀ HOẠT ĐỘNG DỊCH VỤ CÓ LIÊN QUAN
+- 0210Trồng rừng và chăm sóc rừng
+- 02101Ươm giống cây lâm nghiệp
+- 02102Trồng rừng và chăm sóc rừng lấy gỗ
+- 02103Trồng rừng và chăm sóc rừng tre, nứa
+- 02109Trồng rừng và chăm sóc rừng khác
+- 022Khai thác gỗ
+- 0220Khai thác gỗ
+- 0221Khai thác gỗ
+- 02210Khai thác gỗ(trừ các loại gỗ Nhà nước cấm)
+- 0222Khai thác lâm sản khác trừ gỗ
+- 02220(Mã ngành cũ) - Khai thác lâm sản khác trừ gỗ
+- 0230Thu nhặt sản phẩm từ rừng không phải gỗ và lâm sản khác(không hoạt động tại trụ sở chi nhánh)
+- 02300(Mã ngành cũ) - Thu nhặt sản phẩm từ rừng không phải gỗ và lâm sản khác
+- 0231Khai thác lâm sản khác trừ gỗ
+- 0232Thu nhặt lâm sản khác trừ gỗ
+- 0240Hoạt động dịch vụ lâm nghiệp
+- 02400Hoạt động dịch vụ lâm nghiệp
+- 03KHAI THÁC, NUÔI TRỒNG THUỶ SẢN
+- 031Khai thác thuỷ sản
+- 0311Khai thác thuỷ sản biển
+- 03110Khai thác thuỷ sản biển
+- 0312Khai thác thuỷ sản nội địa
+- 03121(Mã ngành cũ) - Khai thác thuỷ sản nước lợ
+- 03122(Mã ngành cũ) - Khai thác thuỷ sản nước ngọt
+- 032Nuôi trồng thuỷ sản
+- 0321Nuôi trồng thuỷ sản biển
+- 03210(Mã ngành cũ) - Nuôi trồng thuỷ sản biển
+- 0322Nuôi trồng thuỷ sản nội địa
+- 03221Nuôi trồng thuỷ sản nước lợ
+- 03222Nuôi trồng thuỷ sản nước ngọt
+- 0323Sản xuất giống thuỷ sản
+- 03230(Mã ngành cũ) - Sản xuất giống thuỷ sản
+- 05KHAI THÁC THAN CỨNG VÀ THAN NON
+- 0510Khai thác và thu gom than cứng
+- 05100Khai thác và thu gom than cứng
+- 0520Khai thác và thu gom than non
+- 05200Khai thác và thu gom than non
+- 06KHAI THÁC DẦU THÔ VÀ KHÍ ĐỐT TỰ NHIÊN
+- 0610Khai thác dầu thô
+- 06100Khai thác dầu thô
+- 0620Khai thác khí đốt tự nhiên
+- 06200Khai thác khí đốt tự nhiên
+- 07KHAI THÁC QUẶNG KIM LOẠI
+- 0710Khai thác quặng sắt
+- 07100Khai thác quặng sắt
+- 072Khai thác quặng không chứa sắt (trừ quặng kim loại quý hiếm)
+- 0721Khai thác quặng uranium và quặng thorium(chỉ hoạt động khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 07210Khai thác quặng uranium và thorium
+- 0722Khai thác quặng kim loại khác không chứa sắt
+- 07221Khai thác quặng bôxít
+- 07229Khai thác quặng kim loại khác không chứa sắt chưa được phân vào đâu
+- 0730Khai thác quặng kim loại quí hiếm
+- 07300Khai thác quặng kim loại quí hiếm(trừ các loại Nhà nước cấm)
+- 08KHAI KHOÁNG KHÁC
+- 0810Khai thác đá, cát, sỏi, đất sét
+- 08101Khai thác đá
+- 08102Khai thác cát, sỏi
+- 08103Khai thác đất sét
+- 089Khai khoáng chưa được phân vào đâu
+- 0891Khai thác khoáng hoá chất và khoáng phân bón
+- 08910Khai thác khoáng hoá chất và khoáng phân bón
+- 0892Khai thác và thu gom than bùn
+- 08920Khai thác và thu gom than bùn
+- 0893Khai thác muối
+- 08930Khai thác muối
+- 0899Khai khoáng khác chưa được phân vào đâu
+- 08990Khai khoáng khác chưa được phân vào đâu
+- 09HOẠT ĐỘNG DỊCH VỤ HỖ TRỢ KHAI KHOÁNG
+- 0910Hoạt động dịch vụ hỗ trợ khai thác dầu thô và khí tự nhiên
+- 09100Hoạt động dịch vụ hỗ trợ khai thác dầu thô và khí tự nhiên
+- 0990Hoạt động dịch vụ hỗ trợ khai thác mỏ và quặng khác
+- 09900Hoạt động dịch vụ hỗ trợ khai thác mỏ và quặng khác
+- 10SẢN XUẤT CHẾ BIẾN THỰC PHẨM
+- 1010Chế biến, bảo quản thịt và các sản phẩm từ thịt
+- 10101Giết mổ gia súc, gia cầm
+- 10109Chế biến và bảo quản các sản phẩm từ thịt
+- 1020Chế biến, bảo quản thuỷ sản và các sản phẩm từ thuỷ sản
+- 10201Chế biến và bảo quản thủy sản đông lạnh
+- 10202Chế biến và bảo quản thủy sản khô
+- 10203Chế biến và bảo quản nước mắm
+- 10204(Mã ngành cũ) - Chế biến và bảo quản nước mắm
+- 10209Chế biến và bảo quản các sản phẩm khác từ thủy sản
+- 103Chế biến và bảo quản rau quả
+- 1030Chế biến và bảo quản rau quả
+- 10301Chế biến và đóng hộp rau quả
+- 10309Chế biến và bảo quản rau quả khác
+- 1040Sản xuất dầu, mỡ động, thực vật
+- 10401Sản xuất dầu, mỡ động vật
+- 10409(Mã ngành cũ) - Chế biến và bảo quản dầu mỡ khác
+- 1050Chế biến sữa và các sản phẩm từ sữa
+- 10500Chế biến sữa và các sản phẩm từ sữa
+- 106Xay xát và sản xuất bột
+- 1061Xay xát và sản xuất bột thô
+- 10611Xay xát
+- 10612Sản xuất bột thô
+- 1062Sản xuất tinh bột và các sản phẩm từ tinh bột
+- 10620Sản xuất tinh bột và các sản phẩm từ tinh bột
+- 107Sản xuất thực phẩm khác
+- 1071Sản xuất các loại bánh từ bột
+- 10710Sản xuất các loại bánh từ bột
+- 1072Sản xuất đường
+- 10720Sản xuất đường
+- 1073Sản xuất ca cao, sôcôla và mứt kẹo
+- 10730Sản xuất ca cao, sôcôla và mứt kẹo
+- 1074Sản xuất mì ống, mỳ sợi và sản phẩm tương tự
+- 10740Sản xuất mì ống, mỳ sợi và sản phẩm tương tự
+- 1075Sản xuất món ăn, thức ăn chế biến sẵn
+- 10750Sản xuất món ăn, thức ăn chế biến sẵn
+- 1076Sản xuất chè
+- 1077Sản xuất cà phê
+- 1079Sản xuất thực phẩm khác chưa được phân vào đâu
+- 10790Sản xuất thực phẩm khác chưa được phân vào đâu
+- 1080Sản xuất thức ăn gia súc, gia cầm và thuỷ sản
+- 10800Sản xuất thức ăn gia súc, gia cầm và thuỷ sản
+- 11SẢN XUẤT ĐỒ UỐNG
+- 110Sản xuất đồ uống
+- 1101Chưng, tinh cất và pha chế các loại rượu mạnh
+- 11010Chưng, tinh cất và pha chế các loại rượu mạnh
+- 1102Sản xuất rượu vang
+- 11020Sản xuất rượu vang
+- 1103Sản xuất bia và mạch nha ủ men bia
+- 11030Sản xuất bia và mạch nha ủ men bia
+- 1104Sản xuất đồ uống không cồn, nước khoáng
+- 11041Sản xuất nước khoáng, nước tinh khiết đóng chai
+- 11042Sản xuất đồ uống không cồn
+- 1200Sản xuất sản phẩm thuốc lá
+- 12001Sản xuất thuốc lá
+- 12009Sản xuất thuốc hút khác
+- 13DỆT
+- 131Sản xuất sợi, vải dệt thoi và hoàn thiện sản phẩm dệt
+- 1311Sản xuất sợi
+- 13110Sản xuất sợi
+- 1312Sản xuất vải dệt thoi
+- 13120Sản xuất vải dệt thoi
+- 1313Hoàn thiện sản phẩm dệt
+- 13130Hoàn thiện sản phẩm dệt
+- 132(Mã ngành cũ) - Sản xuất hàng dệt khác
+- 1321Sản xuất vải dệt kim, vải đan móc và vải không dệt khác
+- 13210(Mã ngành cũ) - Sản xuất vải dệt kim, vải đan móc và vải không dệt khác
+- 1322Sản xuất hàng may sẵn (trừ trang phục)
+- 13220Sản xuất hàng may sẵn (trừ trang phục)
+- 1323Sản xuất thảm, chăn đệm
+- 13230(Mã ngành cũ) - Sản xuất thảm, chăn đệm
+- 1324Sản xuất các loại dây bện và lưới
+- 13240(Mã ngành cũ) - Sản xuất các loại dây bện và lưới
+- 1329Sản xuất các loại hàng dệt khác chưa được phân vào đâu
+- 13290Sản xuất các loại hàng dệt khác chưa được phân vào đâu
+- 1391Sản xuất vải dệt kim, vải đan móc và vải không dệt khác
+- 1392Sản xuất hàng dệt sẵn (trừ trang phục)
+- 1393Sản xuất thảm, chăn, đệm
+- 1394Sản xuất các loại dây bện và lưới
+- 1399Sản xuất các loại hàng dệt khác chưa được phân vào đâu
+- 14SẢN XUẤT TRANG PHỤC
+- 141May trang phục (trừ trang phục từ da lông thú)
+- 1410May trang phục (trừ trang phục từ da lông thú)
+- 14100May trang phục (trừ trang phục từ da lông thú)May trang phục xuất khẩu; Sản xuất quần áo bảo hộ lao động
+- 142Sản xuất sản phẩm từ da lông thú
+- 1420Sản xuất sản phẩm từ da lông thú
+- 14200Sản xuất sản phẩm từ da lông thú
+- 1430Sản xuất trang phục dệt kim, đan móc
+- 14300Sản xuất trang phục dệt kim, đan móc
+- 15SẢN XUẤT DA VÀ CÁC SẢN PHẨM CÓ LIÊN QUAN
+- 151Thuộc, sơ chế da; sản xuất va li, túi xách, yên đệm; sơ chế và nhuộm da lông thú
+- 1511Thuộc, sơ chế da; sơ chế và nhuộm da lông thú
+- 15110Thuộc, sơ chế da; sơ chế và nhuộm da lông thú
+- 1512Sản xuất vali, túi xách và các loại tương tự, sản xuất yên đệm
+- 15120Sản xuất vali, túi xách và các loại tương tự; sản xuất yên đệm
+- 1520Sản xuất giày dép
+- 15200Sản xuất giày dép
+- 16CHẾ BIẾN GỖ VÀ SẢN XUẤT SẢN PHẨM TỪ GỖ, TRE, NỨA (TRỪ GIƯỜNG, TỦ, BÀN, GHẾ); SẢN XUẤT SẢN PHẨM TỪ RƠM, RẠ VÀ VẬT LIỆU TẾT BỆN
+- 161Cưa, xẻ, bào gỗ và bảo quản gỗ
+- 1610Cưa, xẻ, bào gỗ và bảo quản gỗ
+- 16101Cưa, xẻ và bào gỗ
+- 16102Bảo quản gỗ
+- 162Sản xuất sản phẩm từ gỗ, tre, nứa (trừ giường, tủ, bàn, ghế); sản xuất các sản phẩm từ rơm, rạ và vật liệu tết bện
+- 1621Sản xuất gỗ dán, gỗ lạng, ván ép và ván mỏng khác
+- 16210Sản xuất gỗ dán, gỗ lạng, ván ép và ván mỏng khác
+- 1622Sản xuất đồ gỗ xây dựng
+- 16220Sản xuất đồ gỗ xây dựng
+- 1623Sản xuất bao bì bằng gỗ
+- 16230Sản xuất bao bì bằng gỗ
+- 1629Sản xuất sản phẩm khác từ gỗ; sản xuất sản phẩm từ tre, nứa, rơm, rạ và vật liệu tết bện
+- 16291Sản xuất sản phẩm khác từ gỗ
+- 16292Sản xuất sản phẩm từ lâm sản (trừ gỗ), cói và vật liệu tết bện
+- 17SẢN XUẤT GIẤY VÀ SẢN PHẨM TỪ GIẤY
+- 170Sản xuất giấy và sản phẩm từ giấy
+- 1701Sản xuất bột giấy, giấy và bìa
+- 17010Sản xuất bột giấy, giấy và bìa
+- 1702Sản xuất giấy nhăn, bìa nhăn, bao bì từ giấy và bìa
+- 17021Sản xuất bao bì bằng giấy, bìa
+- 17022Sản xuất giấy nhăn và bìa nhăn
+- 1709Sản xuất các sản phẩm khác từ giấy và bìa chưa được phân vào đâu
+- 17090Sản xuất các sản phẩm khác từ giấy và bìa chưa được phân vào đâu
+- 18IN, SAO CHÉP BẢN GHI CÁC LOẠI
+- 181In ấn và dịch vụ liên quan đến in
+- 1811In ấn
+- 18110In ấn
+- 1812Dịch vụ liên quan đến in
+- 18120Dịch vụ liên quan đến in
+- 1820Sao chép bản ghi các loại
+- 18200Sao chép bản ghi các loại
+- 19SẢN XUẤT THAN CỐC, SẢN PHẨM DẦU MỎ TINH CHẾ
+- 1910Sản xuất than cốc
+- 19100Sản xuất than cốc
+- 1920Sản xuất sản phẩm dầu mỏ tinh chế
+- 19200Sản xuất sản phẩm dầu mỏ tinh chế
+- 20SẢN XUẤT HÓA CHẤT VÀ SẢN PHẨM HOÁ CHẤT
+- 201Sản xuất hoá chất cơ bản, phân bón và hợp chất nitơ; sản xuất plastic và cao su tổng hợp dạng nguyên sinh
+- 2011Sản xuất hoá chất cơ bản
+- 20110(Mã ngành cũ) - Sản xuất hoá chất cơ bản
+- 2012Sản xuất phân bón và hợp chất ni tơ
+- 20120Sản xuất phân bón và hợp chất ni tơ
+- 2013Sản xuất plastic và cao su tổng hợp dạng nguyên sinh
+- 20131Sản xuất plastic nguyên sinh
+- 20132Sản xuất cao su tổng hợp dạng nguyên sinh
+- 202Sản xuất sản phẩm hoá chất khác
+- 2021Sản xuất thuốc trừ sâu và sản phẩm hoá chất khác dùng trong nông nghiệp
+- 20210Sản xuất thuốc trừ sâu và sản phẩm hoá chất khác dùng trong nông nghiệp
+- 2022Sản xuất sơn, véc ni và các chất sơn, quét tương tự; sản xuất mực in và ma tít
+- 20221Sản xuất sơn, véc ni và các chất sơn, quét tương tự, ma tít
+- 20222Sản xuất mực in
+- 2023Sản xuất mỹ phẩm, xà phòng, chất tẩy rửa, làm bóng và chế phẩm vệ sinh
+- 20231Sản xuất mỹ phẩm
+- 20232Sản xuất xà phòng, chất tẩy rửa, làm bóng và chế phẩm vệ sinh
+- 2029Sản xuất sản phẩm hoá chất khác chưa được phân vào đâu
+- 20290Sản xuất sản phẩm hoá chất khác chưa được phân vào đâu
+- 2030Sản xuất sợi nhân tạo
+- 20300Sản xuất sợi nhân tạo
+- 21SẢN XUẤT THUỐC, HOÁ DƯỢC VÀ DƯỢC LIỆU
+- 210Sản xuất thuốc, hoá dược và dược liệu
+- 2100Sản xuất thuốc, hoá dược và dược liệu
+- 21001Sản xuất thuốc các loại
+- 21002Sản xuất hoá dược và dược liệu
+- 22SẢN XUẤT SẢN PHẨM TỪ CAO SU VÀ PLASTIC
+- 221Sản xuất sản phẩm từ cao su
+- 2211Sản xuất săm, lốp cao su; đắp và tái chế lốp cao su
+- 22110Sản xuất săm, lốp cao su; đắp và tái chế lốp cao su
+- 2212Sản xuất sản phẩm khác từ cao su
+- 22120(Mã ngành cũ) - Sản xuất sản phẩm khác từ cao su
+- 2219Sản xuất sản phẩm khác từ cao su
+- 222Sản xuất sản phẩm từ plastic
+- 2220Sản xuất sản phẩm từ plastic
+- 22201Sản xuất bao bì từ plastic
+- 22209Sản xuất sản phẩm khác từ plastic
+- 23SẢN XUẤT SẢN PHẨM TỪ KHOÁNG PHI KIM LOẠI KHÁC
+- 231Sản xuất thuỷ tinh và sản phẩm từ thuỷ tinh
+- 2310Sản xuất thuỷ tinh và sản phẩm từ thuỷ tinh
+- 23100(Mã ngành cũ) - Sản xuất thuỷ tinh và sản phẩm từ thuỷ tinh
+- 239Sản xuất sản phẩm từ khoáng phi kim loại chưa được phân vào đâu
+- 2391Sản xuất sản phẩm chịu lửa
+- 23910Sản xuất sản phẩm chịu lửa
+- 2392Sản xuất vật liệu xây dựng từ đất sét
+- 23920Sản xuất vật liệu xây dựng từ đất sét
+- 2393Sản xuất sản phẩm gốm sứ khác
+- 23930Sản xuất sản phẩm gốm sứ khác
+- 2394Sản xuất xi măng, vôi và thạch cao
+- 23941Sản xuất xi măng
+- 23942Sản xuất vôi
+- 23943Sản xuất thạch cao
+- 2395Sản xuất bê tông và các sản phẩm từ xi măng và thạch cao
+- 23950Sản xuất bê tông và các sản phẩm từ xi măng và thạch cao
+- 2396Cắt tạo dáng và hoàn thiện đá
+- 23960Cắt tạo dáng và hoàn thiện đá
+- 2399Sản xuất sản phẩm từ chất khoáng phi kim loại khác chưa được phân vào đâu
+- 23990Sản xuất sản phẩm từ chất khoáng phi kim loại khác chưa được phân vào đâu
+- 24SẢN XUẤT KIM LOẠI
+- 2410Sản xuất sắt, thép, gang
+- 24100Sản xuất sắt, thép, gang
+- 2420Sản xuất kim loại màu và kim loại quý
+- 24200(Mã ngành cũ) - Sản xuất kim loại màu và kim loại quý
+- 243Đúc kim loại
+- 2431Đúc sắt, thép
+- 24310Đúc sắt thép
+- 2432Đúc kim loại màu
+- 24320Đúc kim loại màu
+- 25SẢN XUẤT SẢN PHẨM TỪ KIM LOẠI ĐÚC SẴN (TRỪ MÁY MÓC, THIẾT BỊ)
+- 251Sản xuất các cấu kiện kim loại, thùng, bể chứa và nồi hơi
+- 2511Sản xuất các cấu kiện kim loại
+- 25110Sản xuất các cấu kiện kim loại
+- 2512Sản xuất thùng, bể chứa và dụng cụ chứa đựng bằng kim loại
+- 25120Sản xuất thùng, bể chứa và dụng cụ chứa đựng bằng kim loạiĐịa điểm sản xuất tại đường số 5-10 Khu công nghiệp Hòa Khánh, Quận Liên Chiểu, Đà Nẵng
+- 2513Sản xuất nồi hơi (trừ nồi hơi trung tâm)
+- 25130Sản xuất nồi hơi (trừ nồi hơi trung tâm)
+- 2520Sản xuất vũ khí và đạn dược
+- 25200Sản xuất vũ khí và đạn dược
+- 259Sản xuất sản phẩm khác bằng kim loại; các dịch vụ xử lý, gia công kim loại
+- 2591Rèn, dập, ép và cán kim loại; luyện bột kim loại
+- 25910Rèn, dập, ép và cán kim loại; luyện bột kim loạiĐịa điểm sản xuất tại đường số 5-10 Khu công nghiệp Hòa Khánh, Quận Liên Chiểu, Đà Nẵng
+- 2592Gia công cơ khí; xử lý và tráng phủ kim loại
+- 25920Gia công cơ khí; xử lý và tráng phủ kim loại
+- 2593Sản xuất dao kéo, dụng cụ cầm tay và đồ kim loại thông dụng
+- 25930Sản xuất dao kéo, dụng cụ cầm tay và đồ kim loại thông dụng
+- 2599Sản xuất sản phẩm khác bằng kim loại chưa được phân vào đâu
+- 25991Sản xuất đồ dùng bằng kim loại cho nhà bếp, nhà vệ sinh và nhà ăn
+- 25999Sản xuất sản phẩm khác còn lại bằng kim loại chưa được phân vào đâu
+- 26SẢN XUẤT SẢN PHẨM ĐIỆN TỬ, MÁY VI TÍNH VÀ SẢN PHẨM QUANG HỌC
+- 2610Sản xuất linh kiện điện tử
+- 26100Sản xuất linh kiện điện tử
+- 2620Sản xuất máy vi tính và thiết bị ngoại vi của máy vi tính
+- 26200Sản xuất máy vi tính và thiết bị ngoại vi của máy vi tính
+- 2630Sản xuất thiết bị truyền thông
+- 26300Sản xuất thiết bị truyền thông
+- 2640Sản xuất sản phẩm điện tử dân dụng
+- 26400Sản xuất sản phẩm điện tử dân dụng
+- 265Sản xuất thiết bị đo lường, kiểm tra, định hướng và điều khiển; sản xuất đồng hồ
+- 2651Sản xuất thiết bị đo lường, kiểm tra, định hướng và điều khiển
+- 26510Sản xuất thiết bị đo lường, kiểm tra, định hướng và điều khiển
+- 2652Sản xuất đồng hồ
+- 26520Sản xuất đồng hồ
+- 2660Sản xuất thiết bị bức xạ, thiết bị điện tử trong y học, điện liệu pháp
+- 26600Sản xuất thiết bị bức xạ, thiết bị điện tử trong y học, điện liệu pháp
+- 2670Sản xuất thiết bị và dụng cụ quang học
+- 26700Sản xuất thiết bị và dụng cụ quang học
+- 2680Sản xuất băng, đĩa từ tính và quang học
+- 26800Sản xuất băng, đĩa từ tính và quang học
+- 27SẢN XUẤT THIẾT BỊ ĐIỆN
+- 2710Sản xuất mô tơ, máy phát, biến thế điện, thiết bị phân phối và điều khiển điện
+- 27101Sản xuất mô tơ, máy phát
+- 27102Sản xuất biến thế điện, thiết bị phân phối và điều khiển điện
+- 2720Sản xuất pin và ắc quy
+- 27200Sản xuất pin và ắc quy
+- 273Sản xuất dây và thiết bị dây dẫn
+- 2731Sản xuất dây cáp, sợi cáp quang học
+- 27310Sản xuất dây cáp, sợi cáp quang học
+- 2732Sản xuất dây, cáp điện và điện tử khác
+- 27320Sản xuất dây, cáp điện và điện tử khác
+- 2733Sản xuất thiết bị dây dẫn điện các loại
+- 27330Sản xuất thiết bị dây dẫn điện các loại
+- 2740Sản xuất thiết bị điện chiếu sáng
+- 27400Sản xuất thiết bị điện chiếu sáng
+- 275Sản xuất đồ điện dân dụng
+- 2750Sản xuất đồ điện dân dụng
+- 27500Sản xuất đồ điện dân dụng
+- 2790Sản xuất thiết bị điện khác
+- 27900Sản xuất thiết bị điện khác
+- 28SẢN XUẤT MÁY MÓC, THIẾT BỊ CHƯA ĐƯỢC PHÂN VÀO ĐÂU
+- 281Sản xuất máy thông dụng
+- 2811Sản xuất động cơ, tua bin (trừ động cơ máy bay, ô tô, mô tô và xe máy)
+- 28110Sản xuất động cơ, tua bin (trừ động cơ máy bay, ô tô, mô tô và xe máy)
+- 2812Sản xuất thiết bị sử dụng năng lượng chiết lưu
+- 28120Sản xuất thiết bị sử dụng năng lượng chiết lưu
+- 2813Sản xuất máy bơm, máy nén, vòi và van khác
+- 28130Sản xuất máy bơm, máy nén, vòi và van khác
+- 2814Sản xuất bi, bánh răng, hộp số, các bộ phận điều khiển và truyền chuyển động
+- 28140Sản xuất bi, bánh răng, hộp số, các bộ phận điều khiển và truyền chuyển động
+- 2815Sản xuất lò nướng, lò luyện và lò nung
+- 28150Sản xuất lò nướng, lò luyện và lò nung
+- 2816Sản xuất các thiết bị nâng, hạ và bốc xếp
+- 28160Sản xuất các thiết bị nâng, hạ và bốc xếp
+- 2817Sản xuất máy móc và thiết bị văn phòng (trừ máy vi tính và thiết bị ngoại vi của máy vi tính)-
+- 28170Sản xuất máy móc và thiết bị văn phòng (trừ máy vi tính và thiết bị ngoại vi của máy vi tính)
+- 2818Sản xuất dụng cụ cầm tay chạy bằng mô tơ hoặc khí nén
+- 28180Sản xuất dụng cụ cầm tay chạy bằng mô tơ hoặc khí nén
+- 2819Sản xuất máy thông dụng khác
+- 28190Sản xuất máy thông dụng khác
+- 282Sản xuất máy chuyên dụng
+- 2821Sản xuất máy nông nghiệp và lâm nghiệp
+- 28210Sản xuất máy nông nghiệp và lâm nghiệp
+- 2822Sản xuất máy công cụ và máy tạo hình kim loại
+- 28220Sản xuất máy công cụ và máy tạo hình kim loại
+- 2823Sản xuất máy luyện kim
+- 28230Sản xuất máy luyện kim
+- 2824Sản xuất máy khai thác mỏ và xây dựng
+- 28240Sản xuất máy khai thác mỏ và xây dựng
+- 2825Sản xuất máy chế biến thực phẩm, đồ uống và thuốc lá
+- 28250Sản xuất máy chế biến thực phẩm, đồ uống và thuốc lá
+- 2826Sản xuất máy cho ngành dệt, may và da
+- 28260Sản xuất máy cho ngành dệt, may và da
+- 2829Sản xuất máy chuyên dụng khác
+- 28291Sản xuất máy sản xuất vật liệu xây dựng
+- 28299Sản xuất máy chuyên dụng khác chưa được phân vào đâu
+- 29SẢN XUẤT XE CÓ ĐỘNG CƠ
+- 2910Sản xuất xe có động cơ
+- 29100Sản xuất xe có động cơ
+- 2920Sản xuất thân xe có động cơ, rơ moóc và bán rơ moóc
+- 29200Sản xuất thân xe có động cơ, rơ moóc và bán rơ moóc
+- 293Sản xuất phụ tùng và bộ phận phụ trợ cho xe có động cơ
+- 2930Sản xuất phụ tùng và bộ phận phụ trợ cho xe có động cơ và động cơ xe
+- 29300Sản xuất phụ tùng và bộ phận phụ trợ cho xe có động cơ và động cơ xe
+- 30SẢN XUẤT PHƯƠNG TIỆN VẬN TẢI KHÁC
+- 301Đóng tàu và thuyền
+- 3011Đóng tàu và cấu kiện nổi
+- 30110Đóng tàu và cấu kiện nổi
+- 3012Đóng thuyền, xuồng thể thao và giải trí
+- 30120Đóng thuyền, xuồng thể thao và giải trí
+- 3020Sản xuất đầu máy xe lửa, xe điện và toa xe
+- 30200Sản xuất đầu máy xe lửa, xe điện và toa xe
+- 3030Sản xuất máy bay, tàu vũ trụ và máy móc liên quan
+- 30300Sản xuất máy bay, tàu vũ trụ và máy móc liên quan
+- 3040Sản xuất xe cơ giới chiến đấu dùng trong quân đội
+- 30400Sản xuất xe cơ giới chiến đấu dùng trong quân đội
+- 309Sản xuất phương tiện và thiết bị vận tải chưa được phân vào đâu
+- 3091Sản xuất mô tô, xe máy
+- 30910Sản xuất mô tô, xe máy
+- 3092Sản xuất xe đạp và xe cho người tàn tật
+- 30920Sản xuất xe đạp và xe cho người tàn tật
+- 3099Sản xuất phương tiện và thiết bị vận tải khác chưa được phân vào đâu
+- 30990Sản xuất phương tiện và thiết bị vận tải khác chưa được phân vào đâu
+- 31SẢN XUẤT GIƯỜNG, TỦ, BÀN, GHẾ
+- 3100Sản xuất giường, tủ, bàn, ghế
+- 31001Sản xuất giường, tủ, bàn, ghế bằng gỗ
+- 31009Sản xuất giường, tủ, bàn, ghế bằng vật liệu khác
+- 32CÔNG NGHIỆP CHẾ BIẾN, CHẾ TẠO KHÁC
+- 321Sản xuất đồ kim hoàn, đồ giả kim hoàn và các chi tiết liên quan
+- 3211Sản xuất đồ kim hoàn và chi tiết liên quan
+- 32110Sản xuất đồ kim hoàn và chi tiết liên quan
+- 3212Sản xuất đồ giả kim hoàn và chi tiết liên quan
+- 32120Sản xuất đồ giả kim hoàn và chi tiết liên quan
+- 322Sản xuất nhạc cụ
+- 3220Sản xuất nhạc cụ
+- 32200Sản xuất nhạc cụ
+- 323Sản xuất dụng cụ thể dục, thể thao
+- 3230Sản xuất dụng cụ thể dục, thể thao
+- 32300Sản xuất dụng cụ thể dục, thể thao
+- 3240Sản xuất đồ chơi, trò chơi
+- 32400Sản xuất đồ chơi, trò chơi
+- 3250Sản xuất thiết bị, dụng cụ y tế, nha khoa, chỉnh hình và phục hồi chức năng
+- 32501Sản xuất thiết bị, dụng cụ y tế, nha khoa
+- 32502Sản xuất dụng cụ chỉnh hình, phục hồi chức năng
+- 3290Sản xuất khác chưa được phân vào đâu
+- 32900Sản xuất khác chưa được phân vào đâu
+- 33SỬA CHỮA, BẢO DƯỠNG VÀ LẮP ĐẶT MÁY MÓC VÀ THIẾT BỊ
+- 331Sửa chữa và bảo dưỡng máy móc, thiết bị và sản phẩm kim loại đúc sẵn
+- 3311Sửa chữa các sản phẩm kim loại đúc sẵn
+- 33110Sửa chữa các sản phẩm kim loại đúc sẵn
+- 3312Sửa chữa máy móc, thiết bị
+- 33120Sửa chữa máy móc, thiết bị
+- 3313Sửa chữa thiết bị điện tử và quang học
+- 33130Sửa chữa thiết bị điện tử và quang học
+- 3314Sửa chữa thiết bị điện
+- 33140Sửa chữa thiết bị điện
+- 3315Sửa chữa và bảo dưỡng phương tiện vận tải (trừ ô tô, mô tô, xe máy và xe có động cơ khác)
+- 33150Sửa chữa và bảo dưỡng phương tiện vận tải (trừ ô tô, mô tô, xe máy và xe có động cơ khác)
+- 3319Sửa chữa thiết bị khác
+- 33190Sửa chữa thiết bị khác
+- 3320Lắp đặt máy móc và thiết bị công nghiệp
+- 33200Lắp đặt máy móc và thiết bị công nghiệp
+- 35SẢN XUẤT VÀ PHÂN PHỐI ĐIỆN, KHÍ ĐỐT, NƯỚC NÓNG, HƠI NƯỚC VÀ ĐIỀU HOÀ KHÔNG KHÍ
+- 3510Sản xuất, truyền tải và phân phối điện
+- 35101Sản xuất điện
+- 35102Truyền tải và phân phối điện
+- 3511Sản xuất điện
+- 3512Truyền tải và phân phối điện
+- 3520Sản xuất khí đốt, phân phối nhiên liệu khí bằng đường ống
+- 35200Sản xuất khí đốt, phân phối nhiên liệu khí bằng đường ống
+- 3530Sản xuất, phân phối hơi nước, nước nóng, điều hoà không khí và sản xuất nước đá
+- 35301Sản xuất, phân phối hơi nước, nước nóng và điều hoà không khí
+- 35302Sản xuất nước đá
+- 3600Khai thác, xử lý và cung cấp nước
+- 36000Khai thác, xử lý và cung cấp nước
+- 37THOÁT NƯỚC VÀ XỬ LÝ NƯỚC THẢI
+- 3700Thoát nước và xử lý nước thải
+- 37001Thoát nước
+- 37002Xử lý nước thải
+- 38HOẠT ĐỘNG THU GOM, XỬ LÝ VÀ TIÊU HUỶ RÁC THẢI; TÁI CHẾ PHẾ LIỆU
+- 381Thu gom rác thải
+- 3811Thu gom rác thải không độc hại
+- 38110Thu gom rác thải không độc hại
+- 3812Thu gom rác thải độc hại
+- 38121Thu gom rác thải y tế
+- 38129Thu gom rác thải độc hại khác
+- 382Xử lý và tiêu huỷ rác thải
+- 3821Xử lý và tiêu huỷ rác thải không độc hại
+- 38210Xử lý và tiêu huỷ rác thải không độc hại
+- 3822Xử lý và tiêu huỷ rác thải độc hại
+- 38221Xử lý và tiêu huỷ rác thải y tế
+- 38229Xử lý và tiêu huỷ rác thải độc hại khác
+- 3830Tái chế phế liệu
+- 38301Tái chế phế liệu kim loại
+- 38302Tái chế phế liệu phi kim loại
+- 3900Xử lý ô nhiễm và hoạt động quản lý chất thải khác
+- 39000Xử lý ô nhiễm và hoạt động quản lý chất thải khác
+- 410Xây dựng nhà các loại
+- 4100Xây dựng nhà các loại
+- 41000Xây dựng nhà các loại
+- 4101Xây dựng nhà để ở
+- 4102Xây dựng nhà không để ở
+- 42XÂY DỰNG CÔNG TRÌNH KỸ THUẬT DÂN DỤNG
+- 4210Xây dựng công trình đường sắt và đường bộ
+- 42101Xây dựng công trình đường sắt
+- 42102Xây dựng công trình đường bộ
+- 4211Xây dựng công trình đường sắt
+- 4212Xây dựng công trình đường bộ
+- 4220Xây dựng công trình công ích
+- 42200Xây dựng công trình công ích
+- 4221Xây dựng công trình điện
+- 4222Xây dựng công trình cấp, thoát nước
+- 4223Xây dựng công trình viễn thông, thông tin liên lạc
+- 4229Xây dựng công trình công ích khác
+- 4290Xây dựng công trình kỹ thuật dân dụng khác
+- 42900Xây dựng công trình kỹ thuật dân dụng khác
+- 4291Xây dựng công trình thủy
+- 4292Xây dựng công trình khai khoáng
+- 4293Xây dựng công trình chế biến, chế tạo
+- 4299Xây dựng công trình kỹ thuật dân dụng khác
+- 43HOẠT ĐỘNG XÂY DỰNG CHUYÊN DỤNG
+- 431Phá dỡ và chuẩn bị mặt bằng
+- 4311Phá dỡ
+- 43110Phá dỡ
+- 4312Chuẩn bị mặt bằng
+- 43120Chuẩn bị mặt bằng
+- 432Lắp đặt hệ thống điện, hệ thống cấp thoát nước và lắp đặt xây dựng khác
+- 4321Lắp đặt hệ thống điện
+- 43210Lắp đặt hệ thống điện
+- 4322Lắp đặt hệ thống cấp, thoát nước, lò sưởi và điều hoà không khí
+- 43221Lắp đặt hệ thống cấp, thoát nước- Xây dựng, lắp đặt hệ thống cấp thoát nước
+- 43222Lắp đặt hệ thống lò sưởi và điều hoà không khí
+- 4329Lắp đặt hệ thống xây dựng khác
+- 43290Lắp đặt hệ thống xây dựng khác
+- 4330Hoàn thiện công trình xây dựng
+- 43300Hoàn thiện công trình xây dựng
+- 4390Hoạt động xây dựng chuyên dụng khác
+- 43900Hoạt động xây dựng chuyên dụng khác
+- 45BÁN, SỬA CHỮA Ô TÔ, MÔ TÔ, XE MÁY VÀ XE CÓ ĐỘNG CƠ KHÁC
+- 451Bán ô tô và xe có động cơ khác
+- 4511Bán buôn ô tô và xe có động cơ khác
+- 45111Bán buôn ô tô con (loại 12 chỗ ngồi trở xuống)
+- 45119Bán buôn xe có động cơ khác
+- 4512Bán lẻ ô tô con (loại 12 chỗ ngồi trở xuống)
+- 45120Bán lẻ ô tô con (loại 12 chỗ ngồi trở xuống)
+- 4513Đại lý ô tô và xe có động cơ khác
+- 45131Đại lý ô tô con (loại 12 chỗ ngồi trở xuống)
+- 45139Đại lý xe có động cơ khác
+- 4520Bảo dưỡng, sửa chữa ô tô và xe có động cơ khác
+- 45200Bảo dưỡng, sửa chữa ô tô và xe có động cơ khác
+- 4530Bán phụ tùng và các bộ phận phụ trợ của ô tô và xe có động cơ khác
+- 45301Bán buôn phụ tùng và các bộ phận phụ trợ của ô tô và xe có động cơ khác
+- 45302Bán lẻ phụ tùng và các bộ phận phụ trợ của ô tô con (loại 9 chỗ ngồi trở xuống)
+- 45303Đại lý phụ tùng và các bộ phận phụ trợ của ô tô và xe có động cơ khác
+- 454Bán, bảo dưỡng và sửa chữa mô tô, xe máy, phụ tùng và các bộ phận phụ trợ của mô tô, xe máy
+- 4541Bán mô tô, xe máy
+- 45411Bán buôn mô tô, xe máy
+- 45412Bán lẻ mô tô, xe máy
+- 45413Đại lý mô tô, xe máy
+- 4542Bảo dưỡng và sửa chữa mô tô, xe máy
+- 45420Bảo dưỡng và sửa chữa mô tô, xe máy
+- 4543Bán phụ tùng và các bộ phận phụ trợ của mô tô, xe máy
+- 45431Bán buôn phụ tùng và các bộ phận phụ trợ của mô tô, xe máy
+- 45432Bán lẻ phụ tùng và các bộ phận phụ trợ của mô tô, xe máy
+- 45433Đại lý phụ tùng và các bộ phận phụ trợ của mô tô, xe máy
+- 46BÁN BUÔN (TRỪ Ô TÔ, MÔ TÔ, XE MÁY VÀ XE CÓ ĐỘNG CƠ KHÁC)
+- 4610Đại lý, môi giới, đấu giá
+- 46101Đại lý
+- 46102Môi giới
+- 46103Đấu giá(chỉ hoạt động khi người đại diện theo pháp luật có chứng chỉ hành nghề đầu giá)
+- 462Bán buôn nông, lâm sản nguyên liệu (trừ gỗ, tre, nứa) và động vật sống
+- 4620Bán buôn nông, lâm sản nguyên liệu (trừ gỗ, tre, nứa) và động vật sống
+- 46201Bán buôn thóc, ngô và các loại hạt ngũ cốc khác
+- 46202Bán buôn hoa và cây
+- 46203Bán buôn động vật sống
+- 46204Bán buôn thức ăn và nguyên liệu làm thức ăn cho gia súc, gia cầm và thuỷ sản
+- 46209Bán buôn nông, lâm sản nguyên liệu khác (trừ gỗ, tre, nứa)
+- 463Bán buôn lương thực, thực phẩm, đồ uống và sản phẩm thuốc lá, thuốc lào
+- 4631Bán buôn gạo
+- 46310Bán buôn gạo
+- 4632Bán buôn thực phẩm
+- 46321Bán buôn thịt và các sản phẩm từ thịt
+- 46322Bán buôn thủy sản
+- 46323Bán buôn rau, quả
+- 46324Bán buôn cà phê
+- 46325Bán buôn chè
+- 46326Bán buôn đường, sữa và các sản phẩm sữa, bánh kẹo và các sản phẩm chế biến từ ngũ cốc, bột, tinh bột
+- 46329Bán buôn thực phẩm khác
+- 4633Bán buôn đồ uống
+- 46331Bán buôn đồ uống có cồn
+- 46332Bán buôn đồ uống không có cồn
+- 4634Bán buôn sản phẩm thuốc lá, thuốc lào
+- 46340Bán buôn sản phẩm thuốc lá, thuốc lào
+- 464Bán buôn đồ dùng gia đình
+- 4641Bán buôn vải, hàng may sẵn, giày dép
+- 46411Bán buôn vải
+- 46412Bán buôn thảm, đệm, chăn, màn, rèm, ga trải giường, gối và hàng dệt khác
+- 46413Bán buôn hàng may mặc
+- 46414Bán buôn giày dép
+- 4649Bán buôn đồ dùng khác cho gia đình
+- 46491Bán buôn vali, cặp, túi, ví, hàng da và giả da khác- Bán buôn hàng gốm, sứ, thủy tinh; Bán buôn đồ điện gia dụng, đèn và bộ đèn điện; Bán buôn giường, tủ, bàn ghế và đồ dùng nội thất tương tự
+- 46492Bán buôn dược phẩm và dụng cụ y tế
+- 46493Bán buôn nước hoa, hàng mỹ phẩm và chế phẩm vệ sinh
+- 46494Bán buôn hàng gốm, sứ, thủy tinh
+- 46495Bán buôn đồ điện gia dụng, đèn và bộ đèn điện
+- 46496Bán buôn giường, tủ, bàn ghế và đồ dùng nội thất tương tự
+- 46497Bán buôn sách, báo, tạp chí, văn phòng phẩm
+- 46498Bán buôn dụng cụ thể dục, thể thao
+- 46499Bán buôn đồ dùng khác cho gia đình chưa được phân vào đâu
+- 465Bán buôn máy móc, thiết bị và phụ tùng máy
+- 4651Bán buôn máy vi tính, thiết bị ngoại vi và phần mềm
+- 46510Bán buôn máy vi tính, thiết bị ngoại vi và phần mềm
+- 4652Bán buôn thiết bị và linh kiện điện tử, viễn thông
+- 46520Bán buôn thiết bị và linh kiện điện tử, viễn thông
+- 4653Bán buôn máy móc, thiết bị và phụ tùng máy nông nghiệp
+- 46530Bán buôn máy móc, thiết bị và phụ tùng máy nông nghiệp
+- 4659Bán buôn máy móc, thiết bị và phụ tùng máy khác
+- 46591Bán buôn máy móc, thiết bị và phụ tùng máy khai khoáng, xây dựng
+- 46592Bán buôn máy móc, thiết bị điện, vật liệu điện (máy phát điện, động cơ điện, dây điện và thiết bị khác dùng trong mạch điện)
+- 46593Bán buôn máy móc, thiết bị và phụ tùng máy dệt, may, da giày
+- 46594Bán buôn máy móc, thiết bị và phụ tùng máy văn phòng (trừ máy vi tính và thiết bị ngoại vi)
+- 46595Bán buôn máy móc, thiết bị y tế
+- 46599Bán buôn máy móc, thiết bị và phụ tùng máy khác chưa được phân vào đâu
+- 466Bán buôn chuyên doanh khác
+- 4661Bán buôn nhiên liệu rắn, lỏng, khí và các sản phẩm liên quan
+- 46611Bán buôn than đá và nhiên liệu rắn khác
+- 46612Bán buôn dầu thô
+- 46613Bán buôn xăng dầu và các sản phẩm liên quan
+- 46614Bán buôn khí đốt và các sản phẩm liên quan
+- 4662Bán buôn kim loại và quặng kim loại
+- 46621Bán buôn quặng kim loại
+- 46622Bán buôn sắt, thép
+- 46623Bán buôn kim loại khác
+- 46624Bán buôn vàng, bạc và kim loại quý khác
+- 4663Bán buôn vật liệu, thiết bị lắp đặt khác trong xây dựng
+- 46631Bán buôn tre, nứa, gỗ cây và gỗ chế biến(Trừ loại nhà nước cấm)
+- 46632Bán buôn xi măng
+- 46633Bán buôn gạch xây, ngói, đá, cát, sỏi
+- 46634Bán buôn kính xây dựng
+- 46635Bán buôn sơn, vécni
+- 46636Bán buôn gạch ốp lát và thiết bị vệ sinh
+- 46637Bán buôn đồ ngũ kim
+- 46639Bán buôn vật liệu, thiết bị lắp đặt khác trong xây dựng
+- 4669Bán buôn chuyên doanh khác chưa được phân vào đâu
+- 46691Bán buôn phân bón, thuốc trừ sâu và hóa chất khác sử dụng trong nông nghiệp
+- 46692Bán buôn hóa chất khác (trừ loại sử dụng trong nông nghiệp)
+- 46693Bán buôn chất dẻo dạng nguyên sinh
+- 46694Bán buôn cao su
+- 46695Bán buôn tơ, xơ, sợi dệt
+- 46696Bán buôn phụ liệu may mặc và giày dép
+- 46697Bán buôn phế liệu, phế thải kim loại, phi kim loại
+- 46699Bán buôn chuyên doanh khác còn lại chưa được phân vào đâu
+- 4690Bán buôn tổng hợp
+- 46900Bán buôn tổng hợp
+- 47BÁN LẺ (TRỪ Ô TÔ, MÔ TÔ, XE MÁY VÀ XE CÓ ĐỘNG CƠ KHÁC)
+- 471Bán lẻ trong các cửa hàng kinh doanh tổng hợp
+- 4711Bán lẻ lương thực, thực phẩm, đồ uống, thuốc lá, thuốc lào chiếm tỷ trọng lớn trong các cửa hàng kinh doanh tổng hợp
+- 47110Bán lẻ lương thực, thực phẩm, đồ uống, thuốc lá, thuốc lào chiếm tỷ trọng lớn trong các cửa hàng kinh doanh tổng hợp
+- 4719Bán lẻ khác trong các cửa hàng kinh doanh tổng hợp
+- 47191Bán lẻ trong siêu thị, trung tâm thương mại
+- 47199Bán lẻ trong cửa hàng kinh doanh tổng hợp khác
+- 472Bán lẻ lương thực, thực phẩm, đồ uống hoặc thuốc lá, thuốc lào trong các cửa hàng chuyên doanh
+- 4721Bán lẻ lương thực trong các cửa hàng chuyên doanh
+- 47210Bán lẻ lương thực trong các cửa hàng chuyên doanh
+- 4722Bán lẻ thực phẩm trong các cửa hàng chuyên doanh
+- 47221Bán lẻ thịt và các sản phẩm thịt trong các cửa hàng chuyên doanh
+- 47222Bán lẻ thủy sản trong các cửa hàng chuyên doanh
+- 47223Bán lẻ rau, quả trong các cửa hàng chuyên doanh
+- 47224Bán lẻ đường, sữa và các sản phẩm sữa, bánh, mứt, kẹo và các sản phẩm chế biến từ ngũ cốc, bột, tinh bột trong các cửa hàng chuyên doanh
+- 47229Bán lẻ thực phẩm khác trong các cửa hàng chuyên doanh
+- 4723Bán lẻ đồ uống trong các cửa hàng chuyên doanh
+- 47230Bán lẻ đồ uống trong các cửa hàng chuyên doanh
+- 4724Bán lẻ sản phẩm thuốc lá, thuốc lào trong các cửa hàng chuyên doanh
+- 47240Bán lẻ sản phẩm thuốc lá, thuốc lào trong các cửa hàng chuyên doanh
+- 4730Bán lẻ nhiên liệu động cơ trong các cửa hàng chuyên doanh
+- 47300Bán lẻ nhiên liệu động cơ trong các cửa hàng chuyên doanh
+- 474Bán lẻ thiết bị công nghệ thông tin liên lạc trong các cửa hàng chuyên doanh
+- 4741Bán lẻ máy vi tính, thiết bị ngoại vi, phần mềm và thiết bị viễn thông trong các cửa hàng chuyên doanh
+- 47411Bán lẻ máy vi tính, thiết bị ngoại vi, phần mềm trong các cửa hàng chuyên doanh
+- 47412Bán lẻ thiết bị viễn thông trong các cửa hàng chuyên doanh
+- 4742Bán lẻ thiết bị nghe nhìn trong các cửa hàng chuyên doanh
+- 47420Bán lẻ thiết bị nghe nhìn trong các cửa hàng chuyên doanh
+- 475Bán lẻ thiết bị gia đình khác trong các cửa hàng chuyên doanh
+- 4751Bán lẻ vải, len, sợi, chỉ khâu và hàng dệt khác trong các cửa hàng chuyên doanh
+- 47511Bán lẻ vải trong các cửa hàng chuyên doanh
+- 47519Bán lẻ len, sợi, chỉ khâu và hàng dệt khác trong các cửa hàng chuyên doanh
+- 4752Bán lẻ đồ ngũ kim, sơn, kính và thiết bị lắp đặt khác trong xây dựng trong các cửa hàng chuyên doanh
+- 47521Bán lẻ đồ ngũ kim trong các cửa hàng chuyên doanh
+- 47522Bán lẻ sơn, màu, véc ni trong các cửa hàng chuyên doanh
+- 47523Bán lẻ kính xây dựng trong các cửa hàng chuyên doanh
+- 47524Bán lẻ xi măng, gạch xây, ngói, đá, cát sỏi và vật liệu xây dựng khác trong các cửa hàng chuyên doanh
+- 47525Bán lẻ gạch ốp lát, thiết bị vệ sinh trong các cửa hàng chuyên doanh
+- 47529Bán lẻ thiết bị lắp đặt khác trong xây dựng trong các cửa hàng chuyên doanh
+- 4753Bán lẻ thảm, đệm, chăn, màn, rèm, vật liệu phủ tường và sàn trong các cửa hàng chuyên doanh
+- 47530Bán lẻ thảm, đệm, chăn, màn, rèm, vật liệu phủ tường và sàn trong các cửa hàng chuyên doanh
+- 4759Bán lẻ đồ điện gia dụng, giường, tủ, bàn, ghế và đồ nội thất tương tự, đèn và bộ đèn điện, đồ dùng gia đình khác chưa được phân vào đâu trong các cửa hàng chuyên doanh
+- 47591Bán lẻ đồ điện gia dụng, đèn và bộ đèn điện trong các cửa hàng chuyên doanh
+- 47592Bán lẻ giường, tủ, bàn, ghế và đồ dùng nội thất tương tự trong các cửa hàng chuyên doanh
+- 47593Bán lẻ đồ dùng gia đình bằng gốm, sứ, thủy tinh trong các cửa hàng chuyên doanh
+- 47594Bán lẻ nhạc cụ trong các cửa hàng chuyên doanh
+- 47599Bán lẻ đồ điện gia dụng, giường, tủ, bàn, ghế và đồ nội thất tương tự, đèn và bộ đèn điện, đồ dùng gia đình khác còn lại chưa được phân vào đâu trong các cửa hàng chuyên doanh
+- 476Bán lẻ hàng văn hóa, giải trí trong các cửa hàng chuyên doanh
+- 4761Bán lẻ sách, báo, tạp chí văn phòng phẩm trong các cửa hàng chuyên doanh
+- 47610Bán lẻ sách, báo, tạp chí văn phòng phẩm trong các cửa hàng chuyên doanh
+- 4762Bán lẻ băng đĩa âm thanh, hình ảnh (kể cả băng, đĩa trắng) trong các cửa hàng chuyên doanh
+- 47620Bán lẻ băng đĩa âm thanh, hình ảnh (kể cả băng, đĩa trắng) trong các cửa hàng chuyên doanh
+- 4763Bán lẻ thiết bị, dụng cụ thể dục, thể thao trong các cửa hàng chuyên doanh
+- 47630Bán lẻ thiết bị, dụng cụ thể dục, thể thao trong các cửa hàng chuyên doanh
+- 4764Bán lẻ trò chơi, đồ chơi trong các cửa hàng chuyên doanh
+- 47640Bán lẻ trò chơi, đồ chơi trong các cửa hàng chuyên doanh
+- 477Bán lẻ hàng hoá khác trong các cửa hàng chuyên doanh
+- 4771Bán lẻ hàng may mặc, giày dép, hàng da và giả da trong các cửa hàng chuyên doanh
+- 47711Bán lẻ hàng may mặc trong các cửa hàng chuyên doanh
+- 47712Bán lẻ giày dép trong các cửa hàng chuyên doanh
+- 47713Bán lẻ cặp, túi, ví, hàng da và giả da khác trong các cửa hàng chuyên doanh
+- 4772Bán lẻ thuốc, dụng cụ y tế, mỹ phẩm và vật phẩm vệ sinh trong các cửa hàng chuyên doanh
+- 47721Bán lẻ dược phẩm, dụng cụ y tế trong các cửa hàng chuyên doanh
+- 47722Bán lẻ nước hoa, mỹ phẩm và vật phẩm vệ sinh trong các cửa hàng chuyên doanh
+- 4773Bán lẻ hàng hóa khác mới trong các cửa hàng chuyên doanh
+- 47731Bán lẻ hoa, cây cảnh trong các cửa hàng chuyên doanh
+- 47732Bán lẻ vàng, bạc, đá quí và đá bán quí, đồ trang sức trong các cửa hàng chuyên doanh
+- 47733Bán lẻ hàng lưu niệm, hàng đan lát, hàng thủ công mỹ nghệ trong các cửa hàng chuyên doanh
+- 47734Bán lẻ tranh, ảnh và các tác phẩm nghệ thuật khác (trừ đồ cổ) trong các cửa hàng chuyên doanh
+- 47735Bán lẻ dầu hoả, ga, than nhiên liệu dùng cho gia đình trong các cửa hàng chuyên doanh
+- 47736Bán lẻ đồng hồ, kính mắt trong các cửa hàng chuyên doanh- Bán buôn khuy áo, kính mắt, thắt lưng, ví da, đồng hồ
+- 47737Bán lẻ máy ảnh, phim ảnh và vật liệu ảnh trong các cửa hàng chuyên doanh
+- 47738Bán lẻ xe đạp và phụ tùng trong các cửa hàng chuyên doanh
+- 47739Bán lẻ hàng hóa khác mới chưa được phân vào đâu trong các cửa hàng chuyên doanh
+- 4774Bán lẻ hàng hóa đã qua sử dụng trong các cửa hàng chuyên doanh
+- 47741Bán lẻ hàng may mặc đã qua sử dụng trong các cửa hàng chuyên doanh
+- 47749Bán lẻ hàng hoá khác đã qua sử dụng trong các cửa hàng chuyên doanh
+- 478Bán lẻ lưu động hoặc bán tại chợ
+- 4781Bán lẻ lương thực, thực phẩm, đồ uống, thuốc lá, thuốc lào lưu động hoặc tại chợ
+- 47811Bán lẻ lương thực lưu động hoặc tại chợ
+- 47812Bán lẻ thực phẩm lưu động hoặc tại chợ
+- 47813Bán lẻ đồ uống lưu động hoặc tại chợ
+- 47814Bán lẻ sản phẩm thuốc lá, thuốc lào lưu động hoặc tại chợ
+- 4782Bán lẻ hàng dệt, may sẵn, giày dép lưu động hoặc tại chợ
+- 47821Bán lẻ hàng dệt lưu động hoặc tại chợ
+- 47822Bán lẻ hàng may sẵn lưu động hoặc tại chợ
+- 47823Bán lẻ giày dép lưu động hoặc tại chợ
+- 4783Bán lẻ thiết bị công nghệ thông tin liên lạc lưu động hoặc tại chợ
+- 4784Bán lẻ thiết bị gia đình khác lưu động hoặc tại chợ
+- 4785Bán lẻ hàng văn hóa, giải trí lưu động hoặc tại chợ
+- 4789Bán lẻ hàng hóa khác lưu động hoặc tại chợ
+- 47891Bán lẻ mỹ phẩm và vật phẩm vệ sinh lưu động hoặc tại chợ
+- 47892Bán lẻ hàng gốm sứ, thủy tinh lưu động hoặc tại chợ
+- 47893Bán lẻ hoa tươi, cây cảnh lưu động hoặc tại chợ
+- 47899Bán lẻ hàng hóa khác chưa được phân vào đâu, lưu động hoặc tại chợ
+- 479Bán lẻ hình thức khác (trừ bán lẻ tại cửa hàng, lưu động hoặc tại chợ)
+- 4791Bán lẻ theo yêu cầu đặt hàng qua bưu điện hoặc internet
+- 47910Bán lẻ theo yêu cầu đặt hàng qua bưu điện hoặc internetDịch vụ thương mại điện tử;
+- 4799Bán lẻ hình thức khác chưa được phân vào đâu
+- 47990Bán lẻ hình thức khác chưa được phân vào đâu
+- 49VẬN TẢI ĐƯỜNG SẮT, ĐƯỜNG BỘ VÀ VẬN TẢI ĐƯỜNG ỐNG
+- 491Vận tải đường sắt
+- 4911Vận tải hành khách đường sắt
+- 49110Vận tải hành khách đường sắt
+- 4912Vận tải hàng hóa đường sắt
+- 49120Vận tải hàng hóa đường sắt
+- 492Vận tải bằng xe buýt
+- 4920Vận tải bằng xe buýt
+- 49200(Mã ngành cũ) - Vận tải bằng xe buýt
+- 4921Vận tải hành khách bằng xe buýt trong nội thành
+- 4922Vận tải hành khách bằng xe buýt giữa nội thành và ngoại thành, liên tỉnh
+- 4929Vận tải hành khách bằng xe buýt loại khác
+- 493Vận tải đường bộ khác
+- 4931Vận tải hành khách đường bộ trong nội thành, ngoại thành (trừ vận tải bằng xe buýt)
+- 49311Vận tải hành khách bằng hệ thống đường sắt ngầm hoặc đường sắt trên cao
+- 49312Vận tải hành khách bằng taxi
+- 49313Vận tải hành khách bằng xe lam, xe lôi, xe máy
+- 49319Vận tải hành khách đường bộ loại khác trong nội thành, ngoại thành (trừ xe buýt)
+- 4932Vận tải hành khách đường bộ khác
+- 49321Vận tải hành khách bằng xe khách nội tỉnh, liên tỉnh
+- 49329Vận tải hành khách đường bộ khác chưa được phân vào đâu
+- 4933Vận tải hàng hóa bằng đường bộ
+- 49331Vận tải hàng hóa bằng ô tô chuyên dụng
+- 49332Vận tải hàng hóa bằng ô tô loại khác (trừ ô tô chuyên dụng)
+- 49333Vận tải hàng hóa bằng xe lam, xe lôi, xe công nông
+- 49334Vận tải hàng hóa bằng xe thô sơ
+- 49339Vận tải hàng hóa bằng phương tiện đường bộ khácChi tiết ngành, nghề kinh doanh là: Dịch vụ vận tải liên vận quốc tế bằng đường bộ, đường thủy.
+- 4940Vận tải đường ống
+- 49400Vận tải đường ống
+- 50VẬN TẢI ĐƯỜNG THUỶ
+- 501Vận tải ven biển và viễn dương
+- 5011Vận tải hành khách ven biển và viễn dương
+- 50111Vận tải hành khách ven biển
+- 50112Vận tải hành khách viễn dương
+- 5012Vận tải hàng hóa ven biển và viễn dương
+- 50121Vận tải hàng hóa ven biển
+- 50122Vận tải hàng hóa viễn dương
+- 502Vận tải đường thuỷ nội địa
+- 5021Vận tải hành khách đường thuỷ nội địa
+- 50211Vận tải hành khách đường thuỷ nội địa bằng phương tiện cơ giới
+- 50212Vận tải hành khách đường thủy nội địa bằng phương tiện thô sơ
+- 5022Vận tải hàng hóa đường thuỷ nội địa
+- 50221Vận tải hàng hóa đường thuỷ nội địa bằng phương tiện cơ giới
+- 50222Vận tải hàng hóa đường thủy nội địa bằng phương tiện thô sơ
+- 51VẬN TẢI HÀNG KHÔNG
+- 5110Vận tải hành khách hàng không
+- 51100(Mã ngành cũ) - Vận tải hành khách hàng không
+- 5120Vận tải hàng hóa hàng không
+- 51200(Mã ngành cũ) - Vận tải hàng hóa hàng không
+- 52KHO BÃI VÀ CÁC HOẠT ĐỘNG HỖ TRỢ CHO VẬN TẢI
+- 5210Kho bãi và lưu giữ hàng hóa
+- 52101Kho bãi và lưu giữ hàng hoá trong kho ngoại quan
+- 52102Kho bãi và lưu giữ hàng hoá trong kho đông lạnh (trừ kho ngoại quan)
+- 52109Kho bãi và lưu giữ hàng hóa trong kho khác
+- 522Hoạt động dịch vụ hỗ trợ cho vận tải
+- 5221Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường sắt và đường bộ
+- 52211(Mã ngành cũ) - Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường sắt
+- 52219Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường bộ
+- 5222Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường thủy
+- 52221Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải ven biển và viễn dương
+- 52222Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường thuỷ nội địa
+- 5223Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải hàng không
+- 52231Dịch vụ điều hành bay
+- 52239Hoạt động dịch vụ hỗ trợ liên quan đến vận tải hàng không
+- 5224Bốc xếp hàng hóa
+- 52241Bốc xếp hàng hóa ga đường sắt
+- 52242Bốc xếp hàng hóa đường bộ
+- 52243Bốc xếp hàng hoá cảng biển
+- 52244Bốc xếp hàng hóa cảng sông
+- 52245Bốc xếp hàng hóa cảng hàng không
+- 5225Hoạt động dịch vụ hỗ trợ trực tiếp cho vận tải đường bộ
+- 5229Hoạt động dịch vụ hỗ trợ khác liên quan đến vận tải
+- 52291Dịch vụ đại lý tàu biển
+- 52292Logistics
+- 52299Dịch vụ hỗ trợ khác liên quan đến vận tải chưa được phân vào đâu
+- 53BƯU CHÍNH VÀ CHUYỂN PHÁT
+- 5310Bưu chính
+- 53100Bưu chính
+- 5320Chuyển phát
+- 53200Chuyển phát
+- 55DỊCH VỤ LƯU TRÚ
+- 551Dịch vụ lưu trú ngắn ngày
+- 5510Dịch vụ lưu trú ngắn ngày
+- 55101Khách sạn
+- 55102Biệt thự hoặc căn hộ kinh doanh dịch vụ lưu trú ngắn ngày(Khu nghỉ dưỡng, khu du lịch sinh thái)
+- 55103Nhà khách, nhà nghỉ kinh doanh dịch vụ lưu trú ngắn ngày(Không bao gồm: kinh doanh quán bar, karaoke, vũ trường)
+- 55104Nhà trọ, phòng trọ và các cơ sở lưu trú tương tự(Không bao gồm kinh doanh quán bar, phòng hát Karaoke, vũ trường)
+- 5590Cơ sở lưu trú khác
+- 55901Ký túc xá học sinh, sinh viên
+- 55902Chỗ nghỉ trọ trên xe lưu động, lều quán, trại dùng để nghỉ tạm
+- 55909Cơ sở lưu trú khác chưa được phân vào đâu
+- 56DỊCH VỤ ĂN UỐNG
+- 5610Nhà hàng và các dịch vụ ăn uống phục vụ lưu động
+- 56101Nhà hàng, quán ăn, hàng ăn uống
+- 56109Dịch vụ ăn uống phục vụ lưu động khác
+- 562Cung cấp dịch vụ ăn uống theo hợp đồng không thường xuyên và dịch vụ ăn uống khác
+- 5621Cung cấp dịch vụ ăn uống theo hợp đồng không thường xuyên với khách hàng (phục vụ tiệc, hội họp, đám cưới...)
+- 56210Cung cấp dịch vụ ăn uống theo hợp đồng không thường xuyên với khách hàng (phục vụ tiệc, hội họp, đám cưới...)
+- 5629Dịch vụ ăn uống khác
+- 56290Dịch vụ ăn uống khác
+- 5630Dịch vụ phục vụ đồ uống
+- 56301Quán rượu, bia, quầy bar
+- 56309Dịch vụ phục vụ đồ uống khác
+- 58HOẠT ĐỘNG XUẤT BẢN
+- 581Xuất bản sách, ấn phẩm định kỳ và các hoạt động xuất bản khác
+- 5811Xuất bản sách- Xuất bản sách, báo, tài liệu chính trị, pháp luật về lĩnh vực nông nghiệp và phát triển nông thôn; - Xuất bản sách khoa học – công nghệ, kinh tế về lĩnh vực nông nghiệp và phát triển nông thôn; - Xuất bản từ điển nông, lâm – ngư nghiệp; - Xuất bản sách tham khảo học sinh các bậc học phổ thông về kỹ thuật nông, lâm, ngư nghiệp; - Xuất bản sách giáo trình, tài liệu tham khảo dùng cho các hệ đào tạo ngành nông nghiệp và phát triển nông thôn.
+- 58110(Mã ngành cũ) - Xuất bản sách
+- 5812Xuất bản các danh mục chỉ dẫn và địa chỉXuất bản các danh mục chỉ dẫn và địa chỉ phục vụ nông nghiệp, nông dân và phát triển nông thôn
+- 58120(Mã ngành cũ) - Xuất bản các danh mục chỉ dẫn và địa chỉ
+- 5813Xuất bản báo, tạp chí và các ấn phẩm định kỳXuất bản các ấn phẩm báo, tạp chí, các ấn phẩm định kì trong lĩnh vực nông nghiệp và phát triển nông thôn
+- 58130(Mã ngành cũ) - Xuất bản báo, tạp chí và các ấn phẩm định kỳ
+- 5819Hoạt động xuất bản khácCác hoạt động xuất bản khác liên quan đến nông nghiệp và phát triển nông thôn như: Xuất bản catalog, ảnh, bản khắc, bưu thiếp, thiệp chúc mừng,..
+- 58190(Mã ngành cũ) - Hoạt động xuất bản khác
+- 5820Xuất bản phần mềm
+- 58200Xuất bản phần mềm
+- 59HOẠT ĐỘNG ĐIỆN ẢNH, SẢN XUẤT CHƯƠNG TRÌNH TRUYỀN HÌNH, GHI ÂM VÀ XUẤT BẢN ÂM NHẠC
+- 591Hoạt động điện ảnh và sản xuất chương trình truyền hình
+- 5911Hoạt động sản xuất phim điện ảnh, phim video và chương trình truyền hình
+- 59111Hoạt động sản xuất phim điện ảnh
+- 59112Hoạt động sản xuất phim video
+- 59113Hoạt động sản xuất chương trình truyền hình(không bao gồm sản xuất phim)
+- 5912Hoạt động hậu kỳ
+- 59120Hoạt động hậu kỳ
+- 5913Hoạt động phát hành phim điện ảnh, phim video và chương trình truyền hình
+- 59130Hoạt động phát hành phim điện ảnh, phim video và chương trình truyền hình
+- 5914Hoạt động chiếu phim
+- 59141Hoạt động chiếu phim cố định
+- 59142Hoạt động chiếu phim lưu động
+- 5920Hoạt động ghi âm và xuất bản âm nhạc
+- 59200Hoạt động ghi âm và xuất bản âm nhạc
+- 60HOẠT ĐỘNG PHÁT THANH, TRUYỀN HÌNH
+- 6010Hoạt động phát thanh
+- 60100Hoạt động phát thanh
+- 602Hoạt động truyền hình và cung cấp chương trình thuê bao
+- 6021Hoạt động truyền hình
+- 60210Hoạt động truyền hình
+- 6022Chương trình cáp, vệ tinh và các chương trình thuê bao khác
+- 60220Chương trình cáp, vệ tinh và các chương trình thuê bao khác
+- 61VIỄN THÔNG
+- 6110Hoạt động viễn thông có dây
+- 61100(Mã ngành cũ) - Hoạt động viễn thông có dây
+- 6120Hoạt động viễn thông không dây
+- 61200(Mã ngành cũ) - Hoạt động viễn thông không dây
+- 6130Hoạt động viễn thông vệ tinh
+- 61300Hoạt động viễn thông vệ tinh
+- 6190Hoạt động viễn thông khác
+- 61901Hoạt động của các điểm truy cập internet
+- 61909Hoạt động viễn thông khác chưa được phân vào đâu
+- 620Lập trình máy vi tính, dịch vụ tư vấn và các hoạt động khác liên quan đến máy vi tính
+- 6201Lập trình máy vi tính
+- 62010Lập trình máy vi tính
+- 6202Tư vấn máy vi tính và quản trị hệ thống máy vi tính
+- 62020Tư vấn máy vi tính và quản trị hệ thống máy vi tính
+- 6209Hoạt động dịch vụ công nghệ thông tin và dịch vụ khác liên quan đến máy vi tính
+- 62090Hoạt động dịch vụ công nghệ thông tin và dịch vụ khác liên quan đến máy vi tính
+- 63HOẠT ĐỘNG DỊCH VỤ THÔNG TIN
+- 631Xử lý dữ liệu, cho thuê và các hoạt động liên quan; cổng thông tin
+- 6311Xử lý dữ liệu, cho thuê và các hoạt động liên quan
+- 63110Xử lý dữ liệu, cho thuê và các hoạt động liên quan
+- 6312Cổng thông tin
+- 63120Cổng thông tin
+- 632(Mã ngành cũ) - Dịch vụ thông tin khác
+- 6321Hoạt động thông tấn(Chi nhánh chỉ hoạt động khi đã được cơ quan nhà nước có thẩm quyền cho phép)
+- 63210(Mã ngành cũ) - Hoạt động thông tấn
+- 6329Dịch vụ thông tin khác chưa được phân vào đâu
+- 63290Dịch vụ thông tin khác chưa được phân vào đâu
+- 6391Hoạt động thông tấn
+- 6399Dịch vụ thông tin khác chưa được phân vào đâu
+- 64HOẠT ĐỘNG DỊCH VỤ TÀI CHÍNH (TRỪ BẢO HIỂM VÀ BẢO HIỂM XÃ HỘI)
+- 641Hoạt động trung gian tiền tệ
+- 6411Hoạt động ngân hàng trung ươngChi tiết ngành nghề kinh doanh là: Kinh doanh tiền tệ, tín dụng, dịch vụ ngân hàng và các hoạt động khác ghi trong quy chế tổ chức và hoạt động của Sở giao dịch, chi nhánh Ngân hàng thương mại cổ phần Công thương Việt Nam./. *Lưu ý: Doanh nghiệp chỉ được hoạt động kinh doanh các ngành nghề đăng ký nêu trên khi thực hiện đầy đủ các điều kiện theo quy định pháp luật và phù hợp với quy hoạch phát triển kinh tế xã hội của địa phương.
+- 64110Hoạt động ngân hàng trung ương
+- 6419Hoạt động trung gian tiền tệ khác
+- 64190Hoạt động trung gian tiền tệ khác
+- 6420Hoạt động công ty nắm giữ tài sản
+- 64200Hoạt động công ty nắm giữ tài sản
+- 6430Hoạt động quỹ tín thác, các quỹ và các tổ chức tài chính khác
+- 64300Hoạt động quỹ tín thác, các quỹ và các tổ chức tài chính khác
+- 649Hoạt động dịch vụ tài chính khác (trừ bảo hiểm và bảo hiểm xã hội)
+- 6491Hoạt động cho thuê tài chính
+- 64910Hoạt động cho thuê tài chính
+- 6492Hoạt động cấp tín dụng khác
+- 64920Hoạt động cấp tín dụng khác
+- 6499Hoạt động dịch vụ tài chính khác chưa được phân vào đâu (trừ bảo hiểm và bảo hiểm xã hội)
+- 64990Hoạt động dịch vụ tài chính khác chưa được phân vào đâu( trừ bảo hiểm và bảo hiểm xã hội)
+- 65BẢO HIỂM, TÁI BẢO HIỂM VÀ BẢO HIỂM XÃ HỘI (TRỪ BẢO ĐẢM XÃ HỘI BẮT BUỘC)
+- 651Bảo hiểm
+- 6511Bảo hiểm nhân thọ
+- 65110Bảo hiểm nhân thọ
+- 6512Bảo hiểm phi nhân thọ
+- 65121(Mã ngành cũ) - Bảo hiểm y tế
+- 65129(Mã ngành cũ) - Bảo hiểm phi nhân thọ khác
+- 6513Bảo hiểm sức khỏe
+- 6520Tái bảo hiểm
+- 65200Tái bảo hiểm
+- 6530Bảo hiểm xã hội
+- 65300Bảo hiểm xã hội
+- 66HOẠT ĐỘNG TÀI CHÍNH KHÁC
+- 661Hoạt động hỗ trợ dịch vụ tài chính (trừ bảo hiểm và bảo hiểm xã hội)
+- 6611Quản lý thị trường tài chính
+- 66110Quản lý thị trường tài chính
+- 6612Môi giới hợp đồng hàng hoá và chứng khoán
+- 66120Môi giới hợp đồng hàng hóa và chứng khoán
+- 6619Hoạt động hỗ trợ dịch vụ tài chính chưa được phân vào đâu
+- 66190Hoạt động hỗ trợ dịch vụ tài chính chưa được phân vào đâu
+- 662Hoạt động hỗ trợ bảo hiểm và bảo hiểm xã hội
+- 6621Đánh giá rủi ro và thiệt hại
+- 66210Đánh giá rủi ro và thiệt hại
+- 6622Hoạt động của đại lý và môi giới bảo hiểm
+- 66220Hoạt động của đại lý và môi giới bảo hiểm
+- 6629Hoạt động hỗ trợ khác cho bảo hiểm và bảo hiểm xã hội
+- 66290Hoạt động hỗ trợ khác cho bảo hiểm và bảo hiểm xã hội
+- 663Hoạt động quản lý quỹ
+- 6630Hoạt động quản lý quỹ- Quản lý quỹ đầu tư chứng khoán, công ty đầu tư chứng khoán - Quản lý danh mục đầu tư chứng khoán - Tư vấn đầu tư chứng khoán
+- 66300Hoạt động quản lý quỹ
+- 68HOẠT ĐỘNG KINH DOANH BẤT ĐỘNG SẢN
+- 681Kinh doanh bất động sản, quyền sử dụng đất thuộc chủ sở hữu, chủ sử dụng hoặc đi thuê
+- 6810Kinh doanh bất động sản, quyền sử dụng đất thuộc chủ sở hữu, chủ sử dụng hoặc đi thuê
+- 68100(Mã ngành cũ) - Kinh doanh bất động sản, quyền sử dụng đất thuộc chủ sở hữu, chủ sử dụng hoặc đi thuê
+- 6820Tư vấn, môi giới, đấu giá bất động sản, đấu giá quyền sử dụng đất
+- 68200Tư vấn, môi giới, đấu giá bất động sản, đấu giá quyền sử dụng đất
+- 69HOẠT ĐỘNG PHÁP LUẬT, KẾ TOÁN VÀ KIỂM TOÁN
+- 6910Hoạt động pháp luật-
+- 69101Hoạt động đại diện, tư vấn pháp luật-
+- 69102Hướng dẫn chung và tư vấn, chuẩn bị các tài liệu pháp lý
+- 69109Hoạt động pháp luật khác
+- 6920Hoạt động liên quan đến kế toán, kiểm toán và tư vấn về thuế(trừ hoạt động kiểm toán, kế toán)
+- 69200Hoạt động liên quan đến kế toán, kiểm toán và tư vấn về thuế
+- 70HOẠT ĐỘNG CỦA TRỤ SỞ VĂN PHÒNG; HOẠT ĐỘNG TƯ VẤN QUẢN LÝ
+- 7010Hoạt động của trụ sở văn phòng
+- 70100Hoạt động của trụ sở văn phòng
+- 7020Hoạt động tư vấn quản lý
+- 70200Hoạt động tư vấn quản lý
+- 71HOẠT ĐỘNG KIẾN TRÚC; KIỂM TRA VÀ PHÂN TÍCH KỸ THUẬT
+- 711Hoạt động kiến trúc và tư vấn kỹ thuật có liên quan
+- 7110Hoạt động kiến trúc và tư vấn kỹ thuật có liên quan
+- 71101Hoạt động kiến trúc- Thiết kế kiến trúc công trình
+- 71102Hoạt động đo đạc bản đồ- Dịch vụ bay điều tra, đo đạc và lập bản đồ; - Dịch vụ bay đo vẽ bản đồ không gian, chụp ảnh địa hình, thăm dò khảo sát địa chất, quay phim. (Đối với các hoạt động đo đạc và bản đồ phải có giấy phép chỉ được thực hiện sau khi được Cục Đo đạc và Bản đồ Việt Nam cấp Giấy phép hoạt động đo đạc và bản đồ. Đối với các chuyến bay hoặc khu vực bay theo quy định phải được Cục hàng không dân dụng Việt Nam hoặc Bộ Quốc phòng cấp phép chỉ được thực hiện sau khi được cấp phép theo quy định).
+- 71103Hoạt động thăm dò địa chất, nguồn nước- Khoan khai thác nước ngầm - Khoan thăm dò, khoan lỗ kiểm tra, lấy mẫu thử để kiểm tra về địa chất, địa vật lý hoặc các mục đích tương tự
+- 71109Hoạt động tư vấn kỹ thuật có liên quan khác
+- 7120Kiểm tra và phân tích kỹ thuật
+- 71200Kiểm tra và phân tích kỹ thuật
+- 72NGHIÊN CỨU KHOA HỌC VÀ PHÁT TRIỂN
+- 721Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học tự nhiên và kỹ thuật
+- 7210Nghiên cứu và phát triển thực nghiệm khoa học tự nhiên và kỹ thuật
+- 72100Nghiên cứu và phát triển thực nghiệm khoa học tự nhiên và kỹ thuật
+- 7211Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học tự nhiên
+- 7212Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học kỹ thuật và công nghệ
+- 7213Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học y, dược
+- 7214Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học nông nghiệp
+- 722Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học xã hội và nhân văn
+- 7220Nghiên cứu và phát triển thực nghiệm khoa học xã hội và nhân văn
+- 72200(Mã ngành cũ) - Nghiên cứu và phát triển thực nghiệm khoa học xã hội và nhân văn
+- 7221Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học xã hội
+- 7222Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học nhân văn
+- 73QUẢNG CÁO VÀ NGHIÊN CỨU THỊ TRƯỜNG
+- 731Quảng cáo
+- 7310Quảng cáo
+- 73100Quảng cáo
+- 7320Nghiên cứu thị trường và thăm dò dư luận
+- 73200Nghiên cứu thị trường và thăm dò dư luận
+- 74HOẠT ĐỘNG CHUYÊN MÔN, KHOA HỌC VÀ CÔNG NGHỆ KHÁC
+- 7410Hoạt động thiết kế chuyên dụng
+- 74100Hoạt động thiết kế chuyên dụng
+- 7420Hoạt động nhiếp ảnh
+- 74200Hoạt động nhiếp ảnh
+- 7490Hoạt động chuyên môn, khoa học và công nghệ khác chưa được phân vào đâu
+- 74901Hoạt động khí tượng thủy văn
+- 74909Hoạt động chuyên môn, khoa học và công nghệ khác còn lại chưa được phân vào đâu- Lập báo cáo đầu tư, lập báo cáo dự án đầu tư xây dựng, thiết kế cơ sở; - Lập tổng mức đầu tư cho các công trình xây dựng dân dụng, công nghiệp, giao thông, thủy lợi, hạ tầng kỹ thuật (chỉ hoạt động ktrong phạm vi chứng chỉ hành nghề); - Lập dự toán, tổng dự toán cho các công trình xây dựng dân dụng, công nghiệp, điện năng, giao thông, thủy lợi, cấp thoát nước, hạ tầng kỹ thuật (chỉ hoạt động ktrong phạm vi chứng chỉ hành nghề); - Tư vấn đấu thầu (không gồm tư vấn giá gói thầu, giá hợp đồng xây dựng); - Tư vấn quản lý dự án đầu tư xây dựng.
+- 7500Hoạt động thú y
+- 75000Hoạt động thú y
+- 77CHO THUÊ MÁY MÓC, THIẾT BỊ (KHÔNG KÈM NGƯỜI ĐIỀU KHIỂN); CHO THUÊ ĐỒ DÙNG CÁ NHÂN VÀ GIA ĐÌNH; CHO THUÊ TÀI SẢN VÔ HÌNH PHI TÀI CHÍNH
+- 7710Cho thuê xe có động cơ
+- 77101Cho thuê ôtô
+- 77109Cho thuê xe có động cơ khác
+- 772Cho thuê đồ dùng cá nhân và gia đình
+- 7721Cho thuê thiết bị thể thao, vui chơi giải trí(Chỉ hoạt động khi có đủ điều kiện kinh doanh theo quy định pháp luật)
+- 77210Cho thuê thiết bị thể thao, vui chơi giải trí
+- 7722Cho thuê băng, đĩa video
+- 77220Cho thuê băng, đĩa video
+- 7729Cho thuê đồ dùng cá nhân và gia đình khác
+- 77290Cho thuê đồ dùng cá nhân và gia đình khác
+- 7730Cho thuê máy móc, thiết bị và đồ dùng hữu hình khác
+- 77301Cho thuê máy móc, thiết bị nông, lâm nghiệp
+- 77302Cho thuê máy móc, thiết bị xây dựng
+- 77303Cho thuê máy móc, thiết bị văn phòng (kể cả máy vi tính)
+- 77309Cho thuê máy móc, thiết bị và đồ dùng hữu hình khác chưa được phân vào đâu
+- 7740Cho thuê tài sản vô hình phi tài chính
+- 77400Cho thuê tài sản vô hình phi tài chính
+- 78HOẠT ĐỘNG DỊCH VỤ LAO ĐỘNG VÀ VIỆC LÀM
+- 7810Hoạt động của các trung tâm, đại lý tư vấn, giới thiệu và môi giới lao động, việc làm
+- 78100Hoạt động của các trung tâm, đại lý tư vấn, giới thiệu và môi giới lao động, việc làm
+- 7820Cung ứng lao động tạm thời
+- 78200Cung ứng lao động tạm thời
+- 7830Cung ứng và quản lý nguồn lao động
+- 78301Cung ứng và quản lý nguồn lao động trong nước
+- 78302Cung ứng và quản lý nguồn lao động đi làm việc ở nước ngoài
+- 79HOẠT ĐỘNG CỦA CÁC ĐẠI LÝ DU LỊCH, KINH DOANH TUA DU LỊCH VÀ CÁC DỊCH VỤ HỖ TRỢ, LIÊN QUAN ĐẾN QUẢNG BÁ VÀ TỔ CHỨC TUA DU LỊCH
+- 791Hoạt động của các đại lý du lịch, kinh doanh tua du lịch
+- 7911Đại lý du lịch
+- 79110Đại lý du lịch
+- 7912Điều hành tua du lịch
+- 79120Điều hành tua du lịch
+- 7920Dịch vụ hỗ trợ liên quan đến quảng bá và tổ chức tua du lịch
+- 79200Dịch vụ hỗ trợ liên quan đến quảng bá và tổ chức tua du lịch
+- 7990Dịch vụ đặt chỗ và các dịch vụ hỗ trợ liên quan đến quảng bá và tổ chức tua du lịch
+- 80HOẠT ĐỘNG ĐIỀU TRA BẢO ĐẢM AN TOÀN
+- 8010Hoạt động bảo vệ cá nhân
+- 80100Hoạt động bảo vệ tư nhân
+- 8020Dịch vụ hệ thống bảo đảm an toàn
+- 80200Dịch vụ hệ thống bảo đảm an toàn
+- 8030Dịch vụ điều tra
+- 80300Dịch vụ điều tra
+- 81HOẠT ĐỘNG DỊCH VỤ VỆ SINH NHÀ CỬA, CÔNG TRÌNH VÀ CẢNH QUAN.
+- 8110Dịch vụ hỗ trợ tổng hợp
+- 81100Dịch vụ hỗ trợ tổng hợp
+- 812Dịch vụ vệ sinh
+- 8121Vệ sinh chung nhà cửa
+- 81210Vệ sinh chung nhà cửa
+- 8129Vệ sinh nhà cửa và các công trình khác
+- 81290Vệ sinh nhà cửa và các công trình khác
+- 8130Dịch vụ chăm sóc và duy trì cảnh quan
+- 81300Dịch vụ chăm sóc và duy trì cảnh quan
+- 82HOẠT ĐỘNG HÀNH CHÍNH, HỖ TRỢ VĂN PHÒNG VÀ CÁC HOẠT ĐỘNG HỖ TRỢ KINH DOANH KHÁC
+- 821Hoạt động hành chính và hỗ trợ văn phòng
+- 8211Dịch vụ hành chính văn phòng tổng hợp
+- 82110Dịch vụ hành chính văn phòng tổng hợp
+- 8219Photo, chuẩn bị tài liệu và các hoạt động hỗ trợ văn phòng đặc biệt khác
+- 82191Photo, chuẩn bị tài liệu
+- 82199Hoạt động hỗ trợ văn phòng đặc biệt khác
+- 8220Hoạt động dịch vụ liên quan đến các cuộc gọi
+- 82200Hoạt động dịch vụ liên quan đến các cuộc gọi
+- 823Tổ chức giới thiệu và xúc tiến thương mại
+- 8230Tổ chức giới thiệu và xúc tiến thương mại
+- 82300Tổ chức giới thiệu và xúc tiến thương mại
+- 829Hoạt động dịch vụ hỗ trợ kinh doanh khác chưa được phân vào đâu
+- 8291Hoạt động dịch vụ hỗ trợ thanh toán, tín dụng
+- 82910Hoạt động dịch vụ hỗ trợ thanh toán, tín dụng
+- 8292Dịch vụ đóng gói
+- 82920Dịch vụ đóng góiBảo quản, đóng gói, cung ứng, dự trữ Quốc gia về vật liệu nổ công nghiệp
+- 8299Hoạt động dịch vụ hỗ trợ kinh doanh khác còn lại chưa được phân vào đâu
+- 82990Hoạt động dịch vụ hỗ trợ kinh doanh khác còn lại chưa được phân vào đâuXuất nhập khẩu vật liệu nổ công nghiệp, nguyên vật liệu, hóa chất để sản xuất kinh doanh vật liệu nổ công nghiệp; Xuất nhập khẩu vật tư thiết bị nguyên liệu may mặc, cung ứng xăng dầu và vật tư thiết bị, gỗ trụ mỏ
+- 84HOẠT ĐỘNG CỦA ĐẢNG CỘNG SẢN, TỔ CHỨC CHÍNH TRỊ - XÃ HỘI, QUẢN LÝ NHÀ NƯỚC, AN NINH QUỐC PHÒNG VÀ BẢO HIỂM XÃ HỘI BẮT BUỘC
+- 841Hoạt động của Đảng cộng sản, tổ chức chính trị - xã hội, quản lý nhà nước và quản lý chính sách kinh tế, xã hội
+- 8411Hoạt động của Đảng cộng sản, tổ chức chính trị - xã hội, hoạt động quản lý Nhà nước nói chung và kinh tế tổng hợp
+- 84111Hoạt động của Đảng cộng sản, tổ chức chính trị - xã hội
+- 84112Hoạt động quản lý nhà nước nói chung và kinh tế tổng hợp
+- 8412Hoạt động quản lý nhà nước trong các lĩnh vực y tế, giáo dục, văn hoá và các dịch vụ xã hội khác (trừ bảo đảm xã hội bắt buộc)
+- 84120Hoạt động quản lý Nhà nước trong các lĩnh vực y tế, giáo dục, văn hóa và các dịch vụ xã hội khác ( trừ bảo đảm xã hội bắt buộc)
+- 8413Hoạt động quản lý nhà nước trong các lĩnh vực kinh tế chuyên ngành
+- 84130Hoạt động quản lý nhà nước trong các lĩnh vực kinh tế chuyên ngành
+- 842Hoạt động phục vụ chung cho toàn đất nước
+- 8421Hoạt động ngoại giao
+- 84210Hoạt động ngoại giao
+- 8422Hoạt động quốc phòng
+- 84220Hoạt động quốc phòng
+- 8423Hoạt động an ninh, trật tự, an toàn xã hội
+- 84230Hoạt động an ninh, trật tự an toàn xã hội
+- 8430Hoạt động bảo đảm xã hội bắt buộc
+- 84300Hoạt động bảo đảm xã hội bắt buộc
+- 85GIÁO DỤC VÀ ĐÀO TẠO
+- 851Giáo dục mầm non
+- 8510Giáo dục mầm non
+- 85100Giáo dục mầm non(Chỉ hoạt động sau khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 8511Giáo dục nhà trẻ
+- 8512Giáo dục mẫu giáo
+- 8520Giáo dục tiểu học(Chỉ hoạt động sau khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 85200Giáo dục tiểu học(Chỉ hoạt động sau khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 8521Giáo dục tiểu học
+- 8522Giáo dục trung học cơ sở
+- 8523Giáo dục trung học phổ thông
+- 853Giáo dục nghề nghiệp
+- 8531Đào tạo sơ cấp
+- 85311(Mã ngành cũ) - Giáo dục trung học cơ sở
+- 85312Giáo dục trung học phổ thông(Chỉ hoạt động sau khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 8532Đào tạo trung cấp
+- 85321(Mã ngành cũ) - Giáo dục trung cấp chuyên nghiệp
+- 85322Dạy nghề(Chỉ hoạt động sau khi được cơ quan Nhà nước có thẩm quyền cho phép)
+- 8533Đào tạo cao đẳng
+- 854Giáo dục đại học
+- 8541Đào tạo đại học
+- 85410Đào tạo đại học
+- 8542Đào tạo thạc sỹ
+- 85420Đào tạo thạc sỹ
+- 8543Đào tạo tiến sỹ
+- 855Giáo dục khác
+- 8551Giáo dục thể thao và giải trí
+- 85510Giáo dục thể thao và giải trí
+- 8552Giáo dục văn hoá nghệ thuật
+- 85520Giáo dục văn hoá nghệ thuật
+- 8559Giáo dục khác chưa được phân vào đâu
+- 85590Giáo dục khác chưa được phân vào đâu
+- 8560Dịch vụ hỗ trợ giáo dục
+- 85600Dịch vụ hỗ trợ giáo dục
+- 86HOẠT ĐỘNG Y TẾ
+- 8610Hoạt động của các bệnh viện, trạm xá
+- 86101Hoạt động của các bệnh viện
+- 86102Hoạt động của các trạm y tế cấp xã và trạm y tế bộ/ngành
+- 8620Hoạt động của các phòng khám đa khoa, chuyên khoa và nha khoa
+- 86201Hoạt động của các phòng khám đa khoa, chuyên khoa.
+- 86202Hoạt động của các phòng khám nha khoa
+- 869Hoạt động y tế khác
+- 8691Hoạt động y tế dự phòng-
+- 86910Hoạt động y tế dự phòng
+- 8692Hoạt động của hệ thống cơ sở chỉnh hình, phục hồi chức năng
+- 86920Hoạt động của hệ thống cơ sở chỉnh hình, phục hồi chức năng
+- 8699Hoạt động y tế khác chưa được phân vào đâu
+- 86990Hoạt động y tế khác chưa được phân vào đâu
+- 87HOẠT ĐỘNG CHĂM SÓC, ĐIỀU DƯỠNG TẬP TRUNG
+- 8710Hoạt động của các cơ sở nuôi dưỡng, điều dưỡng
+- 87101Hoạt động của các cơ sở nuôi dưỡng, điều dưỡng thương bệnh binh
+- 87109Hoạt động của các cơ sở nuôi dưỡng, điều dưỡng các đối tượng khác
+- 8720Hoạt động chăm sóc sức khoẻ người bị thiểu năng, tâm thần và người nghiện
+- 87201Hoạt động chăm sóc sức khoẻ người bị thiểu năng, tâm thần
+- 87202Hoạt động chăm sóc sức khoẻ, cai nghiện phục hồi người nghiện
+- 8730Hoạt động chăm sóc sức khoẻ người có công, người già và người khuyết tật không có khả năng tự chăm sóc(trừ hoạt động chăm sóc sức khỏe người có công)
+- 87301Hoạt động chăm sóc sức khoẻ người có công (trừ thương bệnh binh).
+- 87302Hoạt động chăm sóc sức khoẻ người già
+- 87303Hoạt động chăm sóc sức khoẻ người tàn tật
+- 8790Hoạt động chăm sóc tập trung khác
+- 87901Hoạt động chữa bệnh, phục hồi nhân phẩm cho đối tượng mại dâm
+- 87909Hoạt động chăm sóc tập trung khác chưa được phân vào đâu
+- 88HOẠT ĐỘNG TRỢ GIÚP XÃ HỘI KHÔNG TẬP TRUNG
+- 8810Hoạt động trợ giúp xã hội không tập trung đối với người có công, thương bệnh binh, người già và người tàn tật
+- 88101Hoạt động trợ giúp xã hội không tập trung đối với người có công (trừ thương bệnh binh)
+- 88102Hoạt động trợ giúp xã hội không tập trung đối với thương bệnh binh
+- 88103Hoạt động trợ giúp xã hội không tập trung đối với người già và người tàn tật
+- 8890Hoạt động trợ giúp xã hội không tập trung khác
+- 88900Hoạt động trợ giúp xã hội không tập trung khác
+- 9000Hoạt động sáng tác, nghệ thuật và giải trí
+- 90000Hoạt động sáng tác, nghệ thuật và giải trí
+- 91HOẠT ĐỘNG CỦA THƯ VIỆN, LƯU TRỮ, BẢO TÀNG VÀ CÁC HOẠT ĐỘNG VĂN HOÁ KHÁC
+- 910Hoạt động của thư viện, lưu trữ, bảo tàng và các hoạt động văn hoá khác
+- 9101Hoạt động thư viện và lưu trữ(Đối với các ngành nghề kinh doanh có điều kiện, Doanh nghiệp chỉ kinh doanh khi có đủ điều kiện theo quy định của pháp luật)
+- 91010Hoạt động thư viện và lưu trữ
+- 9102Hoạt động bảo tồn, bảo tàng
+- 91020Hoạt động bảo tồn, bảo tàng
+- 9103Hoạt động của các vườn bách thảo, bách thú và khu bảo tồn tự nhiên
+- 91030Hoạt động của các vườn bách thảo, bách thú và khu bảo tồn tự nhiên
+- 9200Hoạt động xổ số, cá cược và đánh bạc
+- 92001Hoạt động xổ số
+- 92002Hoạt động cá cược và đánh bạc
+- 93HOẠT ĐỘNG THỂ THAO, VUI CHƠI VÀ GIẢI TRÍ
+- 931Hoạt động thể thao
+- 9311Hoạt động của các cơ sở thể thao
+- 93110Hoạt động của các cơ sở thể thao
+- 9312Hoạt động của các câu lạc bộ thể thao
+- 93120Hoạt động của các câu lạc bộ thể thao
+- 9319Hoạt động thể thao khác
+- 93190Hoạt động thể thao khác
+- 932Hoạt động vui chơi giải trí khác
+- 9321Hoạt động của các công viên vui chơi và công viên theo chủ đề
+- 93210Hoạt động của các công viên vui chơi và công viên theo chủ đề
+- 9329Hoạt động vui chơi giải trí khác chưa được phân vào đâu
+- 93290Hoạt động vui chơi giải trí khác chưa được phân vào đâu
+- 94HOẠT ĐỘNG CỦA CÁC HIỆP HỘI, TỔ CHỨC KHÁC
+- 941Hoạt động của các hiệp hội kinh doanh, nghiệp chủ và nghề nghiệp
+- 9411Hoạt động của các hiệp hội kinh doanh và nghiệp chủ-
+- 94110Hoạt động của các hiệp hội kinh doanh và nghiệp chủ
+- 9412Hoạt động của các hội nghề nghiệp
+- 94120Hoạt động của các hội nghề nghiệp
+- 9420Hoạt động của công đoàn
+- 94200Hoạt động của công đoàn
+- 949Hoạt động của các tổ chức khác
+- 9491Hoạt động của các tổ chức tôn giáo
+- 94910Hoạt động của các tổ chức tôn giáo
+- 9499Hoạt động của các tổ chức khác chưa được phân vào đâu
+- 94990Hoạt động của các tổ chức khác chưa được phân vào đâu
+- 95SỬA CHỮA MÁY VI TÍNH, ĐỒ DÙNG CÁ NHÂN VÀ GIA ĐÌNH
+- 951Sửa chữa máy vi tính và thiết bị liên lạc
+- 9511Sửa chữa máy vi tính và thiết bị ngoại vi
+- 95110Sửa chữa máy vi tính và thiết bị ngoại vi
+- 9512Sửa chữa thiết bị liên lạc
+- 95120Sửa chữa thiết bị liên lạc
+- 952Sửa chữa đồ dùng cá nhân và gia đình
+- 9521Sửa chữa thiết bị nghe nhìn điện tử gia dụng
+- 95210Sửa chữa thiết bị nghe nhìn điện tử gia dụng
+- 9522Sửa chữa thiết bị, đồ dùng gia đình
+- 95220Sửa chữa thiết bị, đồ dùng gia đình
+- 9523Sửa chữa giày, dép, hàng da và giả da
+- 95230Sửa chữa giày, dép, hàng da và giả da
+- 9524Sửa chữa giường, tủ, bàn, ghế và đồ nội thất tương tự
+- 95240Sửa chữa giường, tủ, bàn, ghế và đồ nội thất tương tự
+- 9529Sửa chữa đồ dùng cá nhân và gia đình khác
+- 95290Sửa chữa xe đạp, đồng hồ, đồ dùng cá nhân và gia đình khác chưa được phân vào đâu
+- 96HOẠT ĐỘNG DỊCH VỤ PHỤC VỤ CÁ NHÂN KHÁC
+- 961Dịch vụ tắm hơi, massage và các dịch vụ tăng cường sức khoẻ tương tự (trừ hoạt động thể thao)
+- 9610Dịch vụ tắm hơi, massage và các dịch vụ tăng cường sức khoẻ tương tự (trừ hoạt động thể thao)
+- 96100Dịch vụ tắm hơi, massage và các dịch vụ tăng cường sức khoẻ tương tự (trừ hoạt động thể thao)
+- 9620Giặt là, làm sạch các sản phẩm dệt và lông thú
+- 96200Giặt là, làm sạch các sản phẩm dệt và lông thú
+- 963Hoạt động dịch vụ phục vụ cá nhân khác chưa được phân vào đâu
+- 9631Cắt tóc, làm đầu, gội đầu
+- 96310Cắt tóc, làm đầu, gội đầu
+- 9632Hoạt động dịch vụ phục vụ tang lễ
+- 96320Hoạt động dịch vụ phục vụ tang lễ
+- 9633Hoạt động dịch vụ phục vụ hôn lễ
+- 96330Hoạt động dịch vụ phục vụ hôn lễ
+- 9639Hoạt động dịch vụ phục vụ cá nhân khác còn lại chưa được phân vào đâu
+- 96390Hoạt động dịch vụ phục vụ cá nhân khác còn lại chưa được phân vào đâu(Dịch vụ làm thủ tục visa, hộ chiếu, dịch vụ chăm sóc sắc đẹp)
+- 9700Hoạt động làm thuê công việc gia đình trong các hộ gia đình
+- 97000Hoạt động làm thuê công việc gia đình trong các hộ gia đình
+- 98HOẠT ĐỘNG SẢN XUẤT SẢN PHẨM VẬT CHẤT VÀ DỊCH VỤ TỰ TIÊU DÙNG CỦA HỘ GIA ĐÌNH
+- 9810Hoạt động sản xuất các sản phẩm vật chất tự tiêu dùng của hộ gia đình
+- 98100Hoạt động sản xuất các sản phẩm vật chất tự tiêu dùng của hộ gia đình
+- 9820Hoạt động sản xuất các sản phẩm dịch vụ tự tiêu dùng của hộ gia đình
+- 98200Hoạt động sản xuất các sản phẩm dịch vụ tự tiêu dùng của hộ gia đình
+- 990Hoạt động của các tổ chức và cơ quan quốc tế
+- 9900Hoạt động của các tổ chức và cơ quan quốc tế-
+- 99000Hoạt động của các tổ chức và cơ quan quốc tế
+- ANÔNG NGHIỆP, LÂM NGHIỆP VÀ THỦY SẢN
+- BKHAI KHOÁNG
+- CCÔNG NGHIỆP CHẾ BIẾN, CHẾ TẠO
+- DSẢN XUẤT VÀ PHÂN PHỐI ĐIỆN, KHÍ ĐỐT, NƯỚC NÓNG, HƠI NƯỚC VÀ ĐIỀU HOÀ KHÔNG KHÍ
+- ECUNG CẤP NƯỚC; HOẠT ĐỘNG QUẢN LÝ VÀ XỬ LÝ RÁC THẢI, NƯỚC THẢI
+- FXÂY DỰNG
+- GBÁN BUÔN VÀ BÁN LẺ; SỬA CHỮA Ô TÔ, MÔ TÔ, XE MÁY VÀ XE CÓ ĐỘNG CƠ KHÁC
+- HVẬN TẢI KHO BÃI
+- IDỊCH VỤ LƯU TRÚ VÀ ĂN UỐNG
+- KHOẠT ĐỘNG TÀI CHÍNH, NGÂN HÀNG VÀ BẢO HIỂM
+- LHOẠT ĐỘNG KINH DOANH BẤT ĐỘNG SẢN
+- MHOẠT ĐỘNG CHUYÊN MÔN, KHOA HỌC VÀ CÔNG NGHỆ
+- NHOẠT ĐỘNG HÀNH CHÍNH VÀ DỊCH VỤ HỖ TRỢ
+- OHOẠT ĐỘNG CỦA ĐẢNG CỘNG SẢN, TỔ CHỨC CHÍNH TRỊ - XÃ HỘI, QUẢN LÝ NHÀ NƯỚC, AN NINH QUỐC PHÒNG; BẢO ĐẢM XÃ HỘI BẮT BUỘC
+- PGIÁO DỤC VÀ ĐÀO TẠO
+- QY TẾ VÀ HOẠT ĐỘNG TRỢ GIÚP XÃ HỘI
+- RNGHỆ THUẬT, VUI CHƠI VÀ GIẢI TRÍ
+- SHOẠT ĐỘNG DỊCH VỤ KHÁC
+- UHOẠT ĐỘNG CỦA CÁC TỔ CHỨC VÀ CƠ QUAN QUỐC TẾ

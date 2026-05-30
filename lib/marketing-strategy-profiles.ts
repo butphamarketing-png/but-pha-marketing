@@ -358,7 +358,7 @@ const PROFILES: IndustryProfile[] = [
   {
     id: "construction",
     label: "Xây dựng / Nội thất",
-    match: /xây dựng|nội thất|kiến trúc|thiết kế nội thất|xưởng mộc|thi công|renovation/i,
+    match: /xây dựng|nội thất|kiến trúc|thiết kế nội thất|xưởng mộc|thi công|renovation|lắp đặt|thang máy|thang cuốn|điều hòa|4329/i,
     summary:
       "Ngành xây dựng & nội thất cần portfolio website, Fanpage showcase công trình và lead ads để thu khách có nhu cầu rõ.",
     comboLabel: "Combo đề xuất: Website portfolio + Fanpage + Ads lead",
@@ -639,7 +639,7 @@ export type ComboRecommendation = {
 type BudgetTier = 0 | 1 | 2;
 type ScaleTier = 0 | 1 | 2;
 
-type IndustryChannelConfig = {
+export type IndustryChannelPlan = {
   needsWebsite: boolean;
   needsFanpage: boolean;
   needsMaps: boolean;
@@ -647,13 +647,12 @@ type IndustryChannelConfig = {
   localBusiness: boolean;
 };
 
-const TIER_LABELS: Record<PackageTier, string> = {
-  starter: "Gói Khởi đầu",
-  growth: "Gói Tăng trưởng",
-  professional: "Gói Chuyên sâu",
-};
+export function getIndustryChannelPlan(profileId: string): IndustryChannelPlan {
+  const channels = INDUSTRY_CHANNELS[profileId] ?? INDUSTRY_CHANNELS.default;
+  return { ...channels };
+}
 
-const INDUSTRY_CHANNELS: Record<string, IndustryChannelConfig> = {
+const INDUSTRY_CHANNELS: Record<string, IndustryChannelPlan> = {
   "health-beauty": { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
   fnb: { needsWebsite: false, needsFanpage: true, needsMaps: true, adsPreference: "gm", localBusiness: true },
   ecommerce: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
@@ -672,6 +671,12 @@ const INDUSTRY_CHANNELS: Record<string, IndustryChannelConfig> = {
   logistics: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "fb", localBusiness: false },
   agriculture: { needsWebsite: true, needsFanpage: true, needsMaps: false, adsPreference: "fb", localBusiness: false },
   default: { needsWebsite: true, needsFanpage: true, needsMaps: true, adsPreference: "auto", localBusiness: true },
+};
+
+const TIER_LABELS: Record<PackageTier, string> = {
+  starter: "Gói Khởi đầu",
+  growth: "Gói Tăng trưởng",
+  professional: "Gói Chuyên sâu",
 };
 
 function getBudgetTier(budgetRange: string): BudgetTier {
@@ -768,11 +773,12 @@ function buildComboLabel(itemIds: string[]): string {
 export function buildRecommendedCombo(
   profile: IndustryProfile,
   form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+  options?: { forceTier?: PackageTier },
 ): ComboRecommendation {
   const has = (key: string) => form.existingAssets.includes(key);
   const budgetTier = getBudgetTier(form.budgetRange);
   const scaleTier = getScaleTier(form.scale);
-  const tier = resolvePackageTier(budgetTier, scaleTier);
+  const tier = options?.forceTier ?? resolvePackageTier(budgetTier, scaleTier);
   const channels = INDUSTRY_CHANNELS[profile.id] ?? INDUSTRY_CHANNELS.default;
 
   const ids: string[] = [];
@@ -954,6 +960,38 @@ export function buildRecommendedCombo(
     fanpageStack,
     mapsStack,
   };
+}
+
+export type TierComparisonItem = {
+  tier: PackageTier;
+  tierLabel: string;
+  combo: ComboRecommendation;
+  monthTotal: number;
+  onceTotal: number;
+  itemCount: number;
+  recommended: boolean;
+};
+
+export function buildTierComparison(
+  profile: IndustryProfile,
+  form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+): TierComparisonItem[] {
+  const current = buildRecommendedCombo(profile, form);
+  const tiers: PackageTier[] = ["starter", "growth", "professional"];
+
+  return tiers.map((tier) => {
+    const combo = tier === current.tier ? current : buildRecommendedCombo(profile, form, { forceTier: tier });
+    const totals = calculatePlanTotals(combo.itemIds);
+    return {
+      tier,
+      tierLabel: TIER_LABELS[tier],
+      combo,
+      monthTotal: totals.month,
+      onceTotal: totals.once,
+      itemCount: combo.itemIds.length,
+      recommended: tier === current.tier,
+    };
+  });
 }
 
 export function adjustComboForAssets(comboIds: string[], existingAssets: string[]) {
