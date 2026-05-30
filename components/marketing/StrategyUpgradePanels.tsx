@@ -22,8 +22,10 @@ import {
 import {
   buildActionPlan,
   buildAdsChannelAdvice,
+  buildCostBreakdown,
   buildDigitalReadiness,
   buildKpiProjections,
+  buildRoiEstimate,
   type ActionStep,
 } from "@/lib/strategy-intelligence";
 import type { ComboRecommendation } from "@/lib/marketing-strategy-profiles";
@@ -326,6 +328,96 @@ export function FormProgressBar({ percent }: { percent: number }) {
           transition={{ duration: 0.4 }}
         />
       </div>
+    </div>
+  );
+}
+
+export function StrategyCostBreakdown({ itemIds }: { itemIds: string[] }) {
+  const channels = buildCostBreakdown(itemIds);
+  const monthTotal = channels.reduce((s, c) => s + c.month, 0);
+  const onceTotal = channels.reduce((s, c) => s + c.once, 0);
+
+  if (!channels.length) return null;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5">
+      <p className="flex items-center gap-2 text-sm font-black text-slate-800">
+        <BarChart3 size={16} /> Phân bổ chi phí theo kênh
+      </p>
+      <p className="mt-1 text-[10px] text-slate-500">Setup {formatVnd(onceTotal)} · Duy trì {formatVnd(monthTotal)}/tháng</p>
+
+      {monthTotal > 0 && (
+        <div className="mt-4 flex h-4 overflow-hidden rounded-full">
+          {channels
+            .filter((c) => c.month > 0)
+            .map((c) => (
+              <div
+                key={c.id}
+                style={{ width: `${(c.month / monthTotal) * 100}%`, backgroundColor: c.color }}
+                title={`${c.label}: ${formatVnd(c.month)}/th`}
+              />
+            ))}
+        </div>
+      )}
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {channels.map((c) => (
+          <div key={c.id} className="rounded-xl border border-slate-100 bg-slate-50/80 p-3">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: c.color }} />
+              <p className="text-xs font-black text-slate-800">{c.label}</p>
+            </div>
+            {c.once > 0 && <p className="mt-1 text-[10px] text-slate-500">Setup: <strong className="text-slate-700">{formatVnd(c.once)}</strong></p>}
+            {c.month > 0 && <p className="text-[10px] text-slate-500">Hàng tháng: <strong className="text-slate-700">{formatVnd(c.month)}</strong></p>}
+            {c.year > 0 && <p className="text-[10px] text-slate-500">Hàng năm: <strong className="text-slate-700">{formatVnd(c.year)}</strong></p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function StrategyRoiPanel({
+  profile,
+  form,
+  itemIds,
+}: {
+  profile: IndustryProfile;
+  form: Pick<StrategyFormSnapshot, "scale" | "budgetRange">;
+  itemIds: string[];
+}) {
+  const roi = buildRoiEstimate(profile, form, itemIds);
+
+  return (
+    <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 to-white p-5">
+      <p className="flex items-center gap-2 text-sm font-black text-indigo-800">
+        <TrendingUp size={16} /> Ước tính ROI (tham khảo)
+      </p>
+      <p className="mt-1 text-[10px] text-slate-500">Mô hình theo ngành — không cam kết doanh thu</p>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="rounded-xl border border-indigo-100 bg-white p-3">
+          <p className="text-[10px] font-black uppercase text-indigo-600">Lead/tháng</p>
+          <p className="text-xl font-black text-slate-900">~{roi.monthlyLeads}</p>
+        </div>
+        <div className="rounded-xl border border-indigo-100 bg-white p-3">
+          <p className="text-[10px] font-black uppercase text-indigo-600">Chi phí/lead</p>
+          <p className="text-xl font-black text-slate-900">{formatVnd(roi.costPerLead)}</p>
+        </div>
+        <div className="rounded-xl border border-indigo-100 bg-white p-3">
+          <p className="text-[10px] font-black uppercase text-indigo-600">Doanh thu ước tính</p>
+          <p className="text-lg font-black text-emerald-700">{formatVnd(roi.estimatedRevenue)}</p>
+          <p className="text-[9px] text-slate-400">Tỷ lệ chốt {(roi.conversionRate * 100).toFixed(0)}%</p>
+        </div>
+        <div className="rounded-xl border border-indigo-100 bg-white p-3">
+          <p className="text-[10px] font-black uppercase text-indigo-600">ROI ước tính</p>
+          <p className={`text-xl font-black ${roi.estimatedRoi >= 0 ? "text-emerald-700" : "text-amber-600"}`}>
+            {roi.estimatedRoi >= 0 ? "+" : ""}{roi.estimatedRoi}%
+          </p>
+          <p className="text-[9px] text-slate-400">Hoà vốn: ~{roi.breakEvenLeads} lead</p>
+        </div>
+      </div>
+      <p className="mt-3 rounded-lg bg-indigo-100/60 px-3 py-2 text-[11px] leading-relaxed text-indigo-900">{roi.summary}</p>
     </div>
   );
 }

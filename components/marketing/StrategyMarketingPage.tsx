@@ -10,7 +10,6 @@ import {
   Clock3,
   BarChart3,
   Headphones,
-  ChevronRight,
   ArrowLeft,
   Facebook,
   Building2,
@@ -45,12 +44,33 @@ import {
   FormProgressBar,
   StrategyActionPlanPanel,
   StrategyAdsAdviceBanner,
+  StrategyCostBreakdown,
   StrategyKpiPanel,
   StrategyReadinessPanel,
+  StrategyRoiPanel,
   StrategyTierComparison,
 } from "@/components/marketing/StrategyUpgradePanels";
+import {
+  FormNavButtons,
+  FormStepIndicator,
+  GoalCards,
+  LiveStrategySidebar,
+  BudgetSimulator,
+  DraftRestoredBanner,
+} from "@/components/marketing/StrategyFormWizard";
+import {
+  StrategyBenchmarkPanel,
+  StrategyExecutiveSummary,
+  StrategyWhatIfPanel,
+} from "@/components/marketing/StrategySmartPanels";
 import { analyzeIndustryInput, getProfileShortLabel } from "@/lib/industry-intelligence";
-import { buildFormProgress, buildDigitalReadiness } from "@/lib/strategy-intelligence";
+import { buildFormProgress, buildDigitalReadiness, buildRoiEstimate } from "@/lib/strategy-intelligence";
+import {
+  clearStrategyDraft,
+  hasStrategyDraftContent,
+  loadStrategyDraft,
+  saveStrategyDraft,
+} from "@/lib/strategy-storage";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
@@ -267,6 +287,29 @@ export function StrategyMarketingPage() {
   const [budgetFilter, setBudgetFilter] = useState<BudgetFilter>("all");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [pricingColumnTab, setPricingColumnTab] = useState<"website" | "fanpage" | "googlemaps">("website");
+  const [formStep, setFormStep] = useState(1);
+  const [draftRestored, setDraftRestored] = useState(false);
+  const [draftSavedAt, setDraftSavedAt] = useState<string | undefined>();
+  const [storageReady, setStorageReady] = useState(false);
+
+  useEffect(() => {
+    const draft = loadStrategyDraft();
+    if (draft) {
+      setForm(draft.form);
+      setFormStep(draft.step);
+      setDraftRestored(true);
+      setDraftSavedAt(draft.savedAt);
+    }
+    setStorageReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storageReady) return;
+    saveStrategyDraft(form, formStep);
+    if (hasStrategyDraftContent(form)) {
+      setDraftSavedAt(new Date().toISOString());
+    }
+  }, [form, formStep, storageReady]);
 
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
   const industryAnalysis = useMemo(
@@ -286,6 +329,11 @@ export function StrategyMarketingPage() {
     [planIds, comboIds],
   );
   const formProgress = useMemo(() => buildFormProgress(form), [form]);
+
+  const step1Valid = [form.fullName, form.companyName, form.phone, form.address, form.email].every((v) => String(v).trim());
+  const step2Valid = form.industry.trim().length >= 2 && !!form.businessGoal;
+  const step3Valid = !!form.scale && !!form.budgetRange;
+  const canAdvance = formStep === 1 ? step1Valid : formStep === 2 ? step2Valid : step3Valid;
 
   useEffect(() => {
     if (!showStrategy) return;
@@ -325,12 +373,11 @@ export function StrategyMarketingPage() {
     setPlanIds((prev) => prev.filter((x) => x !== id));
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (event?: React.FormEvent) => {
+    event?.preventDefault();
     if (submitting) return;
 
-    const required = [form.fullName, form.companyName, form.phone, form.address, form.email, form.industry, form.businessGoal, form.scale, form.budgetRange];
-    if (required.some((v) => !String(v).trim())) {
+    if (!step1Valid || !step2Valid || !step3Valid) {
       setError("Vui lòng điền đầy đủ thông tin trước khi xem chiến lược.");
       return;
     }
@@ -350,6 +397,7 @@ export function StrategyMarketingPage() {
       setError("Không lưu được thông tin. Vui lòng thử lại.");
       return;
     }
+    saveStrategyDraft(form, formStep);
     setShowStrategy(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -371,8 +419,10 @@ export function StrategyMarketingPage() {
     if (readiness.gaps.length) {
       extras.push(`Cần bổ sung: ${readiness.gaps.map((g) => g.label).join(", ")}`);
     }
+    const roi = buildRoiEstimate(profile, form, planIds.length ? planIds : comboIds);
+    extras.push(`ROI ước tính: ${roi.estimatedRoi >= 0 ? "+" : ""}${roi.estimatedRoi}% · ~${roi.monthlyLeads} lead/th · CPL ${formatVnd(roi.costPerLead)}`);
     return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
-  }, [form, profile, planIds, industryAnalysis]);
+  }, [form, profile, planIds, industryAnalysis, comboIds]);
 
   const sendEmail = () => {
     const subject = encodeURIComponent(`Chiến lược Marketing — ${form.companyName}`);
@@ -415,45 +465,93 @@ export function StrategyMarketingPage() {
                   </div>
                 ))}
               </div>
+              <LiveStrategySidebar form={form} />
             </motion.div>
 
-            <motion.form initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
+              {draftRestored && (
+                <DraftRestoredBanner
+                  savedAt={draftSavedAt}
+                  onClear={() => {
+                    clearStrategyDraft();
+                    setForm(initialForm);
+                    setFormStep(1);
+                    setDraftRestored(false);
+                    setDraftSavedAt(undefined);
+                  }}
+                />
+              )}
               <FormProgressBar percent={formProgress.percent} />
-              <p className="mb-5 flex items-center gap-2 text-sm font-bold text-violet-800"><Info size={16} /> Thông tin & mục tiêu</p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} /></label>
-                <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} /></label>
-                <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} /></label>
-                <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} /></label>
-                <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} /></label>
-                <div className="space-y-2 sm:col-span-2">
-                  <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
-                  <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} inputClass={inputClass} />
-                  {form.industry.trim() && <StrategyIndustryPreview form={form} />}
+              <FormStepIndicator currentStep={formStep} />
+              <p className="mb-5 flex items-center gap-2 text-sm font-bold text-violet-800">
+                <Info size={16} />
+                {formStep === 1 ? "Thông tin liên hệ" : formStep === 2 ? "Ngành nghề & mục tiêu" : "Quy mô & ngân sách"}
+              </p>
+
+              {formStep === 1 && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><User size={14} className="inline" /> Họ và Tên *</span><input className={inputClass} value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} autoComplete="name" /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} autoComplete="organization" /></label>
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} autoComplete="tel" inputMode="tel" /></label>
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} autoComplete="email" /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} autoComplete="street-address" /></label>
                 </div>
-                <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Target size={14} className="inline" /> Mục tiêu kinh doanh *</span>
-                  <select className={selectClass} value={form.businessGoal} onChange={(e) => updateField("businessGoal", e.target.value)}>{BUSINESS_GOALS.map((g) => <option key={g} value={g}>{g}</option>)}</select>
-                </label>
-                <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Quy mô *</span>
-                  <select className={selectClass} value={form.scale} onChange={(e) => updateField("scale", e.target.value)}>{SCALE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}</select>
-                </label>
-                <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Ngân sách/tháng *</span>
-                  <select className={selectClass} value={form.budgetRange} onChange={(e) => updateField("budgetRange", e.target.value)}>{BUDGET_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}</select>
-                </label>
-                <div className="space-y-2 sm:col-span-2">
-                  <span className="text-xs font-bold uppercase text-slate-500">Đã có gì? (chọn nếu có)</span>
-                  <div className="flex flex-wrap gap-2">
-                    {EXISTING_ASSET_OPTIONS.map((asset) => (
-                      <button key={asset.id} type="button" onClick={() => toggleAsset(asset.id)} className={`rounded-full border px-3 py-1.5 text-[11px] font-bold ${form.existingAssets.includes(asset.id) ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-slate-50 text-slate-600"}`}>{asset.label}</button>
-                    ))}
+              )}
+
+              {formStep === 2 && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
+                    <IndustryAutocomplete value={form.industry} onChange={(v) => updateField("industry", v)} inputClass={inputClass} />
+                    {form.industry.trim() && <StrategyIndustryPreview form={form} />}
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold uppercase text-slate-500"><Target size={14} className="inline" /> Mục tiêu kinh doanh *</span>
+                    <GoalCards value={form.businessGoal} onChange={(g) => updateField("businessGoal", g)} />
                   </div>
                 </div>
-              </div>
+              )}
+
+              {formStep === 3 && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Quy mô *</span>
+                    <select className={selectClass} value={form.scale} onChange={(e) => updateField("scale", e.target.value)}>{SCALE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}</select>
+                  </label>
+                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Ngân sách/tháng *</span>
+                    <select className={selectClass} value={form.budgetRange} onChange={(e) => updateField("budgetRange", e.target.value)}>{BUDGET_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}</select>
+                  </label>
+                  <div className="space-y-2 sm:col-span-2">
+                    <BudgetSimulator form={form} onSelectBudget={(b) => updateField("budgetRange", b)} />
+                  </div>
+                  <div className="space-y-2 sm:col-span-2">
+                    <span className="text-xs font-bold uppercase text-slate-500">Đã có gì? (chọn nếu có)</span>
+                    <div className="flex flex-wrap gap-2">
+                      {EXISTING_ASSET_OPTIONS.map((asset) => (
+                        <button key={asset.id} type="button" onClick={() => toggleAsset(asset.id)} className={`rounded-full border px-3 py-1.5 text-[11px] font-bold ${form.existingAssets.includes(asset.id) ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-slate-50 text-slate-600"}`}>{asset.label}</button>
+                      ))}
+                    </div>
+                  </div>
+                  {form.industry.trim() && <div className="sm:col-span-2"><StrategyIndustryPreview form={form} /></div>}
+                </div>
+              )}
+
               {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
-              <button type="submit" disabled={submitting} className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-60">
-                {submitting ? "Đang xử lý..." : "Xem chiến lược"} <ChevronRight size={18} />
-              </button>
-            </motion.form>
+              <FormNavButtons
+                step={formStep}
+                canNext={canAdvance}
+                submitting={submitting}
+                onBack={() => { setFormStep((s) => s - 1); setError(null); }}
+                onNext={() => {
+                  if (!canAdvance) {
+                    setError(formStep === 1 ? "Vui lòng điền đủ thông tin liên hệ." : "Vui lòng chọn ngành nghề và mục tiêu.");
+                    return;
+                  }
+                  setError(null);
+                  setFormStep((s) => s + 1);
+                }}
+                onSubmit={() => handleSubmit()}
+              />
+            </motion.div>
           </div>
         </div>
       </div>
@@ -466,7 +564,7 @@ export function StrategyMarketingPage() {
     <div className="min-h-screen bg-[#ece6f7] px-3 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto max-w-[1600px]">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
-          <button type="button" onClick={() => setShowStrategy(false)} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
+          <button type="button" onClick={() => { setShowStrategy(false); setFormStep(1); }} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={sendEmail} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Send size={14} /> Gửi Gmail</button>
             <button type="button" onClick={copySummary} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><Copy size={14} /> Sao chép</button>
@@ -519,12 +617,36 @@ export function StrategyMarketingPage() {
             ))}
           </div>
 
+          <div className="border-b border-violet-100 p-4 md:p-8">
+            <StrategyExecutiveSummary
+              profile={profile}
+              form={form}
+              confidence={industryAnalysis.confidence}
+              itemIds={planIds.length ? planIds : comboIds}
+            />
+          </div>
+
           {/* Smart strategy panels */}
           <div className="space-y-4 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8 print:hidden">
             <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
             <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} />
+              <StrategyWhatIfPanel
+                profile={profile}
+                form={form}
+                onApplyAssets={(assets) => {
+                  setForm((prev) => ({ ...prev, existingAssets: assets }));
+                  setActionMessage("Đã áp dụng kịch bản — combo tính lại theo tài sản mới.");
+                }}
+              />
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
               <StrategyReadinessPanel profileId={profile.id} existingAssets={form.existingAssets} />
               <StrategyKpiPanel profile={profile} form={form} />
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyCostBreakdown itemIds={planIds.length ? planIds : comboIds} />
+              <StrategyRoiPanel profile={profile} form={form} itemIds={planIds.length ? planIds : comboIds} />
             </div>
             <StrategyTierComparison profile={profile} form={form} onSelectTier={setPlanIds} />
             <StrategyActionPlanPanel profile={profile} form={form} combo={comboRecommendation} />

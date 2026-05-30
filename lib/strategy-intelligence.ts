@@ -2,6 +2,10 @@ import {
   buildRecommendedCombo,
   calculatePlanTotals,
   getIndustryChannelPlan,
+  getItemBilling,
+  getPricingItemById,
+  parsePriceVnd,
+  formatVnd,
   type ComboRecommendation,
   type IndustryProfile,
   type StrategyFormSnapshot,
@@ -332,6 +336,133 @@ export function buildFormProgress(form: StrategyFormSnapshot): { percent: number
   return { percent: Math.round((filled / fields.length) * 100), filled, total: fields.length };
 }
 
+export type CostChannel = {
+  id: "website" | "fanpage" | "maps" | "ads" | "other";
+  label: string;
+  color: string;
+  once: number;
+  month: number;
+  year: number;
+};
+
+function channelForItemId(id: string): CostChannel["id"] {
+  if (id.startsWith("web-")) return "website";
+  if (id.startsWith("fb-")) return id.includes("ads") ? "ads" : "fanpage";
+  if (id.startsWith("gm-")) return id.includes("ads") ? "ads" : "maps";
+  return "other";
+}
+
+const CHANNEL_META: Record<CostChannel["id"], { label: string; color: string }> = {
+  website: { label: "Website", color: "#22C55E" },
+  fanpage: { label: "Fanpage", color: "#1877F2" },
+  maps: { label: "Google Maps", color: "#EA580C" },
+  ads: { label: "Quảng cáo", color: "#8B5CF6" },
+  other: { label: "Khác", color: "#64748B" },
+};
+
+export function buildCostBreakdown(itemIds: string[]): CostChannel[] {
+  const buckets = new Map<CostChannel["id"], CostChannel>();
+
+  for (const id of itemIds) {
+    const item = getPricingItemById(id);
+    if (!item) continue;
+    const ch = channelForItemId(id);
+    const meta = CHANNEL_META[ch];
+    const existing = buckets.get(ch) ?? { id: ch, label: meta.label, color: meta.color, once: 0, month: 0, year: 0 };
+    const price = parsePriceVnd(item.price);
+    const billing = getItemBilling(id);
+    if (billing === "month") existing.month += price;
+    else if (billing === "year") existing.year += price;
+    else existing.once += price;
+    buckets.set(ch, existing);
+  }
+
+  return [...buckets.values()].sort((a, b) => b.month + b.once / 12 - (a.month + a.once / 12));
+}
+
+const AVG_ORDER_VALUE: Record<string, number> = {
+  "health-beauty": 1_500_000,
+  fnb: 250_000,
+  ecommerce: 750_000,
+  "fashion-retail": 600_000,
+  realestate: 30_000_000,
+  education: 3_000_000,
+  hotel: 2_000_000,
+  construction: 50_000_000,
+  automotive: 2_500_000,
+  pharmacy: 400_000,
+  default: 800_000,
+};
+
+const CONVERSION_RATE: Record<string, number> = {
+  "health-beauty": 0.18,
+  fnb: 0.22,
+  ecommerce: 0.08,
+  realestate: 0.05,
+  default: 0.12,
+};
+
+function estimateMonthlyLeads(profileId: string, form: Pick<StrategyFormSnapshot, "scale" | "budgetRange">) {
+  const isLocal = getIndustryChannelPlan(profileId).localBusiness;
+  const isLarge = form.scale.includes("Trên 5");
+  const isLow = form.budgetRange.includes("Dưới 5");
+  if (isLocal) {
+    if (isLow) return 12;
+    if (isLarge) return 55;
+    return 25;
+  }
+  if (isLow) return 8;
+  if (isLarge) return 35;
+  return 18;
+}
+
+export type RoiEstimate = {
+  monthlyLeads: number;
+  costPerLead: number;
+  conversionRate: number;
+  avgOrderValue: number;
+  estimatedRevenue: number;
+  estimatedRoi: number;
+  breakEvenLeads: number;
+  summary: string;
+};
+
+export function buildRoiEstimate(
+  profile: IndustryProfile,
+  form: Pick<StrategyFormSnapshot, "scale" | "budgetRange">,
+  itemIds: string[],
+): RoiEstimate {
+  const totals = calculatePlanTotals(itemIds);
+  const monthlyLeads = estimateMonthlyLeads(profile.id, form);
+  const monthlyCost = totals.month + totals.once / 12 + totals.year / 12;
+  const costPerLead = monthlyLeads > 0 ? Math.round(monthlyCost / monthlyLeads) : 0;
+  const conversionRate = CONVERSION_RATE[profile.id] ?? CONVERSION_RATE.default;
+  const avgOrderValue = AVG_ORDER_VALUE[profile.id] ?? AVG_ORDER_VALUE.default;
+  const estimatedRevenue = Math.round(monthlyLeads * conversionRate * avgOrderValue);
+  const estimatedRoi = monthlyCost > 0 ? Math.round(((estimatedRevenue - monthlyCost) / monthlyCost) * 100) : 0;
+  const breakEvenLeads = conversionRate > 0 && avgOrderValue > 0
+    ? Math.ceil(monthlyCost / (conversionRate * avgOrderValue))
+    : 0;
+
+  const summary =
+    estimatedRoi >= 100
+      ? `Với ~${monthlyLeads} lead/tháng, doanh thu ước tính gấp ${(estimatedRevenue / Math.max(monthlyCost, 1)).toFixed(1)}× chi phí marketing.`
+      : estimatedRoi >= 0
+        ? `Cần ~${breakEvenLeads} lead chốt/tháng để hoà vốn chi phí marketing.`
+        : `Giai đoạn đầu ưu tiên xây nền tảng — ROI tích lũy sau 2–3 tháng.`;
+
+  return {
+    monthlyLeads,
+    costPerLead,
+    conversionRate,
+    avgOrderValue,
+    estimatedRevenue,
+    estimatedRoi,
+    breakEvenLeads,
+    summary,
+  };
+}
+
 export function buildStrategyBrief(
   profile: IndustryProfile,
   form: StrategyFormSnapshot,
@@ -349,3 +480,184 @@ export function buildStrategyBrief(
 }
 
 export { ASSET_LABELS };
+
+export type BenchmarkItem = {
+  id: string;
+  label: string;
+  industryPct: number;
+  youHave: boolean;
+  priority: "critical" | "important" | "nice";
+};
+
+export type CompetitiveBenchmark = {
+  items: BenchmarkItem[];
+  yourCoverage: number;
+  industryAvg: number;
+  gapCount: number;
+  headline: string;
+  insight: string;
+};
+
+export function buildCompetitiveBenchmark(
+  profileId: string,
+  existingAssets: string[],
+): CompetitiveBenchmark {
+  const plan = getIndustryChannelPlan(profileId);
+  const has = (id: string) => existingAssets.includes(id);
+  const items: BenchmarkItem[] = [];
+
+  if (plan.needsMaps) {
+    items.push({
+      id: "maps",
+      label: "Google Maps tối ưu + review",
+      industryPct: plan.localBusiness ? 94 : 72,
+      youHave: has("maps"),
+      priority: plan.localBusiness ? "critical" : "important",
+    });
+  }
+  if (plan.needsFanpage) {
+    items.push({
+      id: "fanpage",
+      label: "Fanpage active + inbox CSKH",
+      industryPct: 88,
+      youHave: has("fanpage"),
+      priority: "critical",
+    });
+  }
+  if (plan.needsWebsite) {
+    items.push({
+      id: "website",
+      label: "Website chuyên nghiệp + SEO",
+      industryPct: profileId === "ecommerce" || profileId === "tech" ? 91 : 76,
+      youHave: has("website"),
+      priority: profileId === "ecommerce" ? "critical" : "important",
+    });
+  }
+  items.push({
+    id: "ads",
+    label: "Quảng cáo có đo lường (FB/Maps)",
+    industryPct: plan.localBusiness ? 68 : 74,
+    youHave: has("ads"),
+    priority: "nice",
+  });
+  items.push({
+    id: "content",
+    label: "Content đều ≥10 bài/tháng",
+    industryPct: 62,
+    youHave: has("fanpage") || has("website"),
+    priority: "important",
+  });
+
+  const yourCoverage = items.length
+    ? Math.round((items.filter((i) => i.youHave).length / items.length) * 100)
+    : 0;
+  const industryAvg = Math.round(items.reduce((s, i) => s + i.industryPct, 0) / Math.max(items.length, 1));
+  const gapCount = items.filter((i) => !i.youHave && i.priority !== "nice").length;
+
+  const headline =
+    yourCoverage >= 80
+      ? "Bạn đang ở nhóm top — tập trung tối ưu & scale"
+      : yourCoverage >= 50
+        ? "Nền tảng trung bình — bổ sung 1–2 kênh để vượt đối thủ"
+        : "Đang tụt hậu so với đối thủ cùng ngành";
+
+  const insight =
+    gapCount === 0
+      ? "Hạ tầng marketing đạt chuẩn ngành — ưu tiên chất lượng content và tối ưu ads."
+      : `Còn ${gapCount} hạng mục quan trọng mà ${industryAvg}%+ đối thủ đã có — lấp gap trước khi scale ngân sách.`;
+
+  return { items, yourCoverage, industryAvg, gapCount, headline, insight };
+}
+
+export type WhatIfScenario = {
+  id: string;
+  label: string;
+  description: string;
+  monthDelta: number;
+  newMonthTotal: number;
+  newItemCount: number;
+  assets: string[];
+};
+
+export function buildWhatIfScenarios(
+  profile: IndustryProfile,
+  form: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+): WhatIfScenario[] {
+  const base = buildRecommendedCombo(profile, form);
+  const baseMonth = calculatePlanTotals(base.itemIds).month;
+  const scenarios: WhatIfScenario[] = [];
+
+  const candidates = [
+    { id: "website", label: "Đã có Website", desc: "Bỏ phí setup web — tập trung chăm sóc & SEO" },
+    { id: "fanpage", label: "Đã có Fanpage", desc: "Bỏ setup Fanpage — chỉ chăm sóc content" },
+    { id: "maps", label: "Đã có Google Maps", desc: "Bỏ phí xây Maps — tối ưu & review" },
+    { id: "ads", label: "Đang chạy quảng cáo", desc: "Bỏ phí quản lý ads — tự chạy hoặc audit" },
+  ] as const;
+
+  for (const c of candidates) {
+    if (form.existingAssets.includes(c.id)) continue;
+    const assets = [...form.existingAssets, c.id];
+    const combo = buildRecommendedCombo(profile, { ...form, existingAssets: assets });
+    const month = calculatePlanTotals(combo.itemIds).month;
+    scenarios.push({
+      id: c.id,
+      label: c.label,
+      description: c.desc,
+      monthDelta: month - baseMonth,
+      newMonthTotal: month,
+      newItemCount: combo.itemIds.length,
+      assets,
+    });
+  }
+
+  return scenarios.sort((a, b) => a.monthDelta - b.monthDelta);
+}
+
+export type ExecutiveSummary = {
+  overallScore: number;
+  grade: string;
+  tierLabel: string;
+  monthTotal: number;
+  readinessScore: number;
+  confidence: number;
+  topActions: string[];
+  quickWins: string[];
+  headline: string;
+};
+
+export function buildExecutiveSummary(
+  profile: IndustryProfile,
+  form: StrategyFormSnapshot,
+  confidence: number,
+  itemIds: string[],
+): ExecutiveSummary {
+  const readiness = buildDigitalReadiness(profile.id, form.existingAssets);
+  const combo = buildRecommendedCombo(profile, form);
+  const monthTotal = calculatePlanTotals(itemIds).month;
+  const actionPlan = buildActionPlan(profile, form, combo);
+  const benchmark = buildCompetitiveBenchmark(profile.id, form.existingAssets);
+
+  const overallScore = Math.round(readiness.score * 0.45 + confidence * 0.35 + benchmark.yourCoverage * 0.2);
+  const grade =
+    overallScore >= 80 ? "Xuất sắc" : overallScore >= 65 ? "Tốt" : overallScore >= 45 ? "Khá" : "Cần cải thiện";
+
+  const topActions = actionPlan.flatMap((s) => s.tasks).slice(0, 3);
+  const quickWins = benchmark.items
+    .filter((i) => !i.youHave && i.priority === "critical")
+    .map((i) => `Bổ sung ${i.label.split(" ")[0]} ${i.label.split(" ")[1] ?? ""}`.trim())
+    .slice(0, 2);
+
+  const headline = `${form.companyName || "Doanh nghiệp"} — ${combo.tierLabel}, ~${formatVnd(monthTotal)}/tháng, ${benchmark.gapCount} gap so với đối thủ`;
+
+  return {
+    overallScore,
+    grade,
+    tierLabel: combo.tierLabel,
+    monthTotal,
+    readinessScore: readiness.score,
+    confidence,
+    topActions,
+    quickWins,
+    headline,
+  };
+}
