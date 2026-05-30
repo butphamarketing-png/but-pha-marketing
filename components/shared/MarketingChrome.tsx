@@ -14,7 +14,7 @@ const CursorEffect = dynamic(() => import("@/components/shared/CursorEffect").th
 export function MarketingChrome() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/studio") || pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/studio") || pathname.startsWith("/admin") || pathname.startsWith("/chienluocmarketing") || pathname.startsWith("/khachhang")) {
     return null;
   }
 
