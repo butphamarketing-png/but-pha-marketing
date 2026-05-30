@@ -149,25 +149,48 @@ function PricingRow({
 }) {
   const GmIcon = GM_ICONS[item.id];
   return (
-    <div className={`rounded-xl border transition ${dimmed ? "opacity-45" : "opacity-100"} ${active ? "border-violet-300 bg-violet-50" : "border-transparent"}`}>
-      <div className="flex items-stretch gap-1 p-1">
-        <button type="button" onClick={onTogglePlan} title="Thêm vào kế hoạch" className={`shrink-0 rounded-lg px-2 text-[10px] font-black ${inPlan ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-violet-100"}`}>
-          +
-        </button>
-        <button type="button" onClick={onSelect} className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2 py-2 text-left hover:bg-white">
-          <div className="flex min-w-0 items-center gap-2">
+    <div className={`rounded-xl border transition ${dimmed ? "opacity-45" : "opacity-100"} ${active ? "border-violet-400 bg-violet-50 shadow-sm" : "border-slate-100 bg-white hover:border-violet-200"}`}>
+      <div className="flex gap-2 p-2.5">
+        <div className="flex shrink-0 flex-col gap-1">
+          <button
+            type="button"
+            onClick={onTogglePlan}
+            title="Thêm vào kế hoạch"
+            className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-black ${inPlan ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-violet-100 hover:text-violet-700"}`}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onClick={onToggleCompare}
+            title="So sánh"
+            className={`flex h-8 w-8 items-center justify-center rounded-lg ${inCompare ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600"}`}
+          >
+            <GitCompare size={14} />
+          </button>
+        </div>
+        <button type="button" onClick={onSelect} className="min-w-0 flex-1 rounded-lg px-1 py-0.5 text-left transition hover:bg-violet-50/60">
+          <div className="flex items-start gap-2.5">
             {GmIcon && (
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-white" style={{ backgroundColor: accent }}>
-                <GmIcon size={14} />
+              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white" style={{ backgroundColor: accent }}>
+                <GmIcon size={15} />
               </span>
             )}
-            <span className="truncate text-sm font-semibold text-slate-700">{item.label}</span>
-            {recommended && <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-black uppercase text-amber-700 sm:inline">Gợi ý</span>}
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="text-sm font-bold leading-snug text-slate-800">{item.label}</span>
+                {recommended && (
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-amber-800">
+                    Gợi ý
+                  </span>
+                )}
+              </div>
+              {item.quantity && <p className="mt-0.5 text-[11px] leading-snug text-slate-500">{item.quantity}</p>}
+              <p className="mt-1.5 text-base font-black leading-none" style={{ color: accent }}>
+                {item.price}
+              </p>
+            </div>
           </div>
-          <span className="shrink-0 text-sm font-black" style={{ color: accent }}>{item.price}</span>
-        </button>
-        <button type="button" onClick={onToggleCompare} title="So sánh" className={`shrink-0 rounded-lg px-2 ${inCompare ? "bg-indigo-600 text-white" : "text-slate-400 hover:bg-indigo-50 hover:text-indigo-600"}`}>
-          <GitCompare size={14} />
         </button>
       </div>
     </div>
@@ -184,6 +207,7 @@ export function StrategyMarketingPage() {
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [budgetFilter, setBudgetFilter] = useState<BudgetFilter>("all");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [pricingColumnTab, setPricingColumnTab] = useState<"website" | "fanpage" | "googlemaps">("website");
 
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
   const comboIds = useMemo(() => adjustComboForAssets(profile.comboItemIds, form.existingAssets), [profile, form.existingAssets]);
@@ -336,7 +360,7 @@ export function StrategyMarketingPage() {
 
   return (
     <div className="min-h-screen bg-[#ece6f7] px-3 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1600px]">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 print:hidden">
           <button type="button" onClick={() => setShowStrategy(false)} className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-4 py-2 text-xs font-bold text-violet-700"><ArrowLeft size={14} /> Quay lại</button>
           <div className="flex flex-wrap gap-2">
@@ -348,7 +372,7 @@ export function StrategyMarketingPage() {
         </div>
         {actionMessage && <p className="mb-4 text-sm text-emerald-600 print:hidden">{actionMessage}</p>}
 
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-2xl">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-violet-100 bg-white shadow-2xl">
           {/* Header */}
           <div className="border-b border-violet-100 bg-gradient-to-b from-white to-violet-50/40 px-6 py-8 text-center md:px-10">
             <Image src="/logo.png" alt="Logo" width={88} height={88} className="mx-auto" />
@@ -435,46 +459,72 @@ export function StrategyMarketingPage() {
           )}
 
           {/* Pricing grid */}
-          <div className="grid gap-6 p-4 lg:grid-cols-[1fr,300px] lg:p-8">
-            <div className="grid gap-6 md:grid-cols-3">
-              {STRATEGY_PRICING.map((column) => {
-                const Icon = COLUMN_ICONS[column.id];
-                const theme = COLUMN_THEME[column.id];
-                return (
-                  <div key={column.id}>
-                    <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-2xl px-4 py-2.5 text-white" style={{ backgroundColor: theme.color }}>
-                      <Icon size={18} /><span className="text-sm font-black">{column.title}</span>
-                    </div>
-                    <div className={`space-y-3 rounded-2xl border bg-gradient-to-b p-3 ${theme.border} ${theme.bg}`}>
-                      {column.groups.map((group) => (
-                        <div key={group.title} className="rounded-xl border border-white/80 bg-white/95 p-2">
-                          <h3 className="mb-2 border-b border-slate-100 pb-1 text-center text-[10px] font-black uppercase text-slate-600">{group.title}</h3>
-                          <div className="space-y-1">
-                            {group.items.map((item) => (
-                              <PricingRow
-                                key={item.id}
-                                item={item}
-                                accent={theme.color}
-                                recommended={comboIds.includes(item.id)}
-                                active={activeItem?.id === item.id}
-                                dimmed={budgetFilter !== "all" && !itemFitsBudgetFilter(item.id, budgetFilter)}
-                                inPlan={planIds.includes(item.id)}
-                                inCompare={compareIds.includes(item.id)}
-                                onSelect={() => setActiveItem(item)}
-                                onTogglePlan={() => togglePlan(item.id)}
-                                onToggleCompare={() => toggleCompare(item.id)}
-                              />
-                            ))}
+          <div className="grid gap-8 p-4 xl:grid-cols-[minmax(0,1fr),380px] xl:p-8">
+            <div>
+              <div className="mb-4 flex gap-2 lg:hidden">
+                {STRATEGY_PRICING.map((column) => {
+                  const Icon = COLUMN_ICONS[column.id];
+                  const theme = COLUMN_THEME[column.id];
+                  const active = pricingColumnTab === column.id;
+                  return (
+                    <button
+                      key={column.id}
+                      type="button"
+                      onClick={() => setPricingColumnTab(column.id)}
+                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-[11px] font-black uppercase transition ${active ? "text-white shadow-md" : "border border-slate-200 bg-white text-slate-600"}`}
+                      style={active ? { backgroundColor: theme.color } : undefined}
+                    >
+                      <Icon size={14} />
+                      {column.title}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-2 2xl:grid-cols-3">
+                {STRATEGY_PRICING.map((column) => {
+                  const Icon = COLUMN_ICONS[column.id];
+                  const theme = COLUMN_THEME[column.id];
+                  const hiddenOnMobile = pricingColumnTab !== column.id;
+                  return (
+                    <div key={column.id} className={`min-w-0 ${hiddenOnMobile ? "hidden lg:block" : ""}`}>
+                      <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-2xl px-5 py-3 text-white shadow-sm" style={{ backgroundColor: theme.color }}>
+                        <Icon size={20} />
+                        <span className="text-sm font-black tracking-wide">{column.title}</span>
+                      </div>
+                      <div className={`space-y-4 rounded-2xl border bg-gradient-to-b p-4 ${theme.border} ${theme.bg}`}>
+                        {column.groups.map((group) => (
+                          <div key={group.title} className="rounded-xl border border-white/90 bg-white p-3 shadow-sm">
+                            <h3 className="mb-3 border-b border-slate-100 pb-2 text-center text-[11px] font-black uppercase leading-snug text-slate-600">
+                              {group.title}
+                            </h3>
+                            <div className="space-y-2">
+                              {group.items.map((item) => (
+                                <PricingRow
+                                  key={item.id}
+                                  item={item}
+                                  accent={theme.color}
+                                  recommended={comboIds.includes(item.id)}
+                                  active={activeItem?.id === item.id}
+                                  dimmed={budgetFilter !== "all" && !itemFitsBudgetFilter(item.id, budgetFilter)}
+                                  inPlan={planIds.includes(item.id)}
+                                  inCompare={compareIds.includes(item.id)}
+                                  onSelect={() => setActiveItem(item)}
+                                  onTogglePlan={() => togglePlan(item.id)}
+                                  onToggleCompare={() => toggleCompare(item.id)}
+                                />
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+            <div className="space-y-4 xl:sticky xl:top-6 xl:self-start">
               <AnimatePresence mode="wait">{activeItem && <DetailPanel key={activeItem.id} item={activeItem} />}</AnimatePresence>
               <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
                 <p className="flex items-center gap-2 text-sm font-black text-violet-900"><ShoppingCart size={16} /> Tổng kế hoạch đã chọn</p>
