@@ -7,6 +7,7 @@ import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, Search, Check, FileText, Sparkles, MessageSquare } from "lucide-react";
+import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 
 const config: PlatformConfig = {
   name: "Website",
@@ -27,37 +28,14 @@ const config: PlatformConfig = {
   tabs: [
     {
       label: "Thiết kế Website",
-      packages: [
-        { 
-          name: "Giới thiệu", 
-          price: "3.000.000đ", 
-          features: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
-          allFeatures: ["Website cơ bản", "Giao diện chuẩn", "Tương thích mobile", "Chuẩn SEO cơ bản", "Hỗ trợ kỹ thuật"], 
-          audioText: "Gói Giới thiệu cung cấp giải pháp website cơ bản, chuẩn SEO, tương thích hoàn toàn với thiết bị di động." 
-        },
-        { 
-          name: "Tối ưu", 
-          price: "6.000.000đ", 
-          features: ["Chuẩn SEO + UX", "Giao diện chuyên nghiệp", "Chuẩn SEO nâng cao", "Tối ưu tốc độ", "Tích hợp công cụ marketing"], 
-          allFeatures: ["Chuẩn SEO + UX", "Giao diện chuyên nghiệp", "Chuẩn SEO nâng cao", "Tối ưu tốc độ", "Tích hợp công cụ marketing"], 
-          audioText: "Gói Tối ưu tập trung vào trải nghiệm người dùng và SEO nâng cao, giúp website tải nhanh và tích hợp đầy đủ công cụ marketing." 
-        },
-        { 
-          name: "Kinh doanh", 
-          price: "9.000.000đ", 
-          popular: true,
-          features: ["Tối ưu chuyển đổi", "Thiết kế độc quyền", "Tối ưu chuyển đổi (CRO)", "Tích hợp CRM, Chatbot", "Báo cáo & theo dõi dữ liệu"], 
-          allFeatures: ["Tối ưu chuyển đổi", "Thiết kế độc quyền", "Tối ưu chuyển đổi (CRO)", "Tích hợp CRM, Chatbot", "Báo cáo & theo dõi dữ liệu"], 
-          audioText: "Gói Kinh doanh là giải pháp hoàn hảo để tăng doanh thu với thiết kế độc quyền và các tính năng tối ưu chuyển đổi mạnh mẽ." 
-        },
-        { 
-          name: "Hệ thống", 
-          price: "12.000.000đ", 
-          features: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
-          allFeatures: ["Automation + Scale", "Hệ thống chuyên sâu", "Tự động hóa marketing", "Tích hợp API, CRM nâng cao", "Hỗ trợ ưu tiên 24/7"], 
-          audioText: "Gói Hệ thống dành cho doanh nghiệp cần tự động hóa vận hành và mở rộng quy mô với các tích hợp kỹ thuật chuyên sâu." 
-        },
-      ],
+      packages: WEBSITE_BUILD_PACKAGES.map((pkg, index) => ({
+        name: pkg.name,
+        price: formatPriceVnd(pkg.price),
+        popular: index === 2,
+        features: [...pkg.works],
+        allFeatures: [...pkg.works],
+        audioText: `Gói ${pkg.name} — ${formatPriceVnd(pkg.price)}.`,
+      })),
     },
   ],
   stats: [],
@@ -227,31 +205,14 @@ export default function WebsitePage() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
-              {[
-                {
-                  title: "10 bài viết/tháng",
-                  price: "1.000.000đ",
-                  features: ["Viết & đăng bài SEO", "Tối ưu Onpage cơ bản", "Cập nhật hình ảnh minh họa", "Báo cáo tiến độ hàng tháng"],
-                },
-                {
-                  title: "20 bài viết/tháng",
-                  price: "2.000.000đ",
-                  popular: true,
-                  features: ["Viết & đăng bài SEO chuyên sâu", "Tối ưu từ khóa & meta", "Internal link trong website", "Báo cáo & đề xuất cải thiện"],
-                },
-                {
-                  title: "30 bài viết/tháng",
-                  price: "2.500.000đ",
-                  features: ["Chiến lược content theo tháng", "Viết bài chuẩn SEO + CTA", "Tối ưu hiển thị & tốc độ", "Hỗ trợ ưu tiên khi cần chỉnh sửa"],
-                },
-              ].map((pkg, i) => (
+              {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
                 <div
-                  key={i}
+                  key={pkg.id}
                   className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${
-                    pkg.popular ? "border-green-500/50 bg-green-500/5" : "border-white/10 bg-white/[0.03]"
+                    i === 1 ? "border-green-500/50 bg-green-500/5" : "border-white/10 bg-white/[0.03]"
                   }`}
                 >
-                  {pkg.popular && (
+                  {i === 1 && (
                     <div
                       className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black text-white shadow-xl"
                       style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
@@ -264,7 +225,7 @@ export default function WebsitePage() {
                       <div
                         className="flex h-16 w-16 items-center justify-center rounded-2xl"
                         style={
-                          pkg.popular
+                          i === 1
                             ? { backgroundColor: config.color, color: "#fff" }
                             : { backgroundColor: `${config.color}15`, color: config.color }
                         }
@@ -273,13 +234,13 @@ export default function WebsitePage() {
                       </div>
                     </div>
                     <div className="space-y-2 text-center">
-                      <h3 className="text-xl font-black text-white">{pkg.title}</h3>
+                      <h3 className="text-xl font-black text-white">{pkg.posts} bài viết/tháng</h3>
                       <p className="text-3xl font-black" style={{ color: config.color }}>
-                        {pkg.price}
+                        {formatPriceVnd(pkg.price)}
                       </p>
                     </div>
                     <ul className="flex-1 space-y-4">
-                      {pkg.features.map((feature, j) => (
+                      {pkg.works.map((feature, j) => (
                         <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
                           <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
                         </li>
@@ -288,7 +249,7 @@ export default function WebsitePage() {
                     <div className="flex gap-3 pt-4">
                       <button
                         type="button"
-                        onClick={() => handleOpenConsult(pkg.title, pkg.price, "Chăm sóc Website")}
+                        onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
                         className="flex-1 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all shadow-lg"
                         style={{ backgroundColor: config.color }}
                       >
@@ -296,7 +257,7 @@ export default function WebsitePage() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleOpenConsult(pkg.title, pkg.price, "Chăm sóc Website")}
+                        onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
                         className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 transition-all hover:bg-white/5 hover:text-white"
                       >
                         <MessageSquare size={18} />

@@ -1,29 +1,20 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Database, HardDrive, Zap, TrendingUp, Rocket, ShieldCheck, Cpu, Globe, Share2, Award } from "lucide-react";
+import { HOSTING_PACKAGES } from "@/lib/service-pricing";
 
-const HOSTING_PACKAGES = [
-  { gb: 3, price: 3348000, label: "Doanh nghiệp nhỏ, website cá nhân", icon: Database },
-  { gb: 5, price: 4872000, label: "Website giới thiệu, landing page", icon: HardDrive },
-  { gb: 7, price: 6000000, label: "Blog, website tin tức nhỏ", icon: TrendingUp },
-  { gb: 8, price: 6504000, label: "Cửa hàng online nhỏ", icon: ShieldCheck },
-  { gb: 10, price: 7200000, label: "Website doanh nghiệp vừa & nhỏ", icon: HardDrive },
-  { gb: 16, price: 10080000, label: "Website doanh nghiệp chuyên nghiệp", icon: Award },
-  { gb: 20, price: 12000000, label: "Website TMĐT, nhiều sản phẩm", icon: Globe },
-  { gb: 30, price: 16080000, label: "Website nhiều truy cập, dữ liệu lớn", icon: Zap },
-  { gb: 50, price: 24000000, label: "Website hệ thống, nhiều tính năng", icon: Rocket },
-  { gb: 60, price: 28008000, label: "Website có lượng truy cập cao", icon: Zap },
-  { gb: 70, price: 32040000, label: "Dự án lớn, hệ thống web phức tạp", icon: Globe },
-  { gb: 80, price: 36000000, label: "Enterprise, hệ thống đa site", icon: Share2 },
-  { gb: 90, price: 39960000, label: "Hệ thống lớn, lưu trữ dữ liệu nhiều", icon: Cpu },
-  { gb: 100, price: 43200000, label: "Giải pháp cao cấp, hiệu suất tối đa", icon: Award },
-];
+const HOSTING_ICONS = [Database, HardDrive, TrendingUp, ShieldCheck, HardDrive, Award, Globe, Zap, Rocket, Zap, Globe, Cpu, Award];
+
+const PACKAGES = HOSTING_PACKAGES.map((pkg, index) => ({
+  ...pkg,
+  icon: HOSTING_ICONS[index] ?? Database,
+}));
 
 export function StorageSlider({ primaryColor }: { primaryColor: string }) {
   const [index, setIndex] = useState(0);
-  const currentPackage = HOSTING_PACKAGES[index];
+  const currentPackage = PACKAGES[index];
 
   const formatPrice = (p: number) => {
     return new Intl.NumberFormat("vi-VN").format(p) + " đ";
@@ -75,7 +66,7 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             <div 
               className="absolute h-3 rounded-full transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.2)]"
               style={{ 
-                width: `${(index / (HOSTING_PACKAGES.length - 1)) * 100}%`,
+                width: `${(index / (PACKAGES.length - 1)) * 100}%`,
                 background: `linear-gradient(90deg, ${primaryColor}40, ${primaryColor})`,
                 boxShadow: `0 0 30px ${primaryColor}60`
               }} 
@@ -84,7 +75,7 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
             <input
               type="range"
               min="0"
-              max={HOSTING_PACKAGES.length - 1}
+              max={PACKAGES.length - 1}
               value={index}
               onChange={(e) => setIndex(parseInt(e.target.value))}
               className="absolute w-full appearance-none bg-transparent cursor-pointer z-10 
@@ -97,10 +88,10 @@ export function StorageSlider({ primaryColor }: { primaryColor: string }) {
           </div>
 
           <div className="grid grid-cols-4 gap-4 px-4">
-            {[0, Math.floor(HOSTING_PACKAGES.length / 3), Math.floor(2 * HOSTING_PACKAGES.length / 3), HOSTING_PACKAGES.length - 1].map((val) => (
+            {[0, Math.floor(PACKAGES.length / 3), Math.floor(2 * PACKAGES.length / 3), PACKAGES.length - 1].map((val) => (
               <div key={val} className="flex flex-col items-center gap-3">
                 <div className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${index >= val ? 'scale-150 shadow-[0_0_10px_white]' : 'opacity-20'}`} style={{ backgroundColor: index >= val ? 'white' : 'gray' }} />
-                <span className={`text-[10px] font-black transition-colors duration-500 ${index >= val ? 'text-white' : 'text-gray-600'}`}>{HOSTING_PACKAGES[val].gb}GB</span>
+                <span className={`text-[10px] font-black transition-colors duration-500 ${index >= val ? 'text-white' : 'text-gray-600'}`}>{PACKAGES[val].gb}GB</span>
               </div>
             ))}
           </div>

@@ -14,10 +14,6 @@ import {
   ArrowLeft,
   Facebook,
   Building2,
-  Phone,
-  Mail,
-  MapPinned,
-  Briefcase,
   User,
   Sparkles,
   MessageCircle,
@@ -35,6 +31,11 @@ import {
   ShoppingCart,
   GitCompare,
   CalendarDays,
+  X,
+  TrendingUp,
+  Layers,
+  BadgeCheck,
+  Zap,
 } from "lucide-react";
 import { db } from "@/lib/useData";
 import { STRATEGY_FOOTER, STRATEGY_PRICING, type StrategyPricingItem } from "@/lib/marketing-strategy-pricing";
@@ -51,6 +52,8 @@ import {
   calculatePlanTotals,
   formatVnd,
   getAllPricingItems,
+  getBudgetFitAssessment,
+  getIndustryCount,
   getPricingItemById,
   itemFitsBudgetFilter,
   parsePriceVnd,
@@ -74,26 +77,21 @@ const initialForm: LeadForm = {
   existingAssets: [],
 };
 
-const INDUSTRY_SUGGESTIONS = [
-  "Nha khoa",
-  "Spa / Thẩm mỹ",
-  "Nhà hàng / F&B",
-  "Khách sạn / Lưu trú",
-  "Bất động sản",
-  "TMĐT / Bán lẻ",
-  "Thời trang / Mỹ phẩm",
-  "Giáo dục / Đào tạo",
-  "Gym / Yoga / Fitness",
-  "Xây dựng / Nội thất",
-  "Ô tô / Garage",
-  "Du lịch / Tour",
-  "Luật / Kế toán / Tư vấn",
-  "Công nghệ / IT",
-  "Nhà thuốc",
-  "Sự kiện / Wedding",
-  "Logistics / Vận chuyển",
-  "Nông sản / Thực phẩm",
-  "Dịch vụ doanh nghiệp",
+const INDUSTRY_GROUPS = [
+  { label: "Y tế & Sức khỏe", items: ["Nha khoa", "Spa / Thẩm mỹ", "Nhà thuốc"] },
+  { label: "Ăn uống & Lưu trú", items: ["Nhà hàng / F&B", "Khách sạn / Lưu trú"] },
+  { label: "Bán hàng & TMĐT", items: ["TMĐT / Bán lẻ", "Thời trang / Mỹ phẩm", "Nông sản / Thực phẩm"] },
+  {
+    label: "Dịch vụ & B2B",
+    items: ["Bất động sản", "Xây dựng / Nội thất", "Luật / Kế toán / Tư vấn", "Công nghệ / IT", "Logistics / Vận chuyển", "Dịch vụ doanh nghiệp"],
+  },
+  { label: "Giải trí & Lifestyle", items: ["Giáo dục / Đào tạo", "Gym / Yoga / Fitness", "Du lịch / Tour", "Sự kiện / Wedding", "Ô tô / Garage"] },
+] as const;
+
+const TRUST_STATS = [
+  { icon: Layers, label: `${getIndustryCount()}+ ngành`, sub: "Profile riêng" },
+  { icon: Zap, label: "Combo tự động", sub: "Theo ngân sách" },
+  { icon: BadgeCheck, label: "Báo giá rõ", sub: "Minh bạch 100%" },
 ] as const;
 
 const COLUMN_THEME = {
@@ -116,6 +114,54 @@ const inputClass =
   "w-full rounded-xl border border-violet-200/80 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20";
 
 const selectClass = inputClass;
+
+function PhaseStepper({ phases }: { phases: { title: string; duration: string; focus: string }[] }) {
+  return (
+    <div className="relative mt-4">
+      <div className="absolute left-4 right-4 top-5 hidden h-0.5 bg-violet-200 md:block" />
+      <div className="grid gap-4 md:grid-cols-3">
+        {phases.map((phase, i) => (
+          <div key={phase.title} className="relative rounded-2xl border border-violet-100 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-black text-white shadow-md">
+                {i + 1}
+              </span>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-wide text-violet-600">{phase.duration}</p>
+                <p className="text-xs font-bold text-slate-500">Giai đoạn {i + 1}</p>
+              </div>
+            </div>
+            <h3 className="font-black leading-snug text-slate-800">{phase.title.replace(/^Giai đoạn \d+ — /, "")}</h3>
+            <p className="mt-1 text-xs font-bold text-violet-700">{phase.focus}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BudgetFitBar({ monthTotal, budgetRange }: { monthTotal: number; budgetRange: string }) {
+  const fit = getBudgetFitAssessment(monthTotal, budgetRange);
+  const barColor = fit.status === "good" ? "bg-emerald-500" : fit.status === "warning" ? "bg-amber-500" : "bg-red-500";
+  const textColor = fit.status === "good" ? "text-emerald-700" : fit.status === "warning" ? "text-amber-700" : "text-red-700";
+
+  return (
+    <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="flex items-center gap-1.5 text-xs font-black text-slate-700">
+          <TrendingUp size={14} /> Mức phù hợp ngân sách
+        </p>
+        <span className={`text-[10px] font-black uppercase ${textColor}`}>
+          {fit.status === "good" ? "Phù hợp" : fit.status === "warning" ? "Gần ngưỡng" : "Cần điều chỉnh"}
+        </span>
+      </div>
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${Math.min(fit.percentUsed, 100)}%` }} />
+      </div>
+      <p className={`mt-2 text-[11px] leading-relaxed ${textColor}`}>{fit.message}</p>
+    </div>
+  );
+}
 
 function DetailPanel({ item }: { item: StrategyPricingItem }) {
   return (
@@ -230,6 +276,16 @@ export function StrategyMarketingPage() {
   const whyBullets = useMemo(() => buildWhyBullets(profile, form.businessGoal, form.existingAssets), [profile, form.businessGoal, form.existingAssets]);
   const planTotals = useMemo(() => calculatePlanTotals(planIds.length ? planIds : comboIds), [planIds, comboIds]);
   const timeline = useMemo(() => buildDeploymentTimeline(planIds.length || comboIds.length), [planIds.length, comboIds.length]);
+  const planItems = useMemo(
+    () => (planIds.length ? planIds : comboIds).map((id) => getPricingItemById(id)).filter(Boolean) as StrategyPricingItem[],
+    [planIds, comboIds],
+  );
+
+  const previewProfile = useMemo(() => (form.industry.trim() ? resolveIndustryProfile(form.industry) : null), [form.industry]);
+  const previewCombo = useMemo(
+    () => (previewProfile ? buildRecommendedCombo(previewProfile, form) : null),
+    [previewProfile, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
+  );
 
   useEffect(() => {
     if (!showStrategy) return;
@@ -263,6 +319,10 @@ export function StrategyMarketingPage() {
       if (prev.length >= 2) return [prev[1], id];
       return [...prev, id];
     });
+  };
+
+  const removeFromPlan = (id: string) => {
+    setPlanIds((prev) => prev.filter((x) => x !== id));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -328,6 +388,15 @@ export function StrategyMarketingPage() {
               <p className="mt-4 text-sm leading-relaxed text-violet-100/80">
                 Trả lời vài câu hỏi ngắn — hệ thống sẽ gợi ý lộ trình 3 giai đoạn, combo gói phù hợp ngành nghề và bảng báo giá chi tiết.
               </p>
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {TRUST_STATS.map(({ icon: Icon, label, sub }) => (
+                  <div key={label} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                    <Icon size={18} className="text-violet-300" />
+                    <p className="mt-2 text-sm font-black">{label}</p>
+                    <p className="text-[11px] text-violet-200/70">{sub}</p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
 
             <motion.form initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
@@ -340,8 +409,38 @@ export function StrategyMarketingPage() {
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} /></label>
                 <div className="space-y-2 sm:col-span-2">
                   <span className="text-xs font-bold uppercase text-slate-500">Ngành nghề *</span>
-                  <input className={inputClass} value={form.industry} onChange={(e) => updateField("industry", e.target.value)} placeholder="VD: Nha khoa..." />
-                  <div className="flex flex-wrap gap-2">{INDUSTRY_SUGGESTIONS.map((item) => (<button key={item} type="button" onClick={() => updateField("industry", item)} className={`rounded-full border px-3 py-1 text-[11px] font-bold ${form.industry === item ? "border-violet-500 bg-violet-600 text-white" : "border-violet-200 bg-violet-50 text-violet-700"}`}>{item}</button>))}</div>
+                  <input className={inputClass} value={form.industry} onChange={(e) => updateField("industry", e.target.value)} placeholder="VD: Nha khoa, Quán cafe, Shop thời trang..." />
+                  <div className="max-h-48 space-y-3 overflow-y-auto rounded-xl border border-violet-100 bg-violet-50/40 p-3">
+                    {INDUSTRY_GROUPS.map((group) => (
+                      <div key={group.label}>
+                        <p className="mb-1.5 text-[10px] font-black uppercase tracking-wide text-violet-600">{group.label}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {group.items.map((item) => (
+                            <button
+                              key={item}
+                              type="button"
+                              onClick={() => updateField("industry", item)}
+                              className={`rounded-full border px-2.5 py-1 text-[10px] font-bold transition ${form.industry === item ? "border-violet-500 bg-violet-600 text-white shadow-sm" : "border-violet-200 bg-white text-violet-700 hover:border-violet-400"}`}
+                            >
+                              {item}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {previewProfile && previewCombo && (
+                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4">
+                      <p className="flex items-center gap-2 text-xs font-black text-emerald-800">
+                        <Sparkles size={14} /> Xem trước: {previewProfile.label}
+                      </p>
+                      <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{previewProfile.summary.slice(0, 120)}…</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-black text-violet-700">{previewCombo.tierLabel}</span>
+                        <span className="text-[10px] font-bold text-slate-500">{previewCombo.itemIds.length} gói gợi ý · ~{formatVnd(calculatePlanTotals(previewCombo.itemIds).month)}/tháng</span>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
                 <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Target size={14} className="inline" /> Mục tiêu kinh doanh *</span>
                   <select className={selectClass} value={form.businessGoal} onChange={(e) => updateField("businessGoal", e.target.value)}>{BUSINESS_GOALS.map((g) => <option key={g} value={g}>{g}</option>)}</select>
@@ -399,6 +498,22 @@ export function StrategyMarketingPage() {
             <p className="mx-auto mt-2 text-xs font-bold uppercase tracking-wide text-violet-600">{form.businessGoal} · {form.budgetRange}</p>
           </div>
 
+          {/* KPI summary */}
+          <div className="grid grid-cols-2 gap-3 border-b border-violet-100 bg-white p-4 md:grid-cols-4 md:p-6">
+            {[
+              { label: "Gói đề xuất", value: comboRecommendation.tierLabel, sub: `${planItems.length} dịch vụ` },
+              { label: "Chi phí một lần", value: formatVnd(planTotals.once), sub: "Setup & xây dựng" },
+              { label: "Chi phí / tháng", value: formatVnd(planTotals.month), sub: "Chăm sóc & ads" },
+              { label: "Chi phí / năm", value: formatVnd(planTotals.year), sub: "Hosting & data" },
+            ].map((kpi) => (
+              <div key={kpi.label} className="rounded-2xl border border-violet-100 bg-violet-50/50 p-4 text-center">
+                <p className="text-[10px] font-black uppercase tracking-wide text-violet-600">{kpi.label}</p>
+                <p className="mt-1 text-lg font-black text-slate-900 md:text-xl">{kpi.value}</p>
+                <p className="mt-0.5 text-[10px] text-slate-500">{kpi.sub}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Consultation blocks */}
           <div className="grid gap-4 border-b border-violet-100 bg-[#faf8ff] p-4 md:grid-cols-2 md:p-8">
             <div className="rounded-2xl border border-violet-100 bg-white p-5">
@@ -425,13 +540,16 @@ export function StrategyMarketingPage() {
           {/* Phases + Combo */}
           <div className="border-b border-violet-100 p-4 md:p-8">
             <h2 className="text-lg font-black text-violet-900">Lộ trình 3 giai đoạn</h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-3">
-              {profile.phases.map((phase, i) => (
-                <div key={phase.title} className="rounded-2xl border border-violet-100 bg-violet-50/40 p-4">
-                  <p className="text-[10px] font-black uppercase tracking-wide text-violet-600">Giai đoạn {i + 1} · {phase.duration}</p>
-                  <h3 className="mt-1 font-black text-slate-800">{phase.title}</h3>
-                  <p className="mt-1 text-xs font-bold text-violet-700">{phase.focus}</p>
-                  <ul className="mt-3 space-y-1">{phase.tasks.map((t) => <li key={t} className="text-xs text-slate-600">• {t}</li>)}</ul>
+            <PhaseStepper phases={profile.phases} />
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              {profile.phases.map((phase) => (
+                <div key={`tasks-${phase.title}`} className="rounded-xl border border-violet-100 bg-violet-50/30 p-3">
+                  <p className="text-[10px] font-black uppercase text-violet-600">{phase.focus}</p>
+                  <ul className="mt-2 space-y-1">
+                    {phase.tasks.map((t) => (
+                      <li key={t} className="text-xs text-slate-600">• {t}</li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -457,6 +575,9 @@ export function StrategyMarketingPage() {
               <p className="mt-4 text-sm font-bold">
                 Dự toán combo: Một lần {formatVnd(calculatePlanTotals(comboIds).once)} · Hàng tháng {formatVnd(calculatePlanTotals(comboIds).month)} · Hàng năm {formatVnd(calculatePlanTotals(comboIds).year)}
               </p>
+              <div className="mt-3 rounded-xl bg-white/10 px-3 py-2 text-xs opacity-90 print:hidden">
+                {getBudgetFitAssessment(calculatePlanTotals(comboIds).month, form.budgetRange).message}
+              </div>
               <p className="mt-2 text-xs opacity-80 italic">Case tham khảo: {profile.caseStudy.title} — {profile.caseStudy.result}</p>
             </div>
           </div>
@@ -467,6 +588,7 @@ export function StrategyMarketingPage() {
             {([["all", "Tất cả"], ["under5", "< 5tr/th"], ["5to15", "5–15tr/th"], ["over15", "> 15tr/th"]] as const).map(([key, label]) => (
               <button key={key} type="button" onClick={() => setBudgetFilter(key)} className={`rounded-full px-3 py-1 text-[11px] font-bold ${budgetFilter === key ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-600"}`}>{label}</button>
             ))}
+            <span className="text-[10px] font-bold text-emerald-600">✓ Giá đồng bộ /website · /facebook · /google-maps</span>
             <span className="ml-auto flex items-center gap-1 text-xs font-bold text-violet-700"><ShoppingCart size={14} /> Kế hoạch: {planIds.length} gói</span>
           </div>
 
@@ -516,7 +638,7 @@ export function StrategyMarketingPage() {
                   const theme = COLUMN_THEME[column.id];
                   const hiddenOnMobile = pricingColumnTab !== column.id;
                   return (
-                    <div key={column.id} className={`min-w-0 ${hiddenOnMobile ? "hidden lg:block" : ""}`}>
+                    <div key={column.id} className={`min-w-0 print:block ${hiddenOnMobile ? "hidden lg:block" : ""}`}>
                       <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-2xl px-5 py-3 text-white shadow-sm" style={{ backgroundColor: theme.color }}>
                         <Icon size={20} />
                         <span className="text-sm font-black tracking-wide">{column.title}</span>
@@ -557,10 +679,28 @@ export function StrategyMarketingPage() {
               <AnimatePresence mode="wait">{activeItem && <DetailPanel key={activeItem.id} item={activeItem} />}</AnimatePresence>
               <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
                 <p className="flex items-center gap-2 text-sm font-black text-violet-900"><ShoppingCart size={16} /> Tổng kế hoạch đã chọn</p>
-                <p className="mt-2 text-xs text-slate-600">Một lần: <strong>{formatVnd(planTotals.once)}</strong></p>
-                <p className="text-xs text-slate-600">Hàng tháng: <strong>{formatVnd(planTotals.month)}</strong></p>
-                <p className="text-xs text-slate-600">Hàng năm: <strong>{formatVnd(planTotals.year)}</strong></p>
-                <button type="button" onClick={() => setPlanIds(comboIds)} className="mt-3 w-full rounded-xl border border-violet-300 py-2 text-xs font-bold text-violet-700">Dùng combo đề xuất</button>
+                <ul className="mt-3 max-h-48 space-y-2 overflow-y-auto">
+                  {planItems.map((item) => (
+                    <li key={item.id} className="flex items-start justify-between gap-2 rounded-lg bg-white px-2.5 py-2 text-xs">
+                      <div className="min-w-0">
+                        <p className="font-bold text-slate-800">{item.label}</p>
+                        <p className="font-black text-violet-700">{item.price}</p>
+                      </div>
+                      {planIds.length > 0 && (
+                        <button type="button" onClick={() => removeFromPlan(item.id)} className="shrink-0 rounded-md p-1 text-slate-400 hover:bg-red-50 hover:text-red-500 print:hidden" title="Bỏ gói">
+                          <X size={14} />
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 border-t border-violet-200 pt-3">
+                  <p className="text-xs text-slate-600">Một lần: <strong>{formatVnd(planTotals.once)}</strong></p>
+                  <p className="text-xs text-slate-600">Hàng tháng: <strong>{formatVnd(planTotals.month)}</strong></p>
+                  <p className="text-xs text-slate-600">Hàng năm: <strong>{formatVnd(planTotals.year)}</strong></p>
+                </div>
+                <BudgetFitBar monthTotal={planTotals.month} budgetRange={form.budgetRange} />
+                <button type="button" onClick={() => setPlanIds(comboIds)} className="mt-3 w-full rounded-xl border border-violet-300 py-2 text-xs font-bold text-violet-700 print:hidden">Dùng combo đề xuất</button>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white p-4">
                 <p className="flex items-center gap-2 text-sm font-black text-slate-800"><CalendarDays size={16} /> Timeline triển khai</p>

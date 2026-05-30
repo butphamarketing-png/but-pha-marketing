@@ -890,6 +890,47 @@ export function formatVnd(amount: number) {
   return new Intl.NumberFormat("vi-VN").format(amount) + "đ";
 }
 
+export function getBudgetMonthlyLimit(budgetRange: string) {
+  if (budgetRange.includes("Dưới 5")) return 5_000_000;
+  if (budgetRange.includes("Trên 15")) return null;
+  return 15_000_000;
+}
+
+export function getBudgetFitAssessment(monthTotal: number, budgetRange: string) {
+  const limit = getBudgetMonthlyLimit(budgetRange);
+  if (limit === null) {
+    return {
+      status: "good" as const,
+      message: "Ngân sách linh hoạt — có thể triển khai gói chuyên sâu.",
+      percentUsed: Math.min(100, Math.round((monthTotal / 20_000_000) * 100)),
+    };
+  }
+  const percentUsed = Math.round((monthTotal / limit) * 100);
+  if (percentUsed <= 85) {
+    return {
+      status: "good" as const,
+      message: `Phí hàng tháng ~${formatVnd(monthTotal)} — nằm trong ${budgetRange.toLowerCase()}.`,
+      percentUsed,
+    };
+  }
+  if (percentUsed <= 100) {
+    return {
+      status: "warning" as const,
+      message: `Gần ngưỡng ngân sách (${formatVnd(monthTotal)}/tháng). Có thể bỏ ads để tối ưu.`,
+      percentUsed,
+    };
+  }
+  return {
+    status: "over" as const,
+    message: `Vượt ngân sách khai báo — hãy bỏ bớt gói hoặc hạ cấp chăm sóc.`,
+    percentUsed: Math.min(percentUsed, 150),
+  };
+}
+
+export function getIndustryCount() {
+  return PROFILES.filter((p) => p.id !== "default").length;
+}
+
 export function buildDeploymentTimeline(itemCount: number) {
   return [
     { week: "Tuần 1", task: "Khảo sát, chốt gói & thu nội dung từ doanh nghiệp" },
