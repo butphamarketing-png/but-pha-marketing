@@ -13,6 +13,12 @@ import {
   type StrategyFormSnapshot,
 } from "./marketing-strategy-profiles";
 import { buildDigitalReadiness, buildAdsChannelAdvice } from "./strategy-intelligence";
+import {
+  getChannelReason,
+  getConsultancyProfile,
+  getDecisionFactors,
+  getPositioningLine,
+} from "./consultancy-content";
 
 export type SwotAnalysis = {
   strengths: string[];
@@ -102,19 +108,10 @@ const CPC_RANGE: Record<CityTier, { low: number; high: number }> = {
 const DIGITAL_PENETRATION: Record<CityTier, number> = { 1: 78, 2: 58, 3: 42 };
 
 const MARKET_SIZE_BY_BREADTH: Record<string, string> = {
-  hep: "2.000–8.000 khách tiềm năng trong bán kính",
-  vua: "8.000–25.000 khách tiềm năng khu vực",
-  rong: "25.000–100.000+ khách tiềm năng (thành phố/online)",
-  "rat-rong": "100.000+ khách tiềm năng (đa tỉnh/toàn quốc)",
-};
-
-const DECISION_FACTORS: Record<string, string[]> = {
-  "health-beauty": ["Review Google Maps ≥ 4.5★", "Ảnh before/after thật", "Giá minh bạch & đặt lịch dễ"],
-  fnb: ["Ảnh món hấp dẫn", "Vị trí & giờ mở cửa rõ", "Khuyến mãi/check-in trên Fanpage"],
-  ecommerce: ["Giá & ưu đãi", "Ship nhanh & đổi trả", "Social proof & video sản phẩm"],
-  realestate: ["Uy tín thương hiệu", "Thông tin pháp lý rõ", "Case study dự án đã bán"],
-  education: ["Feedback phụ huynh", "Cơ sở gần & tiện đón", "Chương trình học cụ thể"],
-  default: ["Uy tín online (review, Fanpage)", "Phản hồi nhanh inbox/Zalo", "Thông tin dịch vụ rõ ràng"],
+  hep: "2.000–8.000 khách tiềm năng trong bán kính (ước tính)",
+  vua: "8.000–25.000 khách tiềm năng khu vực (ước tính)",
+  rong: "25.000–100.000+ khách tiềm năng — thành phố & online",
+  "rat-rong": "100.000+ khách — phạm vi đa tỉnh / toàn quốc",
 };
 
 function competitionLabel(score: number): MarketResearchReport["marketOverview"]["competitionLevel"] {
@@ -151,22 +148,26 @@ function buildSwot(
   competitionScore: number,
 ): SwotAnalysis {
   const plan = getIndustryChannelPlan(profile.id);
+  const consultancy = getConsultancyProfile(profile.id);
   const strengths: string[] = [...readiness.strengths];
   const weaknesses: string[] = readiness.gaps.map((g) => `${g.label}: ${g.impact}`);
   const opportunities: string[] = [];
   const threats: string[] = [];
 
   if (location?.areaType.includes("Ngoại thành")) {
-    opportunities.push("Khu ngoại thành — cạnh tranh Maps thường thấp hơn, dễ lên top 'gần tôi'.");
+    opportunities.push("Khu ngoại thành — ít đối thủ Maps chuẩn, cơ hội lên top 'gần tôi' nhanh hơn nội thành 30–50%.");
   }
   if (location && inferCityTier(location) >= 2) {
-    opportunities.push("Thị trường tỉnh — CPC ads thấp hơn TP lớn, ROI dễ positive hơn giai đoạn đầu.");
+    opportunities.push("Thị trường tỉnh/ven đô — CPC ads thấp hơn TP lớn 40–60%, dễ ROI positive giai đoạn đầu.");
   }
   if (form.businessGoal.includes("thương hiệu")) {
-    opportunities.push("Mục tiêu xây thương hiệu — content & UGC tạo moat dài hạn trước đối thủ chỉ chạy ads.");
+    opportunities.push("Mục tiêu thương hiệu — content & UGC tạo lợi thế dài hạn trước đối thủ chỉ chạy ads ngắn hạn.");
   }
   if (plan.localBusiness && !form.existingAssets.includes("maps")) {
-    opportunities.push("70%+ khách local tìm trên Maps — lấp gap này có thể tăng lead nhanh nhất.");
+    opportunities.push("Lấp gap Maps trước — kênh intent cao nhất, chi phí organic thấp nhất trong 90 ngày đầu.");
+  }
+  if (consultancy.marketContext && opportunities.length < 4) {
+    opportunities.push(consultancy.marketContext);
   }
 
   if (competitionScore >= 75) {
@@ -181,10 +182,10 @@ function buildSwot(
   profile.risks.slice(0, 2).forEach((r) => threats.push(r));
 
   if (strengths.length === 0) {
-    strengths.push("Đang bắt đầu từ số 0 — linh hoạt triển khai đúng chuẩn ngay từ đầu, không cần sửa legacy.");
+    strengths.push("Khởi đầu sạch — triển khai đúng chuẩn ngay từ đầu, không tốn chi phí sửa hạ tầng cũ.");
   }
   if (opportunities.length === 0) {
-    opportunities.push(`${profile.label} — thị trường Việt Nam digital hóa nhanh, kênh online còn room tăng trưởng.`);
+    opportunities.push(consultancy.marketContext);
   }
 
   return {
@@ -201,39 +202,29 @@ function buildPositioning(
   location: LocationAnalysis | null,
 ): MarketResearchReport["positioning"] {
   const city = location?.city ?? "khu vực của bạn";
-  const segment = location?.targetAudiences[0]?.segment ?? "khách hàng mục tiêu";
-  const goal = form.businessGoal;
+  const consultancy = getConsultancyProfile(profile.id);
 
-  const statement =
-    goal.includes("Tăng khách")
-      ? `${form.companyName} — ${profile.label} uy tín tại ${city}, tiếp cận ${segment.toLowerCase()} qua Maps & inbox nhanh.`
-      : goal.includes("thương hiệu")
-        ? `${form.companyName} — thương hiệu ${profile.label} được tin tưởng tại ${city}, nổi bật bằng content & trải nghiệm khách hàng.`
-        : goal.includes("doanh thu")
-          ? `${form.companyName} — ${profile.label} chuyển đổi cao tại ${city}, kết hợp kênh sở hữu & ads đo lường ROI.`
-          : `${form.companyName} — ${profile.label} giữ chân khách bằng dịch vụ tận tâm & nuôi cộng đồng online.`;
+  const statement = getPositioningLine(profile.id, form.companyName, city, form.businessGoal);
 
   const uspSuggestions = [
     ...profile.whyBullets.slice(0, 2),
     location?.areaType.includes("Trung tâm")
-      ? "Vị trí trung tâm — nhấn mạnh tiện lợi & chất lượng phục vụ nhanh"
-      : "Gần khách hàng — nhấn mạnh 'gần bạn', phục vụ tận tâm khu vực",
+      ? "Vị trí trung tâm — USP tiện lợi, phục vụ nhanh & chất lượng ổn định"
+      : "Gần khách hàng — USP 'phục vụ tận tâm khu vực', phản hồi inbox/Zalo ≤ 30 phút",
     form.existingAssets.length > 0
-      ? `Tận dụng tài sản đã có (${form.existingAssets.join(", ")}) — triển khai nhanh, tiết kiệm setup`
-      : "Xây nền tảng chuẩn từ đầu — đồng bộ Maps, Fanpage & Website",
+      ? `Tận dụng ${form.existingAssets.map((a) => EXISTING_ASSET_LABEL[a] ?? a).join(", ")} — combo tính cải tạo, triển khai nhanh hơn xây mới`
+      : "Xây bộ ba Maps + Fanpage + Website đồng bộ — mọi touchpoint khách thấy cùng một thông điệp",
   ];
 
-  const messagingTone =
-    profile.id === "fnb" || profile.id === "fashion-retail"
-      ? "Trẻ trung, visual-first, khuyến mãi rõ ràng"
-      : profile.id === "health-beauty" || profile.id === "pharmacy"
-        ? "Chuyên nghiệp, tin cậy, before/after & review"
-        : profile.id === "realestate" || profile.id === "construction"
-          ? "Uy tín, minh bạch, case study & số liệu cụ thể"
-          : "Thân thiện, phản hồi nhanh, giải thích dịch vụ rõ";
-
-  return { statement, uspSuggestions: uspSuggestions.slice(0, 3), messagingTone };
+  return { statement, uspSuggestions: uspSuggestions.slice(0, 3), messagingTone: consultancy.messagingTone };
 }
+
+const EXISTING_ASSET_LABEL: Record<string, string> = {
+  website: "Website",
+  fanpage: "Fanpage",
+  maps: "Google Maps",
+  ads: "Quảng cáo",
+};
 
 function buildChannelStrategy(
   profile: IndustryProfile,
@@ -255,30 +246,30 @@ function buildChannelStrategy(
       strategies.push({
         channel: "Google Maps",
         priority,
-        rationale: location?.mapsAdvice ?? "Ngành local — khách tìm 'gần tôi' trước khi gọi.",
+        rationale: location?.mapsAdvice ?? getChannelReason(profile.id, "maps"),
         action: combo.mapsStack
-          ? `${combo.mapsStack.serviceName} + thu review, ảnh cơ sở thật`
-          : "Tối ưu profile Maps, NAP chuẩn, xin review sau phục vụ",
+          ? `${combo.mapsStack.serviceName} · Ảnh thật · Quy trình xin review sau mỗi lần phục vụ`
+          : "Chuẩn hóa NAP (tên/địa chỉ/SĐT) · Ảnh cơ sở · Category đúng ngành",
       });
     }
     if (ch === "fanpage" && plan.needsFanpage) {
       strategies.push({
         channel: "Fanpage Facebook",
         priority,
-        rationale: "Nuôi trust trước khi khách liên hệ — inbox & content hàng ngày.",
+        rationale: getChannelReason(profile.id, "fanpage"),
         action: combo.fanpageStack
-          ? `${combo.fanpageStack.carePosts} bài/tháng + trả lời inbox ≤ 30 phút`
-          : "Setup Fanpage chuẩn thương hiệu + lịch content tuần",
+          ? `${combo.fanpageStack.carePosts} bài/tháng · Inbox ≤ 30 phút · CTA Zalo/form rõ`
+          : "Setup chuẩn thương hiệu · Lịch content tuần · Script trả lời inbox",
       });
     }
     if (ch === "website" && plan.needsWebsite) {
       strategies.push({
         channel: "Website",
         priority,
-        rationale: location?.contentAdvice ?? "Kênh sở hữu — SEO & chuyển đổi dài hạn.",
+        rationale: location?.contentAdvice ?? getChannelReason(profile.id, "website"),
         action: combo.websiteStack
-          ? `${combo.websiteStack.buildName} + ${combo.websiteStack.carePosts} bài SEO/tháng`
-          : "Landing page chuyên nghiệp + CTA Zalo/form rõ",
+          ? `${combo.websiteStack.buildName} · ${combo.websiteStack.carePosts} bài SEO/th · Pixel/form đo lead`
+          : "Landing chuyên nghiệp · CTA nổi bật · Tốc độ tải < 3 giây",
       });
     }
   });
@@ -303,62 +294,65 @@ function buildSolutions(
   competitionScore: number,
 ): MarketSolution[] {
   const plan = getIndustryChannelPlan(profile.id);
+  const consultancy = getConsultancyProfile(profile.id);
   const solutions: MarketSolution[] = [];
 
   if (plan.needsMaps && !form.existingAssets.includes("maps")) {
     solutions.push({
       priority: plan.localBusiness ? 1 : 2,
-      title: "Hiện diện Google Maps chuẩn SEO local",
+      title: consultancy.solutions.maps.title,
       rationale: plan.localBusiness
-        ? `Thị trường cạnh tranh ${competitionLabel(competitionScore)} — Maps là kênh intent cao nhất cho ${profile.label}.`
-        : "Bổ sung hiện diện khu vực trên Google.",
+        ? `${consultancy.competitiveNote} Cạnh tranh hiện tại: ${competitionLabel(competitionScore)}.`
+        : getChannelReason(profile.id, "maps"),
       channels: ["Google Maps"],
       timeline: "Tuần 1–3",
-      expectedOutcome: "Tăng lượt xem profile & cuộc gọi từ tìm kiếm 'gần tôi'",
+      expectedOutcome: consultancy.solutions.maps.outcome,
     });
   }
 
   if (plan.needsFanpage && !form.existingAssets.includes("fanpage")) {
     solutions.push({
       priority: solutions.length === 0 ? 1 : 2,
-      title: "Xây Fanpage & nuôi content đều",
-      rationale: "Khách Việt check Fanpage trước khi quyết định — thiếu kênh này mất 30–50% trust.",
+      title: consultancy.solutions.fanpage.title,
+      rationale: getChannelReason(profile.id, "fanpage"),
       channels: ["Fanpage Facebook"],
       timeline: "Tuần 2–6",
-      expectedOutcome: "Inbox ổn định, tương tác tăng, remarketing audience",
+      expectedOutcome: consultancy.solutions.fanpage.outcome,
     });
   }
 
   if (plan.needsWebsite && !form.existingAssets.includes("website")) {
     solutions.push({
       priority: profile.id === "ecommerce" || profile.id === "tech" ? 1 : 2,
-      title: "Website chuyên nghiệp + SEO nền tảng",
-      rationale: "Kênh sở hữu — không phụ thuộc thuật toán, đo chuyển đổi chính xác.",
+      title: consultancy.solutions.website.title,
+      rationale: getChannelReason(profile.id, "website"),
       channels: ["Website"],
       timeline: "Tuần 3–8",
-      expectedOutcome: "Lead từ organic search & landing page chuyển đổi",
+      expectedOutcome: consultancy.solutions.website.outcome,
     });
   }
 
   if (combo.itemIds.some((id) => id.includes("ads")) && !form.existingAssets.includes("ads")) {
     solutions.push({
       priority: 3,
-      title: "Quảng cáo có đo lường (sau khi nền tảng sẵn sàng)",
-      rationale: location?.adsGeoAdvice ?? "Scale lead sau khi Maps/Fanpage chuẩn — tránh đốt ngân sách không data.",
+      title: consultancy.solutions.ads.title,
+      rationale: location?.adsGeoAdvice ?? "Chỉ scale ads sau khi Maps/Fanpage đủ trust — tránh đốt ngân sách không đo được CPL.",
       channels: ["Facebook Ads", "Google Local Ads"],
       timeline: "Tuần 5+",
-      expectedOutcome: `Lead đo được CPL, target ${form.budgetRange}`,
+      expectedOutcome: `${consultancy.solutions.ads.outcome} · Ngân sách: ${form.budgetRange}`,
     });
   }
 
   if (solutions.length === 0) {
     solutions.push({
       priority: 1,
-      title: `Tối ưu & scale combo ${combo.tierLabel}`,
-      rationale: "Hạ tầng đã có — tập trung content chất lượng, review & tối ưu ads.",
-      channels: ["Maps", "Fanpage", "Website"].filter((c) => form.existingAssets.some((a) => a === c.toLowerCase().split(" ")[0])),
+      title: consultancy.solutions.optimize.title,
+      rationale: "Hạ tầng marketing đã có — tập trung nâng chất content, review & tối ưu chi phí/lead.",
+      channels: ["Maps", "Fanpage", "Website"].filter((c) =>
+        form.existingAssets.some((a) => a === c.toLowerCase().split(" ")[0] || (c === "Fanpage" && a === "fanpage")),
+      ),
       timeline: "Liên tục",
-      expectedOutcome: profile.expectedResults[0] ?? "Tăng trưởng bền vững từ kênh số",
+      expectedOutcome: consultancy.solutions.optimize.outcome,
     });
   }
 
@@ -387,22 +381,24 @@ export function buildMarketResearch(
     (analysis.confidence * 0.35 + (location?.confidence ?? 30) * 0.35 + readiness.score * 0.3),
   );
 
-  const primarySegment = location?.targetAudiences[0]?.segment ?? `Khách ${profile.label}`;
-  const behavior = location?.targetAudiences[0]?.reason ?? profile.summary;
-  const decisionFactors = DECISION_FACTORS[profile.id] ?? DECISION_FACTORS.default;
+  const consultancy = getConsultancyProfile(profile.id);
+  const primarySegment = location?.targetAudiences[0]?.segment ?? `Khách mục tiêu — ${consultancy.sectorLabel}`;
+  const behavior = location?.targetAudiences[0]?.reason ?? consultancy.marketContext;
+  const decisionFactors = getDecisionFactors(profile.id);
 
   const gapCount = readiness.gaps.filter((g) => g.priority === "high").length;
   const yourGap =
     gapCount === 0
-      ? "Hạ tầng marketing tương đương đối thủ top — ưu tiên chất lượng & scale."
-      : `Thiếu ${gapCount} kênh quan trọng so với ${Math.round(digitalSaturation)}% doanh nghiệp cùng ngành đã có digital cơ bản.`;
+      ? "Hạ tầng marketing ngang tầm top ngành — ưu tiên chất lượng content, review & tối ưu CPL."
+      : `Còn ${gapCount} kênh trọng yếu — trong khi ~${Math.round(digitalSaturation)}% DN ${consultancy.sectorLabel} cùng khu vực đã có digital cơ bản.`;
 
-  const typicalCompetitor = [
-    plan.needsMaps ? `Maps tối ưu + review ≥ 4.3★ (${plan.localBusiness ? "94" : "72"}% đối thủ local)` : null,
-    plan.needsFanpage ? "Fanpage đăng ≥ 12 bài/tháng + inbox nhanh" : null,
-    plan.needsWebsite ? "Website/landing có CTA rõ + SEO cơ bản" : null,
-    competitionScore >= 60 ? "Chạy ads local/geo có đo CPL" : "Word-of-mouth + Maps organic",
-  ].filter(Boolean) as string[];
+  const typicalCompetitor = consultancy.typicalCompetitor.length
+    ? consultancy.typicalCompetitor
+    : [
+        plan.needsMaps ? "Maps tối ưu + review ≥ 4.3★" : null,
+        plan.needsFanpage ? "Fanpage content đều + inbox nhanh" : null,
+        plan.needsWebsite ? "Website/landing CTA rõ" : null,
+      ].filter(Boolean) as string[];
 
   const swot = buildSwot(profile, form, location, readiness, competitionScore);
   const positioning = buildPositioning(profile, form, location);
@@ -427,7 +423,7 @@ export function buildMarketResearch(
 
   return {
     methodology:
-      "Phân tích dựa trên mô hình ngành VSIC, dữ liệu hành vi digital VN (2024–2025), địa lý & quy mô DN — ước tính tham khảo, nên xác nhận thêm qua audit thực tế.",
+      "Mô hình tư vấn Bứt Phá: phân loại ngành VSIC · hành vi khách VN · địa lý & quy mô DN · playbook 17 ngành. Số liệu cạnh tranh/CPC là ước tính tham khảo — nên xác nhận qua audit thực tế trước khi cam kết KPI.",
     confidence,
     marketOverview: {
       label: location?.breadthLabel ?? "Thị trường trực tuyến Việt Nam",
@@ -440,7 +436,7 @@ export function buildMarketResearch(
     },
     customerInsight: { primarySegment, behavior, decisionFactors },
     competitiveLandscape: {
-      summary: `Ngành ${profile.label} tại ${location?.city ?? "Việt Nam"} — ${competitionLabel(competitionScore)} cạnh tranh digital, ${digitalSaturation}% DN đã có ít nhất 1 kênh online cơ bản.`,
+      summary: `${consultancy.competitiveNote} Tại ${location?.city ?? "Việt Nam"} — cạnh tranh digital ${competitionLabel(competitionScore)} (${competitionScore}/100).`,
       typicalCompetitorProfile: typicalCompetitor,
       yourGap,
     },

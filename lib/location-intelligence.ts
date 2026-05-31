@@ -218,13 +218,13 @@ function buildInsights(
   const tips: string[] = [];
 
   if (breadth === "hep" || marketType === "hyperlocal") {
-    tips.push("Thị trường hẹp → Maps + review là then chốt; ads geo bán kính 3–5 km, tránh target quá rộng tốn tiền.");
+    tips.push("Thị trường hẹp → Maps + review là then chốt; ads geo 3–5 km, tránh target rộng gây lãng phí ngân sách.");
   } else if (breadth === "vua") {
-    tips.push("Phạm vi vừa → kết hợp Maps local + content theo quận/khu vực; thử ads 5–10 km rồi mở rộn dần.");
+    tips.push("Phạm vi vừa → Maps local + content theo quận; test ads 5–10 km, đo lead 2 tuần rồi mở rộn.");
   } else if (breadth === "rong") {
-    tips.push("Thị trường rộng → chia campaign theo quận/vùng; đo lead riêng từng khu để tối ưu ngân sách.");
+    tips.push("Thị trường rộng → chia campaign theo quận/vùng; đo CPL riêng từng khu trước khi scale.");
   } else {
-    tips.push("Phạm vi rất rộng → ưu tiên website/TMĐT + ads interest; Maps chỉ cho từng chi nhánh nếu có.");
+    tips.push("Phạm vi rất rộng → website/TMĐT + ads interest; Maps chỉ cho từng chi nhánh vật lý.");
   }
 
   if (areaType.includes("Trung tâm")) {
@@ -238,7 +238,7 @@ function buildInsights(
   }
 
   if (localBusiness) {
-    tips.push("Ngành local — 70%+ khách có thể đến từ tìm kiếm 'gần tôi' + review 4.5★ trở lên.");
+    tips.push("Ngành local — 70%+ khách có thể đến từ 'gần tôi' + review ≥ 4.5★ trên Maps.");
   }
 
   return tips.slice(0, 3);

@@ -5,6 +5,10 @@ import {
 } from "./industry-suggestions";
 import { analyzeBusinessLocation } from "./location-intelligence";
 import {
+  getChannelReason,
+  getIndustryInsight,
+} from "./consultancy-content";
+import {
   buildRecommendedCombo,
   getBudgetFitAssessment,
   getIndustryChannelPlan,
@@ -106,21 +110,21 @@ function buildChannelPriorities(profileId: string): ChannelPriority[] {
       label: "Google Maps",
       active: plan.needsMaps,
       stars: mapsStars,
-      reason: plan.localBusiness ? "Ngành local — khách tìm 'gần tôi' trước" : "Hỗ trợ hiển diện khu vực",
+      reason: plan.needsMaps ? getChannelReason(profileId, "maps") : "Không ưu tiên cho ngành này",
     },
     {
       id: "fanpage" as const,
       label: "Fanpage",
       active: plan.needsFanpage,
       stars: fanpageStars,
-      reason: "Nuôi tương tác, inbox & content hàng ngày",
+      reason: plan.needsFanpage ? getChannelReason(profileId, "fanpage") : "Không ưu tiên cho ngành này",
     },
     {
       id: "website" as const,
       label: "Website",
       active: plan.needsWebsite,
       stars: webStars,
-      reason: "Kênh sở hữu — chuyển đổi & SEO dài hạn",
+      reason: plan.needsWebsite ? getChannelReason(profileId, "website") : "Không ưu tiên cho ngành này",
     },
   ].sort((a, b) => b.stars - a.stars);
 }
@@ -132,29 +136,16 @@ function buildInsight(
   address?: string,
   scale?: string,
 ) {
-  const sector = PROFILE_SHORT[profile.id] ?? profile.label;
-  if (matchType === "unknown") {
-    return "Gõ thêm từ khóa hoặc chọn gợi ý masothue để tư vấn sát ngành hơn.";
-  }
-
   let locationHint = "";
   if (address && address.trim().length >= 8 && scale) {
     const loc = analyzeBusinessLocation(address, scale, profile, businessGoal);
     if (loc) {
-      locationHint = ` Khu vực ${loc.city ?? "local"} — cạnh tranh ${loc.areaType.includes("Trung tâm") ? "cao" : "vừa"}, target ${loc.catchmentRange}.`;
+      const competition =
+        loc.areaType.includes("Trung tâm") ? "cao" : loc.areaType.includes("Ngoại thành") ? "thấp hơn nội thành" : "vừa";
+      locationHint = ` · ${loc.city ?? "Khu vực local"}: cạnh tranh ${competition}, bán kính ${loc.catchmentRange}.`;
     }
   }
-
-  if (businessGoal.includes("Tăng khách")) {
-    return `${sector} + mục tiêu tăng khách → ưu tiên kênh local (Maps) & quảng cáo có đo lường.${locationHint}`;
-  }
-  if (businessGoal.includes("thương hiệu")) {
-    return `${sector} + xây thương hiệu → ưu tiên Fanpage & Website showcase trước khi scale ads.${locationHint}`;
-  }
-  if (businessGoal.includes("doanh thu")) {
-    return `${sector} + tăng doanh thu → kết hợp chuyển đổi (web/inbox) với content nuôi lead.${locationHint}`;
-  }
-  return (profile.whyBullets[0] ?? `${sector} — chiến lược tối ưu theo ngân sách & tài sản hiện có.`) + locationHint;
+  return getIndustryInsight(profile.id, businessGoal, matchType, locationHint);
 }
 
 export function analyzeIndustryInput(

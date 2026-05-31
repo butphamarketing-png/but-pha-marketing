@@ -27,6 +27,7 @@ import {
   type FanpageStackRecommendation,
 } from "./fanpage-pricing-advisor";
 import { findIndustrySuggestion, getIndustrySuggestionCount } from "./industry-suggestions";
+import { getConsultancyTip } from "./consultancy-content";
 import {
   buildMapsStackItemIds,
   recommendMapsStack,
@@ -1203,7 +1204,9 @@ export function adjustComboForAssets(comboIds: string[], existingAssets: string[
 
 export function buildWhyBullets(profile: IndustryProfile, businessGoal: string, existingAssets: string[]) {
   const bullets = [...profile.whyBullets];
-  if (businessGoal.includes("Tăng khách")) {
+  const tip = getConsultancyTip(profile.id, businessGoal);
+  if (tip) bullets.unshift(tip);
+  else if (businessGoal.includes("Tăng khách")) {
     bullets.unshift("Mục tiêu tăng khách mới → ưu tiên Maps/Ads/Inbox trước, content nuôi tin sau.");
   } else if (businessGoal.includes("doanh thu")) {
     bullets.unshift("Mục tiêu tăng doanh thu → kết hợp kênh chuyển đổi (website/inbox) với quảng cáo có đo lường.");
