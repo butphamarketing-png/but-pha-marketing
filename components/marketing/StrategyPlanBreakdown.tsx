@@ -193,7 +193,7 @@ export function StrategyPlanBreakdown({
     .filter(Boolean);
 
   return (
-    <div id="section-pricing" className="scroll-mt-24 space-y-6 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8 print:hidden">
+    <div id="section-pricing" className="scroll-mt-24 space-y-6 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8">
       <SectionHeader
         step={2}
         title="Báo giá đề xuất"
@@ -254,7 +254,7 @@ export function StrategyPlanBreakdown({
         </div>
       </section>
 
-      <section>
+      <section className="print:hidden">
         <p className="mb-3 flex items-center gap-2 text-sm font-black text-slate-800">
           <CalendarDays size={16} className="text-violet-700" /> Lịch triển khai dự kiến
         </p>

@@ -68,7 +68,13 @@ import {
 } from "@/components/marketing/StrategySmartPanels";
 import { StrategyLocationPanel, StrategyLocationPreview } from "@/components/marketing/StrategyLocationPanel";
 import { StrategyPlanBreakdown } from "@/components/marketing/StrategyPlanBreakdown";
-import { CollapsibleAdvancedPanel, SectionHeader, StrategyResultsNav } from "@/components/marketing/StrategyResultsUI";
+import {
+  CollapsibleAdvancedPanel,
+  SectionHeader,
+  StrategyResultsNav,
+  StrategyResultsStickyBar,
+  useStrategyActiveSection,
+} from "@/components/marketing/StrategyResultsUI";
 import { analyzeIndustryInput, getProfileShortLabel } from "@/lib/industry-intelligence";
 import { buildFormProgress, buildDigitalReadiness, buildRoiEstimate } from "@/lib/strategy-intelligence";
 import {
@@ -392,6 +398,10 @@ export function StrategyMarketingPage() {
     }
   };
 
+  const effectivePlanIds = planIds.length ? planIds : comboIds;
+  const activeSection = useStrategyActiveSection();
+  const showStickyBar = showStrategy && activeSection !== "section-summary";
+
   if (!showStrategy) {
     return (
       <div className="relative min-h-screen overflow-hidden bg-[#120a24] px-4 py-10 sm:py-14">
@@ -493,10 +503,26 @@ export function StrategyMarketingPage() {
 
               {formStep === 4 && (
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Quy mô *</span>
-                    <select className={selectClass} value={form.scale} onChange={(e) => updateField("scale", e.target.value)}>{SCALE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}</select>
-                  </label>
-                  <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Ngân sách/tháng *</span>
+                  <div className="space-y-2 sm:col-span-2">
+                    <span className="text-xs font-bold uppercase text-slate-500">Quy mô *</span>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {SCALE_OPTIONS.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => updateField("scale", s)}
+                          className={`rounded-xl border-2 px-3 py-2.5 text-left text-[11px] font-bold transition ${
+                            form.scale === s
+                              ? "border-violet-500 bg-violet-50 text-violet-800 ring-2 ring-violet-200"
+                              : "border-slate-200 bg-white text-slate-600 hover:border-violet-200"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Ngân sách/tháng *</span>
                     <select className={selectClass} value={form.budgetRange} onChange={(e) => updateField("budgetRange", e.target.value)}>{BUDGET_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}</select>
                   </label>
                   <div className="sm:col-span-2 grid gap-2 sm:grid-cols-3">
@@ -582,8 +608,6 @@ export function StrategyMarketingPage() {
     );
   }
 
-  const effectivePlanIds = planIds.length ? planIds : comboIds;
-
   return (
     <div className="min-h-screen bg-[#ece6f7] px-3 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto max-w-[1600px]">
@@ -608,8 +632,16 @@ export function StrategyMarketingPage() {
         )}
         {actionMessage && <p className="mb-4 text-sm text-emerald-600 print:hidden">{actionMessage}</p>}
 
+        <StrategyResultsStickyBar
+          companyName={form.companyName}
+          tierLabel={comboRecommendation.tierLabel}
+          monthTotal={formatVnd(planTotals.month)}
+          onceTotal={formatVnd(planTotals.once)}
+          visible={showStickyBar}
+        />
+
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-2xl">
-          <StrategyResultsNav />
+          <StrategyResultsNav activeId={activeSection} />
           {/* Header */}
           <div id="section-summary" className="scroll-mt-24 border-b border-violet-100 bg-gradient-to-b from-white to-violet-50/40 px-6 py-8 text-center md:px-10">
             <Image src="/logo.png" alt="Logo" width={88} height={88} className="mx-auto" />
@@ -692,89 +724,6 @@ export function StrategyMarketingPage() {
             comboReasons={comboRecommendation.reasons}
           />
 
-          {/* Smart strategy panels — mở rộng */}
-          <div id="section-analysis" className="scroll-mt-24 border-b border-violet-100 p-4 md:p-8 print:hidden">
-            <CollapsibleAdvancedPanel
-              title="Phân tích mở rộng"
-              subtitle="So sánh gói, ROI, benchmark đối thủ, kịch bản what-if — bấm để xem chi tiết"
-            >
-            <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
-            <div className="grid gap-4 lg:grid-cols-2">
-              <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} />
-              <StrategyLocationPanel form={form} profile={profile} />
-            </div>
-            <StrategyWhatIfPanel
-              profile={profile}
-              form={form}
-              onApplyAssets={(assets) => {
-                setForm((prev) => ({ ...prev, existingAssets: assets }));
-                setActionMessage("Đã áp dụng kịch bản — combo tính lại theo tài sản mới.");
-              }}
-            />
-            <div className="grid gap-4 lg:grid-cols-2">
-              <StrategyReadinessPanel profileId={profile.id} existingAssets={form.existingAssets} />
-              <StrategyKpiPanel profile={profile} form={form} />
-            </div>
-            <div className="grid gap-4 lg:grid-cols-2">
-              <StrategyCostBreakdown itemIds={effectivePlanIds} />
-              <StrategyRoiPanel profile={profile} form={form} itemIds={effectivePlanIds} />
-            </div>
-            <StrategyTierComparison
-              profile={profile}
-              form={form}
-              onSelectTier={(ids) => {
-                setPlanIds(ids);
-                setActionMessage("Đã chọn gói khác — báo giá cập nhật theo tier bạn chọn.");
-              }}
-            />
-            <StrategyMultiLocationPanel
-              form={form}
-              mapsSetupOnce={comboRecommendation.mapsStack?.setupOnce ?? null}
-              baseMonthTotal={planTotals.month}
-            />
-            <StrategyActionPlanPanel profile={profile} form={form} combo={comboRecommendation} />
-            </CollapsibleAdvancedPanel>
-          </div>
-
-          {/* Consultation blocks */}
-          <div id="section-advice" className="scroll-mt-24 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8">
-            <SectionHeader
-              step={4}
-              title="Tư vấn chuyên sâu theo ngành"
-              subtitle={`Phân tích rủi ro, kết quả kỳ vọng và checklist chuẩn bị cho ${profile.label}`}
-            />
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-violet-100 bg-white p-5">
-              <p className="flex items-center gap-2 text-sm font-black text-violet-800"><Sparkles size={16} /> Tư vấn cho {profile.label}</p>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">{profile.summary}</p>
-              <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                {industryAnalysis.channels.filter((ch) => ch.active).map((ch) => (
-                  <div key={ch.id} className="rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2">
-                    <p className="text-[10px] font-black uppercase text-violet-700">{ch.label}</p>
-                    <p className="text-[10px] font-bold text-amber-500">{"★".repeat(ch.stars)}{"☆".repeat(3 - ch.stars)}</p>
-                    <p className="mt-0.5 text-[10px] text-slate-500">{ch.reason}</p>
-                  </div>
-                ))}
-              </div>
-              <ul className="mt-4 space-y-2">{whyBullets.map((b) => (<li key={b} className="flex gap-2 text-sm text-slate-700"><CheckCircle2 size={16} className="shrink-0 text-emerald-500" />{b}</li>))}</ul>
-            </div>
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-amber-100 bg-amber-50/50 p-4">
-                <p className="flex items-center gap-2 text-xs font-black uppercase text-amber-800"><AlertTriangle size={14} /> Rủi ro nếu chưa triển khai</p>
-                <ul className="mt-2 space-y-1">{profile.risks.map((r) => <li key={r} className="text-sm text-amber-900/80">• {r}</li>)}</ul>
-              </div>
-              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4">
-                <p className="text-xs font-black uppercase text-emerald-800">Kết quả kỳ vọng</p>
-                <ul className="mt-2 space-y-1">{profile.expectedResults.map((r) => <li key={r} className="text-sm text-emerald-900/80">• {r}</li>)}</ul>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className="flex items-center gap-2 text-xs font-black uppercase text-slate-700"><ClipboardList size={14} /> Bạn cần chuẩn bị</p>
-                <ul className="mt-2 space-y-1">{profile.clientPrep.map((r) => <li key={r} className="text-sm text-slate-600">• {r}</li>)}</ul>
-              </div>
-            </div>
-          </div>
-          </div>
-
           {/* Phases + Combo */}
           <div id="section-roadmap" className="scroll-mt-24 border-b border-violet-100 p-4 md:p-8">
             <SectionHeader
@@ -815,7 +764,7 @@ export function StrategyMarketingPage() {
             </div>
 
             {comboRecommendation.websiteStack && (
-              <div className="mt-4 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5">
+              <div className="mt-4 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 print:break-inside-avoid">
                 <p className="flex items-center gap-2 text-sm font-black text-emerald-800">
                   <Globe size={16} /> Tư vấn Website (khớp bảng giá /website)
                 </p>
@@ -837,16 +786,16 @@ export function StrategyMarketingPage() {
                 <p className="mt-3 text-xs font-bold text-slate-600">
                   Năm đầu (setup): {formatVnd(comboRecommendation.websiteStack.firstYearSetup)} · Duy trì content web: {formatVnd(comboRecommendation.websiteStack.monthlyRecurring)}/tháng
                 </p>
-                <PricingDeepLink channel="website" />
+                <div className="print:hidden"><PricingDeepLink channel="website" /></div>
               </div>
             )}
 
             {comboRecommendation.fanpageStack && (
-              <div className="mt-4 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-5">
+              <div className="mt-4 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-5 print:break-inside-avoid">
                 <p className="flex items-center gap-2 text-sm font-black text-blue-800">
                   <Facebook size={16} /> Tư vấn Fanpage (khớp bảng giá /facebook)
                 </p>
-                <p className="mt-1 text-[11px] font-bold text-blue-600">
+                <p className="mt-1 text-[11px] font-bold text-blue-600 print:hidden">
                   Công thức: 150.000đ × số bài/tháng — kéo slider 10–60 trên /facebook
                 </p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3">
@@ -893,12 +842,12 @@ export function StrategyMarketingPage() {
                 <p className="mt-3 text-xs font-bold text-slate-600">
                   Setup: {formatVnd(comboRecommendation.fanpageStack.setupOnce)} · Duy trì Fanpage: {formatVnd(comboRecommendation.fanpageStack.monthlyRecurring)}/tháng
                 </p>
-                <PricingDeepLink channel="fanpage" />
+                <div className="print:hidden"><PricingDeepLink channel="fanpage" /></div>
               </div>
             )}
 
             {comboRecommendation.mapsStack && (
-              <div className="mt-4 rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-white p-5">
+              <div className="mt-4 rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-white p-5 print:break-inside-avoid">
                 <p className="flex items-center gap-2 text-sm font-black text-orange-800">
                   <MapPin size={16} /> Tư vấn Google Maps (khớp bảng giá /google-maps)
                 </p>
@@ -926,9 +875,92 @@ export function StrategyMarketingPage() {
                   Setup Maps: {formatVnd(comboRecommendation.mapsStack.setupOnce)}
                   {comboRecommendation.mapsStack.monthlyRecurring > 0 && ` · Quảng cáo: ${formatVnd(comboRecommendation.mapsStack.monthlyRecurring)}/tháng`}
                 </p>
-                <PricingDeepLink channel="maps" />
+                <div className="print:hidden"><PricingDeepLink channel="maps" /></div>
               </div>
             )}
+          </div>
+
+          {/* Consultation blocks */}
+          <div id="section-advice" className="scroll-mt-24 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8 print:break-inside-avoid">
+            <SectionHeader
+              step={4}
+              title="Tư vấn chuyên sâu theo ngành"
+              subtitle={`Phân tích rủi ro, kết quả kỳ vọng và checklist chuẩn bị cho ${profile.label}`}
+            />
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-violet-100 bg-white p-5">
+              <p className="flex items-center gap-2 text-sm font-black text-violet-800"><Sparkles size={16} /> Tư vấn cho {profile.label}</p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{profile.summary}</p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {industryAnalysis.channels.filter((ch) => ch.active).map((ch) => (
+                  <div key={ch.id} className="rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2">
+                    <p className="text-[10px] font-black uppercase text-violet-700">{ch.label}</p>
+                    <p className="text-[10px] font-bold text-amber-500">{"★".repeat(ch.stars)}{"☆".repeat(3 - ch.stars)}</p>
+                    <p className="mt-0.5 text-[10px] text-slate-500">{ch.reason}</p>
+                  </div>
+                ))}
+              </div>
+              <ul className="mt-4 space-y-2">{whyBullets.map((b) => (<li key={b} className="flex gap-2 text-sm text-slate-700"><CheckCircle2 size={16} className="shrink-0 text-emerald-500" />{b}</li>))}</ul>
+            </div>
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-amber-100 bg-amber-50/50 p-4">
+                <p className="flex items-center gap-2 text-xs font-black uppercase text-amber-800"><AlertTriangle size={14} /> Rủi ro nếu chưa triển khai</p>
+                <ul className="mt-2 space-y-1">{profile.risks.map((r) => <li key={r} className="text-sm text-amber-900/80">• {r}</li>)}</ul>
+              </div>
+              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4">
+                <p className="text-xs font-black uppercase text-emerald-800">Kết quả kỳ vọng</p>
+                <ul className="mt-2 space-y-1">{profile.expectedResults.map((r) => <li key={r} className="text-sm text-emerald-900/80">• {r}</li>)}</ul>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="flex items-center gap-2 text-xs font-black uppercase text-slate-700"><ClipboardList size={14} /> Bạn cần chuẩn bị</p>
+                <ul className="mt-2 space-y-1">{profile.clientPrep.map((r) => <li key={r} className="text-sm text-slate-600">• {r}</li>)}</ul>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          {/* Smart strategy panels — mở rộng */}
+          <div id="section-analysis" className="scroll-mt-24 border-b border-violet-100 p-4 md:p-8 print:hidden">
+            <CollapsibleAdvancedPanel
+              title="Phân tích mở rộng"
+              subtitle="So sánh gói, ROI, benchmark đối thủ, kịch bản what-if — bấm để xem chi tiết"
+            >
+            <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} />
+              <StrategyLocationPanel form={form} profile={profile} />
+            </div>
+            <StrategyWhatIfPanel
+              profile={profile}
+              form={form}
+              onApplyAssets={(assets) => {
+                setForm((prev) => ({ ...prev, existingAssets: assets }));
+                setActionMessage("Đã áp dụng kịch bản — combo tính lại theo tài sản mới.");
+              }}
+            />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyReadinessPanel profileId={profile.id} existingAssets={form.existingAssets} />
+              <StrategyKpiPanel profile={profile} form={form} />
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StrategyCostBreakdown itemIds={effectivePlanIds} />
+              <StrategyRoiPanel profile={profile} form={form} itemIds={effectivePlanIds} />
+            </div>
+            <StrategyTierComparison
+              profile={profile}
+              form={form}
+              onSelectTier={(ids) => {
+                setPlanIds(ids);
+                setActionMessage("Đã chọn gói khác — báo giá cập nhật theo tier bạn chọn.");
+              }}
+            />
+            <StrategyMultiLocationPanel
+              form={form}
+              mapsSetupOnce={comboRecommendation.mapsStack?.setupOnce ?? null}
+              baseMonthTotal={planTotals.month}
+            />
+            <StrategyActionPlanPanel profile={profile} form={form} combo={comboRecommendation} />
+            </CollapsibleAdvancedPanel>
           </div>
 
           {/* Post-action CTA */}
@@ -963,6 +995,17 @@ export function StrategyMarketingPage() {
               <p><strong>Dịch vụ:</strong> {planItems.length} gói</p>
               <p><strong>Setup:</strong> {formatVnd(planTotals.once)}</p>
               <p><strong>Hàng tháng:</strong> {formatVnd(planTotals.month)}</p>
+            </div>
+            <div className="mt-4">
+              <p className="text-xs font-black uppercase text-violet-700">Chi tiết hạng mục</p>
+              <ul className="mt-2 space-y-1 text-xs">
+                {planItems.map((item) => (
+                  <li key={item.id} className="flex justify-between gap-4 border-b border-slate-100 py-1">
+                    <span>{item.label}</span>
+                    <span className="shrink-0 font-bold">{item.price}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
             <p className="mt-4 text-xs leading-relaxed whitespace-pre-wrap">{summaryText}</p>
             <p className="mt-6 text-[10px] text-slate-500">butphamarketing.com · Hotline/Zalo 0901438703</p>

@@ -388,7 +388,7 @@ export function StrategySubmitConfirmModal({
           Xác nhận trước khi xem kết quả
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
-          Những gì bạn chọn sẽ ảnh hưởng đến kết quả phù hợp nhất nên hãy chắc chắn rằng bạn nhập chính xác thông tin?
+          Những gì bạn chọn sẽ ảnh hưởng trực tiếp đến combo và báo giá. Hãy kiểm tra lại thông tin trước khi tiếp tục.
         </p>
 
         {summary && (
