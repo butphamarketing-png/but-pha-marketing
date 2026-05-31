@@ -502,16 +502,19 @@ export type CompetitiveBenchmark = {
 export function buildCompetitiveBenchmark(
   profileId: string,
   existingAssets: string[],
+  cityTier?: 1 | 2 | 3,
 ): CompetitiveBenchmark {
   const plan = getIndustryChannelPlan(profileId);
   const has = (id: string) => existingAssets.includes(id);
   const items: BenchmarkItem[] = [];
 
+  const tierBoost = cityTier === 1 ? 4 : cityTier === 2 ? 0 : -6;
+
   if (plan.needsMaps) {
     items.push({
       id: "maps",
       label: "Google Maps tối ưu + review",
-      industryPct: plan.localBusiness ? 94 : 72,
+      industryPct: Math.min(98, (plan.localBusiness ? 94 : 72) + tierBoost),
       youHave: has("maps"),
       priority: plan.localBusiness ? "critical" : "important",
     });
@@ -565,7 +568,7 @@ export function buildCompetitiveBenchmark(
   const insight =
     gapCount === 0
       ? "Hạ tầng marketing đạt chuẩn ngành — ưu tiên chất lượng content và tối ưu ads."
-      : `Còn ${gapCount} hạng mục quan trọng mà ${industryAvg}%+ đối thủ đã có — lấp gap trước khi scale ngân sách.`;
+      : `Còn ${gapCount} hạng mục quan trọng mà ~${industryAvg}% doanh nghiệp cùng ngành${cityTier === 1 ? " tại TP lớn" : cityTier === 3 ? " tại tỉnh" : ""} đã có — lấp gap trước khi scale ngân sách.`;
 
   return { items, yourCoverage, industryAvg, gapCount, headline, insight };
 }

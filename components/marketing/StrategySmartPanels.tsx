@@ -90,11 +90,13 @@ export function StrategyExecutiveSummary({
 export function StrategyBenchmarkPanel({
   profileId,
   existingAssets,
+  cityTier,
 }: {
   profileId: string;
   existingAssets: string[];
+  cityTier?: 1 | 2 | 3;
 }) {
-  const bench = buildCompetitiveBenchmark(profileId, existingAssets);
+  const bench = buildCompetitiveBenchmark(profileId, existingAssets, cityTier);
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -136,6 +138,9 @@ export function StrategyBenchmarkPanel({
           </div>
         ))}
       </div>
+      <p className="mt-3 text-[10px] italic text-slate-400">
+        Ước tính dựa trên mô hình ngành & khu vực — tham khảo, không phải khảo sát thực tế.
+      </p>
     </div>
   );
 }

@@ -5,10 +5,11 @@ import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 
 export const STRATEGY_RESULT_SECTIONS = [
   { id: "section-summary", label: "Tóm tắt", short: "1" },
-  { id: "section-pricing", label: "Báo giá", short: "2" },
-  { id: "section-roadmap", label: "Lộ trình", short: "3" },
-  { id: "section-advice", label: "Tư vấn", short: "4" },
-  { id: "section-analysis", label: "Phân tích", short: "5" },
+  { id: "section-market", label: "Thị trường", short: "2" },
+  { id: "section-pricing", label: "Báo giá", short: "3" },
+  { id: "section-roadmap", label: "Lộ trình", short: "4" },
+  { id: "section-advice", label: "Tư vấn", short: "5" },
+  { id: "section-analysis", label: "Phân tích", short: "6" },
 ] as const;
 
 export type StrategyResultSectionId = (typeof STRATEGY_RESULT_SECTIONS)[number]["id"];
@@ -57,7 +58,7 @@ export function StrategyResultsNav({ activeId }: { activeId?: StrategyResultSect
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-[10px] font-black uppercase tracking-wide text-violet-500">Đi tới phần</p>
         <span className="text-[10px] font-bold text-violet-600">
-          {activeIndex >= 0 ? `${activeIndex + 1}/${STRATEGY_RESULT_SECTIONS.length}` : "1/5"}
+          {activeIndex >= 0 ? `${activeIndex + 1}/${STRATEGY_RESULT_SECTIONS.length}` : "1/6"}
         </span>
       </div>
       <div className="mb-2 h-1 overflow-hidden rounded-full bg-violet-100">

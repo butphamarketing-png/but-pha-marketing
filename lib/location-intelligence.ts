@@ -227,11 +227,11 @@ function buildInsights(
     tips.push("Phạm vi rất rộng → ưu tiên website/TMĐT + ads interest; Maps chỉ cho từng chi nhánh nếu có.");
   }
 
-  if (areaType.includes("Ngoại thành")) {
-    tips.push("Khu ngoại thành — cạnh tranh Maps thường thấp hơn nội thành, dễ lên top 'gần tôi' nếu profile chuẩn.");
-  }
   if (areaType.includes("Trung tâm")) {
-    tips.push("Khu trung tâm — CPC cao hơn, cần nổi bật USP & giờ mở cửa rõ trên Maps.");
+    tips.push("Khu trung tâm — CPC cao hơn 20–40%, cần nổi bật USP & giờ mở cửa rõ trên Maps.");
+  }
+  if (areaType.includes("Ngoại thành")) {
+    tips.push("Khu ngoại thành — cạnh tranh Maps thường thấp hơn nội thành 30–50%, dễ lên top 'gần tôi'.");
   }
   if (scale.includes("2")) {
     tips.push("Đa cơ sở — mỗi địa chỉ cần Maps riêng, tránh trùng tên/SĐT gây mất trust Google.");
@@ -242,6 +242,10 @@ function buildInsights(
   }
 
   return tips.slice(0, 3);
+}
+
+export function getCityTierFromAddress(address: string): 1 | 2 | 3 {
+  return parseCity(address.trim()).tier;
 }
 
 export function analyzeBusinessLocation(

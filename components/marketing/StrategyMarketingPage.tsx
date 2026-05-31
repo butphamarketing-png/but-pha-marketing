@@ -68,6 +68,7 @@ import {
 } from "@/components/marketing/StrategySmartPanels";
 import { StrategyLocationPanel, StrategyLocationPreview } from "@/components/marketing/StrategyLocationPanel";
 import { StrategyPlanBreakdown } from "@/components/marketing/StrategyPlanBreakdown";
+import { StrategyMarketResearchPanel } from "@/components/marketing/StrategyMarketResearchPanel";
 import {
   CollapsibleAdvancedPanel,
   SectionHeader,
@@ -87,9 +88,10 @@ import {
   type StrategyDraftSource,
 } from "@/lib/strategy-storage";
 import { buildStrategyShareUrl, decodeStrategyShare, isStrategyFormComplete, isStrategyViewReady, mergeSharedFormWithContact } from "@/lib/strategy-share";
+import { formatMarketResearchSummary, buildMarketResearch } from "@/lib/market-research";
 import { readContactFromCookie } from "@/lib/strategy-cookies";
 import { getContactFieldErrors, isContactStepValid, firstContactError } from "@/lib/strategy-validation";
-import { analyzeBusinessLocation } from "@/lib/location-intelligence";
+import { analyzeBusinessLocation, getCityTierFromAddress } from "@/lib/location-intelligence";
 import {
   BUDGET_OPTIONS,
   BUSINESS_GOALS,
@@ -246,7 +248,7 @@ export function StrategyMarketingPage() {
   const profile = useMemo(() => resolveIndustryProfile(form.industry), [form.industry]);
   const industryAnalysis = useMemo(
     () => analyzeIndustryInput(form.industry, form),
-    [form.industry, form.businessGoal, form.scale, form.budgetRange, form.existingAssets],
+    [form.industry, form.businessGoal, form.scale, form.budgetRange, form.existingAssets, form.address],
   );
   const comboRecommendation = useMemo(
     () => buildRecommendedCombo(profile, form),
@@ -262,6 +264,7 @@ export function StrategyMarketingPage() {
   );
   const formProgress = useMemo(() => buildFormProgress(form), [form]);
   const contactErrors = useMemo(() => getContactFieldErrors(form), [form]);
+  const cityTier = useMemo(() => getCityTierFromAddress(form.address), [form.address]);
 
   const step1Valid = isContactStepValid(form);
   const step2Valid = form.industry.trim().length >= 2 && !!form.businessGoal;
@@ -370,8 +373,10 @@ export function StrategyMarketingPage() {
       extras.push(`Khu vực: ${loc.breadthLabel} · Bán kính ${loc.catchmentRange}`);
       extras.push(`Tệp khách: ${loc.targetAudiences.map((a) => a.segment).join("; ")}`);
     }
+    const marketReport = buildMarketResearch(profile, form, industryAnalysis, comboRecommendation);
+    extras.push(formatMarketResearchSummary(marketReport));
     return extras.length ? `${base}\n\n${extras.join("\n")}` : base;
-  }, [form, profile, planIds, industryAnalysis, comboIds]);
+  }, [form, profile, planIds, industryAnalysis, comboRecommendation, comboIds]);
 
   const sendEmail = () => {
     const subject = encodeURIComponent(`Chiến lược Marketing — ${form.companyName}`);
@@ -474,7 +479,9 @@ export function StrategyMarketingPage() {
                   <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500"><Building2 size={14} className="inline" /> Tên công ty *</span><input className={inputClass} value={form.companyName} onChange={(e) => updateField("companyName", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="organization" /><FieldError message={contactTouched ? contactErrors.companyName : null} /></label>
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">SĐT *</span><input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="tel" inputMode="tel" /><FieldError message={contactTouched ? contactErrors.phone : null} /></label>
                   <label className="space-y-2"><span className="text-xs font-bold uppercase text-slate-500">Gmail *</span><input type="email" className={inputClass} value={form.email} onChange={(e) => updateField("email", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="email" /><FieldError message={contactTouched ? contactErrors.email : null} /></label>
-                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="street-address" placeholder="VD: 123 Nguyễn Huệ, P. Bến Nghé, Q.1, TP. Hồ Chí Minh" /><FieldError message={contactTouched ? contactErrors.address : null} /></label>
+                  <label className="space-y-2 sm:col-span-2"><span className="text-xs font-bold uppercase text-slate-500">Địa chỉ cơ sở *</span><input className={inputClass} value={form.address} onChange={(e) => updateField("address", e.target.value)} onBlur={() => setContactTouched(true)} autoComplete="street-address" placeholder="VD: 123 Nguyễn Huệ, P. Bến Nghé, Q.1, TP. Hồ Chí Minh" /><FieldError message={contactTouched ? contactErrors.address : null} />
+                    <StrategyLocationPreview address={form.address} scale={form.scale} profile={profile} businessGoal={form.businessGoal} />
+                  </label>
                 </div>
               )}
 
@@ -711,6 +718,13 @@ export function StrategyMarketingPage() {
             </div>
           </div>
 
+          <StrategyMarketResearchPanel
+            profile={profile}
+            form={form}
+            industryAnalysis={industryAnalysis}
+            combo={comboRecommendation}
+          />
+
           <div className="border-b border-violet-100 bg-white p-4 md:p-8 print:hidden">
             <StrategyOwnedAssetsPanel existingAssets={form.existingAssets} />
           </div>
@@ -727,7 +741,7 @@ export function StrategyMarketingPage() {
           {/* Phases + Combo */}
           <div id="section-roadmap" className="scroll-mt-24 border-b border-violet-100 p-4 md:p-8">
             <SectionHeader
-              step={3}
+              step={4}
               title="Lộ trình triển khai 3 giai đoạn"
               subtitle="Kế hoạch hành động theo ngành — từ setup nền tảng đến tăng trưởng bền vững"
             />
@@ -883,7 +897,7 @@ export function StrategyMarketingPage() {
           {/* Consultation blocks */}
           <div id="section-advice" className="scroll-mt-24 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8 print:break-inside-avoid">
             <SectionHeader
-              step={4}
+              step={5}
               title="Tư vấn chuyên sâu theo ngành"
               subtitle={`Phân tích rủi ro, kết quả kỳ vọng và checklist chuẩn bị cho ${profile.label}`}
             />
@@ -927,7 +941,7 @@ export function StrategyMarketingPage() {
             >
             <StrategyAdsAdviceBanner profileId={profile.id} form={form} />
             <div className="grid gap-4 lg:grid-cols-2">
-              <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} />
+              <StrategyBenchmarkPanel profileId={profile.id} existingAssets={form.existingAssets} cityTier={cityTier} />
               <StrategyLocationPanel form={form} profile={profile} />
             </div>
             <StrategyWhatIfPanel

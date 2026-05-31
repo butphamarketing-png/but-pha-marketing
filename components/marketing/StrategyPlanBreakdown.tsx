@@ -195,7 +195,7 @@ export function StrategyPlanBreakdown({
   return (
     <div id="section-pricing" className="scroll-mt-24 space-y-6 border-b border-violet-100 bg-[#faf8ff] p-4 md:p-8">
       <SectionHeader
-        step={2}
+        step={3}
         title="Báo giá đề xuất"
         subtitle={`Gói ${tierLabel} · ${itemIds.length} hạng mục · khớp bảng giá chính thức`}
       />

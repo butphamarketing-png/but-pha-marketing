@@ -3,6 +3,7 @@ import {
   searchIndustrySuggestions,
   type IndustrySuggestion,
 } from "./industry-suggestions";
+import { analyzeBusinessLocation } from "./location-intelligence";
 import {
   buildRecommendedCombo,
   getBudgetFitAssessment,
@@ -124,26 +125,42 @@ function buildChannelPriorities(profileId: string): ChannelPriority[] {
   ].sort((a, b) => b.stars - a.stars);
 }
 
-function buildInsight(profile: IndustryProfile, businessGoal: string, matchType: IndustryMatchType) {
+function buildInsight(
+  profile: IndustryProfile,
+  businessGoal: string,
+  matchType: IndustryMatchType,
+  address?: string,
+  scale?: string,
+) {
   const sector = PROFILE_SHORT[profile.id] ?? profile.label;
   if (matchType === "unknown") {
     return "Gõ thêm từ khóa hoặc chọn gợi ý masothue để tư vấn sát ngành hơn.";
   }
+
+  let locationHint = "";
+  if (address && address.trim().length >= 8 && scale) {
+    const loc = analyzeBusinessLocation(address, scale, profile, businessGoal);
+    if (loc) {
+      locationHint = ` Khu vực ${loc.city ?? "local"} — cạnh tranh ${loc.areaType.includes("Trung tâm") ? "cao" : "vừa"}, target ${loc.catchmentRange}.`;
+    }
+  }
+
   if (businessGoal.includes("Tăng khách")) {
-    return `${sector} + mục tiêu tăng khách → ưu tiên kênh local (Maps) & quảng cáo có đo lường.`;
+    return `${sector} + mục tiêu tăng khách → ưu tiên kênh local (Maps) & quảng cáo có đo lường.${locationHint}`;
   }
   if (businessGoal.includes("thương hiệu")) {
-    return `${sector} + xây thương hiệu → ưu tiên Fanpage & Website showcase trước khi scale ads.`;
+    return `${sector} + xây thương hiệu → ưu tiên Fanpage & Website showcase trước khi scale ads.${locationHint}`;
   }
   if (businessGoal.includes("doanh thu")) {
-    return `${sector} + tăng doanh thu → kết hợp chuyển đổi (web/inbox) với content nuôi lead.`;
+    return `${sector} + tăng doanh thu → kết hợp chuyển đổi (web/inbox) với content nuôi lead.${locationHint}`;
   }
-  return profile.whyBullets[0] ?? `${sector} — chiến lược tối ưu theo ngân sách & tài sản hiện có.`;
+  return (profile.whyBullets[0] ?? `${sector} — chiến lược tối ưu theo ngân sách & tài sản hiện có.`) + locationHint;
 }
 
 export function analyzeIndustryInput(
   industryText: string,
-  form?: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets">,
+  form?: Pick<StrategyFormSnapshot, "businessGoal" | "scale" | "budgetRange" | "existingAssets"> &
+    Partial<Pick<StrategyFormSnapshot, "address">>,
 ): IndustryAnalysis {
   const trimmed = industryText.trim();
   const suggestion = trimmed ? findIndustrySuggestion(trimmed) : null;
@@ -168,7 +185,7 @@ export function analyzeIndustryInput(
   }
 
   const channels = buildChannelPriorities(profile.id);
-  const insight = buildInsight(profile, form?.businessGoal ?? "", matchType);
+  const insight = buildInsight(profile, form?.businessGoal ?? "", matchType, form?.address, form?.scale);
 
   return {
     input: trimmed,
