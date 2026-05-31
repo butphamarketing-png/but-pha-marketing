@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Globe,
   Heart,
+  Info,
   MapPin,
   Sparkles,
   TrendingUp,
@@ -19,7 +20,6 @@ import {
 import {
   BUSINESS_GOALS,
   CHANNEL_ASSET_IDS,
-  CHANNEL_OWNED_SETUP,
   EXISTING_ASSET_OPTIONS,
   PLATFORM_FOCUS_OPTIONS,
   formatVnd,
@@ -72,34 +72,46 @@ const CHANNEL_ICON: Record<(typeof CHANNEL_ASSET_IDS)[number], typeof Globe> = {
   maps: MapPin,
 };
 
-export function FormStepIndicator({ currentStep }: { currentStep: number }) {
+export function FormStepIndicator({
+  currentStep,
+  onStepClick,
+}: {
+  currentStep: number;
+  onStepClick?: (step: number) => void;
+}) {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between gap-1 sm:gap-2">
         {FORM_STEPS.map(({ step, label, desc }, i) => {
           const active = currentStep === step;
           const done = currentStep > step;
+          const clickable = done && onStepClick;
           return (
             <div key={step} className="flex min-w-0 flex-1 items-center gap-1 sm:gap-2">
-              <div className="flex min-w-0 flex-1 flex-col items-center text-center">
+              <button
+                type="button"
+                disabled={!clickable}
+                onClick={() => clickable && onStepClick(step)}
+                className={`flex min-w-0 flex-1 flex-col items-center text-center ${clickable ? "cursor-pointer" : "cursor-default"}`}
+              >
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black transition ${
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-black transition ${
                     active
-                      ? "bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-md"
+                      ? "bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg ring-4 ring-violet-200"
                       : done
-                        ? "bg-emerald-500 text-white"
+                        ? "bg-emerald-500 text-white hover:bg-emerald-600"
                         : "bg-violet-100 text-violet-400"
                   }`}
                 >
                   {done ? "✓" : step}
                 </span>
-                <p className={`mt-1.5 truncate text-[9px] font-black uppercase sm:text-[10px] ${active ? "text-violet-800" : "text-slate-400"}`}>
+                <p className={`mt-1.5 truncate text-[9px] font-black uppercase sm:text-[10px] ${active ? "text-violet-800" : done ? "text-emerald-700" : "text-slate-400"}`}>
                   {label}
                 </p>
                 <p className="hidden truncate text-[9px] text-slate-400 md:block">{desc}</p>
-              </div>
+              </button>
               {i < FORM_STEPS.length - 1 && (
-                <div className={`mb-5 hidden h-0.5 flex-1 sm:block ${done ? "bg-emerald-300" : "bg-violet-100"}`} />
+                <div className={`mb-5 hidden h-1 flex-1 rounded-full sm:block ${done ? "bg-emerald-300" : "bg-violet-100"}`} />
               )}
             </div>
           );
@@ -214,19 +226,15 @@ export function OwnedChannelCards({
   ownedIds: string[];
   onToggle: (id: string) => void;
 }) {
-  const ownedPriceLabel = (id: (typeof CHANNEL_ASSET_IDS)[number]) =>
-    formatVnd(CHANNEL_OWNED_SETUP[id].price);
-
   return (
     <div className="space-y-2">
       <p className="text-xs font-bold uppercase text-slate-500">Doanh nghiệp đã có gì?</p>
-      <p className="text-[11px] text-slate-500">
-        Chọn kênh <strong className="text-slate-700">đã có sẵn</strong> — chỉ tính phí cải tạo theo bảng giá (một lần), không xây mới.
+      <p className="rounded-lg border border-violet-100 bg-violet-50/50 px-3 py-2 text-[11px] leading-relaxed text-slate-600">
+        Chọn <strong className="text-violet-800">「Đã có」</strong> cho từng kênh bạn đang sở hữu. Hệ thống sẽ đề xuất <strong>cải tạo</strong> thay vì xây mới — giá hiển thị ở trang kết quả.
       </p>
       <div className="grid gap-3 sm:grid-cols-3">
         {CHANNEL_ASSET_IDS.map((id) => {
           const meta = EXISTING_ASSET_OPTIONS.find((a) => a.id === id)!;
-          const setup = CHANNEL_OWNED_SETUP[id];
           const Icon = CHANNEL_ICON[id];
           const owned = ownedIds.includes(id);
           return (
@@ -243,7 +251,7 @@ export function OwnedChannelCards({
               <Icon size={20} className={owned ? "text-emerald-700" : "text-slate-400"} />
               <p className="mt-2 text-xs font-black text-slate-800">{meta.label}</p>
               <p className={`mt-1 text-[10px] font-bold ${owned ? "text-emerald-700" : "text-slate-400"}`}>
-                {owned ? `✓ Đã có — ${setup.label} ${ownedPriceLabel(id)}` : "Chưa có — tính xây mới"}
+                {owned ? "✓ Đã có" : "Chưa có"}
               </p>
             </button>
           );
@@ -257,7 +265,7 @@ export function OwnedChannelCards({
           className="h-4 w-4 rounded border-violet-300 text-violet-600"
         />
         <span className="text-xs text-slate-700">
-          <strong>Đang chạy quảng cáo</strong> — bỏ phí quản lý ads, tập trung tối ưu nội dung
+          <strong>Đang chạy quảng cáo</strong> (Facebook / Google)
         </span>
       </label>
     </div>
@@ -335,9 +343,89 @@ export function FormNavButtons({
           disabled={submitting || !canNext}
           className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-60"
         >
-          {submitting ? "Đang xử lý..." : "Xem chiến lược"} <ChevronRight size={18} />
+          {submitting ? "Đang xử lý..." : "Xem kết quả"} <ChevronRight size={18} />
         </button>
       )}
+    </div>
+  );
+}
+
+export function StrategySubmitConfirmModal({
+  open,
+  onBack,
+  onContinue,
+  continuing,
+  summary,
+}: {
+  open: boolean;
+  onBack: () => void;
+  onContinue: () => void;
+  continuing?: boolean;
+  summary?: { company: string; industry: string; goal: string; budget: string; focus: string; assets: string[] };
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        aria-label="Đóng"
+        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
+        onClick={onBack}
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative w-full max-w-lg rounded-3xl border border-violet-100 bg-white p-6 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="strategy-confirm-title"
+      >
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg">
+          <Info size={28} />
+        </div>
+        <h2 id="strategy-confirm-title" className="mt-4 text-xl font-black leading-snug text-slate-900">
+          Xác nhận trước khi xem kết quả
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          Những gì bạn chọn sẽ ảnh hưởng đến kết quả phù hợp nhất nên hãy chắc chắn rằng bạn nhập chính xác thông tin?
+        </p>
+
+        {summary && (
+          <div className="mt-4 rounded-xl border border-violet-100 bg-violet-50/60 p-4">
+            <p className="text-[10px] font-black uppercase text-violet-600">Thông tin sẽ dùng để tính</p>
+            <ul className="mt-2 space-y-1.5 text-[11px] text-slate-700">
+              <li><strong>Công ty:</strong> {summary.company}</li>
+              <li><strong>Ngành:</strong> {summary.industry}</li>
+              <li><strong>Mục tiêu:</strong> {summary.goal}</li>
+              <li><strong>Ngân sách:</strong> {summary.budget}</li>
+              <li><strong>Ưu tiên:</strong> {summary.focus}</li>
+              {summary.assets.length > 0 && (
+                <li><strong>Đã có:</strong> {summary.assets.join(", ")}</li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-6 flex gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={continuing}
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-violet-200 py-3.5 text-sm font-black text-violet-700 transition hover:bg-violet-50 disabled:opacity-50"
+          >
+            <ArrowLeft size={16} /> Quay Lại
+          </button>
+          <button
+            type="button"
+            onClick={onContinue}
+            disabled={continuing}
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-3.5 text-sm font-black text-white shadow-lg disabled:opacity-60"
+          >
+            {continuing ? "Đang xử lý..." : "Tiếp tục"} <ArrowRight size={16} />
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -440,21 +528,68 @@ export function BudgetSimulator({
   return null;
 }
 
-export function FormProgressBar({ percent }: { percent: number }) {
+export function FormProgressBar({ percent, step }: { percent: number; step?: number }) {
+  const stepMeta = step ? FORM_STEPS.find((s) => s.step === step) : null;
   return (
-    <div className="mb-4">
-      <div className="mb-1 flex justify-between text-[10px] font-bold text-violet-600">
-        <span>Tiến độ form</span>
+    <div className="mb-4 rounded-xl border border-violet-100 bg-violet-50/50 px-4 py-3">
+      <div className="mb-2 flex justify-between text-[10px] font-bold text-violet-700">
+        <span>
+          {stepMeta ? `Bước ${step}/${TOTAL_FORM_STEPS} — ${stepMeta.label}` : "Tiến độ form"}
+        </span>
         <span>{percent}%</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-violet-100">
+      <div className="h-2.5 overflow-hidden rounded-full bg-violet-100">
         <motion.div
           className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500"
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.35 }}
         />
       </div>
+    </div>
+  );
+}
+
+export function FormLivePreview({
+  industry,
+  businessGoal,
+  budgetRange,
+  tierLabel,
+  monthTotal,
+  itemCount,
+  existingAssets,
+}: {
+  industry: string;
+  businessGoal: string;
+  budgetRange: string;
+  tierLabel: string;
+  monthTotal: number;
+  itemCount: number;
+  existingAssets: string[];
+}) {
+  if (industry.trim().length < 2) return null;
+
+  const owned = EXISTING_ASSET_OPTIONS.filter((a) => existingAssets.includes(a.id));
+
+  return (
+    <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50/50 p-4">
+      <p className="flex items-center gap-2 text-[10px] font-black uppercase text-violet-700">
+        <Sparkles size={14} /> Xem trước đề xuất (ước tính)
+      </p>
+      <p className="mt-2 text-sm font-black text-slate-800">
+        Gói {tierLabel} · ~{formatVnd(monthTotal)}/tháng
+      </p>
+      <p className="mt-1 text-[11px] text-slate-600">
+        {businessGoal} · {budgetRange} · {itemCount} hạng mục dự kiến
+      </p>
+      {owned.length > 0 && (
+        <p className="mt-2 text-[10px] text-emerald-700">
+          ✓ Đã có: {owned.map((a) => a.label).join(", ")} — combo sẽ tính cải tạo thay vì xây mới
+        </p>
+      )}
+      <p className="mt-2 text-[10px] italic text-slate-500">
+        Báo giá chính xác hiển thị sau khi bấm &quot;Xem kết quả&quot;.
+      </p>
     </div>
   );
 }

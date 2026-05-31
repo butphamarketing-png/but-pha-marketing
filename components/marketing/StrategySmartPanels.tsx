@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Award, Building2, ExternalLink, Lightbulb, Swords, Zap } from "lucide-react";
-import { formatVnd, type IndustryProfile, type StrategyFormSnapshot } from "@/lib/marketing-strategy-profiles";
+import { Award, Building2, ExternalLink, Globe, Layers, Lightbulb, MapPin, Facebook, Swords, Zap } from "lucide-react";
+import {
+  buildOwnedAssetsAdvisory,
+  formatVnd,
+  type IndustryProfile,
+  type StrategyFormSnapshot,
+} from "@/lib/marketing-strategy-profiles";
 import {
   buildCompetitiveBenchmark,
   buildExecutiveSummary,
@@ -175,6 +180,80 @@ export function StrategyWhatIfPanel({
           </button>
         ))}
       </div>
+    </div>
+  );
+}
+
+const ASSET_ICON: Record<string, typeof Globe> = {
+  website: Globe,
+  fanpage: Facebook,
+  maps: MapPin,
+  ads: Zap,
+};
+
+export function StrategyOwnedAssetsPanel({
+  existingAssets,
+}: {
+  existingAssets: string[];
+}) {
+  const items = buildOwnedAssetsAdvisory(existingAssets);
+  const ownedCount = items.filter((i) => i.owned && i.id !== "ads").length;
+
+  return (
+    <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5">
+      <p className="flex items-center gap-2 text-sm font-black text-emerald-900">
+        <Layers size={16} /> Tư vấn tài sản số & cải tạo
+      </p>
+      <p className="mt-1 text-[11px] text-emerald-800/80">
+        {ownedCount > 0
+          ? `Bạn đã có ${ownedCount} kênh — báo giá cải tạo một lần + hướng bổ sung kênh còn thiếu.`
+          : "Chưa chọn kênh nào — combo đề xuất xây mới đầy đủ theo ngành & ngân sách."}
+      </p>
+      <ul className="mt-4 space-y-3">
+        {items.map((item) => {
+          const Icon = ASSET_ICON[item.id] ?? Layers;
+          return (
+            <li
+              key={item.id}
+              className={`rounded-xl border p-3 ${item.owned ? "border-emerald-200 bg-white" : "border-slate-200 bg-slate-50/80"}`}
+            >
+              <div className="flex items-start gap-3">
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.owned ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-500"}`}
+                >
+                  <Icon size={16} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-xs font-black text-slate-800">{item.label}</p>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[9px] font-black uppercase ${item.owned ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-600"}`}
+                    >
+                      {item.owned ? "Đã có" : "Chưa có"}
+                    </span>
+                    {item.setupPrice != null && (
+                      <span className="text-xs font-black text-violet-700">{formatVnd(item.setupPrice)}</span>
+                    )}
+                  </div>
+                  {item.setupLabel && (
+                    <p className="mt-0.5 text-[10px] font-bold text-emerald-700">{item.setupLabel}</p>
+                  )}
+                  <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{item.advice}</p>
+                  {item.pricingPath && item.id !== "ads" && (
+                    <Link
+                      href={item.pricingPath}
+                      target="_blank"
+                      className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-black uppercase text-violet-600 hover:text-violet-800"
+                    >
+                      Xem bảng giá <ExternalLink size={10} />
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

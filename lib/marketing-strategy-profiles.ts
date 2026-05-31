@@ -202,6 +202,16 @@ export const PLATFORM_FOCUS_OPTIONS: {
   },
 ];
 
+export type StrategyChannelId = "maps" | "website" | "fanpage";
+
+/** Thứ tự hiển thị kênh trên trang kết quả — kênh ưu tiên lên trước. */
+export function orderChannelsByPlatformFocus(focus: PlatformFocus): StrategyChannelId[] {
+  const defaultOrder: StrategyChannelId[] = ["maps", "website", "fanpage"];
+  if (focus === "strategy") return defaultOrder;
+  const priority: StrategyChannelId = focus === "maps" ? "maps" : focus === "fanpage" ? "fanpage" : "website";
+  return [priority, ...defaultOrder.filter((c) => c !== priority)];
+}
+
 export const CHANNEL_ASSET_IDS = ["website", "fanpage", "maps"] as const;
 
 const PROFILES: IndustryProfile[] = [
@@ -1203,20 +1213,80 @@ export function buildWhyBullets(profile: IndustryProfile, businessGoal: string, 
     bullets.unshift("Mục tiêu giữ chân → content đều, CSKH inbox và remarketing quan trọng hơn kéo khách lạ.");
   }
   if (existingAssets.length > 0) {
-    const ownedNotes = (["website", "fanpage", "maps"] as const)
+    const channelLabels = (["website", "fanpage", "maps"] as const)
       .filter((ch) => existingAssets.includes(ch))
-      .map((ch) => {
-        const s = CHANNEL_OWNED_SETUP[ch];
-        return `${s.label} ${formatVnd(s.price)}`;
-      });
-    if (ownedNotes.length) {
-      bullets.push(`Đã có kênh → cải tạo theo bảng giá: ${ownedNotes.join(" · ")} — tập trung phần còn thiếu.`);
+      .map((ch) => EXISTING_ASSET_OPTIONS.find((a) => a.id === ch)?.label ?? ch);
+    if (channelLabels.length) {
+      bullets.push(`Đã có ${channelLabels.join(", ")} — xem mục tư vấn tài sản & báo giá cải tạo phía dưới.`);
     }
     if (existingAssets.includes("ads")) {
-      bullets.push("Đang chạy ads → bỏ phí quản lý quảng cáo, ưu tiên tối ưu nội dung.");
+      bullets.push("Đang chạy ads → combo ưu tiên tối ưu nội dung, không tính phí quản lý quảng cáo.");
     }
   }
   return bullets.slice(0, 4);
+}
+
+export type OwnedAssetAdvisoryItem = {
+  id: string;
+  label: string;
+  owned: boolean;
+  setupLabel?: string;
+  setupPrice?: number;
+  pricingPath?: string;
+  advice: string;
+};
+
+export function buildOwnedAssetsAdvisory(existingAssets: string[]): OwnedAssetAdvisoryItem[] {
+  const has = (id: string) => existingAssets.includes(id);
+
+  const items: OwnedAssetAdvisoryItem[] = (["website", "fanpage", "maps"] as const).map((channel) => {
+    const meta = EXISTING_ASSET_OPTIONS.find((a) => a.id === channel)!;
+    const setup = CHANNEL_OWNED_SETUP[channel];
+    const owned = has(channel);
+
+    if (owned) {
+      const careHint =
+        channel === "website"
+          ? " Kèm chăm sóc content/SEO hàng tháng trong combo."
+          : channel === "fanpage"
+            ? " Kèm gói chăm sóc bài viết theo tháng."
+            : " Có thể thêm quảng cáo local nếu cần kéo khách.";
+      return {
+        id: channel,
+        label: meta.label,
+        owned: true,
+        setupLabel: setup.label,
+        setupPrice: setup.price,
+        pricingPath: setup.pricingPath,
+        advice: `${setup.label}: ${formatVnd(setup.price)} (một lần, theo ${setup.pricingPath}).${careHint}`,
+      };
+    }
+
+    const buildHint =
+      channel === "website"
+        ? "Combo đề xuất xây website mới + hosting — chi tiết ở bảng giá Website."
+        : channel === "fanpage"
+          ? "Combo đề xuất setup Fanpage + chăm sóc content."
+          : "Combo đề xuất xây mới hoặc tối ưu Google Business Profile.";
+    return {
+      id: channel,
+      label: meta.label,
+      owned: false,
+      pricingPath: setup.pricingPath,
+      advice: buildHint,
+    };
+  });
+
+  if (has("ads")) {
+    items.push({
+      id: "ads",
+      label: "Quảng cáo đang chạy",
+      owned: true,
+      advice: "Bỏ phí quản lý ads trong combo — tập trung tối ưu creative, landing và inbox chuyển đổi.",
+    });
+  }
+
+  return items;
 }
 
 export function calculatePlanTotals(itemIds: string[]) {
