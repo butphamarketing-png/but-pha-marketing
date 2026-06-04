@@ -8,7 +8,7 @@ import {
   Bell, Globe, Search, Settings, LogOut,
   Trash2, Plus,
   BarChart2, Code, Copy,
-  Calendar, Lock, Sparkles, Star, type LucideIcon
+  Calendar, Lock, Sparkles, Star, ArrowRight, type LucideIcon
 } from "lucide-react";
 import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
@@ -1024,16 +1024,43 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm rounded-2xl border border-white/10 bg-card p-8">
-          <div className="mb-6 flex items-center gap-3">
-            <img src="/logo.png" alt="Logo" className="h-10 w-10 rounded-full" />
-            <div><p className="font-bold text-white">Bứt Phá Marketing</p><p className="text-xs text-gray-400">Trang quản trị hệ thống</p></div>
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 px-4">
+        <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl">
+          <div className="mb-8 flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-full bg-violet-500/30 blur-xl"></div>
+              <img src="/logo.png" alt="Logo" className="relative h-14 w-14 rounded-2xl object-cover shadow-lg" />
+            </div>
+            <div>
+              <p className="text-xl font-black text-white">Bứt Phá Marketing</p>
+              <p className="text-sm text-violet-200">Trang quản trị hệ thống</p>
+            </div>
           </div>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input type="password" value={password} onChange={e => { setPassword(e.target.value); setError(""); }} placeholder="Mật khẩu admin" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-primary" />
-            {error && <p className="text-xs text-red-400">{error}</p>}
-            <button type="submit" className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white hover:bg-primary/90">Đăng Nhập</button>
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wide text-violet-200">Mật khẩu</label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-300">
+                  <Lock size={18} />
+                </div>
+                <input 
+                  type="password" 
+                  value={password} 
+                  onChange={e => { setPassword(e.target.value); setError(""); }} 
+                  placeholder="Nhập mật khẩu admin" 
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 pl-12 text-sm text-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/30 transition-all placeholder:text-violet-200/40" 
+                />
+              </div>
+            </div>
+            {error && <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300"><p>{error}</p></div>}
+            <button type="submit" className="group w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-violet-600/20 transition-all hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-600/40 hover:scale-[1.01] active:scale-[0.99]">
+              <span className="flex items-center justify-center gap-2">
+                Đăng Nhập 
+                <div className="transition-transform group-hover:translate-x-1">
+                  <ArrowRight size={16} />
+                </div>
+              </span>
+            </button>
           </form>
         </motion.div>
       </div>
@@ -1041,26 +1068,43 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="hidden w-64 flex-col border-r border-white/10 bg-card md:flex">
-        <div className="border-b border-white/10 p-5 font-bold text-white">Admin Panel</div>
-        <nav className="flex-1 space-y-1 p-3">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-950 to-indigo-950 text-foreground">
+      <aside className="hidden w-72 flex-col border-r border-white/10 bg-white/5 backdrop-blur-xl md:flex">
+        <div className="border-b border-white/10 p-6">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute -inset-2 rounded-full bg-violet-500/20 blur-md"></div>
+              <img src="/logo.png" alt="Logo" className="relative h-10 w-10 rounded-xl object-cover" />
+            </div>
+            <div>
+              <p className="font-black text-white">Admin Panel</p>
+              <p className="text-xs text-violet-200">Bứt Phá Marketing</p>
+            </div>
+          </div>
+        </div>
+        <nav className="flex-1 space-y-2 p-4">
           {NAV.map(n => (
             <button
               key={n.id}
               onClick={() => n.id === "news" ? router.push("/admin/news") : n.id === "portals" ? router.push("/admin/portals") : setActiveTab(n.id)}
-              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                activeTab === n.id ? "bg-primary text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"
+              className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
+                activeTab === n.id 
+                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/20" 
+                  : "text-gray-300 hover:bg-white/10 hover:text-white"
               }`}
               style={n.color && activeTab !== n.id ? { color: n.color } : {}}
             >
-              <n.icon size={18} /> {n.label}
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
+                <n.icon size={18} />
+              </div>
+              {n.label}
             </button>
           ))}
         </nav>
         <div className="p-4 border-t border-white/10">
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 rounded-xl bg-red-500/10 py-2.5 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white transition-all">
-            <LogOut size={16} /> Đăng xuất
+          <button onClick={handleLogout} className="group w-full flex items-center justify-center gap-2 rounded-2xl bg-red-500/10 px-4 py-3 text-sm font-bold text-red-300 hover:bg-red-500 hover:text-white transition-all">
+            <LogOut size={18} className="group-hover:rotate-12 transition-transform" /> 
+            Đăng xuất
           </button>
         </div>
       </aside>
