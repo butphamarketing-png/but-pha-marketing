@@ -86,6 +86,17 @@ export interface Service {
   feedbacks: ServiceFeedback[];
 }
 
+export interface ClientPortal {
+  id: string;
+  username: string;
+  password: string;
+  clientName: string;
+  phone?: string;
+  platform: string;
+  daysRemaining: number;
+  projects?: any[];
+}
+
 export interface ClientReview {
   id: string;
   clientId: string;
@@ -428,6 +439,22 @@ export const db = {
     delete: async (id: string): Promise<ApiResult<void>> => {
       const result = await apiFetch<JsonObject>(`/leads/${id}`, { method: "DELETE" });
       if (!result.error) invalidateCache("client_reviews");
+      return { data: null, error: result.error };
+    },
+  },
+  clientPortals: {
+    getAll: (): Promise<ApiResult<ClientPortal[]>> => cachedFetch("client_portals", () => apiFetch<ClientPortal[]>("/client-portals")),
+    add: async (portal: Omit<ClientPortal, "id">): Promise<ApiResult<ClientPortal>> => {
+      const result = await apiFetch<ClientPortal>("/client-portals", {
+        method: "POST",
+        body: JSON.stringify(portal),
+      });
+      if (!result.error) invalidateCache("client_portals");
+      return result;
+    },
+    delete: async (id: string): Promise<ApiResult<void>> => {
+      const result = await apiFetch<JsonObject>(`/client-portals/${id}`, { method: "DELETE" });
+      if (!result.error) invalidateCache("client_portals");
       return { data: null, error: result.error };
     },
   },
