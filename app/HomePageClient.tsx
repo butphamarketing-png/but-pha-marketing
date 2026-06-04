@@ -414,7 +414,9 @@ export default function HomePageClient() {
       <ParticleBackground />
       
       <div className="relative z-10 flex flex-col">
-        <header className="sticky top-0 z-50 w-full border-b border-indigo-100/80 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)] transition-all duration-500">
+        <header 
+          className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'bg-transparent border-b border-transparent'}`}
+        >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
             <Link href="/" className="group flex items-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
               <div className="relative">
@@ -422,8 +424,8 @@ export default function HomePageClient() {
                 <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-indigo-200 object-cover shadow-2xl" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight text-indigo-950 md:text-2xl leading-none">{brandName}</span>
-                <span className="text-xs font-medium text-violet-600 mt-1">Bứt Phá để dẫn đầu</span>
+                <span className={`text-xl font-bold tracking-tight md:text-2xl leading-none ${isScrolled ? 'text-indigo-950' : 'text-white'}`}>{brandName}</span>
+                <span className={`text-xs font-medium mt-1 ${isScrolled ? 'text-violet-600' : 'text-violet-300'}`}>Bứt Phá để dẫn đầu</span>
               </div>
             </Link>
 
@@ -432,10 +434,10 @@ export default function HomePageClient() {
                 <Link 
                   key={item.label} 
                   href={item.href} 
-                  className="relative text-sm font-semibold text-slate-600 transition-all hover:text-indigo-900 group"
+                  className={`relative text-sm font-semibold transition-all group ${isScrolled ? 'text-slate-600 hover:text-indigo-900' : 'text-white hover:text-violet-300'}`}
                 >
                   {item.label}
-                  <span className="absolute -bottom-2 left-0 h-px w-0 bg-violet-600 transition-all group-hover:w-full" />
+                  <span className={`absolute -bottom-2 left-0 h-px w-0 transition-all group-hover:w-full ${isScrolled ? 'bg-violet-600' : 'bg-violet-400'}`} />
                 </Link>
               ))}
             </nav>
@@ -443,7 +445,7 @@ export default function HomePageClient() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
-                className="brand-btn-primary hidden px-8 py-3.5 sm:inline-flex"
+                className={`hidden px-8 py-3.5 sm:inline-flex rounded-full font-bold transition-all ${isScrolled ? 'brand-btn-primary' : 'bg-white text-violet-700 hover:bg-violet-50 shadow-lg hover:shadow-xl'}`}
               >
                 Tư vấn ngay
               </button>
