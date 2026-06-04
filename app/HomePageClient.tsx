@@ -69,15 +69,24 @@ export default function HomePageClient() {
   const [progress, setProgress] = useState(0);
   const [showConsult, setShowConsult] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
-  const [blogs, setBlogs] = useState<NewsItem[]>([]);
-  const [reviews, setReviews] = useState<ClientReview[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
-  const [contactForm, setContactForm] = useState<ContactFormState>(initialContactForm);
+  const [blogs, setBlogs] = useState&lt;NewsItem[]&gt;([]);
+  const [reviews, setReviews] = useState&lt;ClientReview[]&gt;([]);
+  const [services, setServices] = useState&lt;Service[]&gt;([]);
+  const [contactForm, setContactForm] = useState&lt;ContactFormState&gt;(initialContactForm);
   const [submittingContact, setSubmittingContact] = useState(false);
-  const [contactState, setContactState] = useState<{ type: "idle" | "success" | "error"; message: string }>({
+  const [contactState, setContactState] = useState&lt;{ type: "idle" | "success" | "error"; message: string }&gt;({
     type: "idle",
     message: "",
   });
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() =&gt; {
+    const handleScroll = () =&gt; {
+      setIsScrolled(window.scrollY &gt; 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () =&gt; window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,8 +163,7 @@ export default function HomePageClient() {
     const slides: any[] = [];
     
     const imagesToUse = [
-      "/2026-01-12.jpg",
-      "/slideshow-hero.png"
+      "/slideshow.png"
     ];
 
     imagesToUse.forEach((img, index) => {
