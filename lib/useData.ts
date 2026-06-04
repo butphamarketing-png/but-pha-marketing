@@ -94,6 +94,9 @@ export interface ClientPortal {
   phone?: string;
   platform: string;
   daysRemaining: number;
+  postsCount?: number;
+  progressPercent?: number;
+  weeklyReports?: any[];
   projects?: any[];
 }
 
