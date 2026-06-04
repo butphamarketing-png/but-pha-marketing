@@ -110,39 +110,39 @@ export default function GoogleMapsPage() {
                 features: ["Tối ưu SEO Maps", "Viết mô tả chuẩn", "Tối ưu hiển thị tìm kiếm"] 
               }
             ].map((pkg, i) => (
-              <div key={i} className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${pkg.bestSeller ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
+              <div key={i} className={`platform-pricing-card ${pkg.bestSeller ? "platform-pricing-card--featured border-orange-300 ring-orange-200/70" : ""}`}>
                 {pkg.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-orange-500/40">
-                    <Sparkles size={12} /> BEST CHOICE
+                  <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-orange-600 px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg shadow-orange-600/25">
+                    <Sparkles size={12} /> Lựa chọn tốt
                   </div>
                 )}
-                <div className="space-y-6 flex-1 flex flex-col">
+                <div className="flex flex-1 flex-col space-y-6">
                   <div className="flex justify-center">
-                    <div className={`h-16 w-16 rounded-2xl flex items-center justify-center ${pkg.bestSeller ? 'bg-orange-600 text-white' : 'bg-white/5 text-orange-400'}`}>
+                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${pkg.bestSeller ? "bg-orange-600 text-white shadow-lg shadow-orange-600/20" : "bg-orange-50 text-orange-600"}`}>
                       <pkg.icon size={32} />
                     </div>
                   </div>
-                  <div className="text-center space-y-2">
-                    <h3 className="text-xl font-black text-white">{pkg.title}</h3>
-                    <p className="text-3xl font-black text-orange-400">{pkg.price}</p>
+                  <div className="space-y-2 text-center">
+                    <h3 className="text-xl font-bold text-indigo-950">{pkg.title}</h3>
+                    <p className="text-3xl font-bold text-orange-600">{pkg.price}</p>
                   </div>
-                  <ul className="space-y-4 flex-1">
+                  <ul className="flex-1 space-y-4">
                     {pkg.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
-                        <Check size={16} className="text-orange-500 flex-shrink-0" /> {f}
+                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                        <Check size={16} className="flex-shrink-0 text-orange-600" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-3 pt-8">
                     <button 
                       onClick={() => handleOpenConsult(pkg.title, pkg.price, "Gói Google Maps")}
-                      className="flex-1 bg-orange-600 hover:bg-orange-500 text-white py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-600/20"
+                      className="flex-1 rounded-2xl bg-orange-600 py-3.5 text-xs font-semibold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-500"
                     >
                       Đăng ký ngay
                     </button>
                     <button 
                       onClick={() => handleOpenConsult(pkg.title, pkg.price, "Gói Google Maps")}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
                     >
                       <MessageSquare size={18} />
                     </button>
@@ -196,43 +196,43 @@ export default function GoogleMapsPage() {
                 fee: "/ tháng (chưa bao gồm ngân sách quảng cáo)"
               }
             ].map((ads, i) => (
-              <div key={i} className={`relative group flex flex-col rounded-[3rem] border p-10 transition-all hover:bg-white/[0.05] ${ads.bestSeller ? 'border-orange-500 bg-orange-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
+              <div key={i} className={`platform-pricing-card p-10 ${ads.bestSeller ? "platform-pricing-card--featured border-orange-300 ring-orange-200/70" : ""}`}>
                 {ads.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-orange-500/40">
-                    <Sparkles size={12} /> BEST SELLER
+                  <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-orange-600 px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg shadow-orange-600/25">
+                    <Sparkles size={12} /> Bán chạy
                   </div>
                 )}
-                <div className="flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="h-16 w-16 rounded-2xl bg-orange-600 flex items-center justify-center text-white shadow-xl shadow-orange-500/20">
+                <div className="flex flex-1 flex-col">
+                  <div className="mb-8 flex items-start justify-between">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-600 text-white shadow-lg shadow-orange-600/20">
                       <ads.icon size={32} />
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-black text-orange-400">{ads.price}</p>
-                      <p className="text-[10px] text-gray-500 font-bold">{ads.fee}</p>
+                      <p className="text-2xl font-bold text-orange-600">{ads.price}</p>
+                      <p className="text-[10px] font-medium text-slate-500">{ads.fee}</p>
                     </div>
                   </div>
                   <div className="mb-6">
-                    <h3 className="text-2xl font-black text-white">{ads.title}</h3>
-                    <p className="text-sm text-orange-400 font-bold">{ads.note}</p>
+                    <h3 className="text-2xl font-bold text-indigo-950">{ads.title}</h3>
+                    <p className="text-sm font-medium text-orange-600">{ads.note}</p>
                   </div>
-                  <ul className="space-y-4 mb-10 flex-1">
+                  <ul className="mb-10 flex-1 space-y-4">
                     {ads.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-gray-400">
-                        <Check size={16} className="text-orange-500" /> {f}
+                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                        <Check size={16} className="text-orange-600" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-4 pt-4">
                     <button 
                       onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                      className="flex-1 bg-orange-600 hover:bg-orange-500 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-600/20"
+                      className="flex-1 rounded-2xl bg-orange-600 py-4 text-xs font-semibold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-500"
                     >
                       Đăng ký quảng cáo
                     </button>
                     <button 
                       onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
                     >
                       <MessageSquare size={18} />
                     </button>
@@ -257,27 +257,27 @@ export default function GoogleMapsPage() {
               { icon: Building2, title: "Hiển thị chuyên nghiệp hơn đối thủ", desc: "Thông tin đầy đủ, hình ảnh đẹp, tạo sự tin tưởng" },
               { icon: Star, title: "Dễ dàng được khách tin tưởng", desc: "Nhiều đánh giá tốt giúp nâng cao uy tín thương hiệu" }
             ].map((item, idx) => (
-              <div key={idx} className="p-8 rounded-[2.5rem] border border-white/10 bg-white/[0.03] space-y-4 hover:bg-white/[0.06] transition-all group">
-                <div className="h-12 w-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+              <div key={idx} className="brand-card group space-y-4 p-8 transition-all hover:-translate-y-0.5">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 transition-transform group-hover:scale-110">
                   <item.icon size={24} />
                 </div>
-                <h3 className="text-lg font-black text-white leading-tight">{item.title}</h3>
-                <p className="text-sm text-gray-500">{item.desc}</p>
+                <h3 className="text-lg font-bold leading-tight text-indigo-950">{item.title}</h3>
+                <p className="text-sm text-slate-600">{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden text-center space-y-8">
-          <div className="absolute top-0 left-0 -z-10 h-full w-full opacity-10 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full blur-[120px]" style={{ backgroundColor: config.color }} />
+        <section className="platform-panel relative space-y-8 overflow-hidden text-center">
+          <div className="pointer-events-none absolute inset-0 -z-10 opacity-30">
+            <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]" style={{ backgroundColor: config.color }} />
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-white">Bạn đã xuất hiện trên Google Maps chưa?</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">Kiểm tra ngay vị trí của bạn và đừng để mất khách hàng tiềm năng!</p>
+          <h2 className="text-3xl font-bold text-indigo-950 md:text-5xl">Bạn đã xuất hiện trên Google Maps chưa?</h2>
+          <p className="mx-auto max-w-2xl text-slate-600">Kiểm tra ngay vị trí của bạn và đừng để mất khách hàng tiềm năng!</p>
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="px-12 py-5 rounded-2xl bg-orange-600 text-white text-sm font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-orange-600/30"
+            className="rounded-2xl bg-orange-600 px-12 py-5 text-sm font-semibold text-white shadow-2xl shadow-orange-600/25 transition-all hover:scale-[1.02] active:scale-[0.99]"
           >
             Kiểm tra ngay
           </button>

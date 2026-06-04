@@ -125,39 +125,39 @@ export default function FacebookPage() {
                 features: ["Khởi tạo Fanpage chuyên nghiệp", "Thiết kế logo, ảnh bìa", "Tối ưu thông tin Fanpage", "SEO Fanpage chuẩn", "Chat tự động cơ bản", "Chiến lược nội dung ban đầu"] 
               }
             ].map((pkg, i) => (
-              <div key={i} className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${pkg.bestSeller ? 'border-blue-500 bg-blue-500/5' : 'border-white/10 bg-white/[0.03]'}`}>
+              <div key={i} className={`platform-pricing-card ${pkg.bestSeller ? "platform-pricing-card--featured border-blue-300 ring-blue-200/70" : ""}`}>
                 {pkg.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-xl shadow-blue-500/40">
-                    <Sparkles size={12} /> BEST SELLER
+                  <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg shadow-blue-600/25">
+                    <Sparkles size={12} /> Bán chạy
                   </div>
                 )}
-                <div className="space-y-6 flex-1 flex flex-col">
+                <div className="flex flex-1 flex-col space-y-6">
                   <div className="flex justify-center">
-                    <div className={`h-16 w-16 rounded-2xl flex items-center justify-center ${pkg.bestSeller ? 'bg-blue-500 text-white' : 'bg-white/5 text-blue-400'}`}>
+                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${pkg.bestSeller ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" : "bg-blue-50 text-blue-600"}`}>
                       <pkg.icon size={32} />
                     </div>
                   </div>
-                  <div className="text-center space-y-2">
-                    <h3 className="text-xl font-black text-white">{pkg.title}</h3>
-                    <p className="text-3xl font-black text-blue-400">{pkg.price}</p>
+                  <div className="space-y-2 text-center">
+                    <h3 className="text-xl font-bold text-indigo-950">{pkg.title}</h3>
+                    <p className="text-3xl font-bold text-blue-600">{pkg.price}</p>
                   </div>
-                  <ul className="space-y-4 flex-1">
+                  <ul className="flex-1 space-y-4">
                     {pkg.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
-                        <Check size={16} className="text-blue-500 flex-shrink-0" /> {f}
+                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                        <Check size={16} className="flex-shrink-0 text-blue-600" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-3 pt-8">
                     <button 
                       onClick={() => handleOpenConsult(pkg.title, pkg.price, "Xây dựng Fanpage")}
-                      className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20"
+                      className="flex-1 rounded-2xl bg-blue-600 py-3.5 text-xs font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500"
                     >
                       Đăng ký ngay
                     </button>
                     <button 
                       onClick={() => handleOpenConsult(pkg.title, pkg.price, "Xây dựng Fanpage")}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
                     >
                       <MessageSquare size={18} />
                     </button>
@@ -181,35 +181,35 @@ export default function FacebookPage() {
             <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">(Theo số lượng bài viết)</p>
           </div>
 
-          <div className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-6 md:p-12 backdrop-blur-xl relative overflow-hidden group">
+          <div className="platform-panel group">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div className="space-y-8">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
-                  <div className="text-center p-6 rounded-[2rem] sm:rounded-[2.5rem] bg-blue-500/10 border border-blue-500/20 w-full sm:w-48">
-                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Số bài viết / tháng</p>
+                <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6">
+                  <div className="platform-stat-box platform-stat-box--accent w-full border-blue-200 sm:w-48">
+                    <p className="mb-2 text-xs font-medium text-slate-500">Số bài viết / tháng</p>
                     <div className="flex items-baseline justify-center gap-1">
-                      <span className="text-4xl sm:text-5xl font-black text-blue-400">{postsPerMonth}</span>
-                      <span className="text-xs font-bold text-gray-500">bài</span>
+                      <span className="text-4xl font-bold text-blue-600 sm:text-5xl">{postsPerMonth}</span>
+                      <span className="text-xs font-medium text-slate-500">bài</span>
                     </div>
                   </div>
-                  <div className="text-center p-6 rounded-[2rem] sm:rounded-[2.5rem] bg-white/5 border border-white/10 w-full sm:flex-1">
-                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Dự toán ngân sách</p>
-                    <p className="text-2xl sm:text-3xl font-black text-white break-words">{new Intl.NumberFormat("vi-VN").format(carePrice)}đ</p>
+                  <div className="platform-stat-box w-full flex-1 sm:flex-1">
+                    <p className="mb-2 text-xs font-medium text-slate-500">Dự toán ngân sách</p>
+                    <p className="break-words text-2xl font-bold text-indigo-950 sm:text-3xl">{new Intl.NumberFormat("vi-VN").format(carePrice)}đ</p>
                   </div>
                 </div>
-                <p className="text-gray-400 leading-relaxed italic border-l-4 border-blue-500 pl-6 text-sm">
+                <p className="border-l-4 border-blue-500 pl-6 text-sm italic leading-relaxed text-slate-600">
                   "Nội dung chất lượng – Đăng bài đều đặn – Tăng tương tác – Tăng khách hàng. Phù hợp cho doanh nghiệp cần duy trì sự hiện diện chuyên nghiệp mỗi ngày."
                 </p>
               </div>
 
               <div className="space-y-12">
                 <div className="relative h-12 flex items-center px-2">
-                  <div className="absolute -top-8 left-0 right-0 flex justify-between text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500 px-1">
+                  <div className="absolute -top-8 left-0 right-0 flex justify-between px-1 text-[9px] font-medium text-slate-500 sm:text-[10px]">
                     <span>10 bài</span>
                     <span className="absolute left-1/2 -translate-x-1/2">35 bài</span>
                     <span>60 bài</span>
                   </div>
-                  <div className="absolute h-3 w-full rounded-full bg-white/5" />
+                  <div className="absolute h-3 w-full rounded-full bg-indigo-100" />
                   <div className="absolute h-3 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.6)]" style={{ width: `${((postsPerMonth - 10) / 50) * 100}%` }} />
                   <input
                     type="range" min="10" max="60" value={postsPerMonth} onChange={(e) => setPostsPerMonth(parseInt(e.target.value))}
@@ -219,13 +219,13 @@ export default function FacebookPage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => handleOpenConsult(`Gói chăm sóc ${postsPerMonth} bài`, `${new Intl.NumberFormat("vi-VN").format(carePrice)}đ`, "Chăm sóc Fanpage")}
-                    className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20"
+                    className="flex-1 rounded-2xl bg-blue-600 py-4 text-[10px] font-semibold text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-500 sm:text-xs"
                   >
                     Đăng ký chăm sóc
                   </button>
                   <button
                     onClick={() => handleOpenConsult(`Tư vấn gói chăm sóc`, `Theo nhu cầu`, "Chăm sóc Fanpage")}
-                    className="flex-1 border border-white/10 hover:bg-white/5 text-white py-4 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all"
+                    className="brand-btn-secondary flex-1 py-4 text-[10px] sm:text-xs"
                   >
                     Tư vấn gói phù hợp
                   </button>
@@ -264,35 +264,35 @@ export default function FacebookPage() {
                 note: "( Chưa bao gồm VAT Facebook )"
               }
             ].map((ads, i) => (
-              <div key={i} className="group flex flex-col rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 hover:bg-white/[0.05] transition-all">
-                <div className="flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="h-16 w-16 rounded-2xl bg-blue-500 flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
+              <div key={i} className="platform-pricing-card p-10">
+                <div className="flex flex-1 flex-col">
+                  <div className="mb-8 flex items-start justify-between">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
                       <ads.icon size={32} />
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-black text-blue-400">{ads.price}</p>
-                      <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">{ads.note}</p>
+                      <p className="text-2xl font-bold text-blue-600">{ads.price}</p>
+                      <p className="text-[10px] font-medium text-slate-500">{ads.note}</p>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-6">{ads.title}</h3>
-                  <ul className="space-y-4 mb-10 flex-1">
+                  <h3 className="mb-6 text-2xl font-bold text-indigo-950">{ads.title}</h3>
+                  <ul className="mb-10 flex-1 space-y-4">
                     {ads.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-gray-400">
-                        <Check size={16} className="text-blue-500" /> {f}
+                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                        <Check size={16} className="text-blue-600" /> {f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex gap-4 pt-4">
                     <button 
                       onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Fanpage")}
-                      className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20"
+                      className="flex-1 rounded-2xl bg-blue-600 py-4 text-xs font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500"
                     >
                       Đăng ký quảng cáo
                     </button>
                     <button 
                       onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Fanpage")}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
                     >
                       <MessageSquare size={18} />
                     </button>

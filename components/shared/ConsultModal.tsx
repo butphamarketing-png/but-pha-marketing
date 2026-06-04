@@ -72,19 +72,19 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm overflow-y-auto">
+      <div className="brand-modal-backdrop">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="relative w-full max-w-lg my-auto overflow-hidden rounded-2xl border border-white/10 bg-card p-6 shadow-2xl"
-          style={{ boxShadow: `0 10px 40px -10px ${platformColor}40` }}
+          className="brand-modal-surface"
+          style={{ boxShadow: `0 20px 50px -12px ${platformColor}35` }}
         >
-          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-white z-10">
+          <button onClick={onClose} className="absolute right-4 top-4 z-10 rounded-full p-1 text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-900">
             <X size={20} />
           </button>
           
-          <h2 className="mb-6 text-center text-2xl font-bold text-white">Đăng ký tư vấn trực tiếp</h2>
+          <h2 className="mb-6 text-center text-2xl font-bold text-indigo-950">Đăng ký tư vấn trực tiếp</h2>
           
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -94,7 +94,7 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
                 placeholder="Họ và tên *" 
                 value={form.name}
                 onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+                className="brand-input text-sm" 
               />
               <input 
                 required 
@@ -102,7 +102,7 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
                 placeholder="Số điện thoại *" 
                 value={form.phone}
                 onChange={e => setForm(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+                className="brand-input text-sm" 
               />
             </div>
             
@@ -112,7 +112,7 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
               placeholder="Gmail (Email) *" 
               value={form.email}
               onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              className="brand-input text-sm" 
             />
 
             <input 
@@ -121,17 +121,17 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
               placeholder="Địa chỉ tư vấn *" 
               value={form.address}
               onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              className="brand-input text-sm" 
             />
 
             <div className="space-y-1">
-              <label className="text-[10px] uppercase text-gray-500 font-bold ml-1">Thời gian tư vấn mong muốn *</label>
+              <label className="ml-1 text-xs font-medium text-slate-500">Thời gian tư vấn mong muốn *</label>
               <input 
                 required 
                 type="datetime-local" 
                 value={form.consultTime}
                 onChange={e => setForm(prev => ({ ...prev, consultTime: e.target.value }))}
-                className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+                className="brand-input text-sm" 
               />
             </div>
 
@@ -140,13 +140,13 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
               value={form.note}
               onChange={e => setForm(prev => ({ ...prev, note: e.target.value }))}
               rows={3} 
-              className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white outline-none focus:border-primary" 
+              className="brand-input text-sm" 
             />
             
             <button 
               disabled={loading}
               type="submit" 
-              className="mt-2 w-full rounded-lg bg-primary py-4 font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50" 
+              className="mt-2 w-full rounded-2xl py-4 text-sm font-semibold text-white transition-all hover:brightness-105 active:scale-[0.99] disabled:opacity-50" 
               style={{ backgroundColor: platformColor }}
             >
               {loading ? "Đang xử lý..." : "Gửi yêu cầu tư vấn ngay"}

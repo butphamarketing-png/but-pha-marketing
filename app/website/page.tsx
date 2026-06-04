@@ -98,15 +98,15 @@ export default function WebsitePage() {
             {/* Custom Website Button */}
             <button
               onClick={() => setShowCustomModal(true)}
-              className="group relative flex items-center justify-between overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.03] p-8 transition-all hover:bg-white/[0.06] md:p-10"
+              className="brand-card group relative flex items-center justify-between overflow-hidden p-8 transition-all hover:-translate-y-0.5 md:p-10"
             >
               <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-500 group-hover:scale-110 transition-transform">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 transition-transform group-hover:scale-110">
                   <Settings size={32} />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-2xl font-black text-white">Website Custom</h3>
-                  <p className="mt-1 text-sm text-gray-400">Hệ thống riêng biệt</p>
+                  <h3 className="text-2xl font-bold text-indigo-950">Website Custom</h3>
+                  <p className="mt-1 text-sm text-slate-600">Hệ thống riêng biệt</p>
                 </div>
               </div>
               <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
@@ -115,15 +115,15 @@ export default function WebsitePage() {
             {/* Domain Selection Button */}
             <button
               onClick={() => setShowDomainModal(true)}
-              className="group relative flex items-center justify-between overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.03] p-8 transition-all hover:bg-white/[0.06] md:p-10"
+              className="brand-card group relative flex items-center justify-between overflow-hidden p-8 transition-all hover:-translate-y-0.5 md:p-10"
             >
               <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-400 group-hover:scale-110 transition-transform">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700 transition-transform group-hover:scale-110">
                   <Globe size={32} />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-2xl font-black text-white">Đăng ký tên miền</h3>
-                  <p className="mt-1 text-sm text-gray-400">Quốc tế & Việt Nam</p>
+                  <h3 className="text-2xl font-bold text-indigo-950">Đăng ký tên miền</h3>
+                  <p className="mt-1 text-sm text-slate-600">Quốc tế & Việt Nam</p>
                 </div>
               </div>
               <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
@@ -142,23 +142,21 @@ export default function WebsitePage() {
               <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
                 <span style={{ color: config.color }}>Chăm sóc</span> Website
               </h2>
-              <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Theo số lượng bài viết mỗi tháng</p>
+              <p className="text-sm font-medium text-slate-500">Theo số lượng bài viết mỗi tháng</p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
               {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
                 <div
                   key={pkg.id}
-                  className={`relative group flex flex-col rounded-[2.5rem] border p-8 transition-all hover:scale-[1.02] ${
-                    i === 1 ? "border-green-500/50 bg-green-500/5" : "border-white/10 bg-white/[0.03]"
-                  }`}
+                  className={`platform-pricing-card ${i === 1 ? "platform-pricing-card--featured ring-violet-200/70" : ""}`}
                 >
                   {i === 1 && (
                     <div
-                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black text-white shadow-xl"
+                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
                       style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
                     >
-                      <Sparkles size={12} /> PHỔ BIẾN
+                      <Sparkles size={12} /> Phổ biến
                     </div>
                   )}
                   <div className="flex flex-1 flex-col space-y-6">
@@ -175,14 +173,14 @@ export default function WebsitePage() {
                       </div>
                     </div>
                     <div className="space-y-2 text-center">
-                      <h3 className="text-xl font-black text-white">{pkg.posts} bài viết/tháng</h3>
-                      <p className="text-3xl font-black" style={{ color: config.color }}>
+                      <h3 className="text-xl font-bold text-indigo-950">{pkg.posts} bài viết/tháng</h3>
+                      <p className="text-3xl font-bold" style={{ color: config.color }}>
                         {formatPriceVnd(pkg.price)}
                       </p>
                     </div>
                     <ul className="flex-1 space-y-4">
                       {pkg.works.map((feature, j) => (
-                        <li key={j} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300">
+                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
                           <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
                         </li>
                       ))}
@@ -191,7 +189,7 @@ export default function WebsitePage() {
                       <button
                         type="button"
                         onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
-                        className="flex-1 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all shadow-lg"
+                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg"
                         style={{ backgroundColor: config.color }}
                       >
                         Đăng ký ngay
@@ -199,7 +197,7 @@ export default function WebsitePage() {
                       <button
                         type="button"
                         onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
-                        className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
                       >
                         <MessageSquare size={18} />
                       </button>
@@ -220,7 +218,7 @@ export default function WebsitePage() {
               <h3 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
                 Dung lượng <span style={{ color: config.color }}>lưu trữ</span>
               </h3>
-              <p className="mt-2 text-gray-400 max-w-2xl mx-auto">Kéo thanh trượt để dự toán hạ tầng phù hợp với quy mô doanh nghiệp</p>
+              <p className="mx-auto mt-2 max-w-2xl text-slate-600">Kéo thanh trượt để dự toán hạ tầng phù hợp với quy mô doanh nghiệp</p>
             </div>
             <StorageSlider primaryColor={config.color} />
           </div>

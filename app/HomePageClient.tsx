@@ -475,9 +475,59 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-900/20" />
+                <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/25 via-transparent to-indigo-950/50" />
               </motion.div>
             </AnimatePresence>
+
+            <div className="home-hero-overlay pointer-events-none">
+              <motion.div
+                key={`hero-copy-${activeHeroSlide}`}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="mx-auto w-full max-w-4xl space-y-6"
+              >
+                <p className="text-xs font-semibold tracking-wide text-violet-200">{currentHeroSlide.eyebrow}</p>
+                <h1 className="text-3xl font-bold leading-[1.15] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                  {currentHeroSlide.middle}{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-200 to-white">
+                    {currentHeroSlide.accent}
+                  </span>
+                </h1>
+                <p className="max-w-2xl text-base font-medium leading-relaxed text-indigo-100/90 md:text-lg">
+                  {currentHeroSlide.description}
+                </p>
+                {currentHeroSlide.pills?.length ? (
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    {currentHeroSlide.pills.map((pill: { label: string; icon: React.ComponentType<{ size?: number }> }) => (
+                      <span key={pill.label} className="home-hero-pill">
+                        <pill.icon size={14} />
+                        {pill.label}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                <div className="flex flex-wrap gap-4 pt-2 pointer-events-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playClickSound();
+                      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="brand-btn-primary"
+                  >
+                    Tư vấn miễn phí
+                  </button>
+                  <Link
+                    href="/chienluocmarketing"
+                    onClick={playClickSound}
+                    className="brand-btn-ghost border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                  >
+                    Lập chiến lược
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
 
             <div className="absolute bottom-12 right-12 z-30 flex gap-4 lg:bottom-16 lg:right-24">
               {heroSlides.map((_, i) => (
@@ -522,7 +572,7 @@ export default function HomePageClient() {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
+                    className="brand-eyebrow"
                   >
                     Tầm nhìn & Sứ mệnh
                   </motion.p>
@@ -530,7 +580,7 @@ export default function HomePageClient() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-5xl font-black text-slate-900 md:text-6xl tracking-tight leading-tight"
+                    className="brand-section-title"
                   >
                     Đồng hành cùng sự <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-violet-600">Bứt Phá</span> của bạn

@@ -160,17 +160,18 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 backdrop-blur-xl overflow-y-auto">
+    <div className="brand-modal-backdrop z-[70]">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-lg my-auto overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0c0c0e] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)]"
+        className="brand-modal-surface max-w-lg overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"
+        style={{ boxShadow: `0 24px 64px -16px ${pkg.color}40` }}
       >
         <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: pkg.color }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full blur-[100px] opacity-20 pointer-events-none" style={{ backgroundColor: pkg.color }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full blur-[100px] opacity-15 pointer-events-none" style={{ backgroundColor: pkg.color }} />
         
-        <button onClick={onClose} className="absolute right-6 top-6 z-20 text-gray-500 hover:text-white transition-all hover:rotate-90">
+        <button onClick={onClose} className="absolute right-6 top-6 z-20 rounded-full p-1 text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-900 hover:rotate-90">
           <X size={20} />
         </button>
 
@@ -185,8 +186,8 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
             >
               <Check className="h-12 w-12 text-white" strokeWidth={3} />
             </motion.div>
-            <h3 className="mb-3 text-3xl font-black text-white tracking-tight">Tuyệt vời!</h3>
-            <p className="mb-10 text-gray-400 leading-relaxed max-w-[280px] mx-auto">
+            <h3 className="mb-3 text-3xl font-bold tracking-tight text-indigo-950">Tuyệt vời!</h3>
+            <p className="mb-10 mx-auto max-w-[280px] leading-relaxed text-slate-600">
               Yêu cầu của bạn đã được tiếp nhận. Đội ngũ chuyên gia sẽ liên hệ tư vấn trong thời gian sớm nhất.
             </p>
             <button
@@ -200,11 +201,11 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
         ) : (
           <div className="relative p-8 sm:p-12">
             <div className="mb-10">
-              <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-white/50 border border-white/10 mb-4 bg-white/5">
+              <span className="brand-eyebrow mb-4 inline-block rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1">
                 Đăng ký ngay
               </span>
-              <h3 className="text-3xl font-black text-white leading-tight">Nhận tư vấn <span style={{ color: pkg.color }}>{pkg.name}</span></h3>
-              <p className="mt-2 text-sm text-gray-500 font-medium">Chúng tôi sẽ thiết kế lộ trình tối ưu cho riêng bạn.</p>
+              <h3 className="text-3xl font-bold leading-tight text-indigo-950">Nhận tư vấn <span style={{ color: pkg.color }}>{pkg.name}</span></h3>
+              <p className="mt-2 text-sm font-medium text-slate-600">Chúng tôi sẽ thiết kế lộ trình tối ưu cho riêng bạn.</p>
             </div>
             
             <div className="space-y-5">
@@ -215,7 +216,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                     value={form.name}
                     onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Họ và tên *"
-                    className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                    className="brand-input text-sm"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -224,7 +225,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                     value={form.phone}
                     onChange={(e) => setForm(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="Số điện thoại (Zalo) *"
-                    className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                    className="brand-input text-sm"
                   />
                 </div>
               </div>
@@ -235,7 +236,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                 value={form.email}
                 onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="Địa chỉ Email *"
-                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                className="brand-input text-sm"
               />
 
               <input
@@ -243,17 +244,17 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                 value={form.address}
                 onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))}
                 placeholder="Khu vực / Tỉnh thành *"
-                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600"
+                className="brand-input text-sm"
               />
 
               <div className="space-y-2">
-                <label className="text-[10px] uppercase font-black tracking-widest text-gray-500 ml-1 opacity-70">Thời gian gọi tư vấn *</label>
+                <label className="ml-1 text-xs font-medium text-slate-500">Thời gian gọi tư vấn *</label>
                 <input
                   required
                   type="datetime-local"
                   value={form.consultTime}
                   onChange={(e) => setForm(prev => ({ ...prev, consultTime: e.target.value }))}
-                  className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] [color-scheme:dark]"
+                  className="brand-input text-sm"
                 />
               </div>
 
@@ -262,7 +263,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
                 onChange={(e) => setForm(prev => ({ ...prev, note: e.target.value }))}
                 placeholder="Bạn cần chúng tôi hỗ trợ cụ thể về điều gì? (Không bắt buộc)"
                 rows={3}
-                className="w-full rounded-2xl border border-white/5 bg-white/5 px-5 py-4 text-sm text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] resize-none placeholder:text-gray-600"
+                className="brand-input resize-none text-sm"
               />
 
               {error && (
@@ -279,7 +280,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="group relative mt-2 w-full overflow-hidden rounded-2xl py-5 text-sm font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl"
+                className="group relative mt-2 w-full overflow-hidden rounded-2xl py-5 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl"
                 style={{ backgroundColor: pkg.color }}
               >
                 <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
@@ -314,18 +315,18 @@ function Stats({ stats, color, isWebsite }: { stats: { label: string; value: str
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.6, type: "spring", stiffness: 100 }}
-            className="group relative rounded-[2.5rem] border border-white/5 bg-white/[0.03] p-10 text-center backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-white/10 hover:shadow-2xl"
+            className="brand-card group relative p-10 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-brand-lg"
           >
-            <div className="absolute -inset-px rounded-[2.5rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100" 
-              style={{ background: `radial-gradient(400px circle at center, ${color}15, transparent 60%)` }} 
+            <div className="absolute -inset-px rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100" 
+              style={{ background: `radial-gradient(400px circle at center, ${color}12, transparent 60%)` }} 
             />
             
             <div className="relative">
               <div className="mb-6 inline-flex items-center justify-center">
-                <CountUp value={s.value} color={color} className="text-5xl font-black md:text-6xl tracking-tighter" />
+                <CountUp value={s.value} color={color} className="text-5xl font-bold tracking-tight text-indigo-950 md:text-6xl" />
               </div>
-              <div className="h-1.5 w-10 mx-auto mb-6 rounded-full opacity-30 group-hover:w-16 group-hover:opacity-100 transition-all duration-500" style={{ backgroundColor: color }} />
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-hover:text-gray-300 transition-colors">
+              <div className="mx-auto mb-6 h-1.5 w-10 rounded-full opacity-40 transition-all duration-500 group-hover:w-16 group-hover:opacity-100" style={{ backgroundColor: color }} />
+              <p className="text-xs font-medium tracking-wide text-slate-500 transition-colors group-hover:text-slate-700">
                 {s.label}
               </p>
             </div>
@@ -364,18 +365,18 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+              className="platform-section-badge"
             >
               <div className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: color }} />
-              Bảng Giá Dịch Vụ
+              Bảng giá dịch vụ
             </motion.div>
-            <h2 className="mb-8 text-5xl font-black text-white md:text-6xl lg:text-7xl tracking-tight">
-              Lựa Chọn <span className="relative inline-block">
-                Tối Ưu
-                <div className="absolute -bottom-2 left-0 h-1.5 w-full rounded-full opacity-30" style={{ backgroundColor: color }} />
+            <h2 className="brand-section-title mb-8">
+              Lựa chọn <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-violet-600">
+                tối ưu
+                <div className="absolute -bottom-2 left-0 h-1 w-full rounded-full opacity-40" style={{ backgroundColor: color }} />
               </span>
             </h2>
-            <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium leading-relaxed">
+            <p className="mx-auto max-w-2xl text-lg font-medium leading-relaxed text-slate-600">
               Các gói giải pháp được may đo riêng biệt, giúp doanh nghiệp bứt phá doanh thu và tối ưu chi phí vận hành.
             </p>
           </div>
@@ -387,19 +388,13 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
               <button 
                 key={i} 
                 onClick={() => { setActiveTab(i); setHoveredIdx(null); setPage(0); }} 
-                className="group relative overflow-hidden rounded-2xl px-10 py-4 text-sm font-black transition-all" 
+                className="rounded-2xl border px-10 py-4 text-sm font-semibold transition-all" 
                 style={activeTab === i 
-                  ? { backgroundColor: color, color: "#fff", boxShadow: `0 20px 40px ${color}30` } 
-                  : { backgroundColor: "rgba(255,255,255,0.03)", color: "#777" }
+                  ? { backgroundColor: color, color: "#fff", borderColor: color, boxShadow: `0 14px 32px ${color}28` } 
+                  : { backgroundColor: "#fff", color: "#475569", borderColor: "rgba(99,102,241,0.2)" }
                 }
               >
                 <span className="relative z-10">{t.label}</span>
-                {activeTab !== i && (
-                  <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
-                )}
-                {activeTab === i && (
-                  <motion.div layoutId="tab-active" className="absolute inset-0 bg-white/10" />
-                )}
               </button>
             ))}
           </div>
@@ -410,7 +405,7 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
             <button
               onClick={() => setPage(prev => Math.max(0, prev - 1))}
               disabled={page === 0}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
+              className="brand-icon-btn disabled:opacity-30"
             >
               <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-1" />
             </button>
@@ -422,7 +417,7 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                   className="h-2 rounded-full transition-all duration-500" 
                   style={{ 
                     width: page === i ? "40px" : "8px", 
-                    backgroundColor: page === i ? color : "rgba(255,255,255,0.15)" 
+                    backgroundColor: page === i ? color : "rgba(99,102,241,0.2)" 
                   }} 
                 />
               ))}
@@ -430,7 +425,7 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
             <button
               onClick={() => setPage(prev => Math.min(maxPage, prev + 1))}
               disabled={page === maxPage}
-              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white/10 disabled:opacity-20"
+              className="brand-icon-btn disabled:opacity-30"
             >
               <ChevronRight size={24} className="transition-transform group-hover:translate-x-1" />
             </button>
@@ -451,38 +446,37 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                 transition={{ delay: i * 0.1, duration: 0.6 }} 
                 onMouseEnter={() => setHoveredIdx(i)} 
                 onMouseLeave={() => setHoveredIdx(null)} 
-                className="group relative flex flex-col rounded-[3rem] border p-10 transition-all duration-700 ease-out" 
-                style={{ 
-                  borderColor: isHovered || isPopular ? `${color}40` : "rgba(255,255,255,0.06)", 
-                  backgroundColor: isHovered ? "rgba(255,255,255,0.04)" : isPopular ? "rgba(255,255,255,0.02)" : "transparent",
-                  boxShadow: isHovered ? `0 40px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px ${color}15` : "none",
-                  transform: isHovered ? "translateY(-16px) scale(1.02)" : "translateY(0) scale(1)"
+                className={`platform-pricing-card flex flex-col p-10 transition-all duration-500 ${isPopular ? "platform-pricing-card--featured" : ""}`}
+                style={{
+                  borderColor: isHovered || isPopular ? `${color}55` : undefined,
+                  boxShadow: isHovered ? `0 24px 48px -16px ${color}22` : undefined,
+                  transform: isHovered ? "translateY(-8px)" : undefined,
                 }}
               >
                 {isPopular && (
-                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white shadow-2xl" style={{ backgroundColor: color }}>
-                    <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                  <div className="absolute -top-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full px-6 py-2.5 text-[10px] font-semibold text-white shadow-lg" style={{ backgroundColor: color }}>
+                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                     Phổ biến nhất
                   </div>
                 )}
                 
                 <div className="mb-8">
-                  <h3 className="mb-2 text-2xl font-black text-white tracking-tight">{pkg.name}</h3>
+                  <h3 className="mb-2 text-2xl font-bold tracking-tight text-indigo-950">{pkg.name}</h3>
                   <div className="mb-6 flex items-center gap-2">
-                    <div className="h-1 w-8 rounded-full" style={{ backgroundColor: color, opacity: isHovered || isPopular ? 1 : 0.3 }} />
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
+                    <div className="h-1 w-8 rounded-full" style={{ backgroundColor: color, opacity: isHovered || isPopular ? 1 : 0.35 }} />
+                    <p className="text-[10px] font-medium tracking-wide text-slate-500">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
                   </div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-black text-white transition-colors duration-500" style={{ color: isHovered || isPopular ? "white" : "white" }}>{pkg.price}</span>
+                    <span className="text-4xl font-bold transition-colors duration-500" style={{ color }}>{pkg.price}</span>
                     {pkg.period && (
-                      <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">
+                      <span className="text-xs font-medium tracking-wide text-slate-500">
                         / {pkg.period === "month" ? "Tháng" : "Trọn đời"}
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="mb-10 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                <div className="mb-10 h-px w-full bg-gradient-to-r from-transparent via-indigo-100 to-transparent" />
 
                 <ul className="mb-12 flex-1 space-y-5">
                   {(pkg.allFeatures?.length ? pkg.allFeatures : pkg.features).map((rawFeature, fi) => {
@@ -498,14 +492,14 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                           className="flex w-full items-start justify-between gap-3 text-left"
                         >
                           <span className="flex items-start gap-3.5">
-                            <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-white/5 transition-all group-hover/item:scale-110" style={{ border: `1px solid ${isHovered || isPopular ? color + "30" : "transparent"}` }}>
+                            <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-indigo-50 transition-all group-hover/item:scale-110" style={{ border: `1px solid ${isHovered || isPopular ? color + "35" : "rgba(99,102,241,0.15)"}` }}>
                               <Check size={12} strokeWidth={3} style={{ color }} />
                             </div>
-                            <span className="text-[13px] font-semibold text-gray-300 transition-colors group-hover/item:text-white leading-snug">{parsed.title}</span>
+                            <span className="text-[13px] font-semibold leading-snug text-slate-600 transition-colors group-hover/item:text-indigo-950">{parsed.title}</span>
                           </span>
                           {parsed.details.length > 0 && (
-                            <div className={`mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-white/5 transition-all ${isExpanded ? "rotate-180" : ""}`}>
-                              <ChevronDown size={12} className="text-gray-500" />
+                            <div className={`mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-50 transition-all ${isExpanded ? "rotate-180" : ""}`}>
+                              <ChevronDown size={12} className="text-slate-500" />
                             </div>
                           )}
                         </button>
@@ -517,10 +511,10 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <div className="mt-4 space-y-2.5 pb-2 pl-9 border-l border-white/5 ml-2.5">
+                              <div className="ml-2.5 mt-4 space-y-2.5 border-l border-indigo-100 pb-2 pl-9">
                                 {parsed.details.map((detail, detailIdx) => (
-                                  <li key={`${featureKey}-detail-${detailIdx}`} className="text-[11px] font-medium leading-relaxed text-gray-500 flex items-start gap-2">
-                                    <div className="h-1 w-1 rounded-full bg-gray-600 mt-1.5 shrink-0" />
+                                  <li key={`${featureKey}-detail-${detailIdx}`} className="flex items-start gap-2 text-[11px] font-medium leading-relaxed text-slate-500">
+                                    <div className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
                                     {detail}
                                   </li>
                                 ))}
@@ -536,10 +530,10 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                 <div className="mt-auto pt-6">
                   <button 
                     onClick={() => onCheckout({ name: pkg.name, price: pkg.price, color, tabLabel: tab.label })} 
-                    className="group/btn relative w-full overflow-hidden rounded-[1.5rem] py-5 text-xs font-black uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl"
-                    style={{ backgroundColor: isHovered || isPopular ? color : "rgba(255,255,255,0.08)" }}
+                    className="group/btn relative w-full overflow-hidden rounded-[1.5rem] py-5 text-xs font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                    style={{ backgroundColor: isHovered || isPopular ? color : "#94a3b8" }}
                   >
-                    <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover/btn:opacity-100" />
+                    <div className="absolute inset-0 bg-white/15 opacity-0 transition-opacity group-hover/btn:opacity-100" />
                     <span className="relative z-10">Tư vấn ngay</span>
                   </button>
                 </div>
@@ -566,12 +560,12 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+            className="platform-section-badge"
           >
             Quy trình làm việc
           </motion.div>
-          <h2 className="mb-6 text-5xl font-black text-white md:text-6xl tracking-tight">Quy Trình <span style={{ color }}>Chuyên Nghiệp</span></h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium">Chúng tôi áp dụng mô hình triển khai bài bản, đảm bảo tính minh bạch và hiệu quả cao nhất cho từng dự án.</p>
+          <h2 className="brand-section-title mb-6">Quy trình <span style={{ color }}>chuyên nghiệp</span></h2>
+          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">Chúng tôi áp dụng mô hình triển khai bài bản, đảm bảo tính minh bạch và hiệu quả cao nhất cho từng dự án.</p>
         </div>
 
         {processTabs.length > 1 && (
@@ -580,10 +574,10 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
               <button 
                 key={i} 
                 onClick={() => setActiveTab(i)} 
-                className="rounded-2xl px-8 py-4 text-sm font-black transition-all border shadow-lg" 
+                className="rounded-2xl border px-8 py-4 text-sm font-semibold transition-all shadow-sm" 
                 style={activeTab === i 
-                  ? { backgroundColor: color, color: "#fff", borderColor: color, boxShadow: `0 20px 40px ${color}30` } 
-                  : { backgroundColor: "rgba(255,255,255,0.03)", color: "#777", borderColor: "rgba(255,255,255,0.05)" }
+                  ? { backgroundColor: color, color: "#fff", borderColor: color, boxShadow: `0 14px 32px ${color}28` } 
+                  : { backgroundColor: "#fff", color: "#475569", borderColor: "rgba(99,102,241,0.2)" }
                 }
               >
                 {t.label}
@@ -593,7 +587,7 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
         )}
 
         <div className="relative">
-          <div className="absolute left-[50%] top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent md:block" />
+          <div className="absolute left-[50%] top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-indigo-200 to-transparent md:block" />
 
           <AnimatePresence mode="wait">
             <motion.div 
@@ -613,17 +607,17 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1, duration: 0.8, type: "spring", damping: 15 }}
-                        className={`group relative rounded-[3rem] border border-white/5 bg-white/[0.02] p-10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 md:mx-12 ${isEven ? "md:text-left" : "md:text-right"}`}
+                        className={`brand-card group relative p-10 transition-all duration-500 hover:-translate-y-0.5 md:mx-12 ${isEven ? "md:text-left" : "md:text-right"}`}
                       >
                         <div className={`mb-6 flex items-center gap-6 ${isEven ? "flex-row" : "flex-row-reverse"}`}>
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.5rem] text-2xl font-black text-white shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" style={{ background: `linear-gradient(135deg, ${color}, ${color}dd)` }}>
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.5rem] text-2xl font-bold text-white shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" style={{ background: `linear-gradient(135deg, ${color}, ${color}dd)` }}>
                             {p.step}
                           </div>
-                          <h4 className="text-2xl font-black text-white tracking-tight">{p.title}</h4>
+                          <h4 className="text-2xl font-bold tracking-tight text-indigo-950">{p.title}</h4>
                         </div>
-                        <p className="text-[15px] leading-relaxed text-gray-400 font-medium">{p.desc}</p>
+                        <p className="text-[15px] font-medium leading-relaxed text-slate-600">{p.desc}</p>
                         
-                        <div className={`absolute top-1/2 -translate-y-1/2 hidden md:block w-12 h-px bg-white/10 ${isEven ? "-left-12" : "-right-12"}`} />
+                        <div className={`absolute top-1/2 hidden h-px w-12 -translate-y-1/2 bg-indigo-200 md:block ${isEven ? "-left-12" : "-right-12"}`} />
                       </motion.div>
                     </div>
 
@@ -647,10 +641,10 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between py-5 text-left font-semibold text-white hover:text-gray-300">
+      <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between px-6 py-5 text-left font-semibold text-indigo-950 hover:text-violet-700">
         {q}<ChevronDown size={18} className={`flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <p className="pb-5 text-sm text-gray-400 leading-relaxed">{a}</p>}
+      {open && <p className="px-6 pb-5 text-sm leading-relaxed text-slate-600">{a}</p>}
     </div>
   );
 }
@@ -660,8 +654,8 @@ function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
     <section data-section="faq" id="faq" className="py-24 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <div className="mb-16 text-center">
-          <h2 className="mb-4 text-3xl font-black text-white md:text-5xl">Câu Hỏi Thường Gặp</h2>
-          <p className="text-gray-400">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
+          <h2 className="brand-section-title mb-4">Câu hỏi thường gặp</h2>
+          <p className="text-slate-600">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
         </div>
         <div className="space-y-4">
           {faqs.map((faq, i) => (
@@ -671,7 +665,7 @@ function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-sm transition-all hover:bg-white/[0.04]"
+              className="brand-card overflow-hidden transition-all hover:shadow-brand-lg"
             >
               <FAQItem q={faq.q} a={faq.a} />
             </motion.div>
@@ -735,29 +729,29 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+            className="platform-section-badge"
           >
             <Phone size={12} style={{ color }} />
-            Kết Nối Ngay
+            Kết nối ngay
           </motion.div>
-          <h2 className="mb-6 text-5xl font-black text-white md:text-6xl tracking-tight">Đặt Lịch Tư Vấn <span style={{ color }}>Trực Tiếp</span></h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-400 font-medium">Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</p>
+          <h2 className="brand-section-title mb-6">Đặt lịch tư vấn <span style={{ color }}>trực tiếp</span></h2>
+          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</p>
         </div>
 
         {sent ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-[3rem] border border-green-500/20 bg-green-500/5 p-20 text-center backdrop-blur-xl shadow-2xl"
+            className="brand-card rounded-[2rem] border-green-200 bg-green-50/80 p-20 text-center"
           >
-            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full bg-green-500 text-white shadow-[0_20px_40px_rgba(34,197,94,0.3)]">
+            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full bg-green-500 text-white shadow-lg shadow-green-500/25">
               <Check size={48} strokeWidth={3} />
             </div>
-            <h3 className="mb-4 text-3xl font-black text-white tracking-tight">Gửi Thông Tin Thành Công!</h3>
-            <p className="text-gray-400 text-lg font-medium leading-relaxed">Chúng tôi sẽ liên hệ với bạn trong vòng 30 phút tới. <br/>Vui lòng giữ điện thoại hoặc kiểm tra Zalo nhé!</p>
+            <h3 className="mb-4 text-3xl font-bold tracking-tight text-indigo-950">Gửi thông tin thành công!</h3>
+            <p className="text-lg font-medium leading-relaxed text-slate-600">Chúng tôi sẽ liên hệ với bạn trong vòng 30 phút tới. <br/>Vui lòng giữ điện thoại hoặc kiểm tra Zalo nhé!</p>
           </motion.div>
         ) : (
-          <div className="relative rounded-[4rem] border border-white/10 bg-white/[0.02] p-8 backdrop-blur-2xl md:p-16 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)] overflow-hidden">
+          <div className="platform-panel relative overflow-hidden rounded-[2rem] p-8 md:rounded-[2.5rem] md:p-16">
             <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: color }} />
             
             <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -767,39 +761,40 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
               >
                 <div className="grid gap-8 md:grid-cols-2">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Họ và tên</label>
-                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
+                    <label className="ml-1 text-xs font-medium text-slate-500">Họ và tên</label>
+                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="brand-input" />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Số điện thoại (Zalo)</label>
-                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0901 234 567" className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
+                    <label className="ml-1 text-xs font-medium text-slate-500">Số điện thoại (Zalo)</label>
+                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0901 234 567" className="brand-input" />
                   </div>
                 </div>
 
                 <div className="grid gap-8 md:grid-cols-2">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Khu vực / Tỉnh thành</label>
-                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] placeholder:text-gray-600 shadow-inner" />
+                    <label className="ml-1 text-xs font-medium text-slate-500">Khu vực / Tỉnh thành</label>
+                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="brand-input" />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Thời gian gọi tư vấn</label>
-                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="w-full rounded-[1.5rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] [color-scheme:dark] shadow-inner" />
+                    <label className="ml-1 text-xs font-medium text-slate-500">Thời gian gọi tư vấn</label>
+                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="brand-input" />
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Nền tảng bạn quan tâm</label>
+                  <label className="ml-1 text-xs font-medium text-slate-500">Nền tảng bạn quan tâm</label>
                   <div className="flex flex-wrap gap-4">
                     {["Website", "Facebook", "Google Maps"].map((p) => (
                       <button
                         key={p}
                         type="button"
                         onClick={() => setPlatform(p.toLowerCase())}
-                        className={`rounded-2xl px-8 py-4 text-xs font-black uppercase tracking-widest transition-all border shadow-lg ${
+                        className={`rounded-2xl border px-8 py-4 text-xs font-semibold transition-all ${
                           platform === p.toLowerCase() 
-                          ? "bg-white text-black border-white scale-105" 
-                          : "bg-white/5 text-gray-400 border-white/5 hover:border-white/20 hover:bg-white/10"
+                          ? "scale-[1.02] text-white shadow-md" 
+                          : "border-indigo-200 bg-white text-slate-600 hover:border-violet-300 hover:bg-indigo-50"
                         }`}
+                        style={platform === p.toLowerCase() ? { backgroundColor: color, borderColor: color } : undefined}
                       >
                         {p}
                       </button>
@@ -808,13 +803,13 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-4 opacity-70">Nội dung yêu cầu</label>
-                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả ngắn gọn nhu cầu của bạn để chúng tôi chuẩn bị tốt hơn..." rows={4} className="w-full rounded-[2rem] border border-white/5 bg-white/5 px-7 py-5 text-white outline-none transition-all focus:border-white/20 focus:bg-white/[0.08] resize-none placeholder:text-gray-600 shadow-inner" />
+                  <label className="ml-1 text-xs font-medium text-slate-500">Nội dung yêu cầu</label>
+                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả ngắn gọn nhu cầu của bạn để chúng tôi chuẩn bị tốt hơn..." rows={4} className="brand-input resize-none" />
                 </div>
                 
                 <button 
                   type="submit" 
-                  className="group relative mt-6 w-full overflow-hidden rounded-[2rem] py-7 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.01] active:scale-95 shadow-[0_20px_40px_rgba(0,0,0,0.4)]" 
+                  className="group relative mt-6 w-full overflow-hidden rounded-[2rem] py-7 text-sm font-semibold text-white transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg" 
                   style={{ backgroundColor: color }}
                 >
                   <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
@@ -825,17 +820,17 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
               </form>
 
               <div className="hidden lg:block relative">
-                <div className="absolute -inset-24 bg-white/5 blur-[120px] rounded-full animate-pulse" style={{ backgroundColor: `${color}20` }} />
-                <div className="relative p-12 rounded-[4rem] border border-white/5 bg-white/[0.01] backdrop-blur-md">
+                <div className="absolute -inset-24 animate-pulse rounded-full blur-[120px]" style={{ backgroundColor: `${color}18` }} />
+                <div className="brand-card-soft relative rounded-[2rem] p-12">
                   <img 
                     src="/mascot-home.png" 
                     alt="Mascot" 
-                    className="w-full max-w-sm mx-auto animate-float drop-shadow-[0_32px_64px_rgba(0,0,0,0.6)]" 
+                    className="mx-auto w-full max-w-sm animate-float drop-shadow-lg" 
                     style={{ filter: resolvedFilter }}
                   />
                   <div className="mt-12 text-center">
-                    <p className="text-xl font-bold text-white mb-2">Đội ngũ chuyên gia</p>
-                    <p className="text-sm text-gray-500 font-medium">Sẵn sàng đồng hành cùng sự phát triển <br/> của doanh nghiệp bạn.</p>
+                    <p className="mb-2 text-xl font-bold text-indigo-950">Đội ngũ chuyên gia</p>
+                    <p className="text-sm font-medium text-slate-600">Sẵn sàng đồng hành cùng sự phát triển <br/> của doanh nghiệp bạn.</p>
                   </div>
                 </div>
               </div>
