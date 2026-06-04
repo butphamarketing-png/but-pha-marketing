@@ -445,7 +445,7 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "min(60vw, 800px)", minHeight: "500px" }}>
+          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "100vh", maxHeight: "1000px", minHeight: "500px" }}>
             <div className="absolute inset-0 z-30 flex items-center justify-between px-6 pointer-events-none lg:px-12">
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
@@ -819,55 +819,119 @@ export default function HomePageClient() {
           </section>
         </main>
 
-        <footer className="border-t border-indigo-100 bg-white py-12">
-          <div className="mx-auto max-w-7xl px-4 lg:px-6">
-            <div className="grid gap-12 lg:grid-cols-4">
-              <div className="col-span-2">
-                <Link href="/" className="flex items-center gap-3">
-                  <img src={logoSrc} alt={brandName} className="h-10 w-10 rounded-full object-cover" />
-                  <span className="text-xl font-black uppercase tracking-wider text-slate-900">{brandName}</span>
+        <footer className="bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 text-white">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6 lg:py-20">
+            <div className="grid gap-12 lg:grid-cols-4 lg:gap-16">
+              <div className="col-span-2 lg:col-span-1">
+                <Link href="/" className="flex items-center gap-3 group">
+                  <div className="relative">
+                    <div className="absolute -inset-2 rounded-full bg-violet-600/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full object-cover shadow-lg" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-black tracking-tight">{brandName}</span>
+                    <span className="text-violet-300 text-xs font-medium">Bứt Phá để dẫn đầu</span>
+                  </div>
                 </Link>
-                <p className="mt-6 max-w-md text-sm leading-7 text-slate-600">
-                  Bứt Phá Marketing - Agency cung cấp giải pháp Digital Marketing toàn diện, giúp doanh nghiệp tối ưu hóa hiện diện số và tăng trưởng doanh thu bền vững.
+                <p className="mt-6 text-sm leading-relaxed text-violet-100 opacity-90">
+                  Agency cung cấp giải pháp Digital Marketing toàn diện, giúp doanh nghiệp tối ưu hóa hiện diện số và tăng trưởng doanh thu bền vững.
                 </p>
-                <div className="mt-8 flex gap-4">
-                  <a href={settings.fanpage} className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 transition hover:border-violet-300 hover:bg-violet-600 hover:text-white">
+                <div className="mt-8 flex gap-3">
+                  <a href={settings.fanpage} className="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-500/30 bg-white/5 text-violet-100 transition-all hover:border-violet-400 hover:bg-violet-600 hover:text-white hover:shadow-lg hover:shadow-violet-600/30">
                     <SiFacebook className="h-5 w-5" />
                   </a>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Dịch vụ</h4>
-                <ul className="mt-6 space-y-4 text-sm text-slate-600">
-                  <li><Link href="/website" className="hover:text-violet-600 transition">Thiết kế Website</Link></li>
-                  <li><Link href="/facebook" className="hover:text-violet-600 transition">Quản trị Fanpage</Link></li>
-                  <li><Link href="/google-maps" className="hover:text-violet-600 transition">Google Maps Marketing</Link></li>
-                  <li><Link href="/lien-he" className="hover:text-violet-600 transition">Tư vấn chiến lược</Link></li>
+                <h4 className="text-sm font-bold uppercase tracking-widest text-violet-300 mb-6">Dịch vụ</h4>
+                <ul className="space-y-4">
+                  <li>
+                    <Link href="/website" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      Thiết kế Website
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/facebook" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      Quản trị Fanpage
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/google-maps" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      Google Maps Marketing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/lien-he" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      Tư vấn chiến lược
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Liên hệ</h4>
-                <ul className="mt-6 space-y-4 text-sm text-slate-600">
+                <h4 className="text-sm font-bold uppercase tracking-widest text-violet-300 mb-6">Liên hệ</h4>
+                <ul className="space-y-5">
                   <li className="flex items-start gap-3">
-                    <MapPinned className="h-5 w-5 shrink-0 text-violet-600" />
-                    <span>{settings.address || "Hồ Chí Minh, Việt Nam"}</span>
+                    <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-violet-300">
+                      <MapPinned className="h-4 w-4" />
+                    </div>
+                    <div className="text-violet-100">
+                      <p className="text-sm font-medium">{settings.address || "Hồ Chí Minh, Việt Nam"}</p>
+                    </div>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 shrink-0 text-violet-600" />
-                    <span>{settings.hotline}</span>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-violet-300">
+                      <Phone className="h-4 w-4" />
+                    </div>
+                    <div className="text-violet-100">
+                      <p className="text-sm font-medium">{settings.hotline}</p>
+                    </div>
                   </li>
                   <li className="flex items-center gap-3">
-                    <MessageCircle className="h-5 w-5 shrink-0 text-violet-600" />
-                    <span>{settings.email || "contact@butphamarketing.com"}</span>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-violet-300">
+                      <MessageCircle className="h-4 w-4" />
+                    </div>
+                    <div className="text-violet-100">
+                      <p className="text-sm font-medium">{settings.email || "contact@butphamarketing.com"}</p>
+                    </div>
                   </li>
                 </ul>
               </div>
+
+              <div>
+                <h4 className="text-sm font-bold uppercase tracking-widest text-violet-300 mb-6">Đăng ký</h4>
+                <p className="text-sm text-violet-100 opacity-80 mb-4">
+                  Nhận các chiến lược marketing miễn phí
+                </p>
+                <div className="flex flex-col gap-3">
+                  <input 
+                    type="email" 
+                    placeholder="Email của bạn" 
+                    className="w-full rounded-xl border border-violet-500/30 bg-white/5 px-4 py-3 text-sm text-white placeholder-violet-300/50 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                  />
+                  <button className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3 text-sm font-bold text-white transition-all hover:from-violet-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-violet-600/30">
+                    Đăng ký
+                  </button>
+                </div>
+              </div>
             </div>
             
-            <div className="mt-12 border-t border-indigo-100 pt-8 text-center text-xs text-slate-500">
-              <p>© {new Date().getFullYear()} {brandName}. All rights reserved.</p>
+            <div className="mt-16 border-t border-white/10 pt-8">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p className="text-xs text-violet-200/60">
+                  © {new Date().getFullYear()} {brandName}. All rights reserved.
+                </p>
+                <div className="flex gap-6 text-xs">
+                  <Link href="/gioi-thieu" className="text-violet-200/60 hover:text-violet-200 transition">Về chúng tôi</Link>
+                  <Link href="/lien-he" className="text-violet-200/60 hover:text-violet-200 transition">Liên hệ</Link>
+                  <Link href="/blog" className="text-violet-200/60 hover:text-violet-200 transition">Blog</Link>
+                </div>
+              </div>
             </div>
           </div>
         </footer>
