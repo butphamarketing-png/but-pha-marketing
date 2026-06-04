@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -154,8 +154,8 @@ export default function HomePageClient() {
     const slides: any[] = [];
     
     const imagesToUse = [
-      "/slideshow.jpg",
-      "/slideshow1.jpg"
+      "/2026-01-12.jpg",
+      "/slideshow-hero.png"
     ];
 
     imagesToUse.forEach((img, index) => {

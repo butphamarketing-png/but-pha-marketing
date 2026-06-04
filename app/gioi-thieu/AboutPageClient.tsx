@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -40,8 +40,8 @@ export default function AboutPageClient() {
   const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = "/logo.png";
   const homeMedia = settings?.media?.home;
-  const teamImage = "/slideshow.jpg";
-  const heroVisual = "/slideshow1.jpg";
+  const teamImage = "/2026-01-12.jpg";
+  const heroVisual = "/slideshow-hero.png";
   const mascotImage = settings?.mascotImage || "/mascot-home.png";
 
   const serviceHighlights = useMemo(() => {

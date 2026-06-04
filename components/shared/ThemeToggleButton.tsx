@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Eye, EyeOff, Menu, X } from "lucide-react";
 import Link from "next/link";
-
-const THEME_KEY = "preferred-theme";
+import { useAdmin } from "@/lib/AdminContext";
 
 const NAV_ITEMS = [
   { label: "Trang Chủ", href: "/" },
@@ -18,58 +17,28 @@ const NAV_ITEMS = [
 ];
 
 export function ThemeToggleButton() {
-  const [isLight, setIsLight] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [shake, setShake] = useState(false);
+  const { settings, updateSettings } = useAdmin();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    const initialLight = savedTheme === null ? true : savedTheme === "light";
-    setIsLight(initialLight);
-    document.documentElement.classList.toggle("light", initialLight);
-    setReady(true);
-  }, []);
+  const mascotEnabled = settings.mascotEnabled !== false;
 
-  useEffect(() => {
-    if (!ready) return;
-    document.documentElement.classList.toggle("light", isLight);
-    localStorage.setItem(THEME_KEY, isLight ? "light" : "dark");
-  }, [isLight, ready]);
-
-  useEffect(() => {
-    let intervalId: number | undefined;
-    const timeout = window.setTimeout(() => {
-      setShake(true);
-      intervalId = window.setInterval(() => setShake(true), 8000);
-    }, 30000);
-    return () => {
-      window.clearTimeout(timeout);
-      if (intervalId) window.clearInterval(intervalId);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!shake) return;
-    const t = window.setTimeout(() => setShake(false), 700);
-    return () => window.clearTimeout(t);
-  }, [shake]);
+  const toggleMascot = () => {
+    updateSettings({ mascotEnabled: !mascotEnabled });
+  };
 
   return (
     <>
-      {/* Theme toggle */}
+      {/* Mascot toggle */}
       <motion.button
         type="button"
-        onClick={() => { setIsLight(prev => !prev); setShake(false); }}
+        onClick={toggleMascot}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        animate={shake ? { rotate: [0, -8, 8, -6, 6, 0] } : { rotate: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-900 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
-        title={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
-        aria-label={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
+        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-90 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
+        title={mascotEnabled ? "Tắt linh vật" : "Bật linh vật"}
+        aria-label={mascotEnabled ? "Tắt linh vật" : "Bật linh vật"}
       >
-        {isLight ? <Moon size={18} /> : <Sun size={18} />}
+        {mascotEnabled ? <Eye size={18} /> : <EyeOff size={18} />}
       </motion.button>
 
       {/* Menu button */}
@@ -78,7 +47,7 @@ export function ThemeToggleButton() {
         onClick={() => setMenuOpen(o => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-900 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
+        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-90 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
         aria-label="Menu"
         title="Menu"
       >
@@ -100,7 +69,7 @@ export function ThemeToggleButton() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-xl px-4 py-2 text-sm font-bold text-indigo-900 transition hover:bg-indigo-50 whitespace-nowrap"
+                className="rounded-xl px-4 py-2 text-sm font-bold text-indigo-90 transition hover:bg-indigo-50 whitespace-nowrap"
               >
                 {item.label}
               </Link>
