@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AdminProvider } from "@/lib/AdminContext";
-import { AuthProvider } from "@/lib/AuthContext";
 import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
 import { VisitorTracker } from "@/components/shared/VisitorTracker";
@@ -69,17 +68,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className="dark">
+    <html lang="vi" className="light">
       <body>
-        <NextTopLoader color="#7C3AED" showSpinner={false} shadow="0 0 10px #7C3AED,0 0 5px #7C3AED" />
-        <AuthProvider>
-          <AdminProvider>
-            <ExternalScripts />
-            <VisitorTracker />
-            {children}
-            <MarketingChrome />
-          </AdminProvider>
-        </AuthProvider>
+        <NextTopLoader color="#7C3AED" showSpinner={false} shadow="0 0 10px #312E81,0 0 5px #7C3AED" />
+        <AdminProvider>
+          <ExternalScripts />
+          <VisitorTracker />
+          {children}
+          <MarketingChrome />
+        </AdminProvider>
       </body>
     </html>
   );

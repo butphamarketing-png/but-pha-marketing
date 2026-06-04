@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -18,14 +18,17 @@ import {
   Users,
 } from "lucide-react";
 import { SiFacebook } from "react-icons/si";
-import { LoginModal } from "@/components/shared/LoginModal";
-import { ParticleBackground } from "@/components/shared/ParticleBackground";
+import dynamic from "next/dynamic";
+
+const ParticleBackground = dynamic(
+  () => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground),
+  { ssr: false },
+);
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
 export default function AboutPageClient() {
-  const [showLogin, setShowLogin] = useState(false);
   const [services, setServices] = useState<Service[]>([]);
   const { settings } = useAdmin();
 
@@ -130,14 +133,14 @@ export default function AboutPageClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#06030d] text-white">
+    <div className="min-h-screen bg-[#06030d] text-slate-900">
       <ParticleBackground />
-      <header className="sticky top-0 z-40 border-b border-fuchsia-400/15 bg-[#080510]/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-violet-500/15 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
           <Link href="/" className="flex items-center gap-3">
             <img src={logoSrc} alt={brandName} className="h-12 w-12 rounded-full object-cover" />
             <div>
-              <div className="text-sm font-black uppercase tracking-[0.16em] text-white">{brandName}</div>
+              <div className="text-sm font-black uppercase tracking-[0.16em] text-slate-900">{brandName}</div>
               <div className="text-xs text-slate-400">Giải pháp marketing thực chiến</div>
             </div>
           </Link>
@@ -148,7 +151,7 @@ export default function AboutPageClient() {
                 key={item.label}
                 href={item.href}
                 className={`text-sm font-bold transition ${
-                  item.href === "/gioi-thieu" ? "text-white" : "text-slate-300 hover:text-white"
+                  item.href === "/gioi-thieu" ? "text-slate-900" : "text-slate-300 hover:text-slate-900"
                 }`}
               >
                 {item.label}
@@ -159,18 +162,8 @@ export default function AboutPageClient() {
           <div className="hidden items-center gap-3 lg:flex">
             <button
               type="button"
-              onClick={() => {
-                playClickSound();
-                setShowLogin(true);
-              }}
-              className="rounded-2xl border border-fuchsia-400/30 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10"
-            >
-              Lộ trình dự án
-            </button>
-            <button
-              type="button"
               onClick={scrollToConsultation}
-              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(168,85,247,0.3)] transition hover:scale-[1.01]"
+              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(124,58,237,0.3)] transition hover:scale-[1.01]"
             >
               <Phone className="h-4 w-4" />
               Liên hệ tư vấn
@@ -182,10 +175,10 @@ export default function AboutPageClient() {
       <main className="relative overflow-hidden pt-12">
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-sm font-black text-fuchsia-200">01</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Bứt Phá Marketing là ai?</h2>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">01</span>
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Bứt Phá Marketing là ai?</h2>
             </div>
 
             <div className={`mt-6 grid gap-8 ${teamImage ? "lg:grid-cols-[1.1fr_0.9fr]" : "lg:grid-cols-1"}`}>
@@ -202,7 +195,7 @@ export default function AboutPageClient() {
               </div>
 
               {teamImage && (
-                <div className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.03]">
+                <div className="overflow-hidden rounded-[1.8rem] border border-indigo-200 bg-white/[0.03]">
                   <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-cover" />
                 </div>
               )}
@@ -215,13 +208,13 @@ export default function AboutPageClient() {
                 { value: "5+ năm", label: "Kinh nghiệm thực chiến trong marketing", icon: Sparkles },
                 { value: "95%", label: "Khách hàng hài lòng và tiếp tục đồng hành", icon: Target },
               ].map((stat) => (
-                <div key={stat.value} className="rounded-[1.6rem] border border-fuchsia-400/20 bg-[#10081b] p-5">
+                <div key={stat.value} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
                       <stat.icon className="h-5 w-5" />
                     </span>
                     <div>
-                      <div className="text-3xl font-black text-fuchsia-300">{stat.value}</div>
+                      <div className="text-3xl font-black text-violet-600">{stat.value}</div>
                       <div className="mt-1 text-sm leading-6 text-slate-300">{stat.label}</div>
                     </div>
                   </div>
@@ -232,19 +225,19 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-sm font-black text-fuchsia-200">02</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Điều chúng tôi thực sự làm</h2>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">02</span>
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Điều chúng tôi thực sự làm</h2>
             </div>
 
             <div className="mt-8 grid gap-5 xl:grid-cols-5">
               {serviceHighlights.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-fuchsia-400/20 bg-[#10081b] p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
+                <div key={item.title} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
                     <item.icon className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-5 text-xl font-black text-white">{item.title}</h3>
+                  <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
                 </div>
               ))}
@@ -253,19 +246,19 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-sm font-black text-fuchsia-200">03</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Triết lý làm việc</h2>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">03</span>
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Triết lý làm việc</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {workPrinciples.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-[#10081b] p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
+                <div key={item.title} className="rounded-[1.6rem] border border-indigo-200 bg-white p-5">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
                     <item.icon className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-5 text-xl font-black text-white">{item.title}</h3>
+                  <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
                 </div>
               ))}
@@ -274,10 +267,10 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-sm font-black text-fuchsia-200">04</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Tầm nhìn – Sứ mệnh – Trách nhiệm</h2>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">04</span>
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Tầm nhìn – Sứ mệnh – Trách nhiệm</h2>
             </div>
 
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -298,8 +291,8 @@ export default function AboutPageClient() {
                     "Chúng tôi có trách nhiệm mang đến dịch vụ chất lượng, đồng hành lâu dài và góp phần vào sự phát triển bền vững của khách hàng và cộng đồng.",
                 },
               ].map((item) => (
-                <div key={item.title} className="rounded-[1.7rem] border border-fuchsia-400/20 bg-[#10081b] px-6 py-7 text-center">
-                  <h3 className="text-2xl font-black uppercase tracking-[0.14em] text-fuchsia-300">{item.title}</h3>
+                <div key={item.title} className="rounded-[1.7rem] border border-violet-500/20 bg-white px-6 py-7 text-center">
+                  <h3 className="text-2xl font-black uppercase tracking-[0.14em] text-violet-600">{item.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-slate-300">{item.description}</p>
                 </div>
               ))}
@@ -308,16 +301,16 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-sm font-black text-fuchsia-200">05</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Vì sao khách hàng chọn chúng tôi?</h2>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">05</span>
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Vì sao khách hàng chọn chúng tôi?</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-6">
               {whyChooseUs.map((item) => (
-                <div key={item} className="rounded-[1.5rem] border border-white/10 bg-[#10081b] px-4 py-5 text-center text-sm font-bold text-slate-200">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/15 text-fuchsia-200">
+                <div key={item} className="rounded-[1.5rem] border border-indigo-200 bg-white px-4 py-5 text-center text-sm font-bold text-slate-200">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   {item}
@@ -328,13 +321,13 @@ export default function AboutPageClient() {
         </section>
 
         <section id="consultation" className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:pb-16">
-          <div className="overflow-hidden rounded-[2.2rem] border border-fuchsia-400/20 bg-[linear-gradient(90deg,rgba(19,10,32,0.96),rgba(61,28,110,0.88))] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.42)] lg:p-8">
+          <div className="overflow-hidden rounded-[2.2rem] border border-violet-500/20 bg-[linear-gradient(90deg,rgba(19,10,32,0.96),rgba(61,28,110,0.88))] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.42)] lg:p-8">
             <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.8fr]">
               <div>
-                <div className="inline-flex items-center rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-fuchsia-200">
+                <div className="inline-flex items-center rounded-full border border-violet-500/30 bg-violet-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-violet-200">
                   06
                 </div>
-                <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] text-white">Sẵn sàng bứt phá cùng doanh nghiệp của bạn?</h2>
+                <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] text-slate-900">Sẵn sàng bứt phá cùng doanh nghiệp của bạn?</h2>
                 <p className="mt-5 max-w-2xl text-xl leading-9 text-violet-100/90">
                   Đừng để đối thủ đi trước. Hãy để Bứt Phá Marketing đồng hành cùng bạn ngay hôm nay.
                 </p>
@@ -349,7 +342,7 @@ export default function AboutPageClient() {
                   </button>
                   <Link
                     href="/#services"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-sm font-black text-white transition hover:bg-white/15"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-indigo-200 bg-indigo-100 px-6 py-4 text-sm font-black text-white transition hover:bg-white/15"
                   >
                     Nhận báo giá miễn phí
                     <ArrowRight className="h-4 w-4" />
@@ -358,21 +351,21 @@ export default function AboutPageClient() {
               </div>
 
               <div className="relative flex items-end justify-center">
-                <span className="absolute inset-x-12 bottom-8 h-24 rounded-full bg-fuchsia-500/25 blur-3xl" />
-                <img src={mascotImage} alt="Mascot Bứt Phá Marketing" className="relative max-h-[280px] object-contain drop-shadow-[0_24px_40px_rgba(168,85,247,0.35)]" />
+                <span className="absolute inset-x-12 bottom-8 h-24 rounded-full bg-violet-600/25 blur-3xl" />
+                <img src={mascotImage} alt="Mascot Bứt Phá Marketing" className="relative max-h-[280px] object-contain drop-shadow-[0_24px_40px_rgba(124,58,237,0.35)]" />
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-[#06030e]">
+      <footer className="border-t border-indigo-200 bg-[#06030e]">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr] lg:px-6">
           <div>
             <div className="flex items-center gap-3">
               <img src={logoSrc} alt={brandName} className="h-11 w-11 rounded-full object-cover" />
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-white">{brandName}</p>
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-slate-900">{brandName}</p>
                 <p className="text-xs text-slate-400">Giải pháp marketing thực chiến</p>
               </div>
             </div>
@@ -382,7 +375,7 @@ export default function AboutPageClient() {
           </div>
 
           <div>
-            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên hệ</h3>
+            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li>{settings?.hotline || "090.143.8703"}</li>
               <li>{settings?.email || "hello@butphamarketing.com"}</li>
@@ -391,7 +384,7 @@ export default function AboutPageClient() {
           </div>
 
           <div>
-            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Dịch vụ</h3>
+            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Dịch vụ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li><Link href="/website">Thiết kế Website</Link></li>
               <li><Link href="/facebook">Quản trị Fanpage</Link></li>
@@ -401,7 +394,7 @@ export default function AboutPageClient() {
           </div>
 
           <div>
-            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-white">Liên kết nhanh</h3>
+            <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên kết nhanh</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li><Link href="/">Trang chủ</Link></li>
               <li><Link href="/gioi-thieu">Giới thiệu</Link></li>
@@ -412,7 +405,6 @@ export default function AboutPageClient() {
         </div>
       </footer>
 
-      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );
 }

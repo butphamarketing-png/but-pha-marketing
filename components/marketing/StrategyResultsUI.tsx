@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
@@ -63,7 +63,7 @@ export function StrategyResultsNav({ activeId }: { activeId?: StrategyResultSect
       </div>
       <div className="mb-2 h-1 overflow-hidden rounded-full bg-violet-100">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 transition-all duration-300"
+          className="h-full rounded-full bg-gradient-to-r from-indigo-900 to-violet-600 transition-all duration-300"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -121,7 +121,7 @@ export function StrategyResultsStickyBar({
           <p className="text-[10px] font-bold text-violet-600">{tierLabel}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-sm font-black text-fuchsia-700">{monthTotal}<span className="text-[10px] font-bold text-slate-500">/th</span></p>
+          <p className="text-sm font-black text-violet-700">{monthTotal}<span className="text-[10px] font-bold text-slate-500">/th</span></p>
           <p className="text-[10px] text-slate-500">Setup {onceTotal}</p>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function SectionHeader({
   return (
     <header id={id} className="scroll-mt-24">
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-black text-white shadow-md">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-900 to-violet-600 text-sm font-black text-white shadow-md">
           {step}
         </span>
         <div>

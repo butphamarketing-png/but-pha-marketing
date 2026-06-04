@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 
@@ -85,7 +85,7 @@ export function ParticleBackground() {
       const lineBoost = mouse.active ? Math.max(0, 1 - mouseDist / 180) : 0;
       const alpha = 0.035 + (1 - dist / maxDistance) * 0.08 + lineBoost * 0.2;
 
-      ctx.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
+      ctx.strokeStyle = `rgba(124, 58, 237, ${alpha * 0.85})`;
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
@@ -117,7 +117,7 @@ export function ParticleBackground() {
 
       ctx.save();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(168, 85, 247, 0.06)";
+      ctx.strokeStyle = "rgba(124, 58, 237, 0.06)";
 
       for (let y = 0; y <= height + horizontalGap; y += horizontalGap) {
         const distance = y - waveCenterY;
@@ -187,12 +187,12 @@ export function ParticleBackground() {
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius + 4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(168, 85, 247, ${0.03 + glow * 0.08})`;
+        ctx.fillStyle = `rgba(124, 58, 237, ${0.03 + glow * 0.08})`;
         ctx.fill();
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = attraction > 0.2 ? "rgba(125, 211, 252, 0.95)" : "rgba(196, 181, 253, 0.7)";
+        ctx.fillStyle = attraction > 0.2 ? "rgba(124, 58, 237, 0.9)" : "rgba(49, 46, 129, 0.45)";
         ctx.fill();
       }
     };
@@ -203,13 +203,13 @@ export function ParticleBackground() {
       ctx.save();
       ctx.beginPath();
       ctx.arc(mouse.x, mouse.y, 46 + mouse.ripple * 28, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(125, 211, 252, ${0.08 - mouse.ripple * 0.05})`;
+      ctx.strokeStyle = `rgba(124, 58, 237, ${0.08 - mouse.ripple * 0.05})`;
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(mouse.x, mouse.y, 92 + mouse.ripple * 48, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(168, 85, 247, ${0.06 - mouse.ripple * 0.035})`;
+      ctx.strokeStyle = `rgba(124, 58, 237, ${0.06 - mouse.ripple * 0.035})`;
       ctx.lineWidth = 1;
       ctx.stroke();
       ctx.restore();
@@ -219,8 +219,8 @@ export function ParticleBackground() {
       ctx.clearRect(0, 0, width, height);
 
       const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 240);
-      gradient.addColorStop(0, "rgba(125, 211, 252, 0.08)");
-      gradient.addColorStop(0.45, "rgba(168, 85, 247, 0.06)");
+      gradient.addColorStop(0, "rgba(124, 58, 237, 0.06)");
+      gradient.addColorStop(0.45, "rgba(124, 58, 237, 0.06)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);

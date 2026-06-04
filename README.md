@@ -1,25 +1,18 @@
-# AI SEO Content Platform Scaffold
+# Bứt Phá Marketing
 
-This repo contains a starter scaffold for:
-- Backend API
-- Frontend dashboard
-- PRD
-- Architecture docs
-- Implementation tasks
+Website marketing agency (Next.js + Supabase).
 
-## Structure
+## Scripts
 
-```text
-apps/
-  backend/
-  frontend/
-docs/
-  architecture/
-```
+- `npm run dev` — local development
+- `npm run build` — production build
+- `npm run start` — run production server
+- `npm run lint` — ESLint
 
-## Notes
+## Main routes
 
-- Backend scaffold uses FastAPI-style structure
-- Frontend scaffold uses Next.js-style structure
-- Docs are written to support immediate team alignment
-
+- `/` — homepage
+- `/blog` — news
+- `/chienluocmarketing` — marketing strategy tool
+- `/khachhang` — customer management
+- `/admin` — admin panel

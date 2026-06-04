@@ -15,7 +15,6 @@ const NAV_ITEMS = [
   { label: "Google Maps", href: "/google-maps" },
   { label: "Tin Tức", href: "/blog" },
   { label: "Liên Hệ", href: "/lien-he" },
-  { label: "Lộ Trình Dự Án", href: "/lo-trinh-du-an" },
 ];
 
 export function ThemeToggleButton() {
@@ -26,7 +25,7 @@ export function ThemeToggleButton() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
-    const initialLight = savedTheme === "light";
+    const initialLight = savedTheme === null ? true : savedTheme === "light";
     setIsLight(initialLight);
     document.documentElement.classList.toggle("light", initialLight);
     setReady(true);
@@ -66,7 +65,7 @@ export function ThemeToggleButton() {
         whileTap={{ scale: 0.94 }}
         animate={shake ? { rotate: [0, -8, 8, -6, 6, 0] } : { rotate: 0 }}
         transition={{ duration: 0.6 }}
-        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-xl backdrop-blur-sm transition-all"
+        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-900 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
         title={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
         aria-label={isLight ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
       >
@@ -79,7 +78,7 @@ export function ThemeToggleButton() {
         onClick={() => setMenuOpen(o => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-xl backdrop-blur-sm transition-all"
+        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-900 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
         aria-label="Menu"
         title="Menu"
       >
@@ -94,14 +93,14 @@ export function ThemeToggleButton() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-14 top-[calc(50%-20px)] z-[54] flex flex-col gap-1 rounded-2xl border border-white/10 bg-black/80 p-2 shadow-2xl backdrop-blur-md"
+            className="fixed left-14 top-[calc(50%-20px)] z-[54] flex flex-col gap-1 rounded-2xl border border-indigo-100 bg-white/95 p-2 shadow-2xl backdrop-blur-md"
           >
             {NAV_ITEMS.map(item => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-xl px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10 whitespace-nowrap"
+                className="rounded-xl px-4 py-2 text-sm font-bold text-indigo-900 transition hover:bg-indigo-50 whitespace-nowrap"
               >
                 {item.label}
               </Link>

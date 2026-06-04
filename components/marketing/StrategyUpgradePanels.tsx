@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import {
@@ -34,13 +34,13 @@ const GRADE_STYLES = {
   red: "from-red-500 to-rose-600 text-white",
   amber: "from-amber-500 to-orange-500 text-white",
   emerald: "from-emerald-500 to-teal-600 text-white",
-  violet: "from-violet-600 to-fuchsia-600 text-white",
+  violet: "from-indigo-900 to-violet-600 text-white",
 } as const;
 
 const TIER_STYLES = {
   starter: { border: "border-slate-200", badge: "bg-slate-100 text-slate-700" },
   growth: { border: "border-violet-300 ring-2 ring-violet-400", badge: "bg-violet-600 text-white" },
-  professional: { border: "border-fuchsia-200", badge: "bg-fuchsia-100 text-fuchsia-800" },
+  professional: { border: "border-violet-200", badge: "bg-violet-100 text-indigo-900" },
 } as const;
 
 const CHANNEL_ICON = {
@@ -322,7 +322,7 @@ export function FormProgressBar({ percent }: { percent: number }) {
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-violet-100">
         <motion.div
-          className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500"
+          className="h-full rounded-full bg-gradient-to-r from-indigo-900 to-violet-600"
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
           transition={{ duration: 0.4 }}

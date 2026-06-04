@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -23,12 +23,10 @@ import {
 } from "lucide-react";
 import { SiFacebook, SiMessenger } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
-import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 
-const LoginModal = dynamic(() => import("@/components/shared/LoginModal").then((mod) => mod.LoginModal), { ssr: false });
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
 
@@ -69,7 +67,6 @@ function slugify(value: string) {
 export default function HomePageClient() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [showLogin, setShowLogin] = useState(false);
   const [showConsult, setShowConsult] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
@@ -125,7 +122,6 @@ export default function HomePageClient() {
       setSubmittingContact(false);
     }
   };
-  const { user } = useAuth();
   const { settings } = useAdmin();
 
   useEffect(() => {
@@ -372,7 +368,7 @@ export default function HomePageClient() {
       description: "Tối ưu hiển thị địa phương, tăng lượt gọi và khách hàng ghé thăm cửa hàng.",
       image: "/GoogleMaps.png",
       href: "/google-maps",
-      accent: "from-fuchsia-500/20",
+      accent: "from-violet-600/20",
     },
   ];
 
@@ -392,34 +388,34 @@ export default function HomePageClient() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050308]">
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
         <div className="relative h-24 w-24">
-          <div className="absolute inset-0 animate-ping rounded-full bg-fuchsia-500/20" />
-          <img src={logoSrc} alt="Loading" className="relative z-10 h-24 w-24 rounded-full object-cover shadow-[0_0_40px_rgba(168,85,247,0.4)]" />
+          <div className="absolute inset-0 animate-ping rounded-full bg-violet-600/20" />
+          <img src={logoSrc} alt="Loading" className="relative z-10 h-24 w-24 rounded-full object-cover shadow-[0_0_40px_rgba(124,58,237,0.4)]" />
         </div>
-        <div className="mt-8 w-48 overflow-hidden rounded-full bg-white/5 p-1">
-          <div className="h-1 rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className="mt-8 w-48 overflow-hidden rounded-full bg-indigo-50 p-1">
+          <div className="h-1 rounded-full bg-gradient-to-r from-indigo-900 to-violet-600 transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
-        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-fuchsia-300/60">Đang khởi tạo hệ thống...</p>
+        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400">Đang khởi tạo hệ thống...</p>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen bg-[#050308] font-sans selection:bg-fuchsia-500/30">
+    <div className="relative min-h-screen bg-white font-sans selection:bg-violet-600/30">
       <ParticleBackground />
       
       <div className="relative z-10 flex flex-col">
-        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#050308]/60 backdrop-blur-2xl transition-all duration-500">
+        <header className="sticky top-0 z-50 w-full border-b border-indigo-100 bg-white/60 backdrop-blur-2xl transition-all duration-500">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
             <Link href="/" className="group flex items-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
               <div className="relative">
-                <div className="absolute -inset-2 rounded-full bg-fuchsia-500/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-white/10 object-cover shadow-2xl" />
+                <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-indigo-200 object-cover shadow-2xl" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black uppercase tracking-[0.15em] text-white md:text-2xl leading-none">{brandName}</span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-fuchsia-500/80 mt-1">Bứt Phá Để Dẫn Đầu</span>
+                <span className="text-xl font-black uppercase tracking-[0.15em] text-slate-900 md:text-2xl leading-none">{brandName}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-violet-600/80 mt-1">Bứt Phá Để Dẫn Đầu</span>
               </div>
             </Link>
 
@@ -428,37 +424,23 @@ export default function HomePageClient() {
                 <Link 
                   key={item.label} 
                   href={item.href} 
-                  className="relative text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 transition-all hover:text-white group"
+                  className="relative text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 transition-all hover:text-slate-900 group"
                 >
                   {item.label}
-                  <span className="absolute -bottom-2 left-0 h-px w-0 bg-fuchsia-500 transition-all group-hover:w-full" />
+                  <span className="absolute -bottom-2 left-0 h-px w-0 bg-violet-600 transition-all group-hover:w-full" />
                 </Link>
               ))}
             </nav>
 
             <div className="flex items-center gap-4">
               <button
-                onClick={() => { playClickSound(); setShowLogin(true); }}
-                className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 sm:flex"
-              >
-                <Workflow size={14} className="text-fuchsia-500" />
-                Lộ trình
-              </button>
-              <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
                 className="group relative hidden overflow-hidden rounded-2xl bg-white px-8 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] text-black transition-all hover:scale-105 active:scale-95 sm:block"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-violet-500 opacity-0 transition-opacity group-hover:opacity-10 group-active:opacity-20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-900 to-violet-600 opacity-0 transition-opacity group-hover:opacity-10 group-active:opacity-20" />
                 Tư vấn ngay
               </button>
               
-              {/* Mobile Menu Button - Placeholder for future implementation */}
-              <button 
-                onClick={() => { playClickSound(); setShowLogin(true); }}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white lg:hidden"
-              >
-                <Workflow size={20} className="text-fuchsia-500" />
-              </button>
             </div>
           </div>
         </header>
@@ -468,13 +450,13 @@ export default function HomePageClient() {
             <div className="absolute inset-0 z-30 flex items-center justify-between px-6 pointer-events-none lg:px-12">
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
-                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
+                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-indigo-200 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
               >
                 <ChevronLeft size={28} />
               </button>
               <button
                 onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length); }}
-                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
+                className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full border border-indigo-200 bg-black/20 text-white backdrop-blur-xl transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
               >
                 <ChevronRight size={28} />
               </button>
@@ -494,7 +476,7 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050308]/40" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-900/20" />
               </motion.div>
             </AnimatePresence>
 
@@ -505,11 +487,11 @@ export default function HomePageClient() {
                   onClick={() => { playClickSound(); setActiveHeroSlide(i); }}
                   className="group relative h-12 w-1 bg-transparent overflow-hidden rounded-full"
                 >
-                  <div className={`absolute inset-0 bg-white/10 transition-all duration-300 ${activeHeroSlide === i ? "bg-fuchsia-500" : "group-hover:bg-white/30"}`} />
+                  <div className={`absolute inset-0 bg-indigo-100 transition-all duration-300 ${activeHeroSlide === i ? "bg-violet-600" : "group-hover:bg-white/30"}`} />
                   {activeHeroSlide === i && (
                     <motion.div 
                       layoutId="hero-pager"
-                      className="absolute inset-0 bg-fuchsia-500 shadow-[0_0_20px_rgba(168,85,247,0.8)]"
+                      className="absolute inset-0 bg-violet-600 shadow-[0_0_20px_rgba(124,58,237,0.8)]"
                     />
                   )}
                 </button>
@@ -525,8 +507,8 @@ export default function HomePageClient() {
                 viewport={{ once: true }}
                 className="relative"
               >
-                <div className="absolute -inset-10 bg-fuchsia-500/10 blur-[100px] rounded-full animate-pulse" />
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.02] shadow-2xl">
+                <div className="absolute -inset-10 bg-violet-600/10 blur-[100px] rounded-full animate-pulse" />
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-indigo-200 bg-indigo-50/40 shadow-2xl">
                   <img 
                     src="/mascot-home.png" 
                     alt="Về chúng tôi" 
@@ -541,7 +523,7 @@ export default function HomePageClient() {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+                    className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
                   >
                     Tầm nhìn & Sứ mệnh
                   </motion.p>
@@ -549,10 +531,10 @@ export default function HomePageClient() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-5xl font-black text-white md:text-6xl tracking-tight leading-tight"
+                    className="text-5xl font-black text-slate-900 md:text-6xl tracking-tight leading-tight"
                   >
                     Đồng hành cùng sự <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-violet-400">Bứt Phá</span> của bạn
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-violet-600">Bứt Phá</span> của bạn
                   </motion.h2>
                   <motion.p 
                     initial={{ opacity: 0, y: 20 }}
@@ -566,8 +548,8 @@ export default function HomePageClient() {
 
                 <div className="grid gap-6 md:grid-cols-2">
                   {[
-                    { title: "Chiến lược", desc: "Tư duy marketing dựa trên dữ liệu thật.", icon: Target, color: "text-fuchsia-400" },
-                    { title: "Công nghệ", desc: "Ứng dụng AI & Automation tối ưu vận hành.", icon: Workflow, color: "text-violet-400" },
+                    { title: "Chiến lược", desc: "Tư duy marketing dựa trên dữ liệu thật.", icon: Target, color: "text-violet-600" },
+                    { title: "Công nghệ", desc: "Ứng dụng AI & Automation tối ưu vận hành.", icon: Workflow, color: "text-violet-600" },
                   ].map((item, i) => (
                     <motion.div 
                       key={i}
@@ -575,12 +557,12 @@ export default function HomePageClient() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
-                      className="group rounded-[2rem] border border-white/5 bg-white/[0.02] p-6 transition-all hover:bg-white/[0.05]"
+                      className="group rounded-[2rem] border border-indigo-100 bg-indigo-50/40 p-6 transition-all hover:bg-indigo-50/80"
                     >
-                      <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 ${item.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
+                      <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 ${item.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
                         <item.icon size={24} />
                       </div>
-                      <h3 className="text-lg font-black text-white">{item.title}</h3>
+                      <h3 className="text-lg font-black text-slate-900">{item.title}</h3>
                       <p className="mt-2 text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
                     </motion.div>
                   ))}
@@ -593,7 +575,7 @@ export default function HomePageClient() {
                 >
                   <Link 
                     href="/gioi-thieu" 
-                    className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-white/10 hover:border-white/20"
+                    className="group inline-flex items-center gap-3 rounded-full border border-indigo-200 bg-indigo-50 px-10 py-5 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-indigo-100 hover:border-indigo-300"
                   >
                     Tìm hiểu thêm về chúng tôi
                     <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
@@ -609,7 +591,7 @@ export default function HomePageClient() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+                className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
               >
                 Giải pháp cốt lõi
               </motion.p>
@@ -617,9 +599,9 @@ export default function HomePageClient() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-4xl font-black text-white md:text-5xl lg:text-6xl tracking-tight"
+                className="text-4xl font-black text-slate-900 md:text-5xl lg:text-6xl tracking-tight"
               >
-                Dịch vụ <span className="text-fuchsia-500">Chiến lược</span>
+                Dịch vụ <span className="text-violet-600">Chiến lược</span>
               </motion.h2>
             </div>
 
@@ -634,24 +616,24 @@ export default function HomePageClient() {
                 >
                   <Link
                     href={card.href}
-                    className="group relative block h-full overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#0e0918] p-4 transition-all hover:border-fuchsia-500/30 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]"
+                    className="group relative block h-full overflow-hidden rounded-[2.5rem] border border-indigo-100 bg-white p-4 transition-all hover:border-violet-600/30 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]"
                   >
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-white/5">
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-indigo-100">
                       <img src={card.image} alt={card.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0e0918] via-transparent to-transparent opacity-60" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/70 via-transparent to-transparent opacity-60" />
                     </div>
                     <div className="p-6">
                       <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-2xl font-black text-white group-hover:text-fuchsia-400 transition-colors">{card.title}</h3>
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition-all group-hover:bg-fuchsia-500 group-hover:text-white group-hover:rotate-45">
+                        <h3 className="text-2xl font-black text-slate-900 group-hover:text-violet-600 transition-colors">{card.title}</h3>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-white/40 transition-all group-hover:bg-violet-600 group-hover:text-white group-hover:rotate-45">
                           <ArrowRight size={20} />
                         </div>
                       </div>
                       <p className="text-[15px] leading-relaxed text-slate-400 font-medium">{card.description}</p>
                       
-                      <div className="mt-8 flex items-center gap-4 border-t border-white/5 pt-6 opacity-0 transition-all duration-500 group-hover:opacity-100">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-fuchsia-500">Khám phá chi tiết</span>
-                        <div className="h-px flex-1 bg-gradient-to-r from-fuchsia-500/50 to-transparent" />
+                      <div className="mt-8 flex items-center gap-4 border-t border-indigo-100 pt-6 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-600">Khám phá chi tiết</span>
+                        <div className="h-px flex-1 bg-gradient-to-r from-violet-600/50 to-transparent" />
                       </div>
                     </div>
                   </Link>
@@ -667,7 +649,7 @@ export default function HomePageClient() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  className="text-xs font-black uppercase tracking-[0.4em] text-fuchsia-500"
+                  className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
                 >
                   Giá trị cốt lõi
                 </motion.p>
@@ -675,7 +657,7 @@ export default function HomePageClient() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-4xl font-black text-white md:text-5xl tracking-tight"
+                  className="text-4xl font-black text-slate-900 md:text-5xl tracking-tight"
                 >
                   Tại sao chọn chúng tôi?
                 </motion.h2>
@@ -683,13 +665,13 @@ export default function HomePageClient() {
               <div className="hidden gap-4 md:flex">
                 <button
                   onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "left"); }}
-                  className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
                 >
                   <ChevronLeft size={24} />
                 </button>
                 <button
                   onClick={() => { playClickSound(); scrollContainer(whyChooseUsRef, "right"); }}
-                  className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 text-white transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-90"
                 >
                   <ChevronRight size={24} />
                 </button>
@@ -706,12 +688,12 @@ export default function HomePageClient() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group relative rounded-[2.5rem] border border-white/5 bg-white/[0.02] p-8 transition-all hover:bg-white/[0.04] hover:border-white/10"
+                  className="group relative rounded-[2.5rem] border border-indigo-100 bg-indigo-50/40 p-8 transition-all hover:bg-indigo-50/60 hover:border-indigo-200"
                 >
-                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-fuchsia-500/10 text-fuchsia-500 transition-all group-hover:scale-110 group-hover:rotate-6 group-hover:bg-fuchsia-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-violet-600/10 text-violet-600 transition-all group-hover:scale-110 group-hover:rotate-6 group-hover:bg-violet-600 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(124,58,237,0.5)]">
                     <item.icon size={32} />
                   </div>
-                  <h3 className="text-xl font-black text-white tracking-tight">{item.title}</h3>
+                  <h3 className="text-xl font-black text-slate-900 tracking-tight">{item.title}</h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-slate-500 font-medium">{item.description}</p>
                 </motion.div>
               ))}
@@ -721,10 +703,10 @@ export default function HomePageClient() {
           <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-fuchsia-300">Tin tức & Kiến thức</p>
-                <h2 className="mt-2 text-3xl font-black text-white">Cập nhật xu hướng Marketing</h2>
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-violet-600">Tin tức & Kiến thức</p>
+                <h2 className="mt-2 text-3xl font-black text-slate-900">Cập nhật xu hướng Marketing</h2>
               </div>
-              <Link href="/blog" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-black text-white transition hover:bg-white/10">
+              <Link href="/blog" className="inline-flex items-center gap-2 rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-black text-white transition hover:bg-indigo-100">
                 Xem tất cả bài viết
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -733,7 +715,7 @@ export default function HomePageClient() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {topBlogs.map((post) => (
                 <Link key={post.id} href={`/blog/${post.slug || post.id}`} className="group block">
-                  <article className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0e0918] transition duration-300 hover:border-fuchsia-500/30 h-full">
+                  <article className="overflow-hidden rounded-[1.5rem] border border-indigo-200 bg-white transition duration-300 hover:border-violet-600/30 h-full">
                     <div className="aspect-video overflow-hidden">
                       <img 
                         src={post.imageUrl || "/mascot-home.png"} 
@@ -742,11 +724,11 @@ export default function HomePageClient() {
                       />
                     </div>
                     <div className="p-5">
-                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-fuchsia-400">
+                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-600">
                         <CalendarDays className="h-3 w-3" />
                         {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("vi-VN") : "Mới cập nhật"}
                       </div>
-                      <h3 className="mt-3 text-lg font-black leading-tight text-white line-clamp-2 group-hover:text-fuchsia-300 transition">
+                      <h3 className="mt-3 text-lg font-black leading-tight text-slate-900 line-clamp-2 group-hover:text-violet-600 transition">
                         {post.title}
                       </h3>
                       <p className="mt-3 text-sm text-slate-400 line-clamp-2">
@@ -760,22 +742,22 @@ export default function HomePageClient() {
           </section>
 
           <section id="contact" className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-            <div className="relative overflow-hidden rounded-[3rem] border border-fuchsia-500/20 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.15),transparent_40%),linear-gradient(180deg,rgba(16,8,27,0.96),rgba(12,6,20,0.98))] p-8 md:p-12">
+            <div className="relative overflow-hidden rounded-[3rem] border border-violet-600/20 bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,0.15),transparent_40%),linear-gradient(180deg,rgba(238,242,255,0.98),rgba(255,255,255,1))] p-8 md:p-12">
               <div className="grid gap-12 lg:grid-cols-2">
                 <div>
-                  <h2 className="text-4xl font-black text-white lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
+                  <h2 className="text-4xl font-black text-slate-900 lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
                   <p className="mt-6 text-lg leading-8 text-slate-300">
                     Để lại thông tin, đội ngũ chuyên gia của chúng tôi sẽ liên hệ tư vấn lộ trình marketing tối ưu nhất cho doanh nghiệp của bạn.
                   </p>
                   
                   <div className="mt-10 space-y-6">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-400">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/10 text-violet-600">
                         <Phone className="h-6 w-6" />
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-400">Hotline tư vấn</p>
-                        <p className="text-xl font-black text-white">{settings.hotline}</p>
+                        <p className="text-xl font-black text-slate-900">{settings.hotline}</p>
                       </div>
                     </div>
                   </div>
@@ -812,7 +794,7 @@ export default function HomePageClient() {
                       placeholder="Họ và tên"
                       value={contactForm.name}
                       onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                      className="w-full rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-4 text-white outline-none focus:border-violet-600/50 transition"
                     />
                     <input
                       required
@@ -820,30 +802,30 @@ export default function HomePageClient() {
                       placeholder="Số điện thoại"
                       value={contactForm.phone}
                       onChange={e => setContactForm({ ...contactForm, phone: e.target.value })}
-                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                      className="w-full rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-4 text-white outline-none focus:border-violet-600/50 transition"
                     />
                   </div>
                   <select 
                     value={contactForm.interest}
                     onChange={e => setContactForm({ ...contactForm, interest: e.target.value })}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition appearance-none"
+                    className="w-full rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-4 text-white outline-none focus:border-violet-600/50 transition appearance-none"
                   >
-                    <option value="" className="bg-[#0e0918]">Dịch vụ quan tâm</option>
-                    <option value="website" className="bg-[#0e0918]">Thiết kế Website</option>
-                    <option value="facebook" className="bg-[#0e0918]">Quản trị Fanpage</option>
-                    <option value="googlemaps" className="bg-[#0e0918]">Google Maps Marketing</option>
+                    <option value="" className="bg-white">Dịch vụ quan tâm</option>
+                    <option value="website" className="bg-white">Thiết kế Website</option>
+                    <option value="facebook" className="bg-white">Quản trị Fanpage</option>
+                    <option value="googlemaps" className="bg-white">Google Maps Marketing</option>
                   </select>
                   <textarea
                     placeholder="Ghi chú thêm"
                     value={contactForm.note}
                     onChange={e => setContactForm({ ...contactForm, note: e.target.value })}
                     rows={4}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-fuchsia-500/50 transition"
+                    className="w-full rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-4 text-white outline-none focus:border-violet-600/50 transition"
                   ></textarea>
                   <button
                     disabled={submittingContact}
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-violet-500 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+                    className="w-full rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
                   >
                     {submittingContact ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>
@@ -858,61 +840,60 @@ export default function HomePageClient() {
           </section>
         </main>
 
-        <footer className="border-t border-white/5 bg-[#050308] py-12">
+        <footer className="border-t border-indigo-100 bg-white py-12">
           <div className="mx-auto max-w-7xl px-4 lg:px-6">
             <div className="grid gap-12 lg:grid-cols-4">
               <div className="col-span-2">
                 <Link href="/" className="flex items-center gap-3">
                   <img src={logoSrc} alt={brandName} className="h-10 w-10 rounded-full object-cover" />
-                  <span className="text-xl font-black uppercase tracking-wider text-white">{brandName}</span>
+                  <span className="text-xl font-black uppercase tracking-wider text-slate-900">{brandName}</span>
                 </Link>
                 <p className="mt-6 max-w-md text-sm leading-7 text-slate-400">
                   Bứt Phá Marketing - Agency cung cấp giải pháp Digital Marketing toàn diện, giúp doanh nghiệp tối ưu hóa hiện diện số và tăng trưởng doanh thu bền vững.
                 </p>
                 <div className="mt-8 flex gap-4">
-                  <a href={settings.fanpage} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-fuchsia-500/20 hover:text-fuchsia-400">
+                  <a href={settings.fanpage} className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 text-white transition hover:bg-violet-600/20 hover:text-violet-600">
                     <SiFacebook className="h-5 w-5" />
                   </a>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-sm font-black uppercase tracking-widest text-white">Dịch vụ</h4>
+                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Dịch vụ</h4>
                 <ul className="mt-6 space-y-4 text-sm text-slate-400">
-                  <li><Link href="/website" className="hover:text-fuchsia-400 transition">Thiết kế Website</Link></li>
-                  <li><Link href="/facebook" className="hover:text-fuchsia-400 transition">Quản trị Fanpage</Link></li>
-                  <li><Link href="/google-maps" className="hover:text-fuchsia-400 transition">Google Maps Marketing</Link></li>
-                  <li><Link href="/lien-he" className="hover:text-fuchsia-400 transition">Tư vấn chiến lược</Link></li>
+                  <li><Link href="/website" className="hover:text-violet-600 transition">Thiết kế Website</Link></li>
+                  <li><Link href="/facebook" className="hover:text-violet-600 transition">Quản trị Fanpage</Link></li>
+                  <li><Link href="/google-maps" className="hover:text-violet-600 transition">Google Maps Marketing</Link></li>
+                  <li><Link href="/lien-he" className="hover:text-violet-600 transition">Tư vấn chiến lược</Link></li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="text-sm font-black uppercase tracking-widest text-white">Liên hệ</h4>
+                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Liên hệ</h4>
                 <ul className="mt-6 space-y-4 text-sm text-slate-400">
                   <li className="flex items-start gap-3">
-                    <MapPinned className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <MapPinned className="h-5 w-5 shrink-0 text-violet-600" />
                     <span>{settings.address || "Hồ Chí Minh, Việt Nam"}</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <Phone className="h-5 w-5 shrink-0 text-violet-600" />
                     <span>{settings.hotline}</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <MessageCircle className="h-5 w-5 shrink-0 text-fuchsia-400" />
+                    <MessageCircle className="h-5 w-5 shrink-0 text-violet-600" />
                     <span>{settings.email || "contact@butphamarketing.com"}</span>
                   </li>
                 </ul>
               </div>
             </div>
             
-            <div className="mt-12 border-t border-white/5 pt-8 text-center text-xs text-slate-500">
+            <div className="mt-12 border-t border-indigo-100 pt-8 text-center text-xs text-slate-500">
               <p>© {new Date().getFullYear()} {brandName}. All rights reserved.</p>
             </div>
           </div>
         </footer>
       </div>
 
-      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} />
     </div>
   );

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import {
@@ -97,7 +97,7 @@ export function FormStepIndicator({
                 <span
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-black transition ${
                     active
-                      ? "bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg ring-4 ring-violet-200"
+                      ? "bg-gradient-to-br from-indigo-900 to-violet-600 text-white shadow-lg ring-4 ring-violet-200"
                       : done
                         ? "bg-emerald-500 text-white hover:bg-emerald-600"
                         : "bg-violet-100 text-violet-400"
@@ -332,7 +332,7 @@ export function FormNavButtons({
           type="button"
           onClick={onNext}
           disabled={!canNext}
-          className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-50"
+          className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-violet-700 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-50"
         >
           Tiếp tục <ArrowRight size={16} />
         </button>
@@ -341,7 +341,7 @@ export function FormNavButtons({
           type="button"
           onClick={onSubmit}
           disabled={submitting || !canNext}
-          className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-60"
+          className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-violet-700 py-4 text-sm font-black uppercase tracking-widest text-white disabled:opacity-60"
         >
           {submitting ? "Đang xử lý..." : "Xem kết quả"} <ChevronRight size={18} />
         </button>
@@ -381,7 +381,7 @@ export function StrategySubmitConfirmModal({
         aria-modal="true"
         aria-labelledby="strategy-confirm-title"
       >
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-900 to-violet-600 text-white shadow-lg">
           <Info size={28} />
         </div>
         <h2 id="strategy-confirm-title" className="mt-4 text-xl font-black leading-snug text-slate-900">
@@ -420,7 +420,7 @@ export function StrategySubmitConfirmModal({
             type="button"
             onClick={onContinue}
             disabled={continuing}
-            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-fuchsia-600 py-3.5 text-sm font-black text-white shadow-lg disabled:opacity-60"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-violet-700 py-3.5 text-sm font-black text-white shadow-lg disabled:opacity-60"
           >
             {continuing ? "Đang xử lý..." : "Tiếp tục"} <ArrowRight size={16} />
           </button>
@@ -540,7 +540,7 @@ export function FormProgressBar({ percent, step }: { percent: number; step?: num
       </div>
       <div className="h-2.5 overflow-hidden rounded-full bg-violet-100">
         <motion.div
-          className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500"
+          className="h-full rounded-full bg-gradient-to-r from-indigo-900 to-violet-600"
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
           transition={{ duration: 0.35 }}
@@ -572,7 +572,7 @@ export function FormLivePreview({
   const owned = EXISTING_ASSET_OPTIONS.filter((a) => existingAssets.includes(a.id));
 
   return (
-    <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50/50 p-4">
+    <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-violet-50/50 p-4">
       <p className="flex items-center gap-2 text-[10px] font-black uppercase text-violet-700">
         <Sparkles size={14} /> Xem trước đề xuất (ước tính)
       </p>

@@ -20,10 +20,10 @@ export function FloatingContactButtons() {
         <motion.div
           whileHover={{ scale: 1.1, x: -5 }}
           whileTap={{ scale: 0.9 }}
-          className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/10 shadow-2xl backdrop-blur-md transition-colors hover:bg-white/20"
+          className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-indigo-200 bg-white shadow-2xl backdrop-blur-md transition-colors hover:border-violet-400 hover:bg-indigo-50"
         >
           <img src={logo} alt="Home" className="h-7 w-7 rounded-full object-cover" />
-          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-black/80 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
+          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
             Trang chủ
           </span>
         </motion.div>
@@ -37,7 +37,7 @@ export function FloatingContactButtons() {
           className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform"
         >
           <Phone size={20} fill="currentColor" />
-          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-black/80 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
+          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
             Gọi điện: {hotline}
           </span>
         </motion.div>
@@ -53,7 +53,7 @@ export function FloatingContactButtons() {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white p-0.5">
              <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="h-full w-full" />
           </div>
-          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-black/80 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
+          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
             Zalo: {hotline}
           </span>
         </motion.div>
@@ -67,7 +67,7 @@ export function FloatingContactButtons() {
           className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg shadow-purple-500/20 transition-transform"
         >
           <SiMessenger className="text-2xl" />
-          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-black/80 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
+          <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">
             Messenger
           </span>
         </motion.div>

@@ -33,7 +33,7 @@ export function StrategyExecutiveSummary({
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-700 via-violet-800 to-fuchsia-800 p-5 text-white shadow-xl md:p-6"
+      className="overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-indigo-900 via-indigo-800 to-violet-700 p-5 text-white shadow-xl md:p-6"
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 flex-1">

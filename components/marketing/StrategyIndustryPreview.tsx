@@ -3,14 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Facebook, Globe, MapPin, Search, Sparkles, Zap } from "lucide-react";
-import { searchIndustrySuggestions } from "@/lib/industry-suggestions";
+import type { IndustrySuggestionResult } from "@/lib/industry-suggestions";
 import {
   POPULAR_INDUSTRIES,
   buildLiveStrategyPreview,
   getProfileShortLabel,
   highlightIndustryLabel,
 } from "@/lib/industry-intelligence";
-import { formatVnd, getIndustryCount } from "@/lib/marketing-strategy-profiles";
+import { formatVnd } from "@/lib/marketing-strategy-profiles";
 import type { StrategyFormSnapshot } from "@/lib/marketing-strategy-profiles";
 import { buildDigitalReadiness } from "@/lib/strategy-intelligence";
 import { StrategyLocationPanel } from "@/components/marketing/StrategyLocationPanel";
@@ -53,8 +53,38 @@ export function IndustryAutocomplete({
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const debouncedQuery = useDebouncedValue(value);
+  const [suggestions, setSuggestions] = useState<IndustrySuggestionResult[]>([]);
+  const [industryTotal, setIndustryTotal] = useState<number | null>(null);
 
-  const suggestions = useMemo(() => searchIndustrySuggestions(debouncedQuery, 12), [debouncedQuery]);
+  useEffect(() => {
+    fetch("/api/industry-suggestions?count=1", { cache: "force-cache" })
+      .then((res) => res.json())
+      .then((data: { count?: number }) => {
+        if (typeof data.count === "number") setIndustryTotal(data.count);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const q = debouncedQuery.trim();
+    if (q.length < 1) {
+      setSuggestions([]);
+      return;
+    }
+    const controller = new AbortController();
+    fetch(`/api/industry-suggestions?q=${encodeURIComponent(q)}&limit=12`, {
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data: { suggestions?: IndustrySuggestionResult[] }) => {
+        setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : []);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setSuggestions([]);
+      });
+    return () => controller.abort();
+  }, [debouncedQuery]);
+
   const showDropdown = open && debouncedQuery.trim().length >= 1 && suggestions.length > 0;
 
   useEffect(() => {
@@ -116,7 +146,7 @@ export function IndustryAutocomplete({
       {!value.trim() && (
         <div className="mt-3 space-y-2">
           <p className="text-[11px] font-bold text-slate-500">
-            {getIndustryCount()}+ ngành masothue · Chọn nhanh:
+            {industryTotal ? `${industryTotal}+` : "1.000+"} ngành VSIC · Chọn nhanh:
           </p>
           <div className="flex flex-wrap gap-1.5">
             {POPULAR_INDUSTRIES.map((item) => (

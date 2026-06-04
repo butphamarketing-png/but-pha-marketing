@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -65,7 +65,7 @@ function buildMascotPalette(platformColor: string, platform: string): MascotPale
       bodyTop: "#A78BFA",
       bodyMid: "#7C3AED",
       bodyBottom: "#4C1D95",
-      shell: "#8B5CF6",
+      shell: "#7C3AED",
       bellyTop: "#F5F3FF",
       bellyBottom: "#EDE9FE",
       accent: "#6D28D9",

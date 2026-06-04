@@ -130,7 +130,8 @@ export interface AdminContextType {
 export const SETTINGS_KEY = "admin_settings";
 const MEDIA_KEYS = ["home", "facebook", "googlemaps", "website"] as const;
 const COLOR_DEFAULTS: Record<string, string> = {
-  primary: "#7C3AED",
+  primary: "#312E81",
+  accent: "#7C3AED",
   facebook: "#1877F2",
   googlemaps: "#EA4335",
   website: "#34A853",
@@ -202,7 +203,7 @@ const defaultSettings: SiteSettings = {
   address: "",
   email: "",
   fanpage: "",
-  brandColor: "#7C3AED",
+  brandColor: "#312E81",
   googleAnalytics: "G-D0XPZGPZNG",
   headJs: "",
   presentationMode: false,

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -187,16 +187,16 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
             {step === "select" ? (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {/* Default Package Info */}
-                <div className="rounded-3xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-6 lg:col-span-3">
+                <div className="rounded-3xl border border-violet-600/20 bg-violet-600/5 p-6 lg:col-span-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-400">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600/20 text-violet-500">
                       <Check size={20} />
                     </div>
                     <div>
                       <h3 className="font-bold text-white">Gói cơ bản + Responsive (Mặc định)</h3>
                       <p className="text-sm text-gray-400">Đã bao gồm trong chi phí khởi tạo ban đầu</p>
                     </div>
-                    <div className="ml-auto text-xl font-black text-fuchsia-400">{formatPrice(BASE_PRICE)}</div>
+                    <div className="ml-auto text-xl font-black text-violet-500">{formatPrice(BASE_PRICE)}</div>
                   </div>
                 </div>
 

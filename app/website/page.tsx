@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
@@ -160,7 +160,7 @@ export default function WebsitePage() {
               className="group relative flex items-center justify-between overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.03] p-8 transition-all hover:bg-white/[0.06] md:p-10"
             >
               <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-fuchsia-500/20 text-fuchsia-400 group-hover:scale-110 transition-transform">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-500 group-hover:scale-110 transition-transform">
                   <Settings size={32} />
                 </div>
                 <div className="text-left">

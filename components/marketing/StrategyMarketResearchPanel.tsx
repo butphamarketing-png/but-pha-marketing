@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import {
@@ -236,7 +236,7 @@ export function StrategyMarketResearchPanel({
               className="rounded-2xl border-2 border-violet-200 bg-white p-5 shadow-sm"
             >
               <div className="flex items-start gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-black text-white">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-900 to-violet-600 text-sm font-black text-white">
                   {sol.priority}
                 </span>
                 <div>

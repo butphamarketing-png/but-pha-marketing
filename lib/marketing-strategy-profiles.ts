@@ -1349,6 +1349,7 @@ export function getBudgetFitAssessment(monthTotal: number, budgetRange: string) 
   };
 }
 
+/** Số ngành curated (masothue đầy đủ qua API, không bundle client) */
 export function getIndustryCount() {
   return getIndustrySuggestionCount();
 }

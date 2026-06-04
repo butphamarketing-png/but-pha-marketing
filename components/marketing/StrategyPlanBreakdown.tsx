@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { CalendarDays, Facebook, Globe, MapPin, Sparkles, TrendingUp } from "lucide-react";
 import {
@@ -226,7 +226,7 @@ export function StrategyPlanBreakdown({
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">{channelBlocks}</div>
 
       <section className="overflow-hidden rounded-2xl border-2 border-violet-300 bg-white shadow-md">
-        <div className="bg-gradient-to-r from-violet-700 to-fuchsia-600 px-5 py-4 text-white">
+        <div className="bg-gradient-to-r from-violet-700 to-violet-700 px-5 py-4 text-white">
           <div className="flex flex-wrap items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-sm font-black">
               {step + 1}
@@ -238,7 +238,7 @@ export function StrategyPlanBreakdown({
           <div className="grid gap-3 sm:grid-cols-3">
             {[
               { label: "Một lần", value: totals.once, hint: "Setup & cải tạo", color: "text-violet-700" },
-              { label: "Hàng tháng", value: totals.month, hint: "Chăm sóc & quảng cáo", color: "text-fuchsia-700" },
+              { label: "Hàng tháng", value: totals.month, hint: "Chăm sóc & quảng cáo", color: "text-violet-700" },
               { label: "Hàng năm", value: totals.year, hint: "Hosting & data", color: "text-indigo-700" },
             ].map((row) => (
               <div key={row.label} className="rounded-xl border border-violet-100 bg-violet-50/40 p-4 text-center">

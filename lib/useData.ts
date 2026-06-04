@@ -48,9 +48,6 @@ export interface NewsItem {
   keywordsMain?: string;
   keywordsSecondary?: string;
   publishedAt?: string;
-  seoScore?: number;
-  qualityLabel?: "ready" | "needs_optimization" | "weak";
-  indexStatus?: "pending_indexing" | "indexed" | "unknown";
 }
 
 export interface MediaItem {
@@ -89,40 +86,6 @@ export interface Service {
   feedbacks: ServiceFeedback[];
 }
 
-export interface PortalReport {
-  id?: number;
-  date?: string;
-  title?: string;
-  content: string;
-  category?: string;
-  image?: string;
-}
-
-export interface ProgressArticle {
-  id: string;
-  clientId: string;
-  title: string;
-  content: string;
-  status: string;
-  image?: string;
-  createdAt: string;
-}
-
-// Extended project data stored in weeklyReports
-export interface ClientProject {
-  id: string;
-  title: string;
-  registeredAt: string;
-  deadlineAt: string;
-  budgetVnd: number;
-  // Thông tin dự án (rich text)
-  infoDoc: string;
-  // Tiến độ dự án (rich text)
-  progressDoc: string;
-  // Báo cáo dự án (rich text)
-  resultDoc: string;
-}
-
 export interface ClientReview {
   id: string;
   clientId: string;
@@ -131,26 +94,6 @@ export interface ClientReview {
   rating: number; // 1-5
   content: string;
   createdAt: string;
-}
-
-export interface ClientPortal {
-  id: string;
-  username: string;
-  clientName: string;
-  phone: string;
-  platform: string;
-  daysRemaining?: number;
-  postsCount?: number;
-  progressPercent?: number;
-  weeklyReports?: PortalReport[];
-  createdAt: string;
-  password?: string;
-  // Extended fields
-  email?: string;
-  address?: string;
-  businessName?: string;
-  platformLink?: string;
-  tickerText?: string; // chữ chạy ngang thông báo
 }
 
 const API_URL = "/api";
@@ -240,19 +183,6 @@ function mapNewsItem(value: unknown): NewsItem {
       toOptionalString(item.keywordsSecondary) ?? toOptionalString(item.keywords_secondary),
     publishedAt:
       toOptionalString(item.publishedAt) ?? toOptionalString(item.published_at),
-    seoScore: typeof parsedContent.meta.seoScore === "number" ? parsedContent.meta.seoScore : undefined,
-    qualityLabel:
-      parsedContent.meta.qualityLabel === "ready" ||
-      parsedContent.meta.qualityLabel === "needs_optimization" ||
-      parsedContent.meta.qualityLabel === "weak"
-        ? parsedContent.meta.qualityLabel
-        : undefined,
-    indexStatus:
-      parsedContent.meta.indexStatus === "pending_indexing" ||
-      parsedContent.meta.indexStatus === "indexed" ||
-      parsedContent.meta.indexStatus === "unknown"
-        ? parsedContent.meta.indexStatus
-        : undefined,
   };
 }
 
@@ -301,85 +231,6 @@ function mapService(value: unknown): Service {
     audioText: toStringValue(item.audioText ?? item.audio_text),
     process: Array.isArray(item.process) ? item.process.map(mapServiceProcess) : [],
     feedbacks: Array.isArray(item.feedbacks) ? item.feedbacks.map(mapServiceFeedback) : [],
-  };
-}
-
-function mapPortalReport(value: unknown): PortalReport {
-  const item = isRecord(value) ? value : {};
-  return {
-    id: typeof item.id === "number" ? item.id : undefined,
-    date: typeof item.date === "string" ? item.date : undefined,
-    title: typeof item.title === "string" ? item.title : undefined,
-    content: toStringValue(item.content),
-    category: typeof item.category === "string" ? item.category : undefined,
-    image: typeof item.image === "string" ? item.image : undefined,
-  };
-}
-
-function mapClientPortal(value: unknown): ClientPortal {
-  const item = isRecord(value) ? value : {};
-  return {
-    id: toStringValue(item.id),
-    username: toStringValue(item.username),
-    clientName: toStringValue(item.clientName ?? item.client_name),
-    phone: toStringValue(item.phone),
-    platform: toStringValue(item.platform),
-    daysRemaining:
-      typeof item.daysRemaining === "number"
-        ? item.daysRemaining
-        : typeof item.days_remaining === "number"
-          ? item.days_remaining
-          : undefined,
-    postsCount:
-      typeof item.postsCount === "number"
-        ? item.postsCount
-        : typeof item.posts_count === "number"
-          ? item.posts_count
-          : undefined,
-    progressPercent:
-      typeof item.progressPercent === "number"
-        ? item.progressPercent
-        : typeof item.progress_percent === "number"
-          ? item.progress_percent
-          : undefined,
-    weeklyReports: Array.isArray(item.weeklyReports ?? item.weekly_reports)
-      ? ((item.weeklyReports ?? item.weekly_reports) as unknown[]).map(mapPortalReport)
-      : undefined,
-    createdAt: toStringValue(item.createdAt ?? item.created_at),
-    password: typeof item.password === "string" ? item.password : undefined,
-    email: typeof item.email === "string" ? item.email : undefined,
-    address: typeof item.address === "string" ? item.address : undefined,
-    businessName:
-      typeof item.businessName === "string"
-        ? item.businessName
-        : typeof item.business_name === "string"
-          ? item.business_name
-          : undefined,
-    platformLink:
-      typeof item.platformLink === "string"
-        ? item.platformLink
-        : typeof item.platform_link === "string"
-          ? item.platform_link
-          : undefined,
-    tickerText:
-      typeof item.tickerText === "string"
-        ? item.tickerText
-        : typeof item.ticker_text === "string"
-          ? item.ticker_text
-          : undefined,
-  };
-}
-
-function mapProgressArticle(value: unknown): ProgressArticle {
-  const item = isRecord(value) ? value : {};
-  return {
-    id: toStringValue(item.id),
-    clientId: toStringValue(item.clientId ?? item.client_id),
-    title: toStringValue(item.title),
-    content: toStringValue(item.content),
-    status: toStringValue(item.status, ""),
-    image: typeof item.image === "string" ? item.image : undefined,
-    createdAt: toStringValue(item.createdAt ?? item.created_at),
   };
 }
 
@@ -549,67 +400,6 @@ export const db = {
   services: {
     getAll: (): Promise<ApiResult<Service[]>> =>
       cachedFetch("services", () => apiFetch<Service[]>("/services", undefined, (value) => normalizeArray(value, mapService))),
-  },
-  clientPortals: {
-    getAll: (): Promise<ApiResult<ClientPortal[]>> =>
-      cachedFetch("client_portals", () =>
-        apiFetch<ClientPortal[]>("/client-portals", undefined, (value) => normalizeArray(value, mapClientPortal)),
-      ),
-    get: (id: string): Promise<ApiResult<ClientPortal>> =>
-      apiFetch<ClientPortal>(`/client-portals/${id}`, undefined, mapClientPortal),
-    add: async (
-      portal: Omit<ClientPortal, "id" | "createdAt"> & { password?: string },
-    ): Promise<ApiResult<ClientPortal>> => {
-      const result = await apiFetch<ClientPortal>("/client-portals", {
-        method: "POST",
-        body: JSON.stringify(portal),
-      }, mapClientPortal);
-      if (!result.error) invalidateCache("client_portals");
-      return result;
-    },
-    update: async (id: string, data: Partial<ClientPortal>): Promise<ApiResult<ClientPortal>> => {
-      const result = await apiFetch<ClientPortal>(`/client-portals/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      }, mapClientPortal);
-      if (!result.error) invalidateCache("client_portals");
-      return result;
-    },
-    delete: async (id: string): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/client-portals/${id}`, { method: "DELETE" });
-      if (!result.error) invalidateCache("client_portals");
-      return { data: null, error: result.error };
-    },
-    login: (username: string, password: string, platform: string): Promise<ApiResult<ClientPortal>> =>
-      apiFetch<ClientPortal>("/client-portals/login", {
-        method: "POST",
-        body: JSON.stringify({ username, password, platform }),
-      }, mapClientPortal),
-  },
-  progressArticles: {
-    getByClient: (clientId: string): Promise<ApiResult<ProgressArticle[]>> =>
-      cachedFetch(`progress_articles_${clientId}`, () =>
-        apiFetch<ProgressArticle[]>(
-          `/progress-articles?clientId=${clientId}`,
-          undefined,
-          (value) => normalizeArray(value, mapProgressArticle),
-        ),
-      ),
-    add: async (
-      article: Omit<ProgressArticle, "id" | "createdAt">,
-    ): Promise<ApiResult<ProgressArticle>> => {
-      const result = await apiFetch<ProgressArticle>("/progress-articles", {
-        method: "POST",
-        body: JSON.stringify(article),
-      }, mapProgressArticle);
-      if (!result.error) invalidateCache(`progress_articles_${article.clientId}`);
-      return result;
-    },
-    delete: async (id: string, clientId: string): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, { method: "DELETE" });
-      if (!result.error) invalidateCache(`progress_articles_${clientId}`);
-      return { data: null, error: result.error };
-    },
   },
   // Client reviews stored in leads table with type="review"
   clientReviews: {
