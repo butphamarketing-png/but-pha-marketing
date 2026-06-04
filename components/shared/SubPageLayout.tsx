@@ -168,7 +168,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
   }, [pathname, sections]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground" style={{ "--platform-color": primaryColor } as React.CSSProperties}>
+    <div className="platform-page-canvas text-foreground" style={{ "--platform-color": primaryColor } as React.CSSProperties}>
       <style>{`
         @keyframes ripple-anim {
           from { transform: scale(0); opacity: 1; }
@@ -184,18 +184,18 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         style={{ scaleX: scrollYProgress, backgroundColor: primaryColor }}
       />
 
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-background/80 px-4 py-3 backdrop-blur-md md:px-6">
-        <Link href="/" className="flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white">
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-indigo-100/90 bg-white/85 px-4 py-3 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl md:px-6">
+        <Link href="/" className="flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-indigo-900">
           <ChevronLeft size={16} />
-          <span className="hidden sm:inline">Hub Center</span>
+          <span className="hidden sm:inline">Trang chủ</span>
         </Link>
         <div className="flex items-center gap-3">
-          <img src={logoSrc} alt="Logo" className="h-8 w-8 rounded-full object-cover" />
-          <span className="hidden font-bold text-white sm:inline">{settings.title}</span>
+          <img src={logoSrc} alt="Logo" className="h-9 w-9 rounded-full border border-indigo-100 object-cover shadow-sm" />
+          <span className="hidden text-sm font-semibold text-indigo-950 sm:inline">{settings.title}</span>
         </div>
         <button
           onClick={() => setShowConsult(true)}
-          className="rounded-full px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95"
+          className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105 active:scale-[0.99]"
           style={{ backgroundColor: primaryColor }}
         >
           Tư vấn ngay
@@ -212,9 +212,9 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
             }}
             className="h-3 w-3 rounded-full transition-all"
             style={{
-              backgroundColor: activeSection === idx ? primaryColor : "white",
+              backgroundColor: activeSection === idx ? primaryColor : "rgba(49, 46, 129, 0.2)",
               transform: activeSection === idx ? "scale(1.5)" : "scale(1)",
-              opacity: activeSection === idx ? 1 : 0.35,
+              opacity: activeSection === idx ? 1 : 0.45,
             }}
             title={section.label}
             type="button"
@@ -231,7 +231,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-background/80 text-white shadow-lg backdrop-blur-md transition-all hover:scale-110 active:scale-95"
+            className="brand-icon-btn fixed bottom-24 right-6 z-40 h-12 w-12 shadow-lg hover:scale-110 active:scale-95"
             style={{ borderLeftColor: primaryColor, borderTopColor: primaryColor }}
             type="button"
           >

@@ -2,7 +2,7 @@
 export const BRAND = {
   main: "#312E81",
   accent: "#7C3AED",
-  background: "#FFFFFF",
+  background: "#F4F6FC",
   mainRgb: "49, 46, 129",
   accentRgb: "124, 58, 237",
 } as const;

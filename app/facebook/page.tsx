@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
-import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap, Search } from "lucide-react";
+import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap } from "lucide-react";
+import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { db } from "@/lib/useData";
 import { AuditModal } from "@/components/shared/AuditModal";
 
@@ -65,93 +66,39 @@ export default function FacebookPage() {
 
   return (
     <PlatformPage config={config}>
-      <div className="mx-auto max-w-7xl px-4 pb-24 space-y-32">
+      <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
         
-        {/* Audit Section */}
-        <section id="audit" className="rounded-[3rem] border border-white/10 bg-white/[0.03] p-10 md:p-14 backdrop-blur-xl relative overflow-hidden group scroll-mt-24">
-          <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-10 pointer-events-none">
-            <div className="absolute top-1/4 right-0 h-[400px] w-[400px] rounded-full blur-[120px]" style={{ backgroundColor: config.color }} />
-          </div>
-          
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="flex-1 space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                <Search size={16} className="text-white" style={{ color: config.color }} />
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Chuẩn đoán Fanpage miễn phí</span>
-              </div>
-              <h3 className="text-3xl md:text-4xl font-black text-white">Phân tích <span style={{ color: config.color }}>Fanpage</span> và nhận báo cáo chi tiết</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Nhập Link Fanpage của bạn để chúng tôi phân tích các yếu tố: Tương tác, Nội dung, Tốc độ phản hồi và Khả năng chuyển đổi.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <input 
-                  placeholder="Nhập Link Fanpage của bạn (VD: facebook.com/yourpage)" 
-                  value={auditUrl}
-                  onChange={e => setAuditUrl(e.target.value)}
-                  className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-white/30"
-                />
-                <button 
-                  onClick={() => setIsAuditOpen(true)}
-                  className="rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2 justify-center"
-                  style={{ backgroundColor: config.color }}
-                >
-                  Phân tích ngay <ChevronRight size={18} />
-                </button>
-              </div>
-              
-              <div className="flex flex-wrap gap-6 pt-6 opacity-60">
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Tương tác
-                </div>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Nội dung
-                </div>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Tốc độ phản hồi
-                </div>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Chuyển đổi
-                </div>
-              </div>
-            </div>
-            
-            <div className="hidden lg:block w-1/3">
-              <div className="relative p-6 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-sm space-y-6">
-                <p className="text-xs font-black uppercase tracking-widest text-gray-500">Nhận báo giá chi tiết qua Zalo</p>
-                <ul className="space-y-4">
-                  {[
-                    "Phân tích điểm mạnh & điểm yếu",
-                    "Đề xuất cải thiện cụ thể",
-                    "Tư vấn giải pháp phù hợp",
-                    "Báo giá chi tiết từng hạng mục"
-                  ].map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-sm text-gray-300">
-                      <Check size={16} className="text-green-500" /> {item}
-                    </li>
-                  ))}
-                </ul>
-                <a 
-                  href="https://zalo.me/0901438703" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition-colors text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2"
-                >
-                   Nhận báo giá qua Zalo
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PlatformAuditSection
+          accentColor={config.color}
+          badge="Chuẩn đoán Fanpage miễn phí"
+          title={
+            <>
+              Phân tích <span style={{ color: config.color }}>Fanpage</span> và nhận báo cáo chi tiết
+            </>
+          }
+          description="Nhập link Fanpage để chúng tôi phân tích tương tác, nội dung, tốc độ phản hồi và khả năng chuyển đổi."
+          placeholder="Nhập link Fanpage (VD: facebook.com/yourpage)"
+          buttonLabel="Phân tích ngay"
+          value={auditUrl}
+          onChange={setAuditUrl}
+          onSubmit={() => setIsAuditOpen(true)}
+          features={["Tương tác", "Nội dung", "Tốc độ phản hồi", "Chuyển đổi"]}
+          zaloItems={[
+            "Phân tích điểm mạnh & điểm yếu",
+            "Đề xuất cải thiện cụ thể",
+            "Tư vấn giải pháp phù hợp",
+            "Báo giá chi tiết từng hạng mục",
+          ]}
+        />
         
         {/* 1. DỊCH VỤ XÂY DỰNG FANPAGE */}
         <section id="build" className="space-y-16 scroll-mt-24">
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
               <div className="h-1 w-12 bg-blue-500 rounded-full" />
-              <span className="text-blue-500 text-xs font-black uppercase tracking-[0.3em]">Professional Service</span>
+              <span className="text-blue-500 text-xs font-semibold tracking-wide text-slate-500">Professional Service</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
               Dịch vụ <span className="text-blue-500">Xây dựng</span> Fanpage
             </h2>
           </div>
@@ -226,9 +173,9 @@ export default function FacebookPage() {
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
               <div className="h-1 w-12 bg-blue-500 rounded-full" />
-              <span className="text-blue-500 text-xs font-black uppercase tracking-[0.3em]">Premium Care</span>
+              <span className="text-blue-500 text-xs font-semibold tracking-wide text-slate-500">Premium Care</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
               <span className="text-blue-500">Chăm sóc</span> Fanpage
             </h2>
             <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">(Theo số lượng bài viết)</p>
@@ -293,9 +240,9 @@ export default function FacebookPage() {
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
               <div className="h-1 w-12 bg-blue-500 rounded-full" />
-              <span className="text-blue-500 text-xs font-black uppercase tracking-[0.3em]">Advertising</span>
+              <span className="text-blue-500 text-xs font-semibold tracking-wide text-slate-500">Advertising</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
               <span className="text-blue-500">Quảng cáo</span> Fanpage
             </h2>
           </div>

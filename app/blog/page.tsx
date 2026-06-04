@@ -52,14 +52,14 @@ export default async function BlogPage() {
   };
 
   return (
-    <main className="min-h-screen brand-section-muted px-4 py-12 md:px-6 lg:px-8">
+    <main className="min-h-screen bg-background brand-section-muted px-4 py-12 md:px-6 lg:px-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="brand-eyebrow mb-4">Kiến thức thực chiến</p>
-            <h1 className="text-4xl font-black tracking-tight text-indigo-950 md:text-5xl">
+            <h1 className="text-4xl font-bold tracking-tight text-indigo-950 md:text-5xl">
               Tin tức &{" "}
               <span className="brand-gradient-text">Kiến thức</span>
             </h1>

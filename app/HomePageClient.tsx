@@ -388,7 +388,7 @@ export default function HomePageClient() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background">
         <div className="relative h-24 w-24">
           <div className="absolute inset-0 animate-ping rounded-full bg-violet-600/20" />
           <img src={logoSrc} alt="Loading" className="relative z-10 h-24 w-24 rounded-full object-cover shadow-[0_0_40px_rgba(124,58,237,0.4)]" />
@@ -396,13 +396,13 @@ export default function HomePageClient() {
         <div className="mt-8 w-48 overflow-hidden rounded-full bg-indigo-50 p-1">
           <div className="h-1 rounded-full bg-gradient-to-r from-indigo-900 to-violet-600 transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
-        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400">Đang khởi tạo hệ thống...</p>
+        <p className="mt-4 text-sm font-medium text-slate-500">Đang khởi tạo hệ thống...</p>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen bg-white font-sans selection:bg-violet-600/30">
+    <div className="relative min-h-screen bg-background font-sans selection:bg-violet-600/30">
       <ParticleBackground />
       
       <div className="relative z-10 flex flex-col">
@@ -414,8 +414,8 @@ export default function HomePageClient() {
                 <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-indigo-200 object-cover shadow-2xl" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black uppercase tracking-[0.15em] text-slate-900 md:text-2xl leading-none">{brandName}</span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-violet-600/80 mt-1">Bứt Phá Để Dẫn Đầu</span>
+                <span className="text-xl font-bold tracking-tight text-indigo-950 md:text-2xl leading-none">{brandName}</span>
+                <span className="text-xs font-medium text-violet-600 mt-1">Bứt Phá để dẫn đầu</span>
               </div>
             </Link>
 
@@ -424,7 +424,7 @@ export default function HomePageClient() {
                 <Link 
                   key={item.label} 
                   href={item.href} 
-                  className="relative text-[11px] font-black uppercase tracking-[0.2em] text-slate-600 transition-all hover:text-indigo-900 group"
+                  className="relative text-sm font-semibold text-slate-600 transition-all hover:text-indigo-900 group"
                 >
                   {item.label}
                   <span className="absolute -bottom-2 left-0 h-px w-0 bg-violet-600 transition-all group-hover:w-full" />
@@ -435,7 +435,7 @@ export default function HomePageClient() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
-                className="brand-btn-primary hidden px-8 py-3.5 text-[10px] uppercase tracking-[0.2em] sm:inline-flex"
+                className="brand-btn-primary hidden px-8 py-3.5 sm:inline-flex"
               >
                 Tư vấn ngay
               </button>
