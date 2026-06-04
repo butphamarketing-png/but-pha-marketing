@@ -9,10 +9,11 @@ import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
 const config: PlatformConfig = {
   name: "Website",
-  color: "#22C55E",
+  color: PLATFORM_COLORS.website,
   auditPlatform: "website",
   vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
   mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
@@ -149,7 +150,8 @@ export default function WebsitePage() {
               {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
                 <div
                   key={pkg.id}
-                  className={`platform-pricing-card ${i === 1 ? "platform-pricing-card--featured ring-violet-200/70" : ""}`}
+                  className={`platform-pricing-card ${i === 1 ? "platform-pricing-card--featured" : ""}`}
+                  style={i === 1 ? ({ ["--tw-ring-color" as string]: `${config.color}45` } as React.CSSProperties) : undefined}
                 >
                   {i === 1 && (
                     <div
@@ -189,8 +191,8 @@ export default function WebsitePage() {
                       <button
                         type="button"
                         onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
-                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg"
-                        style={{ backgroundColor: config.color }}
+                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg hover:brightness-105"
+                        style={{ background: `linear-gradient(135deg, #312E81, ${config.color})` }}
                       >
                         Đăng ký ngay
                       </button>

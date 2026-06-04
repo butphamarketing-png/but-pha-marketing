@@ -196,7 +196,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         <button
           onClick={() => setShowConsult(true)}
           className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105 active:scale-[0.99]"
-          style={{ backgroundColor: primaryColor }}
+          style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
         >
           Tư vấn ngay
         </button>

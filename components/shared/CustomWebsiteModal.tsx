@@ -285,7 +285,7 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-green-500/20 text-green-500">
+                <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-violet-100 text-violet-600">
                   <Check size={48} />
                 </div>
                 <h3 className="text-3xl font-bold text-indigo-950">Đã nhận yêu cầu!</h3>

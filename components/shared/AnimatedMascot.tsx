@@ -313,7 +313,7 @@ export function AnimatedMascot() {
     gioi_thieu: "#7C3AED",
     blog: "#7C3AED",
     lien_he: "#7C3AED",
-    website: "#22C55E",
+    website: "#4F46E5",
     facebook: "#1877F2",
     googlemaps: "#F97316",
   };

@@ -354,7 +354,7 @@ function channelForItemId(id: string): CostChannel["id"] {
 }
 
 const CHANNEL_META: Record<CostChannel["id"], { label: string; color: string }> = {
-  website: { label: "Website", color: "#22C55E" },
+  website: { label: "Website", color: "#4F46E5" },
   fanpage: { label: "Fanpage", color: "#1877F2" },
   maps: { label: "Google Maps", color: "#EA580C" },
   ads: { label: "Quảng cáo", color: "#7C3AED" },

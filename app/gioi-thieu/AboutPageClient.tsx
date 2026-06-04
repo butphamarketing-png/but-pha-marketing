@@ -27,6 +27,7 @@ const ParticleBackground = dynamic(
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
+import { BRAND_GRADIENT } from "@/lib/brand-colors";
 
 export default function AboutPageClient() {
   const [services, setServices] = useState<Service[]>([]);
@@ -135,36 +136,35 @@ export default function AboutPageClient() {
   return (
     <div className="min-h-screen bg-background text-slate-900">
       <ParticleBackground />
-      <header className="sticky top-0 z-40 border-b border-indigo-100 bg-white/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-indigo-100/80 bg-white/90 shadow-[0_8px_30px_rgba(49,46,129,0.04)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
-          <Link href="/" className="flex items-center gap-3">
-            <img src={logoSrc} alt={brandName} className="h-12 w-12 rounded-full object-cover" />
+          <Link href="/" className="group flex items-center gap-3 transition-transform hover:scale-[1.02]">
+            <img src={logoSrc} alt={brandName} className="h-12 w-12 rounded-full border border-indigo-100 object-cover shadow-sm" />
             <div>
-              <div className="text-sm font-black uppercase tracking-[0.16em] text-slate-900">{brandName}</div>
-              <div className="text-xs text-slate-400">Giải pháp marketing thực chiến</div>
+              <div className="text-sm font-bold tracking-tight text-indigo-950">{brandName}</div>
+              <div className="text-xs font-medium text-violet-600">Giải pháp marketing thực chiến</div>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav className="hidden items-center gap-8 lg:flex">
             {navigation.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`text-sm font-bold transition ${
-                  item.href === "/gioi-thieu" ? "text-slate-900" : "text-slate-600 hover:text-indigo-900"
+                className={`relative text-sm font-semibold transition-colors ${
+                  item.href === "/gioi-thieu" ? "text-violet-600" : "text-slate-600 hover:text-indigo-900"
                 }`}
               >
                 {item.label}
+                {item.href === "/gioi-thieu" ? (
+                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-violet-600" />
+                ) : null}
               </Link>
             ))}
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <button
-              type="button"
-              onClick={scrollToConsultation}
-              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(124,58,237,0.3)] transition hover:scale-[1.01]"
-            >
+            <button type="button" onClick={scrollToConsultation} className="brand-btn-primary">
               <Phone className="h-4 w-4" />
               Liên hệ tư vấn
             </button>
@@ -172,13 +172,32 @@ export default function AboutPageClient() {
         </div>
       </header>
 
-      <main className="relative overflow-hidden pt-12">
+      <main className="relative overflow-hidden">
 
-        <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
+        <section className="mx-auto max-w-7xl px-4 pb-6 pt-10 lg:px-6 lg:pt-12">
+          <div className="brand-page-hero grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <p className="brand-eyebrow">Về chúng tôi</p>
+              <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-indigo-950 md:text-5xl">
+                Đồng hành <span className="brand-gradient-text">bứt phá</span> cùng doanh nghiệp
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg">
+                Đội ngũ marketing thực chiến — tư vấn đúng, triển khai hiệu quả, đo lường minh bạch.
+              </p>
+            </div>
+            {heroVisual ? (
+              <div className="overflow-hidden rounded-[2rem] border border-indigo-100 shadow-brand">
+                <img src={heroVisual} alt={brandName} className="aspect-[4/3] w-full object-cover" />
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">01</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Bứt Phá Marketing là ai?</h2>
+              <span className="brand-step-badge">01</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Bứt Phá Marketing là ai?</h2>
             </div>
 
             <div className={`mt-6 grid gap-8 ${teamImage ? "lg:grid-cols-[1.1fr_0.9fr]" : "lg:grid-cols-1"}`}>
@@ -208,13 +227,13 @@ export default function AboutPageClient() {
                 { value: "5+ năm", label: "Kinh nghiệm thực chiến trong marketing", icon: Sparkles },
                 { value: "95%", label: "Khách hàng hài lòng và tiếp tục đồng hành", icon: Target },
               ].map((stat) => (
-                <div key={stat.value} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
+                <div key={stat.value} className="brand-stat-card">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600">
                       <stat.icon className="h-5 w-5" />
                     </span>
                     <div>
-                      <div className="text-3xl font-black text-violet-600">{stat.value}</div>
+                      <div className="text-3xl font-bold text-violet-600">{stat.value}</div>
                       <div className="mt-1 text-sm leading-6 text-slate-600">{stat.label}</div>
                     </div>
                   </div>
@@ -227,17 +246,17 @@ export default function AboutPageClient() {
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">02</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Điều chúng tôi thực sự làm</h2>
+              <span className="brand-step-badge">02</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Điều chúng tôi thực sự làm</h2>
             </div>
 
             <div className="mt-8 grid gap-5 xl:grid-cols-5">
               {serviceHighlights.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
+                <div key={item.title} className="brand-feature-card">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600">
                     <item.icon className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
+                  <h3 className="mt-5 text-xl font-bold text-indigo-950">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
@@ -248,17 +267,17 @@ export default function AboutPageClient() {
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">03</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Triết lý làm việc</h2>
+              <span className="brand-step-badge">03</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Triết lý làm việc</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {workPrinciples.map((item) => (
-                <div key={item.title} className="rounded-[1.6rem] border border-indigo-200 bg-white p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
+                <div key={item.title} className="brand-feature-card">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600">
                     <item.icon className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
+                  <h3 className="mt-5 text-xl font-bold text-indigo-950">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
@@ -269,8 +288,8 @@ export default function AboutPageClient() {
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">04</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Tầm nhìn – Sứ mệnh – Trách nhiệm</h2>
+              <span className="brand-step-badge">04</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Tầm nhìn – Sứ mệnh – Trách nhiệm</h2>
             </div>
 
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -291,8 +310,8 @@ export default function AboutPageClient() {
                     "Chúng tôi có trách nhiệm mang đến dịch vụ chất lượng, đồng hành lâu dài và góp phần vào sự phát triển bền vững của khách hàng và cộng đồng.",
                 },
               ].map((item) => (
-                <div key={item.title} className="rounded-[1.7rem] border border-violet-500/20 bg-white px-6 py-7 text-center">
-                  <h3 className="text-2xl font-black uppercase tracking-[0.14em] text-violet-600">{item.title}</h3>
+                <div key={item.title} className="brand-feature-card px-6 py-7 text-center">
+                  <h3 className="text-xl font-bold text-violet-600">{item.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
@@ -303,13 +322,13 @@ export default function AboutPageClient() {
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">05</span>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Vì sao khách hàng chọn chúng tôi?</h2>
+              <span className="brand-step-badge">05</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Vì sao khách hàng chọn chúng tôi?</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-6">
               {whyChooseUs.map((item) => (
-                <div key={item} className="rounded-[1.5rem] border border-indigo-200 bg-white px-4 py-5 text-center text-sm font-bold text-slate-200">
+                <div key={item} className="rounded-[1.5rem] border border-indigo-100 bg-white px-4 py-5 text-center text-sm font-semibold text-slate-700 shadow-sm">
                   <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
@@ -321,28 +340,31 @@ export default function AboutPageClient() {
         </section>
 
         <section id="consultation" className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:pb-16">
-          <div className="overflow-hidden rounded-[2.2rem] border border-violet-500/20 bg-[linear-gradient(90deg,rgba(19,10,32,0.96),rgba(61,28,110,0.88))] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.42)] lg:p-8">
+          <div
+            className="overflow-hidden rounded-[2.2rem] border border-indigo-300/30 p-6 shadow-brand-lg lg:p-8"
+            style={{ background: BRAND_GRADIENT }}
+          >
             <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.8fr]">
               <div>
-                <div className="inline-flex items-center rounded-full border border-violet-500/30 bg-violet-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-violet-600">
+                <div className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-violet-100">
                   06
                 </div>
-                <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] text-slate-900">Sẵn sàng bứt phá cùng doanh nghiệp của bạn?</h2>
-                <p className="mt-5 max-w-2xl text-xl leading-9 text-violet-100/90">
+                <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">Sẵn sàng bứt phá cùng doanh nghiệp của bạn?</h2>
+                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-indigo-100 md:text-xl">
                   Đừng để đối thủ đi trước. Hãy để Bứt Phá Marketing đồng hành cùng bạn ngay hôm nay.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <button
                     type="button"
                     onClick={scrollToConsultation}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-sm font-black text-slate-900 transition hover:scale-[1.02]"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-sm font-semibold text-indigo-900 shadow-md transition hover:brightness-105 active:scale-[0.99]"
                   >
                     Liên hệ tư vấn ngay
                     <ArrowRight className="h-4 w-4" />
                   </button>
                   <Link
                     href="/#services"
-                    className="brand-btn-secondary px-6 py-4 text-sm font-black"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/35 bg-white/10 px-6 py-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
                   >
                     Nhận báo giá miễn phí
                     <ArrowRight className="h-4 w-4" />

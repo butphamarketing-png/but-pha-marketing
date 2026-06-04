@@ -475,75 +475,21 @@ export default function HomePageClient() {
                   alt="Hero Slide"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/25 via-transparent to-indigo-950/50" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-[#f4f6fc] via-[#f4f6fc]/60 to-transparent" />
               </motion.div>
             </AnimatePresence>
 
-            <div className="home-hero-overlay pointer-events-none">
-              <motion.div
-                key={`hero-copy-${activeHeroSlide}`}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-                className="mx-auto w-full max-w-4xl space-y-6"
-              >
-                <p className="text-xs font-semibold tracking-wide text-violet-200">{currentHeroSlide.eyebrow}</p>
-                <h1 className="text-3xl font-bold leading-[1.15] text-white sm:text-4xl md:text-5xl lg:text-6xl">
-                  {currentHeroSlide.middle}{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-200 to-white">
-                    {currentHeroSlide.accent}
-                  </span>
-                </h1>
-                <p className="max-w-2xl text-base font-medium leading-relaxed text-indigo-100/90 md:text-lg">
-                  {currentHeroSlide.description}
-                </p>
-                {currentHeroSlide.pills?.length ? (
-                  <div className="flex flex-wrap gap-3 pt-1">
-                    {currentHeroSlide.pills.map((pill: { label: string; icon: React.ComponentType<{ size?: number }> }) => (
-                      <span key={pill.label} className="home-hero-pill">
-                        <pill.icon size={14} />
-                        {pill.label}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                <div className="flex flex-wrap gap-4 pt-2 pointer-events-auto">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playClickSound();
-                      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="brand-btn-primary"
-                  >
-                    Tư vấn miễn phí
-                  </button>
-                  <Link
-                    href="/chienluocmarketing"
-                    onClick={playClickSound}
-                    className="brand-btn-ghost border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
-                  >
-                    Lập chiến lược
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-
-            <div className="absolute bottom-12 right-12 z-30 flex gap-4 lg:bottom-16 lg:right-24">
+            <div className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2 rounded-full border border-white/20 bg-indigo-950/25 px-4 py-3 backdrop-blur-md lg:bottom-10">
               {heroSlides.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
+                  aria-label={`Slide ${i + 1}`}
                   onClick={() => { playClickSound(); setActiveHeroSlide(i); }}
-                  className="group relative h-12 w-1 bg-transparent overflow-hidden rounded-full"
-                >
-                  <div className={`absolute inset-0 bg-indigo-100 transition-all duration-300 ${activeHeroSlide === i ? "bg-violet-600" : "group-hover:bg-white/30"}`} />
-                  {activeHeroSlide === i && (
-                    <motion.div 
-                      layoutId="hero-pager"
-                      className="absolute inset-0 bg-violet-600 shadow-[0_0_20px_rgba(124,58,237,0.8)]"
-                    />
-                  )}
-                </button>
+                  className={`rounded-full transition-all duration-300 ${
+                    activeHeroSlide === i ? "h-2.5 w-8 bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.8)]" : "h-2.5 w-2.5 bg-white/50 hover:bg-white/80"
+                  }`}
+                />
               ))}
             </div>
           </section>
@@ -611,7 +557,7 @@ export default function HomePageClient() {
                       <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 ${item.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
                         <item.icon size={24} />
                       </div>
-                      <h3 className="text-lg font-black text-slate-900">{item.title}</h3>
+                      <h3 className="text-lg font-bold text-indigo-950">{item.title}</h3>
                       <p className="mt-2 text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
                     </motion.div>
                   ))}
@@ -634,25 +580,21 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section id="services" className="mx-auto max-w-7xl bg-white px-8 py-24 lg:px-12">
-            <div className="mb-16 text-center space-y-4">
-              <motion.p 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
-              >
-                Giải pháp cốt lõi
-              </motion.p>
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-4xl font-black text-slate-900 md:text-5xl lg:text-6xl tracking-tight"
-              >
-                Dịch vụ <span className="text-violet-600">Chiến lược</span>
-              </motion.h2>
-            </div>
+          <section id="services" className="brand-section-muted mx-auto max-w-7xl px-8 py-24 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="brand-section-intro"
+            >
+              <p className="brand-eyebrow">Giải pháp cốt lõi</p>
+              <h2 className="brand-section-title">
+                Dịch vụ <span className="brand-gradient-text">chiến lược</span>
+              </h2>
+              <p className="text-base font-medium leading-relaxed text-slate-600">
+                Website, Facebook và Google Maps — một hệ sinh thái tăng trưởng thống nhất cho doanh nghiệp.
+              </p>
+            </motion.div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {serviceCards.map((card, i) => (
@@ -665,7 +607,7 @@ export default function HomePageClient() {
                 >
                   <Link
                     href={card.href}
-                    className="group relative block h-full overflow-hidden rounded-[2.5rem] border border-indigo-100 bg-white p-4 transition-all hover:border-violet-300 hover:shadow-brand-lg"
+                    className="brand-service-card group"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-indigo-100">
                       <img src={card.image} alt={card.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -673,7 +615,7 @@ export default function HomePageClient() {
                     </div>
                     <div className="p-6">
                       <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-2xl font-black text-slate-900 group-hover:text-violet-600 transition-colors">{card.title}</h3>
+                        <h3 className="text-2xl font-bold text-indigo-950 transition-colors group-hover:text-violet-600">{card.title}</h3>
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-indigo-400 transition-all group-hover:bg-violet-600 group-hover:text-white group-hover:rotate-45">
                           <ArrowRight size={20} />
                         </div>
@@ -681,7 +623,7 @@ export default function HomePageClient() {
                       <p className="text-[15px] leading-relaxed text-slate-600 font-medium">{card.description}</p>
                       
                       <div className="mt-8 flex items-center gap-4 border-t border-indigo-100 pt-6 opacity-0 transition-all duration-500 group-hover:opacity-100">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-600">Khám phá chi tiết</span>
+                        <span className="text-xs font-semibold text-violet-600">Khám phá chi tiết</span>
                         <div className="h-px flex-1 bg-gradient-to-r from-violet-600/50 to-transparent" />
                       </div>
                     </div>
@@ -694,22 +636,10 @@ export default function HomePageClient() {
           <section className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
             <div className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
               <div className="space-y-4">
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="text-xs font-black uppercase tracking-[0.4em] text-violet-600"
-                >
-                  Giá trị cốt lõi
-                </motion.p>
-                <motion.h2 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-4xl font-black text-slate-900 md:text-5xl tracking-tight"
-                >
+                <p className="brand-eyebrow">Giá trị cốt lõi</p>
+                <h2 className="brand-section-title text-left md:text-4xl lg:text-5xl">
                   Tại sao chọn chúng tôi?
-                </motion.h2>
+                </h2>
               </div>
               <div className="hidden gap-4 md:flex">
                 <button
@@ -737,12 +667,12 @@ export default function HomePageClient() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group relative rounded-[2.5rem] border border-indigo-100 bg-indigo-50/40 p-8 transition-all hover:bg-indigo-50/60 hover:border-indigo-200"
+                  className="brand-card-soft p-8 transition-all hover:shadow-brand-lg"
                 >
-                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-violet-600/10 text-violet-600 transition-all group-hover:scale-110 group-hover:rotate-6 group-hover:bg-violet-600 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(124,58,237,0.5)]">
+                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600 transition-all group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-900 group-hover:to-violet-600 group-hover:text-white group-hover:shadow-brand-accent">
                     <item.icon size={32} />
                   </div>
-                  <h3 className="text-xl font-black text-slate-900 tracking-tight">{item.title}</h3>
+                  <h3 className="text-xl font-bold tracking-tight text-indigo-950">{item.title}</h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-slate-500 font-medium">{item.description}</p>
                 </motion.div>
               ))}
@@ -752,10 +682,10 @@ export default function HomePageClient() {
           <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-violet-600">Tin tức & Kiến thức</p>
-                <h2 className="mt-2 text-3xl font-black text-slate-900">Cập nhật xu hướng Marketing</h2>
+                <p className="brand-eyebrow">Tin tức & kiến thức</p>
+                <h2 className="mt-2 text-3xl font-bold text-indigo-950 md:text-4xl">Cập nhật xu hướng marketing</h2>
               </div>
-              <Link href="/blog" className="brand-btn-secondary px-4 py-3 text-sm font-black">
+              <Link href="/blog" className="brand-btn-secondary px-4 py-3 text-sm font-semibold">
                 Xem tất cả bài viết
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -777,7 +707,7 @@ export default function HomePageClient() {
                         <CalendarDays className="h-3 w-3" />
                         {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("vi-VN") : "Mới cập nhật"}
                       </div>
-                      <h3 className="mt-3 text-lg font-black leading-tight text-slate-900 line-clamp-2 group-hover:text-violet-600 transition">
+                      <h3 className="mt-3 line-clamp-2 text-lg font-bold leading-tight text-indigo-950 transition group-hover:text-violet-600">
                         {post.title}
                       </h3>
                       <p className="mt-3 text-sm text-slate-600 line-clamp-2">
@@ -794,7 +724,7 @@ export default function HomePageClient() {
             <div className="brand-card-soft relative overflow-hidden rounded-[3rem] p-8 md:p-12">
               <div className="grid gap-12 lg:grid-cols-2">
                 <div>
-                  <h2 className="text-4xl font-black text-slate-900 lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
+                  <h2 className="brand-section-title text-left lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
                   <p className="mt-6 text-lg leading-8 text-slate-600">
                     Để lại thông tin, đội ngũ chuyên gia của chúng tôi sẽ liên hệ tư vấn lộ trình marketing tối ưu nhất cho doanh nghiệp của bạn.
                   </p>
@@ -806,7 +736,7 @@ export default function HomePageClient() {
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-500">Hotline tư vấn</p>
-                        <p className="text-xl font-black text-slate-900">{settings.hotline}</p>
+                        <p className="text-xl font-bold text-indigo-950">{settings.hotline}</p>
                       </div>
                     </div>
                   </div>
@@ -874,7 +804,7 @@ export default function HomePageClient() {
                   <button
                     disabled={submittingContact}
                     type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 py-5 text-lg font-black text-white shadow-xl transition hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+                    className="brand-btn-primary w-full py-5 text-lg disabled:opacity-50"
                   >
                     {submittingContact ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>

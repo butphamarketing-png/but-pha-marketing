@@ -8,6 +8,7 @@ import { SubPageLayout } from "./SubPageLayout";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
 import { CountUp } from "./CountUp";
+import { BRAND } from "@/lib/brand-colors";
 
 export interface PricingPackage {
   name: string;
@@ -315,7 +316,7 @@ function Stats({ stats, color, isWebsite }: { stats: { label: string; value: str
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.6, type: "spring", stiffness: 100 }}
-            className="brand-card group relative p-10 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-brand-lg"
+            className="brand-card-soft group relative p-10 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-brand-lg"
           >
             <div className="absolute -inset-px rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100" 
               style={{ background: `radial-gradient(400px circle at center, ${color}12, transparent 60%)` }} 
@@ -451,6 +452,7 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                   borderColor: isHovered || isPopular ? `${color}55` : undefined,
                   boxShadow: isHovered ? `0 24px 48px -16px ${color}22` : undefined,
                   transform: isHovered ? "translateY(-8px)" : undefined,
+                  ...(isPopular ? { ["--tw-ring-color" as string]: `${color}40` } : {}),
                 }}
               >
                 {isPopular && (
@@ -742,9 +744,9 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="brand-card rounded-[2rem] border-green-200 bg-green-50/80 p-20 text-center"
+            className="brand-card rounded-[2rem] border-violet-200 bg-violet-50/80 p-20 text-center"
           >
-            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full bg-green-500 text-white shadow-lg shadow-green-500/25">
+            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full text-white shadow-lg" style={{ background: `linear-gradient(135deg, ${BRAND.main}, ${color})` }}>
               <Check size={48} strokeWidth={3} />
             </div>
             <h3 className="mb-4 text-3xl font-bold tracking-tight text-indigo-950">Gửi thông tin thành công!</h3>

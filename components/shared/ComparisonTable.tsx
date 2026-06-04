@@ -108,7 +108,7 @@ export function ComparisonTable({ tabs, comparisonTabs, primaryColor, onCheckout
                           className={`p-4 text-center transition-colors duration-300 ${hoveredCol === pi ? "bg-violet-50" : (!customTab && pkg.popular) ? "bg-violet-50/40" : ""}`}
                         >
                           {val === "check" || val === "✓" ? (
-                            <Check className="mx-auto h-5 w-5 text-green-600" />
+                            <Check className="mx-auto h-5 w-5 text-violet-600" />
                           ) : val === "—" || val === "-" ? (
                             <Minus className="mx-auto h-4 w-4 text-slate-300" />
                           ) : val ? (
