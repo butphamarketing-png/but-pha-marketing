@@ -1024,23 +1024,23 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-950 via-purple-900 to-pink-900 px-4">
         <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl">
           <div className="mb-8 flex items-center gap-4">
             <div className="relative">
-              <div className="absolute -inset-3 rounded-full bg-violet-500/30 blur-xl"></div>
+              <div className="absolute -inset-3 rounded-full bg-pink-500/30 blur-xl"></div>
               <img src="/logo.png" alt="Logo" className="relative h-14 w-14 rounded-2xl object-cover shadow-lg" />
             </div>
             <div>
               <p className="text-xl font-black text-white">Bứt Phá Marketing</p>
-              <p className="text-sm text-violet-200">Trang quản trị hệ thống</p>
+              <p className="text-sm text-pink-200">Trang quản trị hệ thống</p>
             </div>
           </div>
           <form onSubmit={handleLogin} className="space-y-5">
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wide text-violet-200">Mật khẩu</label>
+              <label className="text-xs font-bold uppercase tracking-wide text-pink-200">Mật khẩu</label>
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-300">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-pink-300">
                   <Lock size={18} />
                 </div>
                 <input 
@@ -1048,12 +1048,12 @@ export default function AdminPage() {
                   value={password} 
                   onChange={e => { setPassword(e.target.value); setError(""); }} 
                   placeholder="Nhập mật khẩu admin" 
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 pl-12 text-sm text-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/30 transition-all placeholder:text-violet-200/40" 
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 pl-12 text-sm text-white outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-500/30 transition-all placeholder:text-pink-200/40" 
                 />
               </div>
             </div>
             {error && <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300"><p>{error}</p></div>}
-            <button type="submit" className="group w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-violet-600/20 transition-all hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-600/40 hover:scale-[1.01] active:scale-[0.99]">
+            <button type="submit" className="group w-full rounded-2xl bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-pink-600/30 transition-all hover:shadow-pink-600/50 hover:scale-[1.01] active:scale-[0.99]">
               <span className="flex items-center justify-center gap-2">
                 Đăng Nhập 
                 <div className="transition-transform group-hover:translate-x-1">
@@ -1068,17 +1068,17 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-950 to-indigo-950 text-foreground">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-pink-950 text-foreground">
       <aside className="hidden w-72 flex-col border-r border-white/10 bg-white/5 backdrop-blur-xl md:flex">
         <div className="border-b border-white/10 p-6">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute -inset-2 rounded-full bg-violet-500/20 blur-md"></div>
+              <div className="absolute -inset-2 rounded-full bg-pink-500/20 blur-md"></div>
               <img src="/logo.png" alt="Logo" className="relative h-10 w-10 rounded-xl object-cover" />
             </div>
             <div>
               <p className="font-black text-white">Admin Panel</p>
-              <p className="text-xs text-violet-200">Bứt Phá Marketing</p>
+              <p className="text-xs text-pink-200">Bứt Phá Marketing</p>
             </div>
           </div>
         </div>
@@ -1089,7 +1089,7 @@ export default function AdminPage() {
               onClick={() => n.id === "news" ? router.push("/admin/news") : n.id === "portals" ? router.push("/admin/portals") : setActiveTab(n.id)}
               className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
                 activeTab === n.id 
-                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/20" 
+                  ? "bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 text-white shadow-lg shadow-pink-600/30" 
                   : "text-gray-300 hover:bg-white/10 hover:text-white"
               }`}
               style={n.color && activeTab !== n.id ? { color: n.color } : {}}

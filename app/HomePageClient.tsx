@@ -819,7 +819,7 @@ export default function HomePageClient() {
           </section>
         </main>
 
-        <footer className="bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 text-white">
+        <footer className="bg-gradient-to-br from-blue-950 via-purple-900 to-pink-900 text-white">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6 lg:py-20">
             <div className="grid gap-12 lg:grid-cols-4 lg:gap-16">
               <div className="col-span-2 lg:col-span-1">
