@@ -135,7 +135,7 @@ const TRUST_STATS = [
 const FOOTER_ICONS = [Shield, Clock3, BarChart3, Headphones];
 
 const inputClass =
-  "w-full rounded-xl border border-violet-200/80 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20";
+  "brand-input rounded-xl px-4 py-3 text-sm";
 
 const selectClass = inputClass;
 
@@ -415,27 +415,27 @@ export function StrategyMarketingPage() {
         </div>
         <div className="relative mx-auto max-w-5xl">
           <div className="grid items-start gap-10 lg:grid-cols-[1fr,1.15fr]">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-white lg:sticky lg:top-10">
-              <Image src="/logo.png" alt="Logo" width={72} height={72} className="rounded-2xl" />
-              <h1 className="mt-6 text-4xl font-black leading-tight md:text-5xl">
-                Chiến lược <span className="text-violet-300">dành riêng</span> cho doanh nghiệp bạn
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="lg:sticky lg:top-10">
+              <Image src="/logo.png" alt="Logo" width={72} height={72} className="rounded-2xl border border-indigo-100 shadow-brand" />
+              <h1 className="mt-6 text-4xl font-black leading-tight text-indigo-950 md:text-5xl">
+                Chiến lược <span className="brand-gradient-text">dành riêng</span> cho doanh nghiệp bạn
               </h1>
-              <p className="mt-4 text-sm leading-relaxed text-violet-100/80">
+              <p className="mt-4 text-sm leading-relaxed text-slate-600">
                 Trả lời vài câu hỏi ngắn — hệ thống sẽ gợi ý lộ trình 3 giai đoạn, combo gói phù hợp ngành nghề và bảng báo giá chi tiết.
               </p>
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 {TRUST_STATS.map(({ icon: Icon, label, sub }) => (
-                  <div key={label} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
-                    <Icon size={18} className="text-violet-300" />
-                    <p className="mt-2 text-sm font-black">{label}</p>
-                    <p className="text-[11px] text-violet-200/70">{sub}</p>
+                  <div key={label} className="rounded-2xl border border-indigo-100 bg-white px-4 py-3 shadow-sm">
+                    <Icon size={18} className="text-violet-600" />
+                    <p className="mt-2 text-sm font-black text-indigo-950">{label}</p>
+                    <p className="text-[11px] text-slate-500">{sub}</p>
                   </div>
                 ))}
               </div>
               <FormIntroPanel />
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-2xl md:p-8">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="brand-card p-6 md:p-8">
               {draftRestored && (
                 <DraftRestoredBanner
                   savedAt={draftSavedAt}
@@ -977,7 +977,7 @@ export function StrategyMarketingPage() {
           </div>
 
           {/* Post-action CTA */}
-          <div className="border-t border-violet-100 bg-gradient-to-r from-violet-700 to-violet-700 p-6 text-center text-white print:hidden">
+          <div className="border-t border-violet-100 bg-gradient-to-r from-indigo-900 to-violet-600 p-6 text-center text-white print:hidden">
             <h3 className="text-lg font-black">Sẵn sàng triển khai cùng Bứt Phá Marketing?</h3>
             <p className="mt-2 text-sm opacity-90">Gửi chiến lược về email, in PDF hoặc chat Zalo để được tư vấn lộ trình riêng.</p>
             <div className="mt-4 flex flex-wrap justify-center gap-3">

@@ -119,9 +119,9 @@ export default function ContactPageClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#06030d] text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <ParticleBackground />
-      <header className="sticky top-0 z-40 border-b border-violet-500/15 bg-white/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-indigo-100 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
           <Link href="/" className="flex items-center gap-3">
             <img src={logoSrc} alt={brandName} className="h-12 w-12 rounded-full object-cover" />
@@ -137,7 +137,7 @@ export default function ContactPageClient() {
                 key={item.label}
                 href={item.href}
                 className={`text-sm font-bold transition ${
-                  item.href === "/lien-he" ? "text-slate-900" : "text-slate-300 hover:text-slate-900"
+                  item.href === "/lien-he" ? "text-slate-900" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {item.label}
@@ -148,7 +148,7 @@ export default function ContactPageClient() {
           <div className="hidden items-center gap-3 lg:flex">
             <Link
               href="/lien-he"
-              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(124,58,237,0.3)] transition hover:scale-[1.01]"
+              className="brand-btn-primary text-sm"
             >
               <Phone className="h-4 w-4" />
               Liên hệ tư vấn
@@ -158,7 +158,7 @@ export default function ContactPageClient() {
       </header>
 
       <main className="relative overflow-hidden">
-        <section className="border-b border-violet-500/12 bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,0.28),transparent_38%),linear-gradient(180deg,#090512,#07040d)]">
+        <section className="border-b border-indigo-100 brand-section-muted">
           <div className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-16">
             <div className="mb-6 flex items-center gap-2 text-sm text-slate-400">
               <Link href="/" className="transition hover:text-slate-900">
@@ -171,7 +171,7 @@ export default function ContactPageClient() {
             <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
               <div className="space-y-6">
                 <div>
-                  <div className="inline-flex items-center rounded-full border border-violet-500/35 bg-violet-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-violet-200">
+                  <div className="brand-eyebrow inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-4 py-2">
                     Liên hệ với chúng tôi
                   </div>
                   <h1 className="mt-6 max-w-2xl text-4xl font-black tracking-[-0.05em] text-slate-900 md:text-6xl">
@@ -179,12 +179,12 @@ export default function ContactPageClient() {
                     <br />
                     luôn sẵn sàng <span className="text-violet-600">hỗ trợ bạn!</span>
                   </h1>
-                  <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+                  <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
                     Bạn có câu hỏi hoặc muốn tư vấn dịch vụ? Đội ngũ của chúng tôi luôn sẵn sàng đồng hành cùng bạn.
                   </p>
                 </div>
 
-                <div className="rounded-[1.9rem] border border-violet-500/20 bg-[#0d0817]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)]">
+                <div className="brand-card p-6">
                   {[
                     { icon: Phone, title: "Hotline", value: settings?.hotline || "090.143.8303" },
                     { icon: Mail, title: "Email", value: settings?.email || "hello@butphamarketing.com" },
@@ -193,11 +193,11 @@ export default function ContactPageClient() {
                   ].map((item, index) => (
                     <div key={item.title} className={index === 0 ? "" : "border-t border-indigo-200 pt-5 mt-5"}>
                       <div className="flex items-start gap-4">
-                        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
                           <item.icon className="h-5 w-5" />
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-slate-300">{item.title}</p>
+                          <p className="text-sm font-semibold text-slate-600">{item.title}</p>
                           <p className="mt-1 text-2xl font-bold text-slate-900">{item.value}</p>
                         </div>
                       </div>
@@ -206,11 +206,11 @@ export default function ContactPageClient() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[2rem] border border-violet-500/20 bg-[linear-gradient(135deg,rgba(22,10,37,0.98),rgba(35,12,66,0.92))] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.42)] lg:p-8">
+              <div className="brand-card-soft overflow-hidden p-6 lg:p-8">
                 <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
                   <div>
-                    <h2 className="text-[32px] font-black tracking-[-0.05em] text-violet-200">Gửi yêu cầu tư vấn</h2>
-                    <p className="mt-3 text-base leading-7 text-slate-300">
+                    <h2 className="text-[32px] font-black tracking-[-0.05em] text-indigo-950">Gửi yêu cầu tư vấn</h2>
+                    <p className="mt-3 text-base leading-7 text-slate-600">
                       Điền thông tin, chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.
                     </p>
 
@@ -287,7 +287,7 @@ export default function ContactPageClient() {
                       <p className="text-center text-sm text-slate-400">Thông tin của bạn được bảo mật tuyệt đối.</p>
 
                       {state.type !== "idle" ? (
-                        <p className={`text-center text-sm font-semibold ${state.type === "success" ? "text-emerald-300" : "text-rose-300"}`}>
+                        <p className={`text-center text-sm font-semibold ${state.type === "success" ? "text-emerald-600" : "text-red-600"}`}>
                           {state.message}
                         </p>
                       ) : null}
@@ -312,14 +312,14 @@ export default function ContactPageClient() {
               { title: "Tư vấn tận tâm", description: "Đưa ra giải pháp phù hợp nhất", icon: Target },
               { title: "Đồng hành dài lâu", description: "Hỗ trợ bạn trước - trong - sau dự án", icon: Users },
             ].map((item) => (
-              <div key={item.title} className="rounded-[1.7rem] border border-indigo-200 bg-[#0d0817]/90 px-6 py-6 shadow-[0_20px_60px_rgba(4,2,10,0.28)]">
+              <div key={item.title} className="brand-card px-6 py-6">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
                     <item.icon className="h-6 w-6" />
                   </span>
                   <div>
                     <h3 className="text-xl font-black text-slate-900">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-300">{item.description}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">{item.description}</p>
                   </div>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export default function ContactPageClient() {
         </section>
       </main>
 
-      <footer className="border-t border-indigo-200 bg-[#06030e]">
+      <footer className="border-t border-indigo-100 bg-indigo-50/30">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_0.8fr] lg:px-6">
           <div>
             <div className="flex items-center gap-3">

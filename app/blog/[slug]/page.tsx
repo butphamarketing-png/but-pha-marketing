@@ -68,22 +68,23 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-4 py-10 text-slate-900">
+    <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <section className="overflow-hidden rounded-[2rem] border border-indigo-200 bg-white/[0.03] shadow-[0_32px_90px_rgba(7,5,16,0.42)] backdrop-blur-sm">
-        <div className="relative overflow-hidden border-b border-indigo-200 px-6 py-10 md:px-10 md:py-14">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.35),transparent_35%),radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),transparent)]" />
+      <section className="brand-card overflow-hidden">
+        <div className="relative overflow-hidden border-b border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 px-6 py-10 md:px-10 md:py-14">
           <div className="relative">
-            <span className="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-xs font-extrabold uppercase tracking-[0.28em] text-cyan-200">
-              Bài viết SEO
+            <span className="brand-eyebrow inline-flex rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5">
+              Bài viết
             </span>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.95] tracking-[-0.05em] text-slate-900 md:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight text-indigo-950 md:text-5xl">
               {blog.title}
             </h1>
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-slate-300">
-              <span className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5">Ngày viết: {publishedLabel}</span>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-slate-600">
+              <span className="rounded-full border border-indigo-200 bg-white px-3 py-1.5 font-semibold text-indigo-900">
+                Ngày đăng: {publishedLabel}
+              </span>
               {blog.metaDescription && (
-                <span className="max-w-2xl text-sm text-slate-300/90">{blog.metaDescription}</span>
+                <span className="max-w-2xl text-sm text-slate-600">{blog.metaDescription}</span>
               )}
             </div>
           </div>
@@ -94,7 +95,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
             <img
               src={blog.imageUrl}
               alt={blog.title}
-              className="h-72 w-full rounded-[1.75rem] border border-indigo-200 object-cover shadow-[0_18px_50px_rgba(0,0,0,0.28)] md:h-[24rem]"
+              className="h-72 w-full rounded-[1.75rem] border border-indigo-100 object-cover shadow-brand md:h-[24rem]"
             />
           </div>
         )}

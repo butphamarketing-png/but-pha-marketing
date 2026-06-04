@@ -39,6 +39,11 @@ module.exports = {
         '3xl': '1.5rem',
         '4xl': '2rem',
       },
+      boxShadow: {
+        brand: '0 20px 60px rgba(49, 46, 129, 0.08)',
+        'brand-lg': '0 28px 80px rgba(49, 46, 129, 0.12)',
+        'brand-accent': '0 18px 44px rgba(124, 58, 237, 0.22)',
+      },
     },
   },
   plugins: [],

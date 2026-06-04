@@ -133,9 +133,9 @@ export default function AboutPageClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#06030d] text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <ParticleBackground />
-      <header className="sticky top-0 z-40 border-b border-violet-500/15 bg-white/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-indigo-100 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
           <Link href="/" className="flex items-center gap-3">
             <img src={logoSrc} alt={brandName} className="h-12 w-12 rounded-full object-cover" />
@@ -151,7 +151,7 @@ export default function AboutPageClient() {
                 key={item.label}
                 href={item.href}
                 className={`text-sm font-bold transition ${
-                  item.href === "/gioi-thieu" ? "text-slate-900" : "text-slate-300 hover:text-slate-900"
+                  item.href === "/gioi-thieu" ? "text-slate-900" : "text-slate-600 hover:text-indigo-900"
                 }`}
               >
                 {item.label}
@@ -175,14 +175,14 @@ export default function AboutPageClient() {
       <main className="relative overflow-hidden pt-12">
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">01</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">01</span>
               <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Bứt Phá Marketing là ai?</h2>
             </div>
 
             <div className={`mt-6 grid gap-8 ${teamImage ? "lg:grid-cols-[1.1fr_0.9fr]" : "lg:grid-cols-1"}`}>
-              <div className="space-y-5 text-base leading-8 text-slate-300">
+              <div className="space-y-5 text-base leading-8 text-slate-600">
                 <p>
                   Bứt Phá Marketing là đơn vị cung cấp giải pháp marketing toàn diện, chuyên sâu cho doanh nghiệp vừa và nhỏ, doanh nghiệp địa phương và thương hiệu đang trên hành trình phát triển.
                 </p>
@@ -195,7 +195,7 @@ export default function AboutPageClient() {
               </div>
 
               {teamImage && (
-                <div className="overflow-hidden rounded-[1.8rem] border border-indigo-200 bg-white/[0.03]">
+                <div className="overflow-hidden rounded-[1.8rem] border border-indigo-200 bg-indigo-50/30">
                   <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-cover" />
                 </div>
               )}
@@ -210,12 +210,12 @@ export default function AboutPageClient() {
               ].map((stat) => (
                 <div key={stat.value} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
                       <stat.icon className="h-5 w-5" />
                     </span>
                     <div>
                       <div className="text-3xl font-black text-violet-600">{stat.value}</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-300">{stat.label}</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">{stat.label}</div>
                     </div>
                   </div>
                 </div>
@@ -225,20 +225,20 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
-          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">02</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">02</span>
               <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Điều chúng tôi thực sự làm</h2>
             </div>
 
             <div className="mt-8 grid gap-5 xl:grid-cols-5">
               {serviceHighlights.map((item) => (
                 <div key={item.title} className="rounded-[1.6rem] border border-violet-500/20 bg-white p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
                     <item.icon className="h-6 w-6" />
                   </span>
                   <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -246,20 +246,20 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">03</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">03</span>
               <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Triết lý làm việc</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {workPrinciples.map((item) => (
                 <div key={item.title} className="rounded-[1.6rem] border border-indigo-200 bg-white p-5">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
                     <item.icon className="h-6 w-6" />
                   </span>
                   <h3 className="mt-5 text-xl font-black text-slate-900">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -267,9 +267,9 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
-          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">04</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">04</span>
               <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Tầm nhìn – Sứ mệnh – Trách nhiệm</h2>
             </div>
 
@@ -293,7 +293,7 @@ export default function AboutPageClient() {
               ].map((item) => (
                 <div key={item.title} className="rounded-[1.7rem] border border-violet-500/20 bg-white px-6 py-7 text-center">
                   <h3 className="text-2xl font-black uppercase tracking-[0.14em] text-violet-600">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-300">{item.description}</p>
+                  <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -301,16 +301,16 @@ export default function AboutPageClient() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-          <div className="rounded-[2rem] border border-indigo-200 bg-[#0a0612]/90 p-6 shadow-[0_24px_70px_rgba(4,2,10,0.34)] lg:p-8">
+          <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-200">05</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600/15 text-sm font-black text-violet-600">05</span>
               <h2 className="text-3xl font-black tracking-[-0.04em] text-slate-900">Vì sao khách hàng chọn chúng tôi?</h2>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-6">
               {whyChooseUs.map((item) => (
                 <div key={item} className="rounded-[1.5rem] border border-indigo-200 bg-white px-4 py-5 text-center text-sm font-bold text-slate-200">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-200">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/15 text-violet-600">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   {item}
@@ -324,7 +324,7 @@ export default function AboutPageClient() {
           <div className="overflow-hidden rounded-[2.2rem] border border-violet-500/20 bg-[linear-gradient(90deg,rgba(19,10,32,0.96),rgba(61,28,110,0.88))] p-6 shadow-[0_28px_80px_rgba(5,2,12,0.42)] lg:p-8">
             <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.8fr]">
               <div>
-                <div className="inline-flex items-center rounded-full border border-violet-500/30 bg-violet-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-violet-200">
+                <div className="inline-flex items-center rounded-full border border-violet-500/30 bg-violet-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-violet-600">
                   06
                 </div>
                 <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] text-slate-900">Sẵn sàng bứt phá cùng doanh nghiệp của bạn?</h2>
@@ -342,7 +342,7 @@ export default function AboutPageClient() {
                   </button>
                   <Link
                     href="/#services"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-indigo-200 bg-indigo-100 px-6 py-4 text-sm font-black text-white transition hover:bg-white/15"
+                    className="brand-btn-secondary px-6 py-4 text-sm font-black"
                   >
                     Nhận báo giá miễn phí
                     <ArrowRight className="h-4 w-4" />
@@ -359,7 +359,7 @@ export default function AboutPageClient() {
         </section>
       </main>
 
-      <footer className="border-t border-indigo-200 bg-[#06030e]">
+      <footer className="border-t border-indigo-100 bg-indigo-50/30">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr] lg:px-6">
           <div>
             <div className="flex items-center gap-3">
