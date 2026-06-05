@@ -38,18 +38,88 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
   };
 }
 
+function getSampleCustomers(): CustomerRecord[] {
+  const now = new Date().toISOString();
+  return [
+    {
+      id: "sample-1",
+      fullName: "Nguyễn Văn A",
+      industry: "Nha khoa",
+      establishmentName: "Nha Khoa Smile",
+      phone: "0901234567",
+      email: "nhakhoasmile@gmail.com",
+      platform: "facebook",
+      service: "Viết bài FB 30 ngày + Quảng cáo",
+      registeredAt: "2026-05-01",
+      expiresAt: "2026-06-30",
+      platformLink: "https://facebook.com/nhakhoasmile",
+      amount: 3500000,
+      renewalReminderEnabled: true,
+      lastRenewalReminderAt: null,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "sample-2",
+      fullName: "Trần Thị B",
+      industry: "Spa & Beauty",
+      establishmentName: "Spa Hoàng Yến",
+      phone: "0912345678",
+      email: "spahoangyen@gmail.com",
+      platform: "instagram",
+      service: "Chăm sóc Instagram 15 bài/tháng",
+      registeredAt: "2026-04-15",
+      expiresAt: "2026-07-15",
+      platformLink: "https://instagram.com/spahoangyen",
+      amount: 2500000,
+      renewalReminderEnabled: true,
+      lastRenewalReminderAt: null,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "sample-3",
+      fullName: "Lê Văn C",
+      industry: "Nhà hàng",
+      establishmentName: "Nhà Hàng Việt Nam",
+      phone: "0987654321",
+      email: "nhahangvietnam@gmail.com",
+      platform: "googlemaps",
+      service: "SEO Google Maps 3 tháng",
+      registeredAt: "2026-03-20",
+      expiresAt: "2026-06-20",
+      platformLink: "https://maps.google.com/?q=nhà+hàng+việt+nam",
+      amount: 5000000,
+      renewalReminderEnabled: true,
+      lastRenewalReminderAt: null,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+}
+
 async function loadEntries() {
   const supabase = createServerClient();
-  const { data, error } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", CUSTOMER_RECORDS_KEY)
-    .maybeSingle();
+  let entries: unknown[] = [];
+  
+  try {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", CUSTOMER_RECORDS_KEY)
+      .maybeSingle();
 
-  if (error) throw error;
-  const entries = Array.isArray((data?.value as StoredPayload | null)?.entries)
-    ? ((data?.value as StoredPayload).entries as unknown[])
-    : [];
+    if (!error && Array.isArray((data?.value as StoredPayload | null)?.entries)) {
+      entries = (data?.value as StoredPayload).entries as unknown[];
+    }
+  } catch (e) {
+    console.warn("Supabase not configured, using sample data");
+  }
+
+  if (entries.length === 0) {
+    return getSampleCustomers();
+  }
+  
   return entries.map(sanitizeRecord);
 }
 

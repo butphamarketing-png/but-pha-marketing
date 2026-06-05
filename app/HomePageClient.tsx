@@ -163,80 +163,13 @@ export default function HomePageClient() {
     const slides: any[] = [];
     
     const imagesToUse = [
-      "/slideshow-hero.png",
-      "/slideshow.jpg",
-      "/slideshow1.jpg"
+      "/slideshow-hero.png"
     ];
 
     imagesToUse.forEach((img, index) => {
-      if (index === 0) {
-        slides.push({
-          eyebrow: "WEBSITE CHỈ ĐỂ ĐẸP",
-          middle: "KHÔNG TẠO RA DOANH THU",
-          accent: "THÌ KHÔNG CÓ Ý NGHĨA!",
-          description: "Bứt Phá Marketing giúp doanh nghiệp tăng trưởng bền vững bằng hệ thống marketing tự động, đo lường được và tối ưu liên tục.",
-          visual: img,
-          revenue: "+215%",
-          growth: "+150%",
-          newClients: "+180%",
-          highlight: "Hiệu quả chiến dịch",
-          pills: [
-            { label: "Website", icon: LayoutTemplate },
-            { label: "Facebook", icon: SiFacebook },
-            { label: "Google Maps", icon: MapPinned },
-          ],
-        });
-      } else if (index === 1) {
-        slides.push({
-          eyebrow: "FACEBOOK KHÔNG CHỈ ĐỂ ĐĂNG BÀI",
-          middle: "PHẢI TẠO RA TƯƠNG TÁC, KHÁCH HÀNG",
-          accent: "VÀ DOANH THU THẬT!",
-          description: "Từ nội dung, quảng cáo đến chatbot và chăm sóc inbox, mọi thứ phải gắn với mục tiêu chuyển đổi đo lường được.",
-          visual: img,
-          revenue: "+168%",
-          growth: "+132%",
-          newClients: "+145%",
-          highlight: "Tăng trưởng Fanpage",
-          pills: [
-            { label: "Facebook", icon: SiFacebook },
-            { label: "Messenger", icon: MessageCircle },
-          ],
-        });
-      } else if (index === 2) {
-        slides.push({
-          eyebrow: "GOOGLE MAPS KHÔNG CHỈ ĐỂ HIỂN THỊ",
-          middle: "PHẢI KÉO ĐÚNG KHÁCH GẦN BẠN",
-          accent: "VÀ TĂNG CUỘC GỌI THẬT!",
-          description: "Đẩy hiển thị địa phương, tối ưu hồ sơ, đánh giá và nội dung để giúp doanh nghiệp chiếm vị trí nổi bật trong khu vực.",
-          visual: img,
-          revenue: "Top 1",
-          growth: "+120%",
-          newClients: "+95%",
-          highlight: "Hiệu quả tìm kiếm",
-          pills: [
-            { label: "Google Maps", icon: MapPinned },
-            { label: "Website", icon: LayoutTemplate },
-            { label: "Facebook", icon: SiFacebook },
-          ],
-        });
-      } else {
-        slides.push({
-          eyebrow: "GIẢI PHÁP MARKETING TOÀN DIỆN",
-          middle: "TĂNG TRƯỞNG DOANH THU ĐỘT PHÁ",
-          accent: "CHO DOANH NGHIỆP CỦA BẠN!",
-          description: "Chúng tôi đồng hành cùng bạn xây dựng thương hiệu và tối ưu hóa quy trình bán hàng trên đa nền tảng.",
-          visual: img,
-          revenue: "+180%",
-          growth: "+140%",
-          newClients: "+120%",
-          highlight: "Tăng trưởng bền vững",
-          pills: [
-            { label: "Marketing", icon: Target },
-            { label: "Branding", icon: Sparkles },
-            { label: "Automation", icon: Workflow },
-          ],
-        });
-      }
+      slides.push({
+        visual: img,
+      });
     });
     
     return slides;
@@ -457,52 +390,14 @@ export default function HomePageClient() {
         </header>
 
         <main className="flex-1">
-          <section id="hero" className="relative w-full overflow-hidden" style={{ height: "100vh", maxHeight: "1000px", minHeight: "500px" }}>
-            <div className="absolute inset-0 z-30 flex items-center justify-between px-6 pointer-events-none lg:px-12">
-              <button
-                onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length); }}
-                className="brand-icon-btn pointer-events-auto h-14 w-14 backdrop-blur-md"
-              >
-                <ChevronLeft size={28} />
-              </button>
-              <button
-                onClick={() => { playClickSound(); setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length); }}
-                className="brand-icon-btn pointer-events-auto h-14 w-14 backdrop-blur-md"
-              >
-                <ChevronRight size={28} />
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeHeroSlide}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0"
-              >
-                <img
-                  src={currentHeroSlide.visual}
-                  alt="Hero Slide"
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-[#f4f6fc] via-[#f4f6fc]/60 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
-
-            <div className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2 rounded-full border border-white/20 bg-indigo-950/25 px-4 py-3 backdrop-blur-md lg:bottom-10">
-              {heroSlides.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={`Slide ${i + 1}`}
-                  onClick={() => { playClickSound(); setActiveHeroSlide(i); }}
-                  className={`rounded-full transition-all duration-300 ${
-                    activeHeroSlide === i ? "h-2.5 w-8 bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.8)]" : "h-2.5 w-2.5 bg-white/50 hover:bg-white/80"
-                  }`}
-                />
-              ))}
+          <section id="hero" className="relative w-full overflow-hidden">
+            {/* All screens: 16:9 ratio (ngang) */}
+            <div className="w-full aspect-[16/9]">
+              <img
+                src="/slideshow-hero.png"
+                alt="Hero"
+                className="h-full w-full object-cover"
+              />
             </div>
           </section>
 
