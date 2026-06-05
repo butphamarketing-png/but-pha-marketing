@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AdminProvider } from "@/lib/AdminContext";
-import { MarketingChrome } from "@/components/shared/MarketingChrome";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
 import { VisitorTracker } from "@/components/shared/VisitorTracker";
 import NextTopLoader from "nextjs-toploader";
@@ -75,7 +74,6 @@ export default function RootLayout({
           <ExternalScripts />
           <VisitorTracker />
           {children}
-          <MarketingChrome />
         </AdminProvider>
       </body>
     </html>
