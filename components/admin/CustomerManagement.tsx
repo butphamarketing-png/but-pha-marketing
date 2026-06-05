@@ -377,17 +377,17 @@ export function CustomerManagement() {
       const res = await fetch("/api/customers", { cache: "no-store", credentials: "include" });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
-        // Fallback to sample data if API fails
-        setCustomers(getSampleCustomers());
-        dirtyRef.current = true; // Mark as dirty to save sample data later
+        // If API fails, keep current customers instead of overwriting with sample data
+        console.warn("Failed to load customers from API");
+        setSaveError("Không thể kết nối với cơ sở dữ liệu. Dữ liệu hiện tại được giữ lại.");
         return;
       }
       const loaded = Array.isArray(data.customers) ? data.customers : [];
-      setCustomers(loaded.length > 0 ? loaded : getSampleCustomers());
-      dirtyRef.current = loaded.length > 0 ? false : true;
+      setCustomers(loaded);
+      dirtyRef.current = false;
     } catch {
-      setCustomers(getSampleCustomers());
-      dirtyRef.current = true;
+      console.error("Failed to load customers");
+      setSaveError("Không thể kết nối với cơ sở dữ liệu. Dữ liệu hiện tại được giữ lại.");
     } finally {
       setIsLoading(false);
     }

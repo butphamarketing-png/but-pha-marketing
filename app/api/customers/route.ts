@@ -111,15 +111,13 @@ async function loadEntries() {
 
     if (!error && Array.isArray((data?.value as StoredPayload | null)?.entries)) {
       entries = (data?.value as StoredPayload).entries as unknown[];
+    } else if (error) {
+      console.error("Supabase load failed:", error);
     }
   } catch (e) {
-    console.warn("Supabase not configured, using sample data");
+    console.error("Supabase load error:", e);
   }
 
-  if (entries.length === 0) {
-    return getSampleCustomers();
-  }
-  
   return entries.map(sanitizeRecord);
 }
 
