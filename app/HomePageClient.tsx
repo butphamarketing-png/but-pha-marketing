@@ -163,7 +163,9 @@ export default function HomePageClient() {
     const slides: any[] = [];
     
     const imagesToUse = [
-      "/slideshow.png"
+      "/slideshow-hero.png",
+      "/slideshow.jpg",
+      "/slideshow1.jpg"
     ];
 
     imagesToUse.forEach((img, index) => {
