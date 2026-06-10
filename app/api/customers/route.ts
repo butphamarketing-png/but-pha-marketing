@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { isAdminRequest } from "@/lib/admin-auth";
 import {
+  CUSTOMER_BACKUP_KEY,
+  hasMeaningfulCustomerData,
+  isSampleCustomerData,
+  type CustomerBackupPayload,
+} from "@/lib/customer-backup";
+import {
   CUSTOMER_RECORDS_KEY,
   type CustomerRecord,
   createEmptyCustomer,
@@ -38,70 +44,11 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
   };
 }
 
-function getSampleCustomers(): CustomerRecord[] {
-  const now = new Date().toISOString();
-  return [
-    {
-      id: "sample-1",
-      fullName: "Nguyễn Văn A",
-      industry: "Nha khoa",
-      establishmentName: "Nha Khoa Smile",
-      phone: "0901234567",
-      email: "nhakhoasmile@gmail.com",
-      platform: "facebook",
-      service: "Viết bài FB 30 ngày + Quảng cáo",
-      registeredAt: "2026-05-01",
-      expiresAt: "2026-06-30",
-      platformLink: "https://facebook.com/nhakhoasmile",
-      amount: 3500000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "sample-2",
-      fullName: "Trần Thị B",
-      industry: "Spa & Beauty",
-      establishmentName: "Spa Hoàng Yến",
-      phone: "0912345678",
-      email: "spahoangyen@gmail.com",
-      platform: "instagram",
-      service: "Chăm sóc Instagram 15 bài/tháng",
-      registeredAt: "2026-04-15",
-      expiresAt: "2026-07-15",
-      platformLink: "https://instagram.com/spahoangyen",
-      amount: 2500000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "sample-3",
-      fullName: "Lê Văn C",
-      industry: "Nhà hàng",
-      establishmentName: "Nhà Hàng Việt Nam",
-      phone: "0987654321",
-      email: "nhahangvietnam@gmail.com",
-      platform: "googlemaps",
-      service: "SEO Google Maps 3 tháng",
-      registeredAt: "2026-03-20",
-      expiresAt: "2026-06-20",
-      platformLink: "https://maps.google.com/?q=nhà+hàng+việt+nam",
-      amount: 5000000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-  ];
-}
-
-async function loadEntries() {
+async function loadEntries(): Promise<{ customers: CustomerRecord[]; serverOk: boolean }> {
   const supabase = createServerClient();
   let entries: unknown[] = [];
-  
+  let serverOk = true;
+
   try {
     const { data, error } = await supabase
       .from("site_settings")
@@ -113,16 +60,37 @@ async function loadEntries() {
       entries = (data?.value as StoredPayload).entries as unknown[];
     } else if (error) {
       console.error("Supabase load failed:", error);
+      serverOk = false;
     }
   } catch (e) {
     console.error("Supabase load error:", e);
+    serverOk = false;
   }
 
-  return entries.map(sanitizeRecord);
+  return { customers: entries.map(sanitizeRecord), serverOk };
+}
+
+async function saveServerBackup(entries: CustomerRecord[]) {
+  if (!hasMeaningfulCustomerData(entries) || isSampleCustomerData(entries)) return;
+
+  const supabase = createServerClient();
+  const payload: CustomerBackupPayload = {
+    entries,
+    savedAt: new Date().toISOString(),
+  };
+  const { error } = await supabase
+    .from("site_settings")
+    .upsert({ key: CUSTOMER_BACKUP_KEY, value: payload }, { onConflict: "key" });
+  if (error) console.error("Customer backup save failed:", error);
 }
 
 async function saveEntries(entries: CustomerRecord[]) {
   const supabase = createServerClient();
+  const { customers: current, serverOk } = await loadEntries();
+  if (serverOk && hasMeaningfulCustomerData(current) && !isSampleCustomerData(current)) {
+    await saveServerBackup(current);
+  }
+
   const { error } = await supabase
     .from("site_settings")
     .upsert({ key: CUSTOMER_RECORDS_KEY, value: { entries } }, { onConflict: "key" });
@@ -134,11 +102,20 @@ export async function GET(request: Request) {
     if (!isAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
-    const customers = await loadEntries();
+    const { customers, serverOk } = await loadEntries();
+    if (!serverOk) {
+      return NextResponse.json(
+        { ok: false, error: "Supabase đang không khả dụng.", offline: true },
+        { status: 503 },
+      );
+    }
     return NextResponse.json({ ok: true, customers });
   } catch (error) {
     console.error("GET /api/customers failed", error);
-    return NextResponse.json({ ok: true, customers: [] });
+    return NextResponse.json(
+      { ok: false, error: "Không thể tải danh sách khách hàng.", offline: true },
+      { status: 503 },
+    );
   }
 }
 
@@ -164,7 +141,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const body = await request.json().catch(() => null);
-    const entries = await loadEntries();
+    const { customers: entries } = await loadEntries();
     const customer = sanitizeRecord(body?.customer ?? createEmptyCustomer(), entries.length);
     entries.unshift(customer);
     await saveEntries(entries);

@@ -12,6 +12,9 @@ import {
   MessageCircle,
   Bell,
   ExternalLink,
+  History,
+  Upload,
+  Download,
 } from "lucide-react";
 import {
   Dialog,
@@ -30,66 +33,16 @@ import {
   formatVnd,
   type CustomerRecord,
 } from "@/lib/customer-records";
-
-function getSampleCustomers(): CustomerRecord[] {
-  const now = new Date().toISOString();
-  return [
-    {
-      id: "sample-1",
-      fullName: "Nguyễn Văn A",
-      industry: "Nha khoa",
-      establishmentName: "Nha Khoa Smile",
-      phone: "0901234567",
-      email: "nhakhoasmile@gmail.com",
-      platform: "facebook",
-      service: "Viết bài FB 30 ngày + Quảng cáo",
-      registeredAt: "2026-05-01",
-      expiresAt: "2026-06-30",
-      platformLink: "https://facebook.com/nhakhoasmile",
-      amount: 3500000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "sample-2",
-      fullName: "Trần Thị B",
-      industry: "Spa & Beauty",
-      establishmentName: "Spa Hoàng Yến",
-      phone: "0912345678",
-      email: "spahoangyen@gmail.com",
-      platform: "instagram",
-      service: "Chăm sóc Instagram 15 bài/tháng",
-      registeredAt: "2026-04-15",
-      expiresAt: "2026-07-15",
-      platformLink: "https://instagram.com/spahoangyen",
-      amount: 2500000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "sample-3",
-      fullName: "Lê Văn C",
-      industry: "Nhà hàng",
-      establishmentName: "Nhà Hàng Việt Nam",
-      phone: "0987654321",
-      email: "nhahangvietnam@gmail.com",
-      platform: "googlemaps",
-      service: "SEO Google Maps 3 tháng",
-      registeredAt: "2026-03-20",
-      expiresAt: "2026-06-20",
-      platformLink: "https://maps.google.com/?q=nhà+hàng+việt+nam",
-      amount: 5000000,
-      renewalReminderEnabled: true,
-      lastRenewalReminderAt: null,
-      createdAt: now,
-      updatedAt: now,
-    },
-  ];
-}
+import {
+  downloadCustomerBackup,
+  formatBackupTime,
+  getUsableLocalBackup,
+  hasMeaningfulCustomerData,
+  isSampleCustomerData,
+  loadLocalCustomerBackup,
+  parseCustomerBackupFile,
+  saveLocalCustomerBackup,
+} from "@/lib/customer-backup";
 
 const cellInput =
   "w-full min-w-[120px] rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-white outline-none focus:border-primary";
@@ -348,7 +301,18 @@ export function CustomerManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [localBackupAt, setLocalBackupAt] = useState<string | null>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [restoreOpen, setRestoreOpen] = useState(false);
+  const [restoreBusy, setRestoreBusy] = useState(false);
+  const [localBackup, setLocalBackup] = useState<ReturnType<typeof loadLocalCustomerBackup>>(null);
+  const [serverBackup, setServerBackup] = useState<{
+    count: number;
+    savedAt: string;
+    preview: { fullName: string; phone: string; service: string }[];
+  } | null>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
   const dirtyRef = useRef(false);
 
   const selectedRowIndex = useMemo(
@@ -370,28 +334,64 @@ export function CustomerManagement() {
     [customers],
   );
 
+  const applyLocalBackup = useCallback((source: "auto" | "manual" = "auto") => {
+    const backup = getUsableLocalBackup();
+    if (!backup) return false;
+
+    setCustomers(backup.entries);
+    setOfflineMode(true);
+    setLocalBackupAt(backup.savedAt);
+    dirtyRef.current = false;
+    setSaveError(null);
+    setSaveMessage(
+      source === "manual"
+        ? `Đã khôi phục ${backup.entries.length} khách từ trình duyệt (${formatBackupTime(backup.savedAt)}).`
+        : `Đã tải ${backup.entries.length} khách từ bản sao trình duyệt (${formatBackupTime(backup.savedAt)}). Supabase đang lỗi.`,
+    );
+    return true;
+  }, []);
+
   const loadCustomers = useCallback(async () => {
     setIsLoading(true);
     setSaveError(null);
+    setSaveMessage(null);
     try {
       const res = await fetch("/api/customers", { cache: "no-store", credentials: "include" });
       const data = await res.json().catch(() => null);
+
       if (!res.ok || !data?.ok) {
-        // If API fails, keep current customers instead of overwriting with sample data
-        console.warn("Failed to load customers from API");
-        setSaveError("Không thể kết nối với cơ sở dữ liệu. Dữ liệu hiện tại được giữ lại.");
+        if (applyLocalBackup("auto")) return;
+        setOfflineMode(true);
+        setSaveError("Supabase đang lỗi. Bấm Khôi phục dữ liệu hoặc nhập file JSON backup.");
         return;
       }
+
       const loaded = Array.isArray(data.customers) ? data.customers : [];
+      const usableServerData = hasMeaningfulCustomerData(loaded) && !isSampleCustomerData(loaded);
+
+      if (!usableServerData) {
+        if (applyLocalBackup("auto")) return;
+        setCustomers(loaded);
+        setOfflineMode(true);
+        setSaveError("Chưa có dữ liệu trên máy chủ. Nhập file JSON hoặc nhập tay rồi bấm Tải backup.");
+        dirtyRef.current = false;
+        return;
+      }
+
       setCustomers(loaded);
+      setOfflineMode(false);
+      setLocalBackupAt(null);
+      saveLocalCustomerBackup(loaded);
       dirtyRef.current = false;
+      setSaveMessage("Đã tải dữ liệu từ máy chủ.");
     } catch {
-      console.error("Failed to load customers");
-      setSaveError("Không thể kết nối với cơ sở dữ liệu. Dữ liệu hiện tại được giữ lại.");
+      if (applyLocalBackup("auto")) return;
+      setOfflineMode(true);
+      setSaveError("Không kết nối được máy chủ. Thử Khôi phục dữ liệu hoặc nhập file JSON.");
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [applyLocalBackup]);
 
   useEffect(() => {
     let mounted = true;
@@ -412,7 +412,20 @@ export function CustomerManagement() {
     };
   }, [loadCustomers]);
 
-  const saveAll = async () => {
+  const saveLocalOnly = useCallback((rows: CustomerRecord[]) => {
+    if (!hasMeaningfulCustomerData(rows)) return;
+    saveLocalCustomerBackup(rows);
+    const savedAt = new Date().toISOString();
+    setLocalBackupAt(savedAt);
+    setOfflineMode(true);
+    dirtyRef.current = false;
+    setSaveError(null);
+    setSaveMessage(
+      `Đã lưu ${rows.length} khách trên trình duyệt (${formatBackupTime(savedAt)}). Bấm Tải backup để lưu file JSON an toàn.`,
+    );
+  }, []);
+
+  const saveAll = useCallback(async () => {
     setIsSaving(true);
     setSaveMessage(null);
     setSaveError(null);
@@ -425,18 +438,24 @@ export function CustomerManagement() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
-        setSaveError(data?.error || "Lưu thất bại.");
+        saveLocalOnly(customers);
         return;
       }
-      setCustomers(Array.isArray(data.customers) ? data.customers : customers);
+      const saved = Array.isArray(data.customers) ? data.customers : customers;
+      setCustomers(saved);
+      if (hasMeaningfulCustomerData(saved) && !isSampleCustomerData(saved)) {
+        saveLocalCustomerBackup(saved);
+      }
+      setOfflineMode(false);
+      setLocalBackupAt(null);
       dirtyRef.current = false;
-      setSaveMessage("Đã lưu danh sách khách hàng.");
+      setSaveMessage("Đã lưu danh sách khách hàng lên máy chủ.");
     } catch {
-      setSaveError("Không thể lưu dữ liệu.");
+      saveLocalOnly(customers);
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [customers, saveLocalOnly]);
 
   useEffect(() => {
     if (!authenticated || !dirtyRef.current) return;
@@ -444,7 +463,7 @@ export function CustomerManagement() {
       void saveAll();
     }, 2500);
     return () => window.clearTimeout(timer);
-  }, [customers, authenticated]);
+  }, [customers, authenticated, saveAll]);
 
   const updateRow = (id: string, patch: Partial<CustomerRecord>) => {
     dirtyRef.current = true;
@@ -517,6 +536,123 @@ export function CustomerManagement() {
     }
   };
 
+  const openRestoreDialog = async () => {
+    setRestoreOpen(true);
+    setLocalBackup(loadLocalCustomerBackup());
+    setServerBackup(null);
+    try {
+      const res = await fetch("/api/customers/restore", { cache: "no-store", credentials: "include" });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok && data.backup) {
+        setServerBackup(data.backup);
+      }
+    } catch {
+      // Server backup unavailable
+    }
+  };
+
+  const applyRestoredCustomers = async (entries: CustomerRecord[], sourceLabel: string) => {
+    if (!hasMeaningfulCustomerData(entries) || isSampleCustomerData(entries)) {
+      alert("Bản sao lưu không hợp lệ hoặc chỉ chứa dữ liệu mẫu.");
+      return;
+    }
+    if (!confirm(`Khôi phục ${entries.length} khách hàng từ ${sourceLabel}? Dữ liệu hiện tại sẽ bị thay thế.`)) {
+      return;
+    }
+
+    setRestoreBusy(true);
+    setSaveError(null);
+    setSaveMessage(null);
+    try {
+      const res = await fetch("/api/customers", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ customers: entries }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        setCustomers(entries);
+        saveLocalOnly(entries);
+        setSaveMessage(`Đã khôi phục ${entries.length} khách từ ${sourceLabel} (chỉ trên trình duyệt).`);
+      } else {
+        const saved = Array.isArray(data.customers) ? data.customers : entries;
+        setCustomers(saved);
+        saveLocalCustomerBackup(saved);
+        setOfflineMode(false);
+        setLocalBackupAt(null);
+        dirtyRef.current = false;
+        setSaveMessage(`Đã khôi phục ${saved.length} khách hàng từ ${sourceLabel}.`);
+      }
+      setRestoreOpen(false);
+    } catch {
+      setCustomers(entries);
+      saveLocalOnly(entries);
+      setSaveMessage(`Đã khôi phục ${entries.length} khách từ ${sourceLabel} (chỉ trên trình duyệt).`);
+      setRestoreOpen(false);
+    } finally {
+      setRestoreBusy(false);
+    }
+  };
+
+  const restoreFromLocal = () => {
+    const backup = getUsableLocalBackup();
+    if (!backup) {
+      alert("Không tìm thấy bản sao lưu hợp lệ trên trình duyệt này.");
+      return;
+    }
+    setCustomers(backup.entries);
+    saveLocalCustomerBackup(backup.entries);
+    setOfflineMode(true);
+    setLocalBackupAt(backup.savedAt);
+    dirtyRef.current = false;
+    setSaveError(null);
+    setSaveMessage(`Đã khôi phục ${backup.entries.length} khách từ trình duyệt (${formatBackupTime(backup.savedAt)}).`);
+    setRestoreOpen(false);
+  };
+
+  const restoreFromServer = async () => {
+    setRestoreBusy(true);
+    try {
+      const res = await fetch("/api/customers/restore", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok || !Array.isArray(data.customers)) {
+        alert(data?.error || "Không có bản sao lưu trên máy chủ.");
+        return;
+      }
+      const label = data.restoredAt ? `máy chủ (${formatBackupTime(data.restoredAt)})` : "máy chủ";
+      setCustomers(data.customers);
+      saveLocalCustomerBackup(data.customers);
+      dirtyRef.current = false;
+      setSaveMessage(`Đã khôi phục ${data.customers.length} khách hàng từ ${label}.`);
+      setRestoreOpen(false);
+    } catch {
+      alert("Không thể khôi phục từ máy chủ.");
+    } finally {
+      setRestoreBusy(false);
+    }
+  };
+
+  const handleImportBackup = async (file: File) => {
+    try {
+      const raw = JSON.parse(await file.text());
+      const backup = parseCustomerBackupFile(raw);
+      if (!backup) {
+        alert("File JSON không đúng định dạng sao lưu khách hàng.");
+        return;
+      }
+      const label = file.name || `file (${formatBackupTime(backup.savedAt)})`;
+      await applyRestoredCustomers(backup.entries, label);
+    } catch {
+      alert("Không đọc được file JSON.");
+    } finally {
+      if (importInputRef.current) importInputRef.current.value = "";
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
@@ -575,9 +711,45 @@ export function CustomerManagement() {
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
             <h1 className="text-lg font-black sm:text-xl">Quản lý khách hàng</h1>
-            <p className="text-xs text-gray-400">Nhập dữ liệu như bảng Excel — bấm dòng để xem chi tiết — tự lưu sau vài giây</p>
+            <p className="text-xs text-gray-400">
+              {offlineMode
+                ? "Chế độ offline — dữ liệu lưu trên trình duyệt. Nhớ bấm Tải backup thường xuyên."
+                : "Nhập dữ liệu như bảng Excel — bấm dòng để xem chi tiết — tự lưu sau vài giây"}
+            </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void openRestoreDialog()}
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200 hover:bg-amber-500/20"
+            >
+              <History size={14} /> Khôi phục dữ liệu
+            </button>
+            <button
+              type="button"
+              onClick={() => importInputRef.current?.click()}
+              className="inline-flex items-center gap-2 rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-xs font-bold text-sky-200 hover:bg-sky-500/20"
+            >
+              <Upload size={14} /> Nhập JSON
+            </button>
+            <button
+              type="button"
+              onClick={() => downloadCustomerBackup(customers)}
+              disabled={customers.length === 0}
+              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-500/20 disabled:opacity-50"
+            >
+              <Download size={14} /> Tải backup
+            </button>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) void handleImportBackup(file);
+              }}
+            />
             <button
               type="button"
               onClick={() => void loadCustomers()}
@@ -612,6 +784,23 @@ export function CustomerManagement() {
         {(saveMessage || saveError) && (
           <div className={`mx-auto max-w-[1600px] px-4 pb-3 text-xs sm:px-6 ${saveError ? "text-red-400" : "text-emerald-400"}`}>
             {saveError || saveMessage}
+          </div>
+        )}
+        {offlineMode && (
+          <div className="mx-auto max-w-[1600px] px-4 pb-4 sm:px-6">
+            <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-3 text-xs text-sky-100">
+              <strong>Chế độ offline</strong> — Supabase đang lỗi. Dữ liệu được lưu trên trình duyệt
+              {localBackupAt ? ` (lần cuối: ${formatBackupTime(localBackupAt)})` : ""}. Bấm{" "}
+              <strong>Tải backup</strong> để tải file JSON, tránh mất khi xóa cache trình duyệt.
+            </div>
+          </div>
+        )}
+        {isSampleCustomerData(customers) && (
+          <div className="mx-auto max-w-[1600px] px-4 pb-4 sm:px-6">
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-100">
+              Danh sách hiện tại là <strong>dữ liệu mẫu</strong> (do lỗi trước đó). Bấm{" "}
+              <strong>Khôi phục dữ liệu</strong> để lấy lại bản sao lưu nếu có.
+            </div>
           </div>
         )}
         {dueReminders.length > 0 && (
@@ -866,6 +1055,82 @@ export function CustomerManagement() {
           khi còn 3 ngày.
         </p>
       </main>
+
+      <Dialog open={restoreOpen} onOpenChange={setRestoreOpen}>
+        <DialogContent className="max-w-md border-white/10 bg-[#111827] text-white">
+          <DialogHeader>
+            <DialogTitle className="text-white">Khôi phục dữ liệu khách hàng</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Chọn nguồn sao lưu để thay thế danh sách hiện tại.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2">
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+              <p className="text-sm font-bold text-white">Trình duyệt này</p>
+              {localBackup ? (
+                <p className="mt-1 text-xs text-gray-400">
+                  {localBackup.entries.length} khách — lưu lúc {formatBackupTime(localBackup.savedAt)}
+                </p>
+              ) : (
+                <p className="mt-1 text-xs text-gray-500">Chưa có bản sao lưu trên trình duyệt này.</p>
+              )}
+              <button
+                type="button"
+                disabled={!localBackup || restoreBusy}
+                onClick={restoreFromLocal}
+                className="mt-3 w-full rounded-lg bg-amber-600 py-2 text-xs font-bold hover:bg-amber-500 disabled:opacity-50"
+              >
+                Khôi phục từ trình duyệt
+              </button>
+            </div>
+
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+              <p className="text-sm font-bold text-white">Máy chủ (Supabase)</p>
+              {serverBackup ? (
+                <p className="mt-1 text-xs text-gray-400">
+                  {serverBackup.count} khách — lưu lúc {formatBackupTime(serverBackup.savedAt)}
+                </p>
+              ) : (
+                <p className="mt-1 text-xs text-gray-500">
+                  Không đọc được bản sao lưu máy chủ (có thể do Supabase vượt quota).
+                </p>
+              )}
+              <button
+                type="button"
+                disabled={!serverBackup || restoreBusy}
+                onClick={() => void restoreFromServer()}
+                className="mt-3 w-full rounded-lg border border-violet-500/40 bg-violet-500/10 py-2 text-xs font-bold text-violet-200 hover:bg-violet-500/20 disabled:opacity-50"
+              >
+                Khôi phục từ máy chủ
+              </button>
+            </div>
+
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+              <p className="text-sm font-bold text-white">File JSON</p>
+              <p className="mt-1 text-xs text-gray-400">Nhập từ file đã tải bằng nút &quot;Tải backup&quot;.</p>
+              <input
+                ref={importInputRef}
+                type="file"
+                accept="application/json,.json"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) void handleImportBackup(file);
+                }}
+              />
+              <button
+                type="button"
+                disabled={restoreBusy}
+                onClick={() => importInputRef.current?.click()}
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 py-2 text-xs font-bold hover:bg-white/5 disabled:opacity-50"
+              >
+                <Upload size={14} /> Chọn file backup
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <CustomerDetailDialog
         customer={selectedCustomer}
