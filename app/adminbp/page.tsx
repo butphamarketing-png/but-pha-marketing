@@ -11,6 +11,7 @@ import {
   Calendar, Lock, Sparkles, Star, ArrowRight, type LucideIcon
 } from "lucide-react";
 import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
+import { uploadMediaFile } from "@/lib/client-media-upload";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
 import { db, type Order, type Lead, type NewsItem, type ClientPortal, type ClientReview } from "@/lib/useData";
@@ -478,13 +479,10 @@ export default function AdminPage() {
     });
   };
 
-  const fileToDataUrl = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ""));
-      reader.onerror = () => reject(new Error("Không thể đọc file ảnh"));
-      reader.readAsDataURL(file);
-    });
+  const uploadImageUrl = async (file: File, sectionLabel: string, suggestedName?: string) => {
+    const result = await uploadMediaFile(file, { sectionLabel, suggestedName });
+    return result.url;
+  };
 
   const createEmptyProject = (index: number): ClientProject => {
     const now = new Date();
@@ -913,7 +911,7 @@ export default function AdminPage() {
       // Logout should still clear the local UI state.
     } finally {
       setAuthenticated(false);
-      router.push("/admin");
+      router.push("/adminbp");
       router.refresh();
     }
   };
@@ -1086,7 +1084,7 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button
               key={n.id}
-              onClick={() => n.id === "news" ? router.push("/admin/news") : n.id === "portals" ? router.push("/admin/portals") : setActiveTab(n.id)}
+              onClick={() => n.id === "news" ? router.push("/adminbp/news") : n.id === "portals" ? router.push("/adminbp/portals") : setActiveTab(n.id)}
               className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
                 activeTab === n.id 
                   ? "bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 text-white shadow-lg shadow-pink-600/30" 
@@ -1128,7 +1126,7 @@ export default function AdminPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-400">Chuyển mục quản trị</label>
               <select
                 value={activeTab}
-                onChange={e => e.target.value === "news" ? router.push("/admin/news") : setActiveTab(e.target.value)}
+                onChange={e => e.target.value === "news" ? router.push("/adminbp/news") : setActiveTab(e.target.value)}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
               >
                 {NAV.map(item => (
@@ -1473,7 +1471,7 @@ export default function AdminPage() {
                             onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const url = await fileToDataUrl(file);
+                              const url = await uploadImageUrl(file, "review-logo", newReview.clientName);
                               setNewReview({ ...newReview, logoUrl: url });
                             }}
                           />
@@ -1621,7 +1619,7 @@ export default function AdminPage() {
                             <input type="file" accept="image/*" className="hidden" onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const imageUrl = await fileToDataUrl(file);
+                              const imageUrl = await uploadImageUrl(file, "featured-project", proj.title);
                               const next = [...(settings.featuredProjects || [])];
                               next[idx] = { ...next[idx], thumbnail: imageUrl };
                               updateSettings({ featuredProjects: next });
@@ -1709,7 +1707,7 @@ export default function AdminPage() {
                               <input type="file" accept="image/*" className="hidden" onChange={async e => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
-                                const imageUrl = await fileToDataUrl(file);
+                                const imageUrl = await uploadImageUrl(file, "feedback-logo", fb.clientName);
                                 const next = [...(settings.customerFeedbacks || [])];
                                 next[idx] = { ...next[idx], clientLogo: imageUrl };
                                 updateSettings({ customerFeedbacks: next });
@@ -1731,7 +1729,7 @@ export default function AdminPage() {
                               <input type="file" accept="image/*" className="hidden" onChange={async e => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
-                                const imageUrl = await fileToDataUrl(file);
+                                const imageUrl = await uploadImageUrl(file, "feedback-content", fb.clientName);
                                 const next = [...(settings.customerFeedbacks || [])];
                                 next[idx] = { ...next[idx], contentImage: imageUrl };
                                 updateSettings({ customerFeedbacks: next });
@@ -1902,9 +1900,8 @@ export default function AdminPage() {
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = () => setBlogForm(prev => ({ ...prev, imageUrl: String(reader.result || "") }));
-                      reader.readAsDataURL(file);
+                      const url = await uploadImageUrl(file, "blog-cover", blogForm.title);
+                      setBlogForm(prev => ({ ...prev, imageUrl: url }));
                     }}
                   />
                 </div>
@@ -2003,9 +2000,8 @@ export default function AdminPage() {
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = () => setBlogForm(prev => ({ ...prev, imageUrl: String(reader.result || "") }));
-                      reader.readAsDataURL(file);
+                      const url = await uploadImageUrl(file, "blog-cover", blogForm.title);
+                      setBlogForm(prev => ({ ...prev, imageUrl: url }));
                     }}
                   />
                 </div>
@@ -2255,7 +2251,7 @@ export default function AdminPage() {
                             onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const imageUrl = await fileToDataUrl(file);
+                              const imageUrl = await uploadImageUrl(file, "mascot-default");
                               updateSettings({ mascotImage: imageUrl });
                               e.currentTarget.value = "";
                             }}
@@ -2297,7 +2293,7 @@ export default function AdminPage() {
                             onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const imageUrl = await fileToDataUrl(file);
+                              const imageUrl = await uploadImageUrl(file, "mascot-platform", selectedMascotPlatform);
                               updateSettings({ mascotImages: { ...(settings.mascotImages || {}), [selectedMascotPlatform]: imageUrl } });
                               e.currentTarget.value = "";
                             }}

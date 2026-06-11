@@ -2,10 +2,9 @@ import path from "path";
 import slugify from "slugify";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
+import { isR2Configured, uploadToR2 } from "@/lib/r2-storage";
 
 export const runtime = "nodejs";
-
-const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || "media";
 
 function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -18,6 +17,17 @@ function getExtension(fileName: string, mimeType: string) {
   if (mimeType.includes("webp")) return "webp";
   if (mimeType.includes("gif")) return "gif";
   return "png";
+}
+
+async function uploadImage(buffer: Buffer, storagePath: string, contentType: string) {
+  if (!isR2Configured()) {
+    throw new Error(
+      "Chưa cấu hình Cloudflare R2. Ảnh được lưu trên R2; Supabase chỉ lưu metadata trong bảng media.",
+    );
+  }
+
+  const publicUrl = await uploadToR2(storagePath, buffer, contentType);
+  return { publicUrl, storage: "r2" as const };
 }
 
 export async function POST(request: Request) {
@@ -42,21 +52,10 @@ export async function POST(request: Request) {
       }) || `upload-${Date.now()}`;
 
     const fileName = `${baseName}-${Date.now()}.${extension}`;
-    const supabase = createServerClient();
     const storagePath = `uploads/media/${fileName}`;
-    const { error: uploadError } = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, buffer, {
-      contentType: file.type || "image/png",
-      upsert: false,
-    });
+    const { publicUrl, storage } = await uploadImage(buffer, storagePath, file.type || "image/png");
 
-    if (uploadError) {
-      console.error("POST /api/media/upload Storage error", uploadError);
-      return NextResponse.json({ error: `Không thể lưu ảnh vào Supabase Storage bucket "${STORAGE_BUCKET}".` }, { status: 500 });
-    }
-
-    const { data: publicData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
-    const publicUrl = publicData.publicUrl;
-
+    const supabase = createServerClient();
     const { data, error } = await supabase
       .from("media")
       .insert({
@@ -78,9 +77,11 @@ export async function POST(request: Request) {
       item: data,
       url: publicUrl,
       path: storagePath,
+      storage,
     });
   } catch (error) {
     console.error("POST /api/media/upload failed", error);
-    return NextResponse.json({ error: "Không thể tải ảnh lên lúc này." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Không thể tải ảnh lên lúc này.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

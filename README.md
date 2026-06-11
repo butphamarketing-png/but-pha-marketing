@@ -14,5 +14,6 @@ Website marketing agency (Next.js + Supabase).
 - `/` — homepage
 - `/blog` — news
 - `/chienluocmarketing` — marketing strategy tool
-- `/khachhang` — customer management
-- `/admin` — admin panel
+- `/cms` — Asset Tracker ERP (quản lý khách hàng, tài sản, báo cáo)
+- `/adminbp` — admin panel marketing site
+- `/admin` → redirect `/adminbp`

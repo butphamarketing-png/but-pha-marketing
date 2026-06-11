@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -8,6 +7,22 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  async redirects() {
+    return [
+      { source: '/admin', destination: '/adminbp', permanent: true },
+      { source: '/khachhang', destination: '/cms', permanent: true },
+      { source: '/khachhang/:path*', destination: '/cms', permanent: true },
+    ];
+  },
+  async rewrites() {
+    return [
+      { source: '/cms', destination: '/cms/index.html' },
+      {
+        source: '/cms/:path((?!api/|assets/|index.html).*)',
+        destination: '/cms/index.html',
+      },
+    ];
   },
 };
 

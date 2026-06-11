@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { isInternalAppPath } from "@/lib/app-paths";
 
 export function VisitorTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!pathname || pathname.startsWith("/admin")) return;
+    if (isInternalAppPath(pathname)) return;
 
     const controller = new AbortController();
 

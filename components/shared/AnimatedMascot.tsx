@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -306,7 +306,13 @@ export function AnimatedMascot() {
   const message =
     settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
-  const hidden = useMemo(() => pathname.startsWith("/admin"), [pathname]);
+  const hidden = useMemo(() => {
+    return (
+      pathname.startsWith("/adminbp") ||
+      pathname.startsWith("/cms") ||
+      pathname === "/admin"
+    );
+  }, [pathname]);
   const enabled = settings.mascotEnabled !== false && !hidden;
   const PLATFORM_COLORS: Record<string, string> = {
     home: "#7C3AED",
