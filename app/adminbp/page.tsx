@@ -117,6 +117,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [adminEmail, setAdminEmail] = useState("butphamarketing@gmail.com");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -129,6 +130,9 @@ export default function AdminPage() {
         const data = await res.json().catch(() => null);
         if (mounted && data?.authenticated) {
           setAuthenticated(true);
+          if (typeof data.email === "string" && data.email) {
+            setAdminEmail(data.email);
+          }
         }
       } catch {
         // Keep the login screen if the session check fails.
@@ -778,6 +782,7 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
+          email: adminEmail,
           currentPassword: currentAdminPassword,
           newPassword: newAdminPassword,
         }),
@@ -791,7 +796,7 @@ export default function AdminPage() {
 
       setCurrentAdminPassword("");
       setNewAdminPassword("");
-      setChangePasswordMessage("Đã cập nhật mật khẩu admin.");
+      setChangePasswordMessage("Đã cập nhật tài khoản admin.");
     } catch {
       setChangePasswordError("Không thể đổi mật khẩu lúc này.");
     } finally {
@@ -886,12 +891,12 @@ export default function AdminPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email: adminEmail, password }),
       });
 
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.authenticated) {
-        setError(data?.error || "Mật khẩu không đúng");
+        setError(data?.error || "Tài khoản hoặc mật khẩu không đúng");
         return;
       }
 
@@ -1035,6 +1040,16 @@ export default function AdminPage() {
             </div>
           </div>
           <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wide text-pink-200">Tài khoản</label>
+              <input
+                type="email"
+                value={adminEmail}
+                onChange={e => { setAdminEmail(e.target.value); setError(""); }}
+                placeholder="Email admin"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm text-white outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-500/30 transition-all placeholder:text-pink-200/40"
+              />
+            </div>
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase tracking-wide text-pink-200">Mật khẩu</label>
               <div className="relative">
@@ -2189,7 +2204,8 @@ export default function AdminPage() {
           {activeTab === "settings" && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4" id="admin-password">
-                <h3 className="font-bold text-white">Đổi mật khẩu admin</h3>
+                <h3 className="font-bold text-white">Tài khoản & mật khẩu admin</h3>
+                <input value={adminEmail} onChange={e => { setAdminEmail(e.target.value); setChangePasswordError(null); setChangePasswordMessage(null); }} type="email" placeholder="Email đăng nhập admin" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={currentAdminPassword} onChange={e => { setCurrentAdminPassword(e.target.value); setChangePasswordError(null); setChangePasswordMessage(null); }} type="password" placeholder="Mật khẩu hiện tại" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={newAdminPassword} onChange={e => { setNewAdminPassword(e.target.value); setChangePasswordError(null); setChangePasswordMessage(null); }} type="password" placeholder="Mật khẩu mới" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 {changePasswordMessage && <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-200">{changePasswordMessage}</div>}

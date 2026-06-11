@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE, verifyAdminSessionToken } from "@/lib/admin-auth";
+import { ADMIN_SESSION_COOKIE, getAdminAuthConfig, verifyAdminSessionToken } from "@/lib/admin-auth";
 
 export async function GET(request: Request) {
   const cookieHeader = request.headers.get("cookie") || "";
@@ -12,6 +12,11 @@ export async function GET(request: Request) {
     .join("=") || "";
 
   const authenticated = verifyAdminSessionToken(decodeURIComponent(token));
-  return NextResponse.json({ ok: true, authenticated });
+  const config = authenticated ? await getAdminAuthConfig() : null;
+  return NextResponse.json({
+    ok: true,
+    authenticated,
+    email: config?.email ?? null,
+  });
 }
 

@@ -2,7 +2,13 @@ import { createHash, createHmac, timingSafeEqual } from "crypto";
 import { createServerClient } from "@/lib/supabase";
 
 export const ADMIN_SESSION_COOKIE = "admin_session";
+export const DEFAULT_ADMIN_EMAIL = "butphamarketing@gmail.com";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
+
+export type AdminAuthConfig = {
+  email: string;
+  passwordHash: string;
+};
 
 type SessionPayload = {
   exp: number;
@@ -25,8 +31,38 @@ function getAdminPassword(): string {
   return password || "admin123";
 }
 
-function hashPassword(password: string) {
+export function hashPassword(password: string) {
   return createHash("sha256").update(password).digest("hex");
+}
+
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
+export async function getAdminAuthConfig(): Promise<AdminAuthConfig> {
+  const fallbackEmail = (process.env.ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL).trim();
+  try {
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "admin_auth_config")
+      .maybeSingle();
+
+    if (error) {
+      console.error("[admin-auth] Failed to load admin auth config", error);
+      return { email: fallbackEmail, passwordHash: "" };
+    }
+
+    const value = data?.value && typeof data.value === "object" ? (data.value as Record<string, unknown>) : {};
+    return {
+      email: typeof value.email === "string" && value.email.trim() ? value.email.trim() : fallbackEmail,
+      passwordHash: typeof value.passwordHash === "string" ? value.passwordHash : "",
+    };
+  } catch (error) {
+    console.error("[admin-auth] getAdminAuthConfig failed", error);
+    return { email: fallbackEmail, passwordHash: "" };
+  }
 }
 
 function getSessionSecret(): string {
@@ -57,35 +93,30 @@ function parseCookies(cookieHeader: string | null): Record<string, string> {
 
 export async function validateAdminPassword(password: string): Promise<boolean> {
   try {
-    // Ưu tiên 1: Kiểm tra mật khẩu từ biến môi trường (Environment Variable)
     const envPassword = (process.env.ADMIN_PASSWORD || "").trim();
     if (envPassword && password === envPassword) {
       return true;
     }
 
-    // Ưu tiên 2: Kiểm tra mật khẩu tùy chỉnh từ Database (Supabase)
-    const supabase = createServerClient();
-    const { data, error } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "admin_auth_config")
-      .maybeSingle();
-
-    if (error) {
-      console.error("[admin-auth] Failed to load custom admin password", error);
-    }
-
-    const passwordHash = typeof data?.value?.passwordHash === "string" ? data.value.passwordHash : "";
+    const { passwordHash } = await getAdminAuthConfig();
     if (passwordHash) {
       return hashPassword(password) === passwordHash;
     }
 
-    // Ưu tiên 3: Mật khẩu mặc định nếu không có cấu hình nào khác
     return password === getAdminPassword();
   } catch (error) {
     console.error("[admin-auth] validateAdminPassword failed", error);
     return password === getAdminPassword();
   }
+}
+
+export async function validateAdminLogin(email: string, password: string): Promise<boolean> {
+  const config = await getAdminAuthConfig();
+  const expectedEmail = normalizeEmail(config.email);
+  if (normalizeEmail(email) !== expectedEmail) {
+    return false;
+  }
+  return validateAdminPassword(password);
 }
 
 export function createAdminSessionToken(): string {

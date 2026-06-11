@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import {
   ADMIN_SESSION_COOKIE,
   createAdminSessionToken,
-  validateAdminPassword,
+  validateAdminLogin,
 } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null);
+    const email = typeof body?.email === "string" ? body.email : "";
     const password = typeof body?.password === "string" ? body.password : "";
-    if (!(await validateAdminPassword(password))) {
-      return NextResponse.json({ ok: false, error: "Sai mat khau admin." }, { status: 401 });
+    if (!(await validateAdminLogin(email, password))) {
+      return NextResponse.json({ ok: false, error: "Sai tài khoản hoặc mật khẩu admin." }, { status: 401 });
     }
 
     const response = NextResponse.json({ ok: true, authenticated: true });

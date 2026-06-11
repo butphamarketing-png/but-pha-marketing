@@ -8,6 +8,7 @@
     "build:site": "next build",
     "build:cms": "node scripts/build-cms.mjs",
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
+    "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
     "setup:supabase": "node scripts/apply-supabase-schema.mjs && npm run check:supabase && npm run seed:seo-articles",
     "start": "next start",
