@@ -7,8 +7,13 @@ const CMS_API_URL = (process.env.CMS_API_URL || "http://localhost:8081").replace
 
 async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   if (canUseCmsDatabase()) {
-    const local = await handleCmsApiRequest(request, pathSegments);
-    if (local) return local;
+    try {
+      const local = await handleCmsApiRequest(request, pathSegments);
+      if (local) return local;
+    } catch (error) {
+      console.error("[cms/api] local handler failed", pathSegments.join("/"), error);
+      return NextResponse.json({ error: "CMS API unavailable" }, { status: 500 });
+    }
   }
   const targetPath = `/api/${pathSegments.join("/")}`;
   const url = new URL(targetPath, CMS_API_URL);

@@ -23,7 +23,9 @@ export function getCmsDb(): CmsDatabase {
     pool = new Pool({
       connectionString: url,
       ssl: url.includes("supabase.com") ? { rejectUnauthorized: false } : undefined,
-      max: 5,
+      max: process.env.VERCEL ? 1 : 5,
+      connectionTimeoutMillis: 10_000,
+      idleTimeoutMillis: 20_000,
     });
     database = drizzle(pool, { schema });
   }
