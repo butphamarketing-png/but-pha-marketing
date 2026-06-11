@@ -1,4 +1,5 @@
 import { cp, mkdir, rm } from "node:fs/promises";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -10,6 +11,11 @@ const cmsRoot = path.join(
   "Asset-Tracker (1)",
   "Asset-Tracker",
 );
+
+if (!fs.existsSync(cmsRoot)) {
+  console.warn("CMS source not found — skip build:cms (Vercel/CI). Use committed public/cms.");
+  process.exit(0);
+}
 const erpDir = path.join(cmsRoot, "artifacts", "erp");
 const publicCms = path.join(root, "public", "cms");
 const distDir = path.join(erpDir, "dist");
