@@ -86,29 +86,6 @@ export interface Service {
   feedbacks: ServiceFeedback[];
 }
 
-export interface ProgressArticle {
-  id: string;
-  clientId: string;
-  title: string;
-  content?: string;
-  date: string;
-  status?: string;
-}
-
-export interface ClientPortal {
-  id: string;
-  username: string;
-  password: string;
-  clientName: string;
-  phone?: string;
-  platform: string;
-  daysRemaining: number;
-  postsCount?: number;
-  progressPercent?: number;
-  weeklyReports?: any[];
-  projects?: any[];
-}
-
 export interface ClientReview {
   id: string;
   clientId: string;
@@ -451,62 +428,6 @@ export const db = {
     delete: async (id: string): Promise<ApiResult<void>> => {
       const result = await apiFetch<JsonObject>(`/leads/${id}`, { method: "DELETE" });
       if (!result.error) invalidateCache("client_reviews");
-      return { data: null, error: result.error };
-    },
-  },
-  clientPortals: {
-    getAll: (): Promise<ApiResult<ClientPortal[]>> => cachedFetch("client_portals", () => apiFetch<ClientPortal[]>("/client-portals")),
-    add: async (portal: Omit<ClientPortal, "id">): Promise<ApiResult<ClientPortal>> => {
-      const result = await apiFetch<ClientPortal>("/client-portals", {
-        method: "POST",
-        body: JSON.stringify(portal),
-      });
-      if (!result.error) invalidateCache("client_portals");
-      return result;
-    },
-    update: async (id: string, data: Partial<ClientPortal>): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/client-portals/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      });
-      if (!result.error) invalidateCache("client_portals");
-      return { data: null, error: result.error };
-    },
-    delete: async (id: string): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/client-portals/${id}`, { method: "DELETE" });
-      if (!result.error) invalidateCache("client_portals");
-      return { data: null, error: result.error };
-    },
-  },
-  progressArticles: {
-    getByClient: (clientId: string): Promise<ApiResult<ProgressArticle[]>> => 
-      cachedFetch(`progress_articles_${clientId}`, () => apiFetch<ProgressArticle[]>(`/progress-articles?clientId=${clientId}`)),
-    add: async (article: Omit<ProgressArticle, "id">): Promise<ApiResult<ProgressArticle>> => {
-      const result = await apiFetch<ProgressArticle>("/progress-articles", {
-        method: "POST",
-        body: JSON.stringify(article),
-      });
-      if (!result.error) invalidateCache(`progress_articles_${article.clientId}`);
-      return result;
-    },
-    update: async (id: string, data: Partial<ProgressArticle>): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      });
-      if (!result.error) {
-        // Invalidate all progress_articles caches
-        for (const key of cache.keys()) {
-          if (key.startsWith("progress_articles_")) {
-            cache.delete(key);
-          }
-        }
-      }
-      return { data: null, error: result.error };
-    },
-    delete: async (id: string, clientId: string): Promise<ApiResult<void>> => {
-      const result = await apiFetch<JsonObject>(`/progress-articles/${id}`, { method: "DELETE" });
-      if (!result.error) invalidateCache(`progress_articles_${clientId}`);
       return { data: null, error: result.error };
     },
   },

@@ -8,13 +8,13 @@ import {
   Bell, Globe, Search, Settings, LogOut,
   Trash2, Plus,
   BarChart2, Code, Copy,
-  Calendar, Lock, Sparkles, Star, ArrowRight, type LucideIcon
+  Lock, Sparkles, Star, ArrowRight, type LucideIcon
 } from "lucide-react";
 import { useAdmin, SETTINGS_KEY } from "@/lib/AdminContext";
 import { uploadMediaFile } from "@/lib/client-media-upload";
 import { RichTextEditor } from "@/components/shared/RichTextEditor";
 import { getContent, saveContent, type ContentOverride } from "@/lib/pageContent";
-import { db, type Order, type Lead, type NewsItem, type ClientPortal, type ClientReview } from "@/lib/useData";
+import { db, type Order, type Lead, type NewsItem, type ClientReview } from "@/lib/useData";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 
@@ -22,11 +22,10 @@ const NAV = [
   { id: "dashboard", label: "Bảng điều khiển", icon: LayoutDashboard },
   { id: "leads", label: "Quản lý nhận tin", icon: Bell },
   { id: "seo", label: "SEO Page", icon: Search },
-  { id: "portals", label: "Quản lý lộ trình dự án", icon: Calendar },
   { id: "mascot", label: "Linh vật công ty", icon: Sparkles },
   { id: "tracking", label: "Tối ưu Website", icon: Code },
   { id: "settings", label: "Thiết lập hệ thống", icon: Settings },
-  { id: "news", label: "Quản lý SEO Content", icon: Newspaper, color: "#f97316" },
+  { id: "news", label: "Tin tức", icon: Newspaper },
 ];
 
 const STATUS_LABELS: Record<Order["status"], { label: string; cls: string }> = {
@@ -183,10 +182,6 @@ export default function AdminPage() {
     rating: 5,
     content: "",
   });
-  const [clientPortals, setClientPortals] = useState<ClientPortal[]>([]);
-  const [progressArticles, setProgressArticles] = useState<Record<string, any[]>>({});
-  const [selectedClient, setSelectedClient] = useState<ClientPortal | null>(null);
-  const [newArticle, setNewArticle] = useState({ title: "", content: "", image: "" });
   const [selectedPlatform, setSelectedPlatform] = useState("home");
   const [newCase, setNewCase] = useState({ id: 0, title: "", before: "", after: "", description: "", content: "" });
   const [blogSaveMessage, setBlogSaveMessage] = useState<string | null>(null);
@@ -204,17 +199,6 @@ export default function AdminPage() {
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const responsibilityEditor = parseResponsibilityEditor(pageContent.responsibility || "");
 
-  // ClientProject type definition (moved from useData to here)
-  type ClientProject = {
-    id: string;
-    title: string;
-    registeredAt: string;
-    deadlineAt: string;
-    budgetVnd: number;
-    progressDoc: string;
-    resultDoc: string;
-  };
-
   const visitorChartData = visitors
     .slice()
     .reverse()
@@ -223,16 +207,11 @@ export default function AdminPage() {
       name: `#${index + 1}`,
       visits: visitor.hits,
     }));
-  const [newPortal, setNewPortal] = useState<Partial<ClientPortal>>({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
-  const [portalPassword, setPortalPassword] = useState("");
-  const [portalCreateMessage, setPortalCreateMessage] = useState<string | null>(null);
-  const [portalCreateError, setPortalCreateError] = useState<string | null>(null);
   const [currentAdminPassword, setCurrentAdminPassword] = useState("");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [changePasswordMessage, setChangePasswordMessage] = useState<string | null>(null);
   const [changePasswordError, setChangePasswordError] = useState<string | null>(null);
   const [changingAdminPassword, setChangingAdminPassword] = useState(false);
-  const [selectedClientProjectId, setSelectedClientProjectId] = useState("");
   const [showSourceViewer, setShowSourceViewer] = useState(false);
   const [sourceFiles, setSourceFiles] = useState<string[]>([]);
   const [selectedSourceFile, setSelectedSourceFile] = useState("");
@@ -488,61 +467,6 @@ export default function AdminPage() {
     return result.url;
   };
 
-  const createEmptyProject = (index: number): ClientProject => {
-    const now = new Date();
-    const deadline = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-    return {
-      id: `${Date.now()}-${index}`,
-      title: `Dự án ${index}`,
-      registeredAt: now.toISOString(),
-      deadlineAt: deadline.toISOString(),
-      budgetVnd: 0,
-      progressDoc: "<p></p>",
-      resultDoc: "<p></p>",
-    };
-  };
-
-  const toDateTimeLocalValue = (value?: string) => {
-    if (!value) return "";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return value.slice(0, 16);
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  };
-
-  const normalizeProjects = (portal: ClientPortal | null): ClientProject[] => {
-    if (!portal) return [];
-    const raw = (portal.weeklyReports || []) as any[];
-    if (raw.length === 0) return [createEmptyProject(1)];
-
-    const first = raw[0];
-    const isLegacy = typeof first?.content === "string" && !("progressDoc" in first);
-    if (isLegacy) {
-      return raw.map((item, idx) => ({
-        id: `${portal.id}-${idx + 1}`,
-        title: item.title || `Dự án ${idx + 1}`,
-        registeredAt: new Date().toISOString(),
-        deadlineAt: new Date(Date.now() + (portal.daysRemaining || 30) * 24 * 60 * 60 * 1000).toISOString(),
-        budgetVnd: 0,
-        progressDoc: `<p>${item.content || ""}</p>`,
-        resultDoc: item.image ? `<p><img src="${item.image}" alt="report-image" /></p>` : "<p></p>",
-      }));
-    }
-
-    return raw.map((item, idx) => ({
-      id: item.id || `${portal.id}-${idx + 1}`,
-      title: item.title || `Dự án ${idx + 1}`,
-      registeredAt: item.registeredAt || new Date().toISOString(),
-      deadlineAt: item.deadlineAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      budgetVnd: Number(item.budgetVnd || 0),
-      progressDoc: item.progressDoc || "<p></p>",
-      resultDoc: item.resultDoc || "<p></p>",
-    }));
-  };
-
-  const selectedProjects = normalizeProjects(selectedClient);
-  const selectedProject = selectedProjects.find(p => p.id === selectedClientProjectId) || selectedProjects[0] || null;
-
   const updatePageContentField = (field: keyof ContentOverride, value: any) => {
     setPageContent((prev) => ({ ...prev, [field]: value }));
   };
@@ -708,11 +632,6 @@ export default function AdminPage() {
     else setClientReviews([...(result.data || [])].reverse());
     setIsReviewsLoading(false);
   };
-  const refreshPortals = async () => {
-    const result = await db.clientPortals.getAll();
-    if (result.error) console.error('Portals error:', result.error);
-    else setClientPortals(result.data || []);
-  };
   const refreshVisitors = async () => {
     try {
       const res = await fetch("/api/visitors", { cache: "no-store", credentials: "include" });
@@ -724,37 +643,6 @@ export default function AdminPage() {
       console.error("Visitors error:", visitorError);
     }
   };
-  const refreshArticles = async (clientId: string) => {
-    const result = await db.progressArticles.getByClient(clientId);
-    if (result.error) console.error('Articles error:', result.error);
-    else setProgressArticles(prev => ({ ...prev, [clientId]: result.data || [] }));
-  };
-
-  const refreshClientPortal = async (clientId: string) => {
-    const result = await db.clientPortals.getAll();
-    if (result.error) {
-      console.error("Portals error:", result.error);
-      return;
-    }
-    const portals = result.data || [];
-    const client = portals.find((portal) => portal.id === clientId) || null;
-    setSelectedClient(client);
-    setClientPortals(portals);
-  };
-
-  const saveSelectedClient = async (patch: Partial<ClientPortal>) => {
-    if (!selectedClient) return;
-    await db.clientPortals.update(selectedClient.id.toString(), patch);
-    await refreshClientPortal(selectedClient.id);
-    setPanelFeedback("Đã lưu thông tin khách hàng.");
-  };
-
-  const saveSelectedProjects = async (projects: ClientProject[]) => {
-    if (!selectedClient) return;
-    await db.clientPortals.update(selectedClient.id.toString(), { weeklyReports: projects as any });
-    await refreshClientPortal(selectedClient.id);
-  };
-
   const saveSettingsPanel = async () => {
     setPanelFeedback(null, null);
     const result = await saveSettings();
@@ -804,50 +692,6 @@ export default function AdminPage() {
     }
   };
 
-  const saveSelectedClientManual = async (patch: Partial<ClientPortal>) => {
-    if (!selectedClient) return;
-    setPanelFeedback(null, null);
-    const result = await db.clientPortals.update(selectedClient.id.toString(), patch);
-    if (result.error) {
-      setPanelFeedback(null, `Lưu thông tin khách hàng thất bại: ${result.error}`);
-      return;
-    }
-    await refreshClientPortal(selectedClient.id);
-    setPanelFeedback("Đã lưu thông tin khách hàng.");
-  };
-
-  const saveSelectedProjectsManual = async (projects: ClientProject[]) => {
-    if (!selectedClient) return;
-    setPanelFeedback(null, null);
-    const result = await db.clientPortals.update(selectedClient.id.toString(), { weeklyReports: projects as any });
-    if (result.error) {
-      setPanelFeedback(null, `Lưu dự án thất bại: ${result.error}`);
-      return;
-    }
-    await refreshClientPortal(selectedClient.id);
-    setPanelFeedback("Đã lưu dự án.");
-  };
-
-  const updateSelectedProject = (projectId: string, patch: Partial<ClientProject>) => {
-    const next = selectedProjects.map(project => project.id === projectId ? { ...project, ...patch } : project);
-    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: next as any }) : prev);
-  };
-
-  const addProjectForSelectedClient = () => {
-    if (!selectedClient) return;
-    const next = [...selectedProjects, createEmptyProject(selectedProjects.length + 1)];
-    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: next as any }) : prev);
-    setSelectedClientProjectId(next[next.length - 1].id);
-  };
-
-  const removeProjectForSelectedClient = (projectId: string) => {
-    if (!selectedClient) return;
-    const next = selectedProjects.filter(project => project.id !== projectId);
-    const safe = next.length > 0 ? next : [createEmptyProject(1)];
-    setSelectedClient(prev => prev ? ({ ...prev, weeklyReports: safe as any }) : prev);
-    setSelectedClientProjectId(safe[0].id);
-  };
-
   const loadSourceFiles = async () => {
     const res = await fetch("/api/source");
     const data = await res.json();
@@ -864,23 +708,12 @@ export default function AdminPage() {
   useEffect(() => {
     if (!authenticated) return;
     refreshOrders(); refreshLeads();
-    refreshPortals();
     refreshReviews();
     refreshVisitors();
     db.news.getAll().then((result) => {
       setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     });
   }, [authenticated]);
-
-  useEffect(() => {
-    if (selectedClient) {
-      refreshArticles(selectedClient.id);
-      const projects = normalizeProjects(selectedClient);
-      setSelectedClientProjectId(projects[0]?.id || "");
-    } else {
-      setSelectedClientProjectId("");
-    }
-  }, [selectedClient]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1099,13 +932,12 @@ export default function AdminPage() {
           {NAV.map(n => (
             <button
               key={n.id}
-              onClick={() => n.id === "news" ? router.push("/adminbp/news") : n.id === "portals" ? router.push("/adminbp/portals") : setActiveTab(n.id)}
+              onClick={() => setActiveTab(n.id)}
               className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
                 activeTab === n.id 
                   ? "bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 text-white shadow-lg shadow-pink-600/30" 
                   : "text-gray-300 hover:bg-white/10 hover:text-white"
               }`}
-              style={n.color && activeTab !== n.id ? { color: n.color } : {}}
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
                 <n.icon size={18} />
@@ -1141,7 +973,7 @@ export default function AdminPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-400">Chuyển mục quản trị</label>
               <select
                 value={activeTab}
-                onChange={e => e.target.value === "news" ? router.push("/adminbp/news") : setActiveTab(e.target.value)}
+                onChange={e => setActiveTab(e.target.value)}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
               >
                 {NAV.map(item => (
@@ -1859,111 +1691,11 @@ export default function AdminPage() {
             </div>
           )}
 
-          {activeTab === "news" && false && (
-            <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h3 className="text-lg font-bold text-white">Quản lý Blog Trang Chủ</h3>
-                <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo blog mới</button>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Tiêu đề</label>
-                  <div className="flex gap-2">
-                    <input
-                      value={blogForm.title}
-                      onChange={e => setBlogForm(prev => ({ ...prev, title: e.target.value }))}
-                      placeholder="Nhập tiêu đề blog"
-                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
-                    />
-                    <button type="button" onClick={generateBlogDraftByAIV2} className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">
-                      AI viết
-                    </button>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">URL slug</label>
-                  <input value={blogForm.slug} onChange={e => setBlogForm(prev => ({ ...prev, slug: e.target.value }))} placeholder="duong-dan-bai-viet" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Từ khóa chính</label>
-                  <input value={blogForm.keywordsMain} onChange={e => setBlogForm(prev => ({ ...prev, keywordsMain: e.target.value }))} placeholder="dịch vụ sửa đường nhựa TP.HCM" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Từ khóa phụ</label>
-                  <input value={blogForm.keywordsSecondary} onChange={e => setBlogForm(prev => ({ ...prev, keywordsSecondary: e.target.value }))} placeholder="từ khóa phụ" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2 lg:col-span-2">
-                  <label className="text-xs text-gray-300">Mô tả ngắn (hiển thị khi rê chuột)</label>
-                  <textarea value={blogForm.description} onChange={e => setBlogForm(prev => ({ ...prev, description: e.target.value }))} rows={3} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2 lg:col-span-2">
-                  <label className="text-xs text-gray-300">Meta Description</label>
-                  <textarea value={blogForm.metaDescription} onChange={e => setBlogForm(prev => ({ ...prev, metaDescription: e.target.value }))} rows={2} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Ngày viết</label>
-                  <input type="date" value={blogForm.publishedAt} onChange={e => setBlogForm(prev => ({ ...prev, publishedAt: e.target.value }))} className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-300">Ảnh đại diện</label>
-                  <input value={blogForm.imageUrl} onChange={e => setBlogForm(prev => ({ ...prev, imageUrl: e.target.value }))} placeholder="URL ảnh hoặc upload bên dưới" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="block w-full text-xs text-gray-300"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const url = await uploadImageUrl(file, "blog-cover", blogForm.title);
-                      setBlogForm(prev => ({ ...prev, imageUrl: url }));
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs text-gray-300">Nội dung bài viết (word nâng cao)</label>
-                <RichTextEditor value={blogForm.content} onChange={(html) => setBlogForm(prev => ({ ...prev, content: html }))} minHeight={260} />
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4">
-                <label className="flex items-center gap-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={blogForm.published} onChange={e => setBlogForm(prev => ({ ...prev, published: e.target.checked }))} />
-                  Hiện blog
-                </label>
-                <label className="flex items-center gap-2 text-sm text-orange-300">
-                  <input type="checkbox" checked={blogForm.hot} onChange={e => setBlogForm(prev => ({ ...prev, hot: e.target.checked }))} />
-                  Blog hot (hiệu ứng lửa)
-                </label>
-                <button type="button" onClick={saveBlog} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">
-                  {editingBlogId ? "Cập nhật blog" : "Lưu blog"}
-                </button>
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
-                <p className="text-sm font-semibold text-white">Danh sách blog</p>
-                {blogs.map((item) => (
-                  <div key={item.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm text-white">{item.title}</p>
-                      <p className="text-[11px] text-gray-400">{new Date(item.publishedAt || item.timestamp).toLocaleDateString("vi-VN")} · {item.published ? "Hiện" : "Ẩn"} {item.hot ? "· HOT" : ""}</p>
-                    </div>
-                    <button type="button" onClick={() => editBlog(item)} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">Sửa</button>
-                    <button type="button" onClick={async () => { await db.news.update(item.id, { published: !item.published }); const result = await db.news.getAll(); setBlogs(result.data || []); }} className="rounded-lg border border-white/20 px-2 py-1 text-xs text-white">{item.published ? "Ẩn" : "Hiện"}</button>
-                    <button type="button" onClick={async () => { await db.news.update(item.id, { hot: !item.hot }); const result = await db.news.getAll(); setBlogs(result.data || []); }} className="rounded-lg border border-orange-400/40 px-2 py-1 text-xs text-orange-300">{item.hot ? "Bỏ hot" : "Hot"}</button>
-                    <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); const result = await db.news.getAll(); setBlogs(result.data || []); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {activeTab === "news" && (
             <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h3 className="text-lg font-bold text-white">Quản lý Blog Trang Chủ</h3>
-                <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo blog mới</button>
+                <h3 className="text-lg font-bold text-white">Tin tức</h3>
+                <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo bài mới</button>
               </div>
 
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -2030,19 +1762,19 @@ export default function AdminPage() {
               <div className="flex flex-wrap items-center gap-4">
                 <label className="flex items-center gap-2 text-sm text-gray-300">
                   <input type="checkbox" checked={blogForm.published} onChange={e => setBlogForm(prev => ({ ...prev, published: e.target.checked }))} />
-                  Hiện blog
+                  Hiện bài
                 </label>
                 <label className="flex items-center gap-2 text-sm text-orange-300">
                   <input type="checkbox" checked={blogForm.hot} onChange={e => setBlogForm(prev => ({ ...prev, hot: e.target.checked }))} />
                   Blog hot (hiệu ứng lửa)
                 </label>
                 <button type="button" onClick={saveBlog} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">
-                  {editingBlogId ? "Cập nhật blog" : "Lưu blog"}
+                  {editingBlogId ? "Cập nhật bài" : "Lưu bài"}
                 </button>
               </div>
 
               <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
-                <p className="text-sm font-semibold text-white">Danh sách blog</p>
+                <p className="text-sm font-semibold text-white">Danh sách bài viết</p>
                 {blogs.map((item) => (
                   <div key={item.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2">
                     <div className="min-w-0 flex-1">
@@ -2055,148 +1787,6 @@ export default function AdminPage() {
                     <button type="button" onClick={async () => { if (!confirm("Xóa blog này?")) return; await db.news.delete(item.id); const result = await db.news.getAll(); setBlogs(result.data || []); if (editingBlogId === item.id) resetBlogForm(); }} className="rounded-lg border border-red-500/40 px-2 py-1 text-xs text-red-300">Xóa</button>
                   </div>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "portals" && (
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="space-y-6 lg:col-span-1">
-                <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
-                  <h3 className="font-bold text-white">Tạo tài khoản khách hàng</h3>
-                  <input value={newPortal.clientName || ""} onChange={e => { setNewPortal({ ...newPortal, clientName: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={newPortal.username || ""} onChange={e => { setNewPortal({ ...newPortal, username: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Tài khoản" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={portalPassword} onChange={e => { setPortalPassword(e.target.value); setPortalCreateError(null); setPortalCreateMessage(null); }} type="password" placeholder="Mật khẩu" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <input value={newPortal.phone || ""} onChange={e => { setNewPortal({ ...newPortal, phone: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                  <select value={newPortal.platform || "facebook"} onChange={e => { setNewPortal({ ...newPortal, platform: e.target.value }); setPortalCreateError(null); setPortalCreateMessage(null); }} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                    {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
-                  </select>
-                  <button
-                    onClick={async () => {
-                      setPortalCreateError(null);
-                      setPortalCreateMessage(null);
-                      if (!newPortal.username || !portalPassword || !newPortal.clientName) {
-                        setPortalCreateError("Vui lòng nhập đầy đủ tên khách hàng, tài khoản và mật khẩu.");
-                        return;
-                      }
-                      const initialProject = createEmptyProject(1);
-                      const result = await db.clientPortals.add({
-                        username: newPortal.username,
-                        password: portalPassword,
-                        clientName: newPortal.clientName,
-                        phone: newPortal.phone || "",
-                        platform: newPortal.platform || "facebook",
-                        daysRemaining: 30,
-                        postsCount: 0,
-                        progressPercent: 0,
-                        weeklyReports: [initialProject],
-                      } as any);
-
-                      if (result.error) {
-                        setPortalCreateError(`Tạo tài khoản thất bại: ${result.error}`);
-                        return;
-                      }
-
-                      await refreshPortals();
-                      setPortalCreateMessage("Tạo tài khoản khách hàng thành công.");
-                      setPortalPassword("");
-                      setNewPortal({ username: "", clientName: "", phone: "", platform: "facebook", daysRemaining: 30, postsCount: 0, progressPercent: 0, weeklyReports: [] });
-                    }}
-                    className="w-full rounded-lg bg-primary py-2 text-sm font-bold text-white"
-                  >
-                    Tạo tài khoản
-                  </button>
-                  {portalCreateError && <p className="text-xs text-red-400">{portalCreateError}</p>}
-                  {portalCreateMessage && <p className="text-xs text-green-400">{portalCreateMessage}</p>}
-                </div>
-
-                <div className="space-y-2 rounded-2xl border border-white/10 bg-card p-6">
-                  <h3 className="mb-3 font-bold text-white">Danh sách khách hàng</h3>
-                  {clientPortals.map(client => (
-                    <button
-                      key={client.id}
-                      onClick={() => setSelectedClient(client)}
-                      className={`w-full rounded-xl border p-3 text-left transition-all ${selectedClient?.id === client.id ? "border-primary bg-primary/10" : "border-white/5 bg-white/5 hover:bg-white/10"}`}
-                    >
-                      <p className="text-sm font-bold text-white">{client.clientName}</p>
-                      <p className="text-[10px] uppercase text-gray-500">{client.username} · {client.platform}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-6 lg:col-span-2">
-                {!selectedClient ? (
-                  <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-white/10 text-gray-500">Chọn khách hàng để quản lý dự án</div>
-                ) : (
-                  <>
-                    <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
-                      <h3 className="font-bold text-white">Thông tin tài khoản khách hàng</h3>
-                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <input value={selectedClient.clientName} onChange={e => setSelectedClient({ ...selectedClient, clientName: e.target.value })} placeholder="Tên khách hàng" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                        <input value={selectedClient.phone || ""} onChange={e => setSelectedClient({ ...selectedClient, phone: e.target.value })} placeholder="Số điện thoại" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white" />
-                        <input value={selectedClient.username} readOnly className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-400" />
-                        <select value={selectedClient.platform} onChange={e => setSelectedClient({ ...selectedClient, platform: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                          {PLATFORMS_DYNAMIC.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
-                        </select>
-                        <input value={selectedClient.password || ""} onChange={e => setSelectedClient({ ...selectedClient, password: e.target.value })} type="text" placeholder="Mật khẩu mới" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white md:col-span-2" />
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <button onClick={() => saveSelectedClientManual({ clientName: selectedClient.clientName, phone: selectedClient.phone, platform: selectedClient.platform, password: selectedClient.password })} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu tài khoản</button>
-                        <button onClick={async () => { await db.clientPortals.delete(selectedClient.id.toString()); setSelectedClient(null); refreshPortals(); }} className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200">Xóa tài khoản</button>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 rounded-2xl border border-white/10 bg-card p-6">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h3 className="font-bold text-white">Quản lý dự án</h3>
-                        <button onClick={addProjectForSelectedClient} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white">Thêm dự án</button>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProjects.map(project => (
-                          <button key={project.id} onClick={() => setSelectedClientProjectId(project.id)} className={`rounded-full px-4 py-2 text-xs font-semibold transition ${selectedProject?.id === project.id ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}>
-                            {project.title}
-                          </button>
-                        ))}
-                      </div>
-
-                      {selectedProject && (
-                        <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <input value={selectedProject.title} onChange={e => updateSelectedProject(selectedProject.id, { title: e.target.value })} placeholder="Tên tiêu đề dự án" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                            <button onClick={() => removeProjectForSelectedClient(selectedProject.id)} className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200">Xóa dự án</button>
-                          </div>
-                          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                            <input type="datetime-local" value={toDateTimeLocalValue(selectedProject.registeredAt)} onChange={e => updateSelectedProject(selectedProject.id, { registeredAt: e.target.value })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                            <input type="datetime-local" value={toDateTimeLocalValue(selectedProject.deadlineAt)} onChange={e => updateSelectedProject(selectedProject.id, { deadlineAt: e.target.value })} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                            <input value={selectedProject.budgetVnd} onChange={e => updateSelectedProject(selectedProject.id, { budgetVnd: Number((e.target.value || "0").replace(/\D/g, "")) })} placeholder="Chi phí dự án (VNĐ)" className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white" />
-                          </div>
-
-                          <div className="space-y-2">
-                            <p className="text-xs font-semibold text-gray-300">Nội dung quản lý dự án</p>
-                            <RichTextEditor
-                              value={selectedProject.progressDoc || "<p></p>"}
-                              onChange={(html) => updateSelectedProject(selectedProject.id, { progressDoc: html })}
-                              minHeight={180}
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <p className="text-xs font-semibold text-gray-300">Báo cáo dự án</p>
-                            <RichTextEditor
-                              value={selectedProject.resultDoc || "<p></p>"}
-                              onChange={(html) => updateSelectedProject(selectedProject.id, { resultDoc: html })}
-                              minHeight={180}
-                            />
-                          </div>
-
-                          <button onClick={() => saveSelectedProjectsManual(selectedProjects)} className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Lưu dự án</button>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
               </div>
             </div>
           )}
@@ -2441,15 +2031,15 @@ export default function AdminPage() {
                   <div className="space-y-3">
                     <div className="space-y-1">
                       <label className="text-xs text-gray-400">Google Analytics (GA4 ID)</label>
-                      <input value={settings.googleAnalytics || ""} onChange={e => updateSettings({ googleAnalytics: e.target.value })} placeholder="G-XXXXXXXXXX" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                      <input value={settings.googleAnalytics || ""} onChange={e => updateSettings({ googleAnalytics: e.target.value })} placeholder="G-XXXXXXXXXX" className="w-full rounded-lg border border-white/10 bg-black/40 px-4 py-2 text-sm text-white" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs text-gray-400">Google Search Console (HTML Tag / ID)</label>
-                      <input value={settings.googleConsole || ""} onChange={e => updateSettings({ googleConsole: e.target.value })} placeholder="Nhập mã xác minh..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                      <input value={settings.googleConsole || ""} onChange={e => updateSettings({ googleConsole: e.target.value })} placeholder="Nhập mã xác minh..." className="w-full rounded-lg border border-white/10 bg-black/40 px-4 py-2 text-sm text-white" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs text-gray-400">Rank Math SEO ID / Key</label>
-                      <input value={settings.rankMath || ""} onChange={e => updateSettings({ rankMath: e.target.value })} placeholder="Mã kết nối Rank Math..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                      <input value={settings.rankMath || ""} onChange={e => updateSettings({ rankMath: e.target.value })} placeholder="Mã kết nối Rank Math..." className="w-full rounded-lg border border-white/10 bg-black/40 px-4 py-2 text-sm text-white" />
                     </div>
                   </div>
                 </div>
@@ -2459,11 +2049,11 @@ export default function AdminPage() {
                   <div className="space-y-3">
                     <div className="space-y-1">
                       <label className="text-xs text-gray-400">AIKTP Connection Key</label>
-                      <input value={settings.aiKtp || ""} onChange={e => updateSettings({ aiKtp: e.target.value })} placeholder="Mã API AIKTP..." className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                      <input value={settings.aiKtp || ""} onChange={e => updateSettings({ aiKtp: e.target.value })} placeholder="Mã API AIKTP..." className="w-full rounded-lg border border-white/10 bg-black/40 px-4 py-2 text-sm text-white" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs text-gray-400">Custom Head Scripts (GTM, Pixel, FB Chat...)</label>
-                      <textarea value={settings.headJs || ""} onChange={e => updateSettings({ headJs: e.target.value })} placeholder="<script>...</script>" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-white" />
+                      <textarea value={settings.headJs || ""} onChange={e => updateSettings({ headJs: e.target.value })} placeholder="<script>...</script>" className="w-full h-32 rounded-lg border border-white/10 bg-black/40 px-4 py-2 text-xs font-mono text-white" />
                     </div>
                   </div>
                 </div>
