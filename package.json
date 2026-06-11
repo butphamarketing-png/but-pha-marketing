@@ -11,6 +11,8 @@
     "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
     "setup:supabase": "node scripts/apply-supabase-schema.mjs && npm run check:supabase && npm run seed:seo-articles",
+    "sync:cms-api": "node scripts/sync-cms-api.mjs",
+    "setup:cms-db": "node scripts/setup-cms-db.mjs",
     "start": "next start",
     "lint": "next lint"
   },
@@ -39,16 +41,24 @@
     "slugify": "^1.6.9",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.5",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "cors": "^2.8.5",
+    "drizzle-orm": "^0.44.2",
+    "drizzle-zod": "^0.8.2",
+    "express": "^4.21.2",
+    "node-mocks-http": "^1.16.2",
+    "pg": "^8.16.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.11.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
-    "pg": "^8.21.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

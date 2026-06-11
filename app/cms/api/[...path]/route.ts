@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { canUseCmsDatabase, handleCmsApiRequest } from "@/lib/cms-express-bridge";
+
+export const runtime = "nodejs";
 
 const CMS_API_URL = (process.env.CMS_API_URL || "http://localhost:8081").replace(/\/$/, "");
 
 async function proxyRequest(request: NextRequest, pathSegments: string[]) {
+  if (canUseCmsDatabase()) {
+    const local = await handleCmsApiRequest(request, pathSegments);
+    if (local) return local;
+  }
   const targetPath = `/api/${pathSegments.join("/")}`;
   const url = new URL(targetPath, CMS_API_URL);
   url.search = request.nextUrl.search;
