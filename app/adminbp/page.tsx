@@ -101,7 +101,7 @@ function StatCard({ value, label, icon: Icon, color }: { value: string | number;
         </div>
       </div>
       <p className="text-2xl font-black text-white">{typeof value === "number" ? value.toLocaleString() : value}</p>
-      <p className="mt-1 text-xs text-gray-400">{label}</p>
+      <p className="mt-1 text-xs text-gray-300">{label}</p>
     </div>
   );
 }
@@ -1081,7 +1081,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-pink-950 text-foreground">
+    <div className="dark flex min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-pink-950 text-foreground">
       <aside className="hidden w-72 flex-col border-r border-white/10 bg-white/5 backdrop-blur-xl md:flex">
         <div className="border-b border-white/10 p-6">
           <div className="flex items-center gap-3">
@@ -1198,8 +1198,8 @@ export default function AdminPage() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid stroke="#ffffff15" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fill: "#9CA3AF", fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fill: "#9CA3AF", fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <XAxis dataKey="name" tick={{ fill: "#E2E8F0", fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fill: "#E2E8F0", fontSize: 12 }} axisLine={false} tickLine={false} />
                       <Tooltip contentStyle={{ backgroundColor: "#111827", borderRadius: 12, border: "1px solid #374151" }} labelStyle={{ color: "#f8fafc" }} itemStyle={{ color: "#10B981" }} />
                       <Area type="monotone" dataKey="visits" stroke="#10B981" fill="url(#visitsGradient)" strokeWidth={3} dot={false} />
                     </AreaChart>
@@ -1792,11 +1792,11 @@ export default function AdminPage() {
                   <div key={key} className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-bold text-white uppercase text-xs tracking-widest">{key}</h3>
-                      <span className="text-[10px] text-gray-500 font-mono">/{key === "home" ? "" : key}</span>
+                      <span className="text-[10px] text-gray-400 font-mono">/{key === "home" ? "" : key}</span>
                     </div>
                     <div className="space-y-3">
                       <div className="space-y-1">
-                        <label className="text-[10px] uppercase text-gray-500 font-bold">SEO Title</label>
+                        <label className="text-[10px] uppercase text-pink-200/90 font-bold">SEO Title</label>
                         <input
                           value={resolveSeoPage(key).title}
                           onChange={e => {
@@ -1815,7 +1815,7 @@ export default function AdminPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Keywords</label>
+                        <label className="text-[10px] uppercase text-pink-200/90 font-bold">Meta Keywords</label>
                         <input
                           value={resolveSeoPage(key).keywords}
                           onChange={e => {
@@ -1834,7 +1834,7 @@ export default function AdminPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] uppercase text-gray-500 font-bold">Meta Description</label>
+                        <label className="text-[10px] uppercase text-pink-200/90 font-bold">Meta Description</label>
                         <textarea
                           value={resolveSeoPage(key).desc}
                           onChange={e => {
