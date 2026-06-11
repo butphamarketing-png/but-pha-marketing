@@ -20,20 +20,39 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
   const item = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
   const now = new Date().toISOString();
 
+  const legacyAmount = typeof item.amount === "number" ? item.amount : Number(item.amount) || 0;
+  const amountPaid =
+    typeof item.amountPaid === "number" ? item.amountPaid : Number(item.amountPaid) || legacyAmount;
+  const amountUnpaid =
+    typeof item.amountUnpaid === "number" ? item.amountUnpaid : Number(item.amountUnpaid) || 0;
+  const platformRaw = typeof item.platform === "string" ? item.platform : base.platform;
+  const platform =
+    platformRaw === "website" || platformRaw === "googlemaps" || platformRaw === "facebook"
+      ? platformRaw
+      : "facebook";
+
   return {
     id: typeof item.id === "string" && item.id.trim() ? item.id : `${Date.now()}-${index}`,
+    contractCode:
+      typeof item.contractCode === "string" && item.contractCode.trim()
+        ? item.contractCode
+        : typeof item.id === "string"
+          ? item.id
+          : base.contractCode,
     fullName: typeof item.fullName === "string" ? item.fullName : "",
     industry: typeof item.industry === "string" ? item.industry : "",
     establishmentName: typeof item.establishmentName === "string" ? item.establishmentName : "",
+    taxId: typeof item.taxId === "string" ? item.taxId : "",
     phone: typeof item.phone === "string" ? item.phone : "",
     email: typeof item.email === "string" ? item.email : "",
-    platform: typeof item.platform === "string" ? item.platform : base.platform,
+    platform,
     service: typeof item.service === "string" ? item.service : "",
     registeredAt:
       typeof item.registeredAt === "string" && item.registeredAt.trim() ? item.registeredAt.slice(0, 10) : null,
     expiresAt: typeof item.expiresAt === "string" && item.expiresAt.trim() ? item.expiresAt.slice(0, 10) : null,
     platformLink: typeof item.platformLink === "string" ? item.platformLink : "",
-    amount: typeof item.amount === "number" ? item.amount : Number(item.amount) || 0,
+    amountPaid,
+    amountUnpaid,
     renewalReminderEnabled: item.renewalReminderEnabled !== false,
     lastRenewalReminderAt:
       typeof item.lastRenewalReminderAt === "string" && item.lastRenewalReminderAt.trim()

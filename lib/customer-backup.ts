@@ -22,7 +22,9 @@ export function hasMeaningfulCustomerData(customers: CustomerRecord[]) {
       row.phone.trim() ||
       row.service.trim() ||
       row.establishmentName?.trim() ||
-      row.email?.trim(),
+      row.email?.trim() ||
+      row.contractCode?.trim() ||
+      row.taxId?.trim(),
   );
 }
 
