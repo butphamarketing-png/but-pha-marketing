@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ADMIN_SESSION_COOKIE, adminSessionCookieOptions } from "@/lib/admin-auth";
 import { authenticateCmsLogin, createCmsSessionToken } from "@/lib/cms-auth";
 
 export async function POST(request: Request) {
@@ -12,10 +13,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email hoặc mật khẩu không đúng" }, { status: 401 });
     }
 
-    return NextResponse.json({
-      token: createCmsSessionToken(),
-      user,
-    });
+    const token = createCmsSessionToken();
+    const response = NextResponse.json({ token, user });
+    response.cookies.set(ADMIN_SESSION_COOKIE, token, adminSessionCookieOptions());
+    return response;
   } catch (error) {
     console.error("POST /cms/api/auth/login failed", error);
     return NextResponse.json({ error: "Đăng nhập thất bại" }, { status: 500 });

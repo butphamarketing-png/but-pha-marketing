@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 import { createServerClient } from "@/lib/supabase";
 import { CUSTOMER_RECORDS_KEY, type CustomerRecord } from "@/lib/customer-records";
 
@@ -28,7 +28,7 @@ async function saveEntries(entries: CustomerRecord[]) {
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!isAdminRequest(request)) {
+    if (!isAuthorizedAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const { id } = await params;
@@ -55,7 +55,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!isAdminRequest(request)) {
+    if (!isAuthorizedAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const { id } = await params;

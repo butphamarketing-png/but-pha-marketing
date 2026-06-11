@@ -152,3 +152,22 @@ export function isAdminRequest(request: Request): boolean {
   const cookies = parseCookies(request.headers.get("cookie"));
   return verifyAdminSessionToken(cookies[ADMIN_SESSION_COOKIE]);
 }
+
+export function isAuthorizedAdminRequest(request: Request): boolean {
+  if (isAdminRequest(request)) return true;
+  const auth = request.headers.get("authorization");
+  if (auth?.startsWith("Bearer ")) {
+    return verifyAdminSessionToken(auth.slice(7).trim());
+  }
+  return false;
+}
+
+export function adminSessionCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: SESSION_TTL_SECONDS,
+  };
+}

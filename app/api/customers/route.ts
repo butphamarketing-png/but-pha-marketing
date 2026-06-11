@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 import {
   CUSTOMER_BACKUP_KEY,
   hasMeaningfulCustomerData,
@@ -99,7 +99,7 @@ async function saveEntries(entries: CustomerRecord[]) {
 
 export async function GET(request: Request) {
   try {
-    if (!isAdminRequest(request)) {
+    if (!isAuthorizedAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const { customers, serverOk } = await loadEntries();
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    if (!isAdminRequest(request)) {
+    if (!isAuthorizedAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const body = await request.json().catch(() => null);
@@ -137,7 +137,7 @@ export async function PUT(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    if (!isAdminRequest(request)) {
+    if (!isAuthorizedAdminRequest(request)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const body = await request.json().catch(() => null);
