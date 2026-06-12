@@ -350,7 +350,7 @@ export default function HomePageClient() {
       
       <div className="relative z-10 flex flex-col">
         <header 
-          className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'bg-transparent border-b border-transparent'}`}
+          className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'border-b border-white/10 bg-indigo-950/35 backdrop-blur-md'}`}
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
             <Link href="/" className="group flex items-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
@@ -395,7 +395,6 @@ export default function HomePageClient() {
               {settings?.heroTitle?.trim() ||
                 `${brandName} — Giải pháp marketing thực chiến cho doanh nghiệp Việt Nam`}
             </h1>
-            {/* All screens: 16:9 ratio (ngang) */}
             <div className="w-full aspect-[16/9]">
               <img
                 src="/slideshow-hero.png"

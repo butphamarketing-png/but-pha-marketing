@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronUp } from "lucide-react";
 import { ConsultModal } from "./ConsultModal";
 import { CursorEffect } from "./CursorEffect";
-import { ChatbotWidget } from "./ChatbotWidget";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
@@ -240,7 +239,6 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         )}
       </AnimatePresence>
 
-      <ChatbotWidget color={primaryColor} />
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
     </div>
   );

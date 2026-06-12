@@ -1,6 +1,8 @@
 ﻿"use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const MOBILE_MAX_WIDTH = 767;
 
 type NodePoint = {
   x: number;
@@ -11,19 +13,38 @@ type NodePoint = {
   strength: number;
 };
 
+function canShowParticles() {
+  if (typeof window === "undefined") return false;
+  return (
+    window.innerWidth > MOBILE_MAX_WIDTH &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    const update = () => setEnabled(canShowParticles());
+    update();
+    window.addEventListener("resize", update);
+    const motionMql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    motionMql.addEventListener("change", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      motionMql.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
-    if (window.innerWidth < 768) return;
 
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const mouse = {
@@ -41,16 +62,15 @@ export function ParticleBackground() {
     let rows = 0;
 
     const createNodes = () => {
-      const isCompactViewport = width < 768;
-      const spacing = isCompactViewport ? 124 : 96;
+      const spacing = 96;
       cols = Math.ceil(width / spacing) + 1;
       rows = Math.ceil(height / spacing) + 1;
 
       nodes = [];
       for (let row = 0; row < rows; row += 1) {
         for (let col = 0; col < cols; col += 1) {
-          const jitterX = (Math.random() - 0.5) * (isCompactViewport ? 8 : 14);
-          const jitterY = (Math.random() - 0.5) * (isCompactViewport ? 8 : 14);
+          const jitterX = (Math.random() - 0.5) * 14;
+          const jitterY = (Math.random() - 0.5) * 14;
           const x = col * spacing + jitterX;
           const y = row * spacing + jitterY;
 
@@ -75,7 +95,7 @@ export function ParticleBackground() {
       const dx = a.x - b.x;
       const dy = a.y - b.y;
       const dist = Math.hypot(dx, dy);
-      const maxDistance = width < 768 ? 132 : 146;
+      const maxDistance = 146;
 
       if (dist > maxDistance) return;
 
@@ -264,7 +284,9 @@ export function ParticleBackground() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseout", onLeave);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full opacity-90" />;
 }
