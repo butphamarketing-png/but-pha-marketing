@@ -146,7 +146,7 @@ function CustomerDetailDialog({
             <select
               className={modalFieldInput}
               value={customer.platform}
-              onChange={(e) => onUpdate({ platform: e.target.value })}
+              onChange={(e) => onUpdate({ platform: e.target.value as CustomerRecord["platform"] })}
             >
               {CUSTOMER_PLATFORMS.map((p) => (
                 <option key={p.key} value={p.key}>
@@ -228,10 +228,10 @@ function CustomerDetailDialog({
               type="number"
               min={0}
               className={modalFieldInput}
-              value={customer.amount || ""}
-              onChange={(e) => onUpdate({ amount: Number(e.target.value) || 0 })}
+              value={customer.amountPaid || ""}
+              onChange={(e) => onUpdate({ amountPaid: Number(e.target.value) || 0 })}
             />
-            <p className="text-sm text-gray-400">{formatVnd(customer.amount)}</p>
+            <p className="text-sm text-gray-400">{formatVnd(customer.amountPaid)}</p>
           </label>
 
           <label className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-3">
@@ -912,7 +912,7 @@ export function CustomerManagement() {
                             className={cellInput}
                             value={row.platform}
                             onClick={stopRowClick}
-                            onChange={(e) => updateRow(row.id, { platform: e.target.value })}
+                            onChange={(e) => updateRow(row.id, { platform: e.target.value as CustomerRecord["platform"] })}
                           >
                             {CUSTOMER_PLATFORMS.map((p) => (
                               <option key={p.key} value={p.key}>
@@ -997,12 +997,12 @@ export function CustomerManagement() {
                           type="number"
                           min={0}
                           className={cellInput}
-                          value={row.amount || ""}
+                          value={row.amountPaid || ""}
                           onClick={stopRowClick}
-                          onChange={(e) => updateRow(row.id, { amount: Number(e.target.value) || 0 })}
+                          onChange={(e) => updateRow(row.id, { amountPaid: Number(e.target.value) || 0 })}
                           placeholder="0"
                         />
-                        <p className="mt-1 text-[10px] text-gray-500">{formatVnd(row.amount)}</p>
+                        <p className="mt-1 text-[10px] text-gray-500">{formatVnd(row.amountPaid)}</p>
                       </td>
                       <td className="px-2 py-2 text-center" onClick={stopRowClick}>
                         <label className="inline-flex cursor-pointer flex-col items-center gap-1">
