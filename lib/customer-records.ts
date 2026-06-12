@@ -6,7 +6,7 @@ export type ServicePackage = {
   key: string;
   label: string;
   price: number;
-  period: "year" | "month";
+  period: "year" | "month" | "once";
 };
 
 export type CustomerRecord = {
@@ -66,50 +66,78 @@ export function getServicesForPlatform(platform: string) {
   return PLATFORM_SERVICES.facebook;
 }
 
-export const WEBSITE_SERVICE_PACKAGES: Record<string, ServicePackage[]> = {
-  domain: [
-    { key: "com", label: ".com", price: 350_000, period: "year" },
-    { key: "com-vn", label: ".com.vn", price: 650_000, period: "year" },
-    { key: "vn", label: ".vn", price: 750_000, period: "year" },
-    { key: "net", label: ".net", price: 420_000, period: "year" },
-    { key: "org", label: ".org", price: 400_000, period: "year" },
-    { key: "online", label: ".online", price: 900_000, period: "year" },
-    { key: "shop", label: ".shop", price: 1_000_000, period: "year" },
-    { key: "store", label: ".store", price: 1_500_000, period: "year" },
-    { key: "asia", label: ".asia", price: 500_000, period: "year" },
-    { key: "edu-vn", label: ".edu.vn", price: 650_000, period: "year" },
-  ],
-  hosting: [
-    { key: "3gb", label: "3GB", price: 3_348_000, period: "year" },
-    { key: "5gb", label: "5GB", price: 4_872_000, period: "year" },
-    { key: "7gb", label: "7GB", price: 6_000_000, period: "year" },
-    { key: "8gb", label: "8GB", price: 6_504_000, period: "year" },
-    { key: "10gb", label: "10GB", price: 7_200_000, period: "year" },
-    { key: "16gb", label: "16GB", price: 10_080_000, period: "year" },
-    { key: "20gb", label: "20GB", price: 12_000_000, period: "year" },
-    { key: "30gb", label: "30GB", price: 16_080_000, period: "year" },
-    { key: "50gb", label: "50GB", price: 24_000_000, period: "year" },
-    { key: "60gb", label: "60GB", price: 28_008_000, period: "year" },
-    { key: "70gb", label: "70GB", price: 32_040_000, period: "year" },
-    { key: "80gb", label: "80GB", price: 36_000_000, period: "year" },
-    { key: "90gb", label: "90GB", price: 39_960_000, period: "year" },
-    { key: "100gb", label: "100GB", price: 43_200_000, period: "year" },
-  ],
-  "thiet-ke": [],
-  "cham-soc": [
-    { key: "cs-web-1", label: "CS Web 1", price: 1_000_000, period: "month" },
-    { key: "cs-web-2", label: "CS Web 2", price: 2_000_000, period: "month" },
-    { key: "cs-web-3", label: "CS Web 3", price: 2_500_000, period: "month" },
-  ],
-  "quang-cao": [
-    { key: "qc-web-1", label: "QC Web 1", price: 1_000_000, period: "month" },
-    { key: "qc-web-2", label: "QC Web 2", price: 2_000_000, period: "month" },
-  ],
+export const PLATFORM_SERVICE_PACKAGES: Record<CustomerPlatform, Record<string, ServicePackage[]>> = {
+  website: {
+    domain: [
+      { key: "com", label: ".com", price: 350_000, period: "year" },
+      { key: "com-vn", label: ".com.vn", price: 650_000, period: "year" },
+      { key: "vn", label: ".vn", price: 750_000, period: "year" },
+      { key: "net", label: ".net", price: 420_000, period: "year" },
+      { key: "org", label: ".org", price: 400_000, period: "year" },
+      { key: "online", label: ".online", price: 900_000, period: "year" },
+      { key: "shop", label: ".shop", price: 1_000_000, period: "year" },
+      { key: "store", label: ".store", price: 1_500_000, period: "year" },
+      { key: "asia", label: ".asia", price: 500_000, period: "year" },
+      { key: "edu-vn", label: ".edu.vn", price: 650_000, period: "year" },
+    ],
+    hosting: [
+      { key: "3gb", label: "3GB", price: 3_348_000, period: "year" },
+      { key: "5gb", label: "5GB", price: 4_872_000, period: "year" },
+      { key: "7gb", label: "7GB", price: 6_000_000, period: "year" },
+      { key: "8gb", label: "8GB", price: 6_504_000, period: "year" },
+      { key: "10gb", label: "10GB", price: 7_200_000, period: "year" },
+      { key: "16gb", label: "16GB", price: 10_080_000, period: "year" },
+      { key: "20gb", label: "20GB", price: 12_000_000, period: "year" },
+      { key: "30gb", label: "30GB", price: 16_080_000, period: "year" },
+      { key: "50gb", label: "50GB", price: 24_000_000, period: "year" },
+      { key: "100gb", label: "100GB", price: 43_200_000, period: "year" },
+    ],
+    "thiet-ke": [],
+    "cham-soc": [
+      { key: "cs-web-1", label: "CS Web 1", price: 1_000_000, period: "month" },
+      { key: "cs-web-2", label: "CS Web 2", price: 2_000_000, period: "month" },
+      { key: "cs-web-3", label: "CS Web 3", price: 2_500_000, period: "month" },
+    ],
+    "quang-cao": [
+      { key: "qc-web-1", label: "QC Web 1", price: 1_000_000, period: "month" },
+      { key: "qc-web-2", label: "QC Web 2", price: 2_000_000, period: "month" },
+    ],
+  },
+  facebook: {
+    "thiet-ke": [
+      { key: "xd-fb-1", label: "XD FB 1", price: 500_000, period: "once" },
+      { key: "xd-fb-2", label: "XD FB 2", price: 1_000_000, period: "once" },
+      { key: "xd-fb-3", label: "XD FB 3", price: 1_500_000, period: "once" },
+    ],
+    "cham-soc": [
+      { key: "cs-fb-1", label: "CS FB 1", price: 1_500_000, period: "month" },
+      { key: "cs-fb-2", label: "CS FB 2", price: 2_500_000, period: "month" },
+      { key: "cs-fb-3", label: "CS FB 3", price: 3_500_000, period: "month" },
+    ],
+    "quang-cao": [
+      { key: "qc-fb-1", label: "QC FB 1", price: 1_000_000, period: "month" },
+      { key: "qc-fb-2", label: "QC FB 2", price: 2_000_000, period: "month" },
+    ],
+  },
+  googlemaps: {
+    "thiet-ke": [
+      { key: "xd-map-1", label: "XD Map 1", price: 300_000, period: "once" },
+      { key: "xd-map-2", label: "XD Map 2", price: 600_000, period: "once" },
+      { key: "xd-map-3", label: "XD Map 3", price: 900_000, period: "once" },
+    ],
+    "quang-cao": [
+      { key: "qc-map-1", label: "QC Map 1", price: 1_000_000, period: "month" },
+      { key: "qc-map-2", label: "QC Map 2", price: 2_000_000, period: "month" },
+    ],
+  },
 };
 
+/** @deprecated use PLATFORM_SERVICE_PACKAGES.website */
+export const WEBSITE_SERVICE_PACKAGES = PLATFORM_SERVICE_PACKAGES.website;
+
 export function getPackagesForService(platform: CustomerPlatform | string, service: string): ServicePackage[] {
-  if (platform === "website") {
-    return WEBSITE_SERVICE_PACKAGES[service] ?? [];
+  if (platform === "website" || platform === "facebook" || platform === "googlemaps") {
+    return PLATFORM_SERVICE_PACKAGES[platform][service] ?? [];
   }
   return [];
 }
@@ -124,6 +152,9 @@ export function getPackageByKey(
 }
 
 export function formatPackageOption(pkg: ServicePackage) {
+  if (pkg.period === "once") {
+    return `${pkg.label} (${formatVnd(pkg.price)})`;
+  }
   const suffix = pkg.period === "year" ? "/năm" : "/tháng";
   return `${pkg.label} (${formatVnd(pkg.price)}${suffix})`;
 }
