@@ -47,6 +47,7 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
     email: typeof item.email === "string" ? item.email : "",
     platform,
     service: typeof item.service === "string" ? item.service : "",
+    subscriptionPackage: typeof item.subscriptionPackage === "string" ? item.subscriptionPackage : "",
     registeredAt:
       typeof item.registeredAt === "string" && item.registeredAt.trim() ? item.registeredAt.slice(0, 10) : null,
     expiresAt: typeof item.expiresAt === "string" && item.expiresAt.trim() ? item.expiresAt.slice(0, 10) : null,

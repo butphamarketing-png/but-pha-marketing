@@ -2,6 +2,13 @@ export const CUSTOMER_RECORDS_KEY = "customer_records";
 
 export type CustomerPlatform = "facebook" | "website" | "googlemaps";
 
+export type ServicePackage = {
+  key: string;
+  label: string;
+  price: number;
+  period: "year" | "month";
+};
+
 export type CustomerRecord = {
   id: string;
   contractCode: string;
@@ -13,6 +20,7 @@ export type CustomerRecord = {
   email: string;
   platform: CustomerPlatform;
   service: string;
+  subscriptionPackage: string;
   registeredAt: string | null;
   expiresAt: string | null;
   platformLink: string;
@@ -56,6 +64,87 @@ export function getServicesForPlatform(platform: string) {
     return PLATFORM_SERVICES[platform];
   }
   return PLATFORM_SERVICES.facebook;
+}
+
+export const WEBSITE_SERVICE_PACKAGES: Record<string, ServicePackage[]> = {
+  domain: [
+    { key: "com", label: ".com", price: 350_000, period: "year" },
+    { key: "com-vn", label: ".com.vn", price: 650_000, period: "year" },
+    { key: "vn", label: ".vn", price: 750_000, period: "year" },
+    { key: "net", label: ".net", price: 420_000, period: "year" },
+    { key: "org", label: ".org", price: 400_000, period: "year" },
+    { key: "online", label: ".online", price: 900_000, period: "year" },
+    { key: "shop", label: ".shop", price: 1_000_000, period: "year" },
+    { key: "store", label: ".store", price: 1_500_000, period: "year" },
+    { key: "asia", label: ".asia", price: 500_000, period: "year" },
+    { key: "edu-vn", label: ".edu.vn", price: 650_000, period: "year" },
+  ],
+  hosting: [
+    { key: "3gb", label: "3GB", price: 3_348_000, period: "year" },
+    { key: "5gb", label: "5GB", price: 4_872_000, period: "year" },
+    { key: "7gb", label: "7GB", price: 6_000_000, period: "year" },
+    { key: "8gb", label: "8GB", price: 6_504_000, period: "year" },
+    { key: "10gb", label: "10GB", price: 7_200_000, period: "year" },
+    { key: "16gb", label: "16GB", price: 10_080_000, period: "year" },
+    { key: "20gb", label: "20GB", price: 12_000_000, period: "year" },
+    { key: "30gb", label: "30GB", price: 16_080_000, period: "year" },
+    { key: "50gb", label: "50GB", price: 24_000_000, period: "year" },
+    { key: "60gb", label: "60GB", price: 28_008_000, period: "year" },
+    { key: "70gb", label: "70GB", price: 32_040_000, period: "year" },
+    { key: "80gb", label: "80GB", price: 36_000_000, period: "year" },
+    { key: "90gb", label: "90GB", price: 39_960_000, period: "year" },
+    { key: "100gb", label: "100GB", price: 43_200_000, period: "year" },
+  ],
+  "thiet-ke": [],
+  "cham-soc": [
+    { key: "cs-web-1", label: "CS Web 1", price: 1_000_000, period: "month" },
+    { key: "cs-web-2", label: "CS Web 2", price: 2_000_000, period: "month" },
+    { key: "cs-web-3", label: "CS Web 3", price: 2_500_000, period: "month" },
+  ],
+  "quang-cao": [
+    { key: "qc-web-1", label: "QC Web 1", price: 1_000_000, period: "month" },
+    { key: "qc-web-2", label: "QC Web 2", price: 2_000_000, period: "month" },
+  ],
+};
+
+export function getPackagesForService(platform: CustomerPlatform | string, service: string): ServicePackage[] {
+  if (platform === "website") {
+    return WEBSITE_SERVICE_PACKAGES[service] ?? [];
+  }
+  return [];
+}
+
+export function getPackageByKey(
+  platform: CustomerPlatform | string,
+  service: string,
+  packageKey: string,
+): ServicePackage | undefined {
+  if (!packageKey) return undefined;
+  return getPackagesForService(platform, service).find((pkg) => pkg.key === packageKey);
+}
+
+export function formatPackageOption(pkg: ServicePackage) {
+  const suffix = pkg.period === "year" ? "/năm" : "/tháng";
+  return `${pkg.label} (${formatVnd(pkg.price)}${suffix})`;
+}
+
+export function formatPackageDisplay(
+  platform: CustomerPlatform | string,
+  service: string,
+  packageKey: string,
+) {
+  const pkg = getPackageByKey(platform, service, packageKey);
+  if (!pkg) return packageKey.trim() ? packageKey : "—";
+  return formatPackageOption(pkg);
+}
+
+export function isValidPackageForService(
+  platform: CustomerPlatform | string,
+  service: string,
+  packageKey: string,
+) {
+  if (!packageKey) return true;
+  return getPackagesForService(platform, service).some((pkg) => pkg.key === packageKey);
 }
 
 export function normalizePlatform(raw: string): CustomerPlatform {
@@ -127,6 +216,7 @@ export function createEmptyCustomer(index = 0): CustomerRecord {
     email: "",
     platform: "facebook",
     service: "thiet-ke",
+    subscriptionPackage: "",
     registeredAt: today,
     expiresAt: null,
     platformLink: "",
@@ -189,7 +279,10 @@ export function formatVnd(amount: number) {
   return new Intl.NumberFormat("vi-VN").format(amount || 0) + " đ";
 }
 
-export const CUSTOMER_EXPORT_COLUMNS: { key: keyof CustomerRecord | "serviceLabel" | "platformLabel"; header: string }[] = [
+export const CUSTOMER_EXPORT_COLUMNS: {
+  key: keyof CustomerRecord | "serviceLabel" | "platformLabel" | "packageLabel";
+  header: string;
+}[] = [
   { key: "contractCode", header: "Mã số hợp đồng" },
   { key: "fullName", header: "Họ và tên khách hàng" },
   { key: "establishmentName", header: "Tên hộ kinh doanh/ công ty" },
@@ -199,6 +292,7 @@ export const CUSTOMER_EXPORT_COLUMNS: { key: keyof CustomerRecord | "serviceLabe
   { key: "email", header: "Gmail" },
   { key: "platformLabel", header: "Nền tảng" },
   { key: "serviceLabel", header: "Dịch vụ đăng ký" },
+  { key: "packageLabel", header: "Gói đăng ký" },
   { key: "registeredAt", header: "Ngày đăng ký" },
   { key: "expiresAt", header: "Ngày hết hạn" },
   { key: "platformLink", header: "Link nền tảng" },
@@ -217,9 +311,11 @@ export function exportCustomersToExcel(customers: CustomerRecord[]) {
     const platformLabel = CUSTOMER_PLATFORMS.find((p) => p.key === row.platform)?.label || row.platform;
     const serviceLabel =
       getServicesForPlatform(row.platform).find((s) => s.key === row.service)?.label || row.service;
+    const packageLabel = formatPackageDisplay(row.platform, row.service, row.subscriptionPackage);
     return CUSTOMER_EXPORT_COLUMNS.map((col) => {
       if (col.key === "platformLabel") return escape(platformLabel);
       if (col.key === "serviceLabel") return escape(serviceLabel);
+      if (col.key === "packageLabel") return escape(packageLabel);
       const val = row[col.key as keyof CustomerRecord];
       return escape(val);
     }).join(",");
