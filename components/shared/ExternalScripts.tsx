@@ -26,11 +26,6 @@ export function ExternalScripts() {
         </>
       )}
 
-      {/* Google Search Console */}
-      {settings.googleConsole && (
-        <meta name="google-site-verification" content={settings.googleConsole} />
-      )}
-
       {/* Custom Head Scripts (GTM, Pixel, FB Chat, etc.) */}
       {settings.headJs && (
         <div

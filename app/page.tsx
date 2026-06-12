@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import HomePageClient from "./HomePageClient";
-import { getDynamicMetadata } from "@/lib/seo";
+import { getDynamicMetadata, SITE_URL } from "@/lib/seo";
 
 export async function generateMetadata() {
   return getDynamicMetadata("/", {
@@ -18,7 +18,7 @@ export async function generateMetadata() {
 }
 
 export default function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+  const baseUrl = SITE_URL;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [

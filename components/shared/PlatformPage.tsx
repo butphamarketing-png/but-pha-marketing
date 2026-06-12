@@ -859,21 +859,30 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
     setCheckoutPkg(pkg);
   };
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+  const pageH1 =
+    [config.heroTitle, config.heroSubtitle].filter(Boolean).join(" — ") ||
+    `Dịch vụ ${config.name} Marketing`;
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": config.name,
-    "description": config.mission,
-    "provider": {
+    name: config.name,
+    description: config.mission,
+    url: `${siteUrl}${pathname}`,
+    provider: {
       "@type": "LocalBusiness",
-      "name": "Bứt Phá Marketing",
-      "image": "https://butphamarketing.com/logo.png"
-    }
+      name: "Bứt Phá Marketing",
+      url: siteUrl,
+      image: `${siteUrl}/logo.jpg`,
+    },
   };
 
   return (
     <SubPageLayout platformName={config.name} primaryColor={platformColor} customSections={config.customSections}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+
+      <h1 className="sr-only">{pageH1}</h1>
 
       {children}
 

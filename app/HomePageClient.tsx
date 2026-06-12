@@ -391,11 +391,15 @@ export default function HomePageClient() {
 
         <main className="flex-1">
           <section id="hero" className="relative w-full overflow-hidden">
+            <h1 className="sr-only">
+              {settings?.heroTitle?.trim() ||
+                `${brandName} — Giải pháp marketing thực chiến cho doanh nghiệp Việt Nam`}
+            </h1>
             {/* All screens: 16:9 ratio (ngang) */}
             <div className="w-full aspect-[16/9]">
               <img
                 src="/slideshow-hero.png"
-                alt="Hero"
+                alt={`${brandName} — Agency marketing Facebook, Website và Google Maps`}
                 className="h-full w-full object-cover"
               />
             </div>

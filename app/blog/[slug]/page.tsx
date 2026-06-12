@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/seo";
 import { getBlogBySlug } from "@/lib/server-blog";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+const BASE_URL = SITE_URL;
 export const dynamic = "force-dynamic";
 
 type Params = { slug: string };

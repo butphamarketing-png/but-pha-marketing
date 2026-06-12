@@ -1,26 +1,27 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Flame } from "lucide-react";
+import { SITE_URL } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+const BASE_URL = SITE_URL;
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Tin Tuc Marketing | But Pha Marketing",
-  description: "Thu vien bai viet marketing thuc chien, toi uu SEO va tang truong doanh thu.",
+  title: "Tin tức Marketing | Bứt Phá Marketing",
+  description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
   alternates: { canonical: `${BASE_URL}/blog` },
   openGraph: {
-    title: "Tin Tuc Marketing | But Pha Marketing",
-    description: "Thu vien bai viet marketing thuc chien, toi uu SEO va tang truong doanh thu.",
+    title: "Tin tức Marketing | Bứt Phá Marketing",
+    description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     url: `${BASE_URL}/blog`,
     type: "website",
-    images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: "Tin tuc But Pha Marketing" }],
+    images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: "Tin tức Bứt Phá Marketing" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tin Tuc Marketing | But Pha Marketing",
-    description: "Thu vien bai viet marketing thuc chien, toi uu SEO va tang truong doanh thu.",
+    title: "Tin tức Marketing | Bứt Phá Marketing",
+    description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     images: [`${BASE_URL}/opengraph.jpg`],
   },
 };
@@ -39,9 +40,9 @@ export default async function BlogPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Tin tuc Marketing",
+    name: "Tin tức Marketing",
     url: `${BASE_URL}/blog`,
-    description: "Thu vien bai viet marketing thuc chien, toi uu SEO va tang truong doanh thu.",
+    description: "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
     inLanguage: "vi-VN",
     hasPart: blogs.slice(0, 12).map((blog) => ({
       "@type": "BlogPosting",

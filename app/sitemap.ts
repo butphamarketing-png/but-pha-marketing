@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+const baseUrl = SITE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/blog"];
+  const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/blog", "/gioi-thieu", "/lien-he"];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),

@@ -15,6 +15,8 @@ const config: PlatformConfig = {
   name: "Website",
   color: PLATFORM_COLORS.website,
   auditPlatform: "website",
+  heroTitle: "Website chuẩn SEO",
+  heroSubtitle: "Thiết kế nhanh, tối ưu chuyển đổi và bảo trì bền vững",
   vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
   mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
   responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",

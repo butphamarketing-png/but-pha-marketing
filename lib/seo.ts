@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { createServerClient } from "./supabase";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
+const BASE_URL = SITE_URL;
 
 type SeoInput = {
   title: string;
@@ -43,6 +44,22 @@ export async function getDynamicMetadata(path: string, fallback: Partial<SeoInpu
     image: fallback.image,
     type: fallback.type,
   });
+}
+
+export async function getGoogleSiteVerification(): Promise<string | undefined> {
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "admin_settings")
+      .maybeSingle();
+    const code = typeof data?.value?.googleConsole === "string" ? data.value.googleConsole.trim() : "";
+    return code || undefined;
+  } catch (error) {
+    console.error("[SEO] Failed to fetch Google site verification:", error);
+    return undefined;
+  }
 }
 
 export function buildMetadata({

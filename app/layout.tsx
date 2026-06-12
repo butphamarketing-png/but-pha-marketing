@@ -4,40 +4,38 @@ import { AdminProvider } from "@/lib/AdminContext";
 import { ExternalScripts } from "@/components/shared/ExternalScripts";
 import { VisitorTracker } from "@/components/shared/VisitorTracker";
 import NextTopLoader from "nextjs-toploader";
+import { getGoogleSiteVerification, SITE_URL } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
-const DEFAULT_TITLE = "But Pha Marketing";
+const DEFAULT_TITLE = "Bứt Phá Marketing";
 const DEFAULT_DESCRIPTION =
-  "Agency marketing toan dien tai Viet Nam. Dich vu Facebook, Website, Local SEO va chien luoc tang truong doanh thu.";
+  "Agency marketing toàn diện tại Việt Nam. Dịch vụ Facebook, Website, Local SEO và chiến lược tăng trưởng doanh thu.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteTitle = DEFAULT_TITLE;
   const favicon = "/favicon.png";
+  const googleVerification = await getGoogleSiteVerification();
 
   return {
     metadataBase: new URL(SITE_URL),
     applicationName: siteTitle,
     title: {
-      default: `${siteTitle} | Giai phap marketing thuc chien`,
+      default: `${siteTitle} | Giải pháp marketing thực chiến`,
       template: `%s | ${siteTitle}`,
     },
     description: DEFAULT_DESCRIPTION,
-    keywords: ["agency marketing", "facebook marketing", "local seo", "website marketing"],
+    keywords: ["agency marketing", "facebook marketing", "local seo", "website marketing", "seo website"],
     authors: [{ name: siteTitle }],
     creator: siteTitle,
     publisher: siteTitle,
-    alternates: {
-      canonical: "/",
-    },
     icons: {
       icon: favicon,
       shortcut: favicon,
       apple: favicon,
     },
     openGraph: {
-      title: `${siteTitle} | Giai phap marketing thuc chien`,
+      title: `${siteTitle} | Giải pháp marketing thực chiến`,
       description: DEFAULT_DESCRIPTION,
-      url: "/",
+      url: SITE_URL,
       siteName: siteTitle,
       locale: "vi_VN",
       type: "website",
@@ -50,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${siteTitle} | Giai phap marketing thuc chien`,
+      title: `${siteTitle} | Giải pháp marketing thực chiến`,
       description: DEFAULT_DESCRIPTION,
       images: ["/opengraph.jpg"],
     },
@@ -58,6 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
       index: true,
       follow: true,
     },
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
   };
 }
 
