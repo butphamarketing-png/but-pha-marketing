@@ -9,6 +9,7 @@ import {
 } from "@/lib/customer-backup";
 import {
   CUSTOMER_RECORDS_KEY,
+  syncCustomerContract,
   type CustomerRecord,
   createEmptyCustomer,
 } from "@/lib/customer-records";
@@ -30,15 +31,24 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
     platformRaw === "website" || platformRaw === "googlemaps" || platformRaw === "facebook"
       ? platformRaw
       : "facebook";
+  const service = typeof item.service === "string" ? item.service : base.service;
+  const contractBaseRaw =
+    typeof item.contractBase === "string" ? item.contractBase : typeof item.contractCode === "string" ? item.contractCode : "";
+  const contractCodeRaw = typeof item.contractCode === "string" ? item.contractCode : "";
+  const { contractBase, contractCode } = syncCustomerContract(
+    {
+      contractBase: contractBaseRaw,
+      contractCode: contractCodeRaw,
+      platform,
+      service,
+    },
+    index,
+  );
 
   return {
     id: typeof item.id === "string" && item.id.trim() ? item.id : `${Date.now()}-${index}`,
-    contractCode:
-      typeof item.contractCode === "string" && item.contractCode.trim()
-        ? item.contractCode
-        : typeof item.id === "string"
-          ? item.id
-          : base.contractCode,
+    contractBase,
+    contractCode,
     fullName: typeof item.fullName === "string" ? item.fullName : "",
     industry: typeof item.industry === "string" ? item.industry : "",
     establishmentName: typeof item.establishmentName === "string" ? item.establishmentName : "",
@@ -46,7 +56,7 @@ function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
     phone: typeof item.phone === "string" ? item.phone : "",
     email: typeof item.email === "string" ? item.email : "",
     platform,
-    service: typeof item.service === "string" ? item.service : "",
+    service,
     subscriptionPackage: typeof item.subscriptionPackage === "string" ? item.subscriptionPackage : "",
     registeredAt:
       typeof item.registeredAt === "string" && item.registeredAt.trim() ? item.registeredAt.slice(0, 10) : null,

@@ -11,6 +11,9 @@ export type ServicePackage = {
 
 export type CustomerRecord = {
   id: string;
+  /** Số gốc HĐ (chỉ số), vd. 100100 */
+  contractBase: string;
+  /** MSHĐ đầy đủ = contractBase + hậu tố dịch vụ, vd. 100100W */
   contractCode: string;
   fullName: string;
   establishmentName: string;
@@ -64,6 +67,101 @@ export function getServicesForPlatform(platform: string) {
     return PLATFORM_SERVICES[platform];
   }
   return PLATFORM_SERVICES.facebook;
+}
+
+/** Hậu tố MSHĐ theo nền tảng + dịch vụ */
+export const SERVICE_CONTRACT_SUFFIX: Record<CustomerPlatform, Record<string, string>> = {
+  website: {
+    domain: "D",
+    hosting: "H",
+    "thiet-ke": "W",
+    "cham-soc": "C",
+    "quang-cao": "Q",
+  },
+  facebook: {
+    "thiet-ke": "F",
+    "cham-soc": "S",
+    "quang-cao": "A",
+  },
+  googlemaps: {
+    "thiet-ke": "M",
+    "quang-cao": "G",
+  },
+};
+
+const ALL_CONTRACT_SUFFIXES = new Set(
+  Object.values(SERVICE_CONTRACT_SUFFIX).flatMap((group) => Object.values(group)),
+);
+
+export function getServiceContractSuffix(platform: CustomerPlatform | string, service: string) {
+  if (platform === "website" || platform === "facebook" || platform === "googlemaps") {
+    return SERVICE_CONTRACT_SUFFIX[platform][service] ?? "";
+  }
+  return "";
+}
+
+export function normalizeContractBase(raw: string) {
+  return raw.replace(/\D/g, "");
+}
+
+export function extractContractBase(
+  contractCode: string,
+  platform?: CustomerPlatform | string,
+  service?: string,
+) {
+  const code = contractCode.trim();
+  if (!code) return "";
+
+  if (platform && service) {
+    const suffix = getServiceContractSuffix(platform, service);
+    if (suffix && code.toUpperCase().endsWith(suffix)) {
+      const base = code.slice(0, -suffix.length);
+      if (/^\d+$/.test(base)) return base;
+    }
+  }
+
+  const upper = code.toUpperCase();
+  if (upper.length > 1 && ALL_CONTRACT_SUFFIXES.has(upper.slice(-1))) {
+    const base = code.slice(0, -1);
+    if (/^\d+$/.test(base)) return base;
+  }
+
+  const digits = code.replace(/\D/g, "");
+  return digits || code;
+}
+
+export function buildContractCode(
+  contractBase: string,
+  platform: CustomerPlatform | string,
+  service: string,
+) {
+  const base = normalizeContractBase(contractBase);
+  if (!base) return "";
+  const suffix = getServiceContractSuffix(platform, service);
+  return suffix ? `${base}${suffix}` : base;
+}
+
+export function generateContractBase(index = 0) {
+  const seq = String(Date.now()).slice(-6);
+  return index > 0 ? `${seq}${index}` : seq;
+}
+
+export function syncCustomerContract(
+  row: Pick<CustomerRecord, "contractBase" | "contractCode" | "platform" | "service">,
+  index = 0,
+) {
+  let base = row.contractBase?.trim()
+    ? normalizeContractBase(row.contractBase)
+    : extractContractBase(row.contractCode, row.platform, row.service);
+  if (!base) base = generateContractBase(index);
+  return {
+    contractBase: base,
+    contractCode: buildContractCode(base, row.platform, row.service),
+  };
+}
+
+export function getContractBaseFromCode(contractCode: string) {
+  return extractContractBase(contractCode);
 }
 
 export const PLATFORM_SERVICE_PACKAGES: Record<CustomerPlatform, Record<string, ServicePackage[]>> = {
@@ -156,6 +254,28 @@ export function getPackageByKey(
   return getPackagesForService(platform, service).find((pkg) => pkg.key === packageKey);
 }
 
+/** Tổng hợp đồng theo giá gói đã chọn (null nếu chưa có gói hoặc gói tự nhập). */
+export function getPackageContractTotal(
+  platform: CustomerPlatform | string,
+  service: string,
+  packageKey: string,
+): number | null {
+  const pkg = getPackageByKey(platform, service, packageKey);
+  return pkg?.price ?? null;
+}
+
+/** Chưa TT = giá gói − Đã TT (tối thiểu 0). */
+export function resolveAmountUnpaid(
+  platform: CustomerPlatform | string,
+  service: string,
+  subscriptionPackage: string,
+  amountPaid: number,
+): number | null {
+  const total = getPackageContractTotal(platform, service, subscriptionPackage);
+  if (total === null) return null;
+  return Math.max(0, total - amountPaid);
+}
+
 export function formatPackageOption(pkg: ServicePackage) {
   if (pkg.period === "once") {
     return `${pkg.label} (${formatVnd(pkg.price)})`;
@@ -232,26 +352,33 @@ export function resolveExpiryOnServiceChange(
   return currentExpiry;
 }
 
+/** @deprecated use generateContractBase + buildContractCode */
 export function generateContractCode(index = 0) {
-  const year = new Date().getFullYear();
-  const seq = String(Date.now()).slice(-6);
-  return `HD-${year}-${seq}${index > 0 ? `-${index}` : ""}`;
+  const base = generateContractBase(index);
+  return buildContractCode(base, "facebook", "thiet-ke");
 }
 
 export function createEmptyCustomer(index = 0): CustomerRecord {
   const now = new Date().toISOString();
   const today = now.slice(0, 10);
+  const platform: CustomerPlatform = "facebook";
+  const service = "thiet-ke";
+  const { contractBase, contractCode } = syncCustomerContract(
+    { contractBase: generateContractBase(index), contractCode: "", platform, service },
+    index,
+  );
   return {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-    contractCode: generateContractCode(index),
+    contractBase,
+    contractCode,
     fullName: "",
     establishmentName: "",
     taxId: "",
     industry: "",
     phone: "",
     email: "",
-    platform: "facebook",
-    service: "thiet-ke",
+    platform,
+    service,
     subscriptionPackage: "",
     registeredAt: today,
     expiresAt: null,
