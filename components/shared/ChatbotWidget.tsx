@@ -25,7 +25,7 @@ const QUICK_REPLIES = [
 let msgId = 0;
 
 const BOT_RESPONSES: { pattern: RegExp; reply: string }[] = [
-  { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi:\n• Xây dựng Fanpage: từ 2.000.000đ/tháng\n• Chăm sóc nội dung: từ 3.500.000đ/tháng\n• Quảng cáo Facebook Ads: từ 5.000.000đ/tháng\n\nBạn muốn tư vấn gói nào?" },
+  { pattern: /facebook|fanpage/i, reply: "Dịch vụ Facebook Marketing của chúng tôi:\n• Xây dựng Fanpage: từ 500.000đ\n• Chăm sóc nội dung: 10 bài 1.500.000đ · 20 bài 2.500.000đ · 30 bài 3.500.000đ/tháng\n• Quảng cáo Facebook Ads: từ 1.000.000đ/tháng\n\nBạn muốn tư vấn gói nào?" },
   { pattern: /google|maps|local|seo/i, reply: "Google Maps/Local SEO:\n• Tạo & tối ưu Google Business: từ 2.000.000đ\n• SEO Local: từ 4.000.000đ/tháng\n\nGiúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm!" },
   { pattern: /website|web/i, reply: "Dịch vụ Website:\n• Landing Page: từ 3.500.000đ\n• Website doanh nghiệp: từ 7.000.000đ\n• E-commerce: từ 15.000.000đ\n• SEO website: từ 3.000.000đ/tháng" },
   { pattern: /giá|bảng giá|chi phí|bao nhiêu|phí/i, reply: "Bảng giá dao động từ 2.000.000đ - 20.000.000đ/tháng tùy nền tảng và gói. Đăng ký từ 3 tháng giảm 5-20%.\n\nĐể báo giá chính xác, bạn cho mình biết nhu cầu cụ thể nhé?" },

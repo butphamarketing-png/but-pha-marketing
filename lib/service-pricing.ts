@@ -26,24 +26,34 @@ export const HOSTING_PACKAGES = [
 /** Giá .com trên modal đăng ký tên miền (/website) */
 export const DOMAIN_COM_PRICE = 350_000;
 
-/** Chăm sóc Fanpage: 150.000đ / bài (trang /facebook) */
-export const FANPAGE_CARE_PRICE_PER_POST = 150_000;
+/** Chăm sóc Fanpage — 3 mốc cố định (trang /facebook) */
+export const FANPAGE_CARE_TIERS = [
+  { posts: 10, price: 1_500_000 },
+  { posts: 20, price: 2_500_000 },
+  { posts: 30, price: 3_500_000 },
+] as const;
+
 export const FANPAGE_CARE_POST_MIN = 10;
-export const FANPAGE_CARE_POST_MAX = 60;
-export const FANPAGE_CARE_POST_STEP = 5;
+export const FANPAGE_CARE_POST_MAX = 30;
+export const FANPAGE_CARE_POST_STEP = 10;
 
 /** Mốc tham chiếu nhanh — 10 / 20 / 30 bài */
 export const FANPAGE_CARE_REFERENCE_TIERS = [10, 20, 30] as const;
 
+const FANPAGE_CARE_PRICE_BY_POSTS = Object.fromEntries(
+  FANPAGE_CARE_TIERS.map((tier) => [tier.posts, tier.price]),
+) as Record<number, number>;
+
 export function fanpageCarePrice(postsPerMonth: number) {
-  return postsPerMonth * FANPAGE_CARE_PRICE_PER_POST;
+  const posts = snapFanpageCarePosts(postsPerMonth);
+  return FANPAGE_CARE_PRICE_BY_POSTS[posts] ?? FANPAGE_CARE_TIERS[0].price;
 }
 
 export function clampFanpageCarePosts(posts: number) {
   return Math.min(FANPAGE_CARE_POST_MAX, Math.max(FANPAGE_CARE_POST_MIN, Math.round(posts)));
 }
 
-/** Snap bước 5 bài — khớp slider /facebook (10, 15, 20 … 60) */
+/** Snap bước 10 bài — khớp slider /facebook (10, 20, 30) */
 export function snapFanpageCarePosts(posts: number) {
   const clamped = clampFanpageCarePosts(posts);
   return Math.round(clamped / FANPAGE_CARE_POST_STEP) * FANPAGE_CARE_POST_STEP;
@@ -59,8 +69,8 @@ export function parseFanpageCarePosts(id: string): number | null {
   if (dynamic) return Number(dynamic[1]);
   const legacy: Record<string, number> = {
     "fb-care-basic": 10,
-    "fb-care-advanced": 25,
-    "fb-care-pro": 35,
+    "fb-care-advanced": 20,
+    "fb-care-pro": 30,
   };
   return legacy[id] ?? null;
 }
@@ -79,11 +89,9 @@ export function getFanpageCareWorks(posts: number): string[] {
 }
 
 export function getFanpageCareTierLabel(posts: number) {
-  if (posts <= 10) return "Tối thiểu";
-  if (posts <= 20) return "Vừa phải";
-  if (posts <= 30) return "Tăng trưởng";
-  if (posts <= 40) return "Chuyên sâu";
-  return "Scale";
+  if (posts <= 10) return "CS FB 1";
+  if (posts <= 20) return "CS FB 2";
+  return "CS FB 3";
 }
 
 export const WEBSITE_BUILD_PACKAGES = [
@@ -179,29 +187,15 @@ export const FANPAGE_BUILD_PACKAGES = [
   },
 ] as const;
 
-export const FANPAGE_CARE_PACKAGES = [
-  {
-    id: "fb-care-basic",
-    posts: 10,
-    price: fanpageCarePrice(10),
-    works: getFanpageCareWorks(10),
-  },
-  {
-    id: "fb-care-advanced",
-    posts: 25,
-    price: fanpageCarePrice(25),
-    works: getFanpageCareWorks(25),
-  },
-  {
-    id: "fb-care-pro",
-    posts: 35,
-    price: fanpageCarePrice(35),
-    works: getFanpageCareWorks(35),
-  },
-] as const;
+export const FANPAGE_CARE_PACKAGES = FANPAGE_CARE_TIERS.map((tier) => ({
+  id: `fb-care-${tier.posts}`,
+  posts: tier.posts,
+  price: tier.price,
+  works: getFanpageCareWorks(tier.posts),
+}));
 
 /** Các mốc hiển thị trên bảng giá chiến lược & tham chiếu nhanh */
-export const FANPAGE_CARE_SHOWCASE_POSTS = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60] as const;
+export const FANPAGE_CARE_SHOWCASE_POSTS = [10, 20, 30] as const;
 
 export const FANPAGE_ADS_PACKAGES = [
   {

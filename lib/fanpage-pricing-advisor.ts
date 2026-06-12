@@ -1,7 +1,6 @@
 import {
   FANPAGE_ADS_PACKAGES,
   FANPAGE_BUILD_PACKAGES,
-  FANPAGE_CARE_PRICE_PER_POST,
   FANPAGE_CARE_REFERENCE_TIERS,
   fanpageCareItemId,
   fanpageCarePrice,
@@ -67,7 +66,7 @@ function getBuildPkg(id: string) {
   return FANPAGE_BUILD_PACKAGES.find((p) => p.id === id) ?? FANPAGE_BUILD_PACKAGES[1];
 }
 
-/** Map số bài → id động `fb-care-20` — giá = số bài × 150.000đ */
+/** Map số bài → id động `fb-care-20` — giá theo mốc 10/20/30 bài */
 export function careIdFromPosts(posts: number) {
   return fanpageCareItemId(posts);
 }
@@ -82,9 +81,9 @@ export function buildFanpageCareAlternatives(selectedPosts: number): FanpageCare
 }
 
 function budgetCapPosts(budgetTier: number, hasAds: boolean): number {
-  if (budgetTier === 0) return hasAds ? 15 : 20;
-  if (budgetTier === 1) return 30;
-  return 60;
+  if (budgetTier === 0) return hasAds ? 10 : 20;
+  if (budgetTier === 1) return 20;
+  return 30;
 }
 
 function pickFanpagePosts(
@@ -116,8 +115,8 @@ function buildCareReason(posts: number, profile: FanpageProfile, tier: string): 
     (p) => `${p} bài = ${formatPriceVnd(fanpageCarePrice(p))}`,
   ).join(" · ");
 
-  let detail = `Chọn ${posts} bài/th (${formatPriceVnd(price)}) — mức "${tierLabel}" cho gói ${tier}.`;
-  detail += ` Công thức: ${formatPriceVnd(FANPAGE_CARE_PRICE_PER_POST)}/bài (${ref}).`;
+  let detail = `Chọn ${posts} bài/th (${formatPriceVnd(price)}) — gói "${tierLabel}" cho mức ${tier}.`;
+  detail += ` Bảng giá: ${ref}.`;
 
   if (posts === 10) {
     detail += " Phù hợp duy trì hiện diện cơ bản, ngân sách gọn.";

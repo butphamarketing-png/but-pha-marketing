@@ -6,6 +6,7 @@ import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Spa
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { db } from "@/lib/useData";
 import { AuditModal } from "@/components/shared/AuditModal";
+import { fanpageCarePrice, snapFanpageCarePosts } from "@/lib/service-pricing";
 
 const config: PlatformConfig = {
   name: "Facebook",
@@ -51,9 +52,7 @@ export default function FacebookPage() {
   const [postsPerMonth, setPostsPerMonth] = useState(30);
   const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
 
-  const carePrice = useMemo(() => {
-    return postsPerMonth * 150000;
-  }, [postsPerMonth]);
+  const carePrice = useMemo(() => fanpageCarePrice(postsPerMonth), [postsPerMonth]);
 
   const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
     setCheckoutPkg({
@@ -206,13 +205,18 @@ export default function FacebookPage() {
                 <div className="relative h-12 flex items-center px-2">
                   <div className="absolute -top-8 left-0 right-0 flex justify-between px-1 text-[9px] font-medium text-slate-500 sm:text-[10px]">
                     <span>10 bài</span>
-                    <span className="absolute left-1/2 -translate-x-1/2">35 bài</span>
-                    <span>60 bài</span>
+                    <span className="absolute left-1/2 -translate-x-1/2">20 bài</span>
+                    <span>30 bài</span>
                   </div>
                   <div className="absolute h-3 w-full rounded-full bg-indigo-100" />
-                  <div className="absolute h-3 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.6)]" style={{ width: `${((postsPerMonth - 10) / 50) * 100}%` }} />
+                  <div className="absolute h-3 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.6)]" style={{ width: `${((postsPerMonth - 10) / 20) * 100}%` }} />
                   <input
-                    type="range" min="10" max="60" value={postsPerMonth} onChange={(e) => setPostsPerMonth(parseInt(e.target.value))}
+                    type="range"
+                    min="10"
+                    max="30"
+                    step="10"
+                    value={postsPerMonth}
+                    onChange={(e) => setPostsPerMonth(snapFanpageCarePosts(parseInt(e.target.value, 10)))}
                     className="absolute w-full appearance-none bg-transparent cursor-pointer z-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-10 [&::-webkit-slider-thumb]:w-10 sm:[&::-webkit-slider-thumb]:h-12 sm:[&::-webkit-slider-thumb]:w-12 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[6px] [&::-webkit-slider-thumb]:border-blue-500"
                   />
                 </div>
