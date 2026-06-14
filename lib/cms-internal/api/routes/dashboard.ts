@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { db, receiptsTable, expensesTable, contractsTable, billingPeriodsTable, customersTable, invoicesTable } from "@/lib/cms-internal/db";
+import { db, receiptsTable, expensesTable, billingPeriodsTable, customersTable, invoicesTable } from "@/lib/cms-internal/db";
 import { sql, gte, lte, and, eq, inArray } from "drizzle-orm";
 import { GetDashboardSummaryQueryParams } from "@/lib/cms-internal/api-zod";
 import { serializeBillingPeriod } from "@/lib/cms-billing-periods";
@@ -25,7 +25,7 @@ router.get("/dashboard/summary", async (req, res) => {
   const prevLastDay = new Date(prevYear, prevMonth, 0).getDate();
   const prevTo = `${prevYear}-${String(prevMonth).padStart(2, "0")}-${String(prevLastDay).padStart(2, "0")}`;
 
-  const [revenueResult, expenseResult, prevRevenueResult, prevExpenseResult, allTimeRevenue, allTimeExpenses, contracts] = await Promise.all([
+  const [revenueResult, expenseResult, prevRevenueResult, prevExpenseResult, allTimeRevenue, allTimeExpenses, receivableRows] = await Promise.all([
     db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(receiptsTable)
       .where(and(gte(receiptsTable.receiptDate, fromDate), lte(receiptsTable.receiptDate, toDate))),
     db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(expensesTable)
@@ -36,7 +36,10 @@ router.get("/dashboard/summary", async (req, res) => {
       .where(and(gte(expensesTable.expenseDate, prevFrom), lte(expensesTable.expenseDate, prevTo))),
     db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(receiptsTable),
     db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(expensesTable),
-    db.select({ totalValue: contractsTable.totalValue, paidAmount: contractsTable.paidAmount }).from(contractsTable),
+    db.select({
+      amountDue: billingPeriodsTable.amountDue,
+      amountPaid: billingPeriodsTable.amountPaid,
+    }).from(billingPeriodsTable).where(inArray(billingPeriodsTable.status, ["pending", "partial", "overdue"])),
   ]);
 
   const totalRevenue = parseFloat(revenueResult[0].total);
@@ -51,9 +54,10 @@ router.get("/dashboard/summary", async (req, res) => {
     getRecognizedRevenueForMonth(prevYear, prevMonth),
   ]);
 
-  const totalReceivable = contracts.reduce((sum, c) => {
-    const remaining = parseFloat(c.totalValue ?? "0") - parseFloat(c.paidAmount ?? "0");
-    return sum + Math.max(0, remaining);
+  const totalReceivable = receivableRows.reduce((sum, row) => {
+    const due = parseFloat(row.amountDue ?? "0");
+    const paid = parseFloat(row.amountPaid ?? "0");
+    return sum + Math.max(0, due - paid);
   }, 0);
 
   const cashBalance = parseFloat(allTimeRevenue[0].total) - parseFloat(allTimeExpenses[0].total);

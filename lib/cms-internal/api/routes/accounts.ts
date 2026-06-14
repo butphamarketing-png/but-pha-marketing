@@ -1,9 +1,25 @@
 import { Router } from "express";
-import { db, contractsTable, customersTable, expensesTable, suppliersTable } from "@/lib/cms-internal/db";
-import { eq, sql } from "drizzle-orm";
+import {
+  db,
+  billingPeriodsTable,
+  contractsTable,
+  customersTable,
+  expensesTable,
+  suppliersTable,
+} from "@/lib/cms-internal/db";
+import { eq, sql, inArray } from "drizzle-orm";
 import { ListAccountsReceivableQueryParams, ListAccountsPayableQueryParams } from "@/lib/cms-internal/api-zod";
 
 const router = Router();
+
+function mapReceivableStatus(
+  periodStatus: string,
+  remainingAmount: number,
+): "paid" | "unpaid" | "overdue" {
+  if (remainingAmount <= 0 || periodStatus === "paid") return "paid";
+  if (periodStatus === "overdue") return "overdue";
+  return "unpaid";
+}
 
 router.get("/accounts-receivable", async (req, res) => {
   const query = ListAccountsReceivableQueryParams.safeParse(req.query);
@@ -11,57 +27,68 @@ router.get("/accounts-receivable", async (req, res) => {
   const { status, customerId, page = 1, limit = 20 } = query.data;
   const offset = (page - 1) * limit;
 
-  const today = new Date().toISOString().split("T")[0];
-
-  const contracts = await db
+  const rows = await db
     .select({
-      contractId: contractsTable.id,
+      id: billingPeriodsTable.id,
+      contractId: billingPeriodsTable.contractId,
       contractCode: contractsTable.code,
-      customerId: contractsTable.customerId,
-      totalValue: contractsTable.totalValue,
-      paidAmount: contractsTable.paidAmount,
-      dueDate: contractsTable.dueDate,
+      customerId: billingPeriodsTable.customerId,
       customerName: customersTable.name,
+      amountDue: billingPeriodsTable.amountDue,
+      amountPaid: billingPeriodsTable.amountPaid,
+      dueDate: billingPeriodsTable.dueDate,
+      periodStatus: billingPeriodsTable.status,
+      label: billingPeriodsTable.label,
     })
-    .from(contractsTable)
-    .leftJoin(customersTable, eq(contractsTable.customerId, customersTable.id));
+    .from(billingPeriodsTable)
+    .leftJoin(customersTable, eq(billingPeriodsTable.customerId, customersTable.id))
+    .leftJoin(contractsTable, eq(billingPeriodsTable.contractId, contractsTable.id))
+    .where(inArray(billingPeriodsTable.status, ["pending", "partial", "overdue", "paid"]))
+    .orderBy(billingPeriodsTable.dueDate);
 
-  const items = contracts
-    .map((c) => {
-      const totalContractValue = parseFloat(c.totalValue ?? "0");
-      const paid = parseFloat(c.paidAmount ?? "0");
-      const remaining = totalContractValue - paid;
-      let arStatus: string;
-      if (remaining <= 0) {
-        arStatus = "paid";
-      } else if (c.dueDate && c.dueDate < today) {
-        arStatus = "overdue";
-      } else {
-        arStatus = "unpaid";
-      }
+  const items = rows
+    .map((row) => {
+      const totalContractValue = parseFloat(row.amountDue ?? "0");
+      const paidAmount = parseFloat(row.amountPaid ?? "0");
+      const remainingAmount = Math.max(0, totalContractValue - paidAmount);
+      const arStatus = mapReceivableStatus(row.periodStatus ?? "pending", remainingAmount);
       return {
-        customerId: c.customerId,
-        customerName: c.customerName ?? "Unknown",
-        contractId: c.contractId,
-        contractCode: c.contractCode,
+        billingPeriodId: row.id,
+        customerId: row.customerId,
+        customerName: row.customerName ?? "Unknown",
+        contractId: row.contractId,
+        contractCode: row.contractCode ?? "—",
+        periodLabel: row.label,
         totalContractValue,
-        paidAmount: paid,
-        remainingAmount: remaining,
-        dueDate: c.dueDate,
+        paidAmount,
+        remainingAmount,
+        dueDate: row.dueDate,
         status: arStatus,
       };
     })
     .filter((item) => {
+      if (item.remainingAmount <= 0 && item.status === "paid") {
+        return status === "paid";
+      }
       if (status && item.status !== status) return false;
       if (customerId && item.customerId !== customerId) return false;
-      return true;
+      if (!status && item.status === "paid") return false;
+      return item.remainingAmount > 0 || status === "paid";
     });
 
   const total = items.length;
   const paginated = items.slice(offset, offset + limit);
-  const totalReceivable = items.filter((i) => i.status !== "paid").reduce((sum, i) => sum + i.remainingAmount, 0);
+  const totalReceivable = items
+    .filter((item) => item.status !== "paid")
+    .reduce((sum, item) => sum + item.remainingAmount, 0);
 
-  return res.json({ data: paginated, total, page, limit, totalReceivable });
+  return res.json({
+    data: paginated,
+    total,
+    page,
+    limit,
+    totalReceivable: Math.round(totalReceivable * 100) / 100,
+  });
 });
 
 router.get("/accounts-payable", async (req, res) => {
@@ -106,9 +133,17 @@ router.get("/accounts-payable", async (req, res) => {
 
   const total = items.length;
   const paginated = items.slice(offset, offset + limit);
-  const totalPayable = items.filter((i) => i.status !== "paid").reduce((sum, i) => sum + i.remainingAmount, 0);
+  const totalPayable = items
+    .filter((i) => i.status !== "paid")
+    .reduce((sum, i) => sum + i.remainingAmount, 0);
 
-  return res.json({ data: paginated, total, page, limit, totalPayable });
+  return res.json({
+    data: paginated,
+    total,
+    page,
+    limit,
+    totalPayable: Math.round(totalPayable * 100) / 100,
+  });
 });
 
 export default router;

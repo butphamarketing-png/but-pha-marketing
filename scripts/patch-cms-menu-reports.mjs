@@ -1,5 +1,5 @@
 /**
- * Patches public/cms bundle: hide legacy menu sections + add revenue-comparison report.
+ * Patches public/cms bundle: hide legacy menu, reports, accounting (AR/AP, aging, reconciliation).
  * Run after build:cms or directly on committed bundle: node scripts/patch-cms-menu-reports.mjs
  */
 import fs from "node:fs";
@@ -92,6 +92,109 @@ if (s.includes(routeAnchor) && !s.includes('path:"/reports/revenue-comparison"')
   console.log("Routes already present");
 } else {
   console.error("Could not find route insert anchor");
+  process.exit(1);
+}
+
+// 6) Thu—Chi: Công nợ → billing periods + Phải trả NCC
+const thuChiMenuAnchor =
+  '{href:"/invoices",label:"Hóa Đơn & Biên Lai",icon:jq},{href:"/debts",label:"Công Nợ",icon:xq}';
+const thuChiMenuReplacement =
+  '{href:"/invoices",label:"Hóa Đơn & Biên Lai",icon:jq},{href:"/accounts-receivable",label:"Công Nợ",icon:xq},{href:"/accounts-payable",label:"Phải Trả NCC",icon:tm}';
+
+if (s.includes(thuChiMenuAnchor)) {
+  s = s.replace(thuChiMenuAnchor, thuChiMenuReplacement);
+  console.log("Updated Thu—Chi menu (AR + AP)");
+} else if (s.includes('href:"/accounts-payable",label:"Phải Trả NCC"')) {
+  console.log("Thu—Chi menu already updated");
+} else {
+  console.error("Could not find Thu—Chi menu anchor");
+  process.exit(1);
+}
+
+// 7) /debts route → billing-period AR page (pI)
+const debtsRouteAnchor =
+  'path:"/debts",component:()=>c.jsx(Le,{comp:x$})}),c.jsx(Re,{path:"/admin/debts",component:()=>c.jsx(Le,{comp:x$})';
+const debtsRouteReplacement =
+  'path:"/debts",component:()=>c.jsx(Le,{comp:pI,title:"Công Nợ Phải Thu"})}),c.jsx(Re,{path:"/admin/debts",component:()=>c.jsx(Le,{comp:pI,title:"Công Nợ Phải Thu"})';
+
+if (s.includes(debtsRouteAnchor)) {
+  s = s.replace(debtsRouteAnchor, debtsRouteReplacement);
+  console.log("Redirected /debts to billing-period AR");
+} else if (s.includes('path:"/debts",component:()=>c.jsx(Le,{comp:pI')) {
+  console.log("/debts route already uses pI");
+} else {
+  console.error("Could not find /debts route anchor");
+  process.exit(1);
+}
+
+// 8) AR page subtitle — billing periods
+const arSubtitleAnchor = 'subtitle:"Theo dõi các khoản tiền khách hàng còn nợ"';
+const arSubtitleReplacement = 'subtitle:"Theo kỳ thanh toán — đồng bộ từ khách hàng Đã TT"';
+if (s.includes(arSubtitleAnchor)) {
+  s = s.replace(arSubtitleAnchor, arSubtitleReplacement);
+  console.log("Updated AR subtitle");
+} else if (s.includes(arSubtitleReplacement)) {
+  console.log("AR subtitle already updated");
+}
+
+// 9) Báo Cáo: Tuổi nợ + Đối soát HĐ
+const reportsMenuAnchor =
+  '{href:"/reports/revenue-comparison",label:"Chênh lệch DT",icon:fG},{href:"/reports/expenses"';
+const reportsMenuReplacement =
+  '{href:"/reports/revenue-comparison",label:"Chênh lệch DT",icon:fG},{href:"/reports/ar-aging",label:"Tuổi nợ",icon:xq},{href:"/reports/invoice-reconciliation",label:"Đối soát HĐ",icon:jq},{href:"/reports/expenses"';
+
+if (s.includes(reportsMenuAnchor) && !s.includes("/reports/ar-aging")) {
+  s = s.replace(reportsMenuAnchor, reportsMenuReplacement);
+  console.log("Added AR aging + invoice reconciliation menu items");
+} else if (s.includes("/reports/ar-aging")) {
+  console.log("Report menu items already present");
+} else {
+  console.error("Could not find Báo Cáo menu anchor for aging/reconciliation");
+  process.exit(1);
+}
+
+// 10) API hooks
+const apiHookAnchor =
+  "function RCmpQ(e,t){const n=KCmpOpts(e);return{...vn(n),queryKey:n.queryKey}}const MZ=e=>";
+const apiHookInsert = `function RCmpQ(e,t){const n=KCmpOpts(e);return{...vn(n),queryKey:n.queryKey}}const ArAgUrl=()=>"/api/reports/ar-aging",ArAgFetch=async(e,t)=>it(ArAgUrl(),{...t,method:"GET"}),ArAgKey=()=>["/api/reports/ar-aging"],ArAgOpts=e=>{const{query:n,request:r}={};return{queryKey:n?.queryKey??ArAgKey(),queryFn:({signal:o})=>ArAgFetch(e,{signal:o,...r}),...n}};function ArAgingQ(e,t){const n=ArAgOpts(e);return{...vn(n),queryKey:n.queryKey}}const InvRecUrl=()=>"/api/reports/invoice-reconciliation",InvRecFetch=async(e,t)=>it(InvRecUrl(),{...t,method:"GET"}),InvRecKey=()=>["/api/reports/invoice-reconciliation"],InvRecOpts=()=>{const{query:n,request:r}={};return{queryKey:n?.queryKey??InvRecKey(),queryFn:({signal:o})=>InvRecFetch({},{signal:o,...r}),...n}};function InvRecQ(){const n=InvRecOpts();return{...vn(n),queryKey:n.queryKey}}const MZ=e=>`;
+
+if (s.includes(apiHookAnchor) && !s.includes("ArAgingQ")) {
+  s = s.replace(apiHookAnchor, apiHookInsert);
+  console.log("Added AR aging + invoice reconciliation API hooks");
+} else if (s.includes("ArAgingQ")) {
+  console.log("Accounting API hooks already present");
+} else {
+  console.error("Could not find API hook anchor for accounting reports");
+  process.exit(1);
+}
+
+// 11) Page components
+const pageCompAnchor = "function RCmpPg(){";
+const pageCompInsert = `function ArAgingPg(){const{data:n,isLoading:r}=ArAgingQ(),a=n?.buckets??[];return c.jsxs("div",{children:[c.jsx(tr,{title:"Tuổi Nợ (AR Aging)",subtitle:"Phân loại công nợ phải thu theo hạn thanh toán",children:c.jsxs("div",{className:"flex flex-wrap gap-2",children:[c.jsxs("div",{className:"rounded-lg bg-orange-50 border border-orange-200 px-3 py-2 text-xs",children:[c.jsx("span",{className:"text-orange-600",children:"Tổng nợ: "}),c.jsx("span",{className:"font-bold text-orange-700",children:Be(n?.totalOutstanding??0)})]}),c.jsxs("div",{className:"rounded-lg bg-slate-50 border px-3 py-2 text-xs",children:[c.jsx("span",{children:"Số kỳ: "}),c.jsx("span",{className:"font-bold",children:n?.totalCount??0})]})]})}),r?c.jsx("div",{className:"text-muted-foreground py-8 text-center",children:"Đang tải..."}):a.map((b,u)=>c.jsxs("div",{className:"rounded-lg border bg-card mb-4 overflow-hidden",children:[c.jsxs("div",{className:"flex justify-between items-center px-4 py-3 bg-muted/30 border-b",children:[c.jsx("span",{className:"font-medium",children:b.label}),c.jsxs("span",{className:"text-sm",children:[b.count," kỳ · ",c.jsx("span",{className:"font-bold text-orange-600",children:Be(b.amount)})]})]}),b.items.length>0&&c.jsxs("table",{className:"w-full text-sm",children:[c.jsx("thead",{children:c.jsxs("tr",{className:"border-b",children:[c.jsx("th",{className:"px-4 py-2 text-left",children:"KH"}),c.jsx("th",{className:"px-4 py-2 text-left",children:"HĐ"}),c.jsx("th",{className:"px-4 py-2 text-left",children:"Hạn"}),c.jsx("th",{className:"px-4 py-2 text-right",children:"Còn nợ"})]})}),c.jsx("tbody",{children:b.items.map((o,h)=>c.jsxs("tr",{className:"border-b last:border-0",children:[c.jsx("td",{className:"px-4 py-2",children:o.customerName}),c.jsx("td",{className:"px-4 py-2",children:o.contractCode??"—"}),c.jsx("td",{className:"px-4 py-2",children:tl(o.dueDate)}),c.jsx("td",{className:"px-4 py-2 text-right font-medium text-orange-600",children:Be(o.remainingAmount)})]},h))})]})]},u))]})}function InvRecPg(){const{data:n,isLoading:r}=InvRecQ(),s=n?.summary,a=n?.unlinkedReceipts??[],i=n?.invoices??[];return c.jsxs("div",{children:[c.jsx(tr,{title:"Đối Soát Hóa Đơn",subtitle:"Liên kết hóa đơn với phiếu thu",children:c.jsxs("div",{className:"flex flex-wrap gap-2",children:[c.jsxs("div",{className:"rounded-lg bg-blue-50 border border-blue-200 px-3 py-2 text-xs",children:["HĐ: ",c.jsx("span",{className:"font-bold",children:s?.invoiceCount??0})]}),c.jsxs("div",{className:"rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs",children:["PT chưa liên kết: ",c.jsx("span",{className:"font-bold",children:s?.unlinkedReceiptCount??0})," (",Be(s?.unlinkedReceiptAmount??0),")"]}),c.jsxs("div",{className:"rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs",children:["HĐ chênh lệch: ",c.jsx("span",{className:"font-bold",children:s?.invoicesWithGap??0})]})]})}),r?c.jsx("div",{className:"py-8 text-center text-muted-foreground",children:"Đang tải..."}):c.jsxs(c.Fragment,{children:[c.jsx("h3",{className:"font-medium mb-2 mt-4",children:"Phiếu thu chưa liên kết HĐ"}),c.jsx("div",{className:"rounded-lg border overflow-hidden mb-6",children:c.jsxs("table",{className:"w-full text-sm",children:[c.jsx("thead",{children:c.jsxs("tr",{className:"bg-muted/40 border-b",children:[c.jsx("th",{className:"px-4 py-2 text-left",children:"Mã PT"}),c.jsx("th",{className:"px-4 py-2 text-left",children:"Ngày"}),c.jsx("th",{className:"px-4 py-2 text-right",children:"Số tiền"})]})}),c.jsx("tbody",{children:a.length===0?c.jsx("tr",{children:c.jsx("td",{colSpan:3,className:"px-4 py-4 text-center text-muted-foreground",children:"Không có"})}):a.map((o,u)=>c.jsxs("tr",{className:"border-b",children:[c.jsx("td",{className:"px-4 py-2",children:o.code}),c.jsx("td",{className:"px-4 py-2",children:tl(o.receiptDate)}),c.jsx("td",{className:"px-4 py-2 text-right",children:Be(o.amount)})]},u))})]})}),c.jsx("h3",{className:"font-medium mb-2",children:"Hóa đơn"}),c.jsx("div",{className:"rounded-lg border overflow-hidden",children:c.jsxs("table",{className:"w-full text-sm",children:[c.jsx("thead",{children:c.jsxs("tr",{className:"bg-muted/40 border-b",children:[c.jsx("th",{className:"px-4 py-2 text-left",children:"Mã HĐ"}),c.jsx("th",{className:"px-4 py-2 text-right",children:"Tổng HĐ"}),c.jsx("th",{className:"px-4 py-2 text-right",children:"Đã liên kết PT"}),c.jsx("th",{className:"px-4 py-2 text-right",children:"Chênh lệch"}),c.jsx("th",{className:"px-4 py-2 text-center",children:"Khớp"})]})}),c.jsx("tbody",{children:i.map((o,u)=>c.jsxs("tr",{className:"border-b",children:[c.jsx("td",{className:"px-4 py-2",children:o.code}),c.jsx("td",{className:"px-4 py-2 text-right",children:Be(o.totalAmount)}),c.jsx("td",{className:"px-4 py-2 text-right",children:Be(o.linkedReceiptAmount)}),c.jsx("td",{className:"px-4 py-2 text-right font-medium text-amber-600",children:Be(o.gap)}),c.jsx("td",{className:"px-4 py-2 text-center",children:o.fullyReconciled?"✓":"—"})]},u))})]})})]})]})}function RCmpPg(){`;
+
+if (s.includes(pageCompAnchor) && !s.includes("function ArAgingPg")) {
+  s = s.replace(pageCompAnchor, pageCompInsert);
+  console.log("Added AR aging + invoice reconciliation pages");
+} else if (s.includes("function ArAgingPg")) {
+  console.log("Accounting report pages already present");
+} else {
+  console.error("Could not find page component anchor");
+  process.exit(1);
+}
+
+// 12) Routes
+const agingRouteAnchor =
+  'c.jsx(Re,{path:"/admin/reports/revenue-comparison",component:()=>c.jsx(Le,{comp:RCmpPg,title:"Chênh lệch Doanh Thu"})}),c.jsx(Re,{path:"/admin/reports/profit"';
+const agingRouteInsert =
+  'c.jsx(Re,{path:"/admin/reports/revenue-comparison",component:()=>c.jsx(Le,{comp:RCmpPg,title:"Chênh lệch Doanh Thu"})}),c.jsx(Re,{path:"/reports/ar-aging",component:()=>c.jsx(Le,{comp:ArAgingPg,title:"Tuổi Nợ"})}),c.jsx(Re,{path:"/admin/reports/ar-aging",component:()=>c.jsx(Le,{comp:ArAgingPg,title:"Tuổi Nợ"})}),c.jsx(Re,{path:"/reports/invoice-reconciliation",component:()=>c.jsx(Le,{comp:InvRecPg,title:"Đối Soát HĐ"})}),c.jsx(Re,{path:"/admin/reports/invoice-reconciliation",component:()=>c.jsx(Le,{comp:InvRecPg,title:"Đối Soát HĐ"})}),c.jsx(Re,{path:"/admin/reports/profit"';
+
+if (s.includes(agingRouteAnchor) && !s.includes('path:"/reports/ar-aging"')) {
+  s = s.replace(agingRouteAnchor, agingRouteInsert);
+  console.log("Added AR aging + invoice reconciliation routes");
+} else if (s.includes('path:"/reports/ar-aging"')) {
+  console.log("Accounting report routes already present");
+} else {
+  console.error("Could not find route anchor for accounting reports");
   process.exit(1);
 }
 
