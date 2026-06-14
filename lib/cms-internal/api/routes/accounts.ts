@@ -101,24 +101,27 @@ router.get("/accounts-payable", async (req, res) => {
     .select({
       supplierId: expensesTable.supplierId,
       supplierName: suppliersTable.name,
-      category: expensesTable.category,
-      total: sql<string>`sum(${expensesTable.amount}::numeric)`,
+      totalAmount: sql<string>`COALESCE(sum(${expensesTable.amount}::numeric), 0)`,
+      paidAmount: sql<string>`COALESCE(sum(case when ${expensesTable.paymentStatus} = 'paid' then ${expensesTable.amount}::numeric else 0 end), 0)`,
+      unpaidAmount: sql<string>`COALESCE(sum(case when ${expensesTable.paymentStatus} != 'paid' then ${expensesTable.amount}::numeric else 0 end), 0)`,
     })
     .from(expensesTable)
     .leftJoin(suppliersTable, eq(expensesTable.supplierId, suppliersTable.id))
-    .groupBy(expensesTable.supplierId, suppliersTable.name, expensesTable.category);
+    .where(sql`${expensesTable.supplierId} is not null`)
+    .groupBy(expensesTable.supplierId, suppliersTable.name);
 
   const items = rows
     .filter((r) => r.supplierId !== null)
     .map((r) => {
-      const totalAmount = parseFloat(r.total ?? "0");
-      const paidAmount = 0;
-      const remainingAmount = totalAmount - paidAmount;
-      const arStatus = remainingAmount <= 0 ? "paid" : "unpaid";
+      const totalAmount = parseFloat(r.totalAmount ?? "0");
+      const paidAmount = parseFloat(r.paidAmount ?? "0");
+      const remainingAmount = parseFloat(r.unpaidAmount ?? "0");
+      const arStatus =
+        remainingAmount <= 0 ? "paid" : paidAmount > 0 ? "partial" : "unpaid";
       return {
         supplierId: r.supplierId!,
         supplierName: r.supplierName ?? "Unknown",
-        category: r.category,
+        category: null,
         totalAmount,
         paidAmount,
         remainingAmount,

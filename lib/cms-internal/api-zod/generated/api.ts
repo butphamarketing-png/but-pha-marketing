@@ -49,7 +49,16 @@ export const CreateCustomerBody = zod.object({
   "phone": zod.string().optional(),
   "email": zod.string().optional(),
   "address": zod.string().optional(),
-  "notes": zod.string().optional()
+  "notes": zod.string().optional(),
+  "taxId": zod.string().optional(),
+  "taxCode": zod.string().optional(),
+  "externalId": zod.string().optional(),
+  "customerType": zod.enum(["individual", "company"]).optional(),
+  "contactPerson": zod.string().optional(),
+  "invoiceAddress": zod.string().optional(),
+  "needsVatInvoice": zod.boolean().optional(),
+  "customerStatus": zod.string().optional(),
+  "status": zod.string().optional(),
 })
 
 
@@ -77,7 +86,16 @@ export const UpdateCustomerBody = zod.object({
   "phone": zod.string().optional(),
   "email": zod.string().optional(),
   "address": zod.string().optional(),
-  "notes": zod.string().optional()
+  "notes": zod.string().optional(),
+  "taxId": zod.string().optional(),
+  "taxCode": zod.string().optional(),
+  "externalId": zod.string().optional(),
+  "customerType": zod.enum(["individual", "company"]).optional(),
+  "contactPerson": zod.string().optional(),
+  "invoiceAddress": zod.string().optional(),
+  "needsVatInvoice": zod.boolean().optional(),
+  "customerStatus": zod.string().optional(),
+  "status": zod.string().optional(),
 })
 
 export const UpdateCustomerResponse = zod.object({
@@ -490,9 +508,12 @@ export const ListExpensesResponse = zod.object({
 export const CreateExpenseBody = zod.object({
   "supplierId": zod.number().optional(),
   "serviceId": zod.number().optional(),
+  "customerId": zod.number().optional(),
   "category": zod.string(),
   "amount": zod.number(),
   "expenseDate": zod.string(),
+  "paymentStatus": zod.enum(["paid", "unpaid"]).optional(),
+  "status": zod.enum(["paid", "unpaid"]).optional(),
   "createdBy": zod.string().optional(),
   "notes": zod.string().optional()
 })
@@ -525,9 +546,12 @@ export const UpdateExpenseParams = zod.object({
 export const UpdateExpenseBody = zod.object({
   "supplierId": zod.number().optional(),
   "serviceId": zod.number().optional(),
+  "customerId": zod.number().optional(),
   "category": zod.string().optional(),
   "amount": zod.number().optional(),
   "expenseDate": zod.string().optional(),
+  "paymentStatus": zod.enum(["paid", "unpaid"]).optional(),
+  "status": zod.enum(["paid", "unpaid"]).optional(),
   "createdBy": zod.string().optional(),
   "notes": zod.string().optional()
 })

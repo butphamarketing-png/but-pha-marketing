@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { requireCmsAuth } from "../middleware/auth";
 import healthRouter from "./health";
 import customersRouter from "./customers";
 import servicesRouter from "./services";
@@ -28,6 +29,7 @@ import invoicesRouter from "./invoices";
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(requireCmsAuth);
 router.use(customersRouter);
 router.use(servicesRouter);
 router.use(suppliersRouter);

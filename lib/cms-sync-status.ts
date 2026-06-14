@@ -57,7 +57,7 @@ export function describeCmsSyncResult(
     return {
       level: "warn",
       title: "ERP: Đồng bộ một phần",
-      detail: `${parts.join(" · ")} · Lỗi: ${result.errors.slice(0, 2).join("; ")}`,
+      detail: `${parts.join(" · ")} · Lỗi: ${result.errors.slice(0, 5).join("; ")}`,
     };
   }
 

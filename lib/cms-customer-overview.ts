@@ -10,6 +10,7 @@ import {
 } from "@/lib/cms-internal/db";
 import { eq, desc, sql, inArray } from "drizzle-orm";
 import { serializeBillingPeriod } from "@/lib/cms-billing-periods";
+import { loadMarketingCustomerByExternalId } from "@/lib/cms-resync-from-marketing";
 
 export async function getCustomerOverview(customerId: number) {
   const [customer] = await db
@@ -47,6 +48,16 @@ export async function getCustomerOverview(customerId: number) {
 
   const serviceById = new Map(services.map((s) => [s.id, s]));
 
+  let marketingFound = false;
+  if (customer.externalId) {
+    try {
+      const marketingRow = await loadMarketingCustomerByExternalId(customer.externalId);
+      marketingFound = Boolean(marketingRow);
+    } catch {
+      marketingFound = false;
+    }
+  }
+
   return {
     customer,
     contracts: contracts.map((contract) => ({
@@ -83,7 +94,8 @@ export async function getCustomerOverview(customerId: number) {
     },
     sync: {
       externalId: customer.externalId,
-      linkedToMarketing: Boolean(customer.externalId),
+      linkedToMarketing: marketingFound,
+      marketingAdminUrl: customer.externalId ? "/adminbp" : null,
     },
   };
 }

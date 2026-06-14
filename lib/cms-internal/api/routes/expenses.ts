@@ -25,6 +25,8 @@ async function enrichExpense(expense: typeof expensesTable.$inferSelect) {
   return {
     ...expense,
     amount: parseFloat(expense.amount),
+    paymentStatus: expense.paymentStatus ?? "unpaid",
+    status: expense.paymentStatus ?? "unpaid",
     supplierName,
     customerName,
     serviceName,
@@ -35,6 +37,11 @@ async function generateExpenseCode(): Promise<string> {
   const result = await db.select({ count: sql<number>`count(*)::int` }).from(expensesTable);
   const count = result[0].count + 1;
   return `PC${String(count).padStart(4, "0")}`;
+}
+
+function resolvePaymentStatus(body: Record<string, unknown>): "paid" | "unpaid" {
+  const raw = body.paymentStatus ?? body.status;
+  return raw === "paid" ? "paid" : "unpaid";
 }
 
 router.get("/expenses", async (req, res) => {
@@ -73,6 +80,7 @@ router.post("/expenses", async (req, res) => {
   const [expense] = await db.insert(expensesTable).values({
     ...body.data,
     customerId: Number.isFinite(customerId) ? customerId : undefined,
+    paymentStatus: resolvePaymentStatus(req.body ?? {}),
     code,
     amount: String(body.data.amount),
   }).returning();
@@ -105,6 +113,9 @@ router.patch("/expenses/:id", async (req, res) => {
       ? Number(req.body.customerId)
       : null;
     updateData.customerId = Number.isFinite(customerId) ? customerId : null;
+  }
+  if (req.body?.paymentStatus !== undefined || req.body?.status !== undefined) {
+    updateData.paymentStatus = resolvePaymentStatus(req.body ?? {});
   }
 
   const [updated] = await db.update(expensesTable).set(updateData).where(eq(expensesTable.id, params.data.id)).returning();

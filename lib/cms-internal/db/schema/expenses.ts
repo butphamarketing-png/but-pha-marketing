@@ -10,6 +10,7 @@ export const expensesTable = erpSchema.table("expenses", {
   category: text("category").notNull(),
   amount: numeric("amount", { precision: 18, scale: 2 }).notNull(),
   expenseDate: date("expense_date", { mode: "string" }).notNull(),
+  paymentStatus: text("payment_status").notNull().default("unpaid"),
   createdBy: text("created_by").notNull().default("Admin"),
   notes: text("notes"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

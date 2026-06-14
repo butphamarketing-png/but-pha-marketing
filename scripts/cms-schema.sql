@@ -373,3 +373,7 @@ alter table erp.customers add column if not exists customer_status text default 
 -- Pha 4: chi phí gắn khách hàng (P&L theo KH)
 alter table erp.expenses add column if not exists customer_id integer references erp.customers(id) on delete set null;
 create index if not exists erp_expenses_customer_idx on erp.expenses (customer_id);
+
+-- Pha 5: trạng thái thanh toán phiếu chi (AP thật)
+alter table erp.expenses add column if not exists payment_status text not null default 'unpaid';
+create index if not exists erp_expenses_payment_status_idx on erp.expenses (payment_status);
