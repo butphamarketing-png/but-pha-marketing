@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import HomePageClient from "./HomePageClient";
 import { getDynamicMetadata, SITE_URL } from "@/lib/seo";
+import { SITE_CONTACT } from "@/lib/site-contact";
 
 export async function generateMetadata() {
   return getDynamicMetadata("/", {
@@ -29,6 +30,14 @@ export default function Home() {
         url: baseUrl,
         logo: `${baseUrl}/logo.jpg`,
         image: `${baseUrl}/opengraph.jpg`,
+        email: SITE_CONTACT.email,
+        telephone: `+84${SITE_CONTACT.hotline.replace(/^0/, "")}`,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: SITE_CONTACT.address,
+          addressLocality: "Hồ Chí Minh",
+          addressCountry: "VN",
+        },
       },
       {
         "@type": "WebSite",

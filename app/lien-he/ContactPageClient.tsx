@@ -25,7 +25,7 @@ const ParticleBackground = dynamic(
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
-import { resolveHotline } from "@/lib/site-contact";
+import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 
 type ContactFormState = {
   name: string;
@@ -187,9 +187,9 @@ export default function ContactPageClient() {
 
                 <div className="brand-card p-6">
                   {[
-                    { icon: Phone, title: "Hotline", value: resolveHotline(settings?.hotline) },
-                    { icon: Mail, title: "Email", value: settings?.email || "hello@butphamarketing.com" },
-                    { icon: MapPin, title: "Địa chỉ", value: settings?.address || "123 Đường ABC, P. An Lạc, Q. Bình Tân, TP. HCM" },
+                    { icon: Phone, title: "Hotline", value: resolveHotline(settings?.hotline), href: getTelHref(settings?.hotline) },
+                    { icon: Mail, title: "Email", value: resolveEmail(settings?.email), href: getMailtoHref(settings?.email) },
+                    { icon: MapPin, title: "Địa chỉ", value: resolveAddress(settings?.address) },
                     { icon: Clock3, title: "Thời gian làm việc", value: "08:30 - 17:30 (Thứ 2 - Thứ 7)" },
                   ].map((item, index) => (
                     <div key={item.title} className={index === 0 ? "" : "border-t border-indigo-200 pt-5 mt-5"}>
@@ -199,7 +199,13 @@ export default function ContactPageClient() {
                         </span>
                         <div>
                           <p className="text-sm font-semibold text-slate-600">{item.title}</p>
-                          <p className="mt-1 text-2xl font-bold text-slate-900">{item.value}</p>
+                          {item.href ? (
+                            <a href={item.href} className="mt-1 block text-2xl font-bold text-slate-900 hover:text-violet-700">
+                              {item.value}
+                            </a>
+                          ) : (
+                            <p className="mt-1 text-2xl font-bold text-slate-900">{item.value}</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -352,8 +358,12 @@ export default function ContactPageClient() {
             <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li>{resolveHotline(settings?.hotline)}</li>
-              <li>{settings?.email || "hello@butphamarketing.com"}</li>
-              <li>{settings?.address || "123 Đường ABC, P. An Lạc, Q. Bình Tân, TP. HCM"}</li>
+              <li>
+                <a href={getMailtoHref(settings?.email)} className="hover:text-white">
+                  {resolveEmail(settings?.email)}
+                </a>
+              </li>
+              <li>{resolveAddress(settings?.address)}</li>
             </ul>
           </div>
 

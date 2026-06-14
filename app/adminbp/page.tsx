@@ -1892,8 +1892,8 @@ export default function AdminPage() {
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">
                 <h3 className="font-bold text-white">Thông tin liên hệ</h3>
-                <input value={settings.address || ""} onChange={e => updateSettings({ address: e.target.value })} placeholder="Địa chỉ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                <input value={settings.email || ""} onChange={e => updateSettings({ email: e.target.value })} placeholder="Email" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                <input value={settings.address || ""} onChange={e => updateSettings({ address: e.target.value })} placeholder="Tổ 8 ấp 6 Bình Mỹ Hồ Chí Minh" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                <input value={settings.email || ""} onChange={e => updateSettings({ email: e.target.value })} placeholder="butphamarketing@gmail.com" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <input value={settings.fanpage || ""} onChange={e => updateSettings({ fanpage: e.target.value })} placeholder="Fanpage URL" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                 <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
                   <h4 className="text-sm font-semibold text-white">Soft UI Sounds</h4>

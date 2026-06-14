@@ -28,7 +28,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
-import { resolveHotline } from "@/lib/site-contact";
+import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 import { WebsitePurposeSection } from "@/components/home/WebsitePurposeSection";
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
@@ -845,7 +845,7 @@ export default function HomePageClient() {
                       <MapPinned className="h-4 w-4" />
                     </div>
                     <div className="text-violet-100">
-                      <p className="text-sm font-medium">{settings.address || "Hồ Chí Minh, Việt Nam"}</p>
+                      <p className="text-sm font-medium">{resolveAddress(settings.address)}</p>
                     </div>
                   </li>
                   <li className="flex items-center gap-3">
@@ -853,7 +853,9 @@ export default function HomePageClient() {
                       <Phone className="h-4 w-4" />
                     </div>
                     <div className="text-violet-100">
-                      <p className="text-sm font-medium">{resolveHotline(settings.hotline)}</p>
+                      <a href={getTelHref(settings.hotline)} className="text-sm font-medium hover:text-white">
+                        {resolveHotline(settings.hotline)}
+                      </a>
                     </div>
                   </li>
                   <li className="flex items-center gap-3">
@@ -861,7 +863,9 @@ export default function HomePageClient() {
                       <MessageCircle className="h-4 w-4" />
                     </div>
                     <div className="text-violet-100">
-                      <p className="text-sm font-medium">{settings.email || "contact@butphamarketing.com"}</p>
+                      <a href={getMailtoHref(settings.email)} className="text-sm font-medium hover:text-white">
+                        {resolveEmail(settings.email)}
+                      </a>
                     </div>
                   </li>
                 </ul>

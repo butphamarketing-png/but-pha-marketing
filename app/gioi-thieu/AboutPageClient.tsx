@@ -28,7 +28,7 @@ import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { BRAND_GRADIENT } from "@/lib/brand-colors";
-import { resolveHotline } from "@/lib/site-contact";
+import { getMailtoHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 
 export default function AboutPageClient() {
   const [services, setServices] = useState<Service[]>([]);
@@ -401,8 +401,12 @@ export default function AboutPageClient() {
             <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
               <li>{resolveHotline(settings?.hotline)}</li>
-              <li>{settings?.email || "hello@butphamarketing.com"}</li>
-              <li>{settings?.address || "123 Đường ABC, TP. HCM"}</li>
+              <li>
+                <a href={getMailtoHref(settings?.email)} className="hover:text-white">
+                  {resolveEmail(settings?.email)}
+                </a>
+              </li>
+              <li>{resolveAddress(settings?.address)}</li>
             </ul>
           </div>
 

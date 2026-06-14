@@ -9,7 +9,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { DEFAULT_HOTLINE, normalizeStoredHotline } from "@/lib/site-contact";
+import {
+  DEFAULT_ADDRESS,
+  DEFAULT_EMAIL,
+  DEFAULT_HOTLINE,
+  normalizeStoredAddress,
+  normalizeStoredEmail,
+  normalizeStoredHotline,
+} from "@/lib/site-contact";
 
 export interface CaseStudyItem {
   id: string;
@@ -201,8 +208,8 @@ const defaultSettings: SiteSettings = {
   favicon: "/logo.png",
   content: "",
   hotline: DEFAULT_HOTLINE,
-  address: "",
-  email: "",
+  address: DEFAULT_ADDRESS,
+  email: DEFAULT_EMAIL,
   fanpage: "",
   brandColor: "#312E81",
   googleAnalytics: "G-D0XPZGPZNG",
@@ -291,6 +298,8 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     ...defaultSettings,
     ...parsed,
     hotline: normalizeStoredHotline(parsed.hotline ?? defaultSettings.hotline),
+    email: normalizeStoredEmail(parsed.email ?? defaultSettings.email),
+    address: normalizeStoredAddress(parsed.address ?? defaultSettings.address),
     media: mergeMedia(parsed.media),
     cms: mergeCms(parsed.cms),
     seoIntegrations: {

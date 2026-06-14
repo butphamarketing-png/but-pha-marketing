@@ -9,6 +9,7 @@ import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
 import { CountUp } from "./CountUp";
 import { BRAND } from "@/lib/brand-colors";
+import { SITE_CONTACT } from "@/lib/site-contact";
 
 export interface PricingPackage {
   name: string;
@@ -768,7 +769,7 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                   </div>
                   <div className="space-y-3">
                     <label className="ml-1 text-xs font-medium text-slate-500">Số điện thoại (Zalo)</label>
-                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0901 234 567" className="brand-input" />
+                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0937 417 982" className="brand-input" />
                   </div>
                 </div>
 
@@ -875,6 +876,14 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
       name: "Bứt Phá Marketing",
       url: siteUrl,
       image: `${siteUrl}/logo.jpg`,
+      telephone: `+84${SITE_CONTACT.hotline.replace(/^0/, "")}`,
+      email: SITE_CONTACT.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE_CONTACT.address,
+        addressLocality: "Hồ Chí Minh",
+        addressCountry: "VN",
+      },
     },
   };
 
