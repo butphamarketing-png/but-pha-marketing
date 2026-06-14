@@ -232,6 +232,11 @@ export default function AdminPage() {
     published: true,
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+  const [pushSubscriberCount, setPushSubscriberCount] = useState<number | null>(null);
+  const [pushSendForm, setPushSendForm] = useState({ title: "", body: "", url: "/blog" });
+  const [pushSendLoading, setPushSendLoading] = useState(false);
+  const [pushSendMessage, setPushSendMessage] = useState<string | null>(null);
+  const [pushSendError, setPushSendError] = useState<string | null>(null);
 
   const setPanelFeedback = (message: string | null, error: string | null = null) => {
     setBlogSaveMessage(message);
@@ -714,6 +719,44 @@ export default function AdminPage() {
       setBlogs([...(result.data || [])].sort((a, b) => b.timestamp - a.timestamp));
     });
   }, [authenticated]);
+
+  useEffect(() => {
+    if (!authenticated || activeTab !== "news") return;
+    fetch("/api/push/send", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.count === "number") setPushSubscriberCount(data.count);
+      })
+      .catch(() => setPushSubscriberCount(null));
+  }, [authenticated, activeTab]);
+
+  const sendPushNotification = async () => {
+    setPushSendLoading(true);
+    setPushSendMessage(null);
+    setPushSendError(null);
+    try {
+      const res = await fetch("/api/push/send", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pushSendForm),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gửi thất bại");
+      if (data.skipped) {
+        setPushSendMessage(data.reason || "Push chưa được cấu hình");
+      } else {
+        setPushSendMessage(`Đã gửi ${data.sent || 0} thông báo${data.failed ? `, ${data.failed} lỗi` : ""}.`);
+        if (typeof data.sent === "number" && data.sent > 0) {
+          setPushSendForm({ title: "", body: "", url: "/blog" });
+        }
+      }
+    } catch (error) {
+      setPushSendError(error instanceof Error ? error.message : "Không thể gửi thông báo");
+    } finally {
+      setPushSendLoading(false);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1693,6 +1736,51 @@ export default function AdminPage() {
 
           {activeTab === "news" && (
             <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
+              <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <p className="font-semibold text-white">Thông báo đẩy (Web Push)</p>
+                    <p className="text-xs text-gray-400">
+                      {pushSubscriberCount === null ? "Đang tải..." : `${pushSubscriberCount} khách đã bật thông báo`}
+                      {" · "}Tự gửi khi xuất bản bài mới
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <input
+                    value={pushSendForm.title}
+                    onChange={(e) => setPushSendForm((prev) => ({ ...prev, title: e.target.value }))}
+                    placeholder="Tiêu đề thông báo"
+                    className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                  />
+                  <input
+                    value={pushSendForm.url}
+                    onChange={(e) => setPushSendForm((prev) => ({ ...prev, url: e.target.value }))}
+                    placeholder="Link (vd: /blog hoặc URL đầy đủ)"
+                    className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                  />
+                </div>
+                <textarea
+                  value={pushSendForm.body}
+                  onChange={(e) => setPushSendForm((prev) => ({ ...prev, body: e.target.value }))}
+                  rows={2}
+                  placeholder="Nội dung thông báo"
+                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-white"
+                />
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={sendPushNotification}
+                    disabled={pushSendLoading}
+                    className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-60"
+                  >
+                    {pushSendLoading ? "Đang gửi..." : "Gửi thông báo"}
+                  </button>
+                  {pushSendMessage && <span className="text-sm text-emerald-300">{pushSendMessage}</span>}
+                  {pushSendError && <span className="text-sm text-red-300">{pushSendError}</span>}
+                </div>
+              </div>
+
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h3 className="text-lg font-bold text-white">Tin tức</h3>
                 <button type="button" onClick={resetBlogForm} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white">Tạo bài mới</button>

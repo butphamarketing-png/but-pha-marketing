@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ensureUniqueNewsSlug } from "@/lib/news-slug";
+import { notifyBlogPublished } from "@/lib/push-notifications";
 import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
@@ -76,6 +77,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
 
+    if (published !== false && data) {
+      notifyBlogPublished({
+        title: data.title,
+        slug: data.slug || uniqueSlug,
+        description: data.description,
+        imageUrl: data.image_url,
+      }).catch((pushError) => console.error("Blog push notify failed", pushError));
+    }
+
     return NextResponse.json(data);
   } catch (error) {
     console.error("POST /api/news failed", error);
@@ -106,6 +116,7 @@ export async function PATCH(request: Request) {
     normalized["updated_at"] = new Date().toISOString();
 
     const supabase = createServerClient();
+    const { data: beforeRow } = await supabase.from("news").select("published,title,slug,description,image_url").eq("id", id).maybeSingle();
     const shouldResolveSlug = typeof normalized["slug"] === "string" || typeof normalized["title"] === "string";
 
     if (shouldResolveSlug) {
@@ -136,6 +147,18 @@ export async function PATCH(request: Request) {
     if (error) {
       console.error("PATCH /api/news Supabase error", error);
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    }
+
+    const nowPublished =
+      normalized["published"] === true || (normalized["published"] === undefined && beforeRow?.published !== false);
+    const wasPublished = beforeRow?.published !== false;
+    if (nowPublished && !wasPublished && beforeRow) {
+      notifyBlogPublished({
+        title: (normalized["title"] as string) || beforeRow.title,
+        slug: (normalized["slug"] as string) || beforeRow.slug || id,
+        description: (normalized["description"] as string) || beforeRow.description,
+        imageUrl: (normalized["image_url"] as string) || beforeRow.image_url,
+      }).catch((pushError) => console.error("Blog push notify failed", pushError));
     }
 
     return NextResponse.json({ ok: true });

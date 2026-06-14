@@ -24,6 +24,10 @@ const FloatingContactButtons = dynamic(
   () => import("@/components/shared/FloatingContactButtons").then((mod) => mod.FloatingContactButtons),
   { ssr: false },
 );
+const PushNotificationPrompt = dynamic(
+  () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
+  { ssr: false },
+);
 const CursorEffect = dynamic(
   () => import("@/components/shared/CursorEffect").then((mod) => mod.CursorEffect),
   { ssr: false },
@@ -44,6 +48,7 @@ export function MarketingChrome() {
       <AnimatedMascot />
       <ThemeToggleButton />
       <FloatingContactButtons />
+      <PushNotificationPrompt />
       <QuickActionBar />
       {isHomePage && <CursorEffect color="#7C3AED" />}
     </>

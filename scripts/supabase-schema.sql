@@ -32,6 +32,19 @@ create table if not exists public.news (
 create index if not exists news_published_idx on public.news (published, timestamp desc);
 create index if not exists news_slug_idx on public.news (slug);
 
+-- Push notification subscriptions (Web Push cho khách website)
+create table if not exists public.push_subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  endpoint text not null unique,
+  p256dh text not null,
+  auth text not null,
+  user_agent text not null default '',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists push_subscriptions_created_idx on public.push_subscriptions (created_at desc);
+
 -- Leads / liên hệ
 create table if not exists public.leads (
   id bigserial primary key,
@@ -103,6 +116,7 @@ create table if not exists public.services (
 -- RLS: API dùng service_role nên tắt RLS hoặc policy cho anon nếu cần
 alter table public.site_settings enable row level security;
 alter table public.news enable row level security;
+alter table public.push_subscriptions enable row level security;
 alter table public.leads enable row level security;
 alter table public.orders enable row level security;
 alter table public.media enable row level security;
