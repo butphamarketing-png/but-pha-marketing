@@ -3,222 +3,270 @@
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  FileSignature,
-  MapPinned,
+  ChevronRight,
+  Globe,
+  Headphones,
+  MapPin,
   Megaphone,
   MessageCircle,
+  MousePointerClick,
   Phone,
   Search,
+  Share2,
   Shield,
+  Sparkles,
   Target,
   TrendingUp,
   UserPlus,
   Users,
 } from "lucide-react";
-import { SiFacebook } from "react-icons/si";
+import Image from "next/image";
 import Link from "next/link";
 
-const trafficSources = [
+const journeySteps = [
   {
-    title: "Google Search",
-    caption: "Khách tìm dịch vụ đúng lúc có nhu cầu",
+    step: "01",
+    title: "Khách hàng tìm kiếm",
+    desc: "Khách tìm thấy bạn đúng lúc cần — qua tìm kiếm, mạng xã hội hoặc quảng cáo.",
+    descMobile: "Tìm thấy bạn đúng lúc cần qua Google, MXH hoặc Ads.",
     icon: Search,
-    preview: "nha khoa quận 7",
   },
   {
-    title: "Google Maps",
-    caption: "Hiện diện địa phương, nhận cuộc gọi & chỉ đường",
-    icon: MapPinned,
-    preview: "4.9★ · Gần bạn",
+    step: "02",
+    title: "Truy cập website",
+    desc: "Website xuất hiện chuyên nghiệp, tạo ấn tượng tin cậy ngay lần đầu.",
+    descMobile: "Giao diện chuyên nghiệp, tạo niềm tin ngay lần đầu.",
+    icon: MousePointerClick,
   },
   {
-    title: "Facebook",
-    caption: "Fanpage & quảng cáo thu hút khách quan tâm",
-    icon: SiFacebook,
-    preview: "Nhắn tin tư vấn",
+    step: "03",
+    title: "Xem dịch vụ & thông tin",
+    desc: "Khách đọc dịch vụ, dự án, đánh giá và so sánh trước khi liên hệ.",
+    descMobile: "Đọc dịch vụ, dự án và đánh giá trước khi liên hệ.",
+    icon: Sparkles,
   },
   {
-    title: "Zalo",
-    caption: "Kênh chat quen thuộc của khách Việt",
+    step: "04",
+    title: "Để lại thông tin",
+    desc: "Form tư vấn, Zalo, Messenger — thu lead nhanh trên mobile.",
+    descMobile: "Form, Zalo, Messenger — thu lead nhanh trên mobile.",
     icon: MessageCircle,
-    preview: "Chat nhanh 24/7",
+    href: "/lien-he",
   },
   {
-    title: "Google Ads",
-    caption: "Quảng cáo đúng từ khóa, tăng traffic chất lượng",
-    icon: Megaphone,
-    preview: "Quảng cáo · Tìm kiếm",
+    step: "05",
+    title: "Chăm sóc & tư vấn",
+    desc: "Đội ngũ gọi điện, nhắn tin và tư vấn đúng nhu cầu khách hàng.",
+    descMobile: "Gọi điện, nhắn tin và tư vấn đúng nhu cầu.",
+    icon: Headphones,
+  },
+  {
+    step: "06",
+    title: "Chốt đơn & tăng trưởng",
+    desc: "Ký hợp đồng, giữ chân khách và mở rộng doanh thu bền vững.",
+    descMobile: "Chốt đơn, giữ chân khách và tăng doanh thu.",
+    icon: TrendingUp,
   },
 ];
 
-const conversionSteps = [
-  { step: "01", title: "Khách tiềm năng", desc: "Truy cập website từ nhiều kênh", icon: Users },
-  { step: "02", title: "Tin nhắn & tư vấn", desc: "Form, Zalo, Messenger", icon: MessageCircle },
-  { step: "03", title: "Cuộc gọi", desc: "Hotline tư vấn sát nhu cầu", icon: Phone },
-  { step: "04", title: "Ký hợp đồng", desc: "Chốt gói dịch vụ / dự án", icon: FileSignature },
-  { step: "05", title: "Tăng doanh thu", desc: "Khách quay lại & giới thiệu thêm", icon: TrendingUp },
+const channelChips = [
+  { label: "Google", icon: Search, className: "bg-blue-50 text-blue-700 border-blue-100" },
+  { label: "Maps", icon: MapPin, className: "bg-emerald-50 text-emerald-700 border-emerald-100" },
+  { label: "Facebook", icon: Share2, className: "bg-sky-50 text-sky-700 border-sky-100" },
+  { label: "Zalo", icon: MessageCircle, className: "bg-indigo-50 text-indigo-700 border-indigo-100" },
+  { label: "Google Ads", icon: Megaphone, className: "bg-amber-50 text-amber-700 border-amber-100" },
+];
+
+const mockupServices = [
+  { title: "Thiết kế web", accent: "from-violet-100 to-indigo-100" },
+  { title: "Facebook Ads", accent: "from-sky-100 to-blue-100" },
+  { title: "Google Maps", accent: "from-emerald-100 to-teal-100" },
 ];
 
 const benefits = [
-  { title: "More Leads", label: "Nhiều khách để lại thông tin", icon: UserPlus },
-  { title: "More Calls", label: "Tăng cuộc gọi tư vấn", icon: Phone },
-  { title: "More Messages", label: "Nhiều tin Zalo / Messenger", icon: MessageCircle },
-  { title: "More Conversions", label: "Tỷ lệ chuyển đổi cao hơn", icon: Target },
-  { title: "More Revenue", label: "Doanh thu tăng bền vững", icon: TrendingUp },
-  { title: "Brand Authority", label: "Thương hiệu uy tín, chuyên nghiệp", icon: Shield },
+  { label: "Lead từ form & Zalo", icon: UserPlus },
+  { label: "Cuộc gọi từ hotline web", icon: Phone },
+  { label: "Tin nhắn qua Messenger", icon: MessageCircle },
+  { label: "Tỷ lệ chuyển đổi cao", icon: Target },
+  { label: "Doanh thu tăng trưởng", icon: TrendingUp },
+  { label: "Uy tín thương hiệu", icon: Shield },
 ];
 
-function GlowCard({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function WebsiteMockup() {
   return (
-    <div
-      className={`rounded-2xl border border-violet-400/20 bg-white/[0.04] p-4 shadow-[0_0_40px_rgba(124,58,237,0.12)] backdrop-blur-xl ${className}`}
-    >
-      {children}
+    <div className="relative mx-auto max-w-lg lg:max-w-none">
+      <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-violet-200/60 via-indigo-100/40 to-transparent blur-2xl" />
+      <div className="group/mockup relative rotate-0 transition-all duration-700 hover:-rotate-1 lg:-rotate-2 lg:hover:-rotate-1">
+        <div className="overflow-hidden rounded-[1.75rem] border border-indigo-100 bg-white shadow-brand-lg transition-shadow duration-500 group-hover/mockup:shadow-[0_32px_64px_rgba(49,46,129,0.18)]">
+          <div className="flex items-center gap-2 border-b border-indigo-50 bg-indigo-50/60 px-4 py-3">
+            <div className="flex gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
+            </div>
+            <div className="mx-auto flex h-7 flex-1 max-w-[220px] items-center gap-1.5 rounded-full border border-indigo-100 bg-white px-3 text-[10px] text-slate-400">
+              <Globe size={10} className="shrink-0 text-emerald-500" />
+              doanhnghiep-mau.vn
+            </div>
+          </div>
+
+          <div className="border-b border-indigo-50 px-4 py-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <div className="relative h-8 w-8 overflow-hidden rounded-full border border-indigo-100 bg-white">
+                  <Image src="/logo.png" alt="Logo mẫu" fill className="object-contain p-1" />
+                </div>
+                <span className="text-xs font-bold text-indigo-950">Doanh nghiệp mẫu</span>
+              </div>
+              <div className="hidden gap-3 sm:flex">
+                {["Dịch vụ", "Dự án", "Liên hệ"].map((item) => (
+                  <span key={item} className="text-[10px] font-semibold text-slate-500">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-800 px-5 py-6 text-white">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-200">Thiết kế chuẩn SEO</p>
+            <p className="mt-2 text-lg font-black leading-snug">Website chuyên nghiệp giúp thu khách mỗi ngày</p>
+            <p className="mt-2 max-w-sm text-xs leading-relaxed text-violet-100/90">
+              Hiển thị dịch vụ rõ ràng, tạo niềm tin và dẫn khách đến form liên hệ nhanh.
+            </p>
+            <div className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold text-violet-800">
+              Tư vấn miễn phí
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 p-4">
+            {mockupServices.map((item) => (
+              <div key={item.title} className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-2 text-center">
+                <div className={`mx-auto mb-2 h-10 w-full rounded-lg bg-gradient-to-br ${item.accent}`} />
+                <p className="text-[10px] font-bold leading-tight text-indigo-950">{item.title}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="relative border-t border-indigo-50 bg-indigo-50/30 p-4">
+            <span className="absolute -top-3 right-4 inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[9px] font-bold text-emerald-700 shadow-sm">
+              +12 lead tuần này
+            </span>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-bold text-indigo-950">Đăng ký tư vấn nhanh</p>
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+                <MessageCircle size={12} />
+              </span>
+            </div>
+            <div className="mt-3 space-y-2">
+              <div className="rounded-lg border border-indigo-100 bg-white px-3 py-2 text-[10px] text-slate-400">Họ và tên</div>
+              <div className="rounded-lg border border-indigo-100 bg-white px-3 py-2 text-[10px] text-slate-400">Số điện thoại</div>
+              <div className="rounded-lg bg-violet-600 py-2 text-center text-[10px] font-bold text-white">Gửi thông tin</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  );
+}
+
+function JourneyStepCard({
+  item,
+  index,
+  total,
+}: {
+  item: (typeof journeySteps)[number];
+  index: number;
+  total: number;
+}) {
+  const content = (
+    <>
+      {index < total - 1 && (
+        <span className="absolute left-[1.35rem] top-12 h-[calc(100%-0.5rem)] w-px bg-gradient-to-b from-violet-300 to-indigo-100 transition-colors duration-300 group-hover:from-violet-500 group-hover:to-violet-200" />
+      )}
+      <div className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-xs font-black text-white shadow-brand-accent transition-transform duration-300 group-hover:scale-105">
+        {item.step}
+      </div>
+      <div className="brand-card-soft min-w-0 flex-1 p-4 transition-all duration-300 group-hover:border-violet-200/80 group-hover:shadow-brand">
+        <div className="flex items-center gap-2">
+          <item.icon size={16} className="text-violet-600 transition-colors group-hover:text-violet-700" />
+          <p className="font-bold text-indigo-950">{item.title}</p>
+        </div>
+        <p className="mt-2 hidden text-sm leading-relaxed text-slate-600 sm:block">{item.desc}</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:hidden">{item.descMobile}</p>
+      </div>
+    </>
+  );
+
+  const rowClassName = "relative flex gap-4";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 16 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.08, duration: 0.45 }}
+      className="group"
+    >
+      {item.href ? (
+        <Link href={item.href} className={rowClassName}>
+          {content}
+        </Link>
+      ) : (
+        <div className={rowClassName}>{content}</div>
+      )}
+    </motion.div>
   );
 }
 
 export function WebsitePurposeSection() {
   return (
-    <section
-      id="website-purpose"
-      className="relative overflow-hidden bg-[#05010d] px-4 py-20 md:px-8 lg:px-12"
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(124,58,237,0.22),transparent_55%)]" />
-      <div className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-violet-600/10 blur-[100px]" />
-      <div className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-indigo-500/10 blur-[100px]" />
+    <section id="website-purpose" className="relative overflow-hidden bg-white">
+      <div className="h-16 bg-gradient-to-b from-[#eef2ff] to-white" />
 
-      <div className="relative mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
+      <div className="mx-auto max-w-7xl px-4 pb-24 pt-4 md:px-8 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="brand-section-intro mb-12 md:mb-16"
+        >
+          <p className="brand-eyebrow">Vai trò website</p>
+          <h2 className="brand-section-title">
+            Website để <span className="brand-gradient-text">làm gì?</span>
+          </h2>
+          <p className="mx-auto max-w-2xl text-base font-medium leading-relaxed text-slate-600">
+            Website là trung tâm thu khách — biến traffic từ Google, Facebook, Maps và Zalo thành lead, cuộc gọi và doanh thu.
+          </p>
+        </motion.div>
+
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="space-y-6"
           >
-            <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-violet-200">
-              Hành trình khách hàng
-            </span>
-            <h2 className="text-4xl font-black leading-tight text-white md:text-5xl">
-              Website để{" "}
-              <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
-                làm gì?
-              </span>
-            </h2>
-            <p className="max-w-xl text-base leading-8 text-slate-300 md:text-lg">
-              Website không chỉ để giới thiệu — mà là trung tâm thu hút khách từ Google, Facebook, Maps, Zalo,
-              tạo lead, tăng cuộc gọi, tin nhắn, chuyển đổi và doanh thu bền vững.
-            </p>
-            <Link
-              href="/website"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-violet-900 transition hover:bg-violet-50"
-            >
-              Xem giải pháp website
-              <ArrowRight size={16} />
-            </Link>
+            <WebsiteMockup />
+            <div className="mt-6 flex flex-wrap justify-center gap-2 lg:justify-start">
+              {channelChips.map((chip) => (
+                <span
+                  key={chip.label}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${chip.className}`}
+                >
+                  <chip.icon size={12} className="shrink-0 opacity-80" />
+                  {chip.label}
+                </span>
+              ))}
+            </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <div className="absolute -inset-4 rounded-[2rem] bg-violet-600/20 blur-3xl" />
-            <GlowCard className="relative overflow-hidden p-0">
-              <div className="border-b border-white/10 bg-gradient-to-r from-violet-950/80 to-indigo-950/80 px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200">Website doanh nghiệp</p>
-                <p className="mt-1 text-lg font-bold text-white">Trung tâm chuyển đổi khách hàng</p>
-              </div>
-              <div className="space-y-4 p-5">
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-violet-900/40 to-indigo-900/20 p-4">
-                  <p className="text-sm font-bold text-white">Thiết kế chuyên nghiệp · Chuẩn SEO</p>
-                  <p className="mt-1 text-xs text-slate-300">Hero · Dịch vụ · Dự án · Form liên hệ</p>
-                  <div className="mt-3 inline-flex rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-bold text-white">
-                    Tư vấn miễn phí
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {["Dịch vụ", "Dự án", "Đánh giá"].map((item) => (
-                    <div key={item} className="rounded-lg border border-white/10 bg-white/5 px-2 py-3 text-center text-[11px] font-semibold text-violet-100">
-                      {item}
-                    </div>
-                  ))}
-                </div>
-                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                  <p className="text-[11px] font-semibold text-violet-200">Form đăng ký tư vấn</p>
-                  <div className="mt-2 space-y-2">
-                    <div className="h-8 rounded-lg bg-white/10" />
-                    <div className="h-8 rounded-lg bg-white/10" />
-                    <div className="h-9 rounded-lg bg-violet-600/80" />
-                  </div>
-                </div>
-              </div>
-            </GlowCard>
-          </motion.div>
-        </div>
-
-        <div className="mt-14 grid gap-8 xl:grid-cols-[1fr_1.2fr_1fr]">
-          <div className="space-y-3">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-violet-300">Nguồn traffic</p>
-            {trafficSources.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <GlowCard className="flex items-start gap-3">
-                  <div className="rounded-xl bg-violet-500/15 p-2 text-violet-200">
-                    <item.icon size={18} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-white">{item.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-400">{item.caption}</p>
-                    <p className="mt-2 inline-flex rounded-md border border-white/10 bg-black/20 px-2 py-1 text-[10px] text-violet-200">
-                      {item.preview}
-                    </p>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="hidden xl:flex items-center justify-center">
-            <div className="h-full w-px bg-gradient-to-b from-transparent via-violet-500/50 to-transparent" />
-          </div>
-
-          <div className="space-y-3">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-violet-300">Hành trình chuyển đổi</p>
-            {conversionSteps.map((item, index) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, x: 12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <GlowCard className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-xs font-black text-white">
-                    {item.step}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <item.icon size={16} className="text-violet-300" />
-                      <p className="font-semibold text-white">{item.title}</p>
-                    </div>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-400">{item.desc}</p>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
+          <div className="space-y-4">
+            <p className="text-sm font-bold text-violet-700">Quy trình chuyển đổi trên website</p>
+            <div className="space-y-3">
+              {journeySteps.map((item, index) => (
+                <JourneyStepCard key={item.step} item={item} index={index} total={journeySteps.length} />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -226,23 +274,56 @@ export function WebsitePurposeSection() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16"
+          className="mt-16 rounded-[2rem] border border-indigo-100 bg-gradient-to-br from-white via-indigo-50/20 to-violet-50/10 p-6 shadow-brand md:p-8"
         >
-          <p className="mb-6 text-center text-sm font-bold uppercase tracking-[0.18em] text-violet-300">
-            Website mang lại kết quả thật
-          </p>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-            {benefits.map((item) => (
-              <GlowCard key={item.title} className="text-center">
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/15 text-violet-200">
+          <div className="mb-8 text-center">
+            <p className="brand-eyebrow mb-3">Kết quả thực tế</p>
+            <h3 className="text-2xl font-black text-indigo-950 md:text-3xl">Website mang lại giá trị gì?</h3>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            {benefits.map((item, index) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="text-center"
+              >
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-100 text-violet-700">
                   <item.icon size={20} />
                 </div>
-                <p className="text-xs font-bold uppercase tracking-wide text-violet-200">{item.title}</p>
-                <p className="mt-2 text-[11px] leading-relaxed text-slate-400">{item.label}</p>
-              </GlowCard>
+                <p className="text-xs font-bold leading-snug text-indigo-950 sm:text-sm">{item.label}</p>
+              </motion.div>
             ))}
           </div>
+
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <Link href="/website" className="brand-btn-primary px-8 py-4">
+              Xem giải pháp website
+              <ArrowRight size={18} />
+            </Link>
+            <Link
+              href="/lien-he"
+              className="text-sm font-semibold text-violet-600 underline-offset-4 transition hover:text-violet-800 hover:underline"
+            >
+              Tư vấn miễn phí — phản hồi trong 15 phút
+            </Link>
+            <p className="text-xs font-medium text-slate-500">1.000+ dự án đã triển khai thành công</p>
+          </div>
         </motion.div>
+
+        <div className="mt-10 flex items-center justify-center gap-2 px-2 text-center text-sm font-semibold text-violet-600">
+          <Users size={16} className="hidden shrink-0 sm:block" />
+          <span className="leading-relaxed sm:inline">
+            <span className="sm:hidden">Từ tìm kiếm đến chốt đơn — bắt đầu từ website đúng cách</span>
+            <span className="hidden sm:inline">
+              Từ tìm kiếm đến ký hợp đồng — tất cả bắt đầu từ một website đúng cách
+            </span>
+          </span>
+          <ChevronRight size={16} className="hidden shrink-0 sm:block" />
+        </div>
       </div>
     </section>
   );
