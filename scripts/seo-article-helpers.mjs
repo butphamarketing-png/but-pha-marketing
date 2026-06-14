@@ -1,22 +1,38 @@
 const SITE = "https://www.butphamarketing.com";
 const FB = "https://www.facebook.com/butphamarketing";
 const ZALO = "https://zalo.me/0937417982";
+const NEWS_DIR = "/tin-tuc";
 
-const IMAGES = [
-  `${SITE}/Website.png`,
-  `${SITE}/slideshow-hero.png`,
-  `${SITE}/slideshow.jpg`,
-  `${SITE}/slideshow1.jpg`,
-  `${SITE}/GoogleMaps.png`,
+function newsImageUrl(filename) {
+  return `${SITE}${NEWS_DIR}/${filename}`;
+}
+
+function newsImagePath(filename) {
+  return `${NEWS_DIR}/${filename}`;
+}
+
+/** Thumbnail danh sách tin tức / blog card / OG */
+export const NEWS_THUMBNAIL = newsImageUrl("tin-tuc-marketing.png");
+
+/** Đường dẫn tương đối thumbnail (dùng khi cần path ngắn) */
+export const NEWS_THUMBNAIL_PATH = newsImagePath("tin-tuc-marketing.png");
+
+/** Ảnh minh họa trong nội dung bài viết (public/tin-tuc) */
+export const NEWS_CONTENT_IMAGES = [
+  newsImagePath("thiet-ke-website.png"),
+  ...Array.from({ length: 10 }, (_, i) => newsImagePath(`thiet-ke-website-${i + 1}.png`)),
 ];
+
+export const NEWS_CONTENT_IMAGE_COUNT = NEWS_CONTENT_IMAGES.length;
 
 export function wrapArticle({ metaTitle, html }) {
   return `<!-- BUTPHA_META ${JSON.stringify({ metaTitle })} -->\n${html}`;
 }
 
 export function img(index, alt) {
-  const src = IMAGES[index % IMAGES.length];
-  return `<figure class="my-6"><img src="${src}" alt="${alt}" loading="lazy" width="1200" height="675" class="w-full rounded-2xl border border-indigo-100" /><figcaption class="mt-2 text-center text-sm text-slate-500">${alt}</figcaption></figure>`;
+  const src = NEWS_CONTENT_IMAGES[index % NEWS_CONTENT_IMAGE_COUNT];
+  const safeAlt = alt || "Thiết kế website Bứt Phá Marketing";
+  return `<figure class="my-6"><img src="${src}" alt="${safeAlt}" loading="lazy" width="1200" height="675" class="w-full rounded-2xl border border-indigo-100" /><figcaption class="mt-2 text-center text-sm text-slate-500">${safeAlt}</figcaption></figure>`;
 }
 
 export function toc(items) {
