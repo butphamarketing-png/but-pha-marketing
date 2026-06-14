@@ -19,22 +19,28 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
+function canUseWebPush() {
+  return typeof window !== "undefined" && "Notification" in window && "serviceWorker" in navigator;
+}
+
 export function PushNotificationPrompt() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [raised, setRaised] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined" || isInternalAppPath(pathname)) return;
-    if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
 
     if (sessionStorage.getItem(DISMISS_SESSION_KEY)) return;
 
     const deniedUntil = Number(localStorage.getItem(DENY_DISMISS_KEY) || "0");
     if (deniedUntil > Date.now()) return;
 
-    if (Notification.permission === "granted" || Notification.permission === "denied") return;
+    if (canUseWebPush()) {
+      if (Notification.permission === "granted" || Notification.permission === "denied") return;
+    }
 
     const showOnPaths = pathname === "/" || pathname.startsWith("/blog");
     if (!showOnPaths) return;
@@ -42,6 +48,23 @@ export function PushNotificationPrompt() {
     const timer = window.setTimeout(() => setVisible(true), 4000);
     return () => window.clearTimeout(timer);
   }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateRaised = () => {
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      setRaised(isMobile && window.scrollY > 300);
+    };
+
+    updateRaised();
+    window.addEventListener("scroll", updateRaised, { passive: true });
+    window.addEventListener("resize", updateRaised);
+    return () => {
+      window.removeEventListener("scroll", updateRaised);
+      window.removeEventListener("resize", updateRaised);
+    };
+  }, []);
 
   const dismissForSession = () => {
     sessionStorage.setItem(DISMISS_SESSION_KEY, "1");
@@ -57,6 +80,11 @@ export function PushNotificationPrompt() {
     setLoading(true);
     setMessage(null);
     try {
+      if (!canUseWebPush()) {
+        setMessage("Trình duyệt này chưa hỗ trợ thông báo đẩy. Bạn có thể liên hệ qua Zalo hoặc hotline.");
+        return;
+      }
+
       const perm = await Notification.requestPermission();
       if (perm !== "granted") {
         setMessage("Bạn đã từ chối thông báo. Có thể bật lại trong cài đặt trình duyệt.");
@@ -115,7 +143,11 @@ export function PushNotificationPrompt() {
   if (!visible && !message) return null;
 
   return (
-    <div className="fixed bottom-24 left-4 right-4 z-[60] mx-auto max-w-md md:left-auto md:right-6">
+    <div
+      className={`fixed left-4 right-4 z-[100] mx-auto max-w-md transition-all duration-300 md:left-auto md:right-6 ${
+        raised ? "bottom-[5.75rem]" : "bottom-24"
+      }`}
+    >
       {visible && (
         <div className="rounded-2xl border border-white/15 bg-black p-4 shadow-xl shadow-black/40">
           <div className="flex items-start gap-3">

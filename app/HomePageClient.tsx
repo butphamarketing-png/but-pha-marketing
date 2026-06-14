@@ -11,6 +11,7 @@ import {
   ChevronRight,
   LayoutTemplate,
   MapPinned,
+  Menu,
   MessageCircle,
   Phone,
   ShieldCheck,
@@ -20,6 +21,7 @@ import {
   TrendingUp,
   Users,
   Workflow,
+  X,
 } from "lucide-react";
 import { SiFacebook, SiMessenger } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
@@ -27,6 +29,7 @@ import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { resolveHotline } from "@/lib/site-contact";
+import { WebsitePurposeSection } from "@/components/home/WebsitePurposeSection";
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
@@ -80,6 +83,7 @@ export default function HomePageClient() {
     message: "",
   });
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -353,17 +357,29 @@ export default function HomePageClient() {
         <header 
           className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'border-b border-white/10 bg-indigo-950/35 backdrop-blur-md'}`}
         >
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-            <Link href="/" className="group flex items-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
-              <div className="relative">
-                <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                <img src={logoSrc} alt={brandName} className="relative h-12 w-12 rounded-full border border-indigo-200 object-cover shadow-2xl" />
-              </div>
-              <div className="flex flex-col">
-                <span className={`text-xl font-bold tracking-tight md:text-2xl leading-none ${isScrolled ? 'text-indigo-950' : 'text-white'}`}>{brandName}</span>
-                <span className={`text-xs font-medium mt-1 ${isScrolled ? 'text-violet-600' : 'text-violet-300'}`}>Bứt Phá để dẫn đầu</span>
-              </div>
-            </Link>
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-4 lg:px-8">
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <Link href="/" className="group flex min-w-0 items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95 sm:gap-4">
+                <div className="relative shrink-0">
+                  <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <img src={logoSrc} alt={brandName} className="relative h-11 w-11 rounded-full border border-indigo-200 object-cover shadow-2xl sm:h-12 sm:w-12" />
+                </div>
+                <div className="min-w-0 flex flex-col">
+                  <span className={`truncate text-lg font-bold tracking-tight sm:text-xl md:text-2xl leading-none ${isScrolled ? "text-indigo-950" : "text-white"}`}>{brandName}</span>
+                  <span className={`text-[11px] font-medium mt-1 sm:text-xs ${isScrolled ? "text-violet-600" : "text-violet-300"}`}>Bứt Phá để dẫn đầu</span>
+                </div>
+              </Link>
+
+              <button
+                type="button"
+                aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
+                aria-expanded={mobileMenuOpen}
+                onClick={() => { playClickSound(); setMobileMenuOpen((open) => !open); }}
+                className={`ml-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition lg:hidden ${isScrolled ? "border-indigo-200 bg-white text-indigo-950 hover:bg-indigo-50" : "border-white/20 bg-white/10 text-white hover:bg-white/15"}`}
+              >
+                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
 
             <nav className="hidden items-center gap-10 lg:flex">
               {navigation.map((item) => (
@@ -388,6 +404,41 @@ export default function HomePageClient() {
               
             </div>
           </div>
+
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className={`overflow-hidden border-t lg:hidden ${isScrolled ? "border-indigo-100 bg-white/98" : "border-white/10 bg-indigo-950/95"}`}
+              >
+                <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${isScrolled ? "text-indigo-950 hover:bg-indigo-50" : "text-white hover:bg-white/10"}`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      playClickSound();
+                      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="mt-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white"
+                  >
+                    Tư vấn ngay
+                  </button>
+                </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </header>
 
         <main className="flex-1">
@@ -543,6 +594,8 @@ export default function HomePageClient() {
               ))}
             </div>
           </section>
+
+          <WebsitePurposeSection />
 
           <section className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
             <div className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
