@@ -175,12 +175,10 @@ export default function ContactPageClient() {
                   <div className="brand-eyebrow inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-4 py-2">
                     Liên hệ với chúng tôi
                   </div>
-                  <h1 className="mt-6 max-w-2xl text-4xl font-black tracking-[-0.05em] text-slate-900 md:text-6xl">
-                    {brandName}
-                    <br />
-                    luôn sẵn sàng <span className="text-violet-600">hỗ trợ bạn!</span>
+                  <h1 className="brand-page-title mt-5 max-w-xl">
+                    Luôn sẵn sàng <span className="brand-gradient-text">hỗ trợ bạn</span>
                   </h1>
-                  <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
+                  <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">
                     Bạn có câu hỏi hoặc muốn tư vấn dịch vụ? Đội ngũ của chúng tôi luôn sẵn sàng đồng hành cùng bạn.
                   </p>
                 </div>
@@ -200,11 +198,11 @@ export default function ContactPageClient() {
                         <div>
                           <p className="text-sm font-semibold text-slate-600">{item.title}</p>
                           {item.href ? (
-                            <a href={item.href} className="mt-1 block text-2xl font-bold text-slate-900 hover:text-violet-700">
+                            <a href={item.href} className="mt-1 block text-lg font-bold text-slate-900 hover:text-violet-700 sm:text-xl">
                               {item.value}
                             </a>
                           ) : (
-                            <p className="mt-1 text-2xl font-bold text-slate-900">{item.value}</p>
+                            <p className="mt-1 text-lg font-bold text-slate-900 sm:text-xl">{item.value}</p>
                           )}
                         </div>
                       </div>
@@ -216,7 +214,7 @@ export default function ContactPageClient() {
               <div className="brand-card-soft overflow-hidden p-6 lg:p-8">
                 <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
                   <div>
-                    <h2 className="text-[32px] font-black tracking-[-0.05em] text-indigo-950">Gửi yêu cầu tư vấn</h2>
+                    <h2 className="text-2xl font-bold tracking-tight text-indigo-950 md:text-3xl">Gửi yêu cầu tư vấn</h2>
                     <p className="mt-3 text-base leading-7 text-slate-600">
                       Điền thông tin, chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.
                     </p>

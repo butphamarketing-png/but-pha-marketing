@@ -31,7 +31,7 @@ import { playClickSound } from "@/lib/utils";
 import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 import { WebsitePurposeSection } from "@/components/home/WebsitePurposeSection";
 import { SectionWaveDivider } from "@/components/shared/SectionWaveDivider";
-import { EASE_PREMIUM, fadeUpChild, scaleIn, slideLeft, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
+import { fadeUpChild, scaleIn, slideLeft, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
@@ -566,9 +566,7 @@ export default function HomePageClient() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={VIEWPORT_ONCE}
-                  custom={i * 0.08}
-                  whileHover={{ y: -6 }}
-                  transition={{ ease: EASE_PREMIUM }}
+                  custom={i * 0.06}
                 >
                   <Link
                     href={card.href}
@@ -615,7 +613,7 @@ export default function HomePageClient() {
                 <motion.p variants={fadeUpChild} className="brand-eyebrow">
                   Giá trị cốt lõi
                 </motion.p>
-                <motion.h2 variants={fadeUpChild} className="brand-section-title text-left md:text-4xl lg:text-5xl">
+                <motion.h2 variants={fadeUpChild} className="brand-section-title text-left">
                   Tại sao chọn chúng tôi?
                 </motion.h2>
               </div>
@@ -645,10 +643,8 @@ export default function HomePageClient() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={VIEWPORT_ONCE}
-                  custom={i * 0.08}
-                  whileHover={{ y: -5 }}
-                  transition={{ ease: EASE_PREMIUM }}
-                  className="brand-card-soft p-8 transition-all hover:shadow-brand-lg"
+                  custom={i * 0.06}
+                  className="brand-card-soft p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-lg"
                 >
                   <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600 transition-all group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-900 group-hover:to-violet-600 group-hover:text-white group-hover:shadow-brand-accent">
                     <item.icon size={32} />
@@ -695,9 +691,7 @@ export default function HomePageClient() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={VIEWPORT_ONCE}
-                  custom={i * 0.07}
-                  whileHover={{ y: -6 }}
-                  transition={{ ease: EASE_PREMIUM }}
+                  custom={i * 0.05}
                 >
                 <Link href={`/blog/${post.slug || post.id}`} className="group block h-full">
                   <article className="overflow-hidden rounded-[1.5rem] border border-indigo-100 bg-white shadow-brand transition duration-300 hover:border-violet-300 hover:shadow-brand-lg h-full">
@@ -734,7 +728,7 @@ export default function HomePageClient() {
             <div className="brand-card relative overflow-hidden rounded-[3rem] p-8 shadow-brand-lg md:p-12">
               <div className="grid gap-12 lg:grid-cols-2">
                 <div>
-                  <h2 className="brand-section-title text-left lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
+                  <h2 className="brand-section-title text-left">Sẵn sàng bứt phá doanh thu?</h2>
                   <p className="mt-6 text-lg leading-8 text-slate-600">
                     Để lại thông tin, đội ngũ chuyên gia của chúng tôi sẽ liên hệ tư vấn lộ trình marketing tối ưu nhất cho doanh nghiệp của bạn.
                   </p>
@@ -814,7 +808,7 @@ export default function HomePageClient() {
                   <button
                     disabled={submittingContact}
                     type="submit"
-                    className="brand-btn-primary brand-btn-primary--shimmer w-full py-5 text-lg disabled:opacity-50"
+                    className="brand-btn-primary w-full py-5 text-lg disabled:opacity-50"
                   >
                     {submittingContact ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>

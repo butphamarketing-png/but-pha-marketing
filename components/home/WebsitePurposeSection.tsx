@@ -103,12 +103,10 @@ const benefits = [
 ];
 
 function WebsiteMockup() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <div className="relative mx-auto max-w-lg lg:max-w-none">
-      <div className="home-blob-float absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-violet-200/60 via-indigo-100/40 to-transparent blur-2xl" />
-      <div className={`group/mockup relative rotate-0 transition-all duration-700 hover:-rotate-1 lg:-rotate-2 lg:hover:-rotate-1 ${reduceMotion ? "" : "home-mockup-float"}`}>
+      <div className="home-blob-float absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-violet-200/50 via-indigo-100/30 to-transparent blur-2xl" />
+      <div className="group/mockup relative transition-transform duration-700 lg:-rotate-2 lg:hover:-rotate-[1.5deg]">
         <div className="overflow-hidden rounded-[1.75rem] border border-indigo-100 bg-white shadow-brand-lg transition-shadow duration-500 group-hover/mockup:shadow-[0_32px_64px_rgba(49,46,129,0.18)]">
           <div className="flex items-center gap-2 border-b border-indigo-50 bg-indigo-50/60 px-4 py-3">
             <div className="flex gap-1.5">
@@ -202,7 +200,7 @@ function JourneyStepCard({
           initial={reduceMotion ? false : { scaleY: 0 }}
           whileInView={{ scaleY: 1 }}
           viewport={VIEWPORT_ONCE}
-          transition={{ duration: 0.55, delay: index * 0.1 + 0.15, ease: EASE_PREMIUM }}
+          transition={{ duration: 0.5, delay: index * 0.08 + 0.12, ease: EASE_PREMIUM }}
         />
       )}
       <motion.div
@@ -210,8 +208,7 @@ function JourneyStepCard({
         initial={reduceMotion ? false : { scale: 0.8, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={VIEWPORT_ONCE}
-        transition={{ duration: 0.45, delay: index * 0.1, ease: EASE_PREMIUM }}
-        whileHover={reduceMotion ? undefined : { scale: 1.06 }}
+        transition={{ duration: 0.45, delay: index * 0.08, ease: EASE_PREMIUM }}
       >
         {item.step}
       </motion.div>
@@ -343,7 +340,7 @@ export function WebsitePurposeSection() {
           </div>
 
           <div className="mt-8 flex flex-col items-center gap-4">
-            <Link href="/website" className="brand-btn-primary brand-btn-primary--shimmer px-8 py-4">
+            <Link href="/website" className="brand-btn-primary px-8 py-4">
               Xem giải pháp website
               <ArrowRight size={18} />
             </Link>
