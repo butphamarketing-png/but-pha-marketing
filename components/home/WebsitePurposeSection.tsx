@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   ChevronRight,
@@ -22,6 +22,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { SectionWaveDivider } from "@/components/shared/SectionWaveDivider";
+import {
+  EASE_PREMIUM,
+  fadeUp,
+  fadeUpChild,
+  scaleIn,
+  slideLeft,
+  staggerIntro,
+  VIEWPORT_ONCE,
+} from "@/lib/motion-presets";
 
 const journeySteps = [
   {
@@ -93,10 +103,12 @@ const benefits = [
 ];
 
 function WebsiteMockup() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div className="relative mx-auto max-w-lg lg:max-w-none">
-      <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-violet-200/60 via-indigo-100/40 to-transparent blur-2xl" />
-      <div className="group/mockup relative rotate-0 transition-all duration-700 hover:-rotate-1 lg:-rotate-2 lg:hover:-rotate-1">
+      <div className="home-blob-float absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-violet-200/60 via-indigo-100/40 to-transparent blur-2xl" />
+      <div className={`group/mockup relative rotate-0 transition-all duration-700 hover:-rotate-1 lg:-rotate-2 lg:hover:-rotate-1 ${reduceMotion ? "" : "home-mockup-float"}`}>
         <div className="overflow-hidden rounded-[1.75rem] border border-indigo-100 bg-white shadow-brand-lg transition-shadow duration-500 group-hover/mockup:shadow-[0_32px_64px_rgba(49,46,129,0.18)]">
           <div className="flex items-center gap-2 border-b border-indigo-50 bg-indigo-50/60 px-4 py-3">
             <div className="flex gap-1.5">
@@ -179,15 +191,31 @@ function JourneyStepCard({
   index: number;
   total: number;
 }) {
+  const reduceMotion = useReducedMotion();
+
   const content = (
     <>
       {index < total - 1 && (
-        <span className="absolute left-[1.35rem] top-12 h-[calc(100%-0.5rem)] w-px bg-gradient-to-b from-violet-300 to-indigo-100 transition-colors duration-300 group-hover:from-violet-500 group-hover:to-violet-200" />
+        <motion.span
+          className="absolute left-[1.35rem] top-12 w-px origin-top bg-gradient-to-b from-violet-400 to-indigo-100"
+          style={{ height: "calc(100% - 0.5rem)" }}
+          initial={reduceMotion ? false : { scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={VIEWPORT_ONCE}
+          transition={{ duration: 0.55, delay: index * 0.1 + 0.15, ease: EASE_PREMIUM }}
+        />
       )}
-      <div className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-xs font-black text-white shadow-brand-accent transition-transform duration-300 group-hover:scale-105">
+      <motion.div
+        className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-xs font-black text-white shadow-brand-accent"
+        initial={reduceMotion ? false : { scale: 0.8, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={VIEWPORT_ONCE}
+        transition={{ duration: 0.45, delay: index * 0.1, ease: EASE_PREMIUM }}
+        whileHover={reduceMotion ? undefined : { scale: 1.06 }}
+      >
         {item.step}
-      </div>
-      <div className="brand-card-soft min-w-0 flex-1 p-4 transition-all duration-300 group-hover:border-violet-200/80 group-hover:shadow-brand">
+      </motion.div>
+      <div className="brand-card-soft min-w-0 flex-1 p-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-violet-200/80 group-hover:shadow-brand">
         <div className="flex items-center gap-2">
           <item.icon size={16} className="text-violet-600 transition-colors group-hover:text-violet-700" />
           <p className="font-bold text-indigo-950">{item.title}</p>
@@ -202,10 +230,11 @@ function JourneyStepCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 16 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.08, duration: 0.45 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT_ONCE}
+      custom={index * 0.08}
       className="group"
     >
       {item.href ? (
@@ -222,46 +251,58 @@ function JourneyStepCard({
 export function WebsitePurposeSection() {
   return (
     <section id="website-purpose" className="relative overflow-hidden brand-section-muted">
-      <div className="brand-section-bridge--to-muted" />
+      <SectionWaveDivider from="#ffffff" to="#eef2ff" />
 
       <div className="brand-section-inner px-4 pb-24 pt-4 md:px-8 lg:px-12">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={staggerIntro}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           className="brand-section-intro mb-12 md:mb-16"
         >
-          <p className="brand-eyebrow">Vai trò website</p>
-          <h2 className="brand-section-title">
+          <motion.p variants={fadeUpChild} className="brand-eyebrow">
+            Vai trò website
+          </motion.p>
+          <motion.h2 variants={fadeUpChild} className="brand-section-title">
             Website để <span className="brand-gradient-text">làm gì?</span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-base font-medium leading-relaxed text-slate-600">
+          </motion.h2>
+          <motion.p variants={fadeUpChild} className="mx-auto max-w-2xl text-base font-medium leading-relaxed text-slate-600">
             Website là trung tâm thu khách — biến traffic từ Google, Facebook, Maps và Zalo thành lead, cuộc gọi và doanh thu.
-          </p>
+          </motion.p>
         </motion.div>
 
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <motion.div variants={slideLeft} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE} custom={0.05}>
             <WebsiteMockup />
             <div className="mt-6 flex flex-wrap justify-center gap-2 lg:justify-start">
-              {channelChips.map((chip) => (
-                <span
+              {channelChips.map((chip, index) => (
+                <motion.span
                   key={chip.label}
+                  variants={scaleIn}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT_ONCE}
+                  custom={index * 0.07}
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${chip.className}`}
                 >
                   <chip.icon size={12} className="shrink-0 opacity-80" />
                   {chip.label}
-                </span>
+                </motion.span>
               ))}
             </div>
           </motion.div>
 
           <div className="space-y-4">
-            <p className="text-sm font-bold text-violet-700">Quy trình chuyển đổi trên website</p>
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+              className="text-sm font-bold text-violet-700"
+            >
+              Quy trình chuyển đổi trên website
+            </motion.p>
             <div className="space-y-3">
               {journeySteps.map((item, index) => (
                 <JourneyStepCard key={item.step} item={item} index={index} total={journeySteps.length} />
@@ -271,9 +312,10 @@ export function WebsitePurposeSection() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={scaleIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
           className="mt-16 rounded-[2rem] border border-indigo-100 bg-gradient-to-br from-white via-indigo-50/20 to-violet-50/10 p-6 shadow-brand md:p-8"
         >
           <div className="mb-8 text-center">
@@ -285,13 +327,14 @@ export function WebsitePurposeSection() {
             {benefits.map((item, index) => (
               <motion.div
                 key={item.label}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT_ONCE}
+                custom={index * 0.06}
                 className="text-center"
               >
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-100 text-violet-700">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-100 text-violet-700 transition-transform duration-300 hover:scale-105">
                   <item.icon size={20} />
                 </div>
                 <p className="text-xs font-bold leading-snug text-indigo-950 sm:text-sm">{item.label}</p>
@@ -300,7 +343,7 @@ export function WebsitePurposeSection() {
           </div>
 
           <div className="mt-8 flex flex-col items-center gap-4">
-            <Link href="/website" className="brand-btn-primary px-8 py-4">
+            <Link href="/website" className="brand-btn-primary brand-btn-primary--shimmer px-8 py-4">
               Xem giải pháp website
               <ArrowRight size={18} />
             </Link>
@@ -314,7 +357,13 @@ export function WebsitePurposeSection() {
           </div>
         </motion.div>
 
-        <div className="mt-10 flex items-center justify-center gap-2 px-2 text-center text-sm font-semibold text-violet-600">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_ONCE}
+          className="mt-10 flex items-center justify-center gap-2 px-2 text-center text-sm font-semibold text-violet-600"
+        >
           <Users size={16} className="hidden shrink-0 sm:block" />
           <span className="leading-relaxed sm:inline">
             <span className="sm:hidden">Từ tìm kiếm đến chốt đơn — bắt đầu từ website đúng cách</span>
@@ -323,7 +372,7 @@ export function WebsitePurposeSection() {
             </span>
           </span>
           <ChevronRight size={16} className="hidden shrink-0 sm:block" />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

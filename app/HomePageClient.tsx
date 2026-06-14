@@ -30,6 +30,8 @@ import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useDat
 import { playClickSound } from "@/lib/utils";
 import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 import { WebsitePurposeSection } from "@/components/home/WebsitePurposeSection";
+import { SectionWaveDivider } from "@/components/shared/SectionWaveDivider";
+import { EASE_PREMIUM, fadeUpChild, scaleIn, slideLeft, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
@@ -357,12 +359,16 @@ export default function HomePageClient() {
         <header 
           className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'border-b border-white/10 bg-indigo-950/35 backdrop-blur-md'}`}
         >
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-4 lg:px-8">
+          <div className={`mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 transition-all duration-500 lg:px-8 ${isScrolled ? "py-2.5" : "py-4"}`}>
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <Link href="/" className="group flex min-w-0 items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95 sm:gap-4">
                 <div className="relative shrink-0">
                   <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <img src={logoSrc} alt={brandName} className="relative h-11 w-11 rounded-full border border-indigo-200 object-cover shadow-2xl sm:h-12 sm:w-12" />
+                  <img
+                    src={logoSrc}
+                    alt={brandName}
+                    className={`relative rounded-full border border-indigo-200 object-cover shadow-2xl transition-all duration-500 ${isScrolled ? "h-9 w-9 sm:h-10 sm:w-10" : "h-11 w-11 sm:h-12 sm:w-12"}`}
+                  />
                 </div>
                 <div className="min-w-0 flex flex-col">
                   <span className={`truncate text-lg font-bold tracking-tight sm:text-xl md:text-2xl leading-none ${isScrolled ? "text-indigo-950" : "text-white"}`}>{brandName}</span>
@@ -447,12 +453,13 @@ export default function HomePageClient() {
               {settings?.heroTitle?.trim() ||
                 `${brandName} — Giải pháp marketing thực chiến cho doanh nghiệp Việt Nam`}
             </h1>
-            <div className="w-full aspect-[16/9]">
+            <div className="relative aspect-[16/9] w-full overflow-hidden">
               <img
                 src="/slideshow-hero.png"
                 alt={`${brandName} — Agency marketing Facebook, Website và Google Maps`}
-                className="h-full w-full object-cover"
+                className="home-hero-kenburns"
               />
+              <div className="home-hero-overlay-shimmer pointer-events-none absolute inset-0" />
             </div>
           </section>
 
@@ -460,13 +467,14 @@ export default function HomePageClient() {
             <div className="brand-section-bridge--from-hero" />
             <div className="brand-section-inner px-8 pb-24 pt-4 lg:px-12">
             <div className="grid gap-20 lg:grid-cols-2 lg:items-center">
-              <motion.div 
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+              <motion.div
+                variants={slideLeft}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT_ONCE}
                 className="relative"
               >
-                <div className="absolute -inset-10 bg-violet-600/10 blur-[100px] rounded-full animate-pulse" />
+                <div className="home-blob-float absolute -inset-10 rounded-full bg-violet-600/10 blur-[100px]" />
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-indigo-200 bg-indigo-50/40 shadow-2xl">
                   <img 
                     src="/mascot-home.png" 
@@ -476,31 +484,22 @@ export default function HomePageClient() {
                 </div>
               </motion.div>
 
-              <div className="space-y-10">
+              <motion.div
+                variants={staggerIntro}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT_ONCE}
+                className="space-y-10"
+              >
                 <div className="space-y-6">
-                  <motion.p 
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="brand-eyebrow"
-                  >
+                  <motion.p variants={fadeUpChild} className="brand-eyebrow">
                     Tầm nhìn & Sứ mệnh
                   </motion.p>
-                  <motion.h2 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="brand-section-title"
-                  >
+                  <motion.h2 variants={fadeUpChild} className="brand-section-title">
                     Đồng hành cùng sự <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-violet-600">Bứt Phá</span> của bạn
                   </motion.h2>
-                  <motion.p 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-lg leading-relaxed text-slate-600 font-medium"
-                  >
+                  <motion.p variants={fadeUpChild} className="text-lg font-medium leading-relaxed text-slate-600">
                     Chúng tôi không chỉ cung cấp dịch vụ marketing rời rạc. Bứt Phá Marketing xây dựng hệ thống tăng trưởng toàn diện, giúp doanh nghiệp tối ưu hóa từng điểm chạm trên hành trình khách hàng.
                   </motion.p>
                 </div>
@@ -510,13 +509,10 @@ export default function HomePageClient() {
                     { title: "Chiến lược", desc: "Tư duy marketing dựa trên dữ liệu thật.", icon: Target, color: "text-violet-600" },
                     { title: "Công nghệ", desc: "Ứng dụng AI & Automation tối ưu vận hành.", icon: Workflow, color: "text-violet-600" },
                   ].map((item, i) => (
-                    <motion.div 
+                    <motion.div
                       key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      className="group rounded-[2rem] border border-indigo-100 bg-indigo-50/40 p-6 transition-all hover:bg-indigo-50/80"
+                      variants={fadeUpChild}
+                      className="group rounded-[2rem] border border-indigo-100 bg-indigo-50/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-indigo-50/80 hover:shadow-brand"
                     >
                       <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 ${item.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
                         <item.icon size={24} />
@@ -527,50 +523,52 @@ export default function HomePageClient() {
                   ))}
                 </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <Link 
-                    href="/gioi-thieu" 
+                <motion.div variants={fadeUpChild}>
+                  <Link
+                    href="/gioi-thieu"
                     className="brand-btn-ghost px-10 py-5"
                   >
                     Tìm hiểu thêm về chúng tôi
                     <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </Link>
                 </motion.div>
-              </div>
+              </motion.div>
             </div>
             </div>
           </section>
 
           <section id="services" className="brand-section-white brand-section-white--grid">
-            <div className="brand-section-bridge--from-muted" />
+            <SectionWaveDivider from="#f4f6fc" to="#ffffff" />
             <div className="brand-section-inner px-8 py-24 lg:px-12">
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              variants={staggerIntro}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
               className="brand-section-intro"
             >
-              <p className="brand-eyebrow">Giải pháp cốt lõi</p>
-              <h2 className="brand-section-title">
+              <motion.p variants={fadeUpChild} className="brand-eyebrow">
+                Giải pháp cốt lõi
+              </motion.p>
+              <motion.h2 variants={fadeUpChild} className="brand-section-title">
                 Dịch vụ <span className="brand-gradient-text">chiến lược</span>
-              </h2>
-              <p className="text-base font-medium leading-relaxed text-slate-600">
+              </motion.h2>
+              <motion.p variants={fadeUpChild} className="text-base font-medium leading-relaxed text-slate-600">
                 Website, Facebook và Google Maps — một hệ sinh thái tăng trưởng thống nhất cho doanh nghiệp.
-              </p>
+              </motion.p>
             </motion.div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {serviceCards.map((card, i) => (
                 <motion.div
                   key={card.key}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  variants={scaleIn}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT_ONCE}
+                  custom={i * 0.08}
+                  whileHover={{ y: -6 }}
+                  transition={{ ease: EASE_PREMIUM }}
                 >
                   <Link
                     href={card.href}
@@ -604,14 +602,22 @@ export default function HomePageClient() {
           <WebsitePurposeSection />
 
           <section id="why-choose" className="brand-section-white">
-            <div className="brand-section-bridge--from-muted" />
+            <SectionWaveDivider from="#f4f6fc" to="#ffffff" />
             <div className="brand-section-inner px-8 py-24 lg:px-12">
-            <div className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
+            <motion.div
+              variants={staggerIntro}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+              className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between"
+            >
               <div className="space-y-4">
-                <p className="brand-eyebrow">Giá trị cốt lõi</p>
-                <h2 className="brand-section-title text-left md:text-4xl lg:text-5xl">
+                <motion.p variants={fadeUpChild} className="brand-eyebrow">
+                  Giá trị cốt lõi
+                </motion.p>
+                <motion.h2 variants={fadeUpChild} className="brand-section-title text-left md:text-4xl lg:text-5xl">
                   Tại sao chọn chúng tôi?
-                </h2>
+                </motion.h2>
               </div>
               <div className="hidden gap-4 md:flex">
                 <button
@@ -627,18 +633,21 @@ export default function HomePageClient() {
                   <ChevronRight size={24} />
                 </button>
               </div>
-            </div>
+            </motion.div>
             <div
               ref={whyChooseUsRef}
               className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
             >
               {whyChooseUs.map((item, i) => (
-                <motion.div 
+                <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  variants={scaleIn}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT_ONCE}
+                  custom={i * 0.08}
+                  whileHover={{ y: -5 }}
+                  transition={{ ease: EASE_PREMIUM }}
                   className="brand-card-soft p-8 transition-all hover:shadow-brand-lg"
                 >
                   <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-indigo-100 to-violet-100 text-violet-600 transition-all group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-indigo-900 group-hover:to-violet-600 group-hover:text-white group-hover:shadow-brand-accent">
@@ -653,28 +662,50 @@ export default function HomePageClient() {
           </section>
 
           <section id="news" className="brand-section-muted">
-            <div className="brand-section-bridge--to-muted" />
+            <SectionWaveDivider from="#ffffff" to="#eef2ff" />
             <div className="brand-section-inner px-4 py-16 lg:px-6 lg:py-20">
-            <div className="mb-8 flex items-end justify-between gap-4">
+            <motion.div
+              variants={staggerIntro}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+              className="mb-8 flex items-end justify-between gap-4"
+            >
               <div>
-                <p className="brand-eyebrow">Tin tức & kiến thức</p>
-                <h2 className="mt-2 text-3xl font-bold text-indigo-950 md:text-4xl">Cập nhật xu hướng marketing</h2>
+                <motion.p variants={fadeUpChild} className="brand-eyebrow">
+                  Tin tức & kiến thức
+                </motion.p>
+                <motion.h2 variants={fadeUpChild} className="mt-2 text-3xl font-bold text-indigo-950 md:text-4xl">
+                  Cập nhật xu hướng marketing
+                </motion.h2>
               </div>
-              <Link href="/blog" className="brand-btn-secondary px-4 py-3 text-sm font-semibold">
-                Xem tất cả bài viết
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+              <motion.div variants={fadeUpChild}>
+                <Link href="/blog" className="brand-btn-secondary px-4 py-3 text-sm font-semibold">
+                  Xem tất cả bài viết
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </motion.div>
+            </motion.div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {topBlogs.map((post) => (
-                <Link key={post.id} href={`/blog/${post.slug || post.id}`} className="group block">
+              {topBlogs.map((post, i) => (
+                <motion.div
+                  key={post.id}
+                  variants={scaleIn}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT_ONCE}
+                  custom={i * 0.07}
+                  whileHover={{ y: -6 }}
+                  transition={{ ease: EASE_PREMIUM }}
+                >
+                <Link href={`/blog/${post.slug || post.id}`} className="group block h-full">
                   <article className="overflow-hidden rounded-[1.5rem] border border-indigo-100 bg-white shadow-brand transition duration-300 hover:border-violet-300 hover:shadow-brand-lg h-full">
                     <div className="aspect-video overflow-hidden">
-                      <img 
-                        src={post.imageUrl || "/mascot-home.png"} 
-                        alt={post.title} 
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105" 
+                      <img
+                        src={post.imageUrl || "/mascot-home.png"}
+                        alt={post.title}
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                       />
                     </div>
                     <div className="p-5">
@@ -691,13 +722,14 @@ export default function HomePageClient() {
                     </div>
                   </article>
                 </Link>
+                </motion.div>
               ))}
             </div>
             </div>
           </section>
 
           <section id="contact" className="brand-section-contact">
-            <div className="h-14 w-full bg-gradient-to-b from-[#f4f6fc] to-violet-50/80" />
+            <SectionWaveDivider from="#f4f6fc" to="#f5f3ff" />
             <div className="brand-section-inner px-4 py-12 lg:px-6 lg:py-16">
             <div className="brand-card relative overflow-hidden rounded-[3rem] p-8 shadow-brand-lg md:p-12">
               <div className="grid gap-12 lg:grid-cols-2">
@@ -782,7 +814,7 @@ export default function HomePageClient() {
                   <button
                     disabled={submittingContact}
                     type="submit"
-                    className="brand-btn-primary w-full py-5 text-lg disabled:opacity-50"
+                    className="brand-btn-primary brand-btn-primary--shimmer w-full py-5 text-lg disabled:opacity-50"
                   >
                     {submittingContact ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                   </button>

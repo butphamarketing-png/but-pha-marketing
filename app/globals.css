@@ -176,7 +176,109 @@
   }
 
   .brand-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_36px_rgba(236,72,153,0.25)] transition hover:shadow-[0_18px_44px_rgba(168,85,247,0.3)] hover:brightness-110 active:scale-[0.99];
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-pink-500 via-purple-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_36px_rgba(236,72,153,0.25)] transition hover:shadow-[0_18px_44px_rgba(168,85,247,0.3)] hover:brightness-110 active:scale-[0.99];
+  }
+
+  .brand-btn-primary--shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.28) 50%,
+      transparent 62%
+    );
+    transform: translateX(-120%);
+    animation: brand-btn-shimmer 3.5s ease-in-out infinite;
+  }
+
+  @keyframes brand-btn-shimmer {
+    0%,
+    72% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(120%);
+    }
+  }
+
+  .home-hero-kenburns {
+    @apply h-full w-full object-cover;
+  }
+
+  .home-hero-overlay-shimmer {
+    background: linear-gradient(
+      180deg,
+      rgba(49, 46, 129, 0.08) 0%,
+      transparent 35%,
+      transparent 62%,
+      rgba(49, 46, 129, 0.12) 100%
+    );
+    animation: home-hero-overlay-breathe 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes home-hero-overlay-breathe {
+    from {
+      opacity: 0.75;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes home-hero-kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes home-blob-float {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(12px, -16px) scale(1.05);
+    }
+  }
+
+  @keyframes home-mockup-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-1.5deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .home-hero-kenburns {
+      animation: home-hero-kenburns 24s ease-in-out infinite alternate;
+    }
+
+    .home-blob-float {
+      animation: home-blob-float 10s ease-in-out infinite;
+    }
+
+    .home-mockup-float {
+      animation: home-mockup-float 6s ease-in-out infinite;
+    }
+
+    .brand-btn-primary--shimmer::after {
+      animation: brand-btn-shimmer 3.5s ease-in-out infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-hero-overlay-shimmer,
+    .brand-btn-primary--shimmer::after {
+      animation: none;
+    }
   }
 
   .brand-btn-secondary {
