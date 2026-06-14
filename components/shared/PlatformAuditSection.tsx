@@ -2,6 +2,7 @@
 
 import { ChevronRight, Search } from "lucide-react";
 import type { ReactNode } from "react";
+import { getZaloUrl } from "@/lib/site-contact";
 
 type PlatformAuditSectionProps = {
   accentColor: string;
@@ -95,7 +96,7 @@ export function PlatformAuditSection({
               ))}
             </ul>
             <a
-              href="https://zalo.me/0937417982"
+              href={getZaloUrl()}
               target="_blank"
               rel="noreferrer"
               className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 px-4 py-3.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105"

@@ -28,6 +28,7 @@ import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { BRAND_GRADIENT } from "@/lib/brand-colors";
+import { resolveHotline } from "@/lib/site-contact";
 
 export default function AboutPageClient() {
   const [services, setServices] = useState<Service[]>([]);
@@ -399,7 +400,7 @@ export default function AboutPageClient() {
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
-              <li>{settings?.hotline || "090.143.8703"}</li>
+              <li>{resolveHotline(settings?.hotline)}</li>
               <li>{settings?.email || "hello@butphamarketing.com"}</li>
               <li>{settings?.address || "123 Đường ABC, TP. HCM"}</li>
             </ul>

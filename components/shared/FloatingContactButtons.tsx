@@ -5,11 +5,12 @@ import { Phone, MessageCircle, Home } from "lucide-react";
 import { SiFacebook, SiMessenger, SiZalo } from "react-icons/si";
 import { useAdmin } from "@/lib/AdminContext";
 import Link from "next/link";
+import { getTelHref, getZaloUrl, resolveHotline } from "@/lib/site-contact";
 
 export function FloatingContactButtons() {
   const { settings } = useAdmin();
-  const hotline = settings.hotline || "0937417982";
-  const zaloUrl = "https://zalo.me/0937417982";
+  const hotline = resolveHotline(settings.hotline);
+  const zaloUrl = getZaloUrl(settings.hotline);
   const messengerUrl = "https://www.facebook.com/butphadoanhthu";
   const logo = settings.logo || "/logo.png";
 
@@ -30,7 +31,7 @@ export function FloatingContactButtons() {
       </Link>
 
       {/* Call Button */}
-      <a href={`tel:${hotline.replace(/\s/g, "")}`}>
+      <a href={getTelHref(settings.hotline)}>
         <motion.div
           whileHover={{ scale: 1.1, x: -5 }}
           whileTap={{ scale: 0.9 }}

@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase";
 import { parseNewsContentMeta } from "@/lib/news-content-meta";
+import { getRelatedBlogs } from "@/lib/blog-utils";
 
 export interface ServerBlogItem {
   id: string;
@@ -92,4 +93,11 @@ export async function getPublishedBlogs(): Promise<ServerBlogItem[]> {
 export async function getBlogBySlug(slug: string) {
   const blogs = await getPublishedBlogs();
   return blogs.find((item) => item.slug === slug) || null;
+}
+
+export async function getRelatedBlogsForSlug(slug: string, limit = 4) {
+  const blogs = await getPublishedBlogs();
+  const current = blogs.find((item) => item.slug === slug);
+  if (!current) return [];
+  return getRelatedBlogs(current, blogs, limit);
 }

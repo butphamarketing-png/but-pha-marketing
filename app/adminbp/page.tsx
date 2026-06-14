@@ -1159,7 +1159,7 @@ export default function AdminPage() {
                     <input value={settings.heroTitle || ""} onChange={e => updateSettings({ heroTitle: e.target.value })} placeholder="Tiêu đề Hero trang chủ" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <textarea value={settings.heroSubtitle || ""} onChange={e => updateSettings({ heroSubtitle: e.target.value })} placeholder="Mô tả Hero trang chủ (ví dụ: Tăng trưởng doanh thu...)" className="h-24 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                     <textarea value={settings.content || ""} onChange={e => updateSettings({ content: e.target.value })} placeholder="Giới thiệu" className="w-full h-32 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
-                    <input value={settings.hotline || ""} onChange={e => updateSettings({ hotline: e.target.value })} placeholder="Hotline" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
+                    <input value={settings.hotline || ""} onChange={e => updateSettings({ hotline: e.target.value })} placeholder="0937417982" className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white" />
                   </div>
                 </div>
               ) : (

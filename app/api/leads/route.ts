@@ -29,10 +29,12 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { type, name, phone, service, note, platform, url, clientId, clientName, logoUrl, rating, content } = body;
+    const { type, name, phone, service, note, platform, url, clientId, clientName, logoUrl, rating, content, email } = body;
+    const phoneValue = typeof phone === "string" ? phone.trim() : "";
+    const emailValue = typeof email === "string" ? email.trim() : "";
 
-    if (!type || !phone) {
-      return NextResponse.json({ error: "Missing required fields: type, phone" }, { status: 400 });
+    if (!type || (!phoneValue && !emailValue)) {
+      return NextResponse.json({ error: "Missing required fields: type, phone or email" }, { status: 400 });
     }
 
     const finalNote =
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("leads")
-      .insert({ type, name, phone, service, note: finalNote, platform, url })
+      .insert({ type, name, phone: phoneValue || emailValue, service, note: finalNote, platform, url })
       .select()
       .single();
 

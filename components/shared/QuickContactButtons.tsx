@@ -2,11 +2,11 @@ import { Phone } from "lucide-react";
 import { SiFacebook } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
+import { getTelHref, resolveHotline } from "@/lib/site-contact";
 
 export function QuickContactButtons() {
   const { settings } = useAdmin();
-  const phone = settings?.hotline || "";
-  const safePhone = phone ? phone.replace(/\D/g, "") : "";
+  const phone = resolveHotline(settings?.hotline);
 
   return (
     <motion.div
@@ -27,12 +27,12 @@ export function QuickContactButtons() {
         </span>
       </a>
       <a
-        href={safePhone ? `tel:${safePhone}` : "#"}
+        href={getTelHref(settings?.hotline)}
         className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg transition-transform hover:scale-110"
       >
         <Phone className="text-xl" />
         <span className="absolute left-14 whitespace-nowrap rounded bg-black/80 px-2 py-1 text-sm font-medium text-white opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">
-          Gọi {phone || "hotline"}
+          Gọi {phone}
         </span>
       </a>
     </motion.div>

@@ -26,6 +26,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
+import { resolveHotline } from "@/lib/site-contact";
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
@@ -646,7 +647,7 @@ export default function HomePageClient() {
                       </div>
                       <div>
                         <p className="text-sm font-bold text-slate-500">Hotline tư vấn</p>
-                        <p className="text-xl font-bold text-indigo-950">{settings.hotline}</p>
+                        <p className="text-xl font-bold text-indigo-950">{resolveHotline(settings.hotline)}</p>
                       </div>
                     </div>
                   </div>
@@ -799,7 +800,7 @@ export default function HomePageClient() {
                       <Phone className="h-4 w-4" />
                     </div>
                     <div className="text-violet-100">
-                      <p className="text-sm font-medium">{settings.hotline}</p>
+                      <p className="text-sm font-medium">{resolveHotline(settings.hotline)}</p>
                     </div>
                   </li>
                   <li className="flex items-center gap-3">

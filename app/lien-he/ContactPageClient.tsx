@@ -25,6 +25,7 @@ const ParticleBackground = dynamic(
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
+import { resolveHotline } from "@/lib/site-contact";
 
 type ContactFormState = {
   name: string;
@@ -186,7 +187,7 @@ export default function ContactPageClient() {
 
                 <div className="brand-card p-6">
                   {[
-                    { icon: Phone, title: "Hotline", value: settings?.hotline || "090.143.8303" },
+                    { icon: Phone, title: "Hotline", value: resolveHotline(settings?.hotline) },
                     { icon: Mail, title: "Email", value: settings?.email || "hello@butphamarketing.com" },
                     { icon: MapPin, title: "Địa chỉ", value: settings?.address || "123 Đường ABC, P. An Lạc, Q. Bình Tân, TP. HCM" },
                     { icon: Clock3, title: "Thời gian làm việc", value: "08:30 - 17:30 (Thứ 2 - Thứ 7)" },
@@ -350,7 +351,7 @@ export default function ContactPageClient() {
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
-              <li>{settings?.hotline || "090.143.8303"}</li>
+              <li>{resolveHotline(settings?.hotline)}</li>
               <li>{settings?.email || "hello@butphamarketing.com"}</li>
               <li>{settings?.address || "123 Đường ABC, P. An Lạc, Q. Bình Tân, TP. HCM"}</li>
             </ul>

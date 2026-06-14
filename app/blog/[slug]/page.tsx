@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
-import { getBlogBySlug } from "@/lib/server-blog";
+import { getBlogBySlug, getRelatedBlogsForSlug } from "@/lib/server-blog";
+import { toBlogCardItem } from "@/lib/blog-utils";
+import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
 
 const BASE_URL = SITE_URL;
 export const dynamic = "force-dynamic";
@@ -40,6 +43,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
+  const related = await getRelatedBlogsForSlug(slug, 4);
   const blogPath = blog.slug || blog.id;
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const publishedDate = blog.publishedAt || new Date(blog.timestamp).toISOString();
@@ -69,7 +73,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   };
 
   return (
-    <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10">
+    <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <section className="brand-card overflow-hidden">
         <div className="relative overflow-hidden border-b border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 px-6 py-10 md:px-10 md:py-14">
@@ -105,6 +109,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
           <article className="article-prose" dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
       </section>
+
+      <RelatedPosts posts={related.map(toBlogCardItem)} />
+      <BlogArticleExtras />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { Phone, X, Home } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/lib/AdminContext";
 import Link from "next/link";
+import { getTelHref, getZaloUrl } from "@/lib/site-contact";
 
 const DISMISS_KEY = "quick-action-dismissed";
 
@@ -28,8 +29,7 @@ export function QuickActionBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [dismissed]);
 
-  const hotline = settings.hotline || "0937417982";
-  const zaloUrl = "https://zalo.me/0937417982";
+  const zaloUrl = getZaloUrl(settings.hotline);
   const messengerUrl = "https://www.facebook.com/butphadoanhthu";
 
   return (
@@ -50,7 +50,7 @@ export function QuickActionBar() {
           </Link>
 
           {/* Call */}
-          <a href={`tel:${hotline.replace(/\s/g, "")}`} className="flex flex-col items-center gap-1 text-indigo-900">
+          <a href={getTelHref(settings.hotline)} className="flex flex-col items-center gap-1 text-indigo-900">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20">
               <Phone size={20} fill="currentColor" />
             </div>

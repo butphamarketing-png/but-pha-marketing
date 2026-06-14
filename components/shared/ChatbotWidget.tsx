@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MessageCircle, Send, Bot, Phone } from "lucide-react";
+import { DEFAULT_HOTLINE, getZaloUrl } from "@/lib/site-contact";
 
 interface Message {
   id: number;
@@ -10,8 +11,8 @@ interface Message {
   text: string;
 }
 
-const ZALO_NUMBER = "0937417982";
-const ZALO_URL = `https://zalo.me/${ZALO_NUMBER}`;
+const ZALO_NUMBER = DEFAULT_HOTLINE;
+const ZALO_URL = getZaloUrl();
 
 const QUICK_REPLIES = [
   "Dịch vụ Facebook Marketing",

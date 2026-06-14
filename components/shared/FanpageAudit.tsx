@@ -4,6 +4,7 @@ import { X, Activity, BarChart2, ShieldCheck, Zap, Target, Search, Loader2, Chec
 import { DecisionTreeQuiz } from "./DecisionTreeQuiz";
 import { db } from "@/lib/useData";
 import { useAdmin } from "@/lib/AdminContext";
+import { getTelHref } from "@/lib/site-contact";
 
 interface FanpageAuditProps {
   primaryColor: string;
@@ -441,7 +442,7 @@ export function FanpageAudit({ primaryColor, platform = "facebook" }: FanpageAud
 
                   <div className="sticky bottom-0 bg-card pt-4 pb-2">
                     <a
-                      href={`tel:0937417982`}
+                      href={getTelHref()}
                       className="flex items-center justify-center gap-3 rounded-2xl py-5 text-base font-black text-white shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                       style={{ backgroundColor: primaryColor }}
                     >

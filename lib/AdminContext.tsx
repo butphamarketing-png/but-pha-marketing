@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { DEFAULT_HOTLINE, normalizeStoredHotline } from "@/lib/site-contact";
 
 export interface CaseStudyItem {
   id: string;
@@ -199,7 +200,7 @@ const defaultSettings: SiteSettings = {
   logo: "/logo.png",
   favicon: "/logo.png",
   content: "",
-  hotline: "090 143 8703",
+  hotline: DEFAULT_HOTLINE,
   address: "",
   email: "",
   fanpage: "",
@@ -289,6 +290,7 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
   return {
     ...defaultSettings,
     ...parsed,
+    hotline: normalizeStoredHotline(parsed.hotline ?? defaultSettings.hotline),
     media: mergeMedia(parsed.media),
     cms: mergeCms(parsed.cms),
     seoIntegrations: {
