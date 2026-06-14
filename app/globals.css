@@ -203,6 +203,43 @@
     @apply bg-gradient-to-b from-indigo-50/50 via-[#f7f8fc] to-[#f4f6fc];
   }
 
+  .brand-section-white {
+    @apply relative isolate bg-white;
+  }
+
+  .brand-section-white--grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(49, 46, 129, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(49, 46, 129, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 88%);
+    pointer-events: none;
+  }
+
+  .brand-section-bridge--from-muted {
+    @apply h-14 w-full bg-gradient-to-b from-[#f4f6fc] to-white;
+  }
+
+  .brand-section-bridge--to-muted {
+    @apply h-14 w-full bg-gradient-to-b from-white to-[#eef2ff];
+  }
+
+  .brand-section-bridge--from-hero {
+    @apply h-16 w-full bg-gradient-to-b from-white via-[#f8f9ff] to-[#eef2ff];
+  }
+
+  .brand-section-contact {
+    @apply relative bg-gradient-to-b from-violet-50/90 via-indigo-50/45 to-white;
+  }
+
+  .brand-section-inner {
+    @apply relative z-10 mx-auto max-w-7xl;
+  }
+
   .platform-page-canvas {
     @apply min-h-screen bg-gradient-to-b from-[#f4f6fc] via-[#f7f8fc] to-white;
   }

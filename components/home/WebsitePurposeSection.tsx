@@ -221,10 +221,10 @@ function JourneyStepCard({
 
 export function WebsitePurposeSection() {
   return (
-    <section id="website-purpose" className="relative overflow-hidden bg-white">
-      <div className="h-16 bg-gradient-to-b from-[#eef2ff] to-white" />
+    <section id="website-purpose" className="relative overflow-hidden brand-section-muted">
+      <div className="brand-section-bridge--to-muted" />
 
-      <div className="mx-auto max-w-7xl px-4 pb-24 pt-4 md:px-8 lg:px-12">
+      <div className="brand-section-inner px-4 pb-24 pt-4 md:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

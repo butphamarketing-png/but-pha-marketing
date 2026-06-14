@@ -456,7 +456,9 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          <section id="intro" className="brand-section-muted mx-auto max-w-7xl px-8 py-24 lg:px-12">
+          <section id="intro" className="brand-section-muted">
+            <div className="brand-section-bridge--from-hero" />
+            <div className="brand-section-inner px-8 pb-24 pt-4 lg:px-12">
             <div className="grid gap-20 lg:grid-cols-2 lg:items-center">
               <motion.div 
                 initial={{ opacity: 0, x: -30 }}
@@ -540,9 +542,12 @@ export default function HomePageClient() {
                 </motion.div>
               </div>
             </div>
+            </div>
           </section>
 
-          <section id="services" className="brand-section-muted mx-auto max-w-7xl px-8 py-24 lg:px-12">
+          <section id="services" className="brand-section-white brand-section-white--grid">
+            <div className="brand-section-bridge--from-muted" />
+            <div className="brand-section-inner px-8 py-24 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -593,11 +598,14 @@ export default function HomePageClient() {
                 </motion.div>
               ))}
             </div>
+            </div>
           </section>
 
           <WebsitePurposeSection />
 
-          <section className="mx-auto max-w-7xl px-8 py-24 lg:px-12">
+          <section id="why-choose" className="brand-section-white">
+            <div className="brand-section-bridge--from-muted" />
+            <div className="brand-section-inner px-8 py-24 lg:px-12">
             <div className="mb-16 flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
               <div className="space-y-4">
                 <p className="brand-eyebrow">Giá trị cốt lõi</p>
@@ -641,9 +649,12 @@ export default function HomePageClient() {
                 </motion.div>
               ))}
             </div>
+            </div>
           </section>
 
-          <section id="news" className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+          <section id="news" className="brand-section-muted">
+            <div className="brand-section-bridge--to-muted" />
+            <div className="brand-section-inner px-4 py-16 lg:px-6 lg:py-20">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
                 <p className="brand-eyebrow">Tin tức & kiến thức</p>
@@ -682,10 +693,13 @@ export default function HomePageClient() {
                 </Link>
               ))}
             </div>
+            </div>
           </section>
 
-          <section id="contact" className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-            <div className="brand-card-soft relative overflow-hidden rounded-[3rem] p-8 md:p-12">
+          <section id="contact" className="brand-section-contact">
+            <div className="h-14 w-full bg-gradient-to-b from-[#f4f6fc] to-violet-50/80" />
+            <div className="brand-section-inner px-4 py-12 lg:px-6 lg:py-16">
+            <div className="brand-card relative overflow-hidden rounded-[3rem] p-8 shadow-brand-lg md:p-12">
               <div className="grid gap-12 lg:grid-cols-2">
                 <div>
                   <h2 className="brand-section-title text-left lg:text-5xl">Sẵn sàng bứt phá doanh thu?</h2>
@@ -779,6 +793,7 @@ export default function HomePageClient() {
                   )}
                 </form>
               </div>
+            </div>
             </div>
           </section>
         </main>
