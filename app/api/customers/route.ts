@@ -9,69 +9,16 @@ import {
 } from "@/lib/customer-backup";
 import {
   CUSTOMER_RECORDS_KEY,
-  syncCustomerContract,
   type CustomerRecord,
   createEmptyCustomer,
 } from "@/lib/customer-records";
+import { sanitizeCustomerRecord } from "@/lib/customer-record-sanitize";
+import { autoSyncCustomersToCms } from "@/lib/cms-customer-auto-sync";
 
 type StoredPayload = { entries: CustomerRecord[] };
 
-function sanitizeRecord(raw: unknown, index: number): CustomerRecord {
-  const base = createEmptyCustomer();
-  const item = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
-  const now = new Date().toISOString();
-
-  const legacyAmount = typeof item.amount === "number" ? item.amount : Number(item.amount) || 0;
-  const amountPaid =
-    typeof item.amountPaid === "number" ? item.amountPaid : Number(item.amountPaid) || legacyAmount;
-  const amountUnpaid =
-    typeof item.amountUnpaid === "number" ? item.amountUnpaid : Number(item.amountUnpaid) || 0;
-  const platformRaw = typeof item.platform === "string" ? item.platform : base.platform;
-  const platform =
-    platformRaw === "website" || platformRaw === "googlemaps" || platformRaw === "facebook"
-      ? platformRaw
-      : "facebook";
-  const service = typeof item.service === "string" ? item.service : base.service;
-  const contractBaseRaw =
-    typeof item.contractBase === "string" ? item.contractBase : typeof item.contractCode === "string" ? item.contractCode : "";
-  const contractCodeRaw = typeof item.contractCode === "string" ? item.contractCode : "";
-  const { contractBase, contractCode } = syncCustomerContract(
-    {
-      contractBase: contractBaseRaw,
-      contractCode: contractCodeRaw,
-      platform,
-      service,
-    },
-    index,
-  );
-
-  return {
-    id: typeof item.id === "string" && item.id.trim() ? item.id : `${Date.now()}-${index}`,
-    contractBase,
-    contractCode,
-    fullName: typeof item.fullName === "string" ? item.fullName : "",
-    industry: typeof item.industry === "string" ? item.industry : "",
-    establishmentName: typeof item.establishmentName === "string" ? item.establishmentName : "",
-    taxId: typeof item.taxId === "string" ? item.taxId : "",
-    phone: typeof item.phone === "string" ? item.phone : "",
-    email: typeof item.email === "string" ? item.email : "",
-    platform,
-    service,
-    subscriptionPackage: typeof item.subscriptionPackage === "string" ? item.subscriptionPackage : "",
-    registeredAt:
-      typeof item.registeredAt === "string" && item.registeredAt.trim() ? item.registeredAt.slice(0, 10) : null,
-    expiresAt: typeof item.expiresAt === "string" && item.expiresAt.trim() ? item.expiresAt.slice(0, 10) : null,
-    platformLink: typeof item.platformLink === "string" ? item.platformLink : "",
-    amountPaid,
-    amountUnpaid,
-    renewalReminderEnabled: item.renewalReminderEnabled !== false,
-    lastRenewalReminderAt:
-      typeof item.lastRenewalReminderAt === "string" && item.lastRenewalReminderAt.trim()
-        ? item.lastRenewalReminderAt
-        : null,
-    createdAt: typeof item.createdAt === "string" ? item.createdAt : now,
-    updatedAt: now,
-  };
+function sanitizeRecord(raw: unknown, index = 0): CustomerRecord {
+  return sanitizeCustomerRecord(raw, index);
 }
 
 async function loadEntries(): Promise<{ customers: CustomerRecord[]; serverOk: boolean }> {
@@ -97,7 +44,7 @@ async function loadEntries(): Promise<{ customers: CustomerRecord[]; serverOk: b
     serverOk = false;
   }
 
-  return { customers: entries.map(sanitizeRecord), serverOk };
+  return { customers: entries.map((entry, index) => sanitizeCustomerRecord(entry, index)), serverOk };
 }
 
 async function saveServerBackup(entries: CustomerRecord[]) {
@@ -158,7 +105,8 @@ export async function PUT(request: Request) {
     const rawList = Array.isArray(body?.customers) ? body.customers : [];
     const customers = rawList.map(sanitizeRecord);
     await saveEntries(customers);
-    return NextResponse.json({ ok: true, customers });
+    const cmsSync = await autoSyncCustomersToCms(customers);
+    return NextResponse.json({ ok: true, customers, cmsSync });
   } catch (error) {
     console.error("PUT /api/customers failed", error);
     return NextResponse.json({ ok: false, error: "Không thể lưu danh sách khách hàng." }, { status: 500 });
@@ -175,7 +123,8 @@ export async function POST(request: Request) {
     const customer = sanitizeRecord(body?.customer ?? createEmptyCustomer(), entries.length);
     entries.unshift(customer);
     await saveEntries(entries);
-    return NextResponse.json({ ok: true, customer });
+    const cmsSync = await autoSyncCustomersToCms([customer]);
+    return NextResponse.json({ ok: true, customer, cmsSync });
   } catch (error) {
     console.error("POST /api/customers failed", error);
     return NextResponse.json({ ok: false, error: "Không thể thêm khách hàng." }, { status: 500 });

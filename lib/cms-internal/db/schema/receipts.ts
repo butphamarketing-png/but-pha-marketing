@@ -6,6 +6,7 @@ export const receiptsTable = erpSchema.table("receipts", {
   code: text("code").notNull().unique(),
   customerId: integer("customer_id").notNull(),
   contractId: integer("contract_id"),
+  billingPeriodId: integer("billing_period_id"),
   serviceId: integer("service_id"),
   amount: numeric("amount", { precision: 18, scale: 2 }).notNull(),
   paymentMethod: text("payment_method").notNull().default("cash"),

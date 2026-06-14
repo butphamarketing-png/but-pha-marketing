@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 import { createServerClient } from "@/lib/supabase";
 import { CUSTOMER_RECORDS_KEY, type CustomerRecord } from "@/lib/customer-records";
+import { sanitizeCustomerRecord } from "@/lib/customer-record-sanitize";
+import { autoSyncCustomersToCms } from "@/lib/cms-customer-auto-sync";
 
 type StoredPayload = { entries: CustomerRecord[] };
 
@@ -39,14 +41,16 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       return NextResponse.json({ ok: false, error: "Không tìm thấy khách hàng." }, { status: 404 });
     }
     const current = entries[index];
-    entries[index] = {
+    const merged = {
       ...current,
       ...(typeof patch === "object" && patch ? patch : {}),
       id: current.id,
-      updatedAt: new Date().toISOString(),
+      createdAt: current.createdAt,
     };
+    entries[index] = sanitizeCustomerRecord(merged, index);
     await saveEntries(entries);
-    return NextResponse.json({ ok: true, customer: entries[index] });
+    const cmsSync = await autoSyncCustomersToCms([entries[index]]);
+    return NextResponse.json({ ok: true, customer: entries[index], cmsSync });
   } catch (error) {
     console.error("PATCH /api/customers/[id] failed", error);
     return NextResponse.json({ ok: false, error: "Không thể cập nhật." }, { status: 500 });

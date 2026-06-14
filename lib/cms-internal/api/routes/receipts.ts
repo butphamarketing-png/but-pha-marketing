@@ -3,6 +3,7 @@ import { db, receiptsTable, contractsTable, customersTable, servicesTable } from
 import { eq, ilike, sql, and, gte, lte } from "drizzle-orm";
 import { CreateReceiptBody, UpdateReceiptBody, GetReceiptParams, UpdateReceiptParams, DeleteReceiptParams, ListReceiptsQueryParams } from "@/lib/cms-internal/api-zod";
 import { logAudit } from "../lib/audit";
+import { refreshBillingPeriodPaid } from "@/lib/cms-billing-periods";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ async function enrichReceipt(receipt: typeof receiptsTable.$inferSelect) {
   return {
     ...receipt,
     amount: parseFloat(receipt.amount),
+    billingPeriodId: receipt.billingPeriodId ?? null,
     customerName: customer?.name ?? "Unknown",
     contractCode,
     serviceName,
@@ -62,6 +64,8 @@ router.post("/receipts", async (req, res) => {
   if (!body.success) return res.status(400).json({ error: body.error.message });
 
   const code = await generateReceiptCode();
+  const billingPeriodId =
+    typeof req.body?.billingPeriodId === "number" ? req.body.billingPeriodId : undefined;
 
   if (body.data.contractId) {
     await db.execute(sql`UPDATE contracts SET paid_amount = paid_amount + ${body.data.amount} WHERE id = ${body.data.contractId}`);
@@ -71,7 +75,12 @@ router.post("/receipts", async (req, res) => {
     ...body.data,
     code,
     amount: String(body.data.amount),
+    billingPeriodId: billingPeriodId ?? null,
   }).returning();
+
+  if (billingPeriodId) {
+    await refreshBillingPeriodPaid(billingPeriodId);
+  }
   const enriched = await enrichReceipt(receipt);
   await logAudit("receipt", receipt.id, "create", "Admin", null, enriched);
   return res.status(201).json(enriched);
@@ -96,8 +105,17 @@ router.patch("/receipts/:id", async (req, res) => {
 
   const updateData: Record<string, unknown> = { ...body.data };
   if (body.data.amount !== undefined) updateData.amount = String(body.data.amount);
+  if (req.body?.billingPeriodId !== undefined) {
+    updateData.billingPeriodId =
+      typeof req.body.billingPeriodId === "number" ? req.body.billingPeriodId : null;
+  }
 
   const [updated] = await db.update(receiptsTable).set(updateData).where(eq(receiptsTable.id, params.data.id)).returning();
+
+  const periodIds = new Set<number>();
+  if (existing.billingPeriodId) periodIds.add(existing.billingPeriodId);
+  if (updated.billingPeriodId) periodIds.add(updated.billingPeriodId);
+  await Promise.all([...periodIds].map((id) => refreshBillingPeriodPaid(id)));
   const enriched = await enrichReceipt(updated);
   await logAudit("receipt", updated.id, "update", "Admin", await enrichReceipt(existing), enriched);
   return res.json(enriched);
@@ -115,6 +133,10 @@ router.delete("/receipts/:id", async (req, res) => {
   }
 
   await db.delete(receiptsTable).where(eq(receiptsTable.id, params.data.id));
+
+  if (existing.billingPeriodId) {
+    await refreshBillingPeriodPaid(existing.billingPeriodId);
+  }
   await logAudit("receipt", params.data.id, "delete", "Admin", existing, null);
   return res.status(204).send();
 });

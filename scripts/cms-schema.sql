@@ -249,3 +249,123 @@ create index if not exists erp_customers_name_idx on erp.customers (name);
 create index if not exists erp_domains_expire_idx on erp.domains (expire_date);
 create index if not exists erp_hostings_expire_idx on erp.hostings (expire_date);
 create index if not exists erp_audit_logs_created_idx on erp.audit_logs (created_at desc);
+
+-- Pha 1: kỳ thu (billing periods) + liên kết marketing customer_records
+alter table erp.customers add column if not exists tax_id text;
+alter table erp.customers add column if not exists external_id text;
+
+create unique index if not exists erp_customers_external_id_idx
+  on erp.customers (external_id) where external_id is not null;
+
+alter table erp.contracts add column if not exists external_contract_code text;
+
+create unique index if not exists erp_contracts_external_code_idx
+  on erp.contracts (external_contract_code) where external_contract_code is not null;
+
+create table if not exists erp.billing_periods (
+  id serial primary key,
+  contract_id integer not null references erp.contracts(id) on delete cascade,
+  customer_id integer not null references erp.customers(id) on delete cascade,
+  period_start date not null,
+  period_end date not null,
+  due_date date not null,
+  amount_due numeric(18, 2) not null default 0,
+  amount_paid numeric(18, 2) not null default 0,
+  status text not null default 'pending',
+  label text,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table erp.receipts add column if not exists billing_period_id integer
+  references erp.billing_periods(id) on delete set null;
+
+create index if not exists erp_billing_periods_due_idx on erp.billing_periods (due_date);
+create index if not exists erp_billing_periods_status_idx on erp.billing_periods (status);
+create index if not exists erp_billing_periods_contract_idx on erp.billing_periods (contract_id);
+create unique index if not exists erp_billing_periods_contract_range_idx
+  on erp.billing_periods (contract_id, period_start, period_end);
+create index if not exists erp_receipts_billing_period_idx on erp.receipts (billing_period_id);
+
+-- Pha 2: ghi nhận doanh thu dồn tích (accrual) + chu kỳ hợp đồng
+alter table erp.contracts add column if not exists billing_cycle text;
+
+create table if not exists erp.revenue_recognition (
+  id serial primary key,
+  billing_period_id integer not null references erp.billing_periods(id) on delete cascade,
+  contract_id integer not null references erp.contracts(id) on delete cascade,
+  customer_id integer not null references erp.customers(id) on delete cascade,
+  recognition_year integer not null,
+  recognition_month integer not null check (recognition_month between 1 and 12),
+  amount numeric(18, 2) not null,
+  method text not null default 'monthly',
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (billing_period_id, recognition_year, recognition_month)
+);
+
+create index if not exists erp_revenue_recognition_period_idx
+  on erp.revenue_recognition (recognition_year, recognition_month);
+create index if not exists erp_revenue_recognition_customer_idx
+  on erp.revenue_recognition (customer_id);
+create index if not exists erp_revenue_recognition_contract_idx
+  on erp.revenue_recognition (contract_id);
+
+-- Pha 3: hóa đơn nội bộ + VAT + đối soát phiếu thu
+create table if not exists erp.invoices (
+  id serial primary key,
+  code text not null unique,
+  customer_id integer not null references erp.customers(id) on delete restrict,
+  contract_id integer references erp.contracts(id) on delete set null,
+  billing_period_id integer references erp.billing_periods(id) on delete set null,
+  tax_id text,
+  buyer_name text not null,
+  buyer_address text,
+  buyer_email text,
+  buyer_phone text,
+  subtotal numeric(18, 2) not null default 0,
+  vat_rate numeric(5, 2) not null default 8,
+  vat_amount numeric(18, 2) not null default 0,
+  total_amount numeric(18, 2) not null default 0,
+  status text not null default 'draft',
+  issue_date date not null,
+  notes text,
+  created_by text not null default 'Admin',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists erp.invoice_lines (
+  id serial primary key,
+  invoice_id integer not null references erp.invoices(id) on delete cascade,
+  line_no integer not null default 1,
+  description text not null,
+  unit text not null default 'Gói',
+  quantity numeric(18, 2) not null default 1,
+  unit_price numeric(18, 2) not null,
+  amount numeric(18, 2) not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists erp.invoice_receipts (
+  invoice_id integer not null references erp.invoices(id) on delete cascade,
+  receipt_id integer not null references erp.receipts(id) on delete restrict,
+  amount numeric(18, 2) not null,
+  created_at timestamptz not null default now(),
+  primary key (invoice_id, receipt_id)
+);
+
+create index if not exists erp_invoices_customer_idx on erp.invoices (customer_id);
+create index if not exists erp_invoices_status_idx on erp.invoices (status);
+create index if not exists erp_invoices_issue_date_idx on erp.invoices (issue_date desc);
+create index if not exists erp_invoice_lines_invoice_idx on erp.invoice_lines (invoice_id);
+create index if not exists erp_invoice_receipts_receipt_idx on erp.invoice_receipts (receipt_id);
+
+-- Loại khách + thông tin hóa đơn (Pha 3 UX)
+alter table erp.customers add column if not exists customer_type text default 'individual';
+alter table erp.customers add column if not exists contact_person text;
+alter table erp.customers add column if not exists invoice_address text;
+alter table erp.customers add column if not exists needs_vat_invoice boolean not null default false;
+alter table erp.customers add column if not exists customer_status text default 'active';

@@ -1,6 +1,8 @@
 export const CUSTOMER_RECORDS_KEY = "customer_records";
 
 export type CustomerPlatform = "facebook" | "website" | "googlemaps";
+export type CustomerType = "individual" | "company";
+export type CustomerStatus = "active" | "paused" | "stopped";
 
 export type ServicePackage = {
   key: string;
@@ -15,9 +17,17 @@ export type CustomerRecord = {
   contractBase: string;
   /** MSHĐ đầy đủ = contractBase + hậu tố dịch vụ, vd. 100100W */
   contractCode: string;
+  customerType: CustomerType;
   fullName: string;
+  /** Người liên hệ (công ty); cá nhân thường trùng fullName */
+  contactPerson: string;
   establishmentName: string;
   taxId: string;
+  /** Địa chỉ in trên hóa đơn VAT — công ty */
+  invoiceAddress: string;
+  needsVatInvoice: boolean;
+  customerStatus: CustomerStatus;
+  internalNotes: string;
   industry: string;
   phone: string;
   email: string;
@@ -371,9 +381,15 @@ export function createEmptyCustomer(index = 0): CustomerRecord {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
     contractBase,
     contractCode,
+    customerType: "individual",
     fullName: "",
+    contactPerson: "",
     establishmentName: "",
     taxId: "",
+    invoiceAddress: "",
+    needsVatInvoice: false,
+    customerStatus: "active",
+    internalNotes: "",
     industry: "",
     phone: "",
     email: "",
@@ -447,9 +463,15 @@ export const CUSTOMER_EXPORT_COLUMNS: {
   header: string;
 }[] = [
   { key: "contractCode", header: "Mã số hợp đồng" },
+  { key: "customerType", header: "Loại khách" },
   { key: "fullName", header: "Họ và tên khách hàng" },
+  { key: "contactPerson", header: "Người liên hệ" },
   { key: "establishmentName", header: "Tên hộ kinh doanh/ công ty" },
   { key: "taxId", header: "Mã số thuế" },
+  { key: "invoiceAddress", header: "Địa chỉ hóa đơn" },
+  { key: "needsVatInvoice", header: "Xuất HĐ VAT" },
+  { key: "customerStatus", header: "Trạng thái" },
+  { key: "internalNotes", header: "Ghi chú nội bộ" },
   { key: "industry", header: "Ngành nghề" },
   { key: "phone", header: "Số liên hệ" },
   { key: "email", header: "Gmail" },

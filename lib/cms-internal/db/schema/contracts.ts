@@ -12,6 +12,8 @@ export const contractsTable = erpSchema.table("contracts", {
   startDate: date("start_date", { mode: "string" }).notNull(),
   endDate: date("end_date", { mode: "string" }),
   dueDate: date("due_date", { mode: "string" }),
+  externalContractCode: text("external_contract_code"),
+  billingCycle: text("billing_cycle"),
   notes: text("notes"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),

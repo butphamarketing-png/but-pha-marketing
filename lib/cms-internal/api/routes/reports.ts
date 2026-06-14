@@ -1,7 +1,14 @@
 import { Router } from "express";
-import { db, receiptsTable, expensesTable, contractsTable, customersTable, servicesTable } from "@/lib/cms-internal/db";
-import { sql, gte, lte, and, eq } from "drizzle-orm";
+import { db, receiptsTable, expensesTable, contractsTable, customersTable, servicesTable, billingPeriodsTable } from "@/lib/cms-internal/db";
+import { sql, gte, lte, and, eq, inArray } from "drizzle-orm";
 import { GetRevenueReportQueryParams, GetExpenseReportQueryParams, GetProfitReportQueryParams, GetCashFlowReportQueryParams, GetCustomerReportQueryParams, GetServiceReportQueryParams } from "@/lib/cms-internal/api-zod";
+import {
+  AGING_BUCKET_LABELS,
+  computeAgingBucket,
+  getRecognizedRevenueForMonth,
+  type AgingBucketKey,
+} from "@/lib/cms-revenue-recognition";
+import { getInvoiceReconciliationReport } from "@/lib/cms-invoices";
 
 const router = Router();
 
@@ -181,6 +188,181 @@ router.get("/reports/by-service", async (req, res) => {
   }
 
   return res.json(results);
+});
+
+router.get("/reports/billing-periods", async (req, res) => {
+  const year = req.query.year ? parseInt(String(req.query.year)) : new Date().getFullYear();
+  const items = [];
+
+  for (let month = 1; month <= 12; month += 1) {
+    const fromDate = `${year}-${String(month).padStart(2, "0")}-01`;
+    const lastDay = new Date(year, month, 0).getDate();
+    const toDate = `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+    const rows = await db.select().from(billingPeriodsTable).where(
+      and(gte(billingPeriodsTable.dueDate, fromDate), lte(billingPeriodsTable.dueDate, toDate)),
+    );
+
+    const amountDue = rows.reduce((sum, row) => sum + parseFloat(row.amountDue ?? "0"), 0);
+    const amountPaid = rows.reduce((sum, row) => sum + parseFloat(row.amountPaid ?? "0"), 0);
+    const remaining = rows.reduce((sum, row) => {
+      const due = parseFloat(row.amountDue ?? "0");
+      const paid = parseFloat(row.amountPaid ?? "0");
+      return sum + Math.max(0, due - paid);
+    }, 0);
+
+    items.push({
+      month,
+      label: `${MONTH_LABELS[month - 1]}/${year}`,
+      periodCount: rows.length,
+      amountDue,
+      amountPaid,
+      remaining,
+      paidCount: rows.filter((row) => row.status === "paid").length,
+      overdueCount: rows.filter((row) => row.status === "overdue").length,
+    });
+  }
+
+  return res.json({
+    year,
+    totalDue: items.reduce((sum, item) => sum + item.amountDue, 0),
+    totalPaid: items.reduce((sum, item) => sum + item.amountPaid, 0),
+    totalRemaining: items.reduce((sum, item) => sum + item.remaining, 0),
+    items,
+  });
+});
+
+router.get("/reports/revenue-comparison", async (req, res) => {
+  const year = req.query.year ? parseInt(String(req.query.year)) : new Date().getFullYear();
+  const items = [];
+
+  for (let month = 1; month <= 12; month += 1) {
+    const fromDate = `${year}-${String(month).padStart(2, "0")}-01`;
+    const lastDay = new Date(year, month, 0).getDate();
+    const toDate = `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+    const [cashResult, recognizedRevenue] = await Promise.all([
+      db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` })
+        .from(receiptsTable)
+        .where(and(gte(receiptsTable.receiptDate, fromDate), lte(receiptsTable.receiptDate, toDate))),
+      getRecognizedRevenueForMonth(year, month),
+    ]);
+
+    const cashRevenue = parseFloat(cashResult[0]?.total ?? "0");
+    items.push({
+      month,
+      label: `${MONTH_LABELS[month - 1]}/${year}`,
+      cashRevenue,
+      recognizedRevenue,
+      gap: Math.round((recognizedRevenue - cashRevenue) * 100) / 100,
+    });
+  }
+
+  return res.json({
+    year,
+    totalCashRevenue: items.reduce((sum, item) => sum + item.cashRevenue, 0),
+    totalRecognizedRevenue: items.reduce((sum, item) => sum + item.recognizedRevenue, 0),
+    totalGap: items.reduce((sum, item) => sum + item.gap, 0),
+    items,
+  });
+});
+
+router.get("/reports/ar-aging", async (req, res) => {
+  const today = new Date().toISOString().slice(0, 10);
+
+  const rows = await db
+    .select({
+      id: billingPeriodsTable.id,
+      customerId: billingPeriodsTable.customerId,
+      customerName: customersTable.name,
+      contractId: billingPeriodsTable.contractId,
+      contractCode: contractsTable.code,
+      dueDate: billingPeriodsTable.dueDate,
+      amountDue: billingPeriodsTable.amountDue,
+      amountPaid: billingPeriodsTable.amountPaid,
+      status: billingPeriodsTable.status,
+      label: billingPeriodsTable.label,
+    })
+    .from(billingPeriodsTable)
+    .leftJoin(customersTable, eq(billingPeriodsTable.customerId, customersTable.id))
+    .leftJoin(contractsTable, eq(billingPeriodsTable.contractId, contractsTable.id))
+    .where(inArray(billingPeriodsTable.status, ["pending", "partial", "overdue"]))
+    .orderBy(billingPeriodsTable.dueDate);
+
+  type Bucket = {
+    key: AgingBucketKey;
+    label: string;
+    count: number;
+    amount: number;
+    items: Array<{
+      id: number;
+      customerId: number;
+      customerName: string;
+      contractCode: string | null;
+      dueDate: string;
+      remainingAmount: number;
+      status: string;
+      label: string | null;
+      daysPastDue: number;
+    }>;
+  };
+
+  const bucketKeys: AgingBucketKey[] = ["current", "days1_30", "days31_60", "days61_90", "over90"];
+  const buckets: Record<AgingBucketKey, Bucket> = {
+    current: { key: "current", label: AGING_BUCKET_LABELS.current, count: 0, amount: 0, items: [] },
+    days1_30: { key: "days1_30", label: AGING_BUCKET_LABELS.days1_30, count: 0, amount: 0, items: [] },
+    days31_60: { key: "days31_60", label: AGING_BUCKET_LABELS.days31_60, count: 0, amount: 0, items: [] },
+    days61_90: { key: "days61_90", label: AGING_BUCKET_LABELS.days61_90, count: 0, amount: 0, items: [] },
+    over90: { key: "over90", label: AGING_BUCKET_LABELS.over90, count: 0, amount: 0, items: [] },
+  };
+
+  for (const row of rows) {
+    const amountDue = parseFloat(row.amountDue ?? "0");
+    const amountPaid = parseFloat(row.amountPaid ?? "0");
+    const remainingAmount = Math.max(0, amountDue - amountPaid);
+    if (remainingAmount <= 0) continue;
+
+    const due = new Date(`${row.dueDate}T12:00:00`);
+    const now = new Date(`${today}T12:00:00`);
+    const daysPastDue = Math.floor((now.getTime() - due.getTime()) / 86_400_000);
+    const bucketKey = computeAgingBucket(row.dueDate, today);
+    const bucket = buckets[bucketKey];
+
+    bucket.count += 1;
+    bucket.amount += remainingAmount;
+    bucket.items.push({
+      id: row.id,
+      customerId: row.customerId,
+      customerName: row.customerName ?? "Unknown",
+      contractCode: row.contractCode ?? null,
+      dueDate: row.dueDate,
+      remainingAmount,
+      status: row.status,
+      label: row.label,
+      daysPastDue,
+    });
+  }
+
+  const bucketList = bucketKeys.map((key) => ({
+    ...buckets[key],
+    amount: Math.round(buckets[key].amount * 100) / 100,
+  }));
+
+  return res.json({
+    asOf: today,
+    totalOutstanding: Math.round(bucketList.reduce((sum, bucket) => sum + bucket.amount, 0) * 100) / 100,
+    totalCount: bucketList.reduce((sum, bucket) => sum + bucket.count, 0),
+    buckets: bucketList,
+  });
+});
+
+router.get("/reports/invoice-reconciliation", async (_req, res) => {
+  try {
+    return res.json(await getInvoiceReconciliationReport());
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 export default router;
