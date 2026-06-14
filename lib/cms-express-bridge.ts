@@ -110,8 +110,14 @@ export async function handleCmsApiRequest(
       return new NextResponse(null, { status: 204, headers: responseHeaders });
     }
 
-    const data = mockRes._getBuffer();
-    const payload = data.length > 0 ? new Uint8Array(data) : null;
+    const textBody = mockRes._getData();
+    const bufferBody = mockRes._getBuffer();
+    const payload =
+      textBody.length > 0
+        ? textBody
+        : bufferBody.length > 0
+          ? new Uint8Array(bufferBody)
+          : null;
     return new NextResponse(payload, {
       status: mockRes.statusCode || 200,
       headers: responseHeaders,
