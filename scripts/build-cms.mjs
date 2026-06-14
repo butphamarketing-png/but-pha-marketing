@@ -56,4 +56,7 @@ await rm(publicCms, { recursive: true, force: true });
 await mkdir(publicCms, { recursive: true });
 await cp(distDir, publicCms, { recursive: true });
 
+console.log("Applying CMS menu/report patches...");
+run("node", ["scripts/patch-cms-menu-reports.mjs"]);
+
 console.log("CMS build complete: public/cms");

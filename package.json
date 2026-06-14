@@ -7,6 +7,7 @@
     "build": "next build",
     "build:site": "next build",
     "build:cms": "node scripts/build-cms.mjs",
+    "patch:cms": "node scripts/patch-cms-menu-reports.mjs",
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
     "generate:vapid-keys": "node scripts/generate-vapid-keys.mjs",
     "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
