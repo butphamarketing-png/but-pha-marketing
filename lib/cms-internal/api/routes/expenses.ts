@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { db, expensesTable, suppliersTable, servicesTable } from "@/lib/cms-internal/db";
+import { db, expensesTable, suppliersTable, servicesTable, customersTable } from "@/lib/cms-internal/db";
 import { eq, ilike, sql, and, gte, lte } from "drizzle-orm";
 import { CreateExpenseBody, UpdateExpenseBody, GetExpenseParams, UpdateExpenseParams, DeleteExpenseParams, ListExpensesQueryParams } from "@/lib/cms-internal/api-zod";
 import { logAudit } from "../lib/audit";
@@ -12,6 +12,11 @@ async function enrichExpense(expense: typeof expensesTable.$inferSelect) {
     const [s] = await db.select({ name: suppliersTable.name }).from(suppliersTable).where(eq(suppliersTable.id, expense.supplierId)).limit(1);
     supplierName = s?.name ?? null;
   }
+  let customerName: string | null = null;
+  if (expense.customerId) {
+    const [c] = await db.select({ name: customersTable.name }).from(customersTable).where(eq(customersTable.id, expense.customerId)).limit(1);
+    customerName = c?.name ?? null;
+  }
   let serviceName: string | null = null;
   if (expense.serviceId) {
     const [svc] = await db.select({ name: servicesTable.name }).from(servicesTable).where(eq(servicesTable.id, expense.serviceId)).limit(1);
@@ -21,6 +26,7 @@ async function enrichExpense(expense: typeof expensesTable.$inferSelect) {
     ...expense,
     amount: parseFloat(expense.amount),
     supplierName,
+    customerName,
     serviceName,
   };
 }
@@ -34,11 +40,12 @@ async function generateExpenseCode(): Promise<string> {
 router.get("/expenses", async (req, res) => {
   const query = ListExpensesQueryParams.safeParse(req.query);
   if (!query.success) return res.status(400).json({ error: "Invalid query params" });
-  const { supplierId, category, serviceId, fromDate, toDate, search, page = 1, limit = 20 } = query.data;
+  const { supplierId, customerId, category, serviceId, fromDate, toDate, search, page = 1, limit = 20 } = query.data;
   const offset = (page - 1) * limit;
 
   const conditions: ReturnType<typeof eq>[] = [];
   if (supplierId) conditions.push(eq(expensesTable.supplierId, supplierId));
+  if (customerId) conditions.push(eq(expensesTable.customerId, customerId));
   if (category) conditions.push(eq(expensesTable.category, category));
   if (serviceId) conditions.push(eq(expensesTable.serviceId, serviceId));
   if (fromDate) conditions.push(gte(expensesTable.expenseDate, String(fromDate)));
@@ -59,9 +66,13 @@ router.post("/expenses", async (req, res) => {
   const body = CreateExpenseBody.safeParse(req.body);
   if (!body.success) return res.status(400).json({ error: body.error.message });
 
+  const rawCustomerId = req.body?.customerId;
+  const customerId = rawCustomerId != null && rawCustomerId !== "" ? Number(rawCustomerId) : undefined;
+
   const code = await generateExpenseCode();
   const [expense] = await db.insert(expensesTable).values({
     ...body.data,
+    customerId: Number.isFinite(customerId) ? customerId : undefined,
     code,
     amount: String(body.data.amount),
   }).returning();
@@ -89,6 +100,12 @@ router.patch("/expenses/:id", async (req, res) => {
 
   const updateData: Record<string, unknown> = { ...body.data };
   if (body.data.amount !== undefined) updateData.amount = String(body.data.amount);
+  if (req.body?.customerId !== undefined) {
+    const customerId = req.body.customerId != null && req.body.customerId !== ""
+      ? Number(req.body.customerId)
+      : null;
+    updateData.customerId = Number.isFinite(customerId) ? customerId : null;
+  }
 
   const [updated] = await db.update(expensesTable).set(updateData).where(eq(expensesTable.id, params.data.id)).returning();
   const enriched = await enrichExpense(updated);

@@ -456,6 +456,7 @@ export const listExpensesQueryLimitDefault = 20;
 
 export const ListExpensesQueryParams = zod.object({
   "supplierId": zod.coerce.number().optional(),
+  "customerId": zod.coerce.number().optional(),
   "category": zod.coerce.string().optional(),
   "serviceId": zod.coerce.number().optional(),
   "fromDate": zod.date().optional(),

@@ -4,7 +4,7 @@ import {
   contractsTable,
   billingPeriodsTable,
 } from "@/lib/cms-internal/db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import {
   type CustomerRecord,
   getPackageContractTotal,
@@ -24,6 +24,7 @@ import {
 } from "@/lib/cms-revenue-recognition";
 import { syncAutoReceiptForBillingPeriod } from "@/lib/cms-sync-receipts";
 import { syncAutoInvoiceForBillingPeriod } from "@/lib/cms-sync-invoices";
+import { resolveServiceId, seedErpServicesFromMarketing } from "@/lib/cms-services";
 
 export type CmsSyncResult = {
   customersCreated: number;
@@ -156,9 +157,11 @@ async function upsertContract(
   const totalValue = resolveContractTotal(record);
   const startDate = record.registeredAt || new Date().toISOString().slice(0, 10);
   const billingCycle = resolveBillingCycleFromRecord(record);
+  const serviceId = await resolveServiceId(record.platform, record.service);
   const values = {
     code,
     customerId,
+    serviceId,
     totalValue: String(totalValue),
     paidAmount: String(Math.max(0, record.amountPaid)),
     status: "active" as const,
@@ -182,6 +185,27 @@ async function upsertContract(
 
   const [created] = await db.insert(contractsTable).values(values).returning();
   return { id: created.id, created: true };
+}
+
+async function computeRenewalPaymentTarget(
+  record: CustomerRecord,
+  contractId: number,
+  isNewPeriod: boolean,
+): Promise<number | undefined> {
+  if (!isNewPeriod) return undefined;
+
+  const siblings = await db
+    .select({ amountPaid: billingPeriodsTable.amountPaid })
+    .from(billingPeriodsTable)
+    .where(eq(billingPeriodsTable.contractId, contractId));
+
+  if (siblings.length === 0) return undefined;
+
+  const paidOnOtherPeriods = siblings.reduce(
+    (sum, row) => sum + parseFloat(row.amountPaid ?? "0"),
+    0,
+  );
+  return Math.max(0, Math.round((record.amountPaid - paidOnOtherPeriods) * 100) / 100);
 }
 
 async function upsertBillingPeriod(
@@ -274,7 +298,16 @@ async function upsertBillingPeriod(
     };
   }
 
-  const receiptSync = await syncAutoReceiptForBillingPeriod(record, customerId, contractId, periodId);
+  const isNewPeriod = !existing;
+  const paymentTarget = await computeRenewalPaymentTarget(record, contractId, isNewPeriod);
+
+  const receiptSync = await syncAutoReceiptForBillingPeriod(
+    record,
+    customerId,
+    contractId,
+    periodId,
+    paymentTarget,
+  );
   await refreshBillingPeriodPaid(periodId);
   const invoiceSync = await syncAutoInvoiceForBillingPeriod(
     record,
@@ -322,6 +355,8 @@ export async function syncCustomerRecordsToCms(records: CustomerRecord[]): Promi
     skipped: 0,
     errors: [],
   };
+
+  await seedErpServicesFromMarketing();
 
   for (const record of records) {
     try {

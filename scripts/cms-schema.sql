@@ -369,3 +369,7 @@ alter table erp.customers add column if not exists contact_person text;
 alter table erp.customers add column if not exists invoice_address text;
 alter table erp.customers add column if not exists needs_vat_invoice boolean not null default false;
 alter table erp.customers add column if not exists customer_status text default 'active';
+
+-- Pha 4: chi phí gắn khách hàng (P&L theo KH)
+alter table erp.expenses add column if not exists customer_id integer references erp.customers(id) on delete set null;
+create index if not exists erp_expenses_customer_idx on erp.expenses (customer_id);

@@ -138,18 +138,33 @@ router.get("/reports/by-customer", async (req, res) => {
   const results = [];
 
   for (const customer of customers) {
-    const [rev, contracts] = await Promise.all([
+    const [rev, exp, periodRows] = await Promise.all([
       db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(receiptsTable)
         .where(and(eq(receiptsTable.customerId, customer.id), gte(receiptsTable.receiptDate, fromDate), lte(receiptsTable.receiptDate, toDate))),
-      db.select({ totalValue: contractsTable.totalValue, paidAmount: contractsTable.paidAmount })
-        .from(contractsTable).where(eq(contractsTable.customerId, customer.id)),
+      db.select({ total: sql<string>`COALESCE(sum(amount::numeric), 0)` }).from(expensesTable)
+        .where(and(eq(expensesTable.customerId, customer.id), gte(expensesTable.expenseDate, fromDate), lte(expensesTable.expenseDate, toDate))),
+      db.select({ amountDue: billingPeriodsTable.amountDue, amountPaid: billingPeriodsTable.amountPaid })
+        .from(billingPeriodsTable)
+        .where(and(eq(billingPeriodsTable.customerId, customer.id), inArray(billingPeriodsTable.status, ["pending", "partial", "overdue"]))),
     ]);
 
     const revenue = parseFloat(rev[0].total);
-    const receivable = contracts.reduce((s, c) => s + Math.max(0, parseFloat(c.totalValue ?? "0") - parseFloat(c.paidAmount ?? "0")), 0);
+    const expenses = parseFloat(exp[0].total);
+    const receivable = periodRows.reduce((s, row) => {
+      const due = parseFloat(row.amountDue ?? "0");
+      const paid = parseFloat(row.amountPaid ?? "0");
+      return s + Math.max(0, due - paid);
+    }, 0);
 
-    if (revenue > 0 || receivable > 0) {
-      results.push({ customerId: customer.id, customerName: customer.name, revenue, expenses: 0, profit: revenue, receivable });
+    if (revenue > 0 || expenses > 0 || receivable > 0) {
+      results.push({
+        customerId: customer.id,
+        customerName: customer.name,
+        revenue,
+        expenses,
+        profit: revenue - expenses,
+        receivable,
+      });
     }
   }
 

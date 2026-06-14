@@ -32,6 +32,12 @@ router.post("/services", async (req, res) => {
   return res.status(201).json(service);
 });
 
+router.post("/services/seed-marketing", async (_req, res) => {
+  const { seedErpServicesFromMarketing } = await import("@/lib/cms-services");
+  const result = await seedErpServicesFromMarketing();
+  return res.json(result);
+});
+
 router.patch("/services/:id", async (req, res) => {
   const params = UpdateServiceParams.safeParse(req.params);
   const body = UpdateServiceBody.safeParse(req.body);

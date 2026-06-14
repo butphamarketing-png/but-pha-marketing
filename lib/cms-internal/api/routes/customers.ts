@@ -3,6 +3,7 @@ import { db, customersTable } from "@/lib/cms-internal/db";
 import { eq, ilike, sql, and } from "drizzle-orm";
 import { CreateCustomerBody, UpdateCustomerBody, GetCustomerParams, UpdateCustomerParams, DeleteCustomerParams, ListCustomersQueryParams } from "@/lib/cms-internal/api-zod";
 import { logAudit } from "../lib/audit";
+import { getCustomerOverview } from "@/lib/cms-customer-overview";
 
 const router = Router();
 
@@ -30,6 +31,15 @@ router.post("/customers", async (req, res) => {
   const [customer] = await db.insert(customersTable).values(body.data).returning();
   await logAudit("customer", customer.id, "create", "Admin", null, customer);
   return res.status(201).json(customer);
+});
+
+router.get("/customers/:id/overview", async (req, res) => {
+  const id = parseInt(String(req.params.id), 10);
+  if (Number.isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+
+  const overview = await getCustomerOverview(id);
+  if (!overview) return res.status(404).json({ error: "Not found" });
+  return res.json(overview);
 });
 
 router.get("/customers/:id", async (req, res) => {

@@ -30,9 +30,10 @@ export async function syncAutoReceiptForBillingPeriod(
   customerId: number,
   contractId: number,
   periodId: number,
+  paymentTarget?: number,
 ): Promise<SyncReceiptResult> {
   const result: SyncReceiptResult = { created: 0, updated: 0, removed: 0, receiptId: null };
-  const targetPaid = Math.max(0, record.amountPaid);
+  const targetPaid = paymentTarget ?? Math.max(0, record.amountPaid);
   const receiptDate = record.registeredAt || new Date().toISOString().slice(0, 10);
   const note = autoSyncNote(record.id);
 

@@ -5,6 +5,7 @@ export const expensesTable = erpSchema.table("expenses", {
   id: serial("id").primaryKey(),
   code: text("code").notNull().unique(),
   supplierId: integer("supplier_id"),
+  customerId: integer("customer_id"),
   serviceId: integer("service_id"),
   category: text("category").notNull(),
   amount: numeric("amount", { precision: 18, scale: 2 }).notNull(),
