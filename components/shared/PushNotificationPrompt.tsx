@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { Bell, X } from "lucide-react";
 import { isInternalAppPath } from "@/lib/app-paths";
 
-const DISMISS_KEY = "butpha_push_prompt_dismissed_until";
+const DISMISS_SESSION_KEY = "butpha_push_prompt_dismissed_session";
+const DENY_DISMISS_KEY = "butpha_push_prompt_dismissed_until";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -28,8 +29,10 @@ export function PushNotificationPrompt() {
     if (typeof window === "undefined" || isInternalAppPath(pathname)) return;
     if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
 
-    const dismissedUntil = Number(localStorage.getItem(DISMISS_KEY) || "0");
-    if (dismissedUntil > Date.now()) return;
+    if (sessionStorage.getItem(DISMISS_SESSION_KEY)) return;
+
+    const deniedUntil = Number(localStorage.getItem(DENY_DISMISS_KEY) || "0");
+    if (deniedUntil > Date.now()) return;
 
     if (Notification.permission === "granted" || Notification.permission === "denied") return;
 
@@ -40,8 +43,13 @@ export function PushNotificationPrompt() {
     return () => window.clearTimeout(timer);
   }, [pathname]);
 
-  const dismiss = (days = 7) => {
-    localStorage.setItem(DISMISS_KEY, String(Date.now() + days * 86400000));
+  const dismissForSession = () => {
+    sessionStorage.setItem(DISMISS_SESSION_KEY, "1");
+    setVisible(false);
+  };
+
+  const dismissAfterDeny = (days = 14) => {
+    localStorage.setItem(DENY_DISMISS_KEY, String(Date.now() + days * 86400000));
     setVisible(false);
   };
 
@@ -52,7 +60,7 @@ export function PushNotificationPrompt() {
       const perm = await Notification.requestPermission();
       if (perm !== "granted") {
         setMessage("Bạn đã từ chối thông báo. Có thể bật lại trong cài đặt trình duyệt.");
-        dismiss(14);
+        dismissAfterDeny();
         return;
       }
 
@@ -93,7 +101,8 @@ export function PushNotificationPrompt() {
         throw new Error(err.error || "Subscribe failed");
       }
 
-      localStorage.removeItem(DISMISS_KEY);
+      localStorage.removeItem(DENY_DISMISS_KEY);
+      sessionStorage.removeItem(DISMISS_SESSION_KEY);
       setMessage("Đã bật thông báo. Bạn sẽ nhận tin bài viết & ưu đãi mới.");
       setVisible(false);
     } catch (error) {
@@ -108,42 +117,41 @@ export function PushNotificationPrompt() {
   return (
     <div className="fixed bottom-24 left-4 right-4 z-[60] mx-auto max-w-md md:left-auto md:right-6">
       {visible && (
-        <div className="rounded-2xl border border-violet-200 bg-white p-4 shadow-xl shadow-violet-200/40">
+        <div className="rounded-2xl border border-white/15 bg-black p-4 shadow-xl shadow-black/40">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-violet-100 p-2 text-violet-700">
+            <div className="rounded-xl bg-white/10 p-2 text-white">
               <Bell size={20} />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-indigo-950">Nhận thông báo tin mới</p>
-              <p className="mt-1 text-sm text-slate-600">
-                Cập nhật bài viết marketing, tips SEO và ưu đãi dịch vụ website từ Bứt Phá Marketing.
+              <p className="font-semibold text-white leading-snug">
+                Nhận thông báo ưu đãi, khuyến mãi hoặc tin tức mới nhất
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={subscribe}
                   disabled={loading}
-                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-60"
+                  className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
                 >
-                  {loading ? "Đang bật..." : "Cho phép thông báo"}
+                  {loading ? "Đang bật..." : "Cho phép"}
                 </button>
                 <button
                   type="button"
-                  onClick={() => dismiss()}
-                  className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
+                  onClick={dismissForSession}
+                  className="rounded-xl border border-white/30 px-4 py-2 text-sm text-white hover:bg-white/10"
                 >
                   Để sau
                 </button>
               </div>
             </div>
-            <button type="button" onClick={() => dismiss()} className="text-slate-400 hover:text-slate-600" aria-label="Đóng">
+            <button type="button" onClick={dismissForSession} className="text-white/60 hover:text-white" aria-label="Đóng">
               <X size={18} />
             </button>
           </div>
         </div>
       )}
       {message && (
-        <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <div className="mt-2 rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white">
           {message}
         </div>
       )}
