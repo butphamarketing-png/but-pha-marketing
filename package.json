@@ -7,7 +7,7 @@
     "build": "next build",
     "build:site": "next build",
     "build:cms": "node scripts/build-cms.mjs",
-    "patch:cms": "node scripts/patch-cms-menu-reports.mjs && node scripts/patch-cms-phases-123.mjs",
+    "patch:cms": "node scripts/patch-cms-menu-reports.mjs && node scripts/patch-cms-phases-123.mjs && node scripts/patch-cms-sync-ux.mjs",
     "seed:erp-services": "npx tsx --tsconfig tsconfig.json scripts/seed-erp-services-run.ts",
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
     "generate:vapid-keys": "node scripts/generate-vapid-keys.mjs",

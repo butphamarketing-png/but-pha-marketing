@@ -43,6 +43,12 @@ import {
   parseCustomerBackupFile,
   saveLocalCustomerBackup,
 } from "@/lib/customer-backup";
+import type { CmsAutoSyncOutcome } from "@/lib/cms-customer-auto-sync";
+import {
+  countCustomersWithContractCode,
+  describeCmsSyncOutcome,
+  type CmsSyncDisplay,
+} from "@/lib/cms-sync-status";
 
 const cellInput =
   "w-full min-w-[120px] rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-white outline-none focus:border-primary";
@@ -301,6 +307,7 @@ export function CustomerManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [lastCmsSync, setLastCmsSync] = useState<CmsAutoSyncOutcome | null>(null);
   const [offlineMode, setOfflineMode] = useState(false);
   const [localBackupAt, setLocalBackupAt] = useState<string | null>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -331,6 +338,16 @@ export function CustomerManagement() {
         const days = daysUntilExpiry(c.expiresAt);
         return c.renewalReminderEnabled && days !== null && days <= 3 && days >= 0;
       }),
+    [customers],
+  );
+
+  const cmsSyncDisplay = useMemo(
+    (): CmsSyncDisplay | null => describeCmsSyncOutcome(lastCmsSync, customers.length),
+    [lastCmsSync, customers.length],
+  );
+
+  const missingContractCodeCount = useMemo(
+    () => customers.length - countCustomersWithContractCode(customers),
     [customers],
   );
 
@@ -450,6 +467,7 @@ export function CustomerManagement() {
       setLocalBackupAt(null);
       dirtyRef.current = false;
       setSaveMessage("Đã lưu danh sách khách hàng lên máy chủ.");
+      setLastCmsSync((data?.cmsSync as CmsAutoSyncOutcome | undefined) ?? null);
     } catch {
       saveLocalOnly(customers);
     } finally {
@@ -583,6 +601,7 @@ export function CustomerManagement() {
         setLocalBackupAt(null);
         dirtyRef.current = false;
         setSaveMessage(`Đã khôi phục ${saved.length} khách hàng từ ${sourceLabel}.`);
+        setLastCmsSync((data?.cmsSync as CmsAutoSyncOutcome | undefined) ?? null);
       }
       setRestoreOpen(false);
     } catch {
@@ -784,6 +803,41 @@ export function CustomerManagement() {
         {(saveMessage || saveError) && (
           <div className={`mx-auto max-w-[1600px] px-4 pb-3 text-xs sm:px-6 ${saveError ? "text-red-400" : "text-emerald-400"}`}>
             {saveError || saveMessage}
+          </div>
+        )}
+        {cmsSyncDisplay && (
+          <div className="mx-auto max-w-[1600px] px-4 pb-3 sm:px-6">
+            <div
+              className={`rounded-xl border px-4 py-3 text-xs ${
+                cmsSyncDisplay.level === "ok"
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-100"
+                  : cmsSyncDisplay.level === "warn"
+                    ? "border-amber-500/40 bg-amber-500/10 text-amber-100"
+                    : cmsSyncDisplay.level === "error"
+                      ? "border-red-500/40 bg-red-500/10 text-red-100"
+                      : "border-slate-500/40 bg-slate-500/10 text-slate-200"
+              }`}
+            >
+              <strong>{cmsSyncDisplay.title}</strong>
+              <span className="ml-2 opacity-90">{cmsSyncDisplay.detail}</span>
+              {cmsSyncDisplay.level === "ok" && (
+                <a
+                  href="/cms/customer-360"
+                  className="ml-3 font-semibold underline hover:no-underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Mở CMS →
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+        {missingContractCodeCount > 0 && (
+          <div className="mx-auto max-w-[1600px] px-4 pb-3 sm:px-6">
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs text-amber-100">
+              <strong>{missingContractCodeCount}</strong> khách chưa có MSHĐ — ERP sẽ bỏ qua khi đồng bộ.
+            </div>
           </div>
         )}
         {offlineMode && (

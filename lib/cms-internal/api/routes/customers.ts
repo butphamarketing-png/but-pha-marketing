@@ -42,6 +42,23 @@ router.get("/customers/:id/overview", async (req, res) => {
   return res.json(overview);
 });
 
+router.post("/customers/:id/resync-marketing", async (req, res) => {
+  const id = parseInt(String(req.params.id), 10);
+  if (Number.isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+
+  try {
+    const { resyncErpCustomerFromMarketing } = await import("@/lib/cms-resync-from-marketing");
+    const outcome = await resyncErpCustomerFromMarketing(id);
+    if (outcome.status === "error") {
+      return res.status(400).json(outcome);
+    }
+    return res.json(outcome);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.get("/customers/:id", async (req, res) => {
   const params = GetCustomerParams.safeParse(req.params);
   if (!params.success) return res.status(400).json({ error: "Invalid id" });
