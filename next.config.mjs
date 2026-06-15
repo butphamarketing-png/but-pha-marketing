@@ -16,6 +16,7 @@ const nextConfig = {
       { source: '/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
       { source: '/adminbp/khachhang', destination: '/cms/khachhang', permanent: true },
       { source: '/adminbp/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
+      { source: '/cms/cms/:path*', destination: '/cms/:path*', permanent: false },
     ];
   },
   async rewrites() {

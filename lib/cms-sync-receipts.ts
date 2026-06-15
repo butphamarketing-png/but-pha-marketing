@@ -81,8 +81,9 @@ export async function syncAutoReceiptForBillingPeriod(
   }
 
   const currentAmount = parseFloat(autoReceipt.amount ?? "0");
+  const currentMethod = autoReceipt.paymentMethod ?? "";
   result.receiptId = autoReceipt.id;
-  if (Math.abs(currentAmount - autoTarget) < 0.01) {
+  if (Math.abs(currentAmount - autoTarget) < 0.01 && currentMethod === paymentMethod) {
     return result;
   }
 
