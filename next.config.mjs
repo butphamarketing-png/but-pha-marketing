@@ -12,15 +12,17 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/admin', destination: '/adminbp', permanent: true },
-      { source: '/khachhang', destination: '/adminbp/khachhang', permanent: true },
-      { source: '/khachhang/:path*', destination: '/adminbp/khachhang', permanent: true },
+      { source: '/khachhang', destination: '/cms/khachhang', permanent: true },
+      { source: '/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
+      { source: '/adminbp/khachhang', destination: '/cms/khachhang', permanent: true },
+      { source: '/adminbp/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
     ];
   },
   async rewrites() {
     return [
       { source: '/cms', destination: '/cms/index.html' },
       {
-        source: '/cms/:path((?!api/|assets/|index.html).*)',
+        source: '/cms/:path((?!api/|assets/|index.html|khachhang).*)',
         destination: '/cms/index.html',
       },
     ];

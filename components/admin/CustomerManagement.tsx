@@ -298,7 +298,7 @@ function CustomerDetailDialog({
   );
 }
 
-export function CustomerManagement() {
+export function CustomerManagement({ variant = "standalone" }: { variant?: "standalone" | "cms" }) {
   const searchParams = useSearchParams();
   const [authenticated, setAuthenticated] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
@@ -776,8 +776,12 @@ export function CustomerManagement() {
           <div className="mb-6 flex items-center gap-3">
             <img src="/logo.png" alt="Logo" className="h-10 w-10 rounded-full" />
             <div>
-              <p className="font-bold text-white">Quản lý khách hàng</p>
-              <p className="text-xs text-gray-400">Đăng nhập bằng mật khẩu admin</p>
+              <p className="font-bold text-white">
+                {variant === "cms" ? "CMS — Quản lý khách hàng" : "Quản lý khách hàng"}
+              </p>
+              <p className="text-xs text-gray-400">
+                {variant === "cms" ? "Đăng nhập ERP / admin" : "Đăng nhập bằng mật khẩu admin"}
+              </p>
             </div>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -809,11 +813,15 @@ export function CustomerManagement() {
       <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0b0f19]/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
-            <h1 className="text-lg font-black sm:text-xl">Quản lý khách hàng</h1>
+            <h1 className="text-lg font-black sm:text-xl">
+              {variant === "cms" ? "CMS — Quản lý khách hàng" : "Quản lý khách hàng"}
+            </h1>
             <p className="text-xs text-gray-400">
               {offlineMode
                 ? "Chế độ offline — dữ liệu lưu trên trình duyệt. Nhớ bấm Tải backup thường xuyên."
-                : "Nhập dữ liệu như bảng Excel — bấm dòng để xem chi tiết — tự lưu sau vài giây"}
+                : variant === "cms"
+                  ? "Nguồn chính KH + tài chính ERP — nhập ở đây, tự sync PT/HĐ/kỳ thu"
+                  : "Nhập dữ liệu như bảng Excel — bấm dòng để xem chi tiết — tự lưu sau vài giây"}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">

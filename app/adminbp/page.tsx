@@ -1057,12 +1057,12 @@ export default function AdminPage() {
                 </button>
               </div>
               <a
-                href="/adminbp/khachhang"
+                href="/cms/khachhang"
                 className="flex items-center justify-between rounded-2xl border border-violet-500/30 bg-violet-500/10 px-5 py-4 text-white transition hover:bg-violet-500/20"
               >
                 <div>
-                  <p className="text-sm font-bold">Quản lý khách hàng (Marketing CRM)</p>
-                  <p className="text-xs text-violet-200/80">Nhập KH, MSHĐ, đồng bộ ERP, nhắc gia hạn Zalo</p>
+                  <p className="text-sm font-bold">Quản lý khách hàng (CMS)</p>
+                  <p className="text-xs text-violet-200/80">KH, MSHĐ, gia hạn, đồng bộ tài chính ERP</p>
                 </div>
                 <ArrowRight size={18} className="text-violet-300" />
               </a>

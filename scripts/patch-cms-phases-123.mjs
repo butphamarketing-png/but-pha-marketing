@@ -98,12 +98,15 @@ patch(
   "{data:C}=qy({limit:100}),x=$Q()",
 );
 
-patch(
-  "Expense submit payload",
-  "const R={supplierId:d.supplierId?Number(d.supplierId):void 0,serviceId:d.serviceId?Number(d.serviceId):void 0,expenseDate:d.expenseDate",
-  "const R={supplierId:d.supplierId?Number(d.supplierId):void 0,serviceId:d.serviceId?Number(d.serviceId):void 0,customerId:d.customerId?Number(d.customerId):void 0,expenseDate:d.expenseDate",
-  "customerId:d.customerId?Number(d.customerId):void 0,expenseDate:d.expenseDate",
-);
+if (s.includes("customerId:d.customerId?Number(d.customerId):void 0")) {
+  console.log("Expense submit payload: already applied");
+} else {
+  patch(
+    "Expense submit payload",
+    "const R={supplierId:d.supplierId?Number(d.supplierId):void 0,serviceId:d.serviceId?Number(d.serviceId):void 0,expenseDate:d.expenseDate",
+    "const R={supplierId:d.supplierId?Number(d.supplierId):void 0,serviceId:d.serviceId?Number(d.serviceId):void 0,customerId:d.customerId?Number(d.customerId):void 0,expenseDate:d.expenseDate",
+  );
+}
 
 patch(
   "Expense edit mapper",

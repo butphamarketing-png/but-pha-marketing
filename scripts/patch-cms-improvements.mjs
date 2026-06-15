@@ -76,36 +76,53 @@ patch(
   'path:"/billing-periods",component:()=>c.jsx(Le,{comp:BillPerPg',
 );
 
-// 6) Customers read-only UI
-patch(
-  "Customers read-only subtitle",
-  'subtitle:"Quản lý danh sách khách hàng",action:{label:"Thêm Khách Hàng",onClick:()=>{h(null),m(O1),o(!0)}}',
-  'subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)",action:{label:"Mở Admin Marketing",onClick:()=>window.open("/adminbp","_blank")}}',
-  'subtitle:"Chỉ xem — sửa từ Admin Marketing',
-);
+// 6) Customers read-only UI — superseded by /cms/khachhang hub (see patch-cms-khachhang-hub.mjs)
+if (s.includes('subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)"')) {
+  console.log("Customers read-only subtitle: skipped (CMS hub)");
+} else {
+  patch(
+    "Customers read-only subtitle",
+    'subtitle:"Quản lý danh sách khách hàng",action:{label:"Thêm Khách Hàng",onClick:()=>{h(null),m(O1),o(!0)}}',
+    'subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)",action:{label:"Mở Admin Marketing",onClick:()=>window.open("/adminbp","_blank")}}',
+    'subtitle:"Chỉ xem — sửa từ Admin Marketing',
+  );
+}
 
-patch(
-  "Customers read-only actions",
-  'render:b=>c.jsxs("div",{className:"flex items-center gap-1",children:[c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"}),c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>A(b),children:c.jsx(Fi,{className:"h-3.5 w-3.5"})}),c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>N(b.id),className:"text-destructive hover:text-destructive",children:c.jsx(si,{className:"h-3.5 w-3.5"})})]})',
-  'render:b=>c.jsx("div",{className:"flex items-center gap-1",children:c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"})})',
-  'render:b=>c.jsx("div",{className:"flex items-center gap-1",children:c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"})})',
-);
+if (s.includes('render:b=>c.jsx("div",{className:"flex items-center gap-1",children:c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"})})')) {
+  console.log("Customers read-only actions: skipped (CMS hub)");
+} else {
+  patch(
+    "Customers read-only actions",
+    'render:b=>c.jsxs("div",{className:"flex items-center gap-1",children:[c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"}),c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>A(b),children:c.jsx(Fi,{className:"h-3.5 w-3.5"})}),c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>N(b.id),className:"text-destructive hover:text-destructive",children:c.jsx(si,{className:"h-3.5 w-3.5"})})]})',
+    'render:b=>c.jsx("div",{className:"flex items-center gap-1",children:c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"})})',
+    'render:b=>c.jsx("div",{className:"flex items-center gap-1",children:c.jsx(st,{variant:"ghost",size:"sm",onClick:()=>window.location.assign("/cms/customer-360?id="+b.id),children:"360"})})',
+  );
+}
 
 // 7) Expense payment status sync to API
-patch(
-  "Expense paymentStatus payload",
-  "customerId:d.customerId?Number(d.customerId):void 0,expenseDate:d.expenseDate",
-  "customerId:d.customerId?Number(d.customerId):void 0,paymentStatus:d.status===\"paid\"?\"paid\":\"unpaid\",expenseDate:d.expenseDate",
-  'paymentStatus:d.status==="paid"',
-);
+if (s.includes('paymentStatus:d.status==="paid"')) {
+  console.log("Expense paymentStatus payload: already applied");
+} else {
+  patch(
+    "Expense paymentStatus payload",
+    "customerId:d.customerId?Number(d.customerId):void 0,expenseDate:d.expenseDate",
+    "customerId:d.customerId?Number(d.customerId):void 0,paymentStatus:d.status===\"paid\"?\"paid\":\"unpaid\",expenseDate:d.expenseDate",
+    'paymentStatus:d.status==="paid"',
+  );
+}
 
-// 8) Customer 360 — admin link with highlight
-patch(
-  "Cust360 admin highlight link",
-  'href:"/adminbp",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
-  'href:r?.sync?.marketingAdminUrl||"/adminbp/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
-  'marketingAdminUrl||"/adminbp/khachhang"',
-);
+// 8) Customer 360 — link to CMS customer hub
+if (s.includes('marketingAdminUrl||"/cms/khachhang"')) {
+  console.log("Cust360 admin highlight link: already applied");
+} else if (s.includes('marketingAdminUrl||"/adminbp/khachhang"')) {
+  s = s.replace(
+    'href:r?.sync?.marketingAdminUrl||"/adminbp/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
+    'href:r?.sync?.marketingAdminUrl||"/cms/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Sửa KH"',
+  );
+  console.log("Cust360 admin highlight link: applied");
+} else {
+  console.log("Cust360 admin highlight link: skipped (anchor not found)");
+}
 
 fs.writeFileSync(bundlePath, s);
 console.log(`Patched ${path.basename(bundlePath)} (${originalLen} -> ${s.length} bytes)`);
