@@ -77,13 +77,16 @@ patch(
 );
 
 // 6) Customers read-only UI — superseded by /cms/khachhang hub (see patch-cms-khachhang-hub.mjs)
-if (s.includes('subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)"')) {
+if (
+  s.includes('subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)"') ||
+  s.includes('subtitle:"Chỉ xem — sửa từ CMS (/cms/khachhang)"')
+) {
   console.log("Customers read-only subtitle: skipped (CMS hub)");
 } else {
   patch(
     "Customers read-only subtitle",
     'subtitle:"Quản lý danh sách khách hàng",action:{label:"Thêm Khách Hàng",onClick:()=>{h(null),m(O1),o(!0)}}',
-    'subtitle:"Chỉ xem — sửa từ Admin Marketing (/adminbp)",action:{label:"Mở Admin Marketing",onClick:()=>window.open("/adminbp","_blank")}}',
+    'subtitle:"Chỉ xem — sửa từ CMS (/cms/khachhang)",action:{label:"Quản lý KH",onClick:()=>window.open("/cms/khachhang","_blank")}}',
     'subtitle:"Chỉ xem — sửa từ Admin Marketing',
   );
 }

@@ -94,8 +94,8 @@ patch(
 patch(
   "Expense customers query",
   "{data:_}=By({limit:100}),x=$Q()",
-  "{data:_}=By({limit:100}),{data:C}=qy({limit:100}),x=$Q()",
-  "{data:C}=qy({limit:100}),x=$Q()",
+  "{data:_}=By({limit:100}),{data:Hc}=qy({limit:100}),x=$Q()",
+  "{data:Hc}=qy({limit:100}),x=$Q()",
 );
 
 if (s.includes("customerId:d.customerId?Number(d.customerId):void 0")) {
@@ -118,7 +118,7 @@ patch(
 patch(
   "Expense customer field",
   'children:"Nhà Cung Cấp"}),c.jsxs(vt,{value:d.supplierId,onValueChange:P=>m({...d,supplierId:P}),children:[c.jsx(mt,{children:c.jsx(gt,{placeholder:"Chọn NCC"})}),c.jsxs(yt,{children:[c.jsx(Ce,{value:"",children:"Không có"}),(w?.data??[]).map(P=>c.jsx(Ce,{value:String(P.id),children:String(P.name)},String(P.id)))]})]})]}),c.jsxs("div",{className:"space-y-1",children:[c.jsx(We,{children:"Dịch Vụ"})',
-  'children:"Nhà Cung Cấp"}),c.jsxs(vt,{value:d.supplierId,onValueChange:P=>m({...d,supplierId:P}),children:[c.jsx(mt,{children:c.jsx(gt,{placeholder:"Chọn NCC"})}),c.jsxs(yt,{children:[c.jsx(Ce,{value:"",children:"Không có"}),(w?.data??[]).map(P=>c.jsx(Ce,{value:String(P.id),children:String(P.name)},String(P.id)))]})]})]}),c.jsxs("div",{className:"space-y-1",children:[c.jsx(We,{children:"Khách Hàng"}),c.jsxs(vt,{value:d.customerId,onValueChange:P=>m({...d,customerId:P}),children:[c.jsx(mt,{children:c.jsx(gt,{placeholder:"Chọn KH (P&L)"})}),c.jsxs(yt,{children:[c.jsx(Ce,{value:"",children:"Không có"}),(C?.data??[]).map(P=>c.jsx(Ce,{value:String(P.id),children:String(P.name)},String(P.id)))]})]})]}),c.jsxs("div",{className:"space-y-1",children:[c.jsx(We,{children:"Dịch Vụ"})',
+  'children:"Nhà Cung Cấp"}),c.jsxs(vt,{value:d.supplierId,onValueChange:P=>m({...d,supplierId:P}),children:[c.jsx(mt,{children:c.jsx(gt,{placeholder:"Chọn NCC"})}),c.jsxs(yt,{children:[c.jsx(Ce,{value:"",children:"Không có"}),(w?.data??[]).map(P=>c.jsx(Ce,{value:String(P.id),children:String(P.name)},String(P.id)))]})]})]}),c.jsxs("div",{className:"space-y-1",children:[c.jsx(We,{children:"Khách Hàng"}),c.jsxs(vt,{value:d.customerId,onValueChange:P=>m({...d,customerId:P}),children:[c.jsx(mt,{children:c.jsx(gt,{placeholder:"Chọn KH (P&L)"})}),c.jsxs(yt,{children:[c.jsx(Ce,{value:"",children:"Không có"}),(Hc?.data??[]).map(P=>c.jsx(Ce,{value:String(P.id),children:String(P.name)},String(P.id)))]})]})]}),c.jsxs("div",{className:"space-y-1",children:[c.jsx(We,{children:"Dịch Vụ"})',
   'placeholder:"Chọn KH (P&L)"',
 );
 
