@@ -1,5 +1,5 @@
 /**
- * CMS menu: link to /cms/tax (Trách nhiệm thuế).
+ * CMS menu: Trách nhiệm thuế + sub-pages (TNCN, TNDN, HĐĐT).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -20,18 +20,23 @@ if (!bundlePath) {
 let s = fs.readFileSync(bundlePath, "utf8");
 const originalLen = s.length;
 
-const anchor =
+const billingAnchor =
   '{href:"/reports/billing-periods",label:"Kỳ Thu theo Tháng",icon:xq}';
-const insert =
-  '{href:"/reports/billing-periods",label:"Kỳ Thu theo Tháng",icon:xq},{href:"/cms/tax",label:"Trách Nhiệm Thuế",icon:jq}';
+const taxMain = '{href:"/cms/tax",label:"Trách Nhiệm Thuế",icon:jq}';
+const taxSubmenus =
+  '{href:"/cms/tax/ctv",label:"TNCN CTV",icon:J1},{href:"/cms/tax/tndn",label:"TNDN Tạm Nộp",icon:tm},{href:"/cms/tax/hddt",label:"Hóa Đơn ĐT",icon:fG}';
+const taxBlock = `${taxMain},${taxSubmenus}`;
 
-if (s.includes('href:"/cms/tax",label:"Trách Nhiệm Thuế"')) {
-  console.log("Tax menu item: already applied");
-} else if (s.includes(anchor)) {
-  s = s.replace(anchor, insert);
-  console.log("Tax menu item: applied");
+if (s.includes('href:"/cms/tax/hddt"')) {
+  console.log("Tax submenu: already applied");
+} else if (s.includes(taxMain)) {
+  s = s.replace(taxMain, taxBlock);
+  console.log("Tax submenu: extended existing Trách Nhiệm Thuế item");
+} else if (s.includes(billingAnchor)) {
+  s = s.replace(billingAnchor, `${billingAnchor},${taxBlock}`);
+  console.log("Tax menu block: applied");
 } else {
-  console.log("Tax menu item: skipped (anchor not found)");
+  console.log("Tax menu: skipped (anchor not found)");
 }
 
 fs.writeFileSync(bundlePath, s);
