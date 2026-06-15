@@ -33,12 +33,12 @@ function patch(label, anchor, replacement, already) {
   console.log(`${label}: applied`);
 }
 
-// 1) Quản Lý menu (KH, Dịch vụ, NCC)
+// 1) Quản Lý menu (Dịch vụ, NCC — KH ở mục Tổng quan)
 patch(
   "Quản Lý menu",
   'trees:fj},{title:"Thu — Chi"',
-  'trees:fj},{title:"Quản Lý",items:[{href:"/customers",label:"Khách Hàng",icon:J1},{href:"/services",label:"Dịch Vụ",icon:tm},{href:"/suppliers",label:"NCC",icon:bq}]},{title:"Thu — Chi"',
-  'title:"Quản Lý",items:[{href:"/customers"',
+  'trees:fj},{title:"Quản Lý",items:[{href:"/services",label:"Dịch Vụ",icon:tm},{href:"/suppliers",label:"NCC",icon:bq}]},{title:"Thu — Chi"',
+  'title:"Quản Lý",items:[{href:"/services",label:"Dịch Vụ"',
 );
 
 // 2) Báo cáo theo dịch vụ trong menu

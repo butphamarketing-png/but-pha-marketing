@@ -33,13 +33,32 @@ function patch(label, anchor, replacement, already) {
   console.log(`${label}: applied`);
 }
 
-// 1) Menu → /cms/khachhang
-patch(
-  "Menu Khách Hàng → CMS hub",
-  '{href:"/customers",label:"Khách Hàng",icon:J1}',
-  '{href:"/cms/khachhang",label:"Khách Hàng",icon:J1}',
-  'href:"/cms/khachhang",label:"Khách Hàng"',
-);
+// 1) Bỏ Khách Hàng trùng trong menu Quản Lý (giữ mục KH ở Tổng quan)
+const quanLyKh =
+  '{title:"Quản Lý",items:[{href:"/cms/khachhang",label:"Khách Hàng",icon:J1},{href:"/services"';
+const quanLyNoKh =
+  '{title:"Quản Lý",items:[{href:"/services"';
+if (s.includes(quanLyKh)) {
+  s = s.replace(quanLyKh, quanLyNoKh);
+  console.log("Removed Khách Hàng from Quản Lý menu: applied");
+} else if (s.includes('{title:"Quản Lý",items:[{href:"/customers",label:"Khách Hàng"')) {
+  s = s.replace(
+    '{title:"Quản Lý",items:[{href:"/customers",label:"Khách Hàng",icon:J1},',
+    '{title:"Quản Lý",items:[',
+  );
+  console.log("Removed Khách Hàng from Quản Lý menu (legacy /customers): applied");
+} else if (s.includes('{title:"Quản Lý",items:[{href:"/services"')) {
+  console.log("Removed Khách Hàng from Quản Lý menu: already applied");
+} else {
+  console.log("Quản Lý menu: no duplicate Khách Hàng found (skipped)");
+}
+
+// Legacy: do not rewrite standalone /customers menu item (removed from Quản Lý)
+if (s.includes('{href:"/customers",label:"Khách Hàng",icon:J1}')) {
+  console.log("Menu Khách Hàng → CMS hub: skipped (no /customers menu item)");
+} else {
+  console.log("Menu Khách Hàng → CMS hub: already applied or N/A");
+}
 
 // 2) Redirect legacy /customers SPA route to Next page
 const redirectComp = `function CustHubRedirect(){return j.useEffect(()=>{window.location.replace("/cms/khachhang")},[]),c.jsxs("div",{className:"p-8 text-center text-muted-foreground",children:[c.jsx("p",{children:"Đang mở Quản lý Khách Hàng…"}),c.jsx("a",{href:"/cms/khachhang",className:"text-violet-600 underline",children:"Mở /cms/khachhang"})]})}`;
