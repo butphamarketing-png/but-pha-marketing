@@ -1057,7 +1057,7 @@ export default function AdminPage() {
                 </button>
               </div>
               <a
-                href="/cms/khachhang"
+                href="/cms/khach-hang"
                 className="flex items-center justify-between rounded-2xl border border-violet-500/30 bg-violet-500/10 px-5 py-4 text-white transition hover:bg-violet-500/20"
               >
                 <div>

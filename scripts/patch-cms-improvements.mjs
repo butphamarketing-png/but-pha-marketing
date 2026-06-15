@@ -86,7 +86,7 @@ if (
   patch(
     "Customers read-only subtitle",
     'subtitle:"Quản lý danh sách khách hàng",action:{label:"Thêm Khách Hàng",onClick:()=>{h(null),m(O1),o(!0)}}',
-    'subtitle:"Chỉ xem — sửa từ CMS (/cms/khachhang)",action:{label:"Quản lý KH",onClick:()=>window.open("/cms/khachhang","_blank")}}',
+    'subtitle:"Chỉ xem — sửa từ CMS (/cms/khach-hang)",action:{label:"Quản lý KH",onClick:()=>window.open("/cms/khach-hang","_blank")}}',
     'subtitle:"Chỉ xem — sửa từ Admin Marketing',
   );
 }
@@ -115,12 +115,19 @@ if (s.includes('paymentStatus:d.status==="paid"')) {
 }
 
 // 8) Customer 360 — link to CMS customer hub
-if (s.includes('marketingAdminUrl||"/cms/khachhang"')) {
+if (s.includes('marketingAdminUrl||"/cms/khach-hang"')) {
   console.log("Cust360 admin highlight link: already applied");
+} else if (s.includes('marketingAdminUrl||"/cms/khachhang"')) {
+  s = s.replaceAll('marketingAdminUrl||"/cms/khachhang"', 'marketingAdminUrl||"/cms/khach-hang"');
+  s = s.replaceAll(
+    'href:r?.sync?.marketingAdminUrl||"/cms/khachhang"',
+    'href:r?.sync?.marketingAdminUrl||"/cms/khach-hang"',
+  );
+  console.log("Cust360 admin highlight link: updated to /cms/khach-hang");
 } else if (s.includes('marketingAdminUrl||"/adminbp/khachhang"')) {
   s = s.replace(
     'href:r?.sync?.marketingAdminUrl||"/adminbp/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
-    'href:r?.sync?.marketingAdminUrl||"/cms/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Sửa KH"',
+    'href:r?.sync?.marketingAdminUrl||"/cms/khach-hang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Sửa KH"',
   );
   console.log("Cust360 admin highlight link: applied");
 } else {

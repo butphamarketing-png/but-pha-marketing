@@ -12,10 +12,12 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/admin', destination: '/adminbp', permanent: true },
-      { source: '/khachhang', destination: '/cms/khachhang', permanent: true },
-      { source: '/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
-      { source: '/adminbp/khachhang', destination: '/cms/khachhang', permanent: true },
-      { source: '/adminbp/khachhang/:path*', destination: '/cms/khachhang', permanent: true },
+      { source: '/khachhang', destination: '/cms/khach-hang', permanent: true },
+      { source: '/khachhang/:path*', destination: '/cms/khach-hang', permanent: true },
+      { source: '/adminbp/khachhang', destination: '/cms/khach-hang', permanent: true },
+      { source: '/adminbp/khachhang/:path*', destination: '/cms/khach-hang', permanent: true },
+      { source: '/cms/khachhang', destination: '/cms/khach-hang', permanent: true },
+      { source: '/cms/khachhang/:path*', destination: '/cms/khach-hang', permanent: true },
       { source: '/cms/cms/:path*', destination: '/cms/:path*', permanent: false },
     ];
   },
@@ -23,7 +25,7 @@ const nextConfig = {
     return [
       { source: '/cms', destination: '/cms/index.html' },
       {
-        source: '/cms/:path((?!api/|assets/|index.html|khachhang|tax).*)',
+        source: '/cms/:path((?!api/|assets/|index.html|tax).*)',
         destination: '/cms/index.html',
       },
     ];

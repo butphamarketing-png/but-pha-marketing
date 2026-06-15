@@ -1,5 +1,6 @@
 /**
- * CMS hub: Khách Hàng lives at /cms/khachhang (Next.js), not legacy ERP list.
+ * CMS: Khách Hàng lives in ERP SPA at /khach-hang (/cms/khach-hang).
+ * Legacy /customers redirects there — NOT the removed Next.js /cms/khachhang page.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -20,59 +21,50 @@ if (!bundlePath) {
 let s = fs.readFileSync(bundlePath, "utf8");
 const originalLen = s.length;
 
+const KH_URL = "/cms/khach-hang";
+
+// 0) Undo any prior redirect to removed /cms/khachhang
+if (s.includes("/cms/khachhang")) {
+  s = s.replaceAll("/cms/khachhang", KH_URL);
+  console.log("Replaced /cms/khachhang → /cms/khach-hang in bundle");
+}
+
+// 1) Bỏ Khách Hàng trùng trong menu Quản Lý (giữ mục KH ở Tổng quan)
+const quanLyKh =
+  '{title:"Quản Lý",items:[{href:"/cms/khach-hang",label:"Khách Hàng",icon:J1},{href:"/services"';
+const quanLyNoKh = '{title:"Quản Lý",items:[{href:"/services"';
+if (s.includes(quanLyKh)) {
+  s = s.replace(quanLyKh, quanLyNoKh);
+  console.log("Removed Khách Hàng from Quản Lý menu: applied");
+} else if (s.includes('{title:"Quản Lý",items:[{href:"/services"')) {
+  console.log("Removed Khách Hàng from Quản Lý menu: already applied");
+}
+
+// 2) Redirect legacy /customers SPA route → ERP Khách Hàng
+const redirectComp = `function CustHubRedirect(){return j.useEffect(()=>{window.location.replace("${KH_URL}")},[]),c.jsxs("div",{className:"p-8 text-center text-muted-foreground",children:[c.jsx("p",{children:"Đang mở Quản lý Khách Hàng…"}),c.jsx("a",{href:"${KH_URL}",className:"text-violet-600 underline",children:"Mở Khách Hàng"})]})}`;
+
+if (s.includes("function CustHubRedirect")) {
+  s = s.replace(/function CustHubRedirect\(\)\{[^}]+replace\("[^"]+"\)[^}]+\}[^}]+\}[^}]+\}[^}]+\}/, redirectComp);
+  console.log("CustHubRedirect: updated to /cms/khach-hang");
+} else {
+  const insertBefore = "function BillPerPg(){";
+  if (s.includes(insertBefore)) {
+    s = s.replace(insertBefore, `${redirectComp}function BillPerPg(){`);
+    console.log("CustHubRedirect component: applied");
+  }
+}
+
 function patch(label, anchor, replacement, already) {
   if (already && s.includes(already)) {
     console.log(`${label}: already applied`);
     return;
   }
   if (!s.includes(anchor)) {
-    console.error(`${label}: anchor not found`);
-    process.exit(1);
+    console.log(`${label}: skipped (anchor not found)`);
+    return;
   }
   s = s.replace(anchor, replacement);
   console.log(`${label}: applied`);
-}
-
-// 1) Bỏ Khách Hàng trùng trong menu Quản Lý (giữ mục KH ở Tổng quan)
-const quanLyKh =
-  '{title:"Quản Lý",items:[{href:"/cms/khachhang",label:"Khách Hàng",icon:J1},{href:"/services"';
-const quanLyNoKh =
-  '{title:"Quản Lý",items:[{href:"/services"';
-if (s.includes(quanLyKh)) {
-  s = s.replace(quanLyKh, quanLyNoKh);
-  console.log("Removed Khách Hàng from Quản Lý menu: applied");
-} else if (s.includes('{title:"Quản Lý",items:[{href:"/customers",label:"Khách Hàng"')) {
-  s = s.replace(
-    '{title:"Quản Lý",items:[{href:"/customers",label:"Khách Hàng",icon:J1},',
-    '{title:"Quản Lý",items:[',
-  );
-  console.log("Removed Khách Hàng from Quản Lý menu (legacy /customers): applied");
-} else if (s.includes('{title:"Quản Lý",items:[{href:"/services"')) {
-  console.log("Removed Khách Hàng from Quản Lý menu: already applied");
-} else {
-  console.log("Quản Lý menu: no duplicate Khách Hàng found (skipped)");
-}
-
-// Legacy: do not rewrite standalone /customers menu item (removed from Quản Lý)
-if (s.includes('{href:"/customers",label:"Khách Hàng",icon:J1}')) {
-  console.log("Menu Khách Hàng → CMS hub: skipped (no /customers menu item)");
-} else {
-  console.log("Menu Khách Hàng → CMS hub: already applied or N/A");
-}
-
-// 2) Redirect legacy /customers SPA route to Next page
-const redirectComp = `function CustHubRedirect(){return j.useEffect(()=>{window.location.replace("/cms/khachhang")},[]),c.jsxs("div",{className:"p-8 text-center text-muted-foreground",children:[c.jsx("p",{children:"Đang mở Quản lý Khách Hàng…"}),c.jsx("a",{href:"/cms/khachhang",className:"text-violet-600 underline",children:"Mở /cms/khachhang"})]})}`;
-
-if (!s.includes("function CustHubRedirect")) {
-  const insertBefore = "function BillPerPg(){";
-  if (!s.includes(insertBefore)) {
-    console.error("CustHubRedirect insert anchor not found");
-    process.exit(1);
-  }
-  s = s.replace(insertBefore, `${redirectComp}function BillPerPg(){`);
-  console.log("CustHubRedirect component: applied");
-} else {
-  console.log("CustHubRedirect component: already applied");
 }
 
 patch(
@@ -89,26 +81,14 @@ patch(
   'path:"/admin/customers",component:()=>c.jsx(Le,{comp:CustHubRedirect',
 );
 
-// 3) Customer 360 link → /cms/khachhang
+// 3) Customer 360 / sync links → ERP Khách Hàng
 if (s.includes('marketingAdminUrl||"/adminbp/khachhang"')) {
-  s = s.replace(
-    'marketingAdminUrl||"/adminbp/khachhang"',
-    'marketingAdminUrl||"/cms/khachhang"',
-  );
+  s = s.replace('marketingAdminUrl||"/adminbp/khachhang"', `marketingAdminUrl||"${KH_URL}"`);
   console.log("Cust360 default admin URL: applied");
-} else if (s.includes('marketingAdminUrl||"/cms/khachhang"')) {
-  console.log("Cust360 default admin URL: already applied");
-} else if (s.includes('href:"/adminbp",target:"_blank"')) {
-  s = s.replace(
-    'href:"/adminbp",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
-    'href:r?.sync?.marketingAdminUrl||"/cms/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Sửa KH"',
-  );
-  console.log("Cust360 admin link: applied");
 }
 
-// 4) Dashboard quick link widget (if present in bundle — optional, skip if missing)
 if (s.includes('href:"/adminbp/khachhang"')) {
-  s = s.replaceAll('href:"/adminbp/khachhang"', 'href:"/cms/khachhang"');
+  s = s.replaceAll('href:"/adminbp/khachhang"', `href:"${KH_URL}"`);
   console.log("Replaced adminbp/khachhang hrefs");
 }
 

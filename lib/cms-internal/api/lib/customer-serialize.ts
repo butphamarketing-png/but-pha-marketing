@@ -1,7 +1,7 @@
 import type { Customer } from "@/lib/cms-internal/db/schema/customers";
 
 export const CUSTOMER_READ_ONLY_MESSAGE =
-  "Danh sách ERP chỉ xem nhanh. Sửa khách hàng tại CMS → Quản lý Khách Hàng (/cms/khachhang).";
+  "Danh sách ERP chỉ xem nhanh. Sửa khách hàng tại CMS → Khách Hàng (/cms/khach-hang).";
 
 export function serializeCustomerForApi(row: Customer) {
   return {

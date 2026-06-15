@@ -598,7 +598,7 @@ export function TaxObligationsPanel() {
 
       <p className="text-xs text-gray-500">
         Chốt kỳ lưu snapshot số liệu. Email nhắc hạn gửi lúc 7h (còn 7/3/1 ngày và quá hạn).{" "}
-        <Link href="/cms/khachhang" className="text-violet-300 underline">
+        <Link href="/cms/khach-hang" className="text-violet-300 underline">
           Quản lý KH
         </Link>{" "}
         ·{" "}
