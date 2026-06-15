@@ -19,3 +19,4 @@ export * from "./facebookAds";
 export * from "./googleProfiles";
 export * from "./googleAds";
 export * from "./employees";
+export * from "./tax-settings";

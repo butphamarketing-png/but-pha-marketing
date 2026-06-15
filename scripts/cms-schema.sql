@@ -377,3 +377,21 @@ create index if not exists erp_expenses_customer_idx on erp.expenses (customer_i
 -- Pha 5: trạng thái thanh toán phiếu chi (AP thật)
 alter table erp.expenses add column if not exists payment_status text not null default 'unpaid';
 create index if not exists erp_expenses_payment_status_idx on erp.expenses (payment_status);
+
+-- Kế toán / thuế (P1): cấu hình TNHH + GTGT quý
+create table if not exists erp.tax_settings (
+  id serial primary key,
+  entity_type text not null default 'TNHH',
+  company_name text,
+  company_tax_id text,
+  company_address text,
+  vat_filing_period text not null default 'quarterly',
+  vat_default_rate numeric(5, 2) not null default 8,
+  cit_rate numeric(5, 2) not null default 20,
+  quarterly_vat_due_day integer not null default 30,
+  updated_at timestamptz not null default now()
+);
+
+insert into erp.tax_settings (entity_type, vat_filing_period)
+select 'TNHH', 'quarterly'
+where not exists (select 1 from erp.tax_settings limit 1);

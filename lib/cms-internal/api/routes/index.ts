@@ -25,6 +25,7 @@ import billingPeriodsRouter from "./billing-periods";
 import revenueRecognitionRouter from "./revenue-recognition";
 import syncRouter from "./sync";
 import invoicesRouter from "./invoices";
+import taxRouter from "./tax";
 
 const router: IRouter = Router();
 
@@ -54,5 +55,6 @@ router.use(billingPeriodsRouter);
 router.use(revenueRecognitionRouter);
 router.use(syncRouter);
 router.use(invoicesRouter);
+router.use(taxRouter);
 
 export default router;

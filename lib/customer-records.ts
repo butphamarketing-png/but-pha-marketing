@@ -1,8 +1,11 @@
+import type { CustomerPaymentMethod } from "@/lib/customer-payment";
+
 export const CUSTOMER_RECORDS_KEY = "customer_records";
 
 export type CustomerPlatform = "facebook" | "website" | "googlemaps";
 export type CustomerType = "individual" | "company";
 export type CustomerStatus = "active" | "paused" | "stopped";
+export type { CustomerPaymentMethod };
 
 export type ServicePackage = {
   key: string;
@@ -39,6 +42,8 @@ export type CustomerRecord = {
   platformLink: string;
   amountPaid: number;
   amountUnpaid: number;
+  /** Tiền mặt / CK công ty / CK cá nhân — dùng khi sync phiếu thu ERP */
+  paymentMethod: CustomerPaymentMethod;
   /** @deprecated migrated to amountPaid */
   amount?: number;
   renewalReminderEnabled: boolean;
@@ -401,6 +406,7 @@ export function createEmptyCustomer(index = 0): CustomerRecord {
     platformLink: "",
     amountPaid: 0,
     amountUnpaid: 0,
+    paymentMethod: "bank_company",
     renewalReminderEnabled: true,
     lastRenewalReminderAt: null,
     createdAt: now,
@@ -483,6 +489,7 @@ export const CUSTOMER_EXPORT_COLUMNS: {
   { key: "platformLink", header: "Link nền tảng" },
   { key: "amountPaid", header: "Số tiền đã thanh toán" },
   { key: "amountUnpaid", header: "Số tiền chưa thanh toán" },
+  { key: "paymentMethod", header: "Hình thức TT" },
 ];
 
 export function exportCustomersToExcel(customers: CustomerRecord[]) {

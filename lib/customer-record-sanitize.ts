@@ -6,6 +6,7 @@ import {
   type CustomerStatus,
   type CustomerType,
 } from "@/lib/customer-records";
+import { normalizeCustomerPaymentMethod } from "@/lib/customer-payment";
 
 export function inferCustomerType(record: Partial<CustomerRecord>): CustomerType {
   if (record.customerType === "company" || record.customerType === "individual") {
@@ -102,6 +103,7 @@ export function sanitizeCustomerRecord(raw: unknown, index = 0): CustomerRecord 
     platformLink: typeof item.platformLink === "string" ? item.platformLink : "",
     amountPaid,
     amountUnpaid,
+    paymentMethod: normalizeCustomerPaymentMethod(item.paymentMethod),
     renewalReminderEnabled: item.renewalReminderEnabled !== false,
     lastRenewalReminderAt:
       typeof item.lastRenewalReminderAt === "string" && item.lastRenewalReminderAt.trim()

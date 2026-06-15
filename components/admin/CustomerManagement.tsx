@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -34,6 +35,8 @@ import {
   formatVnd,
   type CustomerRecord,
 } from "@/lib/customer-records";
+import { applyCustomerTypeRules } from "@/lib/customer-record-sanitize";
+import { CUSTOMER_PAYMENT_METHODS } from "@/lib/customer-payment";
 import {
   downloadCustomerBackup,
   formatBackupTime,
@@ -127,6 +130,53 @@ function CustomerDetailDialog({
               placeholder="Tên phòng khám, cửa hàng..."
             />
           </label>
+
+          <div className="rounded-lg border border-violet-500/20 bg-violet-500/5 p-3 space-y-3">
+            <p className="text-xs font-bold uppercase text-violet-300">Thuế &amp; hóa đơn</p>
+            <label className="block space-y-1.5">
+              <span className="text-xs text-gray-400">Loại khách</span>
+              <select
+                className={modalFieldInput}
+                value={customer.customerType}
+                onChange={(e) =>
+                  onUpdate({ customerType: e.target.value as CustomerRecord["customerType"] })
+                }
+              >
+                <option value="individual">Cá nhân</option>
+                <option value="company">Công ty / HKD</option>
+              </select>
+            </label>
+            {customer.customerType === "company" && (
+              <>
+                <label className="block space-y-1.5">
+                  <span className="text-xs text-gray-400">Mã số thuế</span>
+                  <input
+                    className={modalFieldInput}
+                    value={customer.taxId || ""}
+                    onChange={(e) => onUpdate({ taxId: e.target.value })}
+                    placeholder="10–13 chữ số"
+                  />
+                </label>
+                <label className="block space-y-1.5">
+                  <span className="text-xs text-gray-400">Địa chỉ xuất hóa đơn</span>
+                  <input
+                    className={modalFieldInput}
+                    value={customer.invoiceAddress || ""}
+                    onChange={(e) => onUpdate({ invoiceAddress: e.target.value })}
+                  />
+                </label>
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={customer.needsVatInvoice}
+                    onChange={(e) => onUpdate({ needsVatInvoice: e.target.checked })}
+                    className="h-4 w-4"
+                  />
+                  <span className="text-sm text-gray-200">Xuất hóa đơn VAT 8%</span>
+                </label>
+              </>
+            )}
+          </div>
 
           <label className="block space-y-1.5">
             <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Số liên hệ</span>
@@ -231,7 +281,7 @@ function CustomerDetailDialog({
           </label>
 
           <label className="block space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Số tiền</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Số tiền đã thanh toán</span>
             <input
               type="number"
               min={0}
@@ -240,6 +290,28 @@ function CustomerDetailDialog({
               onChange={(e) => onUpdate({ amountPaid: Number(e.target.value) || 0 })}
             />
             <p className="text-sm text-gray-400">{formatVnd(customer.amountPaid)}</p>
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Hình thức thanh toán</span>
+            <select
+              className={modalFieldInput}
+              value={customer.paymentMethod || "bank_company"}
+              onChange={(e) =>
+                onUpdate({
+                  paymentMethod: e.target.value as CustomerRecord["paymentMethod"],
+                })
+              }
+            >
+              {CUSTOMER_PAYMENT_METHODS.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <p className="text-[11px] text-gray-500">
+              Dùng khi tạo phiếu thu ERP. CK công ty = báo cáo thuế chính thống.
+            </p>
           </label>
 
           <label className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-3">
@@ -566,7 +638,14 @@ export function CustomerManagement({ variant = "standalone" }: { variant?: "stan
   const updateRow = (id: string, patch: Partial<CustomerRecord>) => {
     dirtyRef.current = true;
     setCustomers((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, ...patch, updatedAt: new Date().toISOString() } : row)),
+      prev.map((row) => {
+        if (row.id !== id) return row;
+        return applyCustomerTypeRules({
+          ...row,
+          ...patch,
+          updatedAt: new Date().toISOString(),
+        });
+      }),
     );
   };
 
@@ -825,6 +904,14 @@ export function CustomerManagement({ variant = "standalone" }: { variant?: "stan
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            {variant === "cms" && (
+              <Link
+                href="/cms/tax"
+                className="inline-flex items-center gap-2 rounded-lg border border-orange-500/40 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-200 hover:bg-orange-500/20"
+              >
+                Trách nhiệm thuế
+              </Link>
+            )}
             <button
               type="button"
               onClick={() => void openRestoreDialog()}

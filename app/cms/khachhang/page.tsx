@@ -23,6 +23,13 @@ export default function CmsKhachHangPage() {
             ← CMS Dashboard
           </Link>
           <span className="text-xs text-gray-500">|</span>
+          <Link
+            href="/cms/tax"
+            className="text-xs font-semibold text-orange-300 hover:text-orange-200 hover:underline"
+          >
+            Trách nhiệm thuế →
+          </Link>
+          <span className="text-xs text-gray-500">|</span>
           <span className="text-xs font-bold text-white">Quản lý Khách Hàng</span>
           <span className="text-xs text-gray-500">
             Nguồn chính — tự đồng bộ ERP (thu/chi, kỳ thu, HĐ)

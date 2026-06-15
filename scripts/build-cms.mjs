@@ -62,5 +62,6 @@ run("node", ["scripts/patch-cms-phases-123.mjs"]);
 run("node", ["scripts/patch-cms-sync-ux.mjs"]);
 run("node", ["scripts/patch-cms-improvements.mjs"]);
 run("node", ["scripts/patch-cms-khachhang-hub.mjs"]);
+run("node", ["scripts/patch-cms-tax.mjs"]);
 
 console.log("CMS build complete: public/cms");

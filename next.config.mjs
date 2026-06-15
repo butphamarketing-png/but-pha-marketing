@@ -22,7 +22,7 @@ const nextConfig = {
     return [
       { source: '/cms', destination: '/cms/index.html' },
       {
-        source: '/cms/:path((?!api/|assets/|index.html|khachhang).*)',
+        source: '/cms/:path((?!api/|assets/|index.html|khachhang|tax).*)',
         destination: '/cms/index.html',
       },
     ];

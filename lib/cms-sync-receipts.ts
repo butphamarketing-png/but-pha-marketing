@@ -1,6 +1,7 @@
 import { db, receiptsTable } from "@/lib/cms-internal/db";
 import { eq, sql } from "drizzle-orm";
 import type { CustomerRecord } from "@/lib/customer-records";
+import { receiptPaymentMethodFromCustomer } from "@/lib/customer-payment";
 
 export const AUTO_SYNC_RECEIPT_NOTE_PREFIX = "AUTO_SYNC:";
 
@@ -48,6 +49,7 @@ export async function syncAutoReceiptForBillingPeriod(
 
   const autoTarget = Math.max(0, Math.round((targetPaid - manualTotal) * 100) / 100);
   const [autoReceipt] = periodReceipts.filter((row) => row.notes === note);
+  const paymentMethod = receiptPaymentMethodFromCustomer(record.paymentMethod ?? "bank_company");
 
   if (autoTarget === 0) {
     if (autoReceipt) {
@@ -67,7 +69,7 @@ export async function syncAutoReceiptForBillingPeriod(
         contractId,
         billingPeriodId: periodId,
         amount: String(autoTarget),
-        paymentMethod: "transfer",
+        paymentMethod,
         receiptDate,
         createdBy: "Sync",
         notes: note,
@@ -89,6 +91,7 @@ export async function syncAutoReceiptForBillingPeriod(
     .set({
       amount: String(autoTarget),
       receiptDate,
+      paymentMethod,
       updatedAt: new Date(),
     })
     .where(eq(receiptsTable.id, autoReceipt.id));
