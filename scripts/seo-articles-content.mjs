@@ -1,6 +1,9 @@
 import { wrapArticle, img, toc, internalLinks, externalLinks, NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
 import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
+import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
+import { LOCAL_SEO_ARTICLES } from "./seo-local-articles.mjs";
+import { WEBSITE_ARTICLES } from "./seo-website-articles.mjs";
 
 function faq(items) {
   const blocks = items
@@ -462,4 +465,7 @@ ${faq([
   },
   ...INDUSTRY_ARTICLES,
   ...KEYWORD_ARTICLES,
+  ...LA_GI_ARTICLES,
+  ...LOCAL_SEO_ARTICLES,
+  ...WEBSITE_ARTICLES,
 ];

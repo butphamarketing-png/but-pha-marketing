@@ -6,6 +6,8 @@ import {
   externalLinks,
   NEWS_THUMBNAIL,
   NEWS_CONTENT_IMAGE_COUNT,
+  altFromKeyword,
+  validateSeoKeywordPlacement,
 } from "./seo-article-helpers.mjs";
 import { KEYWORD_ENTRIES } from "./seo-keyword-data.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
@@ -41,7 +43,7 @@ function checklist(items) {
 
 function buildKeywordContent(entry, imgOffset) {
   const kw = entry.keywordsMain;
-  const alt = entry.h1;
+  const alt = altFromKeyword(kw);
   return `
 ${toc([
   { id: "tong-quan", label: "Tổng quan" },
@@ -96,9 +98,28 @@ function buildKeywordArticle(entry, index) {
   };
 }
 
+function assertKeywordArticle(article) {
+  const alt = altFromKeyword(article.keywordsMain);
+  const check = validateSeoKeywordPlacement({
+    keywordsMain: article.keywordsMain,
+    title: article.title,
+    metaTitle: article.metaTitle,
+    metaDescription: article.metaDescription,
+    description: article.description,
+    imageAlts: [alt, alt, alt],
+  });
+  if (!check.ok) {
+    console.warn(`[SEO] ${article.slug}: thiếu từ khóa "${article.keywordsMain}" ở ${check.missing.join(", ")}`);
+  }
+}
+
 const filtered = KEYWORD_ENTRIES.filter((e) => !BASE_SLUGS.has(e.slug));
 
-export const KEYWORD_ARTICLES = filtered.map((entry, index) => buildKeywordArticle(entry, index));
+export const KEYWORD_ARTICLES = filtered.map((entry, index) => {
+  const article = buildKeywordArticle(entry, index);
+  assertKeywordArticle(article);
+  return article;
+});
 
 export const SKIPPED_KEYWORD_SLUGS = KEYWORD_ENTRIES.filter((e) => BASE_SLUGS.has(e.slug)).map(
   (e) => e.slug,

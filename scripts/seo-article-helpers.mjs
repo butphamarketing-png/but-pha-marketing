@@ -25,6 +25,46 @@ export const NEWS_CONTENT_IMAGES = [
 
 export const NEWS_CONTENT_IMAGE_COUNT = NEWS_CONTENT_IMAGES.length;
 
+export function normalizeKeyword(keyword) {
+  return String(keyword || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+}
+
+/** Từ khóa chính phải có trong title, meta, description, alt (so khớp không dấu, không phân biệt hoa thường). */
+export function keywordInText(text, keyword) {
+  const hay = normalizeKeyword(text);
+  const needle = normalizeKeyword(keyword);
+  return Boolean(needle && hay.includes(needle));
+}
+
+export function altFromKeyword(keywordsMain) {
+  const kw = String(keywordsMain || "").trim();
+  if (!kw) return "Thiết kế website Bứt Phá Marketing";
+  return kw.charAt(0).toUpperCase() + kw.slice(1);
+}
+
+export function validateSeoKeywordPlacement({
+  keywordsMain,
+  title,
+  metaTitle,
+  metaDescription,
+  description,
+  imageAlts = [],
+}) {
+  const missing = [];
+  if (!keywordInText(title, keywordsMain)) missing.push("title/H1");
+  if (!keywordInText(metaTitle || title, keywordsMain)) missing.push("metaTitle");
+  const desc = metaDescription || description || "";
+  if (!keywordInText(desc, keywordsMain)) missing.push("description");
+  if (imageAlts.length === 0 || !imageAlts.every((alt) => keywordInText(alt, keywordsMain))) {
+    missing.push("alt ảnh");
+  }
+  return { ok: missing.length === 0, missing };
+}
+
 export function wrapArticle({ metaTitle, html }) {
   return `<!-- BUTPHA_META ${JSON.stringify({ metaTitle })} -->\n${html}`;
 }

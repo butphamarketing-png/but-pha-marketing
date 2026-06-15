@@ -6,6 +6,7 @@ import {
   externalLinks,
   NEWS_THUMBNAIL,
   NEWS_CONTENT_IMAGE_COUNT,
+  altFromKeyword,
 } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 
@@ -28,7 +29,7 @@ function buildIndustryContent(entry, imgOffset) {
   const kw = entry.keywordsSecondary.split(",")[0].trim();
   const niche = entry.niche;
   const industry = entry.industry;
-  const alt = entry.h1;
+  const alt = altFromKeyword(entry.keywordsMain);
 
   return `
 ${toc([

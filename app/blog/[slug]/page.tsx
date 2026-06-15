@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const blogPath = blog.slug || blog.id;
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
+  const imageAlt = blog.keywordsMain?.trim() || blog.title;
   return {
     title: blog.metaTitle || blog.title,
     description: blog.metaDescription || blog.description,
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       url: canonical,
       type: "article",
       publishedTime: blog.publishedAt || undefined,
-      images: [{ url: image, alt: blog.title }],
+      images: [{ url: image, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
@@ -48,6 +49,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const publishedDate = blog.publishedAt || new Date(blog.timestamp).toISOString();
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
+  const imageAlt = blog.keywordsMain?.trim() || blog.title;
   const publishedLabel = new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN");
 
   const jsonLd = {
@@ -99,7 +101,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
           <div className="px-6 pt-6 md:px-10 md:pt-8">
             <img
               src={blog.imageUrl}
-              alt={blog.title}
+              alt={imageAlt}
               className="h-72 w-full rounded-[1.75rem] border border-indigo-100 object-cover shadow-brand md:h-[24rem]"
             />
           </div>
