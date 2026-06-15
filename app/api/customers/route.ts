@@ -107,8 +107,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
     const body = await request.json().catch(() => null);
-    const rawList = Array.isArray(body?.customers) ? body.customers : [];
-    const customers = rawList.map(sanitizeRecord);
+    const rawList: unknown[] = Array.isArray(body?.customers) ? body.customers : [];
+    const customers: CustomerRecord[] = rawList.map((entry, index) => sanitizeRecord(entry, index));
     const { customers: previousCustomers } = await loadEntries();
     const previousIds = new Set(previousCustomers.map((row) => row.id));
     const nextIds = new Set(customers.map((row) => row.id));
