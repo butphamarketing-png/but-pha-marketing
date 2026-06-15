@@ -6,7 +6,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const bundlePath = path.join(root, "public", "cms", "assets", "index-Ceyco5BZ.js");
+const assetsDir = path.join(root, "public", "cms", "assets");
+const bundlePath = fs
+  .readdirSync(assetsDir)
+  .filter((f) => f.startsWith("index-") && f.endsWith(".js"))
+  .map((f) => path.join(assetsDir, f))[0];
+
+if (!bundlePath) {
+  console.error("No CMS bundle found");
+  process.exit(1);
+}
+
 let s = fs.readFileSync(bundlePath, "utf8");
 const originalLen = s.length;
 
