@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, customersTable } from "@/lib/cms-internal/db";
-import { eq, ilike, sql, and } from "drizzle-orm";
+import { eq, ilike, sql, and, inArray } from "drizzle-orm";
 import { GetCustomerParams, ListCustomersQueryParams } from "@/lib/cms-internal/api-zod";
 import { getCustomerOverview } from "@/lib/cms-customer-overview";
 import {
@@ -39,6 +39,29 @@ router.get("/customers", async (req, res) => {
 
 router.post("/customers", (_req, res) => {
   return res.status(403).json(READ_ONLY_RESPONSE);
+});
+
+router.post("/customers/lookup-external", async (req, res) => {
+  try {
+    const externalIds = Array.isArray(req.body?.externalIds)
+      ? req.body.externalIds.map(String).filter(Boolean)
+      : [];
+    if (externalIds.length === 0) {
+      return res.json({ map: {} });
+    }
+    const rows = await db
+      .select({ id: customersTable.id, externalId: customersTable.externalId })
+      .from(customersTable)
+      .where(inArray(customersTable.externalId, externalIds));
+    const map: Record<string, number> = {};
+    for (const row of rows) {
+      if (row.externalId) map[row.externalId] = row.id;
+    }
+    return res.json({ map });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.get("/customers/:id/overview", async (req, res) => {

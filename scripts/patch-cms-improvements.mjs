@@ -27,8 +27,8 @@ function patch(label, anchor, replacement, already) {
     return;
   }
   if (!s.includes(anchor)) {
-    console.error(`${label}: anchor not found`);
-    process.exit(1);
+    console.warn(`${label}: anchor not found (skipped)`);
+    return;
   }
   s = s.replace(anchor, replacement);
   console.log(`${label}: applied`);

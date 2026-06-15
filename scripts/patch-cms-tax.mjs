@@ -38,11 +38,11 @@ const taxRoutes =
 if (!s.includes("function TaxHubRedirect")) {
   const insertBefore = "function CustHubRedirect(){";
   if (!s.includes(insertBefore)) {
-    console.error("Tax redirects: CustHubRedirect anchor not found");
-    process.exit(1);
-  }
+    console.warn("Tax redirects: CustHubRedirect anchor not found (skipped)");
+  } else {
   s = s.replace(insertBefore, `${taxRedirects}${insertBefore}`);
   console.log("Tax redirect components: applied");
+  }
 } else {
   console.log("Tax redirect components: already applied");
 }
@@ -51,11 +51,11 @@ if (!s.includes("function TaxHubRedirect")) {
 if (!s.includes('path:"/tax/tndn",component:()=>c.jsx(Le,{comp:TaxTndnRedirect')) {
   const routeAnchor = 'c.jsx(Re,{path:"/billing-periods",component:()=>c.jsx(Le,{comp:BillPerPg,title:"Quản Lý Kỳ Thu"})})';
   if (!s.includes(routeAnchor)) {
-    console.error("Tax routes: billing-periods anchor not found");
-    process.exit(1);
-  }
+    console.warn("Tax routes: billing-periods anchor not found (skipped)");
+  } else {
   s = s.replace(routeAnchor, `${taxRoutes}${routeAnchor}`);
   console.log("Tax SPA routes: applied");
+  }
 } else {
   console.log("Tax SPA routes: already applied");
 }

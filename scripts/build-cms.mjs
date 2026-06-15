@@ -56,15 +56,4 @@ await rm(publicCms, { recursive: true, force: true });
 await mkdir(publicCms, { recursive: true });
 await cp(distDir, publicCms, { recursive: true });
 
-console.log("Applying CMS menu/report patches...");
-run("node", ["scripts/patch-cms-menu-reports.mjs"]);
-run("node", ["scripts/patch-cms-phases-123.mjs"]);
-run("node", ["scripts/patch-cms-sync-ux.mjs"]);
-run("node", ["scripts/patch-cms-improvements.mjs"]);
-run("node", ["scripts/patch-cms-khachhang-hub.mjs"]);
-run("node", ["scripts/patch-cms-tax.mjs"]);
-run("node", ["scripts/patch-cms-expense-vat.mjs"]);
-run("node", ["scripts/patch-cms-customer-dialog.mjs"]);
-run("node", ["scripts/patch-cms-fixes.mjs"]);
-
 console.log("CMS build complete: public/cms");

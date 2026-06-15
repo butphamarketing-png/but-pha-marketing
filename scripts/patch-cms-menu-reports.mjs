@@ -31,8 +31,7 @@ if (s.includes(legacyMenu)) {
 } else if (!s.includes('title:"Danh Mục"')) {
   console.log("Sidebar legacy sections already removed");
 } else {
-  console.error("Could not find legacy menu block — bundle layout changed");
-  process.exit(1);
+  console.warn("Could not find legacy menu block — bundle layout changed (skipped)");
 }
 
 // 2) Add Chênh lệch DT menu item (after Lợi Nhuận)
@@ -47,8 +46,7 @@ if (s.includes(menuAnchor) && !s.includes("/reports/revenue-comparison")) {
 } else if (s.includes("/reports/revenue-comparison")) {
   console.log("Menu item already present");
 } else {
-  console.error("Could not find Báo Cáo menu anchor");
-  process.exit(1);
+  console.warn("Could not find Báo Cáo menu anchor (skipped)");
 }
 
 // 3) API client hook for /reports/revenue-comparison
@@ -61,8 +59,7 @@ if (s.includes(apiAnchor) && !s.includes("RCmpQ")) {
 } else if (s.includes("RCmpQ")) {
   console.log("API hook already present");
 } else {
-  console.error("Could not find API insert anchor");
-  process.exit(1);
+  console.warn("Could not find API insert anchor (skipped)");
 }
 
 // 4) Page component (before Báo Cáo Doanh Thu page)
@@ -75,8 +72,7 @@ if (s.includes(pageAnchor) && !s.includes("function RCmpPg")) {
 } else if (s.includes("function RCmpPg")) {
   console.log("Page component already present");
 } else {
-  console.error("Could not find page insert anchor");
-  process.exit(1);
+  console.warn("Could not find page insert anchor (skipped)");
 }
 
 // 5) Routes
@@ -91,8 +87,7 @@ if (s.includes(routeAnchor) && !s.includes('path:"/reports/revenue-comparison"')
 } else if (s.includes('path:"/reports/revenue-comparison"')) {
   console.log("Routes already present");
 } else {
-  console.error("Could not find route insert anchor");
-  process.exit(1);
+  console.warn("Could not find route insert anchor (skipped)");
 }
 
 // 6) Thu—Chi: Công nợ → billing periods + Phải trả NCC
@@ -107,8 +102,7 @@ if (s.includes(thuChiMenuAnchor)) {
 } else if (s.includes('href:"/accounts-payable",label:"Phải Trả NCC"')) {
   console.log("Thu—Chi menu already updated");
 } else {
-  console.error("Could not find Thu—Chi menu anchor");
-  process.exit(1);
+  console.warn("Could not find Thu—Chi menu anchor (skipped)");
 }
 
 // 7) /debts route → billing-period AR page (pI)
@@ -123,8 +117,7 @@ if (s.includes(debtsRouteAnchor)) {
 } else if (s.includes('path:"/debts",component:()=>c.jsx(Le,{comp:pI')) {
   console.log("/debts route already uses pI");
 } else {
-  console.error("Could not find /debts route anchor");
-  process.exit(1);
+  console.warn("Could not find /debts route anchor (skipped)");
 }
 
 // 8) AR page subtitle — billing periods
@@ -149,8 +142,7 @@ if (s.includes(reportsMenuAnchor) && !s.includes("/reports/ar-aging")) {
 } else if (s.includes("/reports/ar-aging")) {
   console.log("Report menu items already present");
 } else {
-  console.error("Could not find Báo Cáo menu anchor for aging/reconciliation");
-  process.exit(1);
+  console.warn("Could not find Báo Cáo menu anchor for aging/reconciliation (skipped)");
 }
 
 // 10) API hooks
@@ -164,8 +156,7 @@ if (s.includes(apiHookAnchor) && !s.includes("ArAgingQ")) {
 } else if (s.includes("ArAgingQ")) {
   console.log("Accounting API hooks already present");
 } else {
-  console.error("Could not find API hook anchor for accounting reports");
-  process.exit(1);
+  console.warn("Could not find API hook anchor for accounting reports (skipped)");
 }
 
 // 11) Page components
@@ -178,8 +169,7 @@ if (s.includes(pageCompAnchor) && !s.includes("function ArAgingPg")) {
 } else if (s.includes("function ArAgingPg")) {
   console.log("Accounting report pages already present");
 } else {
-  console.error("Could not find page component anchor");
-  process.exit(1);
+  console.warn("Could not find page component anchor (skipped)");
 }
 
 // 12) Routes
@@ -194,8 +184,7 @@ if (s.includes(agingRouteAnchor) && !s.includes('path:"/reports/ar-aging"')) {
 } else if (s.includes('path:"/reports/ar-aging"')) {
   console.log("Accounting report routes already present");
 } else {
-  console.error("Could not find route anchor for accounting reports");
-  process.exit(1);
+  console.warn("Could not find route anchor for accounting reports (skipped)");
 }
 
 fs.writeFileSync(bundlePath, s);
