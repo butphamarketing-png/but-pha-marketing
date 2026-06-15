@@ -11,6 +11,10 @@ export const taxSettingsTable = erpSchema.table("tax_settings", {
   vatDefaultRate: numeric("vat_default_rate", { precision: 5, scale: 2 }).notNull().default("8"),
   citRate: numeric("cit_rate", { precision: 5, scale: 2 }).notNull().default("20"),
   quarterlyVatDueDay: integer("quarterly_vat_due_day").notNull().default(30),
+  reminderEmail: text("reminder_email"),
+  eInvoiceTemplateCode: text("e_invoice_template_code"),
+  eInvoiceSymbol: text("e_invoice_symbol"),
+  eInvoicePortalUrl: text("e_invoice_portal_url"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
 

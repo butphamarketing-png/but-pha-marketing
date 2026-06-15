@@ -13,6 +13,7 @@ import {
 import { eq, and, sql, inArray } from "drizzle-orm";
 import { assertInvoiceTaxId, validateVietnameseTaxId } from "@/lib/vietnamese-tax-id";
 import { renderInvoiceHtml, type InvoicePrintData } from "@/lib/cms-invoice-html";
+import { resolveEInvoiceStatusOnIssue } from "@/lib/cms-einvoice";
 
 export type InvoiceStatus = "draft" | "issued" | "cancelled";
 
@@ -395,7 +396,11 @@ export async function issueInvoice(invoiceId: number) {
 
   const [updated] = await db
     .update(invoicesTable)
-    .set({ status: "issued", updatedAt: new Date() })
+    .set({
+      status: "issued",
+      eInvoiceStatus: resolveEInvoiceStatusOnIssue(vatRate),
+      updatedAt: new Date(),
+    })
     .where(eq(invoicesTable.id, invoiceId))
     .returning();
 

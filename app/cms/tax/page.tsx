@@ -20,6 +20,26 @@ export default function CmsTaxPage() {
           <span className="text-xs text-gray-500">|</span>
           <span className="text-xs font-bold text-white">Trách nhiệm thuế</span>
           <span className="text-xs text-gray-500">TNHH · GTGT quý</span>
+          <Link
+            href="/cms/tax/ctv"
+            className="text-xs font-semibold text-amber-300 hover:text-amber-200 hover:underline"
+          >
+            TNCN CTV
+          </Link>
+          <span className="text-xs text-gray-500">·</span>
+          <Link
+            href="/cms/tax/tndn"
+            className="text-xs font-semibold text-indigo-300 hover:text-indigo-200 hover:underline"
+          >
+            TNDN tạm nộp
+          </Link>
+          <span className="text-xs text-gray-500">·</span>
+          <Link
+            href="/cms/tax/hddt"
+            className="text-xs font-semibold text-cyan-300 hover:text-cyan-200 hover:underline"
+          >
+            HĐĐT →
+          </Link>
         </div>
       </div>
       <TaxObligationsPanel />

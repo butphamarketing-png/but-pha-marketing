@@ -395,3 +395,72 @@ create table if not exists erp.tax_settings (
 insert into erp.tax_settings (entity_type, vat_filing_period)
 select 'TNHH', 'quarterly'
 where not exists (select 1 from erp.tax_settings limit 1);
+
+-- P2: VAT đầu vào trên phiếu chi
+alter table erp.expenses add column if not exists has_vat_invoice boolean not null default false;
+alter table erp.expenses add column if not exists vat_rate numeric(5, 2) not null default 0;
+alter table erp.expenses add column if not exists subtotal numeric(18, 2) not null default 0;
+alter table erp.expenses add column if not exists vat_amount numeric(18, 2) not null default 0;
+create index if not exists erp_expenses_vat_idx on erp.expenses (has_vat_invoice, expense_date);
+
+-- P3: chốt kỳ GTGT + nhắc hạn
+alter table erp.tax_settings add column if not exists reminder_email text;
+
+create table if not exists erp.tax_period_closures (
+  id serial primary key,
+  year integer not null,
+  quarter integer not null,
+  period_type text not null default 'vat_quarterly',
+  status text not null default 'open',
+  closed_at timestamptz,
+  closed_by text,
+  snapshot jsonb,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (year, quarter, period_type)
+);
+
+create table if not exists erp.tax_reminder_logs (
+  id serial primary key,
+  year integer not null,
+  quarter integer not null,
+  reminder_key text not null,
+  recipient text not null,
+  sent_at timestamptz not null default now(),
+  unique (year, quarter, reminder_key, recipient)
+);
+
+-- P4: TNCN khấu trừ CTV
+create table if not exists erp.contractor_payments (
+  id serial primary key,
+  code text not null unique,
+  contractor_name text not null,
+  contractor_tax_id text,
+  service_description text not null,
+  gross_amount numeric(18, 2) not null,
+  pit_rate numeric(5, 2) not null default 10,
+  pit_amount numeric(18, 2) not null default 0,
+  net_amount numeric(18, 2) not null default 0,
+  payment_date date not null,
+  payment_method text not null default 'transfer',
+  notes text,
+  created_by text not null default 'Admin',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists erp_contractor_payments_date_idx on erp.contractor_payments (payment_date desc);
+
+-- P6: Hóa đơn điện tử (ghi nhận sau khi phát hành thủ công trên cổng)
+alter table erp.invoices add column if not exists e_invoice_status text not null default 'not_applicable';
+alter table erp.invoices add column if not exists e_invoice_symbol text;
+alter table erp.invoices add column if not exists e_invoice_number text;
+alter table erp.invoices add column if not exists e_invoice_lookup_code text;
+alter table erp.invoices add column if not exists e_invoice_lookup_url text;
+alter table erp.invoices add column if not exists e_invoice_registered_at timestamptz;
+create index if not exists erp_invoices_einvoice_status_idx on erp.invoices (e_invoice_status);
+
+alter table erp.tax_settings add column if not exists e_invoice_template_code text;
+alter table erp.tax_settings add column if not exists e_invoice_symbol text;
+alter table erp.tax_settings add column if not exists e_invoice_portal_url text;

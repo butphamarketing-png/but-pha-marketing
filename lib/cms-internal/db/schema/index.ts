@@ -20,3 +20,6 @@ export * from "./googleProfiles";
 export * from "./googleAds";
 export * from "./employees";
 export * from "./tax-settings";
+export * from "./tax-period-closures";
+export * from "./tax-reminder-logs";
+export * from "./contractor-payments";

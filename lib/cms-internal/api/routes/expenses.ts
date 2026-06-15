@@ -3,8 +3,17 @@ import { db, expensesTable, suppliersTable, servicesTable, customersTable } from
 import { eq, ilike, sql, and, gte, lte } from "drizzle-orm";
 import { CreateExpenseBody, UpdateExpenseBody, GetExpenseParams, UpdateExpenseParams, DeleteExpenseParams, ListExpensesQueryParams } from "@/lib/cms-internal/api-zod";
 import { logAudit } from "../lib/audit";
+import { computeExpenseVat, resolveExpenseVatFromBody } from "@/lib/expense-vat";
 
 const router = Router();
+
+function vatFieldsForRow(expense: typeof expensesTable.$inferSelect) {
+  return computeExpenseVat({
+    amount: parseFloat(expense.amount),
+    hasVatInvoice: expense.hasVatInvoice,
+    vatRate: parseFloat(expense.vatRate ?? "0"),
+  });
+}
 
 async function enrichExpense(expense: typeof expensesTable.$inferSelect) {
   let supplierName: string | null = null;
@@ -22,9 +31,14 @@ async function enrichExpense(expense: typeof expensesTable.$inferSelect) {
     const [svc] = await db.select({ name: servicesTable.name }).from(servicesTable).where(eq(servicesTable.id, expense.serviceId)).limit(1);
     serviceName = svc?.name ?? null;
   }
+  const vat = vatFieldsForRow(expense);
   return {
     ...expense,
-    amount: parseFloat(expense.amount),
+    amount: vat.amount,
+    hasVatInvoice: vat.hasVatInvoice,
+    vatRate: vat.vatRate,
+    subtotal: vat.subtotal,
+    vatAmount: vat.vatAmount,
     paymentStatus: expense.paymentStatus ?? "unpaid",
     status: expense.paymentStatus ?? "unpaid",
     supplierName,
@@ -42,6 +56,17 @@ async function generateExpenseCode(): Promise<string> {
 function resolvePaymentStatus(body: Record<string, unknown>): "paid" | "unpaid" {
   const raw = body.paymentStatus ?? body.status;
   return raw === "paid" ? "paid" : "unpaid";
+}
+
+function buildVatDbFields(body: Record<string, unknown>, amount: number) {
+  const vat = resolveExpenseVatFromBody(body, amount);
+  return {
+    amount: String(vat.amount),
+    hasVatInvoice: vat.hasVatInvoice,
+    vatRate: String(vat.vatRate),
+    subtotal: String(vat.subtotal),
+    vatAmount: String(vat.vatAmount),
+  };
 }
 
 router.get("/expenses", async (req, res) => {
@@ -77,12 +102,13 @@ router.post("/expenses", async (req, res) => {
   const customerId = rawCustomerId != null && rawCustomerId !== "" ? Number(rawCustomerId) : undefined;
 
   const code = await generateExpenseCode();
+  const vatFields = buildVatDbFields(req.body ?? {}, body.data.amount);
   const [expense] = await db.insert(expensesTable).values({
     ...body.data,
+    ...vatFields,
     customerId: Number.isFinite(customerId) ? customerId : undefined,
     paymentStatus: resolvePaymentStatus(req.body ?? {}),
     code,
-    amount: String(body.data.amount),
   }).returning();
   const enriched = await enrichExpense(expense);
   await logAudit("expense", expense.id, "create", "Admin", null, enriched);
@@ -107,7 +133,6 @@ router.patch("/expenses/:id", async (req, res) => {
   if (!existing) return res.status(404).json({ error: "Not found" });
 
   const updateData: Record<string, unknown> = { ...body.data };
-  if (body.data.amount !== undefined) updateData.amount = String(body.data.amount);
   if (req.body?.customerId !== undefined) {
     const customerId = req.body.customerId != null && req.body.customerId !== ""
       ? Number(req.body.customerId)
@@ -117,6 +142,25 @@ router.patch("/expenses/:id", async (req, res) => {
   if (req.body?.paymentStatus !== undefined || req.body?.status !== undefined) {
     updateData.paymentStatus = resolvePaymentStatus(req.body ?? {});
   }
+
+  const shouldRecalcVat =
+    body.data.amount !== undefined ||
+    req.body?.hasVatInvoice !== undefined ||
+    req.body?.vatRate !== undefined;
+
+  if (shouldRecalcVat) {
+    const amount = body.data.amount !== undefined
+      ? body.data.amount
+      : parseFloat(existing.amount);
+    const mergedBody = {
+      hasVatInvoice: req.body?.hasVatInvoice ?? existing.hasVatInvoice,
+      vatRate: req.body?.vatRate ?? parseFloat(existing.vatRate ?? "0"),
+    };
+    Object.assign(updateData, buildVatDbFields(mergedBody, amount));
+  }
+
+  delete updateData.hasVatInvoice;
+  delete updateData.vatRate;
 
   const [updated] = await db.update(expensesTable).set(updateData).where(eq(expensesTable.id, params.data.id)).returning();
   const enriched = await enrichExpense(updated);

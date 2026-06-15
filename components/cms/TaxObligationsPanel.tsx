@@ -13,6 +13,7 @@ type TaxSettings = {
   vatDefaultRate: number;
   citRate: number;
   quarterlyVatDueDay: number;
+  reminderEmail: string | null;
 };
 
 type VatSummary = {
@@ -31,6 +32,8 @@ type VatSummary = {
   cashReceiptsTotal: number;
   receiptCount: number;
   inputVat: number;
+  inputVatExpenseCount: number;
+  expenseTotalAmount: number;
   vatPayable: number;
   byMonth: {
     month: number;
@@ -38,6 +41,7 @@ type VatSummary = {
     outputVat: number;
     revenueBeforeVat: number;
     cashReceiptsTotal: number;
+    inputVat: number;
   }[];
   anomalies: string[];
 };
@@ -50,6 +54,36 @@ type Deadline = {
   dueDate: string;
   daysUntil: number;
   status: string;
+};
+
+type TaxBanner = {
+  show: boolean;
+  level: "info" | "warning" | "danger";
+  title: string;
+  message: string;
+};
+
+type PeriodClosure = {
+  status: "open" | "closed";
+  closedAt: string | null;
+  closedBy: string | null;
+  notes: string | null;
+};
+
+type PitSummaryBrief = {
+  totalPitWithheld: number;
+  paymentCount: number;
+};
+
+type CitSummaryBrief = {
+  citProvisional: number;
+  citRate: number;
+  taxableIncome: number;
+};
+
+type EInvoiceSummaryBrief = {
+  pendingEInvoice: number;
+  registeredEInvoice: number;
 };
 
 function formatDate(iso: string) {
@@ -70,19 +104,31 @@ export function TaxObligationsPanel() {
   const [settings, setSettings] = useState<TaxSettings | null>(null);
   const [summary, setSummary] = useState<VatSummary | null>(null);
   const [deadlines, setDeadlines] = useState<Deadline[]>([]);
+  const [banner, setBanner] = useState<TaxBanner | null>(null);
+  const [closure, setClosure] = useState<PeriodClosure | null>(null);
+  const [pitSummary, setPitSummary] = useState<PitSummaryBrief | null>(null);
+  const [citSummary, setCitSummary] = useState<CitSummaryBrief | null>(null);
+  const [eInvoiceSummary, setEInvoiceSummary] = useState<EInvoiceSummaryBrief | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [savingSettings, setSavingSettings] = useState(false);
+  const [closingPeriod, setClosingPeriod] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const [settingsRes, summaryRes, deadlinesRes] = await Promise.all([
+      const [settingsRes, summaryRes, deadlinesRes, bannerRes, periodRes, pitRes, citRes, eInvoiceRes] =
+        await Promise.all([
         fetch("/cms/api/tax/settings", { credentials: "include" }),
         fetch(`/cms/api/tax/vat-summary?year=${year}&quarter=${quarter}`, { credentials: "include" }),
         fetch(`/cms/api/tax/deadlines?year=${year}`, { credentials: "include" }),
+        fetch(`/cms/api/tax/banner?year=${year}&quarter=${quarter}`, { credentials: "include" }),
+        fetch(`/cms/api/tax/period?year=${year}&quarter=${quarter}`, { credentials: "include" }),
+        fetch(`/cms/api/tax/pit-summary?year=${year}&quarter=${quarter}`, { credentials: "include" }),
+        fetch(`/cms/api/tax/cit-summary?year=${year}&quarter=${quarter}`, { credentials: "include" }),
+        fetch(`/cms/api/einvoice/summary?year=${year}&quarter=${quarter}`, { credentials: "include" }),
       ]);
       if (!settingsRes.ok || !summaryRes.ok || !deadlinesRes.ok) {
         throw new Error("Không tải được dữ liệu thuế. Chạy npm run setup:cms-db nếu mới deploy.");
@@ -91,6 +137,30 @@ export function TaxObligationsPanel() {
       setSummary(await summaryRes.json());
       const dl = await deadlinesRes.json();
       setDeadlines(Array.isArray(dl.items) ? dl.items : []);
+      if (bannerRes.ok) setBanner(await bannerRes.json());
+      if (periodRes.ok) setClosure(await periodRes.json());
+      if (pitRes.ok) {
+        const pit = await pitRes.json();
+        setPitSummary({
+          totalPitWithheld: pit.totalPitWithheld ?? 0,
+          paymentCount: pit.paymentCount ?? 0,
+        });
+      }
+      if (citRes.ok) {
+        const cit = await citRes.json();
+        setCitSummary({
+          citProvisional: cit.citProvisional ?? 0,
+          citRate: cit.citRate ?? 20,
+          taxableIncome: cit.taxableIncome ?? 0,
+        });
+      }
+      if (eInvoiceRes.ok) {
+        const einv = await eInvoiceRes.json();
+        setEInvoiceSummary({
+          pendingEInvoice: einv.pendingEInvoice ?? 0,
+          registeredEInvoice: einv.registeredEInvoice ?? 0,
+        });
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Lỗi tải dữ liệu thuế.");
     } finally {
@@ -129,6 +199,66 @@ export function TaxObligationsPanel() {
   const exportCsv = () => {
     window.open(`/cms/api/tax/vat-export?year=${year}&quarter=${quarter}`, "_blank");
   };
+
+  const exportInputCsv = () => {
+    window.open(`/cms/api/tax/vat-input-export?year=${year}&quarter=${quarter}`, "_blank");
+  };
+
+  const exportPack = () => {
+    window.open(`/cms/api/tax/export-pack?year=${year}&quarter=${quarter}`, "_blank");
+  };
+
+  const closePeriod = async () => {
+    if (!summary) return;
+    const warn =
+      summary.anomalies.length > 0
+        ? `Còn ${summary.anomalies.length} cảnh báo. Vẫn chốt kỳ Q${quarter}/${year}?`
+        : `Chốt kỳ GTGT Q${quarter}/${year}? Số liệu sẽ được lưu snapshot.`;
+    if (!window.confirm(warn)) return;
+
+    setClosingPeriod(true);
+    setError(null);
+    try {
+      const res = await fetch("/cms/api/tax/period/close", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ year, quarter }),
+      });
+      if (!res.ok) throw new Error("Chốt kỳ thất bại");
+      await load();
+    } catch {
+      setError("Không chốt được kỳ. Chạy setup:cms-db nếu thiếu bảng tax_period_closures.");
+    } finally {
+      setClosingPeriod(false);
+    }
+  };
+
+  const reopenPeriod = async () => {
+    if (!window.confirm(`Mở lại kỳ Q${quarter}/${year} để chỉnh sửa số liệu?`)) return;
+    setClosingPeriod(true);
+    try {
+      const res = await fetch("/cms/api/tax/period/reopen", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ year, quarter }),
+      });
+      if (!res.ok) throw new Error("Mở lại thất bại");
+      await load();
+    } catch {
+      setError("Không mở lại được kỳ.");
+    } finally {
+      setClosingPeriod(false);
+    }
+  };
+
+  const bannerCls =
+    banner?.level === "danger"
+      ? "border-red-500/40 bg-red-500/10 text-red-100"
+      : banner?.level === "warning"
+        ? "border-amber-500/40 bg-amber-500/10 text-amber-100"
+        : "border-sky-500/40 bg-sky-500/10 text-sky-100";
 
   if (loading && !summary) {
     return <div className="p-8 text-center text-gray-400">Đang tải trách nhiệm thuế…</div>;
@@ -201,6 +331,25 @@ export function TaxObligationsPanel() {
         </div>
       )}
 
+      {banner?.show && (
+        <div className={`rounded-xl border px-4 py-3 ${bannerCls}`}>
+          <p className="text-sm font-bold">{banner.title}</p>
+          <p className="mt-1 text-sm opacity-90">{banner.message}</p>
+        </div>
+      )}
+
+      {closure?.status === "closed" && (
+        <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+          <p className="font-bold">Đã chốt kỳ Q{quarter}/{year}</p>
+          {closure.closedAt && (
+            <p className="mt-1 text-xs opacity-80">
+              Lúc {formatDate(closure.closedAt.slice(0, 10))}
+              {closure.closedBy ? ` · ${closure.closedBy}` : ""}
+            </p>
+          )}
+        </div>
+      )}
+
       {settingsOpen && settings && (
         <div className="rounded-xl border border-white/10 bg-[#111827] p-4 space-y-3">
           <h2 className="text-sm font-bold text-white">Thông tin công ty (But Pha TNHH)</h2>
@@ -229,6 +378,27 @@ export function TaxObligationsPanel() {
                 onChange={(e) => setSettings({ ...settings, companyAddress: e.target.value })}
               />
             </label>
+            <label className="block text-xs text-gray-400">
+              Thuế suất TNDN %
+              <input
+                type="number"
+                min={0}
+                max={100}
+                step={0.1}
+                className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                value={settings.citRate}
+                onChange={(e) => setSettings({ ...settings, citRate: Number(e.target.value) })}
+              />
+            </label>
+            <label className="block text-xs text-gray-400 sm:col-span-2">
+              Email nhắc hạn GTGT
+              <input
+                className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                placeholder="admin@butphamarketing.vn"
+                value={settings.reminderEmail ?? ""}
+                onChange={(e) => setSettings({ ...settings, reminderEmail: e.target.value })}
+              />
+            </label>
           </div>
           <button
             type="button"
@@ -243,16 +413,21 @@ export function TaxObligationsPanel() {
 
       {summary && (
         <>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
             <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 p-4">
               <p className="text-xs font-bold uppercase text-orange-200/80">GTGT phải nộp (Q{summary.quarter})</p>
               <p className="mt-2 text-2xl font-bold text-orange-100">{formatVnd(summary.vatPayable)}</p>
-              <p className="mt-1 text-xs text-orange-200/70">Đầu ra − đầu vào (P2: đầu vào)</p>
+              <p className="mt-1 text-xs text-orange-200/70">Đầu ra − đầu vào</p>
             </div>
             <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-4">
               <p className="text-xs font-bold uppercase text-violet-200/80">VAT đầu ra</p>
               <p className="mt-2 text-2xl font-bold text-violet-100">{formatVnd(summary.outputVat)}</p>
               <p className="mt-1 text-xs text-violet-200/70">{summary.issuedInvoiceCount} HĐ đã xuất</p>
+            </div>
+            <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4">
+              <p className="text-xs font-bold uppercase text-rose-200/80">VAT đầu vào</p>
+              <p className="mt-2 text-2xl font-bold text-rose-100">{formatVnd(summary.inputVat)}</p>
+              <p className="mt-1 text-xs text-rose-200/70">{summary.inputVatExpenseCount} phiếu chi có HĐ GTGT</p>
             </div>
             <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4">
               <p className="text-xs font-bold uppercase text-emerald-200/80">Doanh thu trước VAT</p>
@@ -260,10 +435,48 @@ export function TaxObligationsPanel() {
               <p className="mt-1 text-xs text-emerald-200/70">Từ HĐ issued</p>
             </div>
             <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-4">
-              <p className="text-xs font-bold uppercase text-sky-200/80">Thu tiền mặt (phiếu thu)</p>
+              <p className="text-xs font-bold uppercase text-sky-200/80">Thu tiền (phiếu thu)</p>
               <p className="mt-2 text-2xl font-bold text-sky-100">{formatVnd(summary.cashReceiptsTotal)}</p>
               <p className="mt-1 text-xs text-sky-200/70">{summary.receiptCount} phiếu thu</p>
             </div>
+            <Link
+              href="/cms/tax/ctv"
+              className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 transition hover:border-amber-400/50"
+            >
+              <p className="text-xs font-bold uppercase text-amber-200/80">TNCN CTV</p>
+              <p className="mt-2 text-2xl font-bold text-amber-100">
+                {formatVnd(pitSummary?.totalPitWithheld ?? 0)}
+              </p>
+              <p className="mt-1 text-xs text-amber-200/70">
+                {pitSummary?.paymentCount ?? 0} chi trả · Quản lý →
+              </p>
+            </Link>
+            <Link
+              href="/cms/tax/tndn"
+              className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-4 transition hover:border-indigo-400/50"
+            >
+              <p className="text-xs font-bold uppercase text-indigo-200/80">
+                TNDN tạm nộp · {citSummary?.citRate ?? 20}%
+              </p>
+              <p className="mt-2 text-2xl font-bold text-indigo-100">
+                {formatVnd(citSummary?.citProvisional ?? 0)}
+              </p>
+              <p className="mt-1 text-xs text-indigo-200/70">
+                LN tạm tính {formatVnd(citSummary?.taxableIncome ?? 0)} →
+              </p>
+            </Link>
+            <Link
+              href="/cms/tax/hddt"
+              className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-4 transition hover:border-cyan-400/50"
+            >
+              <p className="text-xs font-bold uppercase text-cyan-200/80">HĐĐT chờ phát hành</p>
+              <p className="mt-2 text-2xl font-bold text-cyan-100">
+                {eInvoiceSummary?.pendingEInvoice ?? 0}
+              </p>
+              <p className="mt-1 text-xs text-cyan-200/70">
+                Đã ghi nhận {eInvoiceSummary?.registeredEInvoice ?? 0} · Quản lý →
+              </p>
+            </Link>
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#111827] px-4 py-3">
@@ -277,13 +490,48 @@ export function TaxObligationsPanel() {
                 </span>
               )}
             </div>
-            <button
-              type="button"
-              onClick={exportCsv}
-              className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-200"
-            >
-              Xuất sổ HĐ bán ra (CSV)
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={exportCsv}
+                className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-200"
+              >
+                Xuất HĐ bán ra (CSV)
+              </button>
+              <button
+                type="button"
+                onClick={exportInputCsv}
+                className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-200"
+              >
+                Xuất VAT đầu vào (CSV)
+              </button>
+              <button
+                type="button"
+                onClick={exportPack}
+                className="rounded-lg border border-violet-500/40 bg-violet-500/10 px-4 py-2 text-sm font-bold text-violet-200"
+              >
+                Gói ZIP nộp quý
+              </button>
+              {closure?.status === "closed" ? (
+                <button
+                  type="button"
+                  disabled={closingPeriod}
+                  onClick={() => void reopenPeriod()}
+                  className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm font-bold text-amber-200 disabled:opacity-50"
+                >
+                  Mở lại kỳ
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={closingPeriod}
+                  onClick={() => void closePeriod()}
+                  className="rounded-lg border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-bold text-orange-200 disabled:opacity-50"
+                >
+                  {closingPeriod ? "Đang chốt…" : "Chốt kỳ"}
+                </button>
+              )}
+            </div>
           </div>
 
           {summary.anomalies.length > 0 && (
@@ -306,6 +554,7 @@ export function TaxObligationsPanel() {
                 <tr className="border-b border-white/10 bg-white/5 text-left text-xs uppercase text-gray-400">
                   <th className="px-4 py-2">Tháng</th>
                   <th className="px-4 py-2 text-right">VAT đầu ra</th>
+                  <th className="px-4 py-2 text-right">VAT đầu vào</th>
                   <th className="px-4 py-2 text-right">Trước VAT</th>
                   <th className="px-4 py-2 text-right">Phiếu thu</th>
                 </tr>
@@ -315,6 +564,7 @@ export function TaxObligationsPanel() {
                   <tr key={row.month} className="border-b border-white/5">
                     <td className="px-4 py-2 text-white">{row.label}</td>
                     <td className="px-4 py-2 text-right text-violet-200">{formatVnd(row.outputVat)}</td>
+                    <td className="px-4 py-2 text-right text-rose-200">{formatVnd(row.inputVat)}</td>
                     <td className="px-4 py-2 text-right text-emerald-200">{formatVnd(row.revenueBeforeVat)}</td>
                     <td className="px-4 py-2 text-right text-sky-200">{formatVnd(row.cashReceiptsTotal)}</td>
                   </tr>
@@ -347,7 +597,7 @@ export function TaxObligationsPanel() {
       )}
 
       <p className="text-xs text-gray-500">
-        Giai đoạn 1: VAT đầu ra + phiếu thu. Giai đoạn 2 sẽ thêm VAT đầu vào (phiếu chi).{" "}
+        Chốt kỳ lưu snapshot số liệu. Email nhắc hạn gửi lúc 7h (còn 7/3/1 ngày và quá hạn).{" "}
         <Link href="/cms/khachhang" className="text-violet-300 underline">
           Quản lý KH
         </Link>{" "}

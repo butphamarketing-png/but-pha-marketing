@@ -21,11 +21,13 @@ import facebookAdsRouter from "./facebookAds";
 import googleAdsRouter from "./googleAds";
 import googleProfilesRouter from "./googleProfiles";
 import employeesRouter from "./employees";
+import contractorPaymentsRouter from "./contractor-payments";
 import billingPeriodsRouter from "./billing-periods";
 import revenueRecognitionRouter from "./revenue-recognition";
 import syncRouter from "./sync";
 import invoicesRouter from "./invoices";
 import taxRouter from "./tax";
+import einvoiceRouter from "./einvoice";
 
 const router: IRouter = Router();
 
@@ -51,10 +53,12 @@ router.use(facebookAdsRouter);
 router.use(googleAdsRouter);
 router.use(googleProfilesRouter);
 router.use(employeesRouter);
+router.use(contractorPaymentsRouter);
 router.use(billingPeriodsRouter);
 router.use(revenueRecognitionRouter);
 router.use(syncRouter);
 router.use(invoicesRouter);
 router.use(taxRouter);
+router.use(einvoiceRouter);
 
 export default router;
