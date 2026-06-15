@@ -4,6 +4,7 @@ import { createServerClient } from "@/lib/supabase";
 import { CUSTOMER_RECORDS_KEY, type CustomerRecord } from "@/lib/customer-records";
 import { sanitizeCustomerRecord } from "@/lib/customer-record-sanitize";
 import { autoSyncCustomersToCms } from "@/lib/cms-customer-auto-sync";
+import { removeErpCustomerByMarketingId } from "@/lib/cms-customer-delete";
 
 type StoredPayload = { entries: CustomerRecord[] };
 
@@ -66,7 +67,8 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     const entries = await loadEntries();
     const next = entries.filter((item) => item.id !== id);
     await saveEntries(next);
-    return NextResponse.json({ ok: true });
+    const erpRemoval = await removeErpCustomerByMarketingId(id);
+    return NextResponse.json({ ok: true, erpRemoval });
   } catch (error) {
     console.error("DELETE /api/customers/[id] failed", error);
     return NextResponse.json({ ok: false, error: "Không thể xóa." }, { status: 500 });

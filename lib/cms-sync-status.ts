@@ -53,6 +53,10 @@ export function describeCmsSyncResult(
     parts.push(`${result.skipped} KH thiếu MSHĐ`);
   }
 
+  if (result.customersRemoved > 0) {
+    parts.push(`Xóa ERP: ${result.customersRemoved}`);
+  }
+
   if (result.errors.length > 0) {
     return {
       level: "warn",

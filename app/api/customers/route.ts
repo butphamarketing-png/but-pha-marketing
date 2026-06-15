@@ -14,6 +14,8 @@ import {
 } from "@/lib/customer-records";
 import { sanitizeCustomerRecord } from "@/lib/customer-record-sanitize";
 import { autoSyncCustomersToCms } from "@/lib/cms-customer-auto-sync";
+import { getCustomerErpSyncStatuses } from "@/lib/cms-customer-sync-status";
+import { canUseCmsDatabase } from "@/lib/cms-express-bridge";
 
 type StoredPayload = { entries: CustomerRecord[] };
 
@@ -86,7 +88,10 @@ export async function GET(request: Request) {
         { status: 503 },
       );
     }
-    return NextResponse.json({ ok: true, customers });
+    const erpSync = canUseCmsDatabase()
+      ? await getCustomerErpSyncStatuses(customers)
+      : null;
+    return NextResponse.json({ ok: true, customers, erpSync });
   } catch (error) {
     console.error("GET /api/customers failed", error);
     return NextResponse.json(
@@ -104,8 +109,12 @@ export async function PUT(request: Request) {
     const body = await request.json().catch(() => null);
     const rawList = Array.isArray(body?.customers) ? body.customers : [];
     const customers = rawList.map(sanitizeRecord);
+    const { customers: previousCustomers } = await loadEntries();
+    const previousIds = new Set(previousCustomers.map((row) => row.id));
+    const nextIds = new Set(customers.map((row) => row.id));
+    const removedMarketingIds = [...previousIds].filter((id) => !nextIds.has(id));
     await saveEntries(customers);
-    const cmsSync = await autoSyncCustomersToCms(customers);
+    const cmsSync = await autoSyncCustomersToCms(customers, { removedMarketingIds });
     return NextResponse.json({ ok: true, customers, cmsSync });
   } catch (error) {
     console.error("PUT /api/customers failed", error);

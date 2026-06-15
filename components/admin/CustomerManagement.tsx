@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LogOut,
@@ -44,6 +45,7 @@ import {
   saveLocalCustomerBackup,
 } from "@/lib/customer-backup";
 import type { CmsAutoSyncOutcome } from "@/lib/cms-customer-auto-sync";
+import type { CustomerErpSyncStatus } from "@/lib/cms-customer-sync-status";
 import {
   countCustomersWithContractCode,
   describeCmsSyncOutcome,
@@ -297,6 +299,7 @@ function CustomerDetailDialog({
 }
 
 export function CustomerManagement() {
+  const searchParams = useSearchParams();
   const [authenticated, setAuthenticated] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [password, setPassword] = useState("");
@@ -308,6 +311,8 @@ export function CustomerManagement() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [lastCmsSync, setLastCmsSync] = useState<CmsAutoSyncOutcome | null>(null);
+  const [erpSync, setErpSync] = useState<Record<string, CustomerErpSyncStatus>>({});
+  const [isSyncingAll, setIsSyncingAll] = useState(false);
   const [offlineMode, setOfflineMode] = useState(false);
   const [localBackupAt, setLocalBackupAt] = useState<string | null>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -396,6 +401,11 @@ export function CustomerManagement() {
       }
 
       setCustomers(loaded);
+      setErpSync(
+        data.erpSync && typeof data.erpSync === "object"
+          ? (data.erpSync as Record<string, CustomerErpSyncStatus>)
+          : {},
+      );
       setOfflineMode(false);
       setLocalBackupAt(null);
       saveLocalCustomerBackup(loaded);
@@ -428,6 +438,76 @@ export function CustomerManagement() {
       mounted = false;
     };
   }, [loadCustomers]);
+
+  useEffect(() => {
+    const highlight = searchParams.get("highlight");
+    if (!highlight || customers.length === 0) return;
+    setSelectedRowId(highlight);
+    window.setTimeout(() => {
+      document.getElementById(`customer-row-${highlight}`)?.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 150);
+  }, [searchParams, customers.length]);
+
+  const syncAllToErp = useCallback(async () => {
+    setIsSyncingAll(true);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/cms/sync-customers", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setSaveError(data?.error || "Đồng bộ ERP thất bại.");
+        return;
+      }
+      setLastCmsSync({
+        status: "ok",
+        result: {
+          customersCreated: data.customersCreated ?? 0,
+          customersUpdated: data.customersUpdated ?? 0,
+          contractsCreated: data.contractsCreated ?? 0,
+          contractsUpdated: data.contractsUpdated ?? 0,
+          periodsCreated: data.periodsCreated ?? 0,
+          periodsUpdated: data.periodsUpdated ?? 0,
+          receiptsCreated: data.receiptsCreated ?? 0,
+          receiptsUpdated: data.receiptsUpdated ?? 0,
+          receiptsRemoved: data.receiptsRemoved ?? 0,
+          invoicesCreated: data.invoicesCreated ?? 0,
+          invoicesUpdated: data.invoicesUpdated ?? 0,
+          invoicesIssued: data.invoicesIssued ?? 0,
+          invoicesCancelled: data.invoicesCancelled ?? 0,
+          invoicesDraft: data.invoicesDraft ?? 0,
+          recognitionEntries: data.recognitionEntries ?? 0,
+          customersRemoved: data.customersRemoved ?? 0,
+          skipped: data.skipped ?? 0,
+          errors: Array.isArray(data.errors) ? data.errors : [],
+        },
+      });
+      setSaveMessage(`Đã đồng bộ ${data.synced ?? customers.length} khách lên ERP.`);
+      await loadCustomers();
+    } catch {
+      setSaveError("Không thể đồng bộ ERP.");
+    } finally {
+      setIsSyncingAll(false);
+    }
+  }, [customers.length, loadCustomers]);
+
+  const erpStatusLabel = (status?: CustomerErpSyncStatus) => {
+    if (!status) return "—";
+    switch (status.state) {
+      case "synced":
+        return "ERP OK";
+      case "missing_mshd":
+        return "Thiếu MSHĐ";
+      case "not_linked":
+        return "Chưa sync";
+      case "removed":
+        return "Đã xóa ERP";
+      default:
+        return "—";
+    }
+  };
 
   const saveLocalOnly = useCallback((rows: CustomerRecord[]) => {
     if (!hasMeaningfulCustomerData(rows)) return;
@@ -778,6 +858,15 @@ export function CustomerManagement() {
             </button>
             <button
               type="button"
+              onClick={() => void syncAllToErp()}
+              disabled={isSyncingAll || customers.length === 0}
+              className="inline-flex items-center gap-2 rounded-lg border border-violet-500/40 bg-violet-500/10 px-3 py-2 text-xs font-bold text-violet-200 hover:bg-violet-500/20 disabled:opacity-50"
+            >
+              <RefreshCw size={14} className={isSyncingAll ? "animate-spin" : ""} />{" "}
+              {isSyncingAll ? "Đang sync ERP..." : "Đồng bộ tất cả ERP"}
+            </button>
+            <button
+              type="button"
               onClick={() => void saveAll()}
               disabled={isSaving}
               className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-3 py-2 text-xs font-bold hover:bg-violet-500 disabled:opacity-60"
@@ -822,7 +911,7 @@ export function CustomerManagement() {
               <span className="ml-2 opacity-90">{cmsSyncDisplay.detail}</span>
               {cmsSyncDisplay.level === "ok" && (
                 <a
-                  href="/cms/customer-360"
+                  href="/cms"
                   className="ml-3 font-semibold underline hover:no-underline"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -886,6 +975,7 @@ export function CustomerManagement() {
                 <th className="px-2 py-3 min-w-[150px]">Ngày hết hạn</th>
                 <th className="px-2 py-3 min-w-[160px]">Link nền tảng</th>
                 <th className="px-2 py-3 min-w-[110px]">Số tiền</th>
+                <th className="px-2 py-3 min-w-[90px] text-center">ERP</th>
                 <th className="px-2 py-3 min-w-[100px] text-center">Nhắc gia hạn</th>
                 <th className="px-2 py-3 w-28 text-center">Thao tác</th>
               </tr>
@@ -893,7 +983,7 @@ export function CustomerManagement() {
             <tbody className="divide-y divide-white/5">
               {customers.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="px-4 py-10 text-center text-gray-500">
+                  <td colSpan={14} className="px-4 py-10 text-center text-gray-500">
                     Chưa có khách hàng. Bấm &quot;Thêm dòng&quot; để bắt đầu nhập.
                   </td>
                 </tr>
@@ -904,6 +994,7 @@ export function CustomerManagement() {
                   return (
                     <tr
                       key={row.id}
+                      id={`customer-row-${row.id}`}
                       onClick={() => setSelectedRowId(row.id)}
                       className={`cursor-pointer transition-colors ${
                         selectedRowId === row.id
@@ -1057,6 +1148,35 @@ export function CustomerManagement() {
                           placeholder="0"
                         />
                         <p className="mt-1 text-[10px] text-gray-500">{formatVnd(row.amountPaid)}</p>
+                      </td>
+                      <td className="px-2 py-2 text-center" onClick={stopRowClick}>
+                        {(() => {
+                          const sync = erpSync[row.id];
+                          const label = erpStatusLabel(sync);
+                          const cls =
+                            sync?.state === "synced"
+                              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
+                              : sync?.state === "missing_mshd"
+                                ? "border-amber-500/40 bg-amber-500/10 text-amber-200"
+                                : "border-slate-500/40 bg-slate-500/10 text-slate-300";
+                          return (
+                            <div className="flex flex-col items-center gap-1">
+                              <span className={`rounded-md border px-2 py-0.5 text-[10px] font-bold ${cls}`}>
+                                {label}
+                              </span>
+                              {sync?.cms360Url && (
+                                <a
+                                  href={sync.cms360Url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-[10px] text-violet-300 underline"
+                                >
+                                  360°
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </td>
                       <td className="px-2 py-2 text-center" onClick={stopRowClick}>
                         <label className="inline-flex cursor-pointer flex-col items-center gap-1">

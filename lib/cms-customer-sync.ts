@@ -42,6 +42,7 @@ export type CmsSyncResult = {
   invoicesCancelled: number;
   invoicesDraft: number;
   recognitionEntries: number;
+  customersRemoved: number;
   skipped: number;
   errors: string[];
 };
@@ -261,24 +262,52 @@ async function upsertBillingPeriod(
     )
     .limit(1);
 
-  const values = {
-    contractId,
-    customerId,
-    periodStart: dates.periodStart,
-    periodEnd: dates.periodEnd,
-    dueDate: dates.dueDate,
-    amountDue: String(amountDue),
-    amountPaid: "0",
-    status: computeBillingPeriodStatus(0, amountDue, dates.dueDate),
-    label,
-    notes: `Đồng bộ từ admin (${record.contractCode})`,
-    updatedAt: new Date(),
-  };
+  let periodId: number;
+  let created = false;
+  let updated = false;
 
-  const periodId = existing
-    ? (await db.update(billingPeriodsTable).set(values).where(eq(billingPeriodsTable.id, existing.id)).returning())[0]?.id ??
-      existing.id
-    : (await db.insert(billingPeriodsTable).values(values).returning())[0]?.id ?? 0;
+  if (existing) {
+    const existingPaid = parseFloat(existing.amountPaid ?? "0");
+    const status = computeBillingPeriodStatus(existingPaid, amountDue, dates.dueDate);
+    const [row] = await db
+      .update(billingPeriodsTable)
+      .set({
+        contractId,
+        customerId,
+        periodStart: dates.periodStart,
+        periodEnd: dates.periodEnd,
+        dueDate: dates.dueDate,
+        amountDue: String(amountDue),
+        amountPaid: String(existingPaid),
+        status,
+        label,
+        notes: `Đồng bộ từ admin (${record.contractCode})`,
+        updatedAt: new Date(),
+      })
+      .where(eq(billingPeriodsTable.id, existing.id))
+      .returning();
+    periodId = row?.id ?? existing.id;
+    updated = true;
+  } else {
+    const status = computeBillingPeriodStatus(0, amountDue, dates.dueDate);
+    const [row] = await db
+      .insert(billingPeriodsTable)
+      .values({
+        contractId,
+        customerId,
+        periodStart: dates.periodStart,
+        periodEnd: dates.periodEnd,
+        dueDate: dates.dueDate,
+        amountDue: String(amountDue),
+        amountPaid: "0",
+        status,
+        label,
+        notes: `Đồng bộ từ admin (${record.contractCode}) — kỳ mới`,
+      })
+      .returning();
+    periodId = row?.id ?? 0;
+    created = true;
+  }
 
   if (!periodId) {
     return {
@@ -298,7 +327,7 @@ async function upsertBillingPeriod(
     };
   }
 
-  const isNewPeriod = !existing;
+  const isNewPeriod = created;
   const paymentTarget = await computeRenewalPaymentTarget(record, contractId, isNewPeriod);
 
   const receiptSync = await syncAutoReceiptForBillingPeriod(
@@ -320,8 +349,8 @@ async function upsertBillingPeriod(
 
   return {
     id: periodId,
-    created: !existing,
-    updated: Boolean(existing),
+    created,
+    updated,
     recognitionEntries,
     receiptsCreated: receiptSync.created,
     receiptsUpdated: receiptSync.updated,
@@ -352,6 +381,7 @@ export async function syncCustomerRecordsToCms(records: CustomerRecord[]): Promi
     invoicesCancelled: 0,
     invoicesDraft: 0,
     recognitionEntries: 0,
+    customersRemoved: 0,
     skipped: 0,
     errors: [],
   };

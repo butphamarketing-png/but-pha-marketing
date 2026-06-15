@@ -99,5 +99,13 @@ patch(
   'paymentStatus:d.status==="paid"',
 );
 
+// 8) Customer 360 — admin link with highlight
+patch(
+  "Cust360 admin highlight link",
+  'href:"/adminbp",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
+  'href:r?.sync?.marketingAdminUrl||"/adminbp/khachhang",target:"_blank",rel:"noopener noreferrer",className:"text-xs font-medium underline text-violet-600",children:"Mở admin KH"',
+  'marketingAdminUrl||"/adminbp/khachhang"',
+);
+
 fs.writeFileSync(bundlePath, s);
 console.log(`Patched ${path.basename(bundlePath)} (${originalLen} -> ${s.length} bytes)`);

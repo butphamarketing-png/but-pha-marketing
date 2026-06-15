@@ -1056,6 +1056,16 @@ export default function AdminPage() {
                   <StatCard value={leads.length} label="Nhận tin" icon={Bell} color="#A855F7" />
                 </button>
               </div>
+              <a
+                href="/adminbp/khachhang"
+                className="flex items-center justify-between rounded-2xl border border-violet-500/30 bg-violet-500/10 px-5 py-4 text-white transition hover:bg-violet-500/20"
+              >
+                <div>
+                  <p className="text-sm font-bold">Quản lý khách hàng (Marketing CRM)</p>
+                  <p className="text-xs text-violet-200/80">Nhập KH, MSHĐ, đồng bộ ERP, nhắc gia hạn Zalo</p>
+                </div>
+                <ArrowRight size={18} className="text-violet-300" />
+              </a>
               <div className="rounded-2xl border border-white/10 bg-card p-6">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-lg font-bold text-white">Khách truy cập website</h2>

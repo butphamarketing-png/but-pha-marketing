@@ -95,7 +95,9 @@ export async function getCustomerOverview(customerId: number) {
     sync: {
       externalId: customer.externalId,
       linkedToMarketing: marketingFound,
-      marketingAdminUrl: customer.externalId ? "/adminbp" : null,
+      marketingAdminUrl: customer.externalId
+        ? `/adminbp/khachhang?highlight=${encodeURIComponent(customer.externalId)}`
+        : null,
     },
   };
 }
