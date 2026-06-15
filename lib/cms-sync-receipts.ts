@@ -1,7 +1,9 @@
-import { db, receiptsTable } from "@/lib/cms-internal/db";
-import { eq, sql } from "drizzle-orm";
+import { db, receiptsTable, billingPeriodsTable } from "@/lib/cms-internal/db";
+import { and, eq, sql } from "drizzle-orm";
 import type { CustomerRecord } from "@/lib/customer-records";
 import { receiptPaymentMethodFromCustomer } from "@/lib/customer-payment";
+import { deleteReceiptById } from "@/lib/cms-receipt-delete";
+import { generateReceiptCode } from "@/lib/cms-receipt-codes";
 
 export const AUTO_SYNC_RECEIPT_NOTE_PREFIX = "AUTO_SYNC:";
 
@@ -12,18 +14,16 @@ export type SyncReceiptResult = {
   receiptId: number | null;
 };
 
-function autoSyncNote(recordId: string) {
+export function autoSyncReceiptNote(recordId: string) {
   return `${AUTO_SYNC_RECEIPT_NOTE_PREFIX}${recordId}`;
+}
+
+function autoSyncNote(recordId: string) {
+  return autoSyncReceiptNote(recordId);
 }
 
 function isAutoSyncReceipt(notes: string | null) {
   return Boolean(notes?.startsWith(AUTO_SYNC_RECEIPT_NOTE_PREFIX));
-}
-
-async function generateReceiptCode(): Promise<string> {
-  const result = await db.select({ count: sql<number>`count(*)::int` }).from(receiptsTable);
-  const count = result[0].count + 1;
-  return `PT${String(count).padStart(4, "0")}`;
 }
 
 export async function syncAutoReceiptForBillingPeriod(
@@ -99,4 +99,30 @@ export async function syncAutoReceiptForBillingPeriod(
 
   result.updated += 1;
   return result;
+}
+
+/** Xóa phiếu thu AUTO_SYNC trên kỳ cũ khi đổi ngày ĐK/hết hạn tạo kỳ mới. */
+export async function cleanupStaleAutoReceipts(
+  record: CustomerRecord,
+  contractId: number,
+  activePeriodId: number,
+): Promise<number> {
+  const note = autoSyncReceiptNote(record.id);
+  const rows = await db
+    .select({ id: receiptsTable.id, billingPeriodId: receiptsTable.billingPeriodId })
+    .from(receiptsTable)
+    .innerJoin(billingPeriodsTable, eq(receiptsTable.billingPeriodId, billingPeriodsTable.id))
+    .where(and(eq(billingPeriodsTable.contractId, contractId), eq(receiptsTable.notes, note)));
+
+  let removed = 0;
+  for (const row of rows) {
+    if (row.billingPeriodId === activePeriodId) continue;
+    try {
+      const result = await deleteReceiptById(row.id);
+      if (result.ok) removed += 1;
+    } catch (error) {
+      console.error("cleanupStaleAutoReceipts: delete failed", row.id, error);
+    }
+  }
+  return removed;
 }

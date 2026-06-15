@@ -4,6 +4,8 @@ import { eq, ilike, sql, and, gte, lte } from "drizzle-orm";
 import { CreateReceiptBody, UpdateReceiptBody, GetReceiptParams, UpdateReceiptParams, DeleteReceiptParams, ListReceiptsQueryParams } from "@/lib/cms-internal/api-zod";
 import { logAudit } from "../lib/audit";
 import { refreshBillingPeriodPaid } from "@/lib/cms-billing-periods";
+import { deleteReceiptById } from "@/lib/cms-receipt-delete";
+import { generateReceiptCode } from "@/lib/cms-receipt-codes";
 
 const router = Router();
 
@@ -27,12 +29,6 @@ async function enrichReceipt(receipt: typeof receiptsTable.$inferSelect) {
     contractCode,
     serviceName,
   };
-}
-
-async function generateReceiptCode(): Promise<string> {
-  const result = await db.select({ count: sql<number>`count(*)::int` }).from(receiptsTable);
-  const count = result[0].count + 1;
-  return `PT${String(count).padStart(4, "0")}`;
 }
 
 router.get("/receipts", async (req, res) => {
@@ -68,7 +64,12 @@ router.post("/receipts", async (req, res) => {
     typeof req.body?.billingPeriodId === "number" ? req.body.billingPeriodId : undefined;
 
   if (body.data.contractId) {
-    await db.execute(sql`UPDATE contracts SET paid_amount = paid_amount + ${body.data.amount} WHERE id = ${body.data.contractId}`);
+    await db
+      .update(contractsTable)
+      .set({
+        paidAmount: sql`${contractsTable.paidAmount}::numeric + ${String(body.data.amount)}::numeric`,
+      })
+      .where(eq(contractsTable.id, body.data.contractId));
   }
 
   const [receipt] = await db.insert(receiptsTable).values({
@@ -125,19 +126,13 @@ router.delete("/receipts/:id", async (req, res) => {
   const params = DeleteReceiptParams.safeParse(req.params);
   if (!params.success) return res.status(400).json({ error: "Invalid id" });
 
-  const [existing] = await db.select().from(receiptsTable).where(eq(receiptsTable.id, params.data.id)).limit(1);
-  if (!existing) return res.status(404).json({ error: "Not found" });
-
-  if (existing.contractId) {
-    await db.execute(sql`UPDATE contracts SET paid_amount = GREATEST(0, paid_amount - ${existing.amount}) WHERE id = ${existing.contractId}`);
+  const result = await deleteReceiptById(params.data.id);
+  if (!result.ok) {
+    return res.status(result.status).json({ error: result.error });
   }
 
-  await db.delete(receiptsTable).where(eq(receiptsTable.id, params.data.id));
-
-  if (existing.billingPeriodId) {
-    await refreshBillingPeriodPaid(existing.billingPeriodId);
-  }
-  await logAudit("receipt", params.data.id, "delete", "Admin", existing, null);
+  const enriched = await enrichReceipt(result.deleted);
+  await logAudit("receipt", params.data.id, "delete", "Admin", enriched, null);
   return res.status(204).send();
 });
 

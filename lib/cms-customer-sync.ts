@@ -3,8 +3,9 @@ import {
   customersTable,
   contractsTable,
   billingPeriodsTable,
+  receiptsTable,
 } from "@/lib/cms-internal/db";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, ne, sql } from "drizzle-orm";
 import {
   type CustomerRecord,
   getPackageContractTotal,
@@ -22,7 +23,7 @@ import {
   resolveBillingCycleFromRecord,
   syncRecognitionForPeriod,
 } from "@/lib/cms-revenue-recognition";
-import { syncAutoReceiptForBillingPeriod } from "@/lib/cms-sync-receipts";
+import { syncAutoReceiptForBillingPeriod, cleanupStaleAutoReceipts } from "@/lib/cms-sync-receipts";
 import { syncAutoInvoiceForBillingPeriod } from "@/lib/cms-sync-invoices";
 import { resolveServiceId, seedErpServicesFromMarketing } from "@/lib/cms-services";
 
@@ -191,21 +192,20 @@ async function upsertContract(
 async function computeRenewalPaymentTarget(
   record: CustomerRecord,
   contractId: number,
+  periodId: number,
   isNewPeriod: boolean,
 ): Promise<number | undefined> {
   if (!isNewPeriod) return undefined;
 
-  const siblings = await db
-    .select({ amountPaid: billingPeriodsTable.amountPaid })
-    .from(billingPeriodsTable)
-    .where(eq(billingPeriodsTable.contractId, contractId));
+  const [otherReceipts] = await db
+    .select({ total: sql<string>`COALESCE(sum(${receiptsTable.amount}::numeric), 0)` })
+    .from(receiptsTable)
+    .innerJoin(billingPeriodsTable, eq(receiptsTable.billingPeriodId, billingPeriodsTable.id))
+    .where(and(eq(billingPeriodsTable.contractId, contractId), ne(billingPeriodsTable.id, periodId)));
 
-  if (siblings.length === 0) return undefined;
+  const paidOnOtherPeriods = parseFloat(otherReceipts?.total ?? "0");
+  if (paidOnOtherPeriods <= 0) return undefined;
 
-  const paidOnOtherPeriods = siblings.reduce(
-    (sum, row) => sum + parseFloat(row.amountPaid ?? "0"),
-    0,
-  );
   return Math.max(0, Math.round((record.amountPaid - paidOnOtherPeriods) * 100) / 100);
 }
 
@@ -328,7 +328,7 @@ async function upsertBillingPeriod(
   }
 
   const isNewPeriod = created;
-  const paymentTarget = await computeRenewalPaymentTarget(record, contractId, isNewPeriod);
+  const paymentTarget = await computeRenewalPaymentTarget(record, contractId, periodId, isNewPeriod);
 
   const receiptSync = await syncAutoReceiptForBillingPeriod(
     record,
@@ -337,6 +337,7 @@ async function upsertBillingPeriod(
     periodId,
     paymentTarget,
   );
+  const staleRemoved = await cleanupStaleAutoReceipts(record, contractId, periodId);
   await refreshBillingPeriodPaid(periodId);
   const invoiceSync = await syncAutoInvoiceForBillingPeriod(
     record,
@@ -354,7 +355,7 @@ async function upsertBillingPeriod(
     recognitionEntries,
     receiptsCreated: receiptSync.created,
     receiptsUpdated: receiptSync.updated,
-    receiptsRemoved: receiptSync.removed,
+    receiptsRemoved: receiptSync.removed + staleRemoved,
     invoicesCreated: invoiceSync.created,
     invoicesUpdated: invoiceSync.updated,
     invoicesIssued: invoiceSync.issued,
