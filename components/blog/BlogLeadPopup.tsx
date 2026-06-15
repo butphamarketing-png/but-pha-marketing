@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { db } from "@/lib/useData";
+import {
+  BLOG_LEAD_DISMISS_SESSION_KEY,
+  BLOG_LEAD_SUBMITTED_UNTIL_KEY,
+  isPushFlowSettled,
+  shouldSkipBlogLeadPopup,
+} from "@/lib/marketing-popup-gate";
 
-const SESSION_DISMISS_KEY = "butpha_blog_lead_dismissed_session";
-const SUBMITTED_KEY = "butpha_blog_lead_submitted_until";
+const SESSION_DISMISS_KEY = BLOG_LEAD_DISMISS_SESSION_KEY;
+const SUBMITTED_KEY = BLOG_LEAD_SUBMITTED_UNTIL_KEY;
 
 function isValidVNPhone(value: string) {
   return /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
@@ -25,21 +31,38 @@ export function BlogLeadPopup({ source }: { source: "blog-list" | "blog-article"
 
   useEffect(() => {
     if (!pathname.startsWith("/blog")) return;
-    if (sessionStorage.getItem(SESSION_DISMISS_KEY)) return;
+    if (shouldSkipBlogLeadPopup()) return;
 
-    const submittedUntil = Number(localStorage.getItem(SUBMITTED_KEY) || "0");
-    if (submittedUntil > Date.now()) return;
+    let cancelled = false;
+    let openTimer: number | undefined;
+    let pollTimer: number | undefined;
 
-    const openPopup = () => setVisible(true);
-    const timer = window.setTimeout(openPopup, 10000);
+    const scheduleLeadPopup = () => {
+      if (cancelled || shouldSkipBlogLeadPopup()) return;
+
+      if (!isPushFlowSettled()) {
+        pollTimer = window.setTimeout(scheduleLeadPopup, 1500);
+        return;
+      }
+
+      openTimer = window.setTimeout(() => {
+        if (!cancelled && !shouldSkipBlogLeadPopup()) setVisible(true);
+      }, 12000);
+    };
 
     const onMouseLeave = (event: MouseEvent) => {
-      if (event.clientY <= 0) openPopup();
+      if (event.clientY <= 0 && isPushFlowSettled() && !shouldSkipBlogLeadPopup()) {
+        setVisible(true);
+      }
     };
+
+    scheduleLeadPopup();
     document.addEventListener("mouseleave", onMouseLeave);
 
     return () => {
-      window.clearTimeout(timer);
+      cancelled = true;
+      if (openTimer) window.clearTimeout(openTimer);
+      if (pollTimer) window.clearTimeout(pollTimer);
       document.removeEventListener("mouseleave", onMouseLeave);
     };
   }, [pathname]);

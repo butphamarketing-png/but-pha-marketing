@@ -4,9 +4,16 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Bell, X } from "lucide-react";
 import { isInternalAppPath } from "@/lib/app-paths";
+import {
+  PUSH_DENY_UNTIL_KEY,
+  PUSH_DISMISS_SESSION_KEY,
+  markPushPromptPending,
+  markPushPromptSettled,
+  markPushSubscribed,
+} from "@/lib/marketing-popup-gate";
 
-const DISMISS_SESSION_KEY = "butpha_push_prompt_dismissed_session";
-const DENY_DISMISS_KEY = "butpha_push_prompt_dismissed_until";
+const DISMISS_SESSION_KEY = PUSH_DISMISS_SESSION_KEY;
+const DENY_DISMISS_KEY = PUSH_DENY_UNTIL_KEY;
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -45,7 +52,10 @@ export function PushNotificationPrompt() {
     const showOnPaths = pathname === "/" || pathname.startsWith("/blog");
     if (!showOnPaths) return;
 
-    const timer = window.setTimeout(() => setVisible(true), 4000);
+    const timer = window.setTimeout(() => {
+      markPushPromptPending();
+      setVisible(true);
+    }, 4000);
     return () => window.clearTimeout(timer);
   }, [pathname]);
 
@@ -66,13 +76,21 @@ export function PushNotificationPrompt() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!visible) return;
+    const autoDismiss = window.setTimeout(() => dismissForSession(), 30000);
+    return () => window.clearTimeout(autoDismiss);
+  }, [visible]);
+
   const dismissForSession = () => {
     sessionStorage.setItem(DISMISS_SESSION_KEY, "1");
+    markPushPromptSettled();
     setVisible(false);
   };
 
   const dismissAfterDeny = (days = 14) => {
     localStorage.setItem(DENY_DISMISS_KEY, String(Date.now() + days * 86400000));
+    markPushPromptSettled();
     setVisible(false);
   };
 
@@ -131,6 +149,7 @@ export function PushNotificationPrompt() {
 
       localStorage.removeItem(DENY_DISMISS_KEY);
       sessionStorage.removeItem(DISMISS_SESSION_KEY);
+      markPushSubscribed();
       setMessage("Đã bật thông báo. Bạn sẽ nhận tin bài viết & ưu đãi mới.");
       setVisible(false);
     } catch (error) {
@@ -156,7 +175,10 @@ export function PushNotificationPrompt() {
             </div>
             <div className="flex-1">
               <p className="font-semibold text-white leading-snug">
-                Nhận thông báo ưu đãi, khuyến mãi hoặc tin tức mới nhất
+                Nhận thông báo ưu đãi & tin mới qua trình duyệt
+              </p>
+              <p className="mt-1 text-xs text-white/65 leading-snug">
+                Bấm Cho phép — không cần nhập SĐT. Thông báo hiện góc màn hình như app.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
