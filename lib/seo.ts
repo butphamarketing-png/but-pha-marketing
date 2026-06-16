@@ -46,7 +46,17 @@ export async function getDynamicMetadata(path: string, fallback: Partial<SeoInpu
   });
 }
 
-export async function getGoogleSiteVerification(): Promise<string | undefined> {
+/** Mã xác minh GSC cố định (meta tag) — bổ sung thêm qua admin hoặc GOOGLE_SITE_VERIFICATION. */
+const STATIC_GOOGLE_VERIFICATION_CODES = ["i4N-qgYtjaDQNjq_XprPN7GIHoByqAakvnquZyG_wgM"];
+
+export async function getGoogleSiteVerification(): Promise<string[]> {
+  const codes = new Set<string>(STATIC_GOOGLE_VERIFICATION_CODES);
+
+  const fromEnv = process.env.GOOGLE_SITE_VERIFICATION?.split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (fromEnv?.length) fromEnv.forEach((c) => codes.add(c));
+
   try {
     const supabase = createServerClient();
     const { data } = await supabase
@@ -55,11 +65,12 @@ export async function getGoogleSiteVerification(): Promise<string | undefined> {
       .eq("key", "admin_settings")
       .maybeSingle();
     const code = typeof data?.value?.googleConsole === "string" ? data.value.googleConsole.trim() : "";
-    return code || undefined;
+    if (code) codes.add(code);
   } catch (error) {
     console.error("[SEO] Failed to fetch Google site verification:", error);
-    return undefined;
   }
+
+  return [...codes];
 }
 
 export function buildMetadata({

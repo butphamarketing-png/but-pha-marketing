@@ -57,7 +57,13 @@ export async function generateMetadata(): Promise<Metadata> {
       index: true,
       follow: true,
     },
-    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
+    ...(googleVerification.length
+      ? {
+          verification: {
+            google: googleVerification.length === 1 ? googleVerification[0] : googleVerification,
+          },
+        }
+      : {}),
   };
 }
 
