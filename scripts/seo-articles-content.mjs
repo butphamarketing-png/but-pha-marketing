@@ -4,6 +4,7 @@ import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
 import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
 import { LOCAL_SEO_ARTICLES } from "./seo-local-articles.mjs";
 import { WEBSITE_ARTICLES } from "./seo-website-articles.mjs";
+import { MARKETING_ARTICLES } from "./seo-marketing-articles.mjs";
 
 function faq(items) {
   const blocks = items
@@ -468,4 +469,5 @@ ${faq([
   ...LA_GI_ARTICLES,
   ...LOCAL_SEO_ARTICLES,
   ...WEBSITE_ARTICLES,
+  ...MARKETING_ARTICLES,
 ];
