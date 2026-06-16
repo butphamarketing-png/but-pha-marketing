@@ -36,6 +36,7 @@ export function PushNotificationPrompt() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [raised, setRaised] = useState(false);
+  const [vapidPublicKey, setVapidPublicKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined" || isInternalAppPath(pathname)) return;
@@ -52,11 +53,31 @@ export function PushNotificationPrompt() {
     const showOnPaths = pathname === "/" || pathname.startsWith("/blog");
     if (!showOnPaths) return;
 
-    const timer = window.setTimeout(() => {
-      markPushPromptPending();
-      setVisible(true);
-    }, 4000);
-    return () => window.clearTimeout(timer);
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    void (async () => {
+      try {
+        const vapidRes = await fetch("/api/push/vapid");
+        const vapidData = await vapidRes.json();
+        if (cancelled || !vapidData.configured || !vapidData.publicKey) return;
+
+        setVapidPublicKey(vapidData.publicKey);
+        timer = window.setTimeout(() => {
+          if (!cancelled) {
+            markPushPromptPending();
+            setVisible(true);
+          }
+        }, 4000);
+      } catch {
+        // Server chưa cấu hình VAPID — không hiện popup
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -110,11 +131,15 @@ export function PushNotificationPrompt() {
         return;
       }
 
-      const vapidRes = await fetch("/api/push/vapid");
-      const vapidData = await vapidRes.json();
-      if (!vapidData.configured || !vapidData.publicKey) {
-        setMessage("Thông báo đẩy chưa được cấu hình trên server.");
-        return;
+      let publicKey = vapidPublicKey;
+      if (!publicKey) {
+        const vapidRes = await fetch("/api/push/vapid");
+        const vapidData = await vapidRes.json();
+        if (!vapidData.configured || !vapidData.publicKey) {
+          dismissForSession();
+          return;
+        }
+        publicKey = vapidData.publicKey;
       }
 
       const registration = await navigator.serviceWorker.register("/sw.js");
@@ -124,7 +149,7 @@ export function PushNotificationPrompt() {
       if (!subscription) {
         subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(vapidData.publicKey),
+          applicationServerKey: urlBase64ToUint8Array(publicKey),
         });
       }
 
