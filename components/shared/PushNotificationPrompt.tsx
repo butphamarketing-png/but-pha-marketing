@@ -54,7 +54,7 @@ export function PushNotificationPrompt() {
     if (!showOnPaths) return;
 
     let cancelled = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    let timer: number | undefined;
 
     void (async () => {
       try {
@@ -139,7 +139,12 @@ export function PushNotificationPrompt() {
           dismissForSession();
           return;
         }
-        publicKey = vapidData.publicKey;
+        publicKey = vapidData.publicKey as string;
+      }
+
+      if (!publicKey) {
+        dismissForSession();
+        return;
       }
 
       const registration = await navigator.serviceWorker.register("/sw.js");
