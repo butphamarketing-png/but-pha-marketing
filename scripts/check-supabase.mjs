@@ -16,7 +16,7 @@ if (!url || !key) {
 }
 
 const supabase = createClient(url, key);
-const tables = ["site_settings", "news", "leads", "orders", "media", "page_content", "services"];
+const tables = ["site_settings", "news", "push_subscriptions", "leads", "orders", "media", "page_content", "services"];
 
 console.log("Supabase URL:", url);
 

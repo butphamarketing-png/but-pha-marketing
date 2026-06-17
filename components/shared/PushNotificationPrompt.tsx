@@ -174,7 +174,11 @@ export function PushNotificationPrompt() {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Subscribe failed");
+        const msg = String(err.error || "Subscribe failed");
+        if (msg.includes("push_subscriptions")) {
+          throw new Error("Hệ thống thông báo đang được cập nhật. Vui lòng thử lại sau vài phút.");
+        }
+        throw new Error(msg);
       }
 
       localStorage.removeItem(DENY_DISMISS_KEY);
