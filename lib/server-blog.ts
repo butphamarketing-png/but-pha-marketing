@@ -4,6 +4,7 @@ import { parseNewsContentMeta } from "@/lib/news-content-meta";
 import { getRelatedBlogs } from "@/lib/blog-utils";
 
 export const BLOG_CACHE_TAG = "blog-posts";
+/** Dùng trong unstable_cache — route segment config phải là literal (3600). */
 export const BLOG_REVALIDATE_SECONDS = 3600;
 
 export interface ServerBlogItem {
@@ -25,11 +26,10 @@ export interface ServerBlogItem {
   timestamp: number;
 }
 
-// Raw row shape returned from Supabase (snake_case columns)
 interface RawNewsRow {
   id: string;
   title: string;
-  content: string;
+  content?: string;
   description?: string;
   image_url?: string;
   slug?: string;
@@ -44,8 +44,11 @@ interface RawNewsRow {
   timestamp: number;
 }
 
-const BLOG_LIST_SELECT =
-  "id,title,content,description,image_url,slug,hot,meta_description,keywords_main,keywords_secondary,published_at,updated_at,category,published,timestamp";
+/** Metadata cho list / sitemap / related — không lấy content (tránh cache &gt; 2MB). */
+const BLOG_META_SELECT =
+  "id,title,description,image_url,slug,hot,meta_description,keywords_main,keywords_secondary,published_at,updated_at,category,published,timestamp";
+
+const BLOG_FULL_SELECT = `${BLOG_META_SELECT},content`;
 
 function slugify(text: string) {
   return text
@@ -57,9 +60,10 @@ function slugify(text: string) {
     .replace(/\s+/g, "-");
 }
 
-function normalize(row: RawNewsRow): ServerBlogItem {
-  const parsedContent = parseNewsContentMeta(row.content);
-  const item: ServerBlogItem = {
+function normalize(row: RawNewsRow, includeContent = false): ServerBlogItem {
+  const rawContent = includeContent ? row.content || "" : "";
+  const parsedContent = rawContent ? parseNewsContentMeta(rawContent) : { meta: {}, content: "" };
+  return {
     id: row.id,
     title: row.title,
     content: parsedContent.content,
@@ -77,15 +81,14 @@ function normalize(row: RawNewsRow): ServerBlogItem {
     published: row.published,
     timestamp: row.timestamp,
   };
-  return item;
 }
 
-async function fetchPublishedBlogs(): Promise<ServerBlogItem[]> {
+async function fetchPublishedBlogsMeta(): Promise<ServerBlogItem[]> {
   try {
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("news")
-      .select(BLOG_LIST_SELECT)
+      .select(BLOG_META_SELECT)
       .eq("published", true)
       .order("timestamp", { ascending: false });
 
@@ -94,13 +97,13 @@ async function fetchPublishedBlogs(): Promise<ServerBlogItem[]> {
       return [];
     }
 
-    return (data ?? []).map((row) => normalize(row as RawNewsRow));
+    return (data ?? []).map((row) => normalize(row as RawNewsRow, false));
   } catch {
     return [];
   }
 }
 
-export const getPublishedBlogs = unstable_cache(fetchPublishedBlogs, ["published-blogs"], {
+export const getPublishedBlogs = unstable_cache(fetchPublishedBlogsMeta, ["published-blogs-meta"], {
   revalidate: BLOG_REVALIDATE_SECONDS,
   tags: [BLOG_CACHE_TAG],
 });
@@ -110,7 +113,7 @@ async function fetchBlogBySlug(slug: string): Promise<ServerBlogItem | null> {
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("news")
-      .select(BLOG_LIST_SELECT)
+      .select(BLOG_FULL_SELECT)
       .eq("published", true)
       .eq("slug", slug)
       .maybeSingle();
@@ -120,11 +123,11 @@ async function fetchBlogBySlug(slug: string): Promise<ServerBlogItem | null> {
       return null;
     }
 
-    if (data) return normalize(data as RawNewsRow);
+    if (data) return normalize(data as RawNewsRow, true);
 
     const { data: byId, error: byIdError } = await supabase
       .from("news")
-      .select(BLOG_LIST_SELECT)
+      .select(BLOG_FULL_SELECT)
       .eq("published", true)
       .eq("id", slug)
       .maybeSingle();
@@ -134,7 +137,7 @@ async function fetchBlogBySlug(slug: string): Promise<ServerBlogItem | null> {
       return null;
     }
 
-    return byId ? normalize(byId as RawNewsRow) : null;
+    return byId ? normalize(byId as RawNewsRow, true) : null;
   } catch {
     return null;
   }
@@ -147,9 +150,25 @@ export async function getBlogBySlug(slug: string) {
   })();
 }
 
+/** Chỉ slug — dùng cho generateStaticParams, không cache payload lớn. */
 export async function getPublishedBlogSlugs(): Promise<string[]> {
-  const blogs = await getPublishedBlogs();
-  return blogs.map((item) => item.slug || item.id).filter(Boolean);
+  try {
+    const supabase = createServerClient();
+    const { data, error } = await supabase
+      .from("news")
+      .select("id,slug")
+      .eq("published", true)
+      .order("timestamp", { ascending: false });
+
+    if (error) {
+      console.error("getPublishedBlogSlugs error", error);
+      return [];
+    }
+
+    return (data ?? []).map((row) => row.slug || row.id).filter(Boolean);
+  } catch {
+    return [];
+  }
 }
 
 export async function getRelatedBlogsForSlug(slug: string, limit = 4) {

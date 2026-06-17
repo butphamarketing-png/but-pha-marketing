@@ -7,6 +7,7 @@ import { REWRITE_THIET_KE_WEBSITE_THEO_YEU_CAU } from "./seo-rewrite-thiet-ke-we
 import { REWRITE_BAO_GIA_THIET_KE_WEBSITE } from "./seo-rewrite-bao-gia-thiet-ke-website.mjs";
 import { REWRITE_THIET_KE_WEBSITE_CONG_TY } from "./seo-rewrite-thiet-ke-website-cong-ty.mjs";
 import { REWRITE_THIET_KE_WEBSITE_TRON_GOI } from "./seo-rewrite-thiet-ke-website-tron-goi.mjs";
+import { REWRITE_THIET_KE_WEBSITE_WORDPRESS } from "./seo-rewrite-thiet-ke-website-wordpress.mjs";
 import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
 import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
 import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
@@ -32,47 +33,7 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_THEO_YEU_CAU,
   REWRITE_BAO_GIA_THIET_KE_WEBSITE,
   REWRITE_THIET_KE_WEBSITE_CONG_TY,
-  {
-    title: "Thiết Kế Website WordPress Có Phải Lựa Chọn Tối Ưu",
-    slug: "thiet-ke-website-wordpress",
-    keywordsMain: "thiết kế website wordpress",
-    keywordsSecondary: "wordpress doanh nghiệp, web wordpress seo",
-    metaTitle: "Thiết Kế Website WordPress Dễ Quản Trị",
-    metaDescription: "Tìm hiểu ưu điểm của thiết kế website WordPress và lý do nền tảng này được nhiều doanh nghiệp lựa chọn.",
-    description: "Đánh giá ưu nhược điểm thiết kế website WordPress cho doanh nghiệp Việt Nam.",
-    imageUrl: NEWS_THUMBNAIL,
-    content: wrapArticle({
-      metaTitle: "Thiết Kế Website WordPress Dễ Quản Trị",
-      html: `
-${toc([
-  { id: "wordpress", label: "WordPress là gì?" },
-  { id: "uu-diem", label: "Ưu điểm cho doanh nghiệp" },
-  { id: "luu-y", label: "Lưu ý bảo mật & hiệu năng" },
-  { id: "faq", label: "Câu hỏi thường gặp" },
-])}
-<p><strong>Thiết kế website WordPress</strong> vẫn là lựa chọn hàng đầu nhờ hệ sinh thái plugin phong phú và khả năng tự quản trị nội dung không cần biết code. Với SME Việt Nam, đây là điểm cân bằng tốt giữa chi phí và tính năng.</p>
-<p>Tuy nhiên, <strong>thiết kế website WordPress</strong> chỉ tối ưu khi được cấu hình đúng: theme nhẹ, plugin tối giản, hosting chất lượng và quy trình cập nhật bảo mật định kỳ.</p>
-${img(2, "Thiết Kế Website WordPress Có Phải Lựa Chọn Tối Ưu")}
-<h2 id="wordpress">Vì sao WordPress phổ biến?</h2>
-<p>Mã nguồn mở, cộng đồng lớn, SEO-friendly với plugin Yoast/RankMath. WooCommerce biến site thành shop chỉ vài click. Page builder (Elementor, Bricks) giúp chỉnh layout trực quan.</p>
-<h3>Thiết kế website WordPress cho ai?</h3>
-<p>Doanh nghiệp cần blog thường xuyên, landing page linh hoạt, ngân sách vừa phải, team marketing tự đăng bài.</p>
-${img(0, "Thiết Kế Website WordPress Có Phải Lựa Chọn Tối Ưu")}
-<h2 id="uu-diem">Ưu điểm khi triển khai WordPress chuyên nghiệp</h2>
-<p>Time-to-market nhanh, dễ mở rộng form, đa ngôn ngữ, membership. Tích hợp CRM, email marketing, chat. <strong>Thiết kế website WordPress</strong> bài bản dùng child theme, custom post type, tối ưu database.</p>
-<h2 id="luu-y">Bảo mật và hiệu năng</h2>
-<p>Cập nhật core/plugin, WAF, backup tự động, ẩn wp-admin, mật khẩu mạnh. Cache (LiteSpeed, WP Rocket), CDN, nén ảnh WebP. Tránh cài plugin dư thừa làm chậm site.</p>
-${img(1, "Thiết Kế Website WordPress Có Phải Lựa Chọn Tối Ưu")}
-${internalLinks()}
-${externalLinks()}
-${faq([
-  { q: "WordPress có bị hack dễ không?", a: "Rủi ro giảm mạnh khi cập nhật thường xuyên và dùng hosting chuyên WP." },
-  { q: "WordPress có SEO tốt không?", a: "Rất tốt nếu cấu hình permalink, schema và tốc độ đúng chuẩn." },
-  { q: "Nên tự host hay managed WP?", a: "Managed WP tiện bảo mật; VPS phù hợp khi cần kiểm soát sâu." },
-])}
-`,
-    }),
-  },
+  REWRITE_THIET_KE_WEBSITE_WORDPRESS,
   {
     title: "Thiết Kế Website Responsive Cho Mọi Thiết Bị",
     slug: "thiet-ke-website-responsive",

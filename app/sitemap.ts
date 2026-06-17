@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
-import { getPublishedBlogs, BLOG_REVALIDATE_SECONDS } from "@/lib/server-blog";
+import { getPublishedBlogs } from "@/lib/server-blog";
 
 const baseUrl = SITE_URL;
-export const revalidate = BLOG_REVALIDATE_SECONDS;
+
+/** Next.js yêu cầu literal — không import biến cho segment config. */
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/blog", "/gioi-thieu", "/lien-he"];

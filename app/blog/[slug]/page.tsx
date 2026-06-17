@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
-import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug, BLOG_REVALIDATE_SECONDS } from "@/lib/server-blog";
+import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
 
 const BASE_URL = SITE_URL;
 
-export const revalidate = BLOG_REVALIDATE_SECONDS;
+/** Next.js yêu cầu literal — không import biến cho segment config. */
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 type Params = { slug: string };
