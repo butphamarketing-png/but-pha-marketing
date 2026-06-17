@@ -1,4 +1,7 @@
-import { wrapArticle, img, toc, internalLinks, externalLinks, NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+/**
+ * Re-seed bài rewrite chất lượng: alt ảnh, hot flag, updated_at cho sitemap.
+ * Chạy: node scripts/seo-boost-quality.mjs
+ */
 import { PILLAR_THIET_KE_WEBSITE } from "./seo-pillar-thiet-ke-website.mjs";
 import { REWRITE_THIET_KE_WEBSITE_DOANH_NGHIEP } from "./seo-rewrite-thiet-ke-website-doanh-nghiep.mjs";
 import { REWRITE_THIET_KE_WEBSITE_CHUAN_SEO } from "./seo-rewrite-thiet-ke-website-chuan-seo.mjs";
@@ -19,24 +22,9 @@ import { REWRITE_THIET_KE_WEBSITE_NHA_KHOA } from "./seo-rewrite-thiet-ke-websit
 import { REWRITE_THIET_KE_WEBSITE_NHA_HANG } from "./seo-rewrite-thiet-ke-website-nha-hang.mjs";
 import { REWRITE_THIET_KE_WEBSITE_KHACH_SAN } from "./seo-rewrite-thiet-ke-website-khach-san.mjs";
 import { REWRITE_THIET_KE_WEBSITE_RESORT } from "./seo-rewrite-thiet-ke-website-resort.mjs";
-import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
-import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
-import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
-import { LOCAL_SEO_ARTICLES } from "./seo-local-articles.mjs";
-import { WEBSITE_ARTICLES } from "./seo-website-articles.mjs";
-import { MARKETING_ARTICLES } from "./seo-marketing-articles.mjs";
+import { seedRewriteArticle } from "./seed-rewrite-utils.mjs";
 
-function faq(items) {
-  const blocks = items
-    .map(
-      (f) =>
-        `<div class="mb-4"><h3 class="text-base font-semibold text-indigo-950">${f.q}</h3><p>${f.a}</p></div>`,
-    )
-    .join("\n");
-  return `<section id="faq"><h2>Câu hỏi thường gặp</h2>${blocks}</section>`;
-}
-
-export const SEO_ARTICLES = [
+const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
   REWRITE_THIET_KE_WEBSITE_DOANH_NGHIEP,
   REWRITE_THIET_KE_WEBSITE_CHUAN_SEO,
@@ -44,6 +32,7 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_THEO_YEU_CAU,
   REWRITE_BAO_GIA_THIET_KE_WEBSITE,
   REWRITE_THIET_KE_WEBSITE_CONG_TY,
+  REWRITE_THIET_KE_WEBSITE_TRON_GOI,
   REWRITE_THIET_KE_WEBSITE_WORDPRESS,
   REWRITE_THIET_KE_WEBSITE_RESPONSIVE,
   REWRITE_THIET_KE_WEBSITE_THUONG_MAI_DIEN_TU,
@@ -56,11 +45,18 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_NHA_HANG,
   REWRITE_THIET_KE_WEBSITE_KHACH_SAN,
   REWRITE_THIET_KE_WEBSITE_RESORT,
-  REWRITE_THIET_KE_WEBSITE_TRON_GOI,
-  ...INDUSTRY_ARTICLES,
-  ...KEYWORD_ARTICLES,
-  ...LA_GI_ARTICLES,
-  ...LOCAL_SEO_ARTICLES,
-  ...WEBSITE_ARTICLES,
-  ...MARKETING_ARTICLES,
 ];
+
+console.log(`Re-seeding ${REWRITE_ARTICLES.length} bài rewrite...\n`);
+
+const results = [];
+for (const article of REWRITE_ARTICLES) {
+  try {
+    results.push(await seedRewriteArticle(article));
+  } catch (error) {
+    console.error(`FAIL ${article.slug}:`, error.message);
+    results.push({ slug: article.slug, seoOk: false, error: error.message });
+  }
+}
+
+console.log(`\nDone: ${results.filter((r) => r.seoOk).length}/${results.length} pass SEO, ${results.filter((r) => r.hot).length} hot.`);

@@ -10,6 +10,14 @@ import {
 } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 
+const SKIP_SLUGS = new Set([
+  "thiet-ke-website-spa",
+  "thiet-ke-website-nha-khoa",
+  "thiet-ke-website-nha-hang",
+  "thiet-ke-website-khach-san",
+  "thiet-ke-website-resort",
+]);
+
 function faq(items) {
   const blocks = items
     .map(
@@ -89,6 +97,6 @@ function buildIndustryArticle(entry, index) {
   };
 }
 
-export const INDUSTRY_ARTICLES = INDUSTRY_ENTRIES.map((entry, index) =>
-  buildIndustryArticle(entry, index),
+export const INDUSTRY_ARTICLES = INDUSTRY_ENTRIES.filter((entry) => !SKIP_SLUGS.has(entry.slug)).map(
+  (entry, index) => buildIndustryArticle(entry, index),
 );

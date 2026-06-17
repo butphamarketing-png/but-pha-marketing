@@ -468,8 +468,25 @@
 }
 
 .article-prose a {
-  color: var(--brand-accent);
+  color: hsl(262 70% 38%);
   border-bottom-color: rgba(124, 58, 237, 0.35);
+}
+
+.article-prose nav[aria-label="Mục lục"] p,
+.article-prose nav[aria-label="Mục lục"] ol {
+  color: hsl(243 47% 18%);
+}
+
+.article-prose nav[aria-label="Mục lục"] a {
+  color: hsl(243 47% 16%);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(49, 46, 129, 0.45);
+}
+
+.article-prose nav[aria-label="Mục lục"] a:hover {
+  color: hsl(262 70% 32%);
 }
 
 .article-prose blockquote {

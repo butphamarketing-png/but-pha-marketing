@@ -23,7 +23,7 @@ export const REWRITE_THIET_KE_WEBSITE_RESPONSIVE = {
     "web responsive, mobile friendly, website responsive chuẩn, thiết kế web đa thiết bị, mobile first",
   metaTitle: "Thiết Kế Website Responsive 2026 | Mobile-First & SEO | Bứt Phá",
   metaDescription:
-    "Hướng dẫn thiết kế website responsive: nguyên tắc mobile-first, breakpoint, Core Web Vitals, checklist kiểm tra và tác động SEO. Báo giá web responsive 3–12 triệu.",
+    "Hướng dẫn thiết kế website responsive: mobile-first, breakpoint, Core Web Vitals, checklist và SEO. Báo giá web responsive 3–12 triệu.",
   description:
     "Thiết kế website responsive cho mọi thiết bị: khái niệm, mobile-first, ảnh hưởng SEO/chuyển đổi, công cụ test và checklist triển khai chuẩn.",
   imageUrl: NEWS_THUMBNAIL,

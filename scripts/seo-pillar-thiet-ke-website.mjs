@@ -17,14 +17,14 @@ export const PILLAR_THIET_KE_WEBSITE = {
   keywordsMain: "thiết kế website",
   keywordsSecondary:
     "thiet ke website, dịch vụ thiết kế website, báo giá thiết kế website, thiết kế web chuẩn seo, làm website doanh nghiệp",
-  metaTitle: "Thiết Kế Website Chuẩn SEO | Báo Giá & Quy Trình 2026 | Bứt Phá Marketing",
+  metaTitle: "Thiết Kế Website Chuẩn SEO | Báo Giá 2026 | Bứt Phá",
   metaDescription:
     "Hướng dẫn thiết kế website toàn diện: loại website, quy trình 7 bước, bảng giá 3–12 triệu, checklist SEO & chuyển đổi. Tư vấn miễn phí tại TP.HCM.",
   description:
     "Bài viết pillar về thiết kế website: khái niệm, lợi ích, quy trình triển khai, bảng giá minh bạch, tiêu chí chọn đối tác và FAQ dành cho doanh nghiệp Việt Nam.",
   imageUrl: NEWS_THUMBNAIL,
   content: wrapArticle({
-    metaTitle: "Thiết Kế Website Chuẩn SEO | Báo Giá & Quy Trình 2026 | Bứt Phá Marketing",
+    metaTitle: "Thiết Kế Website Chuẩn SEO | Báo Giá 2026 | Bứt Phá",
     html: `
 ${toc([
   { id: "tong-quan", label: "Thiết kế website là gì?" },

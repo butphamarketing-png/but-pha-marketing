@@ -23,7 +23,7 @@ export const REWRITE_THIET_KE_WEBSITE_CHUAN_SEO = {
     "website chuẩn seo, seo on-page, tối ưu google, technical seo website, core web vitals, seo khi làm web",
   metaTitle: "Thiết Kế Website Chuẩn SEO | Tăng Thứ Hạng Google | Bứt Phá",
   metaDescription:
-    "Hướng dẫn thiết kế website chuẩn SEO: technical, on-page, Core Web Vitals, schema, nội dung và checklist bàn giao. Giúp website index và xếp hạng bền trên Google.",
+    "Hướng dẫn thiết kế website chuẩn SEO: technical, on-page, Core Web Vitals, schema, checklist bàn giao. Giúp index và xếp hạng trên Google.",
   description:
     "Phân tích toàn diện thiết kế website chuẩn SEO — tích hợp tối ưu Google ngay từ kiến trúc, không SEO vá sau khi web đã lên.",
   imageUrl: NEWS_THUMBNAIL,

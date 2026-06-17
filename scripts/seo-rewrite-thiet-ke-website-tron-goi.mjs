@@ -21,14 +21,14 @@ export const REWRITE_THIET_KE_WEBSITE_TRON_GOI = {
   keywordsMain: KEYWORD,
   keywordsSecondary:
     "dịch vụ web trọn gói, làm website all-in-one, thiết kế web trọn gói giá rẻ, gói website đầy đủ",
-  metaTitle: "Thiết Kế Website Trọn Gói A-Z | Bảng Giá & Hạng Mục 2026 | Bứt Phá",
+  metaTitle: "Thiết Kế Website Trọn Gói | Bảng Giá 2026 | Bứt Phá",
   metaDescription:
     "Dịch vụ thiết kế website trọn gói: khảo sát, thiết kế, code, tên miền, hosting, SSL, SEO, bàn giao. So sánh trọn gói vs làm rời. Báo giá minh bạch 3–12 triệu.",
   description:
     "Hướng dẫn thiết kế website trọn gói cho doanh nghiệp: hạng mục trong gói, lợi ích, bảng giá, checklist hợp đồng và cách chọn đối tác uy tín.",
   imageUrl: NEWS_THUMBNAIL,
   content: buildWpSeoArticle({
-    metaTitle: "Thiết Kế Website Trọn Gói A-Z | Bảng Giá & Hạng Mục 2026 | Bứt Phá",
+    metaTitle: "Thiết Kế Website Trọn Gói | Bảng Giá 2026 | Bứt Phá",
     keyword: KEYWORD,
     html: `
 ${wpToc([

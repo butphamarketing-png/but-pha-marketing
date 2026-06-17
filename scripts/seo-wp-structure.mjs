@@ -1,4 +1,12 @@
-import { wrapArticle, img, NEWS_CONTENT_IMAGE_COUNT, SITE, ZALO, FB } from "./seo-article-helpers.mjs";
+import { wrapArticle, img, seoImageAlt, NEWS_CONTENT_IMAGE_COUNT, SITE, ZALO, FB } from "./seo-article-helpers.mjs";
+
+function ensureKeywordInImageAlts(html, keyword) {
+  if (!keyword) return html;
+  return html.replace(/<img([^>]*?)alt="([^"]*)"([^>]*?)>/gi, (_match, before, alt, after) => {
+    const safeAlt = seoImageAlt(keyword, alt).replace(/"/g, "&quot;");
+    return `<img${before}alt="${safeAlt}"${after}>`;
+  });
+}
 
 /**
  * Cấu trúc bài viết chuẩn SEO WordPress (Yoast / Rank Math):
@@ -14,7 +22,7 @@ export function wpToc(items) {
   const lis = items
     .map((item) => `<li><a href="#${item.id}">${item.label}</a></li>`)
     .join("\n");
-  return `<nav aria-label="Mục lục" class="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5"><p class="text-sm font-semibold uppercase tracking-wide text-indigo-700">Mục lục bài viết</p><ol class="mt-3 list-decimal space-y-1 pl-5 text-indigo-900">${lis}</ol></nav>`;
+  return `<nav aria-label="Mục lục" class="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5"><p class="text-sm font-semibold uppercase tracking-wide text-indigo-950">Mục lục bài viết</p><ol class="mt-3 list-decimal space-y-1 pl-5 text-indigo-950">${lis}</ol></nav>`;
 }
 
 export function wpIntro({ keyword, paragraphs }) {
@@ -66,7 +74,8 @@ export function wpImg(index, alt) {
  * @param {string} config.html
  */
 export function buildWpSeoArticle({ metaTitle, keyword, html }) {
-  return wrapArticle({ metaTitle, html });
+  const optimizedHtml = ensureKeywordInImageAlts(html, keyword);
+  return wrapArticle({ metaTitle, html: optimizedHtml });
 }
 
 export { SITE };

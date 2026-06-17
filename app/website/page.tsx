@@ -1,12 +1,13 @@
-﻿"use client";
+"use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { StorageSlider } from "@/components/shared/StorageSlider";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare } from "lucide-react";
+import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
@@ -94,6 +95,42 @@ export default function WebsitePage() {
           onSubmit={() => setIsAuditOpen(true)}
           features={["Tốc độ", "SEO On-page", "UX / UI", "Khả năng chuyển đổi"]}
         />
+
+        <section className="brand-card flex flex-col gap-6 p-8 md:flex-row md:items-start md:p-10">
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl"
+            style={{ backgroundColor: `${config.color}15`, color: config.color }}
+          >
+            <BookOpen size={28} />
+          </div>
+          <div className="space-y-4">
+            <div>
+              <h2 className="text-2xl font-bold text-indigo-950">Hướng dẫn thiết kế website</h2>
+              <p className="mt-2 max-w-2xl text-sm text-slate-600">
+                Tài liệu chuyên sâu về giá, quy trình, SEO và các loại website — giúp bạn ra quyết định trước khi đầu tư.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { href: "/blog/thiet-ke-website", label: "Thiết kế website 2026" },
+                { href: "/blog/thiet-ke-website-la-gi", label: "Website là gì?" },
+                { href: "/blog/bao-gia-thiet-ke-website", label: "Báo giá" },
+                { href: "/blog/thiet-ke-website-chuan-seo", label: "Chuẩn SEO" },
+                { href: "/blog/thiet-ke-website-ban-hang", label: "Bán hàng" },
+                { href: "/blog/thiet-ke-website-thuong-mai-dien-tu", label: "TMĐT" },
+                { href: "/blog/thiet-ke-website-tron-goi", label: "Trọn gói" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-full border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-800 transition-colors hover:border-indigo-400 hover:bg-indigo-50"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <div className="space-y-32">
           {/* Custom & Domain Section */}

@@ -44,6 +44,10 @@ function scoreRelated(current: ServerBlogItem, candidate: ServerBlogItem) {
     score += 3;
   }
 
+  if (current.keywordsMain && candidate.keywordsMain && current.keywordsMain === candidate.keywordsMain) {
+    score += 6;
+  }
+
   const tokens = keywordTokens(current);
   const candidateHaystack = `${candidate.title} ${candidate.description || ""} ${candidate.keywordsMain || ""} ${candidate.keywordsSecondary || ""} ${candidateSlug}`.toLowerCase();
   for (const token of tokens) {

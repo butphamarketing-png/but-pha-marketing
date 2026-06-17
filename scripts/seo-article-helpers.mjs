@@ -46,6 +46,26 @@ export function altFromKeyword(keywordsMain) {
   return kw.charAt(0).toUpperCase() + kw.slice(1);
 }
 
+/** Alt ảnh có từ khóa chính — dùng cho wpImg / validate SEO. */
+export function seoImageAlt(keywordsMain, detail) {
+  const base = altFromKeyword(keywordsMain);
+  const text = String(detail || "").trim();
+  if (!text) return base;
+  if (keywordInText(text, keywordsMain)) return text;
+  return `${base} — ${text}`;
+}
+
+/** Meta title gọn cho SERP (~55 ký tự trước brand). */
+export function buildSeoMetaTitle(primary, brand = "Bứt Phá") {
+  const suffix = ` | ${brand}`;
+  const maxPrimary = 60 - suffix.length;
+  let head = String(primary || "").trim();
+  if (head.length > maxPrimary) {
+    head = head.slice(0, maxPrimary).replace(/\s+\S*$/, "").trim();
+  }
+  return `${head}${suffix}`;
+}
+
 export function validateSeoKeywordPlacement({
   keywordsMain,
   title,
@@ -53,15 +73,22 @@ export function validateSeoKeywordPlacement({
   metaDescription,
   description,
   imageAlts = [],
+  html = "",
 }) {
   const missing = [];
   if (!keywordInText(title, keywordsMain)) missing.push("title/H1");
   if (!keywordInText(metaTitle || title, keywordsMain)) missing.push("metaTitle");
   const desc = metaDescription || description || "";
   if (!keywordInText(desc, keywordsMain)) missing.push("description");
-  if (imageAlts.length === 0 || !imageAlts.every((alt) => keywordInText(alt, keywordsMain))) {
+  const alts =
+    imageAlts.length > 0
+      ? imageAlts
+      : [...String(html).matchAll(/alt="([^"]+)"/g)].map((m) => m[1]);
+  if (alts.length === 0 || !alts.every((alt) => keywordInText(alt, keywordsMain))) {
     missing.push("alt ảnh");
   }
+  if (metaTitle && metaTitle.length > 65) missing.push("metaTitle dài (>65)");
+  if (metaDescription && metaDescription.length > 160) missing.push("metaDescription dài (>160)");
   return { ok: missing.length === 0, missing };
 }
 

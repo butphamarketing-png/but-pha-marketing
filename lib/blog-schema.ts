@@ -77,8 +77,17 @@ export function buildBlogJsonLd({ blog, canonical, baseUrl, image }: BuildBlogJs
       inLanguage: "vi-VN",
       url: canonical,
       mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+      isPartOf: { "@type": "Blog", "@id": `${baseUrl}/blog#blog`, name: "Tin tức Marketing", url: `${baseUrl}/blog` },
       articleSection: blog.category || "Marketing",
       ...(keywords.length ? { keywords: keywords.join(", ") } : {}),
+      ...(keywords.length
+        ? {
+            about: keywords.map((name) => ({
+              "@type": "Thing",
+              name,
+            })),
+          }
+        : {}),
       ...(wordCount ? { wordCount } : {}),
       author: [{ "@type": "Organization", name: "Bứt Phá Marketing", url: baseUrl }],
       publisher: {

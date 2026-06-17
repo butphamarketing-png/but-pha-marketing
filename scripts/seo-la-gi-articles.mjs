@@ -11,6 +11,8 @@ import {
 } from "./seo-article-helpers.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
 
+const SKIP_SLUGS = new Set(["thiet-ke-website-la-gi"]);
+
 function faq(items) {
   const blocks = items
     .map(
@@ -106,7 +108,7 @@ function assertLaGiArticle(article) {
   }
 }
 
-export const LA_GI_ARTICLES = LA_GI_ENTRIES.map((entry, index) => {
+export const LA_GI_ARTICLES = LA_GI_ENTRIES.filter((entry) => !SKIP_SLUGS.has(entry.slug)).map((entry, index) => {
   const article = buildLaGiArticle(entry, index);
   assertLaGiArticle(article);
   return article;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays, Flame, Search, X } from "lucide-react";
 import { matchesBlogSearch, resolveBlogTag, type BlogListItem } from "@/lib/blog-utils";
 import { BlogLeadPopup } from "@/components/blog/BlogLeadPopup";
+import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
 export function BlogSearchGrid({ blogs }: { blogs: BlogListItem[] }) {
   const [query, setQuery] = useState("");
@@ -60,9 +61,12 @@ export function BlogSearchGrid({ blogs }: { blogs: BlogListItem[] }) {
               className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-indigo-100 bg-white shadow-brand transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-brand-lg"
             >
               <div className="relative overflow-hidden">
-                <img
+                <BlogOptimizedImage
                   src={blog.imageUrl || "/mascot-home.png"}
                   alt={blog.title}
+                  width={640}
+                  height={448}
+                  sizes="card"
                   className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/50 via-transparent to-transparent" />

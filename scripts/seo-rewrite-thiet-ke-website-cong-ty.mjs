@@ -21,14 +21,14 @@ export const REWRITE_THIET_KE_WEBSITE_CONG_TY = {
   keywordsMain: KEYWORD,
   keywordsSecondary:
     "website công ty, thương hiệu doanh nghiệp, web giới thiệu công ty, corporate website",
-  metaTitle: "Thiết Kế Website Công Ty Chuyên Nghiệp | Uy Tín Thương Hiệu | Bứt Phá",
+  metaTitle: "Thiết Kế Website Công Ty | Chuẩn SEO 2026 | Bứt Phá",
   metaDescription:
     "Thiết kế website công ty: cấu trúc trang, thông tin pháp lý, đồng bộ thương hiệu, tuyển dụng & B2B. Nâng uy tín trước đối tác và khách hàng. Tư vấn miễn phí.",
   description:
     "Hướng dẫn thiết kế website công ty chuyên nghiệp — xây dựng uy tín thương hiệu, nội dung cốt lõi và đồng bộ nhận diện trên mọi kênh số.",
   imageUrl: NEWS_THUMBNAIL,
   content: buildWpSeoArticle({
-    metaTitle: "Thiết Kế Website Công Ty Chuyên Nghiệp | Uy Tín Thương Hiệu | Bứt Phá",
+    metaTitle: "Thiết Kế Website Công Ty | Chuẩn SEO 2026 | Bứt Phá",
     keyword: KEYWORD,
     html: `
 ${wpToc([

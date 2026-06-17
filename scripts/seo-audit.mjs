@@ -1,4 +1,7 @@
-import { wrapArticle, img, toc, internalLinks, externalLinks, NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+/**
+ * Audit các bài rewrite chất lượng (pillar + cluster + local + industry).
+ * Chạy: node scripts/seo-audit.mjs
+ */
 import { PILLAR_THIET_KE_WEBSITE } from "./seo-pillar-thiet-ke-website.mjs";
 import { REWRITE_THIET_KE_WEBSITE_DOANH_NGHIEP } from "./seo-rewrite-thiet-ke-website-doanh-nghiep.mjs";
 import { REWRITE_THIET_KE_WEBSITE_CHUAN_SEO } from "./seo-rewrite-thiet-ke-website-chuan-seo.mjs";
@@ -19,24 +22,10 @@ import { REWRITE_THIET_KE_WEBSITE_NHA_KHOA } from "./seo-rewrite-thiet-ke-websit
 import { REWRITE_THIET_KE_WEBSITE_NHA_HANG } from "./seo-rewrite-thiet-ke-website-nha-hang.mjs";
 import { REWRITE_THIET_KE_WEBSITE_KHACH_SAN } from "./seo-rewrite-thiet-ke-website-khach-san.mjs";
 import { REWRITE_THIET_KE_WEBSITE_RESORT } from "./seo-rewrite-thiet-ke-website-resort.mjs";
-import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
-import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
-import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
-import { LOCAL_SEO_ARTICLES } from "./seo-local-articles.mjs";
-import { WEBSITE_ARTICLES } from "./seo-website-articles.mjs";
-import { MARKETING_ARTICLES } from "./seo-marketing-articles.mjs";
+import { validateSeoKeywordPlacement } from "./seo-article-helpers.mjs";
+import { isQualitySeoArticle } from "./seed-rewrite-utils.mjs";
 
-function faq(items) {
-  const blocks = items
-    .map(
-      (f) =>
-        `<div class="mb-4"><h3 class="text-base font-semibold text-indigo-950">${f.q}</h3><p>${f.a}</p></div>`,
-    )
-    .join("\n");
-  return `<section id="faq"><h2>Câu hỏi thường gặp</h2>${blocks}</section>`;
-}
-
-export const SEO_ARTICLES = [
+const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
   REWRITE_THIET_KE_WEBSITE_DOANH_NGHIEP,
   REWRITE_THIET_KE_WEBSITE_CHUAN_SEO,
@@ -44,6 +33,7 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_THEO_YEU_CAU,
   REWRITE_BAO_GIA_THIET_KE_WEBSITE,
   REWRITE_THIET_KE_WEBSITE_CONG_TY,
+  REWRITE_THIET_KE_WEBSITE_TRON_GOI,
   REWRITE_THIET_KE_WEBSITE_WORDPRESS,
   REWRITE_THIET_KE_WEBSITE_RESPONSIVE,
   REWRITE_THIET_KE_WEBSITE_THUONG_MAI_DIEN_TU,
@@ -56,11 +46,51 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_NHA_HANG,
   REWRITE_THIET_KE_WEBSITE_KHACH_SAN,
   REWRITE_THIET_KE_WEBSITE_RESORT,
-  REWRITE_THIET_KE_WEBSITE_TRON_GOI,
-  ...INDUSTRY_ARTICLES,
-  ...KEYWORD_ARTICLES,
-  ...LA_GI_ARTICLES,
-  ...LOCAL_SEO_ARTICLES,
-  ...WEBSITE_ARTICLES,
-  ...MARKETING_ARTICLES,
 ];
+
+const rows = REWRITE_ARTICLES.map((article) => {
+  const check = validateSeoKeywordPlacement({
+    keywordsMain: article.keywordsMain,
+    title: article.title,
+    metaTitle: article.metaTitle,
+    metaDescription: article.metaDescription,
+    description: article.description,
+    html: article.content,
+  });
+  return {
+    slug: article.slug,
+    keyword: article.keywordsMain,
+    chars: article.content.length,
+    metaTitleLen: (article.metaTitle || "").length,
+    metaDescLen: (article.metaDescription || "").length,
+    quality: isQualitySeoArticle(article),
+    ok: check.ok,
+    issues: check.missing,
+  };
+});
+
+const failed = rows.filter((r) => !r.ok);
+const longTitles = rows.filter((r) => r.metaTitleLen > 65);
+const longDescs = rows.filter((r) => r.metaDescLen > 160);
+
+console.log(`=== SEO AUDIT: ${rows.length} bài rewrite chất lượng ===\n`);
+console.log(`Pass: ${rows.length - failed.length}/${rows.length}`);
+
+if (failed.length) {
+  console.log("\n--- Cần sửa ---");
+  for (const r of failed) console.log(`  ${r.slug}: ${r.issues.join(", ")}`);
+}
+
+if (longTitles.length) {
+  console.log("\n--- Meta title > 65 ký tự ---");
+  for (const r of longTitles) console.log(`  ${r.slug}: ${r.metaTitleLen}`);
+}
+
+if (longDescs.length) {
+  console.log("\n--- Meta description > 160 ký tự ---");
+  for (const r of longDescs) console.log(`  ${r.slug}: ${r.metaDescLen}`);
+}
+
+if (!failed.length && !longTitles.length && !longDescs.length) {
+  console.log("\nTất cả bài rewrite đạt checklist SEO nội bộ.");
+}

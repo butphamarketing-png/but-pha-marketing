@@ -3,10 +3,13 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
+import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
 import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
+import { BlogArticleContent } from "@/components/blog/BlogArticleContent";
+import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
 const BASE_URL = SITE_URL;
 
@@ -30,11 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
   const imageAlt = blog.keywordsMain?.trim() || blog.title;
   const keywords = buildBlogMetadataKeywords(blog);
-  const title = blog.metaTitle || blog.title;
+  const title = buildBlogAbsoluteTitle(blog.metaTitle || blog.title);
   const description = blog.metaDescription || blog.description;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     robots: {
@@ -130,18 +133,22 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
 
         {blog.imageUrl && (
           <div className="px-6 pt-6 md:px-10 md:pt-8">
-            <img
-              src={blog.imageUrl}
+            <BlogOptimizedImage
+              src={image}
               alt={imageAlt}
               width={1200}
               height={675}
+              priority
+              sizes="hero"
               className="h-72 w-full rounded-[1.75rem] border border-indigo-100 object-cover shadow-brand md:h-[24rem]"
             />
           </div>
         )}
 
         <div className="px-6 py-8 md:px-10 md:py-10">
-          <article className="article-prose" dangerouslySetInnerHTML={{ __html: blog.content }} />
+          <article className="article-prose">
+            <BlogArticleContent html={blog.content} />
+          </article>
         </div>
       </section>
 

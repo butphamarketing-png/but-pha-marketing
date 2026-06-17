@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { resolveBlogTag, type BlogCardItem } from "@/lib/blog-utils";
+import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
 export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
   if (!posts.length) return null;
@@ -26,9 +27,12 @@ export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-indigo-100 bg-indigo-50/30 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-brand"
           >
             <div className="relative overflow-hidden">
-              <img
+              <BlogOptimizedImage
                 src={blog.imageUrl || "/mascot-home.png"}
                 alt={blog.title}
+                width={640}
+                height={360}
+                sizes="card"
                 className="h-36 w-full object-cover transition duration-500 group-hover:scale-105"
               />
               <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-violet-700">

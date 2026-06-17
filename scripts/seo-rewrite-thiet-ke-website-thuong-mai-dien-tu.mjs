@@ -21,14 +21,14 @@ export const REWRITE_THIET_KE_WEBSITE_THUONG_MAI_DIEN_TU = {
   keywordsMain: KEYWORD,
   keywordsSecondary:
     "website tmđt, ecommerce việt nam, thiết kế web bán hàng, website bán hàng online, shop online chuyên nghiệp",
-  metaTitle: "Thiết Kế Website Thương Mại Điện Tử 2026 | Tính Năng & Báo Giá | Bứt Phá",
+  metaTitle: "Thiết Kế Website Thương Mại Điện Tử | Giá 2026 | Bứt Phá",
   metaDescription:
     "Thiết kế website thương mại điện tử: tính năng shop, thanh toán VNPay/MoMo/COD, vận chuyển, SEO sản phẩm. So sánh web riêng vs sàn. Báo giá 9–15 triệu.",
   description:
     "Hướng dẫn thiết kế website thương mại điện tử bền vững: tính năng cốt lõi, thanh toán, logistics, marketing và chi phí triển khai tại Việt Nam.",
   imageUrl: NEWS_THUMBNAIL,
   content: buildWpSeoArticle({
-    metaTitle: "Thiết Kế Website Thương Mại Điện Tử 2026 | Tính Năng & Báo Giá | Bứt Phá",
+    metaTitle: "Thiết Kế Website Thương Mại Điện Tử | Giá 2026 | Bứt Phá",
     keyword: KEYWORD,
     html: `
 ${wpToc([
