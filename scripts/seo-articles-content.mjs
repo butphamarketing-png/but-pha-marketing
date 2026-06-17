@@ -1,4 +1,5 @@
 import { wrapArticle, img, toc, internalLinks, externalLinks, NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { PILLAR_THIET_KE_WEBSITE } from "./seo-pillar-thiet-ke-website.mjs";
 import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
 import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
 import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
@@ -17,6 +18,7 @@ function faq(items) {
 }
 
 export const SEO_ARTICLES = [
+  PILLAR_THIET_KE_WEBSITE,
   {
     title: "Thiết Kế Website Doanh Nghiệp Chuyên Nghiệp Và Hiệu Quả",
     slug: "thiet-ke-website-doanh-nghiep",
