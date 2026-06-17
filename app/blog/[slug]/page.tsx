@@ -1,15 +1,24 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
-import { getBlogBySlug, getRelatedBlogsForSlug } from "@/lib/server-blog";
+import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
+import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug, BLOG_REVALIDATE_SECONDS } from "@/lib/server-blog";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
 
 const BASE_URL = SITE_URL;
-export const dynamic = "force-dynamic";
+
+export const revalidate = BLOG_REVALIDATE_SECONDS;
+export const dynamicParams = true;
 
 type Params = { slug: string };
+
+export async function generateStaticParams() {
+  const slugs = await getPublishedBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
@@ -19,22 +28,40 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
   const imageAlt = blog.keywordsMain?.trim() || blog.title;
+  const keywords = buildBlogMetadataKeywords(blog);
+  const title = blog.metaTitle || blog.title;
+  const description = blog.metaDescription || blog.description;
+
   return {
-    title: blog.metaTitle || blog.title,
-    description: blog.metaDescription || blog.description,
+    title,
+    description,
+    keywords,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     alternates: { canonical },
     openGraph: {
-      title: blog.metaTitle || blog.title,
-      description: blog.metaDescription || blog.description,
+      title,
+      description,
       url: canonical,
       type: "article",
+      locale: "vi_VN",
+      siteName: "Bứt Phá Marketing",
       publishedTime: blog.publishedAt || undefined,
+      modifiedTime: blog.updatedAt || blog.publishedAt || undefined,
       images: [{ url: image, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
-      title: blog.metaTitle || blog.title,
-      description: blog.metaDescription || blog.description,
+      title,
+      description,
       images: [image],
     },
   };
@@ -47,36 +74,39 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const related = await getRelatedBlogsForSlug(slug, 4);
   const blogPath = blog.slug || blog.id;
   const canonical = `${BASE_URL}/blog/${blogPath}`;
-  const publishedDate = blog.publishedAt || new Date(blog.timestamp).toISOString();
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
   const imageAlt = blog.keywordsMain?.trim() || blog.title;
   const publishedLabel = new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN");
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: blog.title,
-    datePublished: publishedDate,
-    dateModified: publishedDate,
-    description: blog.metaDescription || blog.description,
-    image: [image],
-    inLanguage: "vi-VN",
-    url: canonical,
-    author: [{ "@type": "Organization", name: "Bứt Phá Marketing" }],
-    publisher: {
-      "@type": "Organization",
-      name: "Bứt Phá Marketing",
-      logo: {
-        "@type": "ImageObject",
-        url: `${BASE_URL}/logo.jpg`,
-      },
-    },
-    mainEntityOfPage: canonical,
-  };
+  const jsonLd = buildBlogJsonLd({ blog, canonical, baseUrl: BASE_URL, image });
 
   return (
     <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-slate-600">
+        <ol className="flex flex-wrap items-center gap-1.5">
+          <li>
+            <Link href="/" className="font-medium text-indigo-700 hover:text-indigo-900">
+              Trang chủ
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-400">
+            /
+          </li>
+          <li>
+            <Link href="/blog" className="font-medium text-indigo-700 hover:text-indigo-900">
+              Tin tức
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-400">
+            /
+          </li>
+          <li className="line-clamp-1 font-semibold text-indigo-950" aria-current="page">
+            {blog.title}
+          </li>
+        </ol>
+      </nav>
+
       <section className="brand-card overflow-hidden">
         <div className="relative overflow-hidden border-b border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 px-6 py-10 md:px-10 md:py-14">
           <div className="relative">
@@ -102,6 +132,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
             <img
               src={blog.imageUrl}
               alt={imageAlt}
+              width={1200}
+              height={675}
               className="h-72 w-full rounded-[1.75rem] border border-indigo-100 object-cover shadow-brand md:h-[24rem]"
             />
           </div>

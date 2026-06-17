@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ensureUniqueNewsSlug } from "@/lib/news-slug";
 import { notifyBlogPublished } from "@/lib/push-notifications";
+import { revalidateBlogCache } from "@/lib/blog-revalidate";
 import { createServerClient } from "@/lib/supabase";
 
 export async function GET() {
@@ -86,6 +87,7 @@ export async function POST(request: Request) {
       }).catch((pushError) => console.error("Blog push notify failed", pushError));
     }
 
+    revalidateBlogCache(data?.slug || uniqueSlug);
     return NextResponse.json(data);
   } catch (error) {
     console.error("POST /api/news failed", error);
@@ -161,6 +163,7 @@ export async function PATCH(request: Request) {
       }).catch((pushError) => console.error("Blog push notify failed", pushError));
     }
 
+    revalidateBlogCache((normalized["slug"] as string) || beforeRow?.slug || id);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("PATCH /api/news failed", error);
@@ -178,6 +181,7 @@ export async function DELETE(request: Request) {
     }
 
     const supabase = createServerClient();
+    const { data: beforeRow } = await supabase.from("news").select("slug").eq("id", id).maybeSingle();
     const { error } = await supabase
       .from("news")
       .delete()
@@ -188,6 +192,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 
+    revalidateBlogCache(beforeRow?.slug || id);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("DELETE /api/news failed", error);

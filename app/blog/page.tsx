@@ -2,11 +2,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SITE_URL } from "@/lib/seo";
-import { getPublishedBlogs } from "@/lib/server-blog";
+import { getPublishedBlogs, BLOG_REVALIDATE_SECONDS } from "@/lib/server-blog";
 import { BlogSearchGrid } from "@/components/blog/BlogSearchGrid";
 
 const BASE_URL = SITE_URL;
-export const dynamic = "force-dynamic";
+export const revalidate = BLOG_REVALIDATE_SECONDS;
 
 export const metadata: Metadata = {
   title: "Tin tức Marketing | Bứt Phá Marketing",

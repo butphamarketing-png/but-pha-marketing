@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { REWRITE_THIET_KE_WEBSITE_TRON_GOI } from "./seo-rewrite-thiet-ke-website-tron-goi.mjs";
 import { validateSeoKeywordPlacement } from "./seo-article-helpers.mjs";
+import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
@@ -52,3 +53,4 @@ if (error) {
   process.exit(1);
 }
 console.log(`${existing ? "Updated" : "Created"}: ${article.slug} (${article.content.length} chars)`);
+await revalidateBlogAfterSeed(article.slug);

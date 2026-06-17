@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
-import { getPublishedBlogs } from "@/lib/server-blog";
+import { getPublishedBlogs, BLOG_REVALIDATE_SECONDS } from "@/lib/server-blog";
 
 const baseUrl = SITE_URL;
+export const revalidate = BLOG_REVALIDATE_SECONDS;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/blog", "/gioi-thieu", "/lien-he"];

@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PILLAR_THIET_KE_WEBSITE } from "./seo-pillar-thiet-ke-website.mjs";
 import { validateSeoKeywordPlacement } from "./seo-article-helpers.mjs";
+import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
@@ -69,3 +70,4 @@ if (existing) {
 
 if (error) process.exit(1);
 console.log(`Done. Content: ${article.content.length} chars`);
+await revalidateBlogAfterSeed(article.slug);
