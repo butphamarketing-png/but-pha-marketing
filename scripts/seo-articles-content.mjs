@@ -19,6 +19,14 @@ import { REWRITE_THIET_KE_WEBSITE_NHA_KHOA } from "./seo-rewrite-thiet-ke-websit
 import { REWRITE_THIET_KE_WEBSITE_NHA_HANG } from "./seo-rewrite-thiet-ke-website-nha-hang.mjs";
 import { REWRITE_THIET_KE_WEBSITE_KHACH_SAN } from "./seo-rewrite-thiet-ke-website-khach-san.mjs";
 import { REWRITE_THIET_KE_WEBSITE_RESORT } from "./seo-rewrite-thiet-ke-website-resort.mjs";
+import { REWRITE_THIET_KE_WEBSITE_DAT_PHONG_KHACH_SAN } from "./seo-rewrite-thiet-ke-website-dat-phong-khach-san.mjs";
+import { REWRITE_THIET_KE_WEBSITE_CONG_TY_XAY_DUNG } from "./seo-rewrite-thiet-ke-website-cong-ty-xay-dung.mjs";
+import { REWRITE_THIET_KE_WEBSITE_KIEN_TRUC_NOI_THAT } from "./seo-rewrite-thiet-ke-website-kien-truc-noi-that.mjs";
+import { REWRITE_THIET_KE_WEBSITE_CO_KHI } from "./seo-rewrite-thiet-ke-website-co-khi.mjs";
+import { REWRITE_THIET_KE_WEBSITE_GIA_CONG_CNC } from "./seo-rewrite-thiet-ke-website-gia-cong-cnc.mjs";
+import { REWRITE_THIET_KE_WEBSITE_BAT_DONG_SAN } from "./seo-rewrite-thiet-ke-website-bat-dong-san.mjs";
+import { REWRITE_THIET_KE_WEBSITE_BAT_DONG_SAN_DU_AN } from "./seo-rewrite-thiet-ke-website-bat-dong-san-du-an.mjs";
+import { REWRITE_THIET_KE_WEBSITE_CONG_TY_LUAT } from "./seo-rewrite-thiet-ke-website-cong-ty-luat.mjs";
 import { INDUSTRY_ARTICLES } from "./seo-industry-articles.mjs";
 import { KEYWORD_ARTICLES } from "./seo-keyword-articles.mjs";
 import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
@@ -56,6 +64,14 @@ export const SEO_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_NHA_HANG,
   REWRITE_THIET_KE_WEBSITE_KHACH_SAN,
   REWRITE_THIET_KE_WEBSITE_RESORT,
+  REWRITE_THIET_KE_WEBSITE_DAT_PHONG_KHACH_SAN,
+  REWRITE_THIET_KE_WEBSITE_CONG_TY_XAY_DUNG,
+  REWRITE_THIET_KE_WEBSITE_KIEN_TRUC_NOI_THAT,
+  REWRITE_THIET_KE_WEBSITE_CO_KHI,
+  REWRITE_THIET_KE_WEBSITE_GIA_CONG_CNC,
+  REWRITE_THIET_KE_WEBSITE_BAT_DONG_SAN,
+  REWRITE_THIET_KE_WEBSITE_BAT_DONG_SAN_DU_AN,
+  REWRITE_THIET_KE_WEBSITE_CONG_TY_LUAT,
   REWRITE_THIET_KE_WEBSITE_TRON_GOI,
   ...INDUSTRY_ARTICLES,
   ...KEYWORD_ARTICLES,

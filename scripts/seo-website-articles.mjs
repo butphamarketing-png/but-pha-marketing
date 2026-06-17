@@ -33,6 +33,8 @@ const BASE_SLUGS = new Set([
   "thiet-ke-website-ha-noi-chuyen-nghiep",
   "thiet-ke-website-da-nang",
   "thiet-ke-website-da-nang-du-lich",
+  "thiet-ke-website-dat-phong-khach-san",
+  "thiet-ke-website-bat-dong-san-du-an",
   "website-la-gi",
   ...INDUSTRY_ENTRIES.map((e) => e.slug),
   ...KEYWORD_ENTRIES.map((e) => e.slug),

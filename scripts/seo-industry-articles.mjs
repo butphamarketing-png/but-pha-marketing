@@ -16,6 +16,12 @@ const SKIP_SLUGS = new Set([
   "thiet-ke-website-nha-hang",
   "thiet-ke-website-khach-san",
   "thiet-ke-website-resort",
+  "thiet-ke-website-cong-ty-xay-dung",
+  "thiet-ke-website-kien-truc-noi-that",
+  "thiet-ke-website-co-khi",
+  "thiet-ke-website-gia-cong-cnc",
+  "thiet-ke-website-bat-dong-san",
+  "thiet-ke-website-cong-ty-luat",
 ]);
 
 function faq(items) {
