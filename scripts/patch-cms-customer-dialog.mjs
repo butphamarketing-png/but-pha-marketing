@@ -1,5 +1,6 @@
 /**
- * Keep customer entry dialog open when switching browser tabs (Radix onFocusOutside).
+ * Keep customer entry dialog open when switching browser tabs,
+ * without blocking focus moves between form fields (IME / click).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -20,18 +21,17 @@ if (!bundlePath) {
 let s = fs.readFileSync(bundlePath, "utf8");
 const originalLen = s.length;
 
-const anchor =
-  'children:c.jsxs(gn,{className:"max-h-[92vh] max-w-lg overflow-y-auto sm:max-w-xl",children:[c.jsxs(bn,{children:[c.jsx(xn,{className:"text-left",children:"Nhập / sửa khách hàng"})';
-const replacement =
-  'children:c.jsxs(gn,{className:"max-h-[92vh] max-w-lg overflow-y-auto sm:max-w-xl",onFocusOutside:e=>e.preventDefault(),children:[c.jsxs(bn,{children:[c.jsx(xn,{className:"text-left",children:"Nhập / sửa khách hàng"})';
+const badFocusOutside = "onFocusOutside:x=>x.preventDefault()";
+const goodFocusOutside =
+  'onFocusOutside:x=>{const o=x.detail?.originalEvent;!o?.relatedTarget&&x.preventDefault()}';
 
-if (s.includes("onFocusOutside:e=>e.preventDefault(),children:[c.jsxs(bn,{children:[c.jsx(xn,{className:\"text-left\",children:\"Nhập / sửa khách hàng\"})")) {
-  console.log("Customer dialog onFocusOutside: already applied");
-} else if (!s.includes(anchor)) {
-  console.log("Customer dialog onFocusOutside: skipped (anchor not found)");
+if (s.includes(goodFocusOutside)) {
+  console.log("Customer dialog onFocusOutside: already applied (tab-switch only)");
+} else if (s.includes(badFocusOutside)) {
+  s = s.replaceAll(badFocusOutside, goodFocusOutside);
+  console.log("Customer dialog onFocusOutside: fixed (tab-switch only)");
 } else {
-  s = s.replace(anchor, replacement);
-  console.log("Customer dialog onFocusOutside: applied");
+  console.log("Customer dialog onFocusOutside: skipped (anchor not found)");
 }
 
 fs.writeFileSync(bundlePath, s);
