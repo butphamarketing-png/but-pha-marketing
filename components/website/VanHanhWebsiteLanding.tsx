@@ -24,6 +24,7 @@ import {
 } from "@/lib/service-pricing";
 import { getTelHref, getZaloUrl, resolveHotline } from "@/lib/site-contact";
 import { fadeUpChild, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
+import { WebsiteOperationComparisonTable } from "@/components/website/WebsiteOperationComparisonTable";
 
 const PRIMARY = PLATFORM_COLORS.website;
 
@@ -96,6 +97,7 @@ const PROCESS_STEPS = [
 const NAV_SECTIONS = [
   { id: "hero", label: "Tổng quan" },
   { id: "pricing", label: "Bảng giá" },
+  { id: "compare", label: "So sánh" },
   { id: "services", label: "Dịch vụ" },
   { id: "why-us", label: "Vì sao chọn" },
   { id: "process", label: "Quy trình" },
@@ -275,6 +277,18 @@ export function VanHanhWebsiteLanding() {
               );
             })}
           </div>
+        </section>
+
+        {/* So sánh gói */}
+        <section id="compare" className="scroll-mt-24 py-16 md:py-20">
+          <SectionHeading
+            title={
+              <>
+                So Sánh <span style={{ color: PRIMARY }}>Chi Tiết</span> Các Gói
+              </>
+            }
+          />
+          <WebsiteOperationComparisonTable />
         </section>
 
         {/* 3. What we do */}
