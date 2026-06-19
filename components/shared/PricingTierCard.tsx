@@ -37,25 +37,21 @@ export function PricingTierCard({
 }: PricingTierCardProps) {
   return (
     <div
-      className={`platform-pricing-card pricing-card-vns flex flex-col overflow-hidden p-0 ${featured ? "platform-pricing-card--featured" : ""}`}
+      className={`platform-pricing-card pricing-card-vns flex flex-col p-0 ${featured ? "platform-pricing-card--featured pricing-card-vns--featured" : ""}`}
       style={{
         ["--tier-accent" as string]: accent,
         ...(featured ? ({ ["--tw-ring-color" as string]: `${accent}45` } as React.CSSProperties) : {}),
       }}
     >
-      {featured && (
-        <div
-          className="absolute -top-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg"
-          style={{ backgroundColor: accent }}
-        >
-          <Sparkles size={12} /> {featuredLabel}
-        </div>
-      )}
-
       <div
         className="pricing-card-vns__header"
         style={{ background: `linear-gradient(135deg, #1e3a8a 0%, ${accent} 100%)` }}
       >
+        {featured && (
+          <div className="pricing-card-vns__badge">
+            <Sparkles size={11} /> {featuredLabel}
+          </div>
+        )}
         {Icon && variant === "default" && (
           <div className="pricing-card-vns__header-icon">
             <Icon size={20} strokeWidth={2.2} />
