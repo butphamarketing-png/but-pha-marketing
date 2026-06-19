@@ -24,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
+import { SiFacebook } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
