@@ -9,7 +9,25 @@ const baseUrl = SITE_URL;
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/facebook", "/google-maps", "/website", "/website/thietkewebsite", "/website/van-hanh-website", "/blog", "/gioi-thieu", "/lien-he"];
+  const staticRoutes = [
+    "",
+    "/facebook",
+    "/facebook/thiet-ke-fanpage",
+    "/facebook/cham-soc-fanpage",
+    "/facebook/quang-cao-fanpage",
+    "/google-maps",
+    "/google-maps/thiet-ke-google-maps",
+    "/google-maps/quang-cao-google-maps",
+    "/website",
+    "/website/thietkewebsite",
+    "/website/van-hanh-website",
+    "/website/ten-mien-website",
+    "/website/cham-soc-website",
+    "/website/quang-cao-website",
+    "/blog",
+    "/gioi-thieu",
+    "/lien-he",
+  ];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),

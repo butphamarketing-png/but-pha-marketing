@@ -1,6 +1,6 @@
 import { createServiceLandingPage, generateLandingMetadata } from "@/lib/service-landing-page";
 
-const PATH = "website/thietkewebsite";
+const PATH = "website/quang-cao-website";
 
 export async function generateMetadata() {
   return generateLandingMetadata(PATH);

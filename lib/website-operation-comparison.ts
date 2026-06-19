@@ -75,3 +75,30 @@ export const WEBSITE_OPERATION_COMPARE_ROWS: WebsiteOperationCompareRow[] = [
     ],
   },
 ];
+
+/** Các tiêu chí hiển thị trên card gói (kiểu Vina Software) */
+export const WEBSITE_OPERATION_CARD_ROW_LABELS = [
+  "SSL",
+  "Sao lưu dữ liệu",
+  "Hỗ trợ kỹ thuật",
+  "Thời gian xử lý sự cố",
+  "Phù hợp",
+] as const;
+
+export function formatCompareCell(value: WebsiteOperationCompareCell): string {
+  if (value === "yes") return "Có";
+  if (value === "no") return "Không";
+  return value;
+}
+
+export function getCompareFeaturesForPackage(packageIndex: number) {
+  return WEBSITE_OPERATION_CARD_ROW_LABELS.map((label) => {
+    const row = WEBSITE_OPERATION_COMPARE_ROWS.find((r) => r.label === label);
+    const raw = row?.values[packageIndex] ?? "—";
+    return { label, value: formatCompareCell(raw) };
+  });
+}
+
+export function getPackageCompareIndex(packageName: string) {
+  return WEBSITE_OPERATION_COMPARE_PACKAGES.findIndex((n) => n === packageName);
+}

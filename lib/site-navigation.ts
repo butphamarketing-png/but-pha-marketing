@@ -9,34 +9,34 @@ export type SiteNavGroup = {
   children: SiteNavLink[];
 };
 
-/** Menu dịch vụ xổ cấp — đồng bộ anchor trên /website, /facebook, /google-maps */
+/** Menu dịch vụ xổ cấp — trang landing riêng từng dịch vụ */
 export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
   {
     label: "Website",
     href: "/website",
     children: [
-      { label: "Tên miền website", href: "/website#domain" },
+      { label: "Tên miền website", href: "/website/ten-mien-website" },
       { label: "Thiết kế Website", href: "/website/thietkewebsite" },
       { label: "Vận hành website", href: "/website/van-hanh-website" },
-      { label: "Chăm sóc Website", href: "/website#care" },
-      { label: "Quảng cáo Website", href: "/website#quang-cao" },
+      { label: "Chăm sóc Website", href: "/website/cham-soc-website" },
+      { label: "Quảng cáo Website", href: "/website/quang-cao-website" },
     ],
   },
   {
     label: "Facebook",
     href: "/facebook",
     children: [
-      { label: "Thiết kế Fanpage", href: "/facebook#build" },
-      { label: "Chăm sóc Fanpage", href: "/facebook#care" },
-      { label: "Quảng cáo Fanpage", href: "/facebook#ads" },
+      { label: "Thiết kế Fanpage", href: "/facebook/thiet-ke-fanpage" },
+      { label: "Chăm sóc Fanpage", href: "/facebook/cham-soc-fanpage" },
+      { label: "Quảng cáo Fanpage", href: "/facebook/quang-cao-fanpage" },
     ],
   },
   {
     label: "Google Maps",
     href: "/google-maps",
     children: [
-      { label: "Thiết kế Google Maps", href: "/google-maps#gm-pricing" },
-      { label: "Quảng cáo Google Maps", href: "/google-maps#ads-pricing" },
+      { label: "Thiết kế Google Maps", href: "/google-maps/thiet-ke-google-maps" },
+      { label: "Quảng cáo Google Maps", href: "/google-maps/quang-cao-google-maps" },
     ],
   },
 ];

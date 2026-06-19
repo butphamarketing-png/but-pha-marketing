@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
+import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen, Target, Zap, Server } from "lucide-react";
+import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, LayoutTemplate, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
-import { formatPriceVnd, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
 const config: PlatformConfig = {
@@ -26,6 +26,8 @@ const config: PlatformConfig = {
   customSections: [
     { id: "audit", label: "Chuẩn đoán Website" },
     { id: "domain", label: "Tên miền" },
+    { id: "pricing", label: "Thiết kế Website" },
+    { id: "van-hanh", label: "Vận hành Website" },
     { id: "care", label: "Chăm sóc Website" },
     { id: "quang-cao", label: "Quảng cáo Website" },
     { id: "contact", label: "Liên hệ tư vấn" },
@@ -53,15 +55,6 @@ export default function WebsitePage() {
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.location.hash === "#pricing") {
-      window.location.replace("/website/thietkewebsite");
-    } else if (window.location.hash === "#van-hanh") {
-      window.location.replace("/website/van-hanh-website");
-    }
-  }, []);
 
   const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
     setCheckoutPkg({
@@ -92,42 +85,6 @@ export default function WebsitePage() {
           onSubmit={() => setIsAuditOpen(true)}
           features={["Tốc độ", "SEO On-page", "UX / UI", "Khả năng chuyển đổi"]}
         />
-
-        <section className="brand-card flex flex-col gap-6 p-8 md:flex-row md:items-start md:p-10">
-          <div
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl"
-            style={{ backgroundColor: `${config.color}15`, color: config.color }}
-          >
-            <BookOpen size={28} />
-          </div>
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-2xl font-bold text-indigo-950">Hướng dẫn thiết kế website</h2>
-              <p className="mt-2 max-w-2xl text-sm text-slate-600">
-                Tài liệu chuyên sâu về giá, quy trình, SEO và các loại website — giúp bạn ra quyết định trước khi đầu tư.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { href: "/blog/thiet-ke-website", label: "Thiết kế website 2026" },
-                { href: "/blog/thiet-ke-website-la-gi", label: "Website là gì?" },
-                { href: "/blog/bao-gia-thiet-ke-website", label: "Báo giá" },
-                { href: "/blog/thiet-ke-website-chuan-seo", label: "Chuẩn SEO" },
-                { href: "/blog/thiet-ke-website-ban-hang", label: "Bán hàng" },
-                { href: "/blog/thiet-ke-website-thuong-mai-dien-tu", label: "TMĐT" },
-                { href: "/blog/thiet-ke-website-tron-goi", label: "Trọn gói" },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-800 transition-colors hover:border-indigo-400 hover:bg-indigo-50"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <div className="space-y-32">
           {/* Custom & Domain Section */}
@@ -167,46 +124,102 @@ export default function WebsitePage() {
             </button>
           </div>
 
-          <section className="scroll-mt-24">
-            <Link
-              href="/website/thietkewebsite"
-              className="brand-card group flex items-center justify-between gap-6 p-8 transition-all hover:-translate-y-0.5 md:p-10"
-            >
-              <div className="flex items-center gap-6">
-                <div
-                  className="flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110"
-                  style={{ backgroundColor: `${config.color}15`, color: config.color }}
-                >
-                  <BookOpen size={32} />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-indigo-950">Thiết kế website</h3>
-                  <p className="mt-1 text-sm text-slate-600">Landing chuyên nghiệp — tư vấn miễn phí, chuẩn SEO</p>
-                </div>
+          {/* THIẾT KẾ WEBSITE */}
+          <section id="pricing" className="space-y-16 scroll-mt-24">
+            <div className="text-center space-y-6">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
+                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
+                  Website Design
+                </span>
               </div>
-              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
-            </Link>
+              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+                <span style={{ color: config.color }}>Thiết kế</span> Website
+              </h2>
+              <p className="text-sm font-medium text-slate-500">Gói website chuẩn SEO — tư vấn miễn phí</p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
+                <div
+                  key={pkg.id}
+                  className={`platform-pricing-card ${i === 2 ? "platform-pricing-card--featured" : ""}`}
+                  style={i === 2 ? ({ ["--tw-ring-color" as string]: `${config.color}45` } as React.CSSProperties) : undefined}
+                >
+                  {i === 2 && (
+                    <div
+                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
+                      style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
+                    >
+                      <Sparkles size={12} /> Phổ biến
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col space-y-6">
+                    <div className="flex justify-center">
+                      <div
+                        className="flex h-16 w-16 items-center justify-center rounded-2xl"
+                        style={
+                          i === 2
+                            ? { backgroundColor: config.color, color: "#fff" }
+                            : { backgroundColor: `${config.color}15`, color: config.color }
+                        }
+                      >
+                        <LayoutTemplate size={32} />
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-center">
+                      <h3 className="text-xl font-bold text-indigo-950">{pkg.name}</h3>
+                      <p className="text-3xl font-bold" style={{ color: config.color }}>
+                        {formatPriceVnd(pkg.price)}
+                      </p>
+                    </div>
+                    <ul className="flex-1 space-y-4">
+                      {pkg.works.map((feature, j) => (
+                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                          <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(pkg.name, formatPriceVnd(pkg.price), "Thiết kế Website")}
+                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg hover:brightness-105"
+                        style={{ background: `linear-gradient(135deg, #312E81, ${config.color})` }}
+                      >
+                        Tư vấn ngay
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(pkg.name, formatPriceVnd(pkg.price), "Thiết kế Website")}
+                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
+                      >
+                        <MessageSquare size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
 
-          <section className="scroll-mt-24">
-            <Link
-              href="/website/van-hanh-website"
-              className="brand-card group flex items-center justify-between gap-6 p-8 transition-all hover:-translate-y-0.5 md:p-10"
-            >
-              <div className="flex items-center gap-6">
-                <div
-                  className="flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110"
-                  style={{ backgroundColor: `${config.color}15`, color: config.color }}
-                >
-                  <Server size={32} />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-indigo-950">Vận hành website</h3>
-                  <p className="mt-1 text-sm text-slate-600">Hosting, bảo mật, backup — 9 gói từ 2.500.000đ/năm</p>
-                </div>
+          {/* VẬN HÀNH WEBSITE */}
+          <section id="van-hanh" className="space-y-16 scroll-mt-24">
+            <div className="text-center space-y-6">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
+                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
+                  Managed Operations
+                </span>
               </div>
-              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
-            </Link>
+              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+                Gói <span style={{ color: config.color }}>vận hành</span> Website
+              </h2>
+              <p className="mx-auto mt-2 max-w-2xl text-slate-600">
+                Hosting, bảo mật, backup và hỗ trợ kỹ thuật — chọn mức phù hợp quy mô doanh nghiệp
+              </p>
+            </div>
+            <WebsiteOperationSection primaryColor={config.color} onConsult={handleOpenConsult} />
           </section>
 
           {/* CHĂM SÓC WEBSITE */}
