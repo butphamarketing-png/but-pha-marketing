@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import {
   ArrowRight,
   ChevronRight,
@@ -70,16 +71,6 @@ export default function ContactPageClient() {
   const logoSrc = "/logo.png";
   const mascotImage = settings?.mascotImage || "/mascot-home.png";
 
-  const navigation = [
-    { label: "Trang Chủ", href: "/" },
-    { label: "Giới Thiệu", href: "/gioi-thieu" },
-    { label: "Website", href: "/website" },
-    { label: "Fanpage", href: "/facebook" },
-    { label: "Google Maps", href: "/google-maps" },
-    { label: "Tin Tức", href: "/blog" },
-    { label: "Liên Hệ", href: "/lien-he" },
-  ];
-
   const serviceOptions = useMemo(() => {
     const names = services.map((service) => service.name).filter(Boolean);
     return names.length > 0
@@ -132,19 +123,9 @@ export default function ContactPageClient() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex">
-            {navigation.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`text-sm font-bold transition ${
-                  item.href === "/lien-he" ? "text-slate-900" : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden lg:block">
+            <SiteNavMenu tone="light" layout="horizontal" activeHref="/lien-he" />
+          </div>
 
           <div className="hidden items-center gap-3 lg:flex">
             <Link

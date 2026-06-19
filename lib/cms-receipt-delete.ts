@@ -8,6 +8,8 @@ import {
 } from "@/lib/cms-internal/db";
 import { eq, and, sql } from "drizzle-orm";
 import { refreshBillingPeriodPaid } from "@/lib/cms-billing-periods";
+import { cancelInvoice } from "@/lib/cms-invoices";
+import { AUTO_SYNC_INVOICE_NOTE_PREFIX } from "@/lib/cms-sync-invoices";
 
 export type DeleteReceiptResult =
   | { ok: true; deleted: typeof receiptsTable.$inferSelect }
@@ -27,17 +29,23 @@ async function unlinkReceiptFromInvoices(receiptId: number): Promise<DeleteRecei
 
   for (const link of links) {
     const [invoice] = await db
-      .select({ id: invoicesTable.id, status: invoicesTable.status })
+      .select({ id: invoicesTable.id, status: invoicesTable.status, notes: invoicesTable.notes })
       .from(invoicesTable)
       .where(eq(invoicesTable.id, link.invoiceId))
       .limit(1);
 
     if (invoice?.status === "issued") {
-      return {
-        ok: false,
-        status: 409,
-        error: "Không thể xóa: phiếu thu đã liên kết hóa đơn đã phát hành. Hủy HĐ trước hoặc sửa từ form Khách hàng.",
-      };
+      const isAutoSync = (invoice.notes ?? "").startsWith(AUTO_SYNC_INVOICE_NOTE_PREFIX);
+      if (isAutoSync) {
+        await cancelInvoice(link.invoiceId);
+      } else {
+        return {
+          ok: false,
+          status: 409,
+          error:
+            "Không thể xóa: phiếu thu đã liên kết hóa đơn đã xuất. Hủy HĐ trước hoặc sửa từ form Khách hàng.",
+        };
+      }
     }
   }
 

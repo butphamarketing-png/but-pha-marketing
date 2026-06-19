@@ -23,7 +23,7 @@ import {
   Workflow,
   X,
 } from "lucide-react";
-import { SiFacebook, SiMessenger } from "react-icons/si";
+import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
@@ -244,15 +244,7 @@ export default function HomePageClient() {
     return () => window.clearInterval(timer);
   }, [heroSlides.length]);
 
-  const navigation = [
-    { label: "Trang Chủ", href: "#hero" },
-    { label: "Giới Thiệu", href: "/gioi-thieu" },
-    { label: "Website", href: "/website" },
-    { label: "Facebook", href: "/facebook" },
-    { label: "Google Maps", href: "/google-maps" },
-    { label: "Tin Tức", href: "/blog" },
-    { label: "Liên Hệ", href: "/lien-he" },
-  ];
+  const headerNavTone = isScrolled ? "light" : "dark";
 
   const valuePillars = [
     {
@@ -387,18 +379,9 @@ export default function HomePageClient() {
               </button>
             </div>
 
-            <nav className="hidden items-center gap-10 lg:flex">
-              {navigation.map((item) => (
-                <Link 
-                  key={item.label} 
-                  href={item.href} 
-                  className={`relative text-sm font-semibold transition-all group ${isScrolled ? 'text-slate-600 hover:text-indigo-900' : 'text-white hover:text-violet-300'}`}
-                >
-                  {item.label}
-                  <span className={`absolute -bottom-2 left-0 h-px w-0 transition-all group-hover:w-full ${isScrolled ? 'bg-violet-600' : 'bg-violet-400'}`} />
-                </Link>
-              ))}
-            </nav>
+            <div className="hidden lg:block">
+              <SiteNavMenu tone={headerNavTone} layout="horizontal" />
+            </div>
 
             <div className="flex items-center gap-4">
               <button
@@ -419,17 +402,12 @@ export default function HomePageClient() {
                 exit={{ opacity: 0, height: 0 }}
                 className={`overflow-hidden border-t lg:hidden ${isScrolled ? "border-indigo-100 bg-white/98" : "border-white/10 bg-indigo-950/95"}`}
               >
-                <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${isScrolled ? "text-indigo-950 hover:bg-indigo-50" : "text-white hover:bg-white/10"}`}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                <div className="mx-auto max-w-7xl px-6 py-4">
+                <SiteNavMenu
+                  tone={isScrolled ? "light" : "dark"}
+                  layout="stack"
+                  onNavigate={() => setMobileMenuOpen(false)}
+                />
                   <button
                     type="button"
                     onClick={() => {
@@ -441,7 +419,7 @@ export default function HomePageClient() {
                   >
                     Tư vấn ngay
                   </button>
-                </nav>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

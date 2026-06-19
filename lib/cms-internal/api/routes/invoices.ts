@@ -3,6 +3,7 @@ import { db, invoicesTable, customersTable } from "@/lib/cms-internal/db";
 import { eq, sql, and, desc } from "drizzle-orm";
 import {
   cancelInvoice,
+  deleteInvoiceById,
   createInvoice,
   createInvoiceFromBillingPeriod,
   createInvoiceFromReceipt,
@@ -256,6 +257,18 @@ router.post("/invoices/:id/cancel", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(400).json({ error: err instanceof Error ? err.message : "Cancel failed" });
+  }
+});
+
+router.delete("/invoices/:id", async (req, res) => {
+  try {
+    await deleteInvoiceById(parseInt(req.params.id));
+    return res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    const message = err instanceof Error ? err.message : "Delete failed";
+    const status = message.includes("not found") ? 404 : 400;
+    return res.status(status).json({ error: message });
   }
 });
 

@@ -417,6 +417,22 @@ export async function cancelInvoice(invoiceId: number) {
   return enrichInvoice(updated);
 }
 
+export async function deleteInvoiceById(invoiceId: number) {
+  const [existing] = await db
+    .select()
+    .from(invoicesTable)
+    .where(eq(invoicesTable.id, invoiceId))
+    .limit(1);
+  if (!existing) throw new Error("Invoice not found");
+  if (existing.status === "issued") {
+    throw new Error("Hóa đơn đã xuất — hủy trước khi xóa.");
+  }
+
+  await db.delete(invoiceReceiptsTable).where(eq(invoiceReceiptsTable.invoiceId, invoiceId));
+  await db.delete(invoiceLinesTable).where(eq(invoiceLinesTable.invoiceId, invoiceId));
+  await db.delete(invoicesTable).where(eq(invoicesTable.id, invoiceId));
+}
+
 export async function buildInvoicePrintData(invoiceId: number): Promise<InvoicePrintData> {
   const [invoice] = await db
     .select()

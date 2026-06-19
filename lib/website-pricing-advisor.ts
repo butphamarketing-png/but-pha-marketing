@@ -1,21 +1,23 @@
 import {
   DOMAIN_COM_PRICE,
   formatPriceVnd,
-  getHostingPriceByGb,
-  HOSTING_PACKAGES,
+  getWebsiteOperationPackageById,
+  getWebsiteOperationPriceById,
   WEBSITE_BUILD_PACKAGES,
   WEBSITE_CARE_PACKAGES,
+  WEBSITE_OPERATION_PACKAGES,
   WEBSITE_RENOVATION,
+  type WebsiteOperationPackage,
 } from "./service-pricing";
 
 export type WebsiteStackRecommendation = {
   buildId: string;
   buildName: string;
   buildPrice: number;
-  hostingGb: number;
-  hostingId: string;
-  hostingLabel: string;
-  hostingPrice: number;
+  operationId: string;
+  operationName: string;
+  operationLabel: string;
+  operationPrice: number;
   careId: string;
   carePosts: number;
   carePrice: number;
@@ -28,32 +30,45 @@ export type WebsiteStackRecommendation = {
 type WebProfile = {
   preferredBuild: string;
   minBuild: string;
-  hostingBias: "light" | "standard" | "commerce" | "enterprise";
+  operationBias: "yeu" | "vua" | "manh";
   contentNeed: "low" | "medium" | "high";
 };
 
 const INDUSTRY_WEB_PROFILE: Record<string, WebProfile> = {
-  "health-beauty": { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "medium" },
-  fnb: { preferredBuild: "web-build-3", minBuild: "web-build-3", hostingBias: "light", contentNeed: "low" },
-  ecommerce: { preferredBuild: "web-build-9", minBuild: "web-build-6", hostingBias: "commerce", contentNeed: "high" },
-  "fashion-retail": { preferredBuild: "web-build-9", minBuild: "web-build-6", hostingBias: "commerce", contentNeed: "high" },
-  realestate: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "medium" },
-  education: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "high" },
-  hotel: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "medium" },
-  construction: { preferredBuild: "web-build-9", minBuild: "web-build-6", hostingBias: "standard", contentNeed: "medium" },
-  "professional-services": { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "light", contentNeed: "medium" },
-  automotive: { preferredBuild: "web-build-3", minBuild: "web-build-3", hostingBias: "light", contentNeed: "low" },
-  travel: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "high" },
-  fitness: { preferredBuild: "web-build-3", minBuild: "web-build-3", hostingBias: "light", contentNeed: "medium" },
-  events: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "medium" },
-  tech: { preferredBuild: "web-build-9", minBuild: "web-build-6", hostingBias: "enterprise", contentNeed: "high" },
-  pharmacy: { preferredBuild: "web-build-3", minBuild: "web-build-3", hostingBias: "light", contentNeed: "low" },
-  logistics: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "low" },
-  agriculture: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "commerce", contentNeed: "medium" },
-  default: { preferredBuild: "web-build-6", minBuild: "web-build-3", hostingBias: "standard", contentNeed: "medium" },
+  "health-beauty": { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
+  fnb: { preferredBuild: "web-build-3", minBuild: "web-build-3", operationBias: "yeu", contentNeed: "low" },
+  ecommerce: { preferredBuild: "web-build-9", minBuild: "web-build-6", operationBias: "vua", contentNeed: "high" },
+  "fashion-retail": { preferredBuild: "web-build-9", minBuild: "web-build-6", operationBias: "vua", contentNeed: "high" },
+  realestate: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
+  education: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "high" },
+  hotel: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
+  construction: { preferredBuild: "web-build-9", minBuild: "web-build-6", operationBias: "vua", contentNeed: "medium" },
+  "professional-services": { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "yeu", contentNeed: "medium" },
+  automotive: { preferredBuild: "web-build-3", minBuild: "web-build-3", operationBias: "yeu", contentNeed: "low" },
+  travel: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "high" },
+  fitness: { preferredBuild: "web-build-3", minBuild: "web-build-3", operationBias: "yeu", contentNeed: "medium" },
+  events: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
+  tech: { preferredBuild: "web-build-9", minBuild: "web-build-6", operationBias: "manh", contentNeed: "high" },
+  pharmacy: { preferredBuild: "web-build-3", minBuild: "web-build-3", operationBias: "yeu", contentNeed: "low" },
+  logistics: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "low" },
+  agriculture: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
+  default: { preferredBuild: "web-build-6", minBuild: "web-build-3", operationBias: "vua", contentNeed: "medium" },
 };
 
 const BUILD_ORDER = ["web-build-3", "web-build-6", "web-build-9", "web-build-12"];
+
+const OPERATION_BY_BUILD: Record<string, string> = {
+  "web-build-3": "web-ops-co-ban",
+  "web-build-6": "web-ops-tieu-chuan",
+  "web-build-9": "web-ops-chuyen-nghiep",
+  "web-build-12": "web-ops-phat-trien",
+};
+
+const OPERATION_BIAS_DEFAULT: Record<WebProfile["operationBias"], string> = {
+  yeu: "web-ops-tieu-chuan",
+  vua: "web-ops-chuyen-nghiep",
+  manh: "web-ops-phat-trien",
+};
 
 function buildIndex(id: string) {
   return BUILD_ORDER.indexOf(id);
@@ -71,20 +86,6 @@ function lowerBuild(id: string, steps: number) {
   return BUILD_ORDER[Math.max(0, idx - steps)];
 }
 
-const HOSTING_FLOOR_BY_BUILD: Record<string, number> = {
-  "web-build-3": 3,
-  "web-build-6": 7,
-  "web-build-9": 16,
-  "web-build-12": 30,
-};
-
-const HOSTING_BIAS_FLOOR: Record<WebProfile["hostingBias"], number> = {
-  light: 3,
-  standard: 5,
-  commerce: 10,
-  enterprise: 20,
-};
-
 function getBuildPkg(id: string) {
   return WEBSITE_BUILD_PACKAGES.find((p) => p.id === id) ?? WEBSITE_BUILD_PACKAGES[0];
 }
@@ -97,16 +98,23 @@ function clampBuildId(id: string) {
   return BUILD_ORDER.includes(id) ? id : "web-build-3";
 }
 
-function pickHostingGb(buildId: string, webProfile: WebProfile, scaleTier: number): number {
-  const floor = Math.max(HOSTING_FLOOR_BY_BUILD[buildId] ?? 3, HOSTING_BIAS_FLOOR[webProfile.hostingBias]);
-  let target = floor;
-  if (scaleTier >= 2) target = Math.max(target, 20);
-  else if (scaleTier >= 1) target = Math.max(target, 10);
-  if (webProfile.hostingBias === "enterprise") target = Math.max(target, 30);
-  if (webProfile.hostingBias === "commerce" && buildId !== "web-build-3") target = Math.max(target, 16);
+function pickOperationPackage(buildId: string, webProfile: WebProfile, scaleTier: number): WebsiteOperationPackage {
+  let targetId = OPERATION_BY_BUILD[buildId] ?? OPERATION_BIAS_DEFAULT[webProfile.operationBias];
 
-  const match = HOSTING_PACKAGES.find((p) => p.gb >= target);
-  return match?.gb ?? HOSTING_PACKAGES[HOSTING_PACKAGES.length - 1].gb;
+  if (scaleTier >= 2) {
+    const idx = WEBSITE_OPERATION_PACKAGES.findIndex((p) => p.id === targetId);
+    targetId = WEBSITE_OPERATION_PACKAGES[Math.min(WEBSITE_OPERATION_PACKAGES.length - 1, idx + 2)]?.id ?? targetId;
+  } else if (scaleTier >= 1) {
+    const idx = WEBSITE_OPERATION_PACKAGES.findIndex((p) => p.id === targetId);
+    targetId = WEBSITE_OPERATION_PACKAGES[Math.min(WEBSITE_OPERATION_PACKAGES.length - 1, idx + 1)]?.id ?? targetId;
+  }
+
+  if (webProfile.operationBias === "manh" && buildId !== "web-build-3") {
+    const manhMin = WEBSITE_OPERATION_PACKAGES.find((p) => p.tier === "manh");
+    if (manhMin) targetId = manhMin.id;
+  }
+
+  return getWebsiteOperationPackageById(targetId) ?? WEBSITE_OPERATION_PACKAGES[2];
 }
 
 function pickWebsiteBuildId(
@@ -159,14 +167,6 @@ function pickWebsiteCareId(
   return "web-care-10";
 }
 
-export function hostingIdFromGb(gb: number) {
-  return `web-data-${gb}`;
-}
-
-export function getHostingLabel(gb: number) {
-  return HOSTING_PACKAGES.find((p) => p.gb === gb)?.label ?? `${gb}GB hosting/năm`;
-}
-
 export function recommendWebsiteStack(input: {
   profileId: string;
   businessGoal: string;
@@ -188,9 +188,7 @@ export function recommendWebsiteStack(input: {
     input.budgetTier,
   );
   const build = getBuildPkg(buildId);
-  const hostingGb = pickHostingGb(buildId, webProfile, input.scaleTier);
-  const hostingLabel = getHostingLabel(hostingGb);
-  const hostingPrice = getHostingPriceByGb(hostingGb);
+  const operation = pickOperationPackage(buildId, webProfile, input.scaleTier);
   const careId = pickWebsiteCareId(webProfile, input.tier, input.businessGoal, input.budgetTier);
   const care = getCarePkg(careId);
 
@@ -209,24 +207,24 @@ export function recommendWebsiteStack(input: {
   }
 
   reasons.push(
-    `Hosting ${hostingGb}GB/năm (${formatPriceVnd(hostingPrice)}) — ${hostingLabel.toLowerCase()}, khớp bảng slider /website.`,
+    `Vận hành "${operation.name}" (${formatPriceVnd(operation.price)}/năm) — khớp bảng gói vận hành /website.`,
   );
 
   reasons.push(
     `Chăm sóc ${care.posts} bài/tháng (${formatPriceVnd(care.price)}) — ${webProfile.contentNeed === "high" ? "ngành cần content SEO đều" : "duy trì hiện diện Google ổn định"}.`,
   );
 
-  const firstYearSetup = build.price + DOMAIN_COM_PRICE + hostingPrice;
+  const firstYearSetup = build.price + DOMAIN_COM_PRICE + operation.price;
   const monthlyRecurring = care.price;
 
   return {
     buildId,
     buildName: build.name,
     buildPrice: build.price,
-    hostingGb,
-    hostingId: hostingIdFromGb(hostingGb),
-    hostingLabel,
-    hostingPrice,
+    operationId: operation.id,
+    operationName: operation.name,
+    operationLabel: operation.name,
+    operationPrice: operation.price,
     careId,
     carePosts: care.posts,
     carePrice: care.price,
@@ -238,7 +236,7 @@ export function recommendWebsiteStack(input: {
 }
 
 export function buildWebsiteStackItemIds(stack: WebsiteStackRecommendation) {
-  return [stack.buildId, "web-domain-com", stack.hostingId, stack.careId];
+  return [stack.buildId, "web-domain-com", stack.operationId, stack.careId];
 }
 
 export function recommendWebsiteCareOnly(input: {
@@ -256,4 +254,17 @@ export function recommendWebsiteCareOnly(input: {
     carePrice: care.price,
     reason: `Đã có Website → cải tạo giao diện ${formatPriceVnd(WEBSITE_RENOVATION.price)} (một lần, khớp /website) + chăm sóc ${care.posts} bài/th (${formatPriceVnd(care.price)}).`,
   };
+}
+
+/** @deprecated use operationId */
+export function hostingIdFromGb(_gb: number) {
+  return "web-ops-tieu-chuan";
+}
+
+export function getHostingLabel(_gb: number) {
+  return getWebsiteOperationPackageById("web-ops-tieu-chuan")?.name ?? "Tiêu Chuẩn";
+}
+
+export function getHostingPriceByGb(gb: number) {
+  return getWebsiteOperationPriceById(hostingIdFromGb(gb));
 }

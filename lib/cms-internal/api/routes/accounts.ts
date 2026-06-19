@@ -7,7 +7,7 @@ import {
   expensesTable,
   suppliersTable,
 } from "@/lib/cms-internal/db";
-import { eq, sql, inArray } from "drizzle-orm";
+import { eq, sql, inArray, desc } from "drizzle-orm";
 import { ListAccountsReceivableQueryParams, ListAccountsPayableQueryParams } from "@/lib/cms-internal/api-zod";
 
 const router = Router();
@@ -27,42 +27,72 @@ router.get("/accounts-receivable", async (req, res) => {
   const { status, customerId, page = 1, limit = 20 } = query.data;
   const offset = (page - 1) * limit;
 
-  const rows = await db
+  const contractRows = await db
     .select({
-      id: billingPeriodsTable.id,
-      contractId: billingPeriodsTable.contractId,
+      contractId: contractsTable.id,
       contractCode: contractsTable.code,
-      customerId: billingPeriodsTable.customerId,
+      customerId: contractsTable.customerId,
       customerName: customersTable.name,
-      amountDue: billingPeriodsTable.amountDue,
-      amountPaid: billingPeriodsTable.amountPaid,
-      dueDate: billingPeriodsTable.dueDate,
-      periodStatus: billingPeriodsTable.status,
-      label: billingPeriodsTable.label,
+      totalValue: contractsTable.totalValue,
+      paidAmount: contractsTable.paidAmount,
+      dueDate: contractsTable.dueDate,
     })
-    .from(billingPeriodsTable)
-    .leftJoin(customersTable, eq(billingPeriodsTable.customerId, customersTable.id))
-    .leftJoin(contractsTable, eq(billingPeriodsTable.contractId, contractsTable.id))
-    .where(inArray(billingPeriodsTable.status, ["pending", "partial", "overdue", "paid"]))
-    .orderBy(billingPeriodsTable.dueDate);
+    .from(contractsTable)
+    .leftJoin(customersTable, eq(contractsTable.customerId, customersTable.id))
+    .where(eq(contractsTable.status, "active"))
+    .orderBy(contractsTable.dueDate);
 
-  const items = rows
+  const contractIds = contractRows.map((row) => row.contractId);
+  const periodRows =
+    contractIds.length > 0
+      ? await db
+          .select({
+            id: billingPeriodsTable.id,
+            contractId: billingPeriodsTable.contractId,
+            periodStatus: billingPeriodsTable.status,
+            label: billingPeriodsTable.label,
+          })
+          .from(billingPeriodsTable)
+          .where(inArray(billingPeriodsTable.contractId, contractIds))
+          .orderBy(desc(billingPeriodsTable.id))
+      : [];
+
+  const latestPeriodByContract = new Map<number, (typeof periodRows)[number]>();
+  for (const period of periodRows) {
+    if (!latestPeriodByContract.has(period.contractId)) {
+      latestPeriodByContract.set(period.contractId, period);
+    }
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  const items = contractRows
     .map((row) => {
-      const totalContractValue = parseFloat(row.amountDue ?? "0");
-      const paidAmount = parseFloat(row.amountPaid ?? "0");
-      const remainingAmount = Math.max(0, totalContractValue - paidAmount);
-      const arStatus = mapReceivableStatus(row.periodStatus ?? "pending", remainingAmount);
+      const totalContractValue = parseFloat(row.totalValue ?? "0");
+      const paidAmount = parseFloat(row.paidAmount ?? "0");
+      const remainingAmount = Math.max(0, Math.round((totalContractValue - paidAmount) * 100) / 100);
+      const period = latestPeriodByContract.get(row.contractId);
+      const dueDate = row.dueDate ?? today;
+      const periodStatus =
+        remainingAmount <= 0
+          ? "paid"
+          : dueDate < today
+            ? "overdue"
+            : paidAmount > 0
+              ? "partial"
+              : "pending";
+      const arStatus = mapReceivableStatus(periodStatus, remainingAmount);
       return {
-        billingPeriodId: row.id,
+        billingPeriodId: period?.id ?? null,
         customerId: row.customerId,
         customerName: row.customerName ?? "Unknown",
         contractId: row.contractId,
         contractCode: row.contractCode ?? "—",
-        periodLabel: row.label,
+        periodLabel: period?.label ?? null,
         totalContractValue,
         paidAmount,
         remainingAmount,
-        dueDate: row.dueDate,
+        dueDate,
         status: arStatus,
       };
     })

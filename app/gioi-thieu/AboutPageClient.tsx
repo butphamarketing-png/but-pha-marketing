@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -119,16 +120,6 @@ export default function AboutPageClient() {
     "Báo cáo minh bạch",
   ];
 
-  const navigation = [
-    { label: "Trang chủ", href: "/" },
-    { label: "Giới thiệu", href: "/gioi-thieu" },
-    { label: "Website", href: "/website" },
-    { label: "Facebook", href: "/facebook" },
-    { label: "Google Maps", href: "/google-maps" },
-    { label: "Tin tức", href: "/blog" },
-    { label: "Liên hệ", href: "/lien-he" },
-  ];
-
   const scrollToConsultation = () => {
     playClickSound();
     window.location.href = "/lien-he";
@@ -147,22 +138,9 @@ export default function AboutPageClient() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-8 lg:flex">
-            {navigation.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`relative text-sm font-semibold transition-colors ${
-                  item.href === "/gioi-thieu" ? "text-violet-600" : "text-slate-600 hover:text-indigo-900"
-                }`}
-              >
-                {item.label}
-                {item.href === "/gioi-thieu" ? (
-                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-violet-600" />
-                ) : null}
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden lg:block">
+            <SiteNavMenu tone="light" layout="horizontal" activeHref="/gioi-thieu" />
+          </div>
 
           <div className="hidden items-center gap-3 lg:flex">
             <button type="button" onClick={scrollToConsultation} className="brand-btn-primary">

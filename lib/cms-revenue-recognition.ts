@@ -20,7 +20,7 @@ export function resolveBillingCycleFromRecord(record: Pick<CustomerRecord, "plat
   if (pkg?.period === "year") return "year";
   if (pkg?.period === "month") return "month";
   if (record.service === "thiet-ke") return "once";
-  if (record.service === "domain" || record.service === "hosting") return "year";
+  if (record.service === "domain" || record.service === "hosting" || record.service === "van-hanh") return "year";
   return "month";
 }
 

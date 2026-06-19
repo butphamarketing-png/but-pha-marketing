@@ -1,4 +1,8 @@
 import type { CustomerPaymentMethod } from "@/lib/customer-payment";
+import {
+  LEGACY_HOSTING_SERVICE_PACKAGES,
+  WEBSITE_OPERATION_SERVICE_PACKAGES,
+} from "@/lib/service-pricing";
 
 export const CUSTOMER_RECORDS_KEY = "customer_records";
 
@@ -62,6 +66,7 @@ export const PLATFORM_SERVICES: Record<CustomerPlatform, { key: string; label: s
   website: [
     { key: "domain", label: "Domain" },
     { key: "hosting", label: "Hosting" },
+    { key: "van-hanh", label: "Vận Hành" },
     { key: "thiet-ke", label: "Thiết Kế" },
     { key: "cham-soc", label: "Chăm Sóc" },
     { key: "quang-cao", label: "Quảng Cáo" },
@@ -89,6 +94,7 @@ export const SERVICE_CONTRACT_SUFFIX: Record<CustomerPlatform, Record<string, st
   website: {
     domain: "D",
     hosting: "H",
+    "van-hanh": "V",
     "thiet-ke": "W",
     "cham-soc": "C",
     "quang-cao": "Q",
@@ -193,23 +199,8 @@ export const PLATFORM_SERVICE_PACKAGES: Record<CustomerPlatform, Record<string, 
       { key: "asia", label: ".asia", price: 500_000, period: "year" },
       { key: "edu-vn", label: ".edu.vn", price: 650_000, period: "year" },
     ],
-    hosting: [
-      { key: "2gb", label: "2GB", price: 2_388_000, period: "year" },
-      { key: "3gb", label: "3GB", price: 3_348_000, period: "year" },
-      { key: "5gb", label: "5GB", price: 4_872_000, period: "year" },
-      { key: "7gb", label: "7GB", price: 6_000_000, period: "year" },
-      { key: "8gb", label: "8GB", price: 6_504_000, period: "year" },
-      { key: "10gb", label: "10GB", price: 7_200_000, period: "year" },
-      { key: "16gb", label: "16GB", price: 10_080_000, period: "year" },
-      { key: "20gb", label: "20GB", price: 12_000_000, period: "year" },
-      { key: "30gb", label: "30GB", price: 16_080_000, period: "year" },
-      { key: "50gb", label: "50GB", price: 24_000_000, period: "year" },
-      { key: "60gb", label: "60GB", price: 28_008_000, period: "year" },
-      { key: "70gb", label: "70GB", price: 32_040_000, period: "year" },
-      { key: "80gb", label: "80GB", price: 36_000_000, period: "year" },
-      { key: "90gb", label: "90GB", price: 39_960_000, period: "year" },
-      { key: "100gb", label: "100GB", price: 43_200_000, period: "year" },
-    ],
+    hosting: [...LEGACY_HOSTING_SERVICE_PACKAGES],
+    "van-hanh": [...WEBSITE_OPERATION_SERVICE_PACKAGES],
     "thiet-ke": [],
     "cham-soc": [
       { key: "cs-web-1", label: "CS Web 1", price: 1_000_000, period: "month" },
@@ -343,7 +334,7 @@ export function addYears(dateStr: string | null, years: number): string {
 }
 
 export function computeExpiryForService(service: string, registeredAt: string | null): string | null {
-  if (service === "domain" || service === "hosting") {
+  if (service === "domain" || service === "hosting" || service === "van-hanh") {
     return addYears(registeredAt, 1);
   }
   if (service === "thiet-ke") {
@@ -358,7 +349,7 @@ export function resolveExpiryOnServiceChange(
   currentExpiry: string | null,
 ): string | null {
   if (isExpiryPermanent(service)) return null;
-  if (service === "domain" || service === "hosting") {
+  if (service === "domain" || service === "hosting" || service === "van-hanh") {
     return computeExpiryForService(service, registeredAt);
   }
   if (isExpiryEditable(service)) {

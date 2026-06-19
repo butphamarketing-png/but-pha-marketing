@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
-import { StorageSlider } from "@/components/shared/StorageSlider";
+import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen } from "lucide-react";
+import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
@@ -25,9 +25,11 @@ const config: PlatformConfig = {
   hidePricingHeader: true,
   customSections: [
     { id: "audit", label: "Chuẩn đoán Website" },
-    { id: "pricing", label: "Bảng giá dịch vụ" },
+    { id: "pricing", label: "Thiết kế Website" },
+    { id: "van-hanh", label: "Vận hành Website" },
+    { id: "domain", label: "Tên miền" },
     { id: "care", label: "Chăm sóc Website" },
-    { id: "storage", label: "Hạ tầng lưu trữ" },
+    { id: "quang-cao", label: "Quảng cáo Website" },
     { id: "contact", label: "Liên hệ tư vấn" },
   ],
   tabs: [
@@ -134,7 +136,7 @@ export default function WebsitePage() {
 
         <div className="space-y-32">
           {/* Custom & Domain Section */}
-          <div className="grid gap-6 md:grid-cols-2">
+          <div id="domain" className="grid gap-6 scroll-mt-24 md:grid-cols-2">
             {/* Custom Website Button */}
             <button
               onClick={() => setShowCustomModal(true)}
@@ -249,20 +251,115 @@ export default function WebsitePage() {
             </div>
           </section>
 
-          {/* Storage Slider Section */}
-          <div id="storage" className="space-y-12 scroll-mt-24">
+          {/* GÓI VẬN HÀNH WEBSITE */}
+          <section id="van-hanh" className="space-y-16 scroll-mt-24">
             <div className="text-center space-y-6">
               <div className="flex flex-col items-center gap-3">
                 <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>Infrastructure</span>
+                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
+                  Managed Operations
+                </span>
               </div>
-              <h3 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                Dung lượng <span style={{ color: config.color }}>lưu trữ</span>
-              </h3>
-              <p className="mx-auto mt-2 max-w-2xl text-slate-600">Kéo thanh trượt để dự toán hạ tầng phù hợp với quy mô doanh nghiệp</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+                Gói <span style={{ color: config.color }}>vận hành</span> Website
+              </h2>
+              <p className="mx-auto mt-2 max-w-2xl text-slate-600">
+                Hosting, bảo mật, backup và hỗ trợ kỹ thuật — chọn mức phù hợp quy mô doanh nghiệp
+              </p>
             </div>
-            <StorageSlider primaryColor={config.color} />
-          </div>
+            <WebsiteOperationSection primaryColor={config.color} onConsult={handleOpenConsult} />
+          </section>
+
+          {/* QUẢNG CÁO WEBSITE */}
+          <section id="quang-cao" className="space-y-16 scroll-mt-24">
+            <div className="text-center space-y-6">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
+                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
+                  Advertising
+                </span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+                <span style={{ color: config.color }}>Quảng cáo</span> Website
+              </h2>
+              <p className="text-sm font-medium text-slate-500">Google Ads &amp; Meta Ads — trỏ về website, đo chuyển đổi chính xác</p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2">
+              {[
+                {
+                  title: "Ngân sách dưới 10.000.000đ",
+                  price: "1.000.000đ",
+                  note: "/ tháng (chưa gồm ngân sách ads)",
+                  icon: Target,
+                  features: [
+                    "Thiết lập chiến dịch Google / Meta",
+                    "Landing page & pixel tracking",
+                    "Nghiên cứu từ khóa mục tiêu",
+                    "Theo dõi & tối ưu hàng tuần",
+                    "Báo cáo hiệu quả",
+                  ],
+                },
+                {
+                  title: "Ngân sách trên 10.000.000đ",
+                  price: "2.000.000đ",
+                  note: "/ tháng (chưa gồm ngân sách ads)",
+                  icon: Zap,
+                  features: [
+                    "Tối ưu chiến dịch chuyên sâu",
+                    "A/B test landing & creative",
+                    "Remarketing đa kênh",
+                    "Tối ưu CPA / ROAS",
+                    "Báo cáo & đề xuất chiến lược",
+                  ],
+                },
+              ].map((ads, i) => (
+                <div key={i} className="platform-pricing-card p-10">
+                  <div className="flex flex-1 flex-col">
+                    <div className="mb-8 flex items-start justify-between">
+                      <div
+                        className="flex h-16 w-16 items-center justify-center rounded-2xl text-white shadow-lg"
+                        style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
+                      >
+                        <ads.icon size={32} />
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold" style={{ color: config.color }}>
+                          {ads.price}
+                        </p>
+                        <p className="text-[10px] font-medium text-slate-500">{ads.note}</p>
+                      </div>
+                    </div>
+                    <h3 className="mb-6 text-2xl font-bold text-indigo-950">{ads.title}</h3>
+                    <ul className="mb-10 flex-1 space-y-4">
+                      {ads.features.map((f, j) => (
+                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
+                          <Check size={16} style={{ color: config.color }} /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-4 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
+                        className="flex-1 rounded-2xl py-4 text-xs font-semibold text-white shadow-lg transition-all hover:brightness-105"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        Đăng ký quảng cáo
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
+                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
+                      >
+                        <MessageSquare size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
 
