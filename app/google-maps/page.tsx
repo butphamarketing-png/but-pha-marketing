@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Check, Search, MessageSquare, Target, Zap, Sparkles, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
+import { Check, Search, Target, Zap, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
+import { PricingTierCard } from "@/components/shared/PricingTierCard";
+import { GOOGLE_MAPS_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
+
+const GM_ICONS = [Wrench, Building2, Star] as const;
 
 const config: PlatformConfig = {
   name: "Google Maps",
@@ -89,68 +93,25 @@ export default function GoogleMapsPage() {
             <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
-          <PackageCarousel accent={config.color} itemCount={3} desktopCols={3}>
-            {[
-              { 
-                title: "CẢI TẠO", 
-                price: "300.000đ", 
-                icon: Wrench,
-                features: ["Tối ưu thông tin", "Sửa danh mục", "Tối ưu hình ảnh cơ bản"] 
-              },
-              { 
-                title: "XÂY DỰNG", 
-                price: "600.000đ", 
-                icon: Building2,
-                features: ["Tạo Google Maps", "Xác minh doanh nghiệp", "Setup đầy đủ thông tin"] 
-              },
-              { 
-                title: "TỐI ƯU", 
-                price: "900.000đ", 
-                icon: Star,
-                bestSeller: true,
-                features: ["Tối ưu SEO Maps", "Viết mô tả chuẩn", "Tối ưu hiển thị tìm kiếm"] 
-              }
-            ].map((pkg, i) => (
-              <div key={i} className={`platform-pricing-card ${pkg.bestSeller ? "platform-pricing-card--featured border-orange-300 ring-orange-200/70" : ""}`}>
-                {pkg.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-orange-600 px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg shadow-orange-600/25">
-                    <Sparkles size={12} /> Lựa chọn tốt
-                  </div>
-                )}
-                <div className="flex flex-1 flex-col space-y-6">
-                  <div className="flex justify-center">
-                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${pkg.bestSeller ? "bg-orange-600 text-white shadow-lg shadow-orange-600/20" : "bg-orange-50 text-orange-600"}`}>
-                      <pkg.icon size={32} />
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-center">
-                    <h3 className="text-xl font-bold text-indigo-950">{pkg.title}</h3>
-                    <p className="text-3xl font-bold text-orange-600">{pkg.price}</p>
-                  </div>
-                  <ul className="flex-1 space-y-4">
-                    {pkg.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
-                        <Check size={16} className="flex-shrink-0 text-orange-600" /> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex gap-3 pt-8">
-                    <button 
-                      onClick={() => handleOpenConsult(pkg.title, pkg.price, "Gói Google Maps")}
-                      className="flex-1 rounded-2xl bg-orange-600 py-3.5 text-xs font-semibold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-500"
-                    >
-                      Đăng ký ngay
-                    </button>
-                    <button 
-                      onClick={() => handleOpenConsult(pkg.title, pkg.price, "Gói Google Maps")}
-                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
-                    >
-                      <MessageSquare size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <PackageCarousel accent={config.color} itemCount={GOOGLE_MAPS_PACKAGES.length} desktopCols={3}>
+            {GOOGLE_MAPS_PACKAGES.map((pkg, i) => {
+              const priceStr = formatPriceVnd(pkg.price);
+              return (
+                <PricingTierCard
+                  key={pkg.id}
+                  accent={config.color}
+                  title={pkg.name}
+                  price={priceStr}
+                  features={pkg.works}
+                  icon={GM_ICONS[i]}
+                  featured={i === 2}
+                  featuredLabel="Lựa chọn tốt"
+                  ctaLabel="Đăng ký ngay"
+                  onCta={() => handleOpenConsult(pkg.name, priceStr, "Gói Google Maps")}
+                  onSecondaryCta={() => handleOpenConsult(pkg.name, priceStr, "Gói Google Maps")}
+                />
+              );
+            })}
           </PackageCarousel>
         </section>
 
@@ -165,25 +126,24 @@ export default function GoogleMapsPage() {
           <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
             {[
               {
-                title: "GÓI CƠ BẢN",
+                title: "Gói cơ bản",
                 icon: Target,
-                bestSeller: true,
-                note: "(Ngân sách dưới 10 triệu)",
+                featured: true,
+                note: "Ngân sách dưới 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)",
                 features: [
                   "Setup chiến dịch Google Maps",
                   "Tối ưu hiển thị địa điểm trên Google",
                   "Nghiên cứu từ khóa tìm kiếm khách hàng",
                   "Target đúng khu vực (bán kính / thành phố)",
                   "Theo dõi & tối ưu quảng cáo mỗi ngày",
-                  "Báo cáo hiệu quả định kỳ"
+                  "Báo cáo hiệu quả định kỳ",
                 ],
                 price: "1.000.000đ",
-                fee: "/ tháng (chưa bao gồm ngân sách quảng cáo)"
               },
               {
-                title: "GÓI NÂNG CAO",
+                title: "Gói nâng cao",
                 icon: Zap,
-                note: "(Ngân sách từ 10 triệu trở lên)",
+                note: "Ngân sách từ 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)",
                 features: [
                   "Setup chiến dịch chuyên sâu Google Maps",
                   "Tối ưu từ khóa + vị trí hiển thị TOP",
@@ -191,55 +151,26 @@ export default function GoogleMapsPage() {
                   "Remarketing (bám đuổi khách hàng)",
                   "Tối ưu chi phí – tăng chuyển đổi",
                   "Theo dõi & tối ưu liên tục",
-                  "Báo cáo chi tiết + đề xuất chiến lược"
+                  "Báo cáo chi tiết + đề xuất chiến lược",
                 ],
                 price: "2.000.000đ",
-                fee: "/ tháng (chưa bao gồm ngân sách quảng cáo)"
-              }
-            ].map((ads, i) => (
-              <div key={i} className={`platform-pricing-card p-10 ${ads.bestSeller ? "platform-pricing-card--featured border-orange-300 ring-orange-200/70" : ""}`}>
-                {ads.bestSeller && (
-                  <div className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-orange-600 px-4 py-1.5 text-[10px] font-semibold text-white shadow-lg shadow-orange-600/25">
-                    <Sparkles size={12} /> Bán chạy
-                  </div>
-                )}
-                <div className="flex flex-1 flex-col">
-                  <div className="mb-8 flex items-start justify-between">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-600 text-white shadow-lg shadow-orange-600/20">
-                      <ads.icon size={32} />
-                    </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-orange-600">{ads.price}</p>
-                      <p className="text-[10px] font-medium text-slate-500">{ads.fee}</p>
-                    </div>
-                  </div>
-                  <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-indigo-950">{ads.title}</h3>
-                    <p className="text-sm font-medium text-orange-600">{ads.note}</p>
-                  </div>
-                  <ul className="mb-10 flex-1 space-y-4">
-                    {ads.features.map((f, j) => (
-                      <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
-                        <Check size={16} className="text-orange-600" /> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex gap-4 pt-4">
-                    <button 
-                      onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                      className="flex-1 rounded-2xl bg-orange-600 py-4 text-xs font-semibold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-500"
-                    >
-                      Đăng ký quảng cáo
-                    </button>
-                    <button 
-                      onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                      className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
-                    >
-                      <MessageSquare size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              },
+            ].map((ads) => (
+              <PricingTierCard
+                key={ads.title}
+                accent={config.color}
+                title={ads.title}
+                price={ads.price}
+                priceNote={ads.note}
+                features={ads.features}
+                icon={ads.icon}
+                featured={ads.featured}
+                featuredLabel="Bán chạy"
+                variant="ads"
+                ctaLabel="Đăng ký quảng cáo"
+                onCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
+                onSecondaryCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
+              />
             ))}
           </PackageCarousel>
         </section>

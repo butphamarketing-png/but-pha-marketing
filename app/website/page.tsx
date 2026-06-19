@@ -5,9 +5,10 @@ import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/sh
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
+import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, LayoutTemplate, Target, Zap } from "lucide-react";
+import { Settings, ChevronRight, Globe, FileText, LayoutTemplate, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
@@ -141,66 +142,23 @@ export default function WebsitePage() {
             </div>
 
             <PackageCarousel accent={config.color} itemCount={WEBSITE_BUILD_PACKAGES.length} desktopCols={4}>
-              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
-                <div
-                  key={pkg.id}
-                  className={`platform-pricing-card ${i === 2 ? "platform-pricing-card--featured" : ""}`}
-                  style={i === 2 ? ({ ["--tw-ring-color" as string]: `${config.color}45` } as React.CSSProperties) : undefined}
-                >
-                  {i === 2 && (
-                    <div
-                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
-                      style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
-                    >
-                      <Sparkles size={12} /> Phổ biến
-                    </div>
-                  )}
-                  <div className="flex flex-1 flex-col space-y-6">
-                    <div className="flex justify-center">
-                      <div
-                        className="flex h-16 w-16 items-center justify-center rounded-2xl"
-                        style={
-                          i === 2
-                            ? { backgroundColor: config.color, color: "#fff" }
-                            : { backgroundColor: `${config.color}15`, color: config.color }
-                        }
-                      >
-                        <LayoutTemplate size={32} />
-                      </div>
-                    </div>
-                    <div className="space-y-2 text-center">
-                      <h3 className="text-xl font-bold text-indigo-950">{pkg.name}</h3>
-                      <p className="text-3xl font-bold" style={{ color: config.color }}>
-                        {formatPriceVnd(pkg.price)}
-                      </p>
-                    </div>
-                    <ul className="flex-1 space-y-4">
-                      {pkg.works.map((feature, j) => (
-                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
-                          <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex gap-3 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(pkg.name, formatPriceVnd(pkg.price), "Thiết kế Website")}
-                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg hover:brightness-105"
-                        style={{ background: `linear-gradient(135deg, #312E81, ${config.color})` }}
-                      >
-                        Tư vấn ngay
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(pkg.name, formatPriceVnd(pkg.price), "Thiết kế Website")}
-                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
-                      >
-                        <MessageSquare size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => {
+                const priceStr = formatPriceVnd(pkg.price);
+                return (
+                  <PricingTierCard
+                    key={pkg.id}
+                    accent={config.color}
+                    title={pkg.name}
+                    price={priceStr}
+                    features={pkg.works}
+                    icon={LayoutTemplate}
+                    featured={i === 2}
+                    ctaLabel="Tư vấn ngay"
+                    onCta={() => handleOpenConsult(pkg.name, priceStr, "Thiết kế Website")}
+                    onSecondaryCta={() => handleOpenConsult(pkg.name, priceStr, "Thiết kế Website")}
+                  />
+                );
+              })}
             </PackageCarousel>
           </section>
 
@@ -239,66 +197,25 @@ export default function WebsitePage() {
             </div>
 
             <PackageCarousel accent={config.color} itemCount={WEBSITE_CARE_PACKAGES.length} desktopCols={3}>
-              {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
-                <div
-                  key={pkg.id}
-                  className={`platform-pricing-card ${i === 1 ? "platform-pricing-card--featured" : ""}`}
-                  style={i === 1 ? ({ ["--tw-ring-color" as string]: `${config.color}45` } as React.CSSProperties) : undefined}
-                >
-                  {i === 1 && (
-                    <div
-                      className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
-                      style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
-                    >
-                      <Sparkles size={12} /> Phổ biến
-                    </div>
-                  )}
-                  <div className="flex flex-1 flex-col space-y-6">
-                    <div className="flex justify-center">
-                      <div
-                        className="flex h-16 w-16 items-center justify-center rounded-2xl"
-                        style={
-                          i === 1
-                            ? { backgroundColor: config.color, color: "#fff" }
-                            : { backgroundColor: `${config.color}15`, color: config.color }
-                        }
-                      >
-                        <FileText size={32} />
-                      </div>
-                    </div>
-                    <div className="space-y-2 text-center">
-                      <h3 className="text-xl font-bold text-indigo-950">{pkg.posts} bài viết/tháng</h3>
-                      <p className="text-3xl font-bold" style={{ color: config.color }}>
-                        {formatPriceVnd(pkg.price)}
-                      </p>
-                    </div>
-                    <ul className="flex-1 space-y-4">
-                      {pkg.works.map((feature, j) => (
-                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
-                          <Check size={16} className="flex-shrink-0" style={{ color: config.color }} /> {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex gap-3 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
-                        className="flex-1 rounded-2xl py-3.5 text-xs font-semibold text-white transition-all shadow-lg hover:brightness-105"
-                        style={{ background: `linear-gradient(135deg, #312E81, ${config.color})` }}
-                      >
-                        Đăng ký ngay
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(`${pkg.posts} bài viết/tháng`, formatPriceVnd(pkg.price), "Chăm sóc Website")}
-                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
-                      >
-                        <MessageSquare size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {WEBSITE_CARE_PACKAGES.map((pkg, i) => {
+                const label = `${pkg.posts} bài viết/tháng`;
+                const priceStr = formatPriceVnd(pkg.price);
+                return (
+                  <PricingTierCard
+                    key={pkg.id}
+                    accent={config.color}
+                    title={label}
+                    price={priceStr}
+                    priceNote="/ tháng"
+                    features={pkg.works}
+                    icon={FileText}
+                    featured={i === 1}
+                    ctaLabel="Đăng ký ngay"
+                    onCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Website")}
+                    onSecondaryCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Website")}
+                  />
+                );
+              })}
             </PackageCarousel>
           </section>
 
@@ -320,7 +237,7 @@ export default function WebsitePage() {
             <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
               {[
                 {
-                  title: "Ngân sách dưới 10.000.000đ",
+                  title: "Ngân sách dưới 10 triệu",
                   price: "1.000.000đ",
                   note: "/ tháng (chưa gồm ngân sách ads)",
                   icon: Target,
@@ -333,7 +250,7 @@ export default function WebsitePage() {
                   ],
                 },
                 {
-                  title: "Ngân sách trên 10.000.000đ",
+                  title: "Ngân sách trên 10 triệu",
                   price: "2.000.000đ",
                   note: "/ tháng (chưa gồm ngân sách ads)",
                   icon: Zap,
@@ -345,50 +262,20 @@ export default function WebsitePage() {
                     "Báo cáo & đề xuất chiến lược",
                   ],
                 },
-              ].map((ads, i) => (
-                <div key={i} className="platform-pricing-card p-10">
-                  <div className="flex flex-1 flex-col">
-                    <div className="mb-8 flex items-start justify-between">
-                      <div
-                        className="flex h-16 w-16 items-center justify-center rounded-2xl text-white shadow-lg"
-                        style={{ backgroundColor: config.color, boxShadow: `0 10px 30px ${config.color}40` }}
-                      >
-                        <ads.icon size={32} />
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold" style={{ color: config.color }}>
-                          {ads.price}
-                        </p>
-                        <p className="text-[10px] font-medium text-slate-500">{ads.note}</p>
-                      </div>
-                    </div>
-                    <h3 className="mb-6 text-2xl font-bold text-indigo-950">{ads.title}</h3>
-                    <ul className="mb-10 flex-1 space-y-4">
-                      {ads.features.map((f, j) => (
-                        <li key={j} className="flex items-center gap-3 text-sm text-slate-600">
-                          <Check size={16} style={{ color: config.color }} /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex gap-4 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
-                        className="flex-1 rounded-2xl py-4 text-xs font-semibold text-white shadow-lg transition-all hover:brightness-105"
-                        style={{ backgroundColor: config.color }}
-                      >
-                        Đăng ký quảng cáo
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
-                        className="brand-btn-secondary flex h-12 w-12 items-center justify-center rounded-2xl p-0"
-                      >
-                        <MessageSquare size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              ].map((ads) => (
+                <PricingTierCard
+                  key={ads.title}
+                  accent={config.color}
+                  title={ads.title}
+                  price={ads.price}
+                  priceNote={ads.note}
+                  features={ads.features}
+                  icon={ads.icon}
+                  variant="ads"
+                  ctaLabel="Đăng ký quảng cáo"
+                  onCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
+                  onSecondaryCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
+                />
               ))}
             </PackageCarousel>
           </section>

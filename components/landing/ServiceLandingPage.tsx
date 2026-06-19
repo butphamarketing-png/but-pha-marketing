@@ -17,7 +17,6 @@ import {
   Rocket,
   Server,
   Shield,
-  Sparkles,
   Target,
   Users,
   XCircle,
@@ -30,6 +29,7 @@ import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSec
 import { WebsiteOperationComparisonTable } from "@/components/website/WebsiteOperationComparisonTable";
 import { DomainCarousel } from "@/components/landing/DomainCarousel";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
+import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { useAdmin } from "@/lib/AdminContext";
 import {
   FANPAGE_ADS_PACKAGES,
@@ -246,44 +246,17 @@ function renderPricingSection(
         const label = opts?.chooseLabel ?? chooseLabel;
 
         return (
-          <div
+          <PricingTierCard
             key={pkg.id}
-            className={`platform-pricing-card landing-interactive-card flex flex-col p-8 ${featured ? "platform-pricing-card--featured" : ""}`}
-          >
-            {featured && (
-              <div
-                className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
-                style={{ backgroundColor: accent }}
-              >
-                <Sparkles size={12} /> Phổ biến
-              </div>
-            )}
-            <h3 className="mb-2 text-center text-lg font-bold text-indigo-950">{displayName}</h3>
-            {!opts?.hidePrices && (
-              <div className="mb-6 text-center">
-                <p className="text-2xl font-bold" style={{ color: accent }}>
-                  {priceStr}
-                </p>
-                {opts?.periodNote && <p className="text-[10px] font-medium text-slate-500">{opts.periodNote}</p>}
-              </div>
-            )}
-            <ul className="mb-8 flex-1 space-y-3 border-y border-indigo-100 py-4">
-              {pkg.works.map((w) => (
-                <li key={w} className="flex items-start gap-2 text-sm text-slate-600">
-                  <Check size={16} className="mt-0.5 shrink-0" style={{ color: accent }} />
-                  {w}
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={() => onChoose(displayName, priceStr, label)}
-              className="rounded-2xl py-3.5 text-xs font-bold text-white shadow-lg transition hover:brightness-105"
-              style={{ backgroundColor: accent }}
-            >
-              {label}
-            </button>
-          </div>
+            accent={accent}
+            title={displayName}
+            price={opts?.hidePrices ? undefined : priceStr}
+            priceNote={opts?.periodNote}
+            features={pkg.works}
+            featured={featured}
+            ctaLabel={label}
+            onCta={() => onChoose(displayName, priceStr, label)}
+          />
         );
       })}
     </PackageCarousel>
