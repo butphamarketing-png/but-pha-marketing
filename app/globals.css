@@ -560,6 +560,11 @@
   letter-spacing: 0.06em;
   line-height: 1.35;
   text-transform: uppercase;
+  color: #fff;
+}
+
+.platform-sections .pricing-card-vns__header h3 {
+  color: #fff;
 }
 
 .pricing-card-vns__body {
