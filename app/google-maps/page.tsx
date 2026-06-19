@@ -5,6 +5,7 @@ import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/sh
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Check, Search, MessageSquare, Target, Zap, Sparkles, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
+import { PackageCarousel } from "@/components/shared/PackageCarousel";
 
 const config: PlatformConfig = {
   name: "Google Maps",
@@ -88,7 +89,7 @@ export default function GoogleMapsPage() {
             <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <PackageCarousel accent={config.color} itemCount={3} desktopCols={3}>
             {[
               { 
                 title: "CẢI TẠO", 
@@ -150,7 +151,7 @@ export default function GoogleMapsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </PackageCarousel>
         </section>
 
         {/* 3. GÓI QUẢNG CÁO GOOGLE MAPS */}
@@ -161,7 +162,7 @@ export default function GoogleMapsPage() {
             <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2">
+          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
             {[
               {
                 title: "GÓI CƠ BẢN",
@@ -240,7 +241,7 @@ export default function GoogleMapsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </PackageCarousel>
         </section>
 
         {/* 4. BẠN NHẬN ĐƯỢC GÌ? */}

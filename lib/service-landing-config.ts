@@ -305,9 +305,9 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
       {
         kind: "pricing",
         id: "pricing",
-        label: "Bảng giá",
-        title: "Bảng giá tên miền tham khảo",
-        subtitle: "Giá .com từ 350.000đ/năm — liên hệ báo giá .vn chi tiết",
+        label: "Danh mục",
+        title: "Tra cứu các loại tên miền",
+        subtitle: "13 đuôi phổ biến — vuốt ngang hoặc bấm mũi tên để xem thêm",
         pricingKind: "domain",
       },
       {

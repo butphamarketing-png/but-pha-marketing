@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
+import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, LayoutTemplate, Target, Zap } from "lucide-react";
@@ -139,7 +140,7 @@ export default function WebsitePage() {
               <p className="text-sm font-medium text-slate-500">Gói website chuẩn SEO — tư vấn miễn phí</p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <PackageCarousel accent={config.color} itemCount={WEBSITE_BUILD_PACKAGES.length} desktopCols={4}>
               {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
                 <div
                   key={pkg.id}
@@ -200,7 +201,7 @@ export default function WebsitePage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </PackageCarousel>
           </section>
 
           {/* VẬN HÀNH WEBSITE */}
@@ -237,7 +238,7 @@ export default function WebsitePage() {
               <p className="text-sm font-medium text-slate-500">Theo số lượng bài viết mỗi tháng</p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <PackageCarousel accent={config.color} itemCount={WEBSITE_CARE_PACKAGES.length} desktopCols={3}>
               {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
                 <div
                   key={pkg.id}
@@ -298,7 +299,7 @@ export default function WebsitePage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </PackageCarousel>
           </section>
 
           {/* QUẢNG CÁO WEBSITE */}
@@ -316,7 +317,7 @@ export default function WebsitePage() {
               <p className="text-sm font-medium text-slate-500">Google Ads &amp; Meta Ads — trỏ về website, đo chuyển đổi chính xác</p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-2">
+            <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
               {[
                 {
                   title: "Ngân sách dưới 10.000.000đ",
@@ -389,7 +390,7 @@ export default function WebsitePage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </PackageCarousel>
           </section>
         </div>
       </div>

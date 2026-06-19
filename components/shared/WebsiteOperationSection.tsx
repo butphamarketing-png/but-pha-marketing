@@ -10,6 +10,7 @@ import {
   type WebsiteOperationTierKey,
 } from "@/lib/service-pricing";
 import { getCompareFeaturesForPackage, getPackageCompareIndex } from "@/lib/website-operation-comparison";
+import { PackageCarousel } from "@/components/shared/PackageCarousel";
 
 type ConsultHandler = (pkgName: string, pkgPrice: string, tabLabel: string) => void;
 
@@ -65,8 +66,8 @@ export function WebsiteOperationSection({
 
       <p className="text-center text-sm text-slate-600">{meta.description}</p>
 
-      {/* 3 cards / row */}
-      <div className="grid gap-6 md:grid-cols-3">
+      {/* 3 cards / row — mobile 3 cột ngang */}
+      <PackageCarousel accent={primaryColor} itemCount={packages.length} desktopCols={3}>
         {packages.map((pkg) => {
           const featured = "popular" in pkg && pkg.popular;
           const accent = meta.color;
@@ -154,7 +155,7 @@ export function WebsiteOperationSection({
             </div>
           );
         })}
-      </div>
+      </PackageCarousel>
     </div>
   );
 }

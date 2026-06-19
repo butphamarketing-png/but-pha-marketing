@@ -366,6 +366,107 @@
   }
 }
 
+/* Gói dịch vụ — mobile 3 cột ngang, scroll khi >3 gói */
+@media (max-width: 767px) {
+  .package-carousel--scroll .package-carousel__item {
+    width: calc((100% - 1rem) / 3);
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .package-carousel .platform-pricing-card {
+    border-radius: 0.75rem;
+    padding: 0.625rem;
+    box-shadow: 0 1px 2px rgba(49, 46, 129, 0.08);
+    transform: none;
+  }
+
+  .package-carousel .platform-pricing-card--featured {
+    --tw-ring-offset-width: 1px;
+    --tw-ring-width: 1px;
+  }
+
+  .package-carousel .platform-pricing-card .absolute.-top-4 {
+    top: -0.5rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 8px;
+  }
+
+  .package-carousel .platform-pricing-card .h-16.w-16,
+  .package-carousel .platform-pricing-card .h-14.w-14 {
+    height: 2.25rem;
+    width: 2.25rem;
+  }
+
+  .package-carousel .platform-pricing-card .h-16.w-16 svg,
+  .package-carousel .platform-pricing-card .h-14.w-14 svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .package-carousel .platform-pricing-card h3 {
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .package-carousel .platform-pricing-card .text-3xl,
+  .package-carousel .platform-pricing-card .text-2xl {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .package-carousel .platform-pricing-card .text-xl {
+    font-size: 10px;
+  }
+
+  .package-carousel .platform-pricing-card ul {
+    display: none;
+  }
+
+  .package-carousel .platform-pricing-card .brand-btn-secondary,
+  .package-carousel .platform-pricing-card button[class*="w-12"] {
+    display: none;
+  }
+
+  .package-carousel .platform-pricing-card [class*="gap-3"] {
+    gap: 0;
+    padding-top: 0.25rem;
+  }
+
+  .package-carousel .platform-pricing-card button.rounded-2xl {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .package-carousel .platform-pricing-card .text-xs.font-medium.text-slate-500 {
+    font-size: 8px;
+  }
+
+  .package-carousel .platform-pricing-card.p-10 {
+    padding: 0.625rem;
+  }
+
+  .package-carousel .platform-pricing-card .mb-8 {
+    margin-bottom: 0.5rem;
+  }
+
+  .package-carousel .platform-pricing-card .mb-6 {
+    margin-bottom: 0.25rem;
+    font-size: 9px;
+  }
+}
+
+@media (min-width: 768px) {
+  .package-carousel--scroll .package-carousel__item {
+    width: auto;
+    flex-shrink: 1;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

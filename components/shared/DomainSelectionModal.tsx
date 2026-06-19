@@ -2,54 +2,15 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Globe, Check, Calculator, ShieldCheck, Zap } from "lucide-react";
+import { X, Globe, Check, ShieldCheck, Zap } from "lucide-react";
 import { db } from "@/lib/useData";
+import { DOMAIN_CATEGORIES, formatDomainPrice } from "@/lib/domain-catalog";
 
-interface DomainItem {
-  id: string;
-  name: string;
-  price: number;
-}
-
-interface DomainCategory {
-  title: string;
-  icon: any;
-  domains: DomainItem[];
-}
-
-const DOMAIN_CATEGORIES: DomainCategory[] = [
-  {
-    title: "Tên miền quốc tế",
-    icon: Globe,
-    domains: [
-      { id: "com", name: ".com", price: 350000 },
-      { id: "net", name: ".net", price: 400000 },
-      { id: "org", name: ".org", price: 400000 },
-      { id: "info", name: ".info", price: 600000 },
-      { id: "xyz", name: ".xyz", price: 300000 },
-    ],
-  },
-  {
-    title: "Tên miền Việt Nam",
-    icon: ShieldCheck,
-    domains: [
-      { id: "vn", name: ".vn", price: 750000 },
-      { id: "com_vn", name: ".com.vn", price: 650000 },
-      { id: "net_vn", name: ".net.vn", price: 650000 },
-      { id: "org_vn", name: ".org.vn", price: 650000 },
-    ],
-  },
-  {
-    title: "Tên miền mở rộng",
-    icon: Zap,
-    domains: [
-      { id: "shop", name: ".shop", price: 1000000 },
-      { id: "store", name: ".store", price: 1000000 },
-      { id: "online", name: ".online", price: 800000 },
-      { id: "tech", name: ".tech", price: 1200000 },
-    ],
-  },
-];
+const CATEGORY_ICONS = {
+  intl: Globe,
+  vn: ShieldCheck,
+  extended: Zap,
+} as const;
 
 export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen: boolean; onClose: () => void; primaryColor: string }) {
   const [selectedDomains, setSelectedDomains] = useState<Set<string>>(new Set());
@@ -80,9 +41,7 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
     return sum;
   }, [selectedDomains]);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + "đ/năm";
-  };
+  const formatPrice = formatDomainPrice;
 
   const handleSubmit = async () => {
     if (!form.name.trim() || !form.phone.trim() || !form.domainName.trim()) {
@@ -142,10 +101,12 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
           <div className="flex-1 overflow-y-auto p-6 md:p-10">
             {step === "select" ? (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {DOMAIN_CATEGORIES.map((cat, idx) => (
-                  <div key={idx} className="space-y-4">
+                {DOMAIN_CATEGORIES.map((cat) => {
+                  const Icon = CATEGORY_ICONS[cat.category];
+                  return (
+                  <div key={cat.category} className="space-y-4">
                     <div className="flex items-center gap-2 border-b border-indigo-100 pb-2">
-                      <cat.icon size={18} style={{ color: primaryColor }} />
+                      <Icon size={18} style={{ color: primaryColor }} />
                       <h4 className="text-xs font-semibold tracking-wide text-slate-500">{cat.title}</h4>
                     </div>
                     <div className="grid gap-2">
@@ -171,7 +132,8 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
                       ))}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             ) : step === "contact" ? (
               <div className="mx-auto max-w-lg space-y-6 py-10">

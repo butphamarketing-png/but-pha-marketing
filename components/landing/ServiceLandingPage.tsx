@@ -28,9 +28,10 @@ import { ConsultModal } from "@/components/shared/ConsultModal";
 import { ConsultationModal } from "@/components/shared/PlatformPage";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { WebsiteOperationComparisonTable } from "@/components/website/WebsiteOperationComparisonTable";
+import { DomainCarousel } from "@/components/landing/DomainCarousel";
+import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { useAdmin } from "@/lib/AdminContext";
 import {
-  DOMAIN_COM_PRICE,
   FANPAGE_ADS_PACKAGES,
   FANPAGE_BUILD_PACKAGES,
   FANPAGE_CARE_PACKAGES,
@@ -159,75 +160,6 @@ function StepsGrid({ steps, columns, accent }: { steps: string[]; columns: 3 | 5
   );
 }
 
-function PricingCards({
-  accent,
-  packages,
-  hidePrices,
-  chooseLabel,
-  periodNote,
-  onChoose,
-}: {
-  accent: string;
-  packages: readonly { id: string; name: string; price: number; works: readonly string[]; posts?: number }[];
-  hidePrices?: boolean;
-  chooseLabel: string;
-  periodNote?: string;
-  onChoose: (name: string, price: string, tabLabel: string) => void;
-}) {
-  const cols = packages.length <= 2 ? "md:grid-cols-2" : packages.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2 xl:grid-cols-4";
-
-  return (
-    <div className={`grid gap-6 ${cols}`}>
-      {packages.map((pkg, i) => {
-        const featured = i === 1 && packages.length >= 3;
-        const displayName = pkg.posts ? `${pkg.posts} bài / tháng` : pkg.name;
-        const priceStr = hidePrices ? "Liên hệ" : formatPriceVnd(pkg.price);
-
-        return (
-          <div
-            key={pkg.id}
-            className={`platform-pricing-card flex flex-col p-8 ${featured ? "platform-pricing-card--featured" : ""}`}
-          >
-            {featured && (
-              <div
-                className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
-                style={{ backgroundColor: accent }}
-              >
-                <Sparkles size={12} /> Phổ biến
-              </div>
-            )}
-            <h3 className="mb-2 text-center text-lg font-bold text-indigo-950">{displayName}</h3>
-            {!hidePrices && (
-              <div className="mb-6 text-center">
-                <p className="text-2xl font-bold" style={{ color: accent }}>
-                  {priceStr}
-                </p>
-                {periodNote && <p className="text-[10px] font-medium text-slate-500">{periodNote}</p>}
-              </div>
-            )}
-            <ul className="mb-8 flex-1 space-y-3 border-y border-indigo-100 py-4">
-              {pkg.works.map((w) => (
-                <li key={w} className="flex items-start gap-2 text-sm text-slate-600">
-                  <Check size={16} className="mt-0.5 shrink-0" style={{ color: accent }} />
-                  {w}
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={() => onChoose(displayName, priceStr, chooseLabel)}
-              className="rounded-2xl py-3.5 text-xs font-bold text-white shadow-lg transition hover:brightness-105"
-              style={{ backgroundColor: accent }}
-            >
-              {chooseLabel}
-            </button>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 const LANDING_ICONS: Record<LandingIconName, typeof Server> = {
   Server,
   Shield,
@@ -302,6 +234,61 @@ function renderPricingSection(
   const chooseLabel = section.chooseLabel ?? "Chọn gói";
   const accent = config.color;
 
+  const desktopCols: 2 | 3 | 4 =
+    section.pricingKind === "website-build" ? 4 : section.pricingKind === "website-ads" || section.pricingKind === "fanpage-ads" || section.pricingKind === "gm-ads" ? 2 : 3;
+
+  const renderCards = (packages: readonly { id: string; name: string; price: number; works: readonly string[]; posts?: number }[], opts?: { hidePrices?: boolean; chooseLabel?: string; periodNote?: string }) => (
+    <PackageCarousel accent={accent} itemCount={packages.length} desktopCols={desktopCols}>
+      {packages.map((pkg, i) => {
+        const featured = i === 1 && packages.length >= 3;
+        const displayName = pkg.posts ? `${pkg.posts} bài / tháng` : pkg.name;
+        const priceStr = opts?.hidePrices ? "Liên hệ" : formatPriceVnd(pkg.price);
+        const label = opts?.chooseLabel ?? chooseLabel;
+
+        return (
+          <div
+            key={pkg.id}
+            className={`platform-pricing-card flex flex-col p-8 ${featured ? "platform-pricing-card--featured" : ""}`}
+          >
+            {featured && (
+              <div
+                className="absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold text-white shadow-xl"
+                style={{ backgroundColor: accent }}
+              >
+                <Sparkles size={12} /> Phổ biến
+              </div>
+            )}
+            <h3 className="mb-2 text-center text-lg font-bold text-indigo-950">{displayName}</h3>
+            {!opts?.hidePrices && (
+              <div className="mb-6 text-center">
+                <p className="text-2xl font-bold" style={{ color: accent }}>
+                  {priceStr}
+                </p>
+                {opts?.periodNote && <p className="text-[10px] font-medium text-slate-500">{opts.periodNote}</p>}
+              </div>
+            )}
+            <ul className="mb-8 flex-1 space-y-3 border-y border-indigo-100 py-4">
+              {pkg.works.map((w) => (
+                <li key={w} className="flex items-start gap-2 text-sm text-slate-600">
+                  <Check size={16} className="mt-0.5 shrink-0" style={{ color: accent }} />
+                  {w}
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() => onChoose(displayName, priceStr, label)}
+              className="rounded-2xl py-3.5 text-xs font-bold text-white shadow-lg transition hover:brightness-105"
+              style={{ backgroundColor: accent }}
+            >
+              {label}
+            </button>
+          </div>
+        );
+      })}
+    </PackageCarousel>
+  );
+
   switch (section.pricingKind) {
     case "website-operation":
       return (
@@ -314,116 +301,47 @@ function renderPricingSection(
     case "website-compare":
       return <WebsiteOperationComparisonTable />;
     case "website-build":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={WEBSITE_BUILD_PACKAGES.map((p) => ({ ...p, works: p.works }))}
-          hidePrices={section.hidePrices}
-          chooseLabel={chooseLabel}
-          onChoose={onChoose}
-        />
+      return renderCards(
+        WEBSITE_BUILD_PACKAGES.map((p) => ({ ...p, works: p.works })),
+        { hidePrices: section.hidePrices, chooseLabel },
       );
     case "website-care":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={WEBSITE_CARE_PACKAGES.map((p) => ({ id: p.id, name: `${p.posts} bài/tháng`, price: p.price, works: p.works, posts: p.posts }))}
-          chooseLabel={chooseLabel}
-          periodNote="/ tháng"
-          onChoose={onChoose}
-        />
+      return renderCards(
+        WEBSITE_CARE_PACKAGES.map((p) => ({ id: p.id, name: `${p.posts} bài/tháng`, price: p.price, works: p.works, posts: p.posts })),
+        { chooseLabel, periodNote: "/ tháng" },
       );
     case "website-ads":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={WEBSITE_ADS_PACKAGES.map((p) => ({ ...p }))}
-          chooseLabel={chooseLabel}
-          periodNote="/ tháng (chưa gồm ngân sách ads)"
-          onChoose={onChoose}
-        />
-      );
+      return renderCards(WEBSITE_ADS_PACKAGES.map((p) => ({ ...p })), {
+        chooseLabel,
+        periodNote: "/ tháng (chưa gồm ngân sách ads)",
+      });
     case "domain":
-      return (
-        <div className="mx-auto max-w-lg">
-          <PricingCards
-            accent={accent}
-            packages={[
-              {
-                id: "domain-com",
-                name: "Tên miền .com",
-                price: DOMAIN_COM_PRICE,
-                works: [
-                  "Đăng ký / chuyển tên miền .com",
-                  "Hỗ trợ trỏ DNS",
-                  "Nhắc gia hạn hàng năm",
-                  "Bảo mật thông tin đăng ký",
-                ],
-              },
-            ]}
-            chooseLabel="Tra cứu & đăng ký"
-            periodNote="/ năm (tham khảo .com)"
-            onChoose={onChoose}
-          />
-          <p className="mt-4 text-center text-xs text-slate-500">
-            Giá .vn / .com.vn liên hệ báo chi tiết theo từng tên miền.
-          </p>
-        </div>
-      );
+      return <DomainCarousel accent={accent} />;
     case "fanpage-build":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={FANPAGE_BUILD_PACKAGES.map((p) => ({ ...p }))}
-          chooseLabel={chooseLabel}
-          onChoose={onChoose}
-        />
-      );
+      return renderCards(FANPAGE_BUILD_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     case "fanpage-care":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={FANPAGE_CARE_PACKAGES.map((p) => ({
-            id: p.id,
-            name: `${p.posts} bài/tháng`,
-            price: p.price,
-            works: p.works,
-            posts: p.posts,
-          }))}
-          chooseLabel={chooseLabel}
-          periodNote="/ tháng"
-          onChoose={onChoose}
-        />
+      return renderCards(
+        FANPAGE_CARE_PACKAGES.map((p) => ({
+          id: p.id,
+          name: `${p.posts} bài/tháng`,
+          price: p.price,
+          works: p.works,
+          posts: p.posts,
+        })),
+        { chooseLabel, periodNote: "/ tháng" },
       );
     case "fanpage-ads":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={FANPAGE_ADS_PACKAGES.map((p) => ({ ...p }))}
-          chooseLabel={chooseLabel}
-          periodNote="/ tháng (chưa gồm ngân sách ads)"
-          onChoose={onChoose}
-        />
-      );
+      return renderCards(FANPAGE_ADS_PACKAGES.map((p) => ({ ...p })), {
+        chooseLabel,
+        periodNote: "/ tháng (chưa gồm ngân sách ads)",
+      });
     case "gm-build":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={GOOGLE_MAPS_PACKAGES.map((p) => ({ ...p }))}
-          chooseLabel={chooseLabel}
-          onChoose={onChoose}
-        />
-      );
+      return renderCards(GOOGLE_MAPS_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     case "gm-ads":
-      return (
-        <PricingCards
-          accent={accent}
-          packages={GOOGLE_MAPS_ADS_PACKAGES.map((p) => ({ ...p }))}
-          chooseLabel={chooseLabel}
-          periodNote="/ tháng (chưa gồm ngân sách ads)"
-          onChoose={onChoose}
-        />
-      );
+      return renderCards(GOOGLE_MAPS_ADS_PACKAGES.map((p) => ({ ...p })), {
+        chooseLabel,
+        periodNote: "/ tháng (chưa gồm ngân sách ads)",
+      });
     default:
       return null;
   }

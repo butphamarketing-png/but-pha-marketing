@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { Check, Send, ChevronRight, MessageSquare, Target, Rocket, Settings, Sparkles, UserCheck, ShieldCheck, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
+import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { db } from "@/lib/useData";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { fanpageCarePrice, snapFanpageCarePosts } from "@/lib/service-pricing";
@@ -102,7 +103,7 @@ export default function FacebookPage() {
             </h2>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <PackageCarousel accent={config.color} itemCount={3} desktopCols={3}>
             {[
               { 
                 title: "CẢI TẠO FANPAGE", 
@@ -164,7 +165,7 @@ export default function FacebookPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </PackageCarousel>
         </section>
 
         {/* 2. CHĂM SÓC FANPAGE */}
@@ -251,7 +252,7 @@ export default function FacebookPage() {
             </h2>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2">
+          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
             {[
               {
                 title: "Ngân sách dưới 10.000.000đ",
@@ -304,7 +305,7 @@ export default function FacebookPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </PackageCarousel>
         </section>
 
       </div>
