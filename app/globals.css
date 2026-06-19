@@ -467,30 +467,132 @@
   }
 }
 
-/* Landing & carousel polish */
+/* Landing & platform — tech polish (effects only) */
+@keyframes landing-accent-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes landing-shimmer {
+  0% {
+    transform: translateX(-120%) skewX(-14deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-14deg);
+  }
+}
+
+@keyframes landing-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.platform-page-canvas {
+  position: relative;
+  isolation: isolate;
+}
+
+.platform-page-canvas::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(49, 46, 129, 0.034) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 46, 129, 0.034) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 55% at 50% -5%, rgba(0, 0, 0, 0.55) 0%, transparent 72%);
+  opacity: 0.85;
+}
+
+.platform-page-canvas > * {
+  position: relative;
+  z-index: 1;
+}
+
+.carousel-nav-btn {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
 .carousel-nav-btn:hover {
   border-color: color-mix(in srgb, var(--carousel-accent, #4f46e5) 35%, white);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--carousel-accent, #4f46e5) 22%, transparent);
 }
 
+.carousel-nav-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--carousel-accent, #4f46e5) 18%, white),
+    0 8px 24px color-mix(in srgb, var(--carousel-accent, #4f46e5) 24%, transparent);
+}
+
 .landing-interactive-card {
+  position: relative;
+  isolation: isolate;
   transition:
     transform 0.28s ease,
     box-shadow 0.28s ease,
     border-color 0.28s ease;
 }
 
+.landing-interactive-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    color-mix(in srgb, var(--landing-accent, #4f46e5) 55%, white) 50%,
+    transparent 80%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
 @media (hover: hover) {
   .landing-interactive-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(124, 58, 237, 0.28);
-    box-shadow: 0 16px 40px rgba(49, 46, 129, 0.12);
+    border-color: color-mix(in srgb, var(--landing-accent, #4f46e5) 22%, white);
+    box-shadow:
+      0 16px 40px rgba(49, 46, 129, 0.12),
+      0 0 0 1px color-mix(in srgb, var(--landing-accent, #4f46e5) 8%, transparent);
+  }
+
+  .landing-interactive-card:hover::before {
+    opacity: 1;
   }
 
   .platform-pricing-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(79, 70, 229, 0.22);
-    box-shadow: 0 22px 50px rgba(49, 46, 129, 0.14);
+    border-color: color-mix(in srgb, var(--platform-color, var(--landing-accent, #4f46e5)) 24%, white);
+    box-shadow:
+      0 22px 50px rgba(49, 46, 129, 0.14),
+      0 0 32px color-mix(in srgb, var(--platform-color, var(--landing-accent, #4f46e5)) 10%, transparent);
   }
 
   .landing-step-card:hover {
@@ -498,56 +600,253 @@
     box-shadow: 0 12px 32px rgba(49, 46, 129, 0.1);
   }
 
-  .landing-faq-item:hover {
-    border-color: rgba(124, 58, 237, 0.2);
+  .landing-step-card:hover span[class*="rounded-full"] {
+    box-shadow: 0 0 18px color-mix(in srgb, var(--landing-accent, #4f46e5) 35%, transparent);
   }
+
+  .landing-faq-item:hover {
+    border-color: color-mix(in srgb, var(--landing-accent, #4f46e5) 18%, white);
+  }
+
+  .landing-icon-tile:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--landing-accent, #4f46e5) 28%, white);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--landing-accent, #4f46e5) 16%, transparent);
+  }
+
+  .landing-visual-card:hover {
+    box-shadow:
+      0 24px 60px color-mix(in srgb, var(--landing-accent, #4f46e5) 18%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--landing-accent, #4f46e5) 12%, transparent);
+  }
+
+  .landing-shimmer-btn:hover::after {
+    animation: landing-shimmer 0.7s ease;
+  }
+}
+
+.landing-section-heading > span:first-of-type {
+  display: inline-block;
+  letter-spacing: 0.16em;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--landing-accent, #4f46e5) 18%, white);
+  background: color-mix(in srgb, var(--landing-accent, #4f46e5) 6%, white);
+  font-size: 0.65rem;
 }
 
 .landing-section-heading::after {
   content: "";
   display: block;
-  width: 3rem;
-  height: 3px;
-  margin: 0.75rem auto 0;
+  width: 4.5rem;
+  height: 2px;
+  margin: 0.85rem auto 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, var(--landing-accent, #4f46e5), transparent);
-  opacity: 0.85;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--landing-accent, #4f46e5),
+    color-mix(in srgb, var(--landing-accent, #4f46e5) 40%, white),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: landing-accent-flow 5s ease infinite;
+  opacity: 0.9;
 }
 
 .landing-hero-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 252, 0.92) 100%);
   border: 1px solid rgba(99, 102, 241, 0.12);
-  box-shadow: 0 20px 60px rgba(49, 46, 129, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 20px 60px rgba(49, 46, 129, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.landing-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(49, 46, 129, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 46, 129, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 88%);
+  opacity: 0.65;
+}
+
+.landing-hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: calc(2rem - 10px);
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) top left / 22px 2px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) top left / 2px 22px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) top right / 22px 2px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) top right / 2px 22px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) bottom left / 22px 2px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) bottom left / 2px 22px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) bottom right / 22px 2px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent), color-mix(in srgb, var(--landing-accent, #4f46e5) 45%, transparent)) bottom right / 2px 22px no-repeat;
 }
 
 .landing-hero-card:hover {
-  box-shadow: 0 24px 70px rgba(49, 46, 129, 0.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 24px 70px rgba(49, 46, 129, 0.11),
+    0 0 48px color-mix(in srgb, var(--landing-accent, #4f46e5) 8%, transparent);
 }
 
-.platform-sections > section {
-  scroll-margin-top: 6rem;
-}
-
-.package-carousel-shell {
+.landing-shimmer-btn {
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.platform-sections .platform-pricing-card {
+.landing-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.38) 50%, transparent 62%);
+  transform: translateX(-120%) skewX(-14deg);
+  pointer-events: none;
+}
+
+.landing-cta-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow: 0 24px 80px color-mix(in srgb, var(--landing-accent, #4f46e5) 28%, transparent);
+}
+
+.landing-cta-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 80%);
+}
+
+.landing-cta-panel::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  width: 120%;
+  height: 80%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.landing-icon-tile,
+.landing-visual-card {
   transition:
     transform 0.28s ease,
     box-shadow 0.28s ease,
     border-color 0.28s ease;
 }
 
+.platform-pricing-card--featured::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--platform-color, var(--landing-accent, #7c3aed)),
+    transparent
+  );
+  animation: landing-glow-pulse 3.5s ease infinite;
+  pointer-events: none;
+}
+
+.platform-audit-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(49, 46, 129, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 46, 129, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 75%);
+  opacity: 0.7;
+}
+
+.platform-sections > section {
+  scroll-margin-top: 6rem;
+}
+
+.platform-sections .platform-pricing-card {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.platform-sections .platform-feature-chip,
+.platform-sections .brand-stat-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+@media (hover: hover) {
+  .platform-sections .platform-feature-chip:hover,
+  .platform-sections .brand-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(49, 46, 129, 0.08);
+  }
+}
+
+.package-carousel-shell {
+  position: relative;
+}
+
 @media (max-width: 767px) {
   .package-carousel .landing-interactive-card:hover,
-  .package-carousel .platform-pricing-card:hover {
+  .package-carousel .platform-pricing-card:hover,
+  .landing-icon-tile:hover,
+  .landing-visual-card:hover {
     transform: none;
   }
 
   .platform-sections .platform-pricing-card:hover {
     transform: none;
+  }
+
+  .landing-interactive-card::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-section-heading::after,
+  .platform-pricing-card--featured::after,
+  .landing-shimmer-btn:hover::after {
+    animation: none;
   }
 }
 

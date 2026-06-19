@@ -180,7 +180,7 @@ function HeroVisual({ visual, accent }: { visual: ServiceLandingConfig["hero"]["
     return (
       <motion.div variants={fadeUpChild} className="relative">
         <div className="absolute -inset-4 rounded-[2rem] opacity-20 blur-2xl" style={{ backgroundColor: accent }} />
-        <div className="relative overflow-hidden rounded-[1.75rem] border border-indigo-100 shadow-xl">
+        <div className="landing-visual-card relative overflow-hidden rounded-[1.75rem] border border-indigo-100 shadow-xl">
           <Image
             src={visual.src}
             alt={visual.alt}
@@ -215,7 +215,7 @@ function HeroVisual({ visual, accent }: { visual: ServiceLandingConfig["hero"]["
         return (
           <div
             key={name}
-            className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm"
+            className="landing-icon-tile flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm"
             style={{ backgroundColor: i % 2 === 0 ? `${accent}08` : "#fff" }}
           >
             <Icon size={32} style={{ color: accent }} />
@@ -380,6 +380,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
             viewport={VIEWPORT_ONCE}
             variants={staggerIntro}
             className="brand-card landing-hero-card overflow-hidden p-6 md:p-10 lg:p-12"
+            style={{ ["--landing-accent" as string]: accent }}
           >
             <div className={`grid items-center gap-8 ${hasHeroSide ? "lg:grid-cols-2" : ""}`}>
               <motion.div variants={fadeUpChild} className={`space-y-5 ${!hasHeroSide ? "mx-auto max-w-3xl text-center" : ""}`}>
@@ -405,7 +406,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
                   <button
                     type="button"
                     onClick={() => setShowConsult(true)}
-                    className="rounded-2xl px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:brightness-105 active:scale-[0.99]"
+                    className="landing-shimmer-btn rounded-2xl px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:brightness-105 active:scale-[0.99]"
                     style={{ background: `linear-gradient(135deg, #312E81, ${accent})` }}
                   >
                     {config.hero.cta.toUpperCase()}
@@ -503,8 +504,8 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
 
         <section id="cta" className="scroll-mt-24 py-12 md:py-16">
           <div
-            className="overflow-hidden rounded-[2rem] p-8 text-center text-white md:p-12"
-            style={{ background: `linear-gradient(135deg, #312E81 0%, ${accent} 100%)` }}
+            className="landing-cta-panel overflow-hidden rounded-[2rem] p-8 text-center text-white md:p-12"
+            style={{ background: `linear-gradient(135deg, #312E81 0%, ${accent} 100%)`, ["--landing-accent" as string]: accent }}
           >
             <Globe className="mx-auto mb-4 h-10 w-10 opacity-80" />
             <h2 className="mb-3 text-2xl font-bold md:text-3xl">{config.cta.title}</h2>
@@ -513,7 +514,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={() => setShowConsult(true)}
-                className="rounded-2xl bg-white px-8 py-4 text-sm font-bold shadow-lg transition hover:bg-indigo-50"
+                className="landing-shimmer-btn rounded-2xl bg-white px-8 py-4 text-sm font-bold shadow-lg transition hover:bg-indigo-50"
                 style={{ color: accent }}
               >
                 Liên hệ tư vấn

@@ -169,7 +169,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
   }, [pathname, sections]);
 
   return (
-    <div className="platform-page-canvas text-foreground" style={{ "--platform-color": primaryColor } as React.CSSProperties}>
+    <div className="platform-page-canvas text-foreground" style={{ "--platform-color": primaryColor, "--landing-accent": primaryColor } as React.CSSProperties}>
       <style>{`
         @keyframes ripple-anim {
           from { transform: scale(0); opacity: 1; }
