@@ -66,7 +66,7 @@ export function WebsiteOperationSection({
 
       <p className="text-center text-sm text-slate-600">{meta.description}</p>
 
-      {/* 3 cards / row — mobile 3 cột ngang */}
+      {/* Gói vận hành — mobile xếp dọc */}
       <PackageCarousel accent={primaryColor} itemCount={packages.length} desktopCols={3}>
         {packages.map((pkg) => {
           const featured = "popular" in pkg && pkg.popular;

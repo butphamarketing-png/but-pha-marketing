@@ -30,7 +30,6 @@ import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
-import { WebsitePurposeSection } from "@/components/home/WebsitePurposeSection";
 import { SectionWaveDivider } from "@/components/shared/SectionWaveDivider";
 import { fadeUpChild, scaleIn, slideLeft, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
 
@@ -575,8 +574,6 @@ export default function HomePageClient() {
             </div>
             </div>
           </section>
-
-          <WebsitePurposeSection />
 
           <section id="why-choose" className="brand-section-white">
             <SectionWaveDivider from="#f4f6fc" to="#ffffff" />
