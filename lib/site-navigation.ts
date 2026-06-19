@@ -15,9 +15,9 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
     label: "Website",
     href: "/website",
     children: [
-      { label: "Thiết kế Website", href: "/website#pricing" },
-      { label: "Vận hành website", href: "/website#van-hanh" },
       { label: "Tên miền website", href: "/website#domain" },
+      { label: "Thiết kế Website", href: "/website/thietkewebsite" },
+      { label: "Vận hành website", href: "/website/van-hanh-website" },
       { label: "Chăm sóc Website", href: "/website#care" },
       { label: "Quảng cáo Website", href: "/website#quang-cao" },
     ],

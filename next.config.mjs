@@ -34,6 +34,16 @@ const nextConfig = {
         destination: '/blog/thiet-ke-website-da-nang',
         permanent: true,
       },
+      {
+        source: '/website/thiet-ke-website',
+        destination: '/website/thietkewebsite',
+        permanent: true,
+      },
+      {
+        source: '/website/van-hanh',
+        destination: '/website/van-hanh-website',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

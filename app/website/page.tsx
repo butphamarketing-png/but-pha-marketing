@@ -1,15 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
-import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen, Target, Zap } from "lucide-react";
+import { Settings, ChevronRight, Globe, Check, FileText, Sparkles, MessageSquare, BookOpen, Target, Zap, Server } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
-import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { formatPriceVnd, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
 const config: PlatformConfig = {
@@ -23,28 +22,15 @@ const config: PlatformConfig = {
   responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",
   robotFilter: "hue-rotate(90deg) saturate(1.4) brightness(1.1)",
   hidePricingHeader: true,
+  hideAutoPricing: true,
   customSections: [
     { id: "audit", label: "Chuẩn đoán Website" },
-    { id: "pricing", label: "Thiết kế Website" },
-    { id: "van-hanh", label: "Vận hành Website" },
     { id: "domain", label: "Tên miền" },
     { id: "care", label: "Chăm sóc Website" },
     { id: "quang-cao", label: "Quảng cáo Website" },
     { id: "contact", label: "Liên hệ tư vấn" },
   ],
-  tabs: [
-    {
-      label: "Thiết kế Website",
-      packages: WEBSITE_BUILD_PACKAGES.map((pkg, index) => ({
-        name: pkg.name,
-        price: formatPriceVnd(pkg.price),
-        popular: index === 2,
-        features: [...pkg.works],
-        allFeatures: [...pkg.works],
-        audioText: `Gói ${pkg.name} — ${formatPriceVnd(pkg.price)}.`,
-      })),
-    },
-  ],
+  tabs: [],
   stats: [],
   process: [
     { step: 1, title: "Khảo sát nhu cầu", desc: "Tư vấn chi tiết về mục đích, tính năng và design style phù hợp với thương hiệu của bạn." },
@@ -67,6 +53,15 @@ export default function WebsitePage() {
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#pricing") {
+      window.location.replace("/website/thietkewebsite");
+    } else if (window.location.hash === "#van-hanh") {
+      window.location.replace("/website/van-hanh-website");
+    }
+  }, []);
 
   const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
     setCheckoutPkg({
@@ -172,6 +167,48 @@ export default function WebsitePage() {
             </button>
           </div>
 
+          <section className="scroll-mt-24">
+            <Link
+              href="/website/thietkewebsite"
+              className="brand-card group flex items-center justify-between gap-6 p-8 transition-all hover:-translate-y-0.5 md:p-10"
+            >
+              <div className="flex items-center gap-6">
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110"
+                  style={{ backgroundColor: `${config.color}15`, color: config.color }}
+                >
+                  <BookOpen size={32} />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold text-indigo-950">Thiết kế website</h3>
+                  <p className="mt-1 text-sm text-slate-600">Landing chuyên nghiệp — tư vấn miễn phí, chuẩn SEO</p>
+                </div>
+              </div>
+              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
+            </Link>
+          </section>
+
+          <section className="scroll-mt-24">
+            <Link
+              href="/website/van-hanh-website"
+              className="brand-card group flex items-center justify-between gap-6 p-8 transition-all hover:-translate-y-0.5 md:p-10"
+            >
+              <div className="flex items-center gap-6">
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110"
+                  style={{ backgroundColor: `${config.color}15`, color: config.color }}
+                >
+                  <Server size={32} />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold text-indigo-950">Vận hành website</h3>
+                  <p className="mt-1 text-sm text-slate-600">Hosting, bảo mật, backup — 9 gói từ 2.500.000đ/năm</p>
+                </div>
+              </div>
+              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
+            </Link>
+          </section>
+
           {/* CHĂM SÓC WEBSITE */}
           <section id="care" className="space-y-16 scroll-mt-24">
             <div className="text-center space-y-6">
@@ -249,25 +286,6 @@ export default function WebsitePage() {
                 </div>
               ))}
             </div>
-          </section>
-
-          {/* GÓI VẬN HÀNH WEBSITE */}
-          <section id="van-hanh" className="space-y-16 scroll-mt-24">
-            <div className="text-center space-y-6">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
-                  Managed Operations
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                Gói <span style={{ color: config.color }}>vận hành</span> Website
-              </h2>
-              <p className="mx-auto mt-2 max-w-2xl text-slate-600">
-                Hosting, bảo mật, backup và hỗ trợ kỹ thuật — chọn mức phù hợp quy mô doanh nghiệp
-              </p>
-            </div>
-            <WebsiteOperationSection primaryColor={config.color} onConsult={handleOpenConsult} />
           </section>
 
           {/* QUẢNG CÁO WEBSITE */}
@@ -375,6 +393,7 @@ export default function WebsitePage() {
         isOpen={showCustomModal}
         onClose={() => setShowCustomModal(false)}
         primaryColor={config.color}
+        hidePrices
       />
 
       <DomainSelectionModal

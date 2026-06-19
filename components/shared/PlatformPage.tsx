@@ -41,6 +41,7 @@ export interface PlatformConfig {
   mission: string;
   responsibility: string;
   hidePricingHeader?: boolean;
+  hideAutoPricing?: boolean;
   hideStats?: boolean;
   hideContact?: boolean;
   robotFilter?: string;
@@ -339,7 +340,21 @@ function Stats({ stats, color, isWebsite }: { stats: { label: string; value: str
   );
 }
 
-function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: PricingTab[]; color: string; onCheckout: (pkg: CheckoutPkg) => void; hideHeader?: boolean }) {
+export function PricingSection({
+  tabs,
+  color,
+  onCheckout,
+  hideHeader,
+  sectionTitle,
+  hidePrices,
+}: {
+  tabs: PricingTab[];
+  color: string;
+  onCheckout: (pkg: CheckoutPkg) => void;
+  hideHeader?: boolean;
+  sectionTitle?: string;
+  hidePrices?: boolean;
+}) {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
@@ -355,14 +370,24 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
   const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
 
   return (
-    <section data-section="pricing" id="pricing" className="py-32 px-4 relative">
+    <section data-section="pricing" id="pricing" className={`relative px-4 ${sectionTitle ? "scroll-mt-24 py-16" : "py-32"}`}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full opacity-5 pointer-events-none">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
       </div>
 
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
-        {!hideHeader && (
+        {sectionTitle ? (
+          <div className="mb-16 text-center space-y-6">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-1 w-12 rounded-full" style={{ backgroundColor: color }} />
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+              <span style={{ color }}>{sectionTitle.split(" ")[0]}</span>
+              {sectionTitle.includes(" ") ? ` ${sectionTitle.split(" ").slice(1).join(" ")}` : ""}
+            </h2>
+          </div>
+        ) : !hideHeader ? (
           <div className="mb-20 text-center">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
@@ -382,7 +407,7 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
               Các gói giải pháp được may đo riêng biệt, giúp doanh nghiệp bứt phá doanh thu và tối ưu chi phí vận hành.
             </p>
           </div>
-        )}
+        ) : null}
 
         {tabs.length > 1 && !hideHeader && (
           <div className="mb-16 flex flex-wrap justify-center gap-4">
@@ -469,14 +494,16 @@ function PricingSection({ tabs, color, onCheckout, hideHeader }: { tabs: Pricing
                     <div className="h-1 w-8 rounded-full" style={{ backgroundColor: color, opacity: isHovered || isPopular ? 1 : 0.35 }} />
                     <p className="text-[10px] font-medium tracking-wide text-slate-500">{pkg.name === "Giới thiệu" ? "Website cơ bản" : pkg.name === "Tối ưu" ? "Chuẩn SEO + UX" : pkg.name === "Kinh doanh" ? "Tối ưu chuyển đổi" : "Automation + Scale"}</p>
                   </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold transition-colors duration-500" style={{ color }}>{pkg.price}</span>
-                    {pkg.period && (
-                      <span className="text-xs font-medium tracking-wide text-slate-500">
-                        / {pkg.period === "month" ? "Tháng" : "Trọn đời"}
-                      </span>
-                    )}
-                  </div>
+                  {!hidePrices && (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-bold transition-colors duration-500" style={{ color }}>{pkg.price}</span>
+                      {pkg.period && (
+                        <span className="text-xs font-medium tracking-wide text-slate-500">
+                          / {pkg.period === "month" ? "Tháng" : "Trọn đời"}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-10 h-px w-full bg-gradient-to-r from-transparent via-indigo-100 to-transparent" />
@@ -895,7 +922,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {children}
 
-      {config.tabs && config.tabs.length > 0 && (
+      {config.tabs && config.tabs.length > 0 && !config.hideAutoPricing && (
         <PricingSection tabs={config.tabs} color={platformColor} onCheckout={handleCheckout} hideHeader={config.hidePricingHeader} />
       )}
 

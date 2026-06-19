@@ -93,7 +93,17 @@ const FEATURE_CATEGORIES: FeatureCategory[] = [
 
 const BASE_PRICE = 3000000;
 
-export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: boolean; onClose: () => void; primaryColor: string }) {
+export function CustomWebsiteModal({
+  isOpen,
+  onClose,
+  primaryColor,
+  hidePrices = false,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  primaryColor: string;
+  hidePrices?: boolean;
+}) {
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set());
   const [step, setStep] = useState<"select" | "contact" | "success">("select");
   const [form, setForm] = useState({
@@ -139,12 +149,13 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
       });
     });
 
+    const priceLine = hidePrices ? "" : `\nTổng giá: ${formatPrice(totalPrice)}`;
     const result = await db.leads.add({
       type: "contact",
       name: form.name.trim(),
       phone: form.phone.trim(),
       service: "Website Custom",
-      note: `Gói: Website Custom\nTính năng: ${featureNames.join(", ")}\nTổng giá: ${formatPrice(totalPrice)}\nEmail: ${form.email}\nĐịa chỉ: ${form.address}\nThời gian: ${form.consultTime}\nGhi chú: ${form.note}`,
+      note: `Gói: Website Custom\nTính năng: ${featureNames.join(", ")}${priceLine}\nEmail: ${form.email}\nĐịa chỉ: ${form.address}\nThời gian: ${form.consultTime}\nGhi chú: ${form.note}`,
       platform: "website"
     });
 
@@ -174,7 +185,9 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
           {/* Header */}
           <div className="flex items-center justify-between border-b border-indigo-100 p-6 md:px-10">
             <div>
-              <h2 className="text-2xl font-bold text-indigo-950 md:text-3xl">Báo giá tính năng Website Custom</h2>
+              <h2 className="text-2xl font-bold text-indigo-950 md:text-3xl">
+                {hidePrices ? "Tính năng Website Custom" : "Báo giá tính năng Website Custom"}
+              </h2>
               <p className="mt-1 text-sm text-slate-600">Chọn các tính năng bạn muốn tích hợp cho hệ thống của mình</p>
             </div>
             <button onClick={onClose} className="rounded-full p-3 text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-900">
@@ -196,7 +209,9 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
                       <h3 className="font-bold text-indigo-950">Gói cơ bản + Responsive (Mặc định)</h3>
                       <p className="text-sm text-slate-600">Đã bao gồm trong chi phí khởi tạo ban đầu</p>
                     </div>
-                    <div className="ml-auto text-xl font-bold text-violet-600">{formatPrice(BASE_PRICE)}</div>
+                    {!hidePrices && (
+                      <div className="ml-auto text-xl font-bold text-violet-600">{formatPrice(BASE_PRICE)}</div>
+                    )}
                   </div>
                 </div>
 
@@ -224,7 +239,9 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
                             </div>
                             <span className="text-sm font-medium text-slate-700 group-hover:text-indigo-950">{f.name}</span>
                           </div>
-                          <span className="text-xs font-semibold text-slate-500">{formatPrice(f.price)}</span>
+                          {!hidePrices && (
+                            <span className="text-xs font-semibold text-slate-500">{formatPrice(f.price)}</span>
+                          )}
                         </button>
                       ))}
                     </div>
@@ -309,11 +326,22 @@ export function CustomWebsiteModal({ isOpen, onClose, primaryColor }: { isOpen: 
                     <Calculator size={28} style={{ color: primaryColor }} />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-slate-500">Tổng chi phí ước tính</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold" style={{ color: primaryColor }}>{formatPrice(totalPrice)}</span>
-                      <span className="text-sm text-slate-500">({selectedFeatures.size + 1} tính năng)</span>
-                    </div>
+                    {hidePrices ? (
+                      <>
+                        <p className="text-xs font-medium text-slate-500">Đã chọn</p>
+                        <p className="text-lg font-bold text-indigo-950">
+                          {selectedFeatures.size + 1} tính năng
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-xs font-medium text-slate-500">Tổng chi phí ước tính</p>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-bold" style={{ color: primaryColor }}>{formatPrice(totalPrice)}</span>
+                          <span className="text-sm text-slate-500">({selectedFeatures.size + 1} tính năng)</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="flex gap-4">

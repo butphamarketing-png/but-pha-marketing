@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronUp } from "lucide-react";
+import { ChevronUp, Menu, X } from "lucide-react";
 import { ConsultModal } from "./ConsultModal";
 import { CursorEffect } from "./CursorEffect";
 import { DynamicGreeting } from "./DynamicGreeting";
+import { SiteNavMenu } from "./SiteNavMenu";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useAdmin } from "@/lib/AdminContext";
 import { usePathname } from "next/navigation";
@@ -42,6 +43,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const playClick = useClickSound();
 
   useEffect(() => {
@@ -183,22 +185,78 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         style={{ scaleX: scrollYProgress, backgroundColor: primaryColor }}
       />
 
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-indigo-100/90 bg-white/85 px-4 py-3 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl md:px-6">
-        <Link href="/" className="flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-indigo-900">
-          <ChevronLeft size={16} />
-          <span className="hidden sm:inline">Trang chủ</span>
-        </Link>
-        <div className="flex items-center gap-3">
-          <img src={logoSrc} alt="Logo" className="h-9 w-9 rounded-full border border-indigo-100 object-cover shadow-sm" />
-          <span className="hidden text-sm font-semibold text-indigo-950 sm:inline">{settings.title}</span>
+      <header className="sticky top-0 z-40 border-b border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Link
+              href="/"
+              className="group flex min-w-0 items-center gap-2.5 transition-transform hover:scale-[1.02] sm:gap-3"
+            >
+              <img
+                src={logoSrc}
+                alt="Logo"
+                className="h-9 w-9 shrink-0 rounded-full border border-indigo-100 object-cover shadow-sm sm:h-10 sm:w-10"
+              />
+              <div className="min-w-0 hidden sm:block">
+                <span className="block truncate text-sm font-semibold text-indigo-950">{settings.title}</span>
+                <span className="block truncate text-[11px] font-medium text-violet-600">{platformName}</span>
+              </div>
+            </Link>
+
+            <button
+              type="button"
+              aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-200 bg-white text-indigo-950 transition hover:bg-indigo-50 lg:hidden"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+
+          <div className="hidden lg:block">
+            <SiteNavMenu tone="light" layout="horizontal" activeHref={pathname} />
+          </div>
+
+          <button
+            onClick={() => setShowConsult(true)}
+            className="hidden shrink-0 rounded-2xl px-5 py-2.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105 active:scale-[0.99] sm:inline-flex"
+            style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
+          >
+            Tư vấn ngay
+          </button>
         </div>
-        <button
-          onClick={() => setShowConsult(true)}
-          className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105 active:scale-[0.99]"
-          style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
-        >
-          Tư vấn ngay
-        </button>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden border-t border-indigo-100 bg-white/98 lg:hidden"
+            >
+              <div className="mx-auto max-w-7xl px-4 py-4">
+                <SiteNavMenu
+                  tone="light"
+                  layout="stack"
+                  activeHref={pathname}
+                  onNavigate={() => setMobileMenuOpen(false)}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setShowConsult(true);
+                  }}
+                  className="mt-3 w-full rounded-xl px-4 py-3 text-sm font-bold text-white"
+                  style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
+                >
+                  Tư vấn ngay
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <div className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 lg:flex">
