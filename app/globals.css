@@ -467,6 +467,90 @@
   }
 }
 
+/* Landing & carousel polish */
+.carousel-nav-btn:hover {
+  border-color: color-mix(in srgb, var(--carousel-accent, #4f46e5) 35%, white);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--carousel-accent, #4f46e5) 22%, transparent);
+}
+
+.landing-interactive-card {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+@media (hover: hover) {
+  .landing-interactive-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(124, 58, 237, 0.28);
+    box-shadow: 0 16px 40px rgba(49, 46, 129, 0.12);
+  }
+
+  .platform-pricing-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(79, 70, 229, 0.22);
+    box-shadow: 0 22px 50px rgba(49, 46, 129, 0.14);
+  }
+
+  .landing-step-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(49, 46, 129, 0.1);
+  }
+
+  .landing-faq-item:hover {
+    border-color: rgba(124, 58, 237, 0.2);
+  }
+}
+
+.landing-section-heading::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin: 0.75rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--landing-accent, #4f46e5), transparent);
+  opacity: 0.85;
+}
+
+.landing-hero-card {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 252, 0.92) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  box-shadow: 0 20px 60px rgba(49, 46, 129, 0.08);
+}
+
+.landing-hero-card:hover {
+  box-shadow: 0 24px 70px rgba(49, 46, 129, 0.11);
+}
+
+.platform-sections > section {
+  scroll-margin-top: 6rem;
+}
+
+.package-carousel-shell {
+  position: relative;
+}
+
+.platform-sections .platform-pricing-card {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+@media (max-width: 767px) {
+  .package-carousel .landing-interactive-card:hover,
+  .package-carousel .platform-pricing-card:hover {
+    transform: none;
+  }
+
+  .platform-sections .platform-pricing-card:hover {
+    transform: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

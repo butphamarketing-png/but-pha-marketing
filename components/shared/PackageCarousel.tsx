@@ -1,32 +1,7 @@
 "use client";
 
 import { Children, useCallback, useRef, type ReactNode } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-function CarouselNavButton({
-  direction,
-  accent,
-  onClick,
-  className = "",
-}: {
-  direction: "left" | "right";
-  accent: string;
-  onClick: () => void;
-  className?: string;
-}) {
-  const Icon = direction === "left" ? ChevronLeft : ChevronRight;
-  return (
-    <button
-      type="button"
-      aria-label={direction === "left" ? "Xem gói trước" : "Xem gói tiếp theo"}
-      onClick={onClick}
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-white shadow-md transition hover:scale-105 active:scale-95 md:h-11 md:w-11 ${className}`}
-      style={{ color: accent }}
-    >
-      <Icon size={20} />
-    </button>
-  );
-}
+import { CarouselNavButton } from "@/components/shared/CarouselNavButton";
 
 type DesktopCols = 2 | 3 | 4;
 
@@ -66,30 +41,51 @@ export function PackageCarousel({
   }, []);
 
   const trackClass = scrollable
-    ? `package-carousel package-carousel--scroll flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${DESKTOP_GRID[desktopCols]} md:overflow-visible md:snap-none`
+    ? `package-carousel package-carousel--scroll flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${DESKTOP_GRID[desktopCols]} md:overflow-visible md:snap-none`
     : `package-carousel package-carousel--grid grid ${mobileGridCols} gap-2 ${DESKTOP_GRID[desktopCols]}`;
 
   return (
-    <div className={className}>
+    <div className={`package-carousel-shell ${className}`}>
+      <div className={`relative ${scrollable ? "md:static" : ""}`}>
+        {scrollable && (
+          <>
+            <CarouselNavButton
+              direction="left"
+              accent={accent}
+              onClick={() => scroll("left")}
+              className="absolute left-0 top-[42%] z-10 -translate-y-1/2 md:hidden"
+              size="sm"
+            />
+            <CarouselNavButton
+              direction="right"
+              accent={accent}
+              onClick={() => scroll("right")}
+              className="absolute right-0 top-[42%] z-10 -translate-y-1/2 md:hidden"
+              size="sm"
+            />
+          </>
+        )}
+
+        <div
+          ref={scrollRef}
+          className={`${trackClass}${scrollable ? " px-9 md:px-0" : ""}`}
+          style={scrollable ? { WebkitOverflowScrolling: "touch", touchAction: "pan-x" } : undefined}
+        >
+          {items.map((child, i) => (
+            <div key={i} data-package-card className="package-carousel__item min-w-0">
+              {child}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {scrollable && (
-        <div className="mb-3 flex items-center justify-center gap-3 md:hidden">
-          <CarouselNavButton direction="left" accent={accent} onClick={() => scroll("left")} />
-          <p className="text-[10px] font-medium text-slate-500">Vuốt ngang hoặc bấm mũi tên</p>
-          <CarouselNavButton direction="right" accent={accent} onClick={() => scroll("right")} />
+        <div className="mt-3 flex items-center justify-center gap-3 md:hidden">
+          <CarouselNavButton direction="left" accent={accent} onClick={() => scroll("left")} size="sm" />
+          <p className="text-[10px] font-medium text-slate-500">Vuốt ngang · {itemCount} gói</p>
+          <CarouselNavButton direction="right" accent={accent} onClick={() => scroll("right")} size="sm" />
         </div>
       )}
-
-      <div
-        ref={scrollRef}
-        className={trackClass}
-        style={scrollable ? { WebkitOverflowScrolling: "touch", touchAction: "pan-x" } : undefined}
-      >
-        {items.map((child, i) => (
-          <div key={i} data-package-card className="package-carousel__item min-w-0">
-            {child}
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

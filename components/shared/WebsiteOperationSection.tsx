@@ -78,7 +78,7 @@ export function WebsiteOperationSection({
           return (
             <div
               key={pkg.id}
-              className={`platform-pricing-card flex flex-col ${featured ? "platform-pricing-card--featured" : ""}`}
+              className={`platform-pricing-card landing-interactive-card flex flex-col ${featured ? "platform-pricing-card--featured" : ""}`}
               style={
                 featured
                   ? ({ ["--tw-ring-color" as string]: `${accent}45` } as React.CSSProperties)

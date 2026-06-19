@@ -103,7 +103,7 @@ function SectionHeading({
   accent: string;
 }) {
   return (
-    <div className="mb-10 space-y-3 text-center md:mb-12">
+    <div className="mb-10 space-y-3 text-center md:mb-12 landing-section-heading" style={{ ["--landing-accent" as string]: accent }}>
       {label && (
         <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: accent }}>
           {label}
@@ -123,7 +123,7 @@ function CheckGrid({ items, variant }: { items: string[]; variant: "check" | "cr
   return (
     <ul className="grid gap-4 sm:grid-cols-2">
       {items.map((item) => (
-        <li key={item} className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm">
+        <li key={item} className="landing-interactive-card flex items-start gap-3 rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm">
           <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${iconClass}`} />
           <span className="text-sm font-medium leading-relaxed text-slate-700">{item}</span>
         </li>
@@ -145,7 +145,7 @@ function StepsGrid({ steps, columns, accent }: { steps: string[]; columns: 3 | 5
       {steps.map((step, i) => (
         <li
           key={step}
-          className="rounded-2xl border border-indigo-100 bg-white p-5 text-center shadow-sm"
+          className="landing-interactive-card landing-step-card rounded-2xl border border-indigo-100 bg-white p-5 text-center shadow-sm"
         >
           <span
             className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
@@ -248,7 +248,7 @@ function renderPricingSection(
         return (
           <div
             key={pkg.id}
-            className={`platform-pricing-card flex flex-col p-8 ${featured ? "platform-pricing-card--featured" : ""}`}
+            className={`platform-pricing-card landing-interactive-card flex flex-col p-8 ${featured ? "platform-pricing-card--featured" : ""}`}
           >
             {featured && (
               <div
@@ -372,14 +372,14 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
 
   return (
     <SubPageLayout platformName={config.platformName} primaryColor={accent} customSections={nav}>
-      <div className="mx-auto max-w-7xl px-4 pb-24">
+      <div className="mx-auto max-w-7xl px-4 pb-24" style={{ ["--landing-accent" as string]: accent }}>
         <section id="hero" className="scroll-mt-24 py-12 md:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_ONCE}
             variants={staggerIntro}
-            className="brand-card overflow-hidden p-6 md:p-10 lg:p-12"
+            className="brand-card landing-hero-card overflow-hidden p-6 md:p-10 lg:p-12"
           >
             <div className={`grid items-center gap-8 ${hasHeroSide ? "lg:grid-cols-2" : ""}`}>
               <motion.div variants={fadeUpChild} className={`space-y-5 ${!hasHeroSide ? "mx-auto max-w-3xl text-center" : ""}`}>
@@ -446,7 +446,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
                 {section.items.map((item) => (
                   <div
                     key={item.text}
-                    className="flex items-start gap-4 rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm"
+                    className="landing-interactive-card flex items-start gap-4 rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm"
                   >
                     <span className="text-2xl">{item.icon}</span>
                     <p className="text-sm font-medium text-slate-700">{item.text}</p>
@@ -457,7 +457,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
             {section.kind === "info-cards" && (
               <div className="grid gap-6 md:grid-cols-3">
                 {section.cards.map((card) => (
-                  <div key={card.title} className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm">
+                  <div key={card.title} className="landing-interactive-card rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm">
                     <h3 className="mb-2 text-lg font-bold text-indigo-950">{card.title}</h3>
                     <p className="text-sm leading-relaxed text-slate-600">{card.desc}</p>
                   </div>
@@ -469,7 +469,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
             {section.kind === "faq" && (
               <div className="mx-auto max-w-3xl space-y-3">
                 {section.items.map((item, i) => (
-                  <div key={item.q} className="overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-sm">
+                  <div key={item.q} className="landing-interactive-card landing-faq-item overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-sm">
                     <button
                       type="button"
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}

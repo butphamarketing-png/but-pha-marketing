@@ -855,7 +855,7 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                   <img 
                     src="/mascot-home.png" 
                     alt="Mascot" 
-                    className="mx-auto w-full max-w-sm animate-float drop-shadow-lg" 
+                    className="mx-auto w-full max-w-sm drop-shadow-lg" 
                     style={{ filter: resolvedFilter }}
                   />
                   <div className="mt-12 text-center">

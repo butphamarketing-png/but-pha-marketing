@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { Check, ChevronLeft, ChevronRight, Globe } from "lucide-react";
+import { Check, Globe } from "lucide-react";
+import { CarouselNavButton } from "@/components/shared/CarouselNavButton";
 import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { DOMAIN_CATALOG } from "@/lib/domain-catalog";
 
@@ -16,17 +17,8 @@ function NavButton({
   onClick: () => void;
   className?: string;
 }) {
-  const Icon = direction === "left" ? ChevronLeft : ChevronRight;
   return (
-    <button
-      type="button"
-      aria-label={direction === "left" ? "Xem tên miền trước" : "Xem tên miền tiếp theo"}
-      onClick={onClick}
-      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-white text-indigo-950 shadow-md transition hover:scale-105 active:scale-95 ${className}`}
-      style={{ color: accent }}
-    >
-      <Icon size={22} />
-    </button>
+    <CarouselNavButton direction={direction} accent={accent} onClick={onClick} className={className} size="sm" />
   );
 }
 
@@ -68,7 +60,7 @@ export function DomainCarousel({ accent }: { accent: string }) {
               <article
                 key={domain.id}
                 data-domain-card
-                className="platform-pricing-card w-[min(88vw,340px)] shrink-0 snap-center p-8 sm:w-[320px]"
+                className="platform-pricing-card landing-interactive-card w-[min(88vw,340px)] shrink-0 snap-center p-8 sm:w-[320px]"
               >
                 <div className="mb-5 flex items-start justify-between gap-3">
                   <div

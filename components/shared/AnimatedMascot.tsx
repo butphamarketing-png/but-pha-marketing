@@ -303,6 +303,7 @@ export function AnimatedMascot() {
   const clickCountRef = useRef(0);
 
   const platform = getPlatformFromPath(pathname);
+  const isInnerServicePage = /^\/(website|facebook|google-maps)(\/|$)/.test(pathname);
   const message =
     settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
@@ -340,6 +341,7 @@ export function AnimatedMascot() {
   const isDefaultMascot =
     !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
   const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
+  const mascotStill = isInnerServicePage || isDefaultMascot || isBuiltInRobot;
   // Ảnh gốc mascot-home.png đổi màu theo từng trang dịch vụ.
   const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
     home:       { filter: "none", scale: 1 },
@@ -509,16 +511,20 @@ export function AnimatedMascot() {
     <>
       {isShown && (
         <motion.div
-          className="fixed left-0 top-0 z-[54]"
-          initial={{ x: pos.x, y: pos.y }}
+          className={
+            isInnerServicePage
+              ? "fixed bottom-[5.5rem] right-3 z-[54] md:bottom-8 md:right-8"
+              : "fixed left-0 top-0 z-[54]"
+          }
+          initial={isInnerServicePage ? false : { x: pos.x, y: pos.y }}
           animate={
-            prefersReducedMotion
-              ? { x: pos.x, y: pos.y }
+            isInnerServicePage || prefersReducedMotion
+              ? undefined
               : { x: flightPath.x, y: flightPath.y }
           }
           transition={
-            prefersReducedMotion
-              ? { duration: 0 }
+            isInnerServicePage || prefersReducedMotion
+              ? undefined
               : {
                   duration: isMobileViewport ? 25 : 18,
                   repeat: Infinity,
@@ -598,16 +604,16 @@ export function AnimatedMascot() {
               }
             }}
             animate={
-              prefersReducedMotion
+              mascotStill || prefersReducedMotion
                 ? { y: 0, rotate: 0 }
                 : { y: [0, -10, 0], rotate: [0, 2, -2, 0] }
             }
             transition={
-              prefersReducedMotion
+              mascotStill || prefersReducedMotion
                 ? { duration: 0 }
                 : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
             }
-            className="flex h-[90px] w-[85px] md:h-[126px] md:w-[118px] items-center justify-center transition-transform hover:scale-110 active:scale-90"
+            className="flex h-[90px] w-[85px] md:h-[126px] md:w-[118px] items-center justify-center transition-transform hover:scale-105 active:scale-95"
             aria-label="AI Mascot"
           >
             <div
@@ -620,19 +626,19 @@ export function AnimatedMascot() {
 
               {isDefaultMascot ? (
                 <DefaultMascotGraphic
-                  animate={!prefersReducedMotion}
+                  animate={!mascotStill && !prefersReducedMotion}
                   glowColor={mascotGlowColor}
                   palette={mascotPalette}
                 />
               ) : isBuiltInRobot ? (
                 <RobotMascotGraphic
-                  animate={!prefersReducedMotion}
+                  animate={!mascotStill && !prefersReducedMotion}
                   glowColor={mascotGlowColor}
                   filter={customFilter}
                   scale={isMobileViewport ? dragonStyle.scale * 0.75 : dragonStyle.scale}
                 />
               ) : (
-                <div className={prefersReducedMotion ? "" : "mascot-default-wave"}>
+                <div className={mascotStill || prefersReducedMotion ? "" : "mascot-default-wave"}>
                   <img
                     src={mascotImg}
                     alt="AI Mascot"
