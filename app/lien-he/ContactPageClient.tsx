@@ -69,8 +69,6 @@ export default function ContactPageClient() {
 
   const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = "/logo.png";
-  const mascotImage = settings?.mascotImage || "/mascot-home.png";
-
   const serviceOptions = useMemo(() => {
     const names = services.map((service) => service.name).filter(Boolean);
     return names.length > 0
@@ -193,8 +191,7 @@ export default function ContactPageClient() {
               </div>
 
               <div className="brand-card-soft overflow-hidden p-6 lg:p-8">
-                <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-                  <div>
+                <div className="max-w-2xl">
                     <h2 className="text-2xl font-bold tracking-tight text-indigo-950 md:text-3xl">Gửi yêu cầu tư vấn</h2>
                     <p className="mt-3 text-base leading-7 text-slate-600">
                       Điền thông tin, chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.
@@ -278,12 +275,6 @@ export default function ContactPageClient() {
                         </p>
                       ) : null}
                     </form>
-                  </div>
-
-                  <div className="relative flex items-end justify-center">
-                    <span className="absolute inset-x-8 bottom-6 h-28 rounded-full bg-violet-600/30 blur-3xl" />
-                    <img src={mascotImage} alt="Mascot Bứt Phá Marketing" className="relative max-h-[360px] w-full object-contain drop-shadow-[0_24px_40px_rgba(124,58,237,0.35)]" />
-                  </div>
                 </div>
               </div>
             </div>

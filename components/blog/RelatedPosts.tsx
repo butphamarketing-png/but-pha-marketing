@@ -28,7 +28,7 @@ export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
           >
             <div className="relative overflow-hidden">
               <BlogOptimizedImage
-                src={blog.imageUrl || "/mascot-home.png"}
+                src={blog.imageUrl || "/logo.png"}
                 alt={blog.title}
                 width={640}
                 height={360}

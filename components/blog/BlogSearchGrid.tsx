@@ -62,7 +62,7 @@ export function BlogSearchGrid({ blogs }: { blogs: BlogListItem[] }) {
             >
               <div className="relative overflow-hidden">
                 <BlogOptimizedImage
-                  src={blog.imageUrl || "/mascot-home.png"}
+                  src={blog.imageUrl || "/logo.png"}
                   alt={blog.title}
                   width={640}
                   height={448}

@@ -463,7 +463,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
       subtitle: "Fanpage không chỉ để đăng bài — là điểm chạm đầu tiên tạo niềm tin.",
       bullets: ["Logo & ảnh bìa chuẩn brand", "Tối ưu thông tin & CTA", "SEO Fanpage", "Hướng dẫn vận hành", "Setup chuyên nghiệp"],
       cta: "Tư vấn thiết kế Fanpage",
-      visual: { type: "platform", src: "/Facebook.png", alt: "Thiết kế Fanpage Facebook" },
+      visual: { type: "icons", icons: ["Users", "LayoutTemplate", "Megaphone"] },
     },
     sections: [
       {
@@ -599,7 +599,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
       subtitle: "Khách tìm dịch vụ gần đây — bạn cần xuất hiện đầu tiên trên Maps.",
       bullets: ["Tạo / xác minh hồ sơ", "Tối ưu thông tin & danh mục", "Ảnh & bài viết Maps", "SEO Local cơ bản", "Hướng dẫn thu review"],
       cta: "Kiểm tra hồ sơ Maps",
-      visual: { type: "platform", src: "/GoogleMaps.png", alt: "Thiết kế Google Maps" },
+      visual: { type: "icons", icons: ["MapPin", "Globe", "Target"] },
     },
     sections: [
       {

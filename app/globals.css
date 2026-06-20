@@ -73,6 +73,17 @@
   * {
     border-color: hsl(var(--border));
   }
+  html {
+    cursor: auto;
+  }
+  a[href],
+  button:not(:disabled),
+  [role="button"],
+  label[for],
+  select,
+  summary {
+    cursor: pointer;
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', system-ui, sans-serif;
@@ -706,6 +717,12 @@
 .platform-page-canvas > * {
   position: relative;
   z-index: 1;
+}
+
+[data-mascot="dragon"] {
+  position: fixed !important;
+  z-index: 62 !important;
+  pointer-events: auto;
 }
 
 .carousel-nav-btn {

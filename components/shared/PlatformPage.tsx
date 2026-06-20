@@ -44,7 +44,6 @@ export interface PlatformConfig {
   hideAutoPricing?: boolean;
   hideStats?: boolean;
   hideContact?: boolean;
-  robotFilter?: string;
   customSections?: { id: string; label: string }[];
 }
 
@@ -706,7 +705,7 @@ function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   );
 }
 
-function ContactForm({ color, robotFilter }: { color: string; robotFilter?: string }) {
+function ContactForm({ color }: { color: string }) {
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -715,8 +714,6 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
   const [consultTime, setConsultTime] = useState("");
   const [platform, setPlatform] = useState("website");
   const [note, setNote] = useState("");
-
-  const resolvedFilter = "none";
 
   const handleInlineContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -784,7 +781,7 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
           <div className="platform-panel relative overflow-hidden rounded-[2rem] p-8 md:rounded-[2.5rem] md:p-16">
             <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: color }} />
             
-            <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            <div className="mx-auto max-w-2xl">
               <form 
                 onSubmit={handleInlineContactSubmit} 
                 className="space-y-8"
@@ -848,22 +845,6 @@ function ContactForm({ color, robotFilter }: { color: string; robotFilter?: stri
                   </span>
                 </button>
               </form>
-
-              <div className="hidden lg:block relative">
-                <div className="absolute -inset-24 animate-pulse rounded-full blur-[120px]" style={{ backgroundColor: `${color}18` }} />
-                <div className="brand-card-soft relative rounded-[2rem] p-12">
-                  <img 
-                    src="/mascot-home.png" 
-                    alt="Mascot" 
-                    className="mx-auto w-full max-w-sm drop-shadow-lg" 
-                    style={{ filter: resolvedFilter }}
-                  />
-                  <div className="mt-12 text-center">
-                    <p className="mb-2 text-xl font-bold text-indigo-950">Đội ngũ chuyên gia</p>
-                    <p className="text-sm font-medium text-slate-600">Sẵn sàng đồng hành cùng sự phát triển <br/> của doanh nghiệp bạn.</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         )}
@@ -928,7 +909,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {!config.hideStats && <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />}
       
-      {!config.hideContact && <ContactForm color={platformColor} robotFilter={config.robotFilter} />}
+      {!config.hideContact && <ContactForm color={platformColor} />}
 
       <AnimatePresence>
       {checkoutPkg && <ConsultationModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}

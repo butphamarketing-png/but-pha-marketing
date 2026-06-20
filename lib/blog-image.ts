@@ -1,7 +1,7 @@
 /** Chuẩn hóa src ảnh blog cho next/image (path tương đối). */
 export function normalizeBlogImageSrc(src: string): string {
   const trimmed = src.trim();
-  if (!trimmed) return "/mascot-home.png";
+  if (!trimmed) return "/logo.png";
   if (trimmed.startsWith("/")) return trimmed;
   try {
     return new URL(trimmed).pathname;

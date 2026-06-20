@@ -174,16 +174,10 @@ function createDefaultMedia(): Record<string, MediaSection> {
   }, {});
 
   // Default slideshow for home platform
-  media.home.slideshow = [
-    "/logo.png",
-    "/mascot-home.png"
-  ];
+  media.home.slideshow = ["/slideshow.jpg"];
 
   // Default slideshow for website platform
-  media.website.slideshow = [
-    "/logo.png",
-    "/mascot-home.png"
-  ];
+  media.website.slideshow = ["/slideshow.jpg"];
 
   return media;
 }
@@ -218,7 +212,7 @@ const defaultSettings: SiteSettings = {
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
   mascotEnabled: true,
-  mascotImage: "/mascot-home.png",
+  mascotImage: "",
   mascotImages: {},
   mascotMessages: {},
   mascotAudioUrls: {},
@@ -323,8 +317,12 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     colors: { ...COLOR_DEFAULTS, ...(parsed.colors ?? {}) },
     visibility: { ...VISIBILITY_DEFAULTS, ...(parsed.visibility ?? {}) },
     platformNames: { ...PLATFORM_NAME_DEFAULTS, ...(parsed.platformNames ?? {}) },
-    mascotImage: parsed.mascotImage ?? defaultSettings.mascotImage,
-    mascotImages: { ...defaultSettings.mascotImages, ...(parsed.mascotImages ?? {}) },
+    mascotImage: isDeprecatedMascotAsset(parsed.mascotImage) ? "" : (parsed.mascotImage ?? ""),
+    mascotImages: Object.fromEntries(
+      Object.entries({ ...defaultSettings.mascotImages, ...(parsed.mascotImages ?? {}) }).filter(
+        ([, value]) => !isDeprecatedMascotAsset(value),
+      ),
+    ),
     mascotMessages: { ...defaultSettings.mascotMessages, ...(parsed.mascotMessages ?? {}) },
     mascotAudioUrls: { ...defaultSettings.mascotAudioUrls, ...(parsed.mascotAudioUrls ?? {}) },
     mascotSectionMessages: {
@@ -402,13 +400,19 @@ function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings)
   return changed;
 }
 
+function isDeprecatedMascotAsset(url: string | undefined): boolean {
+  const trimmed = (url ?? "").trim().toLowerCase();
+  if (!trimmed) return true;
+  return trimmed.endsWith("/mascot-home.png") || trimmed.endsWith("/mascot-dragon.svg");
+}
+
 function sanitizeSlideshowItems(items: string[] | undefined): string[] {
   const seen = new Set<string>();
   return (items ?? [])
     .map((item) => item.trim())
     .filter((item) => {
       if (!item) return false;
-      // Allow Base64 images for temporary persistence
+      if (item.endsWith("/mascot-home.png") || item.endsWith("/slideshow-hero.png")) return false;
       if (seen.has(item)) return false;
       seen.add(item);
       return true;

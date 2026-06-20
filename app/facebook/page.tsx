@@ -25,7 +25,6 @@ const config: PlatformConfig = {
   hidePricingHeader: true,
   hideStats: true,
   hideContact: false,
-  robotFilter: "hue-rotate(190deg) saturate(1.4) brightness(1.1)",
   customSections: [
     { id: "audit", label: "Chuẩn đoán Fanpage" },
     { id: "build", label: "Xây dựng Fanpage" },

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { isInternalAppPath } from "@/lib/app-paths";
 
@@ -28,19 +29,20 @@ const PushNotificationPrompt = dynamic(
   () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
   { ssr: false },
 );
-const CursorEffect = dynamic(
-  () => import("@/components/shared/CursorEffect").then((mod) => mod.CursorEffect),
-  { ssr: false },
-);
-
 export function MarketingChrome() {
   const pathname = usePathname();
+
+  useEffect(() => {
+    document.documentElement.style.removeProperty("cursor");
+    document.body.style.removeProperty("cursor");
+    document.querySelectorAll("style").forEach((node) => {
+      if (node.textContent?.includes("cursor: none")) node.remove();
+    });
+  }, [pathname]);
 
   if (isInternalAppPath(pathname)) {
     return null;
   }
-
-  const isHomePage = pathname === "/";
 
   return (
     <>
@@ -50,7 +52,6 @@ export function MarketingChrome() {
       <FloatingContactButtons />
       <PushNotificationPrompt />
       <QuickActionBar />
-      {isHomePage && <CursorEffect color="#7C3AED" />}
     </>
   );
 }

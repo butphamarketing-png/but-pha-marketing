@@ -1,10 +1,18 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useAdmin } from "@/lib/AdminContext";
 import { MessageSquare } from "lucide-react";
+
+const QUICK_ACTION_DISMISS_KEY = "quick-action-dismissed";
+const QUICK_ACTION_SCROLL_THRESHOLD = 300;
+const QUICK_ACTION_CLOSE_ANCHOR_ID = "quick-action-close-anchor";
+const MASCOT_PURPLE = "#7C3AED";
+
+export { QUICK_ACTION_CLOSE_ANCHOR_ID };
 
 function getPlatformFromPath(pathname: string) {
   if (pathname.startsWith("/facebook")) return "facebook";
@@ -30,65 +38,19 @@ type MascotPalette = {
   highlight: string;
 };
 
-function hexToRgb(hex: string) {
-  const clean = hex.replace("#", "");
-  const normalized = clean.length === 3 ? clean.split("").map((char) => char + char).join("") : clean;
-  const value = Number.parseInt(normalized, 16);
-
+function buildMascotPalette(): MascotPalette {
   return {
-    r: (value >> 16) & 255,
-    g: (value >> 8) & 255,
-    b: value & 255,
-  };
-}
-
-function rgbToHex(r: number, g: number, b: number) {
-  return `#${[r, g, b]
-    .map((value) => Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, "0"))
-    .join("")}`;
-}
-
-function mixHex(base: string, target: string, amount: number) {
-  const a = hexToRgb(base);
-  const b = hexToRgb(target);
-  return rgbToHex(
-    a.r + (b.r - a.r) * amount,
-    a.g + (b.g - a.g) * amount,
-    a.b + (b.b - a.b) * amount,
-  );
-}
-
-function buildMascotPalette(platformColor: string, platform: string): MascotPalette {
-  const purplePages = ["home", "gioi_thieu", "blog", "lien_he"];
-  if (purplePages.includes(platform)) {
-    return {
-      bodyTop: "#A78BFA",
-      bodyMid: "#7C3AED",
-      bodyBottom: "#4C1D95",
-      shell: "#7C3AED",
-      bellyTop: "#F5F3FF",
-      bellyBottom: "#EDE9FE",
-      accent: "#6D28D9",
-      accentDark: "#7C3AED",
-      stroke: "#4C1D95",
-      eye: "#1E1B4B",
-      highlight: "#DDD6FE",
-    };
-  }
-
-  const base = platformColor.startsWith("#") ? platformColor : "#3B82F6";
-  return {
-    bodyTop: mixHex(base, "#FFFFFF", 0.55),
-    bodyMid: base,
-    bodyBottom: mixHex(base, "#000000", 0.32),
-    shell: mixHex(base, "#FFFFFF", 0.42),
-    bellyTop: mixHex(base, "#FFFFFF", 0.92),
-    bellyBottom: mixHex(base, "#FFFFFF", 0.8),
-    accent: mixHex(base, "#000000", 0.08),
-    accentDark: mixHex(base, "#000000", 0.22),
-    stroke: mixHex(base, "#000000", 0.35),
-    eye: "#0F172A",
-    highlight: mixHex(base, "#FFFFFF", 0.82),
+    bodyTop: MASCOT_PURPLE,
+    bodyMid: MASCOT_PURPLE,
+    bodyBottom: MASCOT_PURPLE,
+    shell: MASCOT_PURPLE,
+    bellyTop: MASCOT_PURPLE,
+    bellyBottom: MASCOT_PURPLE,
+    accent: MASCOT_PURPLE,
+    accentDark: MASCOT_PURPLE,
+    stroke: MASCOT_PURPLE,
+    eye: MASCOT_PURPLE,
+    highlight: MASCOT_PURPLE,
   };
 }
 
@@ -112,7 +74,7 @@ function DefaultMascotGraphic({
         viewBox="0 0 128 128"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={svgClassName}
+        className={`${svgClassName} h-[72px] w-[68px] md:h-[118px] md:w-[112px]`}
         style={{
           filter: `drop-shadow(0 0 15px ${glowColor}44) drop-shadow(0 5px 15px rgba(0,0,0,0.5))`,
           transformBox: "fill-box",
@@ -145,14 +107,14 @@ function DefaultMascotGraphic({
         />
         <path d="M44 61C44 47 53 34 64 34C75 34 84 47 84 61V68H44V61Z" fill={palette.shell} />
         <g className={eyeClassName} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-          <ellipse cx="51.5" cy="69" rx="11.5" ry="12" fill={palette.eye} />
-          <ellipse cx="53.5" cy="67" rx="5.8" ry="6.2" fill="#FFF" />
-          <circle cx="55.4" cy="68.2" r="2.3" fill={palette.eye} />
+          <ellipse cx="51.5" cy="69" rx="11.5" ry="12" fill="#5B21B6" />
+          <ellipse cx="53.5" cy="67" rx="5.8" ry="6.2" fill="#DDD6FE" />
+          <circle cx="55.4" cy="68.2" r="2.3" fill="#5B21B6" />
         </g>
         <g className={eyeClassName} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-          <ellipse cx="76.5" cy="69" rx="11.5" ry="12" fill={palette.eye} />
-          <ellipse cx="78.5" cy="67" rx="5.8" ry="6.2" fill="#FFF" />
-          <circle cx="80.4" cy="68.2" r="2.3" fill={palette.eye} />
+          <ellipse cx="76.5" cy="69" rx="11.5" ry="12" fill="#5B21B6" />
+          <ellipse cx="78.5" cy="67" rx="5.8" ry="6.2" fill="#DDD6FE" />
+          <circle cx="80.4" cy="68.2" r="2.3" fill="#5B21B6" />
         </g>
         <path d="M58 80C60.4 83.1 67.6 83.1 70 80" stroke={palette.stroke} strokeWidth="3" strokeLinecap="round" />
         <path d="M43 96C45 88 51 82.6 57.8 82.6H70.2C77 82.6 83 88 85 96L81.5 103.5H46.5L43 96Z" fill="url(#belly)" />
@@ -220,90 +182,26 @@ function DefaultMascotGraphic({
   );
 }
 
-function RobotMascotGraphic({
-  animate,
-  glowColor,
-  filter,
-  scale,
-}: {
-  animate: boolean;
-  glowColor: string;
-  filter: string;
-  scale: number;
-}) {
-  return (
-    <>
-      <div
-        className={animate ? "mascot-robot-shell mascot-robot-sway" : "mascot-robot-shell"}
-        style={{
-          filter: `${filter} drop-shadow(0 0 18px ${glowColor}55) drop-shadow(0 8px 16px rgba(0,0,0,0.45))`,
-          transform: `scale(${scale})`,
-          transformOrigin: "center bottom",
-        }}
-        aria-hidden="true"
-      >
-        <img src="/mascot-home.png" alt="" className="h-[118px] w-[118px] object-contain select-none" draggable="false" />
-      </div>
-
-      <style>{`
-        .mascot-robot-shell {
-          position: relative;
-          width: 118px;
-          height: 118px;
-        }
-
-        .mascot-robot-sway {
-          animation: mascot-robot-sway 4s ease-in-out infinite;
-        }
-
-        @keyframes mascot-robot-sway {
-          0%,
-          74% {
-            transform: translateY(0) rotate(0deg) scale(${scale});
-          }
-
-          82% {
-            transform: translateY(-1px) rotate(-5deg) scale(${scale});
-          }
-
-          88% {
-            transform: translateY(-2px) rotate(6deg) scale(${scale});
-          }
-
-          94% {
-            transform: translateY(-1px) rotate(-4deg) scale(${scale});
-          }
-
-          100% {
-            transform: translateY(0) rotate(0deg) scale(${scale});
-          }
-        }
-      `}</style>
-    </>
-  );
-}
-
 export function AnimatedMascot() {
   const pathname = usePathname();
   const { settings } = useAdmin();
-  const prefersReducedMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  const [dockStyle, setDockStyle] = useState<React.CSSProperties>({
+    position: "fixed",
+    right: 12,
+    bottom: 16,
+    zIndex: 62,
+  });
   const [open, setOpen] = useState(false);
   const [currentText, setCurrentText] = useState("");
   const [isShown, setIsShown] = useState(true);
   const [bursting, setBursting] = useState(false);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const [pos, setPos] = useState({ x: 220, y: 240 });
-  const [flightPath, setFlightPath] = useState<{ x: number[]; y: number[] }>({
-    x: [220, 220, 220, 220, 220],
-    y: [240, 240, 240, 240, 240],
-  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sectionSpeakCooldownRef = useRef(0);
   const lastSectionRef = useRef("");
   const clickCountRef = useRef(0);
 
   const platform = getPlatformFromPath(pathname);
-  const isInnerServicePage = /^\/(website|facebook|google-maps)(\/|$)/.test(pathname);
   const message =
     settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
@@ -315,20 +213,8 @@ export function AnimatedMascot() {
     );
   }, [pathname]);
   const enabled = settings.mascotEnabled !== false && !hidden;
-  const PLATFORM_COLORS: Record<string, string> = {
-    home: "#7C3AED",
-    gioi_thieu: "#7C3AED",
-    blog: "#7C3AED",
-    lien_he: "#7C3AED",
-    website: "#4F46E5",
-    facebook: "#1877F2",
-    googlemaps: "#F97316",
-  };
-  const mascotGlowColor = PLATFORM_COLORS[platform] ?? "#7C3AED";
-  const mascotPalette = useMemo(
-    () => buildMascotPalette(mascotGlowColor, platform),
-    [mascotGlowColor, platform],
-  );
+  const mascotGlowColor = MASCOT_PURPLE;
+  const mascotPalette = useMemo(() => buildMascotPalette(), []);
   const sectionMessages = useMemo(
     () => settings.mascotSectionMessages?.[platform] || settings.mascotSectionMessages?.home || {},
     [platform, settings.mascotSectionMessages],
@@ -337,25 +223,6 @@ export function AnimatedMascot() {
     () => settings.mascotClickMessages?.[platform] || settings.mascotClickMessages?.home || [],
     [platform, settings.mascotClickMessages],
   );
-  const mascotImg = settings.mascotImages?.[platform] || settings.mascotImage || "/mascot-home.png";
-  const isDefaultMascot =
-    !mascotImg || mascotImg === "/mascot-dragon.svg" || mascotImg.endsWith("/mascot-dragon.svg");
-  const isBuiltInRobot = mascotImg === "/mascot-home.png" || mascotImg.endsWith("/mascot-home.png");
-  const mascotStill = isInnerServicePage || isDefaultMascot || isBuiltInRobot;
-  // Ảnh gốc mascot-home.png đổi màu theo từng trang dịch vụ.
-  const dragonStyleMap: Record<string, { filter: string; scale: number }> = {
-    home:       { filter: "none", scale: 1 },
-    gioi_thieu: { filter: "none", scale: 1 },
-    blog:       { filter: "none", scale: 1 },
-    lien_he:    { filter: "none", scale: 1 },
-    website:    { filter: "hue-rotate(150deg) saturate(1.8) brightness(1.05)", scale: 1 },
-    facebook:   { filter: "hue-rotate(-60deg) saturate(2) brightness(1.05)", scale: 1 },
-    googlemaps: { filter: "hue-rotate(120deg) saturate(3) brightness(1.1) sepia(0.3)", scale: 1.02 },
-  };
-  const customFilter = useMemo(() => {
-    return dragonStyleMap[platform]?.filter || dragonStyleMap.home.filter;
-  }, [platform]);
-  const dragonStyle = dragonStyleMap[platform] || dragonStyleMap.home;
 
   const estimateSpeechDurationMs = (text: string) => {
     const words = text.trim().split(/\s+/).filter(Boolean).length;
@@ -402,6 +269,57 @@ export function AnimatedMascot() {
   };
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!enabled || !isShown) return;
+
+    const updateDock = () => {
+      const mobile = window.innerWidth < 768;
+      const dismissed = window.sessionStorage.getItem(QUICK_ACTION_DISMISS_KEY) === "1";
+      const barVisible = mobile && !dismissed && window.scrollY > QUICK_ACTION_SCROLL_THRESHOLD;
+
+      if (mobile && barVisible) {
+        const anchor = document.getElementById(QUICK_ACTION_CLOSE_ANCHOR_ID);
+        if (anchor) {
+          const rect = anchor.getBoundingClientRect();
+          setDockStyle({
+            position: "fixed",
+            left: rect.left + rect.width / 2,
+            bottom: Math.max(0, window.innerHeight - rect.top + 8),
+            transform: "translateX(-50%)",
+            zIndex: 62,
+            width: "max-content",
+          });
+          return;
+        }
+      }
+
+      setDockStyle({
+        position: "fixed",
+        right: mobile ? 12 : 32,
+        bottom: mobile
+          ? "max(1rem, calc(1rem + env(safe-area-inset-bottom, 0px)))"
+          : "max(2rem, calc(2rem + env(safe-area-inset-bottom, 0px)))",
+        zIndex: 62,
+        width: "max-content",
+      });
+    };
+
+    updateDock();
+    window.addEventListener("scroll", updateDock, { passive: true });
+    window.addEventListener("resize", updateDock);
+    window.addEventListener("quick-action-bar-change", updateDock);
+
+    return () => {
+      window.removeEventListener("scroll", updateDock);
+      window.removeEventListener("resize", updateDock);
+      window.removeEventListener("quick-action-bar-change", updateDock);
+    };
+  }, [enabled, isShown, pathname]);
+
+  useEffect(() => {
     if (!enabled || !isShown) return;
 
     const timer = window.setTimeout(() => {
@@ -413,36 +331,6 @@ export function AnimatedMascot() {
 
   useEffect(() => {
     if (!enabled || !isShown) return;
-
-    const updatePos = () => {
-      const mobile = window.innerWidth < 768;
-      const width = mobile ? 80 : 118;
-      const height = mobile ? 85 : 126;
-      const maxX = Math.max(24, window.innerWidth - width - 24);
-      const maxY = Math.max(140, window.innerHeight - height - (mobile ? 120 : 24));
-      const startX = Math.max(24, window.innerWidth - width - 40);
-      const startY = Math.max(160, window.innerHeight - height - (mobile ? 130 : 36));
-      const centerX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.52 : 0.44))));
-      const farLeftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.12 : 0.03))));
-      const leftX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.26 : 0.16))));
-      const rightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.66 : 0.68))));
-      const farRightX = Math.max(24, Math.min(maxX, Math.round(window.innerWidth * (mobile ? 0.82 : 0.88))));
-      const topY = Math.max(mobile ? 100 : 96, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.15 : 0.08))));
-      const midY = Math.max(mobile ? 160 : 120, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.35 : 0.3))));
-      const lowerY = Math.max(mobile ? 240 : 180, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.55 : 0.58))));
-      const bottomY = Math.max(mobile ? 280 : 220, Math.min(maxY, Math.round(window.innerHeight * (mobile ? 0.65 : 0.82))));
-
-      setIsMobileViewport(mobile);
-      setPos({ x: startX, y: startY });
-      setFlightPath({
-        x: mobile
-          ? [startX, rightX, centerX, leftX, farLeftX, centerX, startX]
-          : [startX, farLeftX, centerX, farRightX, leftX, rightX, startX],
-        y: mobile
-          ? [startY, lowerY, midY, topY, midY, lowerY, startY]
-          : [startY, midY, bottomY, topY, lowerY, midY, startY],
-      });
-    };
 
     const onMascotAlert = (event: Event) => {
       const custom = event as CustomEvent<{ message?: string; durationMs?: number }>;
@@ -490,56 +378,31 @@ export function AnimatedMascot() {
       }
     };
 
-    updatePos();
-    window.addEventListener("resize", updatePos);
     window.addEventListener("mascot-alert", onMascotAlert as EventListener);
     window.addEventListener("mascot-section-change", onSectionChange as EventListener);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      window.removeEventListener("resize", updatePos);
       window.removeEventListener("mascot-alert", onMascotAlert as EventListener);
       window.removeEventListener("mascot-section-change", onSectionChange as EventListener);
       window.removeEventListener("keydown", onKeyDown);
       stopSpeaking();
     };
-  }, [enabled, isShown, message, sectionMessages]);
+  }, [enabled, isShown, sectionMessages]);
 
-  if (!enabled) return null;
+  if (!enabled || !mounted) return null;
 
-  return (
+  const mascotNode = (
     <>
       {isShown && (
-        <motion.div
-          className={
-            isInnerServicePage
-              ? "fixed bottom-[5.5rem] right-3 z-[54] md:bottom-8 md:right-8"
-              : "fixed left-0 top-0 z-[54]"
-          }
-          initial={isInnerServicePage ? false : { x: pos.x, y: pos.y }}
-          animate={
-            isInnerServicePage || prefersReducedMotion
-              ? undefined
-              : { x: flightPath.x, y: flightPath.y }
-          }
-          transition={
-            isInnerServicePage || prefersReducedMotion
-              ? undefined
-              : {
-                  duration: isMobileViewport ? 25 : 18,
-                  repeat: Infinity,
-                  ease: "linear",
-                }
-          }
-          data-mascot="dragon"
-        >
+        <div data-mascot="dragon" style={dockStyle}>
           <AnimatePresence>
             {open && (
               <motion.div
                 initial={{ opacity: 0, y: 10, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                className="absolute -top-16 left-1/2 mb-2 w-max max-w-[260px] -translate-x-1/2 rounded-2xl border border-white/15 bg-black/80 px-4 py-3 text-sm font-medium text-white backdrop-blur-md shadow-2xl"
+                className="absolute bottom-full left-1/2 mb-2 w-max max-w-[260px] -translate-x-1/2 rounded-2xl border border-white/15 bg-black/80 px-4 py-3 text-sm font-medium text-white backdrop-blur-md shadow-2xl"
               >
                 <div className="relative">
                   <MessageSquare size={12} className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-black/80" />
@@ -568,7 +431,8 @@ export function AnimatedMascot() {
             </div>
           )}
 
-          <motion.button
+          <button
+            type="button"
             onClick={() => {
               clickCountRef.current += 1;
               const idx = clickCountRef.current - 1;
@@ -603,59 +467,22 @@ export function AnimatedMascot() {
                 });
               }
             }}
-            animate={
-              mascotStill || prefersReducedMotion
-                ? { y: 0, rotate: 0 }
-                : { y: [0, -10, 0], rotate: [0, 2, -2, 0] }
-            }
-            transition={
-              mascotStill || prefersReducedMotion
-                ? { duration: 0 }
-                : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
-            }
-            className="flex h-[90px] w-[85px] md:h-[126px] md:w-[118px] items-center justify-center transition-transform hover:scale-105 active:scale-95"
+            className="flex h-[72px] w-[68px] md:h-[118px] md:w-[112px] items-center justify-center transition-transform hover:scale-105 active:scale-95"
             aria-label="AI Mascot"
           >
             <div
-              className="relative group"
+              className="relative"
               style={{
-                filter: `drop-shadow(0 0 15px ${mascotGlowColor}44)`,
+                filter: `drop-shadow(0 0 14px ${mascotGlowColor}66)`,
               }}
             >
-              <div className="absolute inset-0 -z-10 rounded-full bg-white/20 opacity-50 blur-2xl transition-transform duration-500 scale-75 group-hover:scale-100" />
-
-              {isDefaultMascot ? (
-                <DefaultMascotGraphic
-                  animate={!mascotStill && !prefersReducedMotion}
-                  glowColor={mascotGlowColor}
-                  palette={mascotPalette}
-                />
-              ) : isBuiltInRobot ? (
-                <RobotMascotGraphic
-                  animate={!mascotStill && !prefersReducedMotion}
-                  glowColor={mascotGlowColor}
-                  filter={customFilter}
-                  scale={isMobileViewport ? dragonStyle.scale * 0.75 : dragonStyle.scale}
-                />
-              ) : (
-                <div className={mascotStill || prefersReducedMotion ? "" : "mascot-default-wave"}>
-                  <img
-                    src={mascotImg}
-                    alt="AI Mascot"
-                    className="h-[80px] w-[80px] md:h-[118px] md:w-[118px] object-contain"
-                    style={{
-                      filter: `${customFilter} drop-shadow(0 5px 15px rgba(0,0,0,0.5))`,
-                      transform: `scale(${isMobileViewport ? dragonStyle.scale * 0.75 : dragonStyle.scale})`,
-                      transformBox: "fill-box",
-                      transformOrigin: "center bottom",
-                    }}
-                  />
-                </div>
-              )}
+              <DefaultMascotGraphic animate={false} glowColor={mascotGlowColor} palette={mascotPalette} />
             </div>
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
       )}
     </>
   );
+
+  return createPortal(mascotNode, document.body);
 }

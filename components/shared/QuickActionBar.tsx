@@ -8,6 +8,11 @@ import Link from "next/link";
 import { getTelHref, getZaloUrl } from "@/lib/site-contact";
 
 const DISMISS_KEY = "quick-action-dismissed";
+const QUICK_BAR_CHANGE_EVENT = "quick-action-bar-change";
+
+function notifyQuickBarChange() {
+  window.dispatchEvent(new Event(QUICK_BAR_CHANGE_EVENT));
+}
 
 export function QuickActionBar() {
   const { settings } = useAdmin();
@@ -22,7 +27,11 @@ export function QuickActionBar() {
   useEffect(() => {
     const handleScroll = () => {
       if (dismissed) { setIsVisible(false); return; }
-      setIsVisible(window.scrollY > 300);
+      const nextVisible = window.scrollY > 300;
+      setIsVisible((prev) => {
+        if (prev !== nextVisible) notifyQuickBarChange();
+        return nextVisible;
+      });
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll);
@@ -39,6 +48,7 @@ export function QuickActionBar() {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
+          onAnimationComplete={() => notifyQuickBarChange()}
           className="fixed bottom-0 left-0 right-0 z-[60] flex items-center justify-around border-t border-indigo-100 bg-white/95 p-3 shadow-[0_-8px_30px_rgba(49,46,129,0.08)] backdrop-blur-lg md:hidden"
         >
           {/* Home */}
@@ -74,8 +84,14 @@ export function QuickActionBar() {
           </a>
 
           {/* Close */}
+          <div id="quick-action-close-anchor" className="flex flex-col items-center gap-1">
           <button
-            onClick={() => { setIsVisible(false); setDismissed(true); window.sessionStorage.setItem(DISMISS_KEY, "1"); }}
+            onClick={() => {
+              setIsVisible(false);
+              setDismissed(true);
+              window.sessionStorage.setItem(DISMISS_KEY, "1");
+              notifyQuickBarChange();
+            }}
             className="flex flex-col items-center gap-1 text-gray-500"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5">
@@ -83,6 +99,7 @@ export function QuickActionBar() {
             </div>
             <span className="text-[10px] font-bold uppercase tracking-wider">Đóng</span>
           </button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

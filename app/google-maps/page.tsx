@@ -25,7 +25,6 @@ const config: PlatformConfig = {
   hidePricingHeader: true,
   hideStats: true,
   hideContact: false,
-  robotFilter: "hue-rotate(-240deg) saturate(1.5) brightness(1.1)", // Robot màu cam theo yêu cầu
   customSections: [
     { id: "audit", label: "Kiểm tra vị trí" },
     { id: "gm-pricing", label: "Gói Google Maps" },

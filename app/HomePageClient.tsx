@@ -170,7 +170,7 @@ export default function HomePageClient() {
     const slides: any[] = [];
     
     const imagesToUse = [
-      "/slideshow-hero.png"
+      "/slideshow.jpg"
     ];
 
     imagesToUse.forEach((img, index) => {
@@ -433,7 +433,7 @@ export default function HomePageClient() {
             </h1>
             <div className="relative aspect-[16/9] w-full overflow-hidden">
               <img
-                src="/slideshow-hero.png"
+                src="/slideshow.jpg"
                 alt={`${brandName} — Agency marketing Facebook, Website và Google Maps`}
                 className="home-hero-kenburns"
               />
@@ -455,8 +455,8 @@ export default function HomePageClient() {
                 <div className="home-blob-float absolute -inset-10 rounded-full bg-violet-600/10 blur-[100px]" />
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-indigo-200 bg-indigo-50/40 shadow-2xl">
                   <img 
-                    src="/mascot-home.png" 
-                    alt="Về chúng tôi" 
+                    src="/2026-01-12.jpg" 
+                    alt="Đội ngũ Bứt Phá Marketing" 
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" 
                   />
                 </div>
@@ -673,7 +673,7 @@ export default function HomePageClient() {
                   <article className="overflow-hidden rounded-[1.5rem] border border-indigo-100 bg-white shadow-brand transition duration-300 hover:border-violet-300 hover:shadow-brand-lg h-full">
                     <div className="aspect-video overflow-hidden">
                       <img
-                        src={post.imageUrl || "/mascot-home.png"}
+                        src={post.imageUrl || "/logo.png"}
                         alt={post.title}
                         className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                       />

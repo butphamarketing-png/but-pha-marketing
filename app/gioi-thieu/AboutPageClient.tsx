@@ -43,8 +43,7 @@ export default function AboutPageClient() {
   const logoSrc = "/logo.png";
   const homeMedia = settings?.media?.home;
   const teamImage = "/2026-01-12.jpg";
-  const heroVisual = "/slideshow-hero.png";
-  const mascotImage = settings?.mascotImage || "/mascot-home.png";
+  const heroVisual = "/slideshow.jpg";
 
   const serviceHighlights = useMemo(() => {
     const websiteService = services.find((item) => item.platform === "website");
@@ -323,8 +322,7 @@ export default function AboutPageClient() {
             className="overflow-hidden rounded-[2.2rem] border border-indigo-300/30 p-6 shadow-brand-lg lg:p-8"
             style={{ background: BRAND_GRADIENT }}
           >
-            <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.8fr]">
-              <div>
+            <div className="max-w-3xl">
                 <div className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-violet-100">
                   06
                 </div>
@@ -349,12 +347,6 @@ export default function AboutPageClient() {
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
-              </div>
-
-              <div className="relative flex items-end justify-center">
-                <span className="absolute inset-x-12 bottom-8 h-24 rounded-full bg-violet-600/25 blur-3xl" />
-                <img src={mascotImage} alt="Mascot Bứt Phá Marketing" className="relative max-h-[280px] object-contain drop-shadow-[0_24px_40px_rgba(124,58,237,0.35)]" />
-              </div>
             </div>
           </div>
         </section>

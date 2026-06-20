@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { ChevronUp, Menu, X } from "lucide-react";
 import { ConsultModal } from "./ConsultModal";
-import { CursorEffect } from "./CursorEffect";
 import { DynamicGreeting } from "./DynamicGreeting";
 import { SiteNavMenu } from "./SiteNavMenu";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
@@ -177,7 +176,6 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         }
       `}</style>
 
-      <CursorEffect color={primaryColor} />
       <DynamicGreeting color={primaryColor} />
 
       <motion.div
