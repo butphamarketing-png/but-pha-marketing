@@ -1,4 +1,5 @@
 import { unstable_cache } from "next/cache";
+import { resolveBlogImageUrl } from "@/lib/news-images";
 import { createServerClient } from "@/lib/supabase";
 import { parseNewsContentMeta } from "@/lib/news-content-meta";
 import { getRelatedBlogs } from "@/lib/blog-utils";
@@ -69,7 +70,13 @@ function normalize(row: RawNewsRow, includeContent = false): ServerBlogItem {
     content: parsedContent.content,
     metaTitle: parsedContent.meta.metaTitle || "",
     description: row.description || "",
-    imageUrl: row.image_url || "",
+    imageUrl: resolveBlogImageUrl({
+      slug: row.slug || slugify(row.title) || row.id,
+      keywordsMain: row.keywords_main || "",
+      keywordsSecondary: row.keywords_secondary || "",
+      title: row.title,
+      imageUrl: row.image_url || "",
+    }),
     slug: row.slug || slugify(row.title) || row.id,
     hot: !!row.hot,
     metaDescription: row.meta_description || "",

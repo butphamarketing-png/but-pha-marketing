@@ -1,4 +1,5 @@
 import { parseNewsContentMeta } from "./news-content-meta";
+import { resolveBlogImageUrl } from "@/lib/news-images";
 import { useRealtime } from "./useRealtime";
 
 export interface ApiResult<T> {
@@ -163,24 +164,36 @@ function mapLead(value: unknown): Lead {
 function mapNewsItem(value: unknown): NewsItem {
   const item = isRecord(value) ? value : {};
   const parsedContent = parseNewsContentMeta(toStringValue(item.content));
+  const slug = toOptionalString(item.slug);
+  const title = toStringValue(item.title);
+  const keywordsMain =
+    toOptionalString(item.keywordsMain) ?? toOptionalString(item.keywords_main);
+  const keywordsSecondary =
+    toOptionalString(item.keywordsSecondary) ?? toOptionalString(item.keywords_secondary);
+  const rawImageUrl = toOptionalString(item.imageUrl) ?? toOptionalString(item.image_url);
+
   return {
     id: toStringValue(item.id),
-    title: toStringValue(item.title),
+    title,
     content: parsedContent.content,
     category: toStringValue(item.category, "blog"),
     published: typeof item.published === "boolean" ? item.published : true,
     timestamp: toNumber(item.timestamp),
     metaTitle: typeof parsedContent.meta.metaTitle === "string" ? parsedContent.meta.metaTitle : undefined,
     description: toOptionalString(item.description),
-    imageUrl: toOptionalString(item.imageUrl) ?? toOptionalString(item.image_url),
-    slug: toOptionalString(item.slug),
+    imageUrl: resolveBlogImageUrl({
+      slug,
+      keywordsMain,
+      keywordsSecondary,
+      title,
+      imageUrl: rawImageUrl,
+    }),
+    slug,
     hot: typeof item.hot === "boolean" ? item.hot : undefined,
     metaDescription:
       toOptionalString(item.metaDescription) ?? toOptionalString(item.meta_description),
-    keywordsMain:
-      toOptionalString(item.keywordsMain) ?? toOptionalString(item.keywords_main),
-    keywordsSecondary:
-      toOptionalString(item.keywordsSecondary) ?? toOptionalString(item.keywords_secondary),
+    keywordsMain,
+    keywordsSecondary,
     publishedAt:
       toOptionalString(item.publishedAt) ?? toOptionalString(item.published_at),
   };

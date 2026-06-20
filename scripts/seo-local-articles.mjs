@@ -8,6 +8,8 @@ import {
   NEWS_CONTENT_IMAGE_COUNT,
   altFromKeyword,
   validateSeoKeywordPlacement,
+  newsThumbnailForArticle,
+  newsContentImageCountForTopic,
 } from "./seo-article-helpers.mjs";
 import { LOCAL_SEO_ENTRIES } from "./seo-local-data.mjs";
 
@@ -32,6 +34,7 @@ function numberedList(items) {
 }
 
 function buildLocalContent(entry, imgOffset) {
+  const topic = "google-maps";
   const kw = entry.keywordsMain;
   const alt = altFromKeyword(kw);
   const kwTitle = altFromKeyword(kw);
@@ -46,14 +49,14 @@ ${toc([
 ])}
 <p>Doanh nghiệp có cửa hàng, văn phòng hoặc phục vụ theo khu vực không thể bỏ qua <strong>${kw}</strong>. Khách tìm "gần tôi", mở Google Maps và gọi điện ngay — nếu bạn không xuất hiện, đối thủ sẽ nhận lead thay bạn.</p>
 <p>Bài viết giải thích <strong>${kw}</strong> từ cơ bản đến thực hành: định nghĩa, yếu tố xếp hạng Maps, checklist triển khai và FAQ — phù hợp chủ shop, marketing và agency local SEO.</p>
-${img(imgOffset, alt)}
+${img(imgOffset, alt, topic)}
 <h2 id="tong-quan">${kwTitle} — Tổng quan và định nghĩa</h2>
 <p><strong>${kw}</strong> là: ${entry.definition}</p>
 <p>Chủ đề liên quan: ${entry.keywordsSecondary}. Hiểu đúng <strong>${kw}</strong> giúp phối hợp Google Business Profile, website local và review — thay vì chỉ "có mặt trên Maps" mà không ra khách.</p>
 <h2 id="vai-tro">Vai trò của ${kw} trong marketing địa phương</h2>
 <p>${entry.role}</p>
 <p><strong>${kw}</strong> bổ sung cho SEO website: Maps/Local Pack bắt intent "gần tôi" và gọi ngay; website nuôi trust và chuyển đổi sâu. Làm cả hai mới tối ưu lead địa phương.</p>
-${img(imgOffset + 1, alt)}
+${img(imgOffset + 1, alt, topic)}
 <h2 id="yeu-to">Các yếu tố cốt lõi của ${kw}</h2>
 <p>Google đánh giá hồ sơ và website local dựa trên:</p>
 ${bulletList(entry.components)}
@@ -62,7 +65,7 @@ ${bulletList(entry.components)}
 <p>Lộ trình thực chiến cho <strong>${kw}</strong>:</p>
 ${numberedList(entry.applySteps)}
 <p>Sau 4–8 tuần triển khai đều đặn, theo dõi impression/call trên GBP Insights và điều chỉnh — đó là vòng lặp cải thiện <strong>${kw}</strong> bền vững.</p>
-${img(imgOffset + 2, alt)}
+${img(imgOffset + 2, alt, topic)}
 <p>Bứt Phá Marketing hỗ trợ <strong>${kw}</strong> kết hợp thiết kế website chuẩn SEO local, tối ưu Google Business Profile và nội dung theo khu vực. Liên hệ tư vấn miễn phí.</p>
 ${internalLinks()}
 ${externalLinks()}
@@ -71,7 +74,7 @@ ${faq(entry.faq)}
 }
 
 function buildLocalArticle(entry, index) {
-  const imgOffset = (index + 11) % NEWS_CONTENT_IMAGE_COUNT;
+  const imgOffset = (index + 11) % newsContentImageCountForTopic("google-maps");
   const kwCap = entry.keywordsMain.charAt(0).toUpperCase() + entry.keywordsMain.slice(1);
   const metaDescription = `${kwCap}: ${entry.definition.slice(0, 110)}… Hướng dẫn SEO Maps & Local tại Bứt Phá Marketing.`;
   const description = `${entry.keywordsMain} — ${entry.role.slice(0, 100)}… ${entry.keywordsSecondary}.`;
@@ -84,7 +87,12 @@ function buildLocalArticle(entry, index) {
     metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
     metaDescription,
     description,
-    imageUrl: NEWS_THUMBNAIL,
+    imageUrl: newsThumbnailForArticle({
+      slug: entry.slug,
+      keywordsMain: entry.keywordsMain,
+      keywordsSecondary: entry.keywordsSecondary,
+      title: entry.h1,
+    }),
     content: wrapArticle({
       metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
       html: buildLocalContent(entry, imgOffset),

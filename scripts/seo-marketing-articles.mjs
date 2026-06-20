@@ -8,6 +8,9 @@ import {
   NEWS_CONTENT_IMAGE_COUNT,
   altFromKeyword,
   validateSeoKeywordPlacement,
+  detectNewsTopic,
+  newsThumbnailForArticle,
+  newsContentImageCountForTopic,
 } from "./seo-article-helpers.mjs";
 import { MARKETING_SEEDS } from "./seo-marketing-seeds.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
@@ -160,7 +163,7 @@ function expandSeed(seed) {
   };
 }
 
-function buildMarketingContent(entry, imgOffset) {
+function buildMarketingContent(entry, imgOffset, topic) {
   const kw = entry.keywordsMain;
   const alt = altFromKeyword(kw);
   return `
@@ -173,14 +176,14 @@ ${toc([
 ])}
 <p><strong>${kw}</strong> là chủ đề nhiều doanh nghiệp Việt quan tâm khi muốn tăng trưởng bền vững trên môi trường số. Bài viết tập trung vào ${entry.angle} — giúp bạn hiểu bức tranh tổng thể trước khi triển khai hoặc thuê agency.</p>
 <p>Trong bối cảnh cạnh tranh digital ngày càng gay gắt, <strong>${kw}</strong> không còn là “tùy chọn” mà là yếu tố then chốt để thu hút đúng khách, tối ưu chi phí và đo lường ROI rõ ràng.</p>
-${img(imgOffset, alt)}
+${img(imgOffset, alt, topic)}
 <h2 id="tong-quan">${entry.h1.replace(/\?.*$/, "").trim()} — Tổng quan</h2>
 <p><strong>${kw}</strong> xoay quanh ${entry.angle}. Khác với làm marketing theo cảm tính, cách tiếp cận có hệ thống giúp bạn biết đầu tư vào đâu, kỳ vọng gì và khi nào cần điều chỉnh.</p>
 <p>Website chuẩn SEO thường là điểm đến trung tâm — mọi chiến dịch ads, social và email đều dẫn về đây để chuyển đổi và lưu dữ liệu khách hàng.</p>
 <h2 id="tai-sao">Vì sao doanh nghiệp cần ${kw}?</h2>
 <p>Khách hàng tìm kiếm thông tin trên Google, social và video trước khi quyết định mua. Thiếu chiến lược <strong>${kw}</strong> khiến bạn mất cơ hội so với đối thủ, chi phí acquisition tăng và khó scale.</p>
 <p>Ngược lại, triển khai đúng hướng giúp tăng nhận diện thương hiệu, thu lead chất lượng và tạo nguồn doanh thu lặp lại từ khách cũ.</p>
-${img(imgOffset + 1, alt)}
+${img(imgOffset + 1, alt, topic)}
 <h2 id="chien-luc">Chiến lược triển khai ${kw}</h2>
 <p>Checklist thực hành khi bắt đầu với <strong>${kw}</strong>:</p>
 ${checklist(entry.checklist)}
@@ -188,7 +191,7 @@ ${checklist(entry.checklist)}
 <h2 id="do-luong">Đo lường và tối ưu liên tục</h2>
 <p>Theo dõi KPI phù hợp loại hình: traffic, lead, conversion rate, CPA, ROAS, LTV, retention. Dùng GA4, pixel ads và CRM để có một nguồn sự thật. Review hàng tuần, scale kênh hiệu quả và dừng kênh lỗ.</p>
 <p>Đội Bứt Phá Marketing hỗ trợ tư vấn <strong>${kw}</strong> kết hợp website, SEO và quảng cáo — triển khai trọn gói hoặc theo module tùy ngân sách.</p>
-${img(imgOffset + 2, alt)}
+${img(imgOffset + 2, alt, topic)}
 ${internalLinks()}
 ${externalLinks()}
 ${faq(entry.faq)}
@@ -196,7 +199,14 @@ ${faq(entry.faq)}
 }
 
 function buildMarketingArticle(entry, index) {
-  const imgOffset = (index + 3) % NEWS_CONTENT_IMAGE_COUNT;
+  const topic = detectNewsTopic({
+    slug: entry.slug,
+    keywordsMain: entry.keywordsMain,
+    keywordsSecondary: entry.keywordsSecondary,
+    title: entry.h1,
+    niche: entry.niche,
+  });
+  const imgOffset = (index + 3) % newsContentImageCountForTopic(topic);
   const metaDescription = `${entry.keywordsMain.charAt(0).toUpperCase() + entry.keywordsMain.slice(1)} — ${entry.angle}. Chiến lược, checklist KPI và FAQ. Tư vấn tại Bứt Phá Marketing.`;
   const description = `${entry.keywordsMain}: ${entry.angle}. Hướng dẫn triển khai và đo lường hiệu quả.`;
 
@@ -208,10 +218,16 @@ function buildMarketingArticle(entry, index) {
     metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
     metaDescription,
     description,
-    imageUrl: NEWS_THUMBNAIL,
+    imageUrl: newsThumbnailForArticle({
+      slug: entry.slug,
+      keywordsMain: entry.keywordsMain,
+      keywordsSecondary: entry.keywordsSecondary,
+      title: entry.h1,
+      niche: entry.niche,
+    }),
     content: wrapArticle({
       metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
-      html: buildMarketingContent(entry, imgOffset),
+      html: buildMarketingContent(entry, imgOffset, topic),
     }),
   };
 }

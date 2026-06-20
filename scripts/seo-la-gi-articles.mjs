@@ -8,6 +8,9 @@ import {
   NEWS_CONTENT_IMAGE_COUNT,
   altFromKeyword,
   validateSeoKeywordPlacement,
+  detectNewsTopic,
+  newsThumbnailForArticle,
+  newsContentImageCountForTopic,
 } from "./seo-article-helpers.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
 
@@ -33,7 +36,7 @@ function numberedList(items) {
   return `<ol class="list-decimal space-y-2 pl-5">${lis}</ol>`;
 }
 
-function buildLaGiContent(entry, imgOffset) {
+function buildLaGiContent(entry, imgOffset, topic) {
   const kw = entry.keywordsMain;
   const alt = altFromKeyword(kw);
   const kwTitle = altFromKeyword(kw);
@@ -48,14 +51,14 @@ ${toc([
 ])}
 <p>Nhiều chủ doanh nghiệp và marketer thường hỏi <strong>${kw}</strong> trước khi đầu tư digital. Bài viết này giải thích khái niệm, vai trò và cách áp dụng — phù hợp người mới bắt đầu lẫn team muốn củng cố nền tảng.</p>
 <p>Hiểu rõ <strong>${kw}</strong> giúp bạn ra quyết định đúng: tránh đầu tư mù quáng, chọn công cụ phù hợp và phối hợp website, SEO, quảng cáo hiệu quả hơn.</p>
-${img(imgOffset, alt)}
+${img(imgOffset, alt, topic)}
 <h2 id="dinh-nghia">${kwTitle} — Định nghĩa và khái niệm cơ bản</h2>
 <p><strong>${kw}</strong> được hiểu là: ${entry.definition}</p>
 <p>Khái niệm này liên quan trực tiếp đến các chủ đề: ${entry.keywordsSecondary}. Khi tìm hiểu sâu hơn, bạn sẽ thấy <strong>${kw}</strong> không chỉ là thuật ngữ mà là nền tảng cho chiến lược marketing online bền vững.</p>
 <h2 id="vai-tro">Vai trò của ${kw} trong kinh doanh hiện đại</h2>
 <p>${entry.role}</p>
 <p>Trong hệ sinh thái digital, <strong>${kw}</strong> thường đi kèm website chuẩn SEO, đo lường bằng Analytics và tối ưu liên tục theo dữ liệu thực tế — không phải triển khai một lần rồi bỏ quên.</p>
-${img(imgOffset + 1, alt)}
+${img(imgOffset + 1, alt, topic)}
 <h2 id="thanh-phan">Các thành phần cốt lõi cần nắm</h2>
 <p>Để nắm vững <strong>${kw}</strong>, bạn nên hiểu các yếu tố sau:</p>
 ${bulletList(entry.components)}
@@ -64,7 +67,7 @@ ${bulletList(entry.components)}
 <p>Dưới đây là lộ trình thực hành khi bắt đầu với <strong>${kw}</strong>:</p>
 ${numberedList(entry.applySteps)}
 <p>Áp dụng từng bước, đo kết quả và điều chỉnh — đó là cách biến lý thuyết <strong>${kw}</strong> thành lợi thế cạnh tranh thực tế.</p>
-${img(imgOffset + 2, alt)}
+${img(imgOffset + 2, alt, topic)}
 <p>Nếu bạn cần hỗ trợ triển khai sau khi đã hiểu <strong>${kw}</strong>, đội ngũ Bứt Phá Marketing tư vấn miễn phí giải pháp website, SEO và quảng cáo phù hợp mô hình kinh doanh.</p>
 ${internalLinks()}
 ${externalLinks()}
@@ -73,7 +76,13 @@ ${faq(entry.faq)}
 }
 
 function buildLaGiArticle(entry, index) {
-  const imgOffset = (index + 5) % NEWS_CONTENT_IMAGE_COUNT;
+  const topic = detectNewsTopic({
+    slug: entry.slug,
+    keywordsMain: entry.keywordsMain,
+    keywordsSecondary: entry.keywordsSecondary,
+    title: entry.h1,
+  });
+  const imgOffset = (index + 5) % newsContentImageCountForTopic(topic);
   const metaDescription = `${entry.keywordsMain.charAt(0).toUpperCase() + entry.keywordsMain.slice(1)}? ${entry.definition.slice(0, 120)}… Tìm hiểu chi tiết tại Bứt Phá Marketing.`;
   const description = `Giải thích ${entry.keywordsMain}: định nghĩa, vai trò, thành phần và cách áp dụng. ${entry.keywordsSecondary}.`;
 
@@ -85,10 +94,15 @@ function buildLaGiArticle(entry, index) {
     metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
     metaDescription,
     description,
-    imageUrl: NEWS_THUMBNAIL,
+    imageUrl: newsThumbnailForArticle({
+      slug: entry.slug,
+      keywordsMain: entry.keywordsMain,
+      keywordsSecondary: entry.keywordsSecondary,
+      title: entry.h1,
+    }),
     content: wrapArticle({
       metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
-      html: buildLaGiContent(entry, imgOffset),
+      html: buildLaGiContent(entry, imgOffset, topic),
     }),
   };
 }

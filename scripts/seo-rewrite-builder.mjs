@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL, buildSeoMetaTitle } from "./seo-article-helpers.mjs";
+import { NEWS_THUMBNAIL, buildSeoMetaTitle, newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
 import { WEBSITE_SEEDS } from "./seo-website-seeds.mjs";
@@ -363,7 +363,12 @@ function finalizeArticle({ base, keyword, title, html }) {
     metaTitle,
     metaDescription,
     description: base.description || `${keyword}: hướng dẫn triển khai và FAQ.`,
-    imageUrl: NEWS_THUMBNAIL,
+    imageUrl: newsThumbnailForArticle({
+      slug: base.slug,
+      keywordsMain: keyword,
+      keywordsSecondary: base.keywordsSecondary || `${keyword}, website chuẩn seo, bứt phá marketing`,
+      title,
+    }),
     content: buildWpSeoArticle({ metaTitle, keyword, html }),
   };
 }
