@@ -455,8 +455,8 @@ export default function HomePageClient() {
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-indigo-200 bg-indigo-50/40 shadow-2xl">
                   <img 
                     src={DEFAULT_INTRO_IMAGE}
-                    alt="Bứt Phá Marketing — Giải pháp marketing toàn diện"
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" 
+                    alt="Linh vật Bứt Phá Marketing"
+                    className="h-full w-full object-contain object-bottom p-4 transition-transform duration-700 hover:scale-105"
                   />
                 </div>
               </motion.div>

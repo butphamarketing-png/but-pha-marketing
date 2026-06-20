@@ -1,5 +1,6 @@
 export const DEFAULT_HERO_SLIDE = "/slideshow-hero.png";
-export const DEFAULT_INTRO_IMAGE = "/slideshow-hero.png";
+export const DEFAULT_INTRO_IMAGE = "/mascot-home.png";
+export const DEFAULT_MASCOT_IMAGE = "/mascot-home.png";
 
 const DEPRECATED_SLIDESHOW_SUFFIXES = [
   "/mascot-home.png",

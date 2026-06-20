@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
+import { DEFAULT_MASCOT_IMAGE } from "@/lib/media-assets";
 import { useAdmin } from "@/lib/AdminContext";
 import { MessageSquare } from "lucide-react";
 
@@ -24,19 +25,17 @@ function getPlatformFromPath(pathname: string) {
   return "home";
 }
 
-function BrandMascotGraphic({ logoSrc }: { logoSrc: string }) {
+function CompanyMascotGraphic({ mascotSrc }: { mascotSrc: string }) {
   return (
-    <div
-      className="flex h-[56px] w-[56px] items-center justify-center rounded-full border-2 border-violet-300/70 bg-gradient-to-br from-violet-600 to-violet-800 shadow-[0_8px_24px_rgba(124,58,237,0.45)] md:h-[72px] md:w-[72px]"
-      style={{ filter: `drop-shadow(0 0 14px ${MASCOT_PURPLE}66)` }}
-    >
-      <img
-        src={logoSrc}
-        alt=""
-        aria-hidden="true"
-        className="h-[68%] w-[68%] rounded-xl object-cover"
-      />
-    </div>
+    <img
+      src={mascotSrc}
+      alt=""
+      aria-hidden="true"
+      className="h-[72px] w-[68px] object-contain md:h-[118px] md:w-[112px]"
+      style={{
+        filter: `drop-shadow(0 0 14px ${MASCOT_PURPLE}66) drop-shadow(0 5px 15px rgba(0,0,0,0.35))`,
+      }}
+    />
   );
 }
 
@@ -62,7 +61,10 @@ export function AnimatedMascot() {
   const clickCountRef = useRef(0);
 
   const platform = getPlatformFromPath(pathname);
-  const logoSrc = settings.logo?.trim() || "/logo.png";
+  const mascotSrc =
+    settings.mascotImages?.[platform]?.trim() ||
+    settings.mascotImage?.trim() ||
+    DEFAULT_MASCOT_IMAGE;
   const message =
     settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
@@ -332,7 +334,7 @@ export function AnimatedMascot() {
             className="flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
             aria-label="Linh vật Bứt Phá Marketing"
           >
-            <BrandMascotGraphic logoSrc={logoSrc} />
+            <CompanyMascotGraphic mascotSrc={mascotSrc} />
           </button>
         </div>
       )}

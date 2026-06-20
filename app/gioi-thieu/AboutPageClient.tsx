@@ -194,7 +194,7 @@ export default function AboutPageClient() {
 
               {teamImage && (
                 <div className="overflow-hidden rounded-[1.8rem] border border-indigo-200 bg-indigo-50/30">
-                  <img src={teamImage} alt="Đội ngũ Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-cover" />
+                  <img src={teamImage} alt="Linh vật Bứt Phá Marketing" className="h-full min-h-[320px] w-full object-contain object-bottom p-6" />
                 </div>
               )}
             </div>

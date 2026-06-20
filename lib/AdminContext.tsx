@@ -17,7 +17,7 @@ import {
   normalizeStoredEmail,
   normalizeStoredHotline,
 } from "@/lib/site-contact";
-import { DEFAULT_HERO_SLIDE, sanitizeSlideshowItems } from "@/lib/media-assets";
+import { DEFAULT_HERO_SLIDE, DEFAULT_MASCOT_IMAGE, sanitizeSlideshowItems } from "@/lib/media-assets";
 
 export interface CaseStudyItem {
   id: string;
@@ -213,7 +213,7 @@ const defaultSettings: SiteSettings = {
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
   mascotEnabled: true,
-  mascotImage: "",
+  mascotImage: DEFAULT_MASCOT_IMAGE,
   mascotImages: {},
   mascotMessages: {},
   mascotAudioUrls: {},
@@ -318,7 +318,9 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     colors: { ...COLOR_DEFAULTS, ...(parsed.colors ?? {}) },
     visibility: { ...VISIBILITY_DEFAULTS, ...(parsed.visibility ?? {}) },
     platformNames: { ...PLATFORM_NAME_DEFAULTS, ...(parsed.platformNames ?? {}) },
-    mascotImage: isDeprecatedMascotAsset(parsed.mascotImage) ? "" : (parsed.mascotImage ?? ""),
+    mascotImage: isDeprecatedMascotAsset(parsed.mascotImage)
+      ? DEFAULT_MASCOT_IMAGE
+      : (parsed.mascotImage?.trim() || DEFAULT_MASCOT_IMAGE),
     mascotImages: Object.fromEntries(
       Object.entries({ ...defaultSettings.mascotImages, ...(parsed.mascotImages ?? {}) }).filter(
         ([, value]) => !isDeprecatedMascotAsset(value),
@@ -403,8 +405,8 @@ function getChangedTopLevelFields(previous: SiteSettings, current: SiteSettings)
 
 function isDeprecatedMascotAsset(url: string | undefined): boolean {
   const trimmed = (url ?? "").trim().toLowerCase();
-  if (!trimmed) return true;
-  return trimmed.endsWith("/mascot-home.png") || trimmed.endsWith("/mascot-dragon.svg");
+  if (!trimmed) return false;
+  return trimmed.endsWith("/mascot-dragon.svg");
 }
 
 function sanitizeSettingsForSave(settings: SiteSettings): SiteSettings {
