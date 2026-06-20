@@ -183,7 +183,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         style={{ scaleX: scrollYProgress, backgroundColor: primaryColor }}
       />
 
-      <header className="sticky top-0 z-40 border-b border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl">
+      <header className="sticky top-0 z-50 overflow-visible border-b border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <Link
@@ -257,7 +257,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         </AnimatePresence>
       </header>
 
-      <div className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 lg:flex">
+      <div className="section-scroll-nav pointer-events-none fixed right-4 top-1/2 z-30 hidden w-fit -translate-y-1/2 flex-col items-center gap-3 lg:flex">
         {sections.map((section, idx) => (
           <button
             key={section.id}
@@ -265,7 +265,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
               const el = document.getElementById(section.id);
               if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
             }}
-            className="h-3 w-3 rounded-full transition-all"
+            className="pointer-events-auto h-3 w-3 rounded-full transition-all"
             style={{
               backgroundColor: activeSection === idx ? primaryColor : "rgba(49, 46, 129, 0.2)",
               transform: activeSection === idx ? "scale(1.5)" : "scale(1)",

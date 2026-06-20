@@ -74,23 +74,48 @@ function NavGroupDesktop({
   tone: NavTone;
   onNavigate?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="group relative">
-      <Link
-        href={group.href}
-        onClick={onNavigate}
-        className={`inline-flex items-center gap-1 text-sm font-semibold transition ${groupButtonTone(tone)}`}
+    <div
+      className="group relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div className="inline-flex items-center gap-0.5">
+        <Link
+          href={group.href}
+          onClick={onNavigate}
+          className={`inline-flex items-center text-sm font-semibold transition ${groupButtonTone(tone)}`}
+        >
+          {group.label}
+        </Link>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={`Mở menu ${group.label}`}
+          onClick={() => setOpen((v) => !v)}
+          className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition ${groupButtonTone(tone)}`}
+        >
+          <ChevronDown size={14} className={`opacity-70 transition ${open ? "rotate-180" : "group-hover:rotate-180"}`} />
+        </button>
+      </div>
+      <div
+        className={`absolute left-0 top-full z-[60] min-w-[15rem] pt-2 transition-all ${
+          open
+            ? "visible opacity-100"
+            : "pointer-events-none invisible opacity-0 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100"
+        }`}
       >
-        {group.label}
-        <ChevronDown size={14} className="opacity-70 transition group-hover:rotate-180" />
-      </Link>
-      <div className="pointer-events-none invisible absolute left-0 top-full z-50 min-w-[15rem] pt-3 opacity-0 transition-all group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
         <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white p-2 shadow-xl">
           {group.children.map((child) => (
             <Link
               key={child.href}
               href={child.href}
-              onClick={onNavigate}
+              onClick={() => {
+                setOpen(false);
+                onNavigate?.();
+              }}
               className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${childLinkTone("light")}`}
             >
               {child.label}

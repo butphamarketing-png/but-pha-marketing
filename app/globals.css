@@ -714,9 +714,21 @@
   opacity: 0.85;
 }
 
-.platform-page-canvas > * {
+.platform-page-canvas > main {
   position: relative;
   z-index: 1;
+}
+
+.platform-page-canvas > header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  overflow: visible;
+}
+
+/* Giữ position:fixed cho thanh điều hướng dọc — tránh bị rule canvas ghi đè thành relative */
+.platform-page-canvas > .section-scroll-nav {
+  position: fixed;
 }
 
 [data-mascot="dragon"] {
