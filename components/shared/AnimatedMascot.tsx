@@ -24,161 +24,19 @@ function getPlatformFromPath(pathname: string) {
   return "home";
 }
 
-type MascotPalette = {
-  bodyTop: string;
-  bodyMid: string;
-  bodyBottom: string;
-  shell: string;
-  bellyTop: string;
-  bellyBottom: string;
-  accent: string;
-  accentDark: string;
-  stroke: string;
-  eye: string;
-  highlight: string;
-};
-
-function buildMascotPalette(): MascotPalette {
-  return {
-    bodyTop: MASCOT_PURPLE,
-    bodyMid: MASCOT_PURPLE,
-    bodyBottom: MASCOT_PURPLE,
-    shell: MASCOT_PURPLE,
-    bellyTop: MASCOT_PURPLE,
-    bellyBottom: MASCOT_PURPLE,
-    accent: MASCOT_PURPLE,
-    accentDark: MASCOT_PURPLE,
-    stroke: MASCOT_PURPLE,
-    eye: MASCOT_PURPLE,
-    highlight: MASCOT_PURPLE,
-  };
-}
-
-function DefaultMascotGraphic({
-  animate,
-  glowColor,
-  palette,
-}: {
-  animate: boolean;
-  glowColor: string;
-  palette: MascotPalette;
-}) {
-  const svgClassName = animate ? "mascot-default-wave" : "";
-  const eyeClassName = animate ? "mascot-default-blink" : "";
-
+function BrandMascotGraphic({ logoSrc }: { logoSrc: string }) {
   return (
-    <>
-      <svg
-        width="128"
-        height="128"
-        viewBox="0 0 128 128"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={`${svgClassName} h-[72px] w-[68px] md:h-[118px] md:w-[112px]`}
-        style={{
-          filter: `drop-shadow(0 0 15px ${glowColor}44) drop-shadow(0 5px 15px rgba(0,0,0,0.5))`,
-          transformBox: "fill-box",
-          transformOrigin: "center bottom",
-        }}
+    <div
+      className="flex h-[56px] w-[56px] items-center justify-center rounded-full border-2 border-violet-300/70 bg-gradient-to-br from-violet-600 to-violet-800 shadow-[0_8px_24px_rgba(124,58,237,0.45)] md:h-[72px] md:w-[72px]"
+      style={{ filter: `drop-shadow(0 0 14px ${MASCOT_PURPLE}66)` }}
+    >
+      <img
+        src={logoSrc}
+        alt=""
         aria-hidden="true"
-      >
-        <defs>
-          <radialGradient
-            id="body"
-            cx="0"
-            cy="0"
-            r="1"
-            gradientUnits="userSpaceOnUse"
-            gradientTransform="translate(54 33) rotate(48) scale(82 78)"
-          >
-            <stop stopColor={palette.bodyTop} />
-            <stop offset="0.55" stopColor={palette.bodyMid} />
-            <stop offset="1" stopColor={palette.bodyBottom} />
-          </radialGradient>
-          <linearGradient id="belly" x1="64" y1="78" x2="64" y2="111" gradientUnits="userSpaceOnUse">
-            <stop stopColor={palette.bellyTop} />
-            <stop offset="1" stopColor={palette.bellyBottom} />
-          </linearGradient>
-        </defs>
-        <ellipse cx="64" cy="117" rx="30" ry="7" fill="#000" fillOpacity="0.22" />
-        <path
-          d="M26 78C26 55 43 36 64 36C85 36 102 55 102 78C102 99 85 116 64 116C43 116 26 99 26 78Z"
-          fill="url(#body)"
-        />
-        <path d="M44 61C44 47 53 34 64 34C75 34 84 47 84 61V68H44V61Z" fill={palette.shell} />
-        <g className={eyeClassName} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-          <ellipse cx="51.5" cy="69" rx="11.5" ry="12" fill="#5B21B6" />
-          <ellipse cx="53.5" cy="67" rx="5.8" ry="6.2" fill="#DDD6FE" />
-          <circle cx="55.4" cy="68.2" r="2.3" fill="#5B21B6" />
-        </g>
-        <g className={eyeClassName} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-          <ellipse cx="76.5" cy="69" rx="11.5" ry="12" fill="#5B21B6" />
-          <ellipse cx="78.5" cy="67" rx="5.8" ry="6.2" fill="#DDD6FE" />
-          <circle cx="80.4" cy="68.2" r="2.3" fill="#5B21B6" />
-        </g>
-        <path d="M58 80C60.4 83.1 67.6 83.1 70 80" stroke={palette.stroke} strokeWidth="3" strokeLinecap="round" />
-        <path d="M43 96C45 88 51 82.6 57.8 82.6H70.2C77 82.6 83 88 85 96L81.5 103.5H46.5L43 96Z" fill="url(#belly)" />
-        <path d="M37 58L26.5 48L35.3 44.5L43.5 52L37 58Z" fill={palette.accent} />
-        <path d="M91 58L101.5 48L92.7 44.5L84.5 52L91 58Z" fill={palette.accent} />
-        <path d="M33 91C25 87 19 80 18 73.5C24.8 76.8 30.5 80.8 35 86L33 91Z" fill={palette.accentDark} />
-        <path d="M95 91C103 87 109 80 110 73.5C103.2 76.8 97.5 80.8 93 86L95 91Z" fill={palette.accentDark} />
-        <path d="M42 108L29 115" stroke={palette.accent} strokeWidth="6" strokeLinecap="round" />
-        <path d="M86 108L99 115" stroke={palette.accent} strokeWidth="6" strokeLinecap="round" />
-        <circle cx="46.8" cy="51.5" r="1.8" fill={palette.highlight} />
-        <circle cx="57.8" cy="47" r="1.8" fill={palette.highlight} />
-        <circle cx="69.8" cy="47" r="1.8" fill={palette.highlight} />
-        <circle cx="80.8" cy="51.5" r="1.8" fill={palette.highlight} />
-        <ellipse cx="45" cy="78.5" rx="3.6" ry="2.2" fill={palette.highlight} fillOpacity="0.75" />
-        <ellipse cx="83" cy="78.5" rx="3.6" ry="2.2" fill={palette.highlight} fillOpacity="0.75" />
-      </svg>
-
-      <style>{`
-        .mascot-default-wave {
-          animation: mascot-default-wave 4s linear infinite;
-        }
-
-        .mascot-default-blink {
-          animation: mascot-default-blink 4s linear infinite;
-        }
-
-        @keyframes mascot-default-blink {
-          0%,
-          49%,
-          56%,
-          100% {
-            transform: scaleY(1);
-          }
-
-          50%,
-          55% {
-            transform: scaleY(0.12);
-          }
-        }
-
-        @keyframes mascot-default-wave {
-          0%,
-          75% {
-            transform: translateY(0) rotate(0deg);
-          }
-
-          82% {
-            transform: translateY(-1px) rotate(-3deg);
-          }
-
-          88% {
-            transform: translateY(-2px) rotate(6deg);
-          }
-
-          94% {
-            transform: translateY(-1px) rotate(-4deg);
-          }
-
-          100% {
-            transform: translateY(0) rotate(0deg);
-          }
-        }
-      `}</style>
-    </>
+        className="h-[68%] w-[68%] rounded-xl object-cover"
+      />
+    </div>
   );
 }
 
@@ -189,7 +47,9 @@ export function AnimatedMascot() {
   const [dockStyle, setDockStyle] = useState<React.CSSProperties>({
     position: "fixed",
     right: 12,
+    left: "auto",
     bottom: 16,
+    transform: "none",
     zIndex: 62,
   });
   const [open, setOpen] = useState(false);
@@ -202,6 +62,7 @@ export function AnimatedMascot() {
   const clickCountRef = useRef(0);
 
   const platform = getPlatformFromPath(pathname);
+  const logoSrc = settings.logo?.trim() || "/logo.png";
   const message =
     settings.mascotMessages?.[platform] || settings.mascotMessages?.home || "Chào bạn, hôm nay bứt phá doanh số nhé!";
   const audioUrl = settings.mascotAudioUrls?.[platform] || settings.mascotAudioUrls?.home || "";
@@ -213,8 +74,6 @@ export function AnimatedMascot() {
     );
   }, [pathname]);
   const enabled = settings.mascotEnabled !== false && !hidden;
-  const mascotGlowColor = MASCOT_PURPLE;
-  const mascotPalette = useMemo(() => buildMascotPalette(), []);
   const sectionMessages = useMemo(
     () => settings.mascotSectionMessages?.[platform] || settings.mascotSectionMessages?.home || {},
     [platform, settings.mascotSectionMessages],
@@ -287,6 +146,7 @@ export function AnimatedMascot() {
           setDockStyle({
             position: "fixed",
             left: rect.left + rect.width / 2,
+            right: "auto",
             bottom: Math.max(0, window.innerHeight - rect.top + 8),
             transform: "translateX(-50%)",
             zIndex: 62,
@@ -299,9 +159,11 @@ export function AnimatedMascot() {
       setDockStyle({
         position: "fixed",
         right: mobile ? 12 : 32,
+        left: "auto",
         bottom: mobile
           ? "max(1rem, calc(1rem + env(safe-area-inset-bottom, 0px)))"
           : "max(2rem, calc(2rem + env(safe-area-inset-bottom, 0px)))",
+        transform: "none",
         zIndex: 62,
         width: "max-content",
       });
@@ -425,7 +287,7 @@ export function AnimatedMascot() {
                     scale: 1.25,
                   }}
                   transition={{ duration: 0.38 }}
-                  className="absolute h-3 w-3 rounded-full bg-cyan-300/90"
+                  className="absolute h-3 w-3 rounded-full bg-violet-300/90"
                 />
               ))}
             </div>
@@ -467,17 +329,10 @@ export function AnimatedMascot() {
                 });
               }
             }}
-            className="flex h-[72px] w-[68px] md:h-[118px] md:w-[112px] items-center justify-center transition-transform hover:scale-105 active:scale-95"
-            aria-label="AI Mascot"
+            className="flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+            aria-label="Linh vật Bứt Phá Marketing"
           >
-            <div
-              className="relative"
-              style={{
-                filter: `drop-shadow(0 0 14px ${mascotGlowColor}66)`,
-              }}
-            >
-              <DefaultMascotGraphic animate={false} glowColor={mascotGlowColor} palette={mascotPalette} />
-            </div>
+            <BrandMascotGraphic logoSrc={logoSrc} />
           </button>
         </div>
       )}

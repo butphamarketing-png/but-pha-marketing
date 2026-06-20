@@ -26,6 +26,7 @@ const ParticleBackground = dynamic(
   { ssr: false },
 );
 import { useAdmin } from "@/lib/AdminContext";
+import { DEFAULT_HERO_SLIDE, DEFAULT_INTRO_IMAGE } from "@/lib/media-assets";
 import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { BRAND_GRADIENT } from "@/lib/brand-colors";
@@ -42,8 +43,8 @@ export default function AboutPageClient() {
   const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = "/logo.png";
   const homeMedia = settings?.media?.home;
-  const teamImage = "/2026-01-12.jpg";
-  const heroVisual = "/slideshow.jpg";
+  const teamImage = DEFAULT_INTRO_IMAGE;
+  const heroVisual = DEFAULT_HERO_SLIDE;
 
   const serviceHighlights = useMemo(() => {
     const websiteService = services.find((item) => item.platform === "website");

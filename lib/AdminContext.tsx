@@ -17,6 +17,7 @@ import {
   normalizeStoredEmail,
   normalizeStoredHotline,
 } from "@/lib/site-contact";
+import { DEFAULT_HERO_SLIDE, sanitizeSlideshowItems } from "@/lib/media-assets";
 
 export interface CaseStudyItem {
   id: string;
@@ -174,10 +175,10 @@ function createDefaultMedia(): Record<string, MediaSection> {
   }, {});
 
   // Default slideshow for home platform
-  media.home.slideshow = ["/slideshow.jpg"];
+  media.home.slideshow = [DEFAULT_HERO_SLIDE];
 
   // Default slideshow for website platform
-  media.website.slideshow = ["/slideshow.jpg"];
+  media.website.slideshow = [DEFAULT_HERO_SLIDE];
 
   return media;
 }
@@ -250,7 +251,7 @@ function mergePackageConfig(parsed?: Partial<PackageConfig>): PackageConfig {
 function mergeMediaSection(parsed?: Partial<MediaSection>): MediaSection {
   return {
     videoUrl: parsed?.videoUrl ?? "",
-    slideshow: parsed?.slideshow ?? [],
+    slideshow: sanitizeSlideshowItems(parsed?.slideshow),
     cases: parsed?.cases ?? [],
   };
 }
@@ -404,19 +405,6 @@ function isDeprecatedMascotAsset(url: string | undefined): boolean {
   const trimmed = (url ?? "").trim().toLowerCase();
   if (!trimmed) return true;
   return trimmed.endsWith("/mascot-home.png") || trimmed.endsWith("/mascot-dragon.svg");
-}
-
-function sanitizeSlideshowItems(items: string[] | undefined): string[] {
-  const seen = new Set<string>();
-  return (items ?? [])
-    .map((item) => item.trim())
-    .filter((item) => {
-      if (!item) return false;
-      if (item.endsWith("/mascot-home.png") || item.endsWith("/slideshow-hero.png")) return false;
-      if (seen.has(item)) return false;
-      seen.add(item);
-      return true;
-    });
 }
 
 function sanitizeSettingsForSave(settings: SiteSettings): SiteSettings {

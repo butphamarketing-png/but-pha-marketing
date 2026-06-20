@@ -26,6 +26,7 @@ import {
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { SiFacebook } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
+import { sanitizeSlideshowItems, DEFAULT_HERO_SLIDE, DEFAULT_INTRO_IMAGE } from "@/lib/media-assets";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type ClientReview, type NewsItem, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
@@ -169,18 +170,16 @@ export default function HomePageClient() {
   const heroSlides = useMemo(() => {
     const slides: any[] = [];
     
-    const imagesToUse = [
-      "/slideshow.jpg"
-    ];
+    const imagesToUse = sanitizeSlideshowItems(homeMedia?.slideshow);
 
-    imagesToUse.forEach((img, index) => {
+    imagesToUse.forEach((img) => {
       slides.push({
         visual: img,
       });
     });
     
     return slides;
-  }, []);
+  }, [homeMedia?.slideshow]);
 
   const currentHeroSlide = heroSlides[activeHeroSlide] || heroSlides[0] || {
     eyebrow: "Bứt Phá Marketing",
@@ -433,7 +432,7 @@ export default function HomePageClient() {
             </h1>
             <div className="relative aspect-[16/9] w-full overflow-hidden">
               <img
-                src="/slideshow.jpg"
+                src={currentHeroSlide.visual || DEFAULT_HERO_SLIDE}
                 alt={`${brandName} — Agency marketing Facebook, Website và Google Maps`}
                 className="home-hero-kenburns"
               />
@@ -455,8 +454,8 @@ export default function HomePageClient() {
                 <div className="home-blob-float absolute -inset-10 rounded-full bg-violet-600/10 blur-[100px]" />
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] border border-indigo-200 bg-indigo-50/40 shadow-2xl">
                   <img 
-                    src="/2026-01-12.jpg" 
-                    alt="Đội ngũ Bứt Phá Marketing" 
+                    src={DEFAULT_INTRO_IMAGE}
+                    alt="Bứt Phá Marketing — Giải pháp marketing toàn diện"
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" 
                   />
                 </div>
