@@ -29,6 +29,10 @@ const PushNotificationPrompt = dynamic(
   () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
   { ssr: false },
 );
+const SiteConsultPopup = dynamic(
+  () => import("@/components/shared/SiteConsultPopup").then((mod) => mod.SiteConsultPopup),
+  { ssr: false },
+);
 export function MarketingChrome() {
   const pathname = usePathname();
 
@@ -51,6 +55,7 @@ export function MarketingChrome() {
       <ThemeToggleButton />
       <FloatingContactButtons />
       <PushNotificationPrompt />
+      <SiteConsultPopup />
       <QuickActionBar />
     </>
   );

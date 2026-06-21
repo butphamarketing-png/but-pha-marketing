@@ -6,6 +6,8 @@ export const PUSH_DISMISS_SESSION_KEY = "butpha_push_prompt_dismissed_session";
 export const PUSH_DENY_UNTIL_KEY = "butpha_push_prompt_dismissed_until";
 export const BLOG_LEAD_DISMISS_SESSION_KEY = "butpha_blog_lead_dismissed_session";
 export const BLOG_LEAD_SUBMITTED_UNTIL_KEY = "butpha_blog_lead_submitted_until";
+export const SITE_CONSULT_DISMISS_SESSION_KEY = "butpha_site_consult_dismissed_session";
+export const SITE_CONSULT_SUBMITTED_UNTIL_KEY = "butpha_site_consult_submitted_until";
 
 export function markPushPromptPending() {
   if (typeof window === "undefined") return;
@@ -52,5 +54,13 @@ export function shouldSkipBlogLeadPopup(): boolean {
   const submittedUntil = Number(localStorage.getItem(BLOG_LEAD_SUBMITTED_UNTIL_KEY) || "0");
   if (submittedUntil > Date.now()) return true;
   if (hasPushSubscription()) return true;
+  return false;
+}
+
+export function shouldSkipSiteConsultPopup(): boolean {
+  if (typeof window === "undefined") return true;
+  if (sessionStorage.getItem(SITE_CONSULT_DISMISS_SESSION_KEY)) return true;
+  const submittedUntil = Number(localStorage.getItem(SITE_CONSULT_SUBMITTED_UNTIL_KEY) || "0");
+  if (submittedUntil > Date.now()) return true;
   return false;
 }

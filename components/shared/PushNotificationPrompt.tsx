@@ -11,6 +11,7 @@ import {
   markPushPromptSettled,
   markPushSubscribed,
 } from "@/lib/marketing-popup-gate";
+import { canUseWebPush } from "@/lib/push-client";
 
 const DISMISS_SESSION_KEY = PUSH_DISMISS_SESSION_KEY;
 const DENY_DISMISS_KEY = PUSH_DENY_UNTIL_KEY;
@@ -26,10 +27,6 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-function canUseWebPush() {
-  return typeof window !== "undefined" && "Notification" in window && "serviceWorker" in navigator;
-}
-
 export function PushNotificationPrompt() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
@@ -40,15 +37,14 @@ export function PushNotificationPrompt() {
 
   useEffect(() => {
     if (typeof window === "undefined" || isInternalAppPath(pathname)) return;
+    if (!canUseWebPush()) return;
 
     if (sessionStorage.getItem(DISMISS_SESSION_KEY)) return;
 
     const deniedUntil = Number(localStorage.getItem(DENY_DISMISS_KEY) || "0");
     if (deniedUntil > Date.now()) return;
 
-    if (canUseWebPush()) {
-      if (Notification.permission === "granted" || Notification.permission === "denied") return;
-    }
+    if (Notification.permission === "granted" || Notification.permission === "denied") return;
 
     const showOnPaths = pathname === "/" || pathname.startsWith("/blog");
     if (!showOnPaths) return;
