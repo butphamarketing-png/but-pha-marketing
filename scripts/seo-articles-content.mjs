@@ -33,6 +33,7 @@ import { LA_GI_ARTICLES } from "./seo-la-gi-articles.mjs";
 import { LOCAL_SEO_ARTICLES } from "./seo-local-articles.mjs";
 import { WEBSITE_ARTICLES } from "./seo-website-articles.mjs";
 import { MARKETING_ARTICLES } from "./seo-marketing-articles.mjs";
+import { CUSTOMER_KEYWORD_ARTICLES } from "./seo-customer-keywords-articles.mjs";
 
 function faq(items) {
   const blocks = items
@@ -79,4 +80,5 @@ export const SEO_ARTICLES = [
   ...LOCAL_SEO_ARTICLES,
   ...WEBSITE_ARTICLES,
   ...MARKETING_ARTICLES,
+  ...CUSTOMER_KEYWORD_ARTICLES,
 ];

@@ -10,6 +10,7 @@
     "patch:cms": "node scripts/patch-cms-menu-reports.mjs && node scripts/patch-cms-phases-123.mjs && node scripts/patch-cms-sync-ux.mjs && node scripts/patch-cms-improvements.mjs && node scripts/patch-cms-khachhang-hub.mjs && node scripts/patch-cms-tax.mjs && node scripts/patch-cms-expense-vat.mjs",
     "seed:erp-services": "npx tsx --tsconfig tsconfig.json scripts/seed-erp-services-run.ts",
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
+    "seed:customer-keywords-100": "node scripts/seed-customer-keywords-100.mjs",
     "generate:vapid-keys": "node scripts/generate-vapid-keys.mjs",
     "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
