@@ -11,6 +11,7 @@
     "seed:erp-services": "npx tsx --tsconfig tsconfig.json scripts/seed-erp-services-run.ts",
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
     "seed:customer-keywords-100": "node scripts/seed-customer-keywords-100.mjs",
+    "seed:pillar-short-keywords": "node scripts/seed-pillar-short-keywords.mjs",
     "generate:vapid-keys": "node scripts/generate-vapid-keys.mjs",
     "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",

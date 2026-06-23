@@ -12,18 +12,18 @@ import {
   SITE,
 } from "./seo-wp-structure.mjs";
 
-const KEYWORD = "báo giá thiết kế website";
-const TITLE = "Báo Giá Thiết Kế Website Và Những Yếu Tố Ảnh Hưởng";
+const KEYWORD = "báo giá website";
+const TITLE = "Báo Giá Website — Bảng Giá Thiết Kế Website 2026 & Yếu Tố Ảnh Hưởng";
 
 export const REWRITE_BAO_GIA_THIET_KE_WEBSITE = {
   title: TITLE,
   slug: "bao-gia-thiet-ke-website",
   keywordsMain: KEYWORD,
   keywordsSecondary:
-    "chi phí làm website, giá web doanh nghiệp, giá thiết kế website 2026, báo giá làm web",
-  metaTitle: "Báo Giá Thiết Kế Website 2026 | Bảng Giá Minh Bạch | Bứt Phá",
+    "báo giá thiết kế website, chi phí làm website, giá web doanh nghiệp, giá thiết kế website 2026",
+  metaTitle: "Báo Giá Website 2026 | Bảng Giá Thiết Kế Web | Bứt Phá",
   metaDescription:
-    "Báo giá thiết kế website 2026: gói 3–12 triệu, hosting, tên miền, phí ẩn cần hỏi. Yếu tố ảnh hưởng giá và cách tối ưu ngân sách. Tư vấn miễn phí.",
+    "Báo giá website & thiết kế website 2026: gói 3–12 triệu, hosting, tên miền, phí ẩn cần hỏi. Yếu tố ảnh hưởng giá. Tư vấn miễn phí.",
   description:
     "Cập nhật báo giá thiết kế website minh bạch: bảng giá gói, chi phí duy trì, yếu tố làm tăng giá và checklist so sánh báo giá từ đối tác.",
   imageUrl: NEWS_THUMBNAIL,

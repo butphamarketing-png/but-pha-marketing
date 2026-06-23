@@ -1,7 +1,18 @@
 import type { ServerBlogItem } from "@/lib/server-blog";
 
 const GENERIC_KEYWORD = "thiết kế website";
-const PILLAR_SLUGS = new Set(["thiet-ke-website"]);
+const PILLAR_SLUGS = new Set([
+  "thiet-ke-website",
+  "bao-gia-thiet-ke-website",
+  "seo-la-gi",
+  "quang-cao-facebook",
+  "thiet-ke-fanpage-facebook",
+  "cham-soc-fanpage",
+  "seo-google-maps-la-gi",
+  "marketing-online-la-gi",
+  "google-ads-la-gi",
+  "tu-van-marketing-mien-phi",
+]);
 
 /** Title tuyệt đối — tránh template root layout chèn thêm "| Bứt Phá Marketing". */
 export function buildBlogAbsoluteTitle(rawTitle: string): string {

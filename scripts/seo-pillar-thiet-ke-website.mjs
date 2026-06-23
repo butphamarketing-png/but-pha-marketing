@@ -12,14 +12,14 @@ function faq(items) {
 
 /** Bài pillar chính — slug /blog/thiet-ke-website — từ khóa: thiết kế website */
 export const PILLAR_THIET_KE_WEBSITE = {
-  title: "Thiết Kế Website Chuyên Nghiệp Chuẩn SEO — Báo Giá & Quy Trình 2026",
+  title: "Thiết Kế Website — Báo Giá, Quy Trình & Làm Website Chuẩn SEO 2026",
   slug: "thiet-ke-website",
   keywordsMain: "thiết kế website",
   keywordsSecondary:
-    "thiet ke website, dịch vụ thiết kế website, báo giá thiết kế website, thiết kế web chuẩn seo, làm website doanh nghiệp",
-  metaTitle: "Thiết Kế Website Chuẩn SEO | Báo Giá 2026 | Bứt Phá",
+    "làm website, làm web, thiết kế web, báo giá thiết kế website, thiết kế web chuẩn seo, làm website doanh nghiệp",
+  metaTitle: "Thiết Kế Website | Báo Giá & Làm Web 2026 | Bứt Phá",
   metaDescription:
-    "Hướng dẫn thiết kế website toàn diện: loại website, quy trình 7 bước, bảng giá 3–12 triệu, checklist SEO & chuyển đổi. Tư vấn miễn phí tại TP.HCM.",
+    "Thiết kế website & làm website chuẩn SEO: quy trình 7 bước, bảng giá 3–12 triệu, checklist chuyển đổi. Tư vấn miễn phí — Bứt Phá Marketing.",
   description:
     "Bài viết pillar về thiết kế website: khái niệm, lợi ích, quy trình triển khai, bảng giá minh bạch, tiêu chí chọn đối tác và FAQ dành cho doanh nghiệp Việt Nam.",
   imageUrl: NEWS_THUMBNAIL,

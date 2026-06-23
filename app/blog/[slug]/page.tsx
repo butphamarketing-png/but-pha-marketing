@@ -7,6 +7,7 @@ import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
 import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { BlogPillarHub } from "@/components/blog/BlogPillarHub";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
 import { BlogArticleContent } from "@/components/blog/BlogArticleContent";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
@@ -152,6 +153,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
         </div>
       </section>
 
+      <BlogPillarHub slug={blogPath} keywordsMain={blog.keywordsMain} title={blog.title} />
       <RelatedPosts posts={related.map(toBlogCardItem)} />
       <BlogArticleExtras />
     </main>

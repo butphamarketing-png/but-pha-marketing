@@ -33,9 +33,9 @@ export const LOCAL_SEO_ENTRIES = [
   },
   {
     slug: "seo-google-maps-la-gi",
-    h1: "SEO Google Maps Là Gì? Cách Tối Ưu Hiển Thị Trên Bản Đồ Google",
-    keywordsMain: "seo google maps là gì",
-    keywordsSecondary: "google maps seo, xếp hạng google maps, local pack",
+    h1: "SEO Google Maps Là Gì? Tối Ưu Hiển Thị Trên Bản Đồ Google",
+    keywordsMain: "SEO Google Maps",
+    keywordsSecondary: "seo google maps là gì, google maps seo, xếp hạng google maps, local pack",
     definition:
       "SEO Google Maps là tối ưu hồ sơ và tín hiệu liên quan để doanh nghiệp xuất hiện cao trên bản đồ Google và khối Local Pack (3 kết quả maps) khi người dùng tìm kiếm theo khu vực.",
     role:

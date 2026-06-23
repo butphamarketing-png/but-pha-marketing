@@ -33,9 +33,9 @@ export const LA_GI_ENTRIES = [
   },
   {
     slug: "seo-la-gi",
-    h1: "SEO Là Gì? Cách Tối Ưu Website Lên Top Google",
-    keywordsMain: "seo là gì",
-    keywordsSecondary: "search engine optimization, tối ưu công cụ tìm kiếm, seo google",
+    h1: "SEO Là Gì? Cách Tối Ưu Website Lên Top Google 2026",
+    keywordsMain: "SEO",
+    keywordsSecondary: "seo là gì, seo website, lên top google, tối ưu seo, search engine optimization",
     definition:
       "SEO (Search Engine Optimization) là tập hợp kỹ thuật và nội dung giúp website xuất hiện cao trên kết quả tìm kiếm tự nhiên của Google — mang về traffic miễn phí, bền vững theo thời gian.",
     role:
@@ -62,9 +62,9 @@ export const LA_GI_ENTRIES = [
   },
   {
     slug: "marketing-online-la-gi",
-    h1: "Marketing Online Là Gì? Các Hình Thức Và Lợi Ích Cho Doanh Nghiệp",
-    keywordsMain: "marketing online là gì",
-    keywordsSecondary: "digital marketing, tiếp thị trực tuyến, quảng cáo online",
+    h1: "Marketing Online Là Gì? Chiến Lược & Lợi Ích Cho Doanh Nghiệp",
+    keywordsMain: "marketing online",
+    keywordsSecondary: "marketing online là gì, digital marketing, tiếp thị trực tuyến, quảng cáo online",
     definition:
       "Marketing online (digital marketing) là hoạt động quảng bá thương hiệu, sản phẩm và dịch vụ trên các kênh Internet — website, mạng xã hội, email, quảng cáo tìm kiếm và nội dung số.",
     role:
@@ -120,9 +120,9 @@ export const LA_GI_ENTRIES = [
   },
   {
     slug: "google-ads-la-gi",
-    h1: "Google Ads Là Gì? Cách Chạy Quảng Cáo Google Hiệu Quả",
-    keywordsMain: "google ads là gì",
-    keywordsSecondary: "quảng cáo google, google adwords, ppc google",
+    h1: "Google Ads Là Gì? Hướng Dẫn Chạy Quảng Cáo Google Hiệu Quả",
+    keywordsMain: "Google Ads",
+    keywordsSecondary: "google ads là gì, quảng cáo google, google adwords, ppc google",
     definition:
       "Google Ads là nền tảng quảng cáo trả phí của Google — hiển thị quảng cáo trên kết quả tìm kiếm, YouTube, Gmail và mạng đối tác khi người dùng tìm từ khóa hoặc đối tượng phù hợp.",
     role:
