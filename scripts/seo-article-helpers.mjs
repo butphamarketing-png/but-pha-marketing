@@ -200,6 +200,36 @@ export function buildSeoMetaTitle(primary, brand = "Bứt Phá") {
   return `${head}${suffix}`;
 }
 
+/** Meta description ≤160 ký tự, luôn chứa từ khóa chính. */
+export function buildSeoMetaDescription(keywordsMain, hint = "") {
+  const kw = String(keywordsMain || "").trim();
+  const kwCap = kw ? kw.charAt(0).toUpperCase() + kw.slice(1) : "";
+  const extra = String(hint || "").trim();
+  let desc = extra
+    ? `${kwCap} — ${extra.replace(/^[^:]+:\s*/, "").slice(0, 90)}. Tư vấn Bứt Phá Marketing.`
+    : `${kwCap} — hướng dẫn, checklist và FAQ. Tư vấn Bứt Phá Marketing.`;
+  if (!keywordInText(desc, kw)) desc = `${kwCap}. ${desc}`;
+  if (desc.length > 158) desc = desc.slice(0, 155).replace(/\s+\S*$/, "").trim() + "…";
+  return desc.slice(0, 158);
+}
+
+export function ensureTitleHasKeyword(title, keywordsMain) {
+  const t = String(title || "").trim();
+  const kw = String(keywordsMain || "").trim();
+  if (!kw || keywordInText(t, kw)) return t;
+  const kwCap = kw.charAt(0).toUpperCase() + kw.slice(1);
+  return `${kwCap} — ${t}`;
+}
+
+const META_PREFIX = /^<!-- BUTPHA_META ([\s\S]+?) -->\s*/;
+
+export function patchNewsContentMetaTitle(content, metaTitle) {
+  const prefix = `<!-- BUTPHA_META ${JSON.stringify({ metaTitle })} -->\n`;
+  const match = String(content || "").match(META_PREFIX);
+  if (match) return String(content).replace(META_PREFIX, prefix);
+  return prefix + String(content || "");
+}
+
 export function validateSeoKeywordPlacement({
   keywordsMain,
   title,

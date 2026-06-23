@@ -4,12 +4,13 @@ import {
   toc,
   internalLinks,
   externalLinks,
-  NEWS_THUMBNAIL,
   NEWS_CONTENT_IMAGE_COUNT,
   altFromKeyword,
   validateSeoKeywordPlacement,
   newsThumbnailForArticle,
   newsContentImageCountForTopic,
+  buildSeoMetaTitle,
+  buildSeoMetaDescription,
 } from "./seo-article-helpers.mjs";
 import { LOCAL_SEO_ENTRIES } from "./seo-local-data.mjs";
 
@@ -75,8 +76,8 @@ ${faq(entry.faq)}
 
 function buildLocalArticle(entry, index) {
   const imgOffset = (index + 11) % newsContentImageCountForTopic("google-maps");
-  const kwCap = entry.keywordsMain.charAt(0).toUpperCase() + entry.keywordsMain.slice(1);
-  const metaDescription = `${kwCap}: ${entry.definition.slice(0, 110)}… Hướng dẫn SEO Maps & Local tại Bứt Phá Marketing.`;
+  const metaTitle = buildSeoMetaTitle(entry.keywordsMain);
+  const metaDescription = buildSeoMetaDescription(entry.keywordsMain, entry.definition);
   const description = `${entry.keywordsMain} — ${entry.role.slice(0, 100)}… ${entry.keywordsSecondary}.`;
 
   return {
@@ -84,7 +85,7 @@ function buildLocalArticle(entry, index) {
     slug: entry.slug,
     keywordsMain: entry.keywordsMain,
     keywordsSecondary: entry.keywordsSecondary,
-    metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
+    metaTitle,
     metaDescription,
     description,
     imageUrl: newsThumbnailForArticle({
@@ -94,7 +95,7 @@ function buildLocalArticle(entry, index) {
       title: entry.h1,
     }),
     content: wrapArticle({
-      metaTitle: `${entry.h1.replace(/\?.*$/, "").trim()} | Bứt Phá Marketing`,
+      metaTitle,
       html: buildLocalContent(entry, imgOffset),
     }),
   };
