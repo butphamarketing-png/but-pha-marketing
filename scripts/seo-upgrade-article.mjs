@@ -8,6 +8,7 @@ import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 import { KEYWORD_ENTRIES } from "./seo-keyword-data.mjs";
 import { LONGTAIL_GAP_ENTRIES } from "./seo-longtail-gaps.mjs";
 import { KEYWORDS_200, KEYWORDS_200_MARKETING_ONLY } from "./seo-keywords-200.mjs";
+import { KEYWORDS_500, KEYWORDS_500_MARKETING_ONLY } from "./seo-keywords-500.mjs";
 import { buildRewriteArticle } from "./seo-rewrite-builder.mjs";
 import { buildMarketingLongFormFromEntry } from "./seo-marketing-builder.mjs";
 import { applyPillarClusterLinks } from "./pillar-cluster-links.mjs";
@@ -19,6 +20,7 @@ const MARKETING_ONLY_SLUGS = new Set([
   "google-ads-hay-facebook-ads",
   "seo-hay-google-ads",
   ...KEYWORDS_200_MARKETING_ONLY,
+  ...KEYWORDS_500_MARKETING_ONLY,
 ]);
 
 const REWRITE_SLUG_PREFIXES = ["thiet-ke-website", "bao-gia-thiet-ke", "bao-gia-website"];
@@ -87,6 +89,7 @@ function buildEntryIndex() {
     })),
     ...LONGTAIL_GAP_ENTRIES,
     ...KEYWORDS_200,
+    ...KEYWORDS_500,
   ];
   return new Map(entries.map((e) => [e.slug, e]));
 }

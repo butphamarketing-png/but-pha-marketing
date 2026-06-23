@@ -22,6 +22,7 @@
     "seed:phase10": "node scripts/seed-phase10.mjs",
     "seed:fix-seo-meta": "node scripts/seed-fix-seo-meta.mjs",
     "seed:keywords-200": "node scripts/seed-keywords-200.mjs",
+    "seed:keywords-500": "node scripts/seed-keywords-500.mjs",
     "generate:vapid-keys": "node scripts/generate-vapid-keys.mjs",
     "seed:admin-auth": "node scripts/seed-admin-auth.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
