@@ -4,16 +4,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateSeoKeywordPlacement } from "./seo-article-helpers.mjs";
 import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
+import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
 dotenv.config({ path: path.join(root, ".env") });
 
 const GENERIC_KEYWORD = "thiết kế website";
-const PILLAR_SLUGS = new Set(["thiet-ke-website"]);
 
 export function isQualitySeoArticle(article) {
-  if (PILLAR_SLUGS.has(article.slug)) return true;
+  if (PILLAR_SLUG_SET.has(article.slug)) return true;
+  if (article.hot === true) return true;
   const kw = (article.keywordsMain || "").trim().toLowerCase();
   if (!kw || kw === GENERIC_KEYWORD) return false;
   return kw.startsWith("thiết kế website") || kw.includes("website");
@@ -37,7 +38,7 @@ export function buildRewriteSeedPayload(article) {
     description: article.description,
     image_url: article.imageUrl,
     slug: article.slug,
-    hot: isQualitySeoArticle(article) && article.content.length >= 12000,
+    hot: (isQualitySeoArticle(article) || article.hot === true) && article.content.length >= 12000,
     meta_description: article.metaDescription,
     keywords_main: article.keywordsMain,
     keywords_secondary: article.keywordsSecondary,

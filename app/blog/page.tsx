@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { SITE_URL } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 import { BlogSearchGrid } from "@/components/blog/BlogSearchGrid";
+import { BlogTopicNav } from "@/components/blog/BlogTopicNav";
 
 const BASE_URL = SITE_URL;
 
@@ -81,6 +82,10 @@ export default async function BlogPage() {
             Nhận tư vấn miễn phí
             <ArrowRight size={18} />
           </Link>
+        </div>
+
+        <div className="mb-8">
+          <BlogTopicNav active="all" />
         </div>
 
         <BlogSearchGrid blogs={listItems} />

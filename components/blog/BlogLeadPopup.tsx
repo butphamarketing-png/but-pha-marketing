@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { db } from "@/lib/useData";
+import { trackBlogEvent } from "@/lib/blog-analytics";
+import type { PillarTopic } from "@/lib/seo-pillar-hub";
 import {
   BLOG_LEAD_DISMISS_SESSION_KEY,
   BLOG_LEAD_SUBMITTED_UNTIL_KEY,
@@ -22,7 +24,15 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-export function BlogLeadPopup({ source }: { source: "blog-list" | "blog-article" }) {
+export function BlogLeadPopup({
+  source,
+  slug,
+  topic,
+}: {
+  source: "blog-list" | "blog-article";
+  slug?: string;
+  topic?: PillarTopic;
+}) {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,13 +56,26 @@ export function BlogLeadPopup({ source }: { source: "blog-list" | "blog-article"
       }
 
       openTimer = window.setTimeout(() => {
-        if (!cancelled && !shouldSkipBlogLeadPopup()) setVisible(true);
+        if (!cancelled && !shouldSkipBlogLeadPopup()) {
+          setVisible(true);
+          trackBlogEvent("blog_lead_view", {
+            source,
+            blog_slug: slug,
+            blog_topic: topic,
+          });
+        }
       }, 12000);
     };
 
     const onMouseLeave = (event: MouseEvent) => {
       if (event.clientY <= 0 && isPushFlowSettled() && !shouldSkipBlogLeadPopup()) {
         setVisible(true);
+        trackBlogEvent("blog_lead_view", {
+          source,
+          blog_slug: slug,
+          blog_topic: topic,
+          trigger: "exit_intent",
+        });
       }
     };
 
@@ -65,9 +88,10 @@ export function BlogLeadPopup({ source }: { source: "blog-list" | "blog-article"
       if (pollTimer) window.clearTimeout(pollTimer);
       document.removeEventListener("mouseleave", onMouseLeave);
     };
-  }, [pathname]);
+  }, [pathname, slug, source, topic]);
 
   const dismissForSession = () => {
+    trackBlogEvent("blog_lead_dismiss", { source, blog_slug: slug, blog_topic: topic });
     sessionStorage.setItem(SESSION_DISMISS_KEY, "1");
     setVisible(false);
   };
@@ -106,6 +130,7 @@ export function BlogLeadPopup({ source }: { source: "blog-list" | "blog-article"
 
       if (result.error) throw new Error(result.error);
 
+      trackBlogEvent("blog_lead_submit", { source, blog_slug: slug, blog_topic: topic });
       localStorage.setItem(SUBMITTED_KEY, String(Date.now() + 30 * 86400000));
       sessionStorage.setItem(SESSION_DISMISS_KEY, "1");
       setVisible(false);

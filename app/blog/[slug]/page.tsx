@@ -4,10 +4,12 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
 import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
+import { detectPillarTopic } from "@/lib/seo-pillar-hub";
 import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { BlogPillarHub } from "@/components/blog/BlogPillarHub";
+import { BlogInlineCTA } from "@/components/blog/BlogInlineCTA";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
 import { BlogArticleContent } from "@/components/blog/BlogArticleContent";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
@@ -83,6 +85,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const imageAlt = blog.keywordsMain?.trim() || blog.title;
   const publishedLabel = new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN");
   const jsonLd = buildBlogJsonLd({ blog, canonical, baseUrl: BASE_URL, image });
+  const topic = detectPillarTopic({ slug: blogPath, keywordsMain: blog.keywordsMain, title: blog.title });
 
   return (
     <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
@@ -153,9 +156,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
         </div>
       </section>
 
+      <BlogInlineCTA slug={blogPath} topic={topic} />
       <BlogPillarHub slug={blogPath} keywordsMain={blog.keywordsMain} title={blog.title} />
-      <RelatedPosts posts={related.map(toBlogCardItem)} />
-      <BlogArticleExtras />
+      <RelatedPosts posts={related.map(toBlogCardItem)} currentSlug={blogPath} />
+      <BlogArticleExtras slug={blogPath} topic={topic} />
     </main>
   );
 }

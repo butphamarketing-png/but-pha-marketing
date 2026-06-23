@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { resolveBlogTag, type BlogCardItem } from "@/lib/blog-utils";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
+import { BlogTrackedLink } from "@/components/blog/BlogTrackedLink";
 
-export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
+export function RelatedPosts({ posts, currentSlug }: { posts: BlogCardItem[]; currentSlug?: string }) {
   if (!posts.length) return null;
 
   return (
@@ -21,9 +22,14 @@ export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {posts.map((blog) => (
-          <Link
+          <BlogTrackedLink
             key={blog.id}
             href={`/blog/${blog.slug}`}
+            eventName="blog_related_click"
+            eventParams={{
+              from_slug: currentSlug,
+              to_slug: blog.slug || blog.id,
+            }}
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-indigo-100 bg-indigo-50/30 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-brand"
           >
             <div className="relative overflow-hidden">
@@ -49,7 +55,7 @@ export function RelatedPosts({ posts }: { posts: BlogCardItem[] }) {
                 {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
               </span>
             </div>
-          </Link>
+          </BlogTrackedLink>
         ))}
       </div>
     </section>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { blogSitemapChangeFrequency, blogSitemapPriority } from "@/lib/blog-seo";
+import { BLOG_TOPIC_SLUGS } from "@/lib/blog-topic-hub";
 import { getPublishedBlogs } from "@/lib/server-blog";
 
 const baseUrl = SITE_URL;
@@ -43,6 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: blogSitemapPriority(blog),
   }));
 
-  return [...staticEntries, ...blogEntries];
+  const topicHubEntries: MetadataRoute.Sitemap = BLOG_TOPIC_SLUGS.map((slug) => ({
+    url: `${baseUrl}/blog/chu-de/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.88,
+  }));
+
+  return [...staticEntries, ...topicHubEntries, ...blogEntries];
 }
 

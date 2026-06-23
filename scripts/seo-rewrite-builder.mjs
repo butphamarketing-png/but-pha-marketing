@@ -1,7 +1,16 @@
-import { NEWS_THUMBNAIL, buildSeoMetaTitle, newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { NEWS_THUMBNAIL, buildSeoMetaTitle, ensureTitleHasKeyword, newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
 import { WEBSITE_SEEDS } from "./seo-website-seeds.mjs";
+import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
+import {
+  buildIndustryIntroParagraphs,
+  buildIndustryTakeaways,
+  buildIndustryMistakes,
+  buildIndustryContextSection,
+  industryPricingNote,
+  buildIndustryFaqExtras,
+} from "./seo-phase10-industry.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -131,8 +140,39 @@ function buildWebsiteRewrite(base) {
   const seed = websiteSeedBySlug[base.slug];
   const angle = seed?.angle || base.description?.split(":")[1]?.trim() || "doanh nghiệp Việt Nam";
   const features = industry?.features || DEFAULT_FEATURES;
-  const faqItems = industry?.faq || defaultFaq(keyword, title.split("—")[0].trim());
+  const faqExtras = industry ? buildIndustryFaqExtras(industry, keyword) : [];
+  const faqItems = [...(industry?.faq || defaultFaq(keyword, title.split("—")[0].trim())), ...faqExtras].slice(0, 8);
   const imgIdx = Math.abs(hashSlug(base.slug)) % 11;
+
+  const introParagraphs = industry
+    ? buildIndustryIntroParagraphs(industry, keyword, angle)
+    : [
+        `${keyword} là quy trình xây dựng website chuyên biệt — tập trung ${angle}. Khác template rẻ tái sử dụng, ${keyword} custom giúp bạn kiểm soát thương hiệu, tích hợp form/Zalo và tối ưu SEO ngay từ đầu.`,
+        `Bài viết dành cho chủ doanh nghiệp, marketer và freelancer đang tìm hiểu ${keyword}: checklist tính năng, cấu trúc trang, quy trình triển khai, mức giá tham khảo 2026 và FAQ thực chiến tại Việt Nam.`,
+      ];
+
+  const takeaways = industry
+    ? buildIndustryTakeaways(industry, keyword)
+    : [
+        `${keyword} cần mobile-first — phần lớn khách truy cập từ điện thoại.`,
+        `Tập trung ${angle} — không copy layout ngành khác.`,
+        "CTA rõ: form, Zalo, gọi — trên mọi trang dịch vụ.",
+        "SEO on-page + tốc độ: nền tảng traffic organic lâu dài.",
+        "Bứt Phá Marketing: gói 3–12 triệu, tư vấn miễn phí.",
+      ];
+
+  const mistakes = industry
+    ? buildIndustryMistakes(industry, keyword)
+    : [
+        "Chọn template trùng hàng nghìn site — mất khác biệt thương hiệu.",
+        "Web đẹp nhưng chậm — Google và khách đều bỏ đi.",
+        "Không có CTA — khách đọc xong không biết bước tiếp theo.",
+        "Copy nội dung đối thủ — SEO trùng lặp, không E-E-A-T.",
+        "Bỏ quên mobile — mất 70%+ traffic tiềm năng.",
+      ];
+
+  const industrySection = industry ? buildIndustryContextSection(industry, keyword) : "";
+  const pricingExtra = industry ? industryPricingNote(industry) : "";
 
   const html = `
 ${wpToc([
@@ -151,25 +191,18 @@ ${wpToc([
 
 ${wpIntro({
   keyword,
-  paragraphs: [
-    `${keyword} là quy trình xây dựng website chuyên biệt — tập trung ${angle}. Khác template rẻ tái sử dụng, ${keyword} custom giúp bạn kiểm soát thương hiệu, tích hợp form/Zalo và tối ưu SEO ngay từ đầu.`,
-    `Bài viết dành cho chủ doanh nghiệp, marketer và freelancer đang tìm hiểu ${keyword}: checklist tính năng, cấu trúc trang, quy trình triển khai, mức giá tham khảo 2026 và FAQ thực chiến tại Việt Nam.`,
-  ],
+  paragraphs: introParagraphs,
 })}
 
-${wpKeyTakeaways([
-  `${keyword} cần mobile-first — phần lớn khách truy cập từ điện thoại.`,
-  `Tập trung ${angle} — không copy layout ngành khác.`,
-  "CTA rõ: form, Zalo, gọi — trên mọi trang dịch vụ.",
-  "SEO on-page + tốc độ: nền tảng traffic organic lâu dài.",
-  "Bứt Phá Marketing: gói 3–12 triệu, tư vấn miễn phí.",
-])}
+${wpKeyTakeaways(takeaways)}
 
 ${wpImg(imgIdx, `${keyword} chuyên nghiệp chuẩn SEO`)}
 
 <h2 id="tong-quan">${keyword} là gì?</h2>
 <p><strong>${keyword}</strong> không chỉ là “làm web cho đẹp”. Đó là thiết kế giao diện (UI/UX), lập trình chức năng, tối ưu SEO và bàn giao hệ thống giúp website trở thành kênh ${angle} — hoạt động 24/7, đo được lead và scale cùng doanh nghiệp.</p>
 <p>Website chuẩn gồm: trang chủ thuyết phục, trang dịch vụ/sản phẩm chi tiết, giới thiệu, liên hệ, blog (nếu làm SEO), tích hợp analytics và công cụ marketing (Zalo, pixel ads).</p>
+
+${industrySection}
 
 <h2 id="vi-sao-can">Vì sao nên đầu tư ${keyword}?</h2>
 <ul>
@@ -198,6 +231,7 @@ ${wpImg(imgIdx + 1, `Giao diện ${keyword} tối ưu mobile`)}
 
 ${processSection(keyword)}
 ${pricingTable(keyword)}
+${pricingExtra}
 
 <h2 id="seo">SEO &amp; tối ưu chuyển đổi</h2>
 <ul>
@@ -219,11 +253,7 @@ ${pricingTable(keyword)}
 
 <h2 id="sai-lam">Sai lầm thường gặp</h2>
 <ul>
-  <li>Chọn template trùng hàng nghìn site — mất khác biệt thương hiệu.</li>
-  <li>Web đẹp nhưng chậm — Google và khách đều bỏ đi.</li>
-  <li>Không có CTA — khách đọc xong không biết bước tiếp theo.</li>
-  <li>Copy nội dung đối thủ — SEO trùng lặp, không E-E-A-T.</li>
-  <li>Bỏ quên mobile — mất 70%+ traffic tiềm năng.</li>
+${mistakes.map((m) => `  <li>${m}</li>`).join("\n")}
 </ul>
 
 ${wpRelatedLinks([
@@ -251,6 +281,98 @@ ${wpExternalCta()}
   return finalizeArticle({ base, keyword, title, html });
 }
 
+function laGiDefaultFaq(keyword, entry) {
+  const titleShort = (entry?.h1 || keyword).replace(/\?.*$/, "").trim();
+  const base = entry?.faq || [];
+  const extras = [
+    {
+      q: `Khi nào doanh nghiệp cần quan tâm ${keyword}?`,
+      a: "Khi bạn triển khai website, chạy ads hoặc SEO — hiểu khái niệm giúp brief đúng và tránh mua nhầm dịch vụ.",
+    },
+    {
+      q: `${titleShort} có khó triển khai không?`,
+      a: "Nhiều khái niệm có thể bắt đầu quy mô nhỏ; phần kỹ thuật phức tạp nên nhờ chuyên gia hoặc agency.",
+    },
+    {
+      q: "Làm sao đo hiệu quả sau khi áp dụng?",
+      a: "Gắn KPI cụ thể: tốc độ web, traffic, lead, conversion hoặc chi phí acquisition — review hàng tháng.",
+    },
+    {
+      q: "Bứt Phá Marketing hỗ trợ gì?",
+      a: "Tư vấn miễn phí, triển khai website/marketing trọn gói và giải thích thuật ngữ theo ngôn ngữ doanh nghiệp.",
+    },
+  ];
+  return [...base, ...extras].slice(0, 8);
+}
+
+function buildLaGiExtendedSections(keyword, entry, imgIdx) {
+  const applySteps = entry?.applySteps?.length
+    ? entry.applySteps
+    : [
+        "Đọc định nghĩa và xác định mục tiêu kinh doanh liên quan",
+        "Audit công cụ và quy trình hiện tại",
+        "Chọn giải pháp phù hợp quy mô và ngân sách",
+        "Triển khai thử nghiệm trên một kênh hoặc trang",
+        "Đo KPI sau 2–4 tuần và điều chỉnh",
+      ];
+  const components = entry?.components || [];
+  const role = entry?.role || `Tối ưu ${keyword} giúp doanh nghiệp làm digital hiệu quả hơn.`;
+
+  const checklist = applySteps
+    .map((s, i) => `<li><strong>Bước ${i + 1}:</strong> ${s}</li>`)
+    .join("\n");
+
+  const componentRows = components.length
+    ? components
+        .slice(0, 5)
+        .map(
+          (c, i) =>
+            `<tr><td class="border border-indigo-100 px-3 py-2">${i + 1}</td><td class="border border-indigo-100 px-3 py-2">${c}</td><td class="border border-indigo-100 px-3 py-2">Kiểm tra đã triển khai đúng chuẩn</td></tr>`,
+        )
+        .join("\n")
+    : `<tr><td class="border border-indigo-100 px-3 py-2">1</td><td class="border border-indigo-100 px-3 py-2">Nền tảng kỹ thuật / quy trình</td><td class="border border-indigo-100 px-3 py-2">Đúng scope dự án</td></tr>`;
+
+  return `
+<h2 id="vi-du">Ví dụ thực tế về ${keyword} tại Việt Nam</h2>
+<p>${role}</p>
+<ul>
+  <li><strong>Shop online / SME:</strong> Áp dụng ${keyword} để website ổn định, dễ mở rộng khi chạy ads Facebook hoặc Google.</li>
+  <li><strong>Dịch vụ địa phương:</strong> Spa, nha khoa, xây dựng — kết hợp ${keyword} với <a href="${SITE}/blog/seo-google-maps-la-gi">SEO Google Maps</a> thu lead gần.</li>
+  <li><strong>Doanh nghiệp B2B:</strong> Brief agency rõ ràng, giảm tranh chấp scope và timeline triển khai.</li>
+  <li><strong>Startup:</strong> Bắt đầu lean — validate kênh trước khi scale ngân sách marketing.</li>
+</ul>
+
+${wpImg(imgIdx + 1, `${keyword} — ví dụ ứng dụng doanh nghiệp`)}
+
+<h2 id="checklist">Checklist triển khai ${keyword}</h2>
+<ol class="list-decimal space-y-2 pl-5">${checklist}</ol>
+<p>Sau mỗi bước, ghi lại kết quả đo được — tránh triển khai liên tục mà không biết hiệu quả.</p>
+
+<h2 id="thanh-phan-chi-tiet">Bảng thành phần cần nắm</h2>
+<table class="w-full border-collapse text-sm my-6">
+  <thead><tr class="bg-indigo-50">
+    <th class="border border-indigo-100 px-3 py-2 text-left">#</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">Yếu tố</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">Ghi chú</th>
+  </tr></thead>
+  <tbody>${componentRows}</tbody>
+</table>
+
+<h2 id="sai-lam">Hiểu sai về ${keyword} — cần tránh</h2>
+<ul>
+  <li>Nhầm với công cụ khác — mua trùng hoặc thiếu tính năng cần thiết.</li>
+  <li>Triển khai không gắn KPI — không biết có hiệu quả hay không.</li>
+  <li>Bỏ qua website làm nền — ads/social dẫn về điểm đến kém chuyển đổi.</li>
+  <li>Tự làm quá sâu khi thiếu thời gian — chậm tiến độ kinh doanh.</li>
+  <li>Không cập nhật kiến thức — nền tảng và thuật ngữ thay đổi liên tục.</li>
+</ul>
+
+<h2 id="do-luong">Đo lường và tối ưu liên tục</h2>
+<p>Với <strong>${keyword}</strong>, nên theo dõi chỉ số phù hợp loại hình: traffic organic, tốc độ trang, số lead, tỷ lệ chuyển đổi hoặc chi phí/lead. Dùng GA4, Search Console và báo cáo nội bộ — họp review marketing hàng tháng.</p>
+<p>Đọc thêm <a href="${SITE}/blog/marketing-online-la-gi">marketing online</a> để đặt ${keyword} vào bức tranh tổng thể.</p>
+`;
+}
+
 function buildLaGiRewrite(base) {
   const entry = laGiBySlug[base.slug];
   const keyword = entry?.keywordsMain || base.keywordsMain || base.title;
@@ -258,6 +380,9 @@ function buildLaGiRewrite(base) {
   const imgIdx = Math.abs(hashSlug(base.slug)) % 11;
   const components = entry?.components || [];
   const applySteps = entry?.applySteps || [];
+  const skipExtended = PILLAR_SLUG_SET.has(base.slug);
+  const extended = skipExtended ? "" : buildLaGiExtendedSections(keyword, entry, imgIdx);
+  const faqItems = laGiDefaultFaq(keyword, entry);
 
   const html = `
 ${wpToc([
@@ -266,6 +391,13 @@ ${wpToc([
   { id: "thanh-phan", label: "Thành phần chính" },
   { id: "ung-dung", label: "Ứng dụng thực tế" },
   { id: "cach-lam", label: "Cách triển khai" },
+  ...(skipExtended
+    ? []
+    : [
+        { id: "vi-du", label: "Ví dụ thực tế" },
+        { id: "checklist", label: "Checklist" },
+        { id: "sai-lam", label: "Sai lầm" },
+      ]),
   { id: "faq", label: "FAQ" },
   { id: "ket-luan", label: "Kết luận" },
 ])}
@@ -316,6 +448,8 @@ ${applySteps.length ? `<ol class="list-decimal space-y-2 pl-5">${applySteps.map(
   <li>Scale khi có số liệu ổn định.</li>
 </ol>`}
 
+${extended}
+
 ${wpRelatedLinks([
   { href: `${SITE}/blog/thiet-ke-website`, label: "Thiết kế website", desc: "Nền tảng digital." },
   { href: `${SITE}/blog/seo-la-gi`, label: "SEO là gì", desc: "Tăng traffic organic." },
@@ -323,7 +457,7 @@ ${wpRelatedLinks([
   { href: `${SITE}/lien-he`, label: "Liên hệ tư vấn", desc: "Bứt Phá Marketing." },
 ])}
 
-${wpFaq({ keyword, items: entry?.faq || defaultFaq(keyword, keyword) })}
+${wpFaq({ keyword, items: faqItems })}
 
 ${wpConclusion({
   keyword,
@@ -349,14 +483,15 @@ function buildGuideRewrite(base) {
 }
 
 function finalizeArticle({ base, keyword, title, html }) {
-  const metaTitle = buildSeoMetaTitle(title.replace(/\?.*$/, "").trim().slice(0, 52));
+  const safeTitle = ensureTitleHasKeyword(title, keyword);
+  const metaTitle = buildSeoMetaTitle(keyword);
   const metaDescription = `${keyword} — hướng dẫn chi tiết, quy trình, bảng giá và FAQ. Tư vấn miễn phí Bứt Phá Marketing.`.slice(
     0,
     158,
   );
 
   return {
-    title,
+    title: safeTitle,
     slug: base.slug,
     keywordsMain: keyword,
     keywordsSecondary: base.keywordsSecondary || `${keyword}, website chuẩn seo, bứt phá marketing`,
@@ -367,7 +502,7 @@ function finalizeArticle({ base, keyword, title, html }) {
       slug: base.slug,
       keywordsMain: keyword,
       keywordsSecondary: base.keywordsSecondary || `${keyword}, website chuẩn seo, bứt phá marketing`,
-      title,
+      title: safeTitle,
     }),
     content: buildWpSeoArticle({ metaTitle, keyword, html }),
   };

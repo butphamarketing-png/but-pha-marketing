@@ -85,23 +85,32 @@ ${faq(entry.faq)}
 `;
 }
 
+export function industryKeywordsMain(entry) {
+  const fromSecondary = (entry.keywordsSecondary || "").split(",")[0].trim();
+  if (fromSecondary.toLowerCase().startsWith("thiết kế website")) return fromSecondary;
+  if (entry.industry) return `thiết kế website ${entry.industry}`;
+  if (fromSecondary.toLowerCase().startsWith("website ")) return `thiết kế ${fromSecondary}`;
+  return fromSecondary || entry.keywordsMain;
+}
+
 function buildIndustryArticle(entry, index) {
   const imgOffset = index % NEWS_CONTENT_IMAGE_COUNT;
-  const primaryKw = entry.keywordsSecondary.split(",")[0].trim();
+  const keywordsMain = industryKeywordsMain(entry);
+  const primaryKw = keywordsMain;
   const metaDescription = `${entry.title} — Giải pháp ${primaryKw} chuẩn SEO, tối ưu chuyển đổi và tăng khách hàng. Tư vấn miễn phí tại Bứt Phá Marketing.`;
   const description = `Hướng dẫn ${primaryKw}: lợi ích, tính năng cần có, quy trình triển khai và FAQ dành cho doanh nghiệp ngành ${entry.niche}.`;
 
   return {
     title: entry.h1,
     slug: entry.slug,
-    keywordsMain: entry.keywordsMain,
+    keywordsMain,
     keywordsSecondary: entry.keywordsSecondary,
     metaTitle: entry.title,
     metaDescription,
     description,
     imageUrl: newsThumbnailForArticle({
       slug: entry.slug,
-      keywordsMain: entry.keywordsMain,
+      keywordsMain,
       keywordsSecondary: entry.keywordsSecondary,
       title: entry.h1,
     }),

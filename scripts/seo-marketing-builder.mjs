@@ -11,6 +11,7 @@ import {
   newsContentImageCountForTopic,
   buildSeoMetaTitle,
   buildSeoMetaDescription,
+  ensureTitleHasKeyword,
 } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
@@ -319,10 +320,12 @@ ${wpExternalCta()}
 
 /** Bản dài chuẩn WP SEO (~12k+ ký tự) — dùng khi upgrade bài template mỏng. */
 export function buildMarketingLongFormFromEntry(entry, index = 0) {
+  const title = ensureTitleHasKeyword(entry.h1, entry.keywordsMain);
+  const entryWithTitle = { ...entry, h1: title };
   const topic = detectNewsTopic({
     slug: entry.slug,
     keywordsMain: entry.keywordsMain,
-    title: entry.h1,
+    title,
     niche: entry.niche,
   });
   const imgOffset = (index + 3) % newsContentImageCountForTopic(topic);
@@ -330,10 +333,10 @@ export function buildMarketingLongFormFromEntry(entry, index = 0) {
   const metaDescription = buildSeoMetaDescription(entry.keywordsMain, entry.angle);
   const description = `${entry.keywordsMain}: ${entry.angle}. Hướng dẫn triển khai và đo lường hiệu quả.`;
 
-  const html = buildMarketingLongFormContent(entry, imgOffset, topic);
+  const html = buildMarketingLongFormContent(entryWithTitle, imgOffset, topic);
 
   return {
-    title: entry.h1,
+    title,
     slug: entry.slug,
     keywordsMain: entry.keywordsMain,
     keywordsSecondary: `${entry.keywordsMain}, ${entry.niche || "marketing"}, marketing online, bứt phá marketing`,
@@ -343,7 +346,7 @@ export function buildMarketingLongFormFromEntry(entry, index = 0) {
     imageUrl: newsThumbnailForArticle({
       slug: entry.slug,
       keywordsMain: entry.keywordsMain,
-      title: entry.h1,
+      title,
       niche: entry.niche,
     }),
     content: buildWpSeoArticle({ metaTitle, keyword: entry.keywordsMain, html }),
