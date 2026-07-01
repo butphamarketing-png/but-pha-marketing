@@ -3,19 +3,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, MessageCircle, Phone, Search } from "lucide-react";
+import { MessageCircle, Phone, Search } from "lucide-react";
 import type { PricingBranch, PricingPlatform } from "@/lib/pricing-catalog";
 import { getTelHref, getZaloUrl } from "@/lib/site-contact";
 import { useAdmin } from "@/lib/AdminContext";
 import { fadeUpChild, staggerIntro } from "@/lib/motion-presets";
+import { DomainPricingGrid } from "./DomainPricingGrid";
+import { PlatformHero } from "./PlatformHero";
 import { PriceTable } from "./PriceTable";
 
 type PricingDocLayoutProps = {
   platform: PricingPlatform;
   searchQuery?: string;
 };
-
-const COLLAPSIBLE_BRANCH_IDS = new Set(["web-domain"]);
 
 function filterPlatform(platform: PricingPlatform, query: string): PricingPlatform {
   const q = query.trim().toLowerCase();
@@ -49,40 +49,36 @@ function BranchSection({
   searchQuery: string;
   isLast: boolean;
 }) {
-  const collapsible = COLLAPSIBLE_BRANCH_IDS.has(branch.id) && branch.items.length > 8;
-  const [open, setOpen] = useState(!collapsible);
   const animatePrices = index < 2 && !searchQuery;
+  const isDomain = branch.id === "web-domain";
 
   return (
     <motion.section
       id={`section-${branch.id}`}
       variants={fadeUpChild}
-      className="scroll-mt-28"
+      className="scroll-mt-32"
       data-section-id={branch.id}
     >
-      {collapsible ? (
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          className="mb-4 flex w-full items-center justify-between gap-3 rounded-xl px-1 py-1 text-left"
-          aria-expanded={open}
-        >
-          <h3 className="text-base font-bold text-indigo-950 sm:text-lg">{branch.label}</h3>
-          <ChevronDown
-            className={`h-5 w-5 shrink-0 text-slate-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-            style={{ color: open ? accent : undefined }}
-          />
-        </button>
-      ) : (
-        <h3 className="mb-4 text-base font-bold text-indigo-950 sm:text-lg">{branch.label}</h3>
-      )}
+      <div className="mb-5 flex items-end justify-between gap-3">
+        <div>
+          <h3 className="text-lg font-bold tracking-tight text-indigo-950 sm:text-xl">{branch.label}</h3>
+          <p className="mt-0.5 text-xs font-medium text-slate-500">{branch.items.length} gói</p>
+        </div>
+      </div>
 
-      {(!collapsible || open) && (
-        <PriceTable items={branch.items} accent={accent} animatePrices={animatePrices} />
+      {isDomain ? (
+        <DomainPricingGrid items={branch.items} accent={accent} searchQuery={searchQuery} />
+      ) : (
+        <PriceTable
+          items={branch.items}
+          accent={accent}
+          animatePrices={animatePrices}
+          searchQuery={searchQuery}
+        />
       )}
 
       {!isLast ? (
-        <div className="my-8 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent" />
       ) : null}
     </motion.section>
   );
@@ -116,7 +112,7 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
           setActiveSection(visible.target.dataset.sectionId);
         }
       },
-      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5] },
+      { rootMargin: "-28% 0px -58% 0px", threshold: [0, 0.2, 0.45] },
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -125,52 +121,23 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
 
   if (filtered.branches.length === 0) {
     return (
-      <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-sm text-slate-500 shadow-sm">
-        Không tìm thấy gói phù hợp. Thử từ khóa khác hoặc{" "}
-        <Link href="/lien-he" className="font-semibold text-violet-600 hover:underline">
-          liên hệ tư vấn
+      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-sm">
+        <p className="text-base font-medium text-slate-700">Không tìm thấy gói phù hợp</p>
+        <p className="mt-2 text-sm text-slate-500">Thử từ khóa khác hoặc liên hệ để được tư vấn trực tiếp.</p>
+        <Link
+          href="/lien-he"
+          className="mt-5 inline-flex rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700"
+        >
+          Liên hệ tư vấn
         </Link>
-        .
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {/* Mobile sticky chips */}
-      <div className="flex gap-2 overflow-x-auto pb-1 lg:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {filtered.branches.map((branch) => {
-          const active = activeSection === branch.id;
-          return (
-            <button
-              key={branch.id}
-              type="button"
-              onClick={() => scrollToSection(branch.id)}
-              className="shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition-all"
-              style={
-                active
-                  ? {
-                      backgroundColor: platform.color,
-                      color: "#fff",
-                      boxShadow: `0 4px 14px ${platform.color}40`,
-                    }
-                  : { backgroundColor: "#fff", color: "#64748B", border: "1px solid #E2E8F0" }
-              }
-            >
-              {branch.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
-      {/* Desktop sidebar */}
-      <nav
-        aria-label={`Danh mục ${platform.label}`}
-        className="hidden lg:block"
-      >
-        <div className="sticky top-28 space-y-1 rounded-2xl border border-slate-100 bg-white p-3 shadow-sm">
-          <p className="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-slate-400">Danh mục</p>
+    <div className="space-y-5">
+      <div className="sticky top-[57px] z-30 -mx-1 bg-[#F4F6FC]/90 px-1 py-2 backdrop-blur-md lg:hidden">
+        <div className="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {filtered.branches.map((branch) => {
             const active = activeSection === branch.id;
             return (
@@ -178,89 +145,141 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                 key={branch.id}
                 type="button"
                 onClick={() => scrollToSection(branch.id)}
-                className="relative flex w-full items-center rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors"
-                style={{
-                  color: active ? platform.color : "#475569",
-                  backgroundColor: active ? `${platform.color}10` : undefined,
-                }}
+                className="shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition-all"
+                style={
+                  active
+                    ? {
+                        backgroundColor: platform.color,
+                        color: "#fff",
+                        boxShadow: `0 4px 16px ${platform.color}45`,
+                      }
+                    : { backgroundColor: "#fff", color: "#64748B", border: "1px solid #E2E8F0" }
+                }
               >
-                {active ? (
-                  <motion.span
-                    layoutId={`banggia-nav-${platform.id}`}
-                    className="absolute inset-y-1.5 left-1 w-0.5 rounded-full"
-                    style={{ backgroundColor: platform.color }}
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  />
-                ) : null}
-                <span className="pl-2">{branch.label}</span>
+                {branch.label}
+                <span className="ml-1 opacity-70">({branch.items.length})</span>
               </button>
             );
           })}
         </div>
-      </nav>
+      </div>
 
-      <motion.div
-        ref={contentRef}
-        key={platform.id + searchQuery}
-        initial="hidden"
-        animate="visible"
-        variants={staggerIntro}
-        className="min-w-0 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-7 lg:col-start-2 lg:row-start-1 lg:row-span-2"
-      >
-        <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
-          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: platform.color }} aria-hidden />
-          <div>
-            <h2 className="text-lg font-bold text-indigo-950">{platform.label}</h2>
-            <p className="text-xs text-slate-500">{filtered.branches.length} nhóm dịch vụ</p>
+      <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-8">
+        <nav aria-label={`Danh mục ${platform.label}`} className="hidden lg:block">
+          <div className="sticky top-28 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)]">
+            <div className="border-b border-slate-100 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Danh mục</p>
+            </div>
+            <div className="relative space-y-0.5 p-2">
+              {filtered.branches.map((branch) => {
+                const active = activeSection === branch.id;
+                return (
+                  <button
+                    key={branch.id}
+                    type="button"
+                    onClick={() => scrollToSection(branch.id)}
+                    className="relative flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors"
+                    style={{ color: active ? platform.color : "#475569" }}
+                  >
+                    {active ? (
+                      <motion.span
+                        layoutId={`banggia-sidebar-${platform.id}`}
+                        className="absolute inset-0 rounded-xl"
+                        style={{ backgroundColor: `${platform.color}12` }}
+                        transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                      />
+                    ) : null}
+                    <span className="relative truncate pr-2">{branch.label}</span>
+                    <span
+                      className="relative shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums"
+                      style={{
+                        backgroundColor: active ? `${platform.color}18` : "#F1F5F9",
+                        color: active ? platform.color : "#94A3B8",
+                      }}
+                    >
+                      {branch.items.length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </nav>
 
-        {filtered.branches.map((branch, index) => (
-          <BranchSection
-            key={branch.id}
-            branch={branch}
-            accent={platform.color}
-            index={index}
-            searchQuery={searchQuery}
-            isLast={index === filtered.branches.length - 1}
-          />
-        ))}
+        <motion.div
+          ref={contentRef}
+          key={platform.id + searchQuery}
+          initial="hidden"
+          animate="visible"
+          variants={staggerIntro}
+          className="min-w-0 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)] lg:col-start-2"
+        >
+          <PlatformHero platform={platform} />
 
-        <div className="rounded-xl bg-slate-50 px-4 py-4 text-center sm:px-6">
-          <p className="text-sm text-slate-600">Không chắc chọn gói nào?</p>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={getTelHref(settings?.hotline)}
-              className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
+          <div className="space-y-2 px-5 py-6 sm:px-7 sm:py-8">
+            {filtered.branches.map((branch, index) => (
+              <BranchSection
+                key={branch.id}
+                branch={branch}
+                accent={platform.color}
+                index={index}
+                searchQuery={searchQuery}
+                isLast={index === filtered.branches.length - 1}
+              />
+            ))}
+
+            <div
+              className="mt-8 rounded-2xl px-5 py-6 text-center sm:px-8"
+              style={{
+                background: `linear-gradient(135deg, ${platform.color}10 0%, ${platform.color}04 100%)`,
+                boxShadow: `inset 0 0 0 1px ${platform.color}18`,
+              }}
             >
-              <Phone className="h-4 w-4" />
-              Gọi tư vấn
-            </a>
-            <a
-              href={getZaloUrl(settings?.hotline)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-violet-200 hover:text-violet-700"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Chat Zalo
-            </a>
+              <p className="text-sm font-semibold text-slate-700">Không chắc chọn gói nào?</p>
+              <p className="mt-1 text-xs text-slate-500">Đội ngũ Bứt Phá Marketing tư vấn miễn phí theo ngân sách & mục tiêu</p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={getTelHref(settings?.hotline)}
+                  className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+                  style={{ backgroundColor: platform.color }}
+                >
+                  <Phone className="h-4 w-4" />
+                  Gọi tư vấn
+                </a>
+                <a
+                  href={getZaloUrl(settings?.hotline)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/80 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-violet-200"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat Zalo
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
       </div>
     </div>
   );
 }
 
+const SEARCH_PLACEHOLDER: Record<string, string> = {
+  website: "Tìm: thiết kế, vận hành, tên miền…",
+  facebook: "Tìm: fanpage, chăm sóc, quảng cáo…",
+  googlemaps: "Tìm: maps, local ads…",
+};
+
 export function PricingSearchBar({
   value,
   onChange,
   accent,
+  platformId,
 }: {
   value: string;
   onChange: (value: string) => void;
   accent: string;
+  platformId: string;
 }) {
   return (
     <div className="relative">
@@ -269,9 +288,9 @@ export function PricingSearchBar({
         type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Tìm gói dịch vụ..."
+        placeholder={SEARCH_PLACEHOLDER[platformId] ?? "Tìm gói dịch vụ…"}
         className="brand-input w-full pl-10"
-        style={{ boxShadow: value ? `0 0 0 2px ${accent}22` : undefined }}
+        style={{ boxShadow: value ? `0 0 0 2px ${accent}25` : undefined }}
       />
     </div>
   );

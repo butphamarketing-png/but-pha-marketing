@@ -113,6 +113,17 @@ export function BanggiaPageClient() {
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Tham khảo nhanh các gói Website, Facebook và Google Maps. Giá có thể điều chỉnh theo quy mô dự án.
           </p>
+          <p className="mx-auto mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 text-xs font-medium text-slate-600 shadow-sm">
+            <span>Tư vấn miễn phí</span>
+            <span className="text-slate-300" aria-hidden>
+              ·
+            </span>
+            <span>Giá minh bạch</span>
+            <span className="text-slate-300" aria-hidden>
+              ·
+            </span>
+            <span>Phản hồi trong 24h</span>
+          </p>
         </motion.div>
 
         <div className="relative">

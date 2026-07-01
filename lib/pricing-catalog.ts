@@ -19,6 +19,8 @@ import {
 
 export type PricingPeriod = "once" | "month" | "year";
 
+export type PricingBadge = "popular" | "best" | "value";
+
 export type PricingItem = {
   id: string;
   name: string;
@@ -26,12 +28,16 @@ export type PricingItem = {
   period?: PricingPeriod;
   note?: string;
   features?: readonly string[];
+  badge?: PricingBadge;
+  /** Nhóm tên miền — chỉ dùng cho branch web-domain */
+  domainCategory?: "intl" | "vn" | "extended";
 };
 
 export type PricingBranch = {
   id: string;
   label: string;
   items: PricingItem[];
+  icon?: string;
 };
 
 export type PricingPlatformId = "website" | "facebook" | "googlemaps";
@@ -40,7 +46,15 @@ export type PricingPlatform = {
   id: PricingPlatformId;
   label: string;
   color: string;
+  tagline: string;
+  highlights: readonly string[];
   branches: PricingBranch[];
+};
+
+export const PRICING_BADGE_LABEL: Record<PricingBadge, string> = {
+  popular: "Phổ biến",
+  best: "Lựa chọn tốt",
+  value: "Tiết kiệm",
 };
 
 export const PRICING_PLATFORMS: PricingPlatform[] = [
@@ -48,6 +62,8 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
     id: "website",
     label: "Website",
     color: "#7C3AED",
+    tagline: "Thiết kế, vận hành và phát triển website doanh nghiệp",
+    highlights: ["Thiết kế", "Vận hành", "Tên miền", "SEO & Ads"],
     branches: [
       {
         id: "web-build",
@@ -58,6 +74,7 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           price: pkg.price,
           period: "once" as const,
           features: pkg.works,
+          badge: pkg.id === "web-build-6" ? ("popular" as const) : undefined,
         })),
       },
       {
@@ -83,6 +100,12 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           period: "year" as const,
           note: WEBSITE_OPERATION_TIER_META[pkg.tier].label,
           features: pkg.works,
+          badge:
+            pkg.id === "web-ops-sieu-nho"
+              ? ("value" as const)
+              : "popular" in pkg && pkg.popular
+                ? ("popular" as const)
+                : undefined,
         })),
       },
       {
@@ -94,6 +117,8 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           price: domain.price,
           period: "year" as const,
           note: domain.tagline,
+          domainCategory: domain.category,
+          badge: domain.id === "com" ? ("popular" as const) : undefined,
         })),
       },
       {
@@ -125,6 +150,8 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
     id: "facebook",
     label: "Facebook",
     color: "#1877F2",
+    tagline: "Thiết kế Fanpage, content và quảng cáo Facebook",
+    highlights: ["Fanpage", "Content", "Facebook Ads"],
     branches: [
       {
         id: "fb-build",
@@ -135,6 +162,7 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           price: pkg.price,
           period: "once" as const,
           features: pkg.works,
+          badge: pkg.id === "fb-build-advanced" ? ("popular" as const) : undefined,
         })),
       },
       {
@@ -146,6 +174,7 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           price: pkg.price,
           period: "month" as const,
           features: pkg.works,
+          badge: pkg.posts === 20 ? ("popular" as const) : undefined,
         })),
       },
       {
@@ -166,6 +195,8 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
     id: "googlemaps",
     label: "Google Maps",
     color: "#22C55E",
+    tagline: "Google Business Profile, SEO Local và quảng cáo Maps",
+    highlights: ["Maps SEO", "Xác minh", "Local Ads"],
     branches: [
       {
         id: "gm-build",
@@ -176,6 +207,7 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
           price: pkg.price,
           period: "once" as const,
           features: pkg.works,
+          badge: pkg.id === "gm-optimize" ? ("best" as const) : pkg.id === "gm-rebuild" ? ("value" as const) : undefined,
         })),
       },
       {
