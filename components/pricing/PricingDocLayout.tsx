@@ -281,17 +281,46 @@ export function PricingSearchBar({
   accent: string;
   platformId: string;
 }) {
+  const [focused, setFocused] = useState(false);
+  const [pulseDone, setPulseDone] = useState(false);
+
+  const handleFocus = () => {
+    setFocused(true);
+    if (!pulseDone) setPulseDone(true);
+  };
+
   return (
     <div className="relative">
       <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-      <input
+      <motion.input
         type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={handleFocus}
+        onBlur={() => setFocused(false)}
         placeholder={SEARCH_PLACEHOLDER[platformId] ?? "Tìm gói dịch vụ…"}
         className="brand-input w-full pl-10"
-        style={{ boxShadow: value ? `0 0 0 2px ${accent}25` : undefined }}
+        animate={{
+          boxShadow:
+            value || focused
+              ? `0 0 0 2px ${accent}${value ? "40" : "28"}`
+              : pulseDone
+                ? "0 0 0 0px transparent"
+                : "0 0 0 0px transparent",
+        }}
+        initial={false}
+        transition={{ duration: 0.22 }}
       />
+      {!pulseDone ? (
+        <motion.span
+          className="pointer-events-none absolute inset-0 rounded-xl"
+          initial={{ boxShadow: `0 0 0 0px ${accent}00` }}
+          animate={{ boxShadow: [`0 0 0 0px ${accent}00`, `0 0 0 4px ${accent}18`, `0 0 0 0px ${accent}00`] }}
+          transition={{ duration: 1.1, delay: 0.6, times: [0, 0.45, 1] }}
+          onAnimationComplete={() => setPulseDone(true)}
+          aria-hidden
+        />
+      ) : null}
     </div>
   );
 }

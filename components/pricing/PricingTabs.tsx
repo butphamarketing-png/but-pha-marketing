@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Facebook, MapPin, Monitor } from "lucide-react";
 import type { PricingPlatform, PricingPlatformId } from "@/lib/pricing-catalog";
 import { PRICING_PLATFORMS } from "@/lib/pricing-catalog";
+import { tabIconSpring } from "@/lib/banggia-motion";
 import { setBanggiaLastTab } from "@/lib/banggia-prefs";
 import { PricingDocLayout, PricingSearchBar } from "./PricingDocLayout";
 
@@ -25,8 +26,25 @@ const TAB_ITEMS = PRICING_PLATFORMS.map((platform) => ({
   label: platform.label,
   color: platform.color,
   branchCount: platform.branches.length,
-  packageCount: platform.branches.reduce((sum, branch) => sum + branch.items.length, 0),
 }));
+
+function TabIcon({ active, Icon, tabId }: { active: boolean; Icon: typeof Monitor; tabId: string }) {
+  if (!active) {
+    return <Icon className="h-4 w-4 shrink-0" aria-hidden />;
+  }
+
+  return (
+    <motion.span
+      key={`${tabId}-active`}
+      initial={{ scale: 0.88, rotate: -5 }}
+      animate={{ scale: 1, rotate: 0 }}
+      transition={tabIconSpring}
+      className="inline-flex"
+    >
+      <Icon className="h-4 w-4 shrink-0" aria-hidden />
+    </motion.span>
+  );
+}
 
 export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,11 +84,11 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
                     layoutId="banggia-tab-pill"
                     className="absolute inset-0 rounded-xl bg-white shadow-sm"
                     style={{ boxShadow: `0 1px 3px rgba(15,23,42,0.06), inset 0 0 0 1px ${tab.color}22` }}
-                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 28 }}
                   />
                 ) : null}
                 <span className="relative flex items-center gap-2">
-                  <Icon className="h-4 w-4 shrink-0" />
+                  <TabIcon active={active} Icon={Icon} tabId={tab.id} />
                   {tab.label}
                 </span>
               </button>
@@ -90,16 +108,20 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
 
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
-          key={activeId}
+          key={`${activeId}-${searchQuery.trim()}`}
           custom={direction}
-          initial={{ opacity: 0, x: direction >= 0 ? 20 : -20 }}
+          initial={{ opacity: 0, x: isFilteringTransition(direction, searchQuery) ? 0 : direction >= 0 ? 12 : -12 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: direction >= 0 ? -20 : 20 }}
-          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, x: direction >= 0 ? -12 : 12 }}
+          transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
         >
           <PricingDocLayout platform={activePlatform} searchQuery={searchQuery} />
         </motion.div>
       </AnimatePresence>
     </div>
   );
+}
+
+function isFilteringTransition(_direction: number, query: string) {
+  return query.trim().length > 0;
 }

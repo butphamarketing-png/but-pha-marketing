@@ -17,6 +17,7 @@ import { AnimatedCheckmark } from "./AnimatedCheckmark";
 
 type PricingGateFormProps = {
   onUnlocked: () => void;
+  onUnlockStart?: () => void;
 };
 
 type FormPhase = "form" | "success";
@@ -40,7 +41,7 @@ function ValidFieldIcon({ show }: { show: boolean }) {
   );
 }
 
-export function PricingGateForm({ onUnlocked }: PricingGateFormProps) {
+export function PricingGateForm({ onUnlocked, onUnlockStart }: PricingGateFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneTouched, setPhoneTouched] = useState(false);
@@ -134,6 +135,7 @@ export function PricingGateForm({ onUnlocked }: PricingGateFormProps) {
 
       markBanggiaUnlocked();
       setPhase("success");
+      onUnlockStart?.();
       window.setTimeout(() => {
         onUnlocked();
       }, SUCCESS_DELAY_MS);
@@ -146,15 +148,29 @@ export function PricingGateForm({ onUnlocked }: PricingGateFormProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-indigo-950/30 via-slate-900/45 to-slate-900/50 backdrop-blur-md"
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-b from-indigo-950/30 via-slate-900/45 to-slate-900/50"
         aria-hidden
+        initial={{ opacity: 1, backdropFilter: "blur(12px)" }}
+        animate={{
+          opacity: phase === "success" ? 0 : 1,
+          backdropFilter: phase === "success" ? "blur(0px)" : "blur(12px)",
+        }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.98, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        animate={
+          phase === "success" && progress > 0.82
+            ? { opacity: 0, scale: 0.97, y: -10 }
+            : { opacity: 1, scale: 1, y: 0 }
+        }
+        transition={
+          phase === "success" && progress > 0.82
+            ? { duration: 0.28, ease: [0.16, 1, 0.3, 1] }
+            : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
+        }
         className="relative w-full max-w-md rounded-[20px] border border-white/60 bg-white p-7 shadow-2xl sm:p-9"
         role="dialog"
         aria-modal="true"

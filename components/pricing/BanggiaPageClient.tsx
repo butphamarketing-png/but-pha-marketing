@@ -33,6 +33,7 @@ export function BanggiaPageClient() {
   const [activeTab, setActiveTab] = useState<PricingPlatformId>("website");
   const [tabDirection, setTabDirection] = useState(1);
   const [welcomeBack, setWelcomeBack] = useState(false);
+  const [gateDissolving, setGateDissolving] = useState(false);
   const prevTabRef = useRef<PricingPlatformId>("website");
 
   const activeColor = PRICING_PLATFORMS.find((p) => p.id === activeTab)?.color ?? "#7C3AED";
@@ -135,7 +136,11 @@ export function BanggiaPageClient() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.35 }}
               >
-                <div className="pointer-events-none select-none opacity-60 saturate-[0.85] blur-[2px]">
+                <div
+                  className={`pointer-events-none select-none transition-all duration-500 ${
+                    gateDissolving ? "blur-0 opacity-100 saturate-100" : "blur-[2px] opacity-60 saturate-[0.85]"
+                  }`}
+                >
                   <PricingTabs activeId={activeTab} onChange={handleTabChange} direction={tabDirection} />
                 </div>
               </motion.div>
@@ -154,7 +159,9 @@ export function BanggiaPageClient() {
       </main>
 
       {unlocked && !showGate ? <PricingStickyBar /> : null}
-      {showGate ? <PricingGateForm onUnlocked={handleUnlocked} /> : null}
+      {showGate ? (
+        <PricingGateForm onUnlockStart={() => setGateDissolving(true)} onUnlocked={handleUnlocked} />
+      ) : null}
 
       {unlocked && !showGate ? <div className="h-20 md:hidden" aria-hidden /> : null}
     </div>
