@@ -8,6 +8,9 @@ export const BLOG_LEAD_DISMISS_SESSION_KEY = "butpha_blog_lead_dismissed_session
 export const BLOG_LEAD_SUBMITTED_UNTIL_KEY = "butpha_blog_lead_submitted_until";
 export const SITE_CONSULT_DISMISS_SESSION_KEY = "butpha_site_consult_dismissed_session";
 export const SITE_CONSULT_SUBMITTED_UNTIL_KEY = "butpha_site_consult_submitted_until";
+export const BANGGIA_UNLOCKED_UNTIL_KEY = "butpha_banggia_unlocked_until";
+
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export function markPushPromptPending() {
   if (typeof window === "undefined") return;
@@ -63,4 +66,15 @@ export function shouldSkipSiteConsultPopup(): boolean {
   const submittedUntil = Number(localStorage.getItem(SITE_CONSULT_SUBMITTED_UNTIL_KEY) || "0");
   if (submittedUntil > Date.now()) return true;
   return false;
+}
+
+export function isBanggiaUnlocked(): boolean {
+  if (typeof window === "undefined") return false;
+  const unlockedUntil = Number(localStorage.getItem(BANGGIA_UNLOCKED_UNTIL_KEY) || "0");
+  return unlockedUntil > Date.now();
+}
+
+export function markBanggiaUnlocked() {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(BANGGIA_UNLOCKED_UNTIL_KEY, String(Date.now() + THIRTY_DAYS_MS));
 }

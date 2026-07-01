@@ -409,6 +409,33 @@ export function getOwnedChannelSetup(channel: OwnedChannelKey) {
   return CHANNEL_OWNED_SETUP[channel];
 }
 
+export const WEBSITE_ADS_PACKAGES = [
+  {
+    id: "web-ads-under-10",
+    name: "Ngân sách dưới 10.000.000đ",
+    price: 1_000_000,
+    works: [
+      "Thiết lập chiến dịch Google / Meta",
+      "Landing page & pixel tracking",
+      "Nghiên cứu từ khóa mục tiêu",
+      "Theo dõi & tối ưu hàng tuần",
+      "Báo cáo hiệu quả",
+    ],
+  },
+  {
+    id: "web-ads-over-10",
+    name: "Ngân sách trên 10.000.000đ",
+    price: 2_000_000,
+    works: [
+      "Tối ưu chiến dịch chuyên sâu",
+      "A/B test landing & creative",
+      "Remarketing đa kênh",
+      "Tối ưu CPA / ROAS",
+      "Báo cáo & đề xuất chiến lược",
+    ],
+  },
+] as const;
+
 export const GOOGLE_MAPS_ADS_PACKAGES = [
   {
     id: "gm-ads-under-10",

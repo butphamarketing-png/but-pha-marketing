@@ -38,6 +38,7 @@ import {
   formatPriceVnd,
   GOOGLE_MAPS_ADS_PACKAGES,
   GOOGLE_MAPS_PACKAGES,
+  WEBSITE_ADS_PACKAGES,
   WEBSITE_BUILD_PACKAGES,
   WEBSITE_CARE_PACKAGES,
 } from "@/lib/service-pricing";
@@ -51,33 +52,6 @@ import {
 } from "@/lib/service-landing-config";
 import { getTelHref, resolveHotline } from "@/lib/site-contact";
 import { fadeUpChild, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
-
-const WEBSITE_ADS_PACKAGES = [
-  {
-    id: "web-ads-under-10",
-    name: "Ngân sách dưới 10.000.000đ",
-    price: 1_000_000,
-    works: [
-      "Thiết lập chiến dịch Google / Meta",
-      "Landing page & pixel tracking",
-      "Nghiên cứu từ khóa mục tiêu",
-      "Theo dõi & tối ưu hàng tuần",
-      "Báo cáo hiệu quả",
-    ],
-  },
-  {
-    id: "web-ads-over-10",
-    name: "Ngân sách trên 10.000.000đ",
-    price: 2_000_000,
-    works: [
-      "Tối ưu chiến dịch chuyên sâu",
-      "A/B test landing & creative",
-      "Remarketing đa kênh",
-      "Tối ưu CPA / ROAS",
-      "Báo cáo & đề xuất chiến lược",
-    ],
-  },
-] as const;
 
 function platformKeyForModal(key: LandingPlatformKey) {
   if (key === "googlemaps") return "google-maps";
