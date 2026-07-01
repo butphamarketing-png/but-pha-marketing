@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
+import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
@@ -10,7 +10,7 @@ import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, FileText, LayoutTemplate, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
-import { formatPriceVnd, WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
 const config: PlatformConfig = {
@@ -55,16 +55,6 @@ export default function WebsitePage() {
   const [showDomainModal, setShowDomainModal] = useState(false);
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
-  const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
-
-  const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
-    setCheckoutPkg({
-      name: pkgName,
-      price: pkgPrice,
-      color: config.color,
-      tabLabel,
-    });
-  };
 
   return (
     <PlatformPage config={config}>
@@ -141,23 +131,17 @@ export default function WebsitePage() {
             </div>
 
             <PackageCarousel accent={config.color} itemCount={WEBSITE_BUILD_PACKAGES.length} desktopCols={4}>
-              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => {
-                const priceStr = formatPriceVnd(pkg.price);
-                return (
-                  <PricingTierCard
-                    key={pkg.id}
-                    accent={config.color}
-                    title={pkg.name}
-                    price={priceStr}
-                    features={pkg.works}
-                    icon={LayoutTemplate}
-                    featured={i === 2}
-                    ctaLabel="Tư vấn ngay"
-                    onCta={() => handleOpenConsult(pkg.name, priceStr, "Thiết kế Website")}
-                    onSecondaryCta={() => handleOpenConsult(pkg.name, priceStr, "Thiết kế Website")}
-                  />
-                );
-              })}
+              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
+                <PricingTierCard
+                  key={pkg.id}
+                  accent={config.color}
+                  title={pkg.name}
+                  sectionLabel="Thiết kế Website"
+                  features={pkg.works}
+                  icon={LayoutTemplate}
+                  featured={i === 2}
+                />
+              ))}
             </PackageCarousel>
           </section>
 
@@ -177,7 +161,7 @@ export default function WebsitePage() {
                 Hosting, bảo mật, backup và hỗ trợ kỹ thuật — chọn mức phù hợp quy mô doanh nghiệp
               </p>
             </div>
-            <WebsiteOperationSection primaryColor={config.color} onConsult={handleOpenConsult} />
+            <WebsiteOperationSection primaryColor={config.color} sectionLabel="Vận hành Website" />
           </section>
 
           {/* CHĂM SÓC WEBSITE */}
@@ -198,20 +182,15 @@ export default function WebsitePage() {
             <PackageCarousel accent={config.color} itemCount={WEBSITE_CARE_PACKAGES.length} desktopCols={3}>
               {WEBSITE_CARE_PACKAGES.map((pkg, i) => {
                 const label = `${pkg.posts} bài viết/tháng`;
-                const priceStr = formatPriceVnd(pkg.price);
                 return (
                   <PricingTierCard
                     key={pkg.id}
                     accent={config.color}
                     title={label}
-                    price={priceStr}
-                    priceNote="/ tháng"
+                    sectionLabel="Chăm sóc Website"
                     features={pkg.works}
                     icon={FileText}
                     featured={i === 1}
-                    ctaLabel="Đăng ký ngay"
-                    onCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Website")}
-                    onSecondaryCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Website")}
                   />
                 );
               })}
@@ -237,7 +216,6 @@ export default function WebsitePage() {
               {[
                 {
                   title: "Ngân sách dưới 10 triệu",
-                  price: "1.000.000đ",
                   note: "/ tháng (chưa gồm ngân sách ads)",
                   icon: Target,
                   features: [
@@ -250,7 +228,6 @@ export default function WebsitePage() {
                 },
                 {
                   title: "Ngân sách trên 10 triệu",
-                  price: "2.000.000đ",
                   note: "/ tháng (chưa gồm ngân sách ads)",
                   icon: Zap,
                   features: [
@@ -266,14 +243,10 @@ export default function WebsitePage() {
                   key={ads.title}
                   accent={config.color}
                   title={ads.title}
-                  price={ads.price}
-                  priceNote={ads.note}
+                  sectionLabel="Quảng cáo Website"
                   features={ads.features}
                   icon={ads.icon}
                   variant="ads"
-                  ctaLabel="Đăng ký quảng cáo"
-                  onCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
-                  onSecondaryCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Website")}
                 />
               ))}
             </PackageCarousel>
@@ -293,7 +266,6 @@ export default function WebsitePage() {
         isOpen={showCustomModal}
         onClose={() => setShowCustomModal(false)}
         primaryColor={config.color}
-        hidePrices
       />
 
       <DomainSelectionModal
@@ -301,10 +273,6 @@ export default function WebsitePage() {
         onClose={() => setShowDomainModal(false)}
         primaryColor={config.color}
       />
-
-      {checkoutPkg && (
-        <ConsultationModal pkg={checkoutPkg} platformKey="website" onClose={() => setCheckoutPkg(null)} />
-      )}
     </PlatformPage>
   );
 }

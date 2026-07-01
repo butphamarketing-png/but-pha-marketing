@@ -60,6 +60,36 @@ create table if not exists public.leads (
 
 create index if not exists leads_created_at_idx on public.leads (created_at desc);
 
+-- Phiên truy cập website (IP, địa điểm, cảnh báo nghi ngờ)
+create table if not exists public.visitor_sessions (
+  id uuid primary key default gen_random_uuid(),
+  ip text not null unique,
+  user_agent text not null default '',
+  first_seen_at timestamptz not null default now(),
+  last_seen_at timestamptz not null default now(),
+  hits integer not null default 1,
+  hits_last_1h integer not null default 1,
+  paths jsonb not null default '[]'::jsonb,
+  city text,
+  region text,
+  country text,
+  country_code text,
+  risk_score integer not null default 0,
+  risk_level text not null default 'normal',
+  risk_flags jsonb not null default '[]'::jsonb,
+  linked_lead_phone text,
+  linked_lead_name text,
+  last_alerted_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists visitor_sessions_last_seen_idx
+  on public.visitor_sessions (last_seen_at desc);
+
+create index if not exists visitor_sessions_risk_idx
+  on public.visitor_sessions (risk_level, last_seen_at desc);
+
 -- Đơn hàng
 create table if not exists public.orders (
   id bigserial primary key,
@@ -118,6 +148,7 @@ alter table public.site_settings enable row level security;
 alter table public.news enable row level security;
 alter table public.push_subscriptions enable row level security;
 alter table public.leads enable row level security;
+alter table public.visitor_sessions enable row level security;
 alter table public.orders enable row level security;
 alter table public.media enable row level security;
 alter table public.page_content enable row level security;

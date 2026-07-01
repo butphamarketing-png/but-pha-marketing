@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { SubPageLayout } from "@/components/shared/SubPageLayout";
 import { ConsultModal } from "@/components/shared/ConsultModal";
-import { ConsultationModal } from "@/components/shared/PlatformPage";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
 import { WebsiteOperationComparisonTable } from "@/components/website/WebsiteOperationComparisonTable";
 import { DomainCarousel } from "@/components/landing/DomainCarousel";
@@ -35,7 +34,6 @@ import {
   FANPAGE_ADS_PACKAGES,
   FANPAGE_BUILD_PACKAGES,
   FANPAGE_CARE_PACKAGES,
-  formatPriceVnd,
   GOOGLE_MAPS_ADS_PACKAGES,
   GOOGLE_MAPS_PACKAGES,
   WEBSITE_ADS_PACKAGES,
@@ -52,18 +50,6 @@ import {
 } from "@/lib/service-landing-config";
 import { getTelHref, resolveHotline } from "@/lib/site-contact";
 import { fadeUpChild, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
-
-function platformKeyForModal(key: LandingPlatformKey) {
-  if (key === "googlemaps") return "google-maps";
-  return key;
-}
-
-type CheckoutState = {
-  name: string;
-  price: string;
-  color: string;
-  tabLabel: string;
-} | null;
 
 function SectionHeading({
   label,
@@ -203,33 +189,32 @@ function HeroVisual({ visual, accent }: { visual: ServiceLandingConfig["hero"]["
 function renderPricingSection(
   section: Extract<LandingSection, { kind: "pricing" }>,
   config: ServiceLandingConfig,
-  onChoose: (name: string, price: string, tabLabel: string) => void,
 ) {
-  const chooseLabel = section.chooseLabel ?? "Chọn gói";
+  const chooseLabel = section.chooseLabel;
   const accent = config.color;
+  const sectionLabel = section.title;
 
   const desktopCols: 2 | 3 | 4 =
     section.pricingKind === "website-build" ? 4 : section.pricingKind === "website-ads" || section.pricingKind === "fanpage-ads" || section.pricingKind === "gm-ads" ? 2 : 3;
 
-  const renderCards = (packages: readonly { id: string; name: string; price: number; works: readonly string[]; posts?: number }[], opts?: { hidePrices?: boolean; chooseLabel?: string; periodNote?: string }) => (
+  const renderCards = (
+    packages: readonly { id: string; name: string; price: number; works: readonly string[]; posts?: number }[],
+    opts?: { chooseLabel?: string },
+  ) => (
     <PackageCarousel accent={accent} itemCount={packages.length} desktopCols={desktopCols}>
       {packages.map((pkg, i) => {
         const featured = i === 1 && packages.length >= 3;
         const displayName = pkg.posts ? `${pkg.posts} bài / tháng` : pkg.name;
-        const priceStr = opts?.hidePrices ? "Liên hệ" : formatPriceVnd(pkg.price);
-        const label = opts?.chooseLabel ?? chooseLabel;
 
         return (
           <PricingTierCard
             key={pkg.id}
             accent={accent}
             title={displayName}
-            price={opts?.hidePrices ? undefined : priceStr}
-            priceNote={opts?.periodNote}
+            sectionLabel={sectionLabel}
             features={pkg.works}
             featured={featured}
-            ctaLabel={label}
-            onCta={() => onChoose(displayName, priceStr, label)}
+            ctaLabel={opts?.chooseLabel ?? chooseLabel}
           />
         );
       })}
@@ -241,27 +226,21 @@ function renderPricingSection(
       return (
         <WebsiteOperationSection
           primaryColor={accent}
-          onConsult={onChoose}
+          sectionLabel={sectionLabel}
           chooseLabel={chooseLabel}
         />
       );
     case "website-compare":
       return <WebsiteOperationComparisonTable />;
     case "website-build":
-      return renderCards(
-        WEBSITE_BUILD_PACKAGES.map((p) => ({ ...p, works: p.works })),
-        { hidePrices: section.hidePrices, chooseLabel },
-      );
+      return renderCards(WEBSITE_BUILD_PACKAGES.map((p) => ({ ...p, works: p.works })), { chooseLabel });
     case "website-care":
       return renderCards(
         WEBSITE_CARE_PACKAGES.map((p) => ({ id: p.id, name: `${p.posts} bài/tháng`, price: p.price, works: p.works, posts: p.posts })),
-        { chooseLabel, periodNote: "/ tháng" },
+        { chooseLabel },
       );
     case "website-ads":
-      return renderCards(WEBSITE_ADS_PACKAGES.map((p) => ({ ...p })), {
-        chooseLabel,
-        periodNote: "/ tháng (chưa gồm ngân sách ads)",
-      });
+      return renderCards(WEBSITE_ADS_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     case "domain":
       return <DomainCarousel accent={accent} />;
     case "fanpage-build":
@@ -275,20 +254,14 @@ function renderPricingSection(
           works: p.works,
           posts: p.posts,
         })),
-        { chooseLabel, periodNote: "/ tháng" },
+        { chooseLabel },
       );
     case "fanpage-ads":
-      return renderCards(FANPAGE_ADS_PACKAGES.map((p) => ({ ...p })), {
-        chooseLabel,
-        periodNote: "/ tháng (chưa gồm ngân sách ads)",
-      });
+      return renderCards(FANPAGE_ADS_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     case "gm-build":
       return renderCards(GOOGLE_MAPS_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     case "gm-ads":
-      return renderCards(GOOGLE_MAPS_ADS_PACKAGES.map((p) => ({ ...p })), {
-        chooseLabel,
-        periodNote: "/ tháng (chưa gồm ngân sách ads)",
-      });
+      return renderCards(GOOGLE_MAPS_ADS_PACKAGES.map((p) => ({ ...p })), { chooseLabel });
     default:
       return null;
   }
@@ -300,7 +273,6 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
   const { settings } = useAdmin();
   const [showConsult, setShowConsult] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [checkoutPkg, setCheckoutPkg] = useState<CheckoutState>(null);
 
   const hotline = resolveHotline(settings?.hotline);
   const telHref = getTelHref(settings?.hotline);
@@ -308,14 +280,6 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
   const accent = config.color;
   const heroVisual = config.hero.visual;
   const hasHeroSide = heroVisual.type !== "none";
-
-  const openPackageConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
-    if (pkgPrice === "Liên hệ") {
-      setShowConsult(true);
-      return;
-    }
-    setCheckoutPkg({ name: pkgName, price: pkgPrice, color: accent, tabLabel });
-  };
 
   return (
     <SubPageLayout platformName={config.platformName} primaryColor={accent} customSections={nav}>
@@ -412,8 +376,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
                 ))}
               </div>
             )}
-            {section.kind === "pricing" &&
-              renderPricingSection(section, config, openPackageConsult)}
+            {section.kind === "pricing" && renderPricingSection(section, config)}
             {section.kind === "faq" && (
               <div className="mx-auto max-w-3xl space-y-3">
                 {section.items.map((item, i) => (
@@ -486,13 +449,6 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
 
       {showConsult && (
         <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={accent} />
-      )}
-      {checkoutPkg && (
-        <ConsultationModal
-          pkg={checkoutPkg}
-          platformKey={platformKeyForModal(config.platformKey)}
-          onClose={() => setCheckoutPkg(null)}
-        />
       )}
     </SubPageLayout>
   );

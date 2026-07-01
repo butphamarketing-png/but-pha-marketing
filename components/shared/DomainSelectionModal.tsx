@@ -4,7 +4,10 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Globe, Check, ShieldCheck, Zap } from "lucide-react";
 import { db } from "@/lib/useData";
-import { DOMAIN_CATEGORIES, formatDomainPrice } from "@/lib/domain-catalog";
+import { DOMAIN_CATEGORIES } from "@/lib/domain-catalog";
+import { PUBLIC_HIDE_PRICES } from "@/lib/public-pricing-display";
+import { buildZaloPackageUrl } from "@/lib/site-contact";
+import { useAdmin } from "@/lib/AdminContext";
 
 const CATEGORY_ICONS = {
   intl: Globe,
@@ -12,7 +15,18 @@ const CATEGORY_ICONS = {
   extended: Zap,
 } as const;
 
-export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen: boolean; onClose: () => void; primaryColor: string }) {
+export function DomainSelectionModal({
+  isOpen,
+  onClose,
+  primaryColor,
+  hidePrices = PUBLIC_HIDE_PRICES,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  primaryColor: string;
+  hidePrices?: boolean;
+}) {
+  const { settings } = useAdmin();
   const [selectedDomains, setSelectedDomains] = useState<Set<string>>(new Set());
   const [step, setStep] = useState<"select" | "contact" | "success">("select");
   const [form, setForm] = useState({
@@ -32,6 +46,7 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
   };
 
   const totalPrice = useMemo(() => {
+    if (hidePrices) return 0;
     let sum = 0;
     DOMAIN_CATEGORIES.forEach(cat => {
       cat.domains.forEach(d => {
@@ -39,9 +54,9 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
       });
     });
     return sum;
-  }, [selectedDomains]);
+  }, [selectedDomains, hidePrices]);
 
-  const formatPrice = formatDomainPrice;
+  const formatPrice = (price: number) => new Intl.NumberFormat("vi-VN").format(price) + "đ";
 
   const handleSubmit = async () => {
     if (!form.name.trim() || !form.phone.trim() || !form.domainName.trim()) {
@@ -63,7 +78,7 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
       name: form.name.trim(),
       phone: form.phone.trim(),
       service: "Đăng ký tên miền",
-      note: `Tên miền: ${form.domainName}\nĐuôi mở rộng: ${domainExtensions.join(", ")}\nTổng dự toán: ${formatPrice(totalPrice)}\nGhi chú: ${form.note}`,
+      note: `Tên miền: ${form.domainName}\nĐuôi mở rộng: ${domainExtensions.join(", ")}${hidePrices ? "" : `\nTổng dự toán: ${formatPrice(totalPrice)}`}\nGhi chú: ${form.note}`,
       platform: "website"
     });
 
@@ -127,7 +142,9 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
                             </div>
                             <span className="text-sm font-semibold text-slate-700 group-hover:text-indigo-950">{d.name}</span>
                           </div>
-                          <span className="text-[10px] font-semibold text-slate-500">{new Intl.NumberFormat("vi-VN").format(d.price)}đ</span>
+                          {!hidePrices && (
+                            <span className="text-[10px] font-semibold text-slate-500">{formatPrice(d.price)}</span>
+                          )}
                         </button>
                       ))}
                     </div>
@@ -198,14 +215,34 @@ export function DomainSelectionModal({ isOpen, onClose, primaryColor }: { isOpen
                     <Globe size={28} style={{ color: primaryColor }} />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-slate-500">Dự toán phí hàng năm</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold" style={{ color: primaryColor }}>{new Intl.NumberFormat("vi-VN").format(totalPrice)}đ</span>
-                      <span className="text-sm text-slate-500">({selectedDomains.size} tên miền)</span>
-                    </div>
+                    {hidePrices ? (
+                      <>
+                        <p className="text-xs font-medium text-slate-500">Đã chọn {selectedDomains.size} đuôi tên miền</p>
+                        <p className="mt-1 text-sm font-semibold text-slate-600">Báo giá chi tiết qua Zalo hoặc tại /banggia</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-xs font-medium text-slate-500">Dự toán phí hàng năm</p>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-bold" style={{ color: primaryColor }}>{formatPrice(totalPrice)}</span>
+                          <span className="text-sm text-slate-500">({selectedDomains.size} tên miền)</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
+                  {hidePrices && (
+                    <a
+                      href={buildZaloPackageUrl("Đăng ký tên miền", "Website", settings?.hotline)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-2xl px-6 py-4 text-sm font-semibold text-white"
+                      style={{ backgroundColor: "#0068FF" }}
+                    >
+                      Chat Zalo
+                    </a>
+                  )}
                   {step === "contact" && (
                     <button onClick={() => setStep("select")} className="brand-btn-secondary px-8 py-5">Quay lại</button>
                   )}

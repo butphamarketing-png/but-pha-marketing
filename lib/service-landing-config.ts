@@ -214,7 +214,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     color: PLATFORM_COLORS.website,
     seo: {
       title: "Vận hành website chuyên nghiệp — Hosting & bảo trì | Bứt Phá Marketing",
-      description: "Gói vận hành website từ 2.500.000đ/năm: hosting, backup, bảo mật, hỗ trợ kỹ thuật.",
+      description: "Gói vận hành website: hosting, backup, bảo mật, hỗ trợ kỹ thuật. Xem bảng giá tại /banggia.",
       keywords: ["vận hành website", "hosting website", "bảo trì website"],
     },
     hero: {
@@ -232,6 +232,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Các gói vận hành website",
         pricingKind: "website-operation",
+        hidePrices: true,
         chooseLabel: "Chọn gói",
       },
       {
@@ -376,6 +377,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói chăm sóc website",
         subtitle: "Theo số bài viết mỗi tháng",
         pricingKind: "website-care",
+        hidePrices: true,
         chooseLabel: "Đăng ký ngay",
       },
       {
@@ -404,7 +406,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     color: PLATFORM_COLORS.website,
     seo: {
       title: "Quảng cáo website — Google Ads & Meta Ads | Bứt Phá Marketing",
-      description: "Chạy quảng cáo trỏ về website, đo chuyển đổi chính xác. Phí quản lý từ 1.000.000đ/tháng.",
+      description: "Chạy quảng cáo trỏ về website, đo chuyển đổi chính xác. Liên hệ Zalo hoặc xem bảng giá /banggia.",
       keywords: ["quảng cáo website", "google ads", "meta ads landing page"],
     },
     hero: {
@@ -436,6 +438,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo website",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "website-ads",
+        hidePrices: true,
         chooseLabel: "Đăng ký quảng cáo",
       },
     ],
@@ -480,6 +483,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Gói thiết kế Fanpage",
         pricingKind: "fanpage-build",
+        hidePrices: true,
         chooseLabel: "Chọn gói",
       },
     ],
@@ -517,6 +521,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói chăm sóc Fanpage",
         subtitle: "10 / 20 / 30 bài viết mỗi tháng",
         pricingKind: "fanpage-care",
+        hidePrices: true,
         chooseLabel: "Đăng ký ngay",
       },
       {
@@ -545,7 +550,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     color: PLATFORM_COLORS.facebook,
     seo: {
       title: "Quảng cáo Facebook Fanpage — Meta Ads | Bứt Phá Marketing",
-      description: "Quản lý chiến dịch Meta Ads, tối ưu chuyển đổi tin nhắn và lead. Phí quản lý từ 1.000.000đ/tháng.",
+      description: "Quản lý chiến dịch Meta Ads, tối ưu chuyển đổi tin nhắn và lead. Xem bảng giá tại /banggia.",
       keywords: ["quảng cáo facebook", "meta ads", "quảng cáo fanpage"],
     },
     hero: {
@@ -564,6 +569,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo Fanpage",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "fanpage-ads",
+        hidePrices: true,
         chooseLabel: "Đăng ký quảng cáo",
       },
       {
@@ -621,6 +627,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Gói Google Maps",
         pricingKind: "gm-build",
+        hidePrices: true,
         chooseLabel: "Chọn gói",
       },
       {
@@ -666,6 +673,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo Google Maps",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "gm-ads",
+        hidePrices: true,
         chooseLabel: "Đăng ký quảng cáo",
       },
       {

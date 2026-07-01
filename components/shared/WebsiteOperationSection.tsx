@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {
-  formatPriceVnd,
   WEBSITE_OPERATION_PACKAGES,
   WEBSITE_OPERATION_TIER_META,
   type WebsiteOperationTierKey,
@@ -10,8 +9,6 @@ import {
 import { getCompareFeaturesForPackage, getPackageCompareIndex } from "@/lib/website-operation-comparison";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
-
-type ConsultHandler = (pkgName: string, pkgPrice: string, tabLabel: string) => void;
 
 const TIER_TABS: { key: WebsiteOperationTierKey; emoji: string; label: string }[] = [
   { key: "yeu", emoji: "🟢", label: "Nhóm Khởi Đầu" },
@@ -21,17 +18,16 @@ const TIER_TABS: { key: WebsiteOperationTierKey; emoji: string; label: string }[
 
 export function WebsiteOperationSection({
   primaryColor,
-  onConsult,
-  chooseLabel = "Chọn gói",
+  sectionLabel = "Vận hành Website",
+  chooseLabel,
 }: {
   primaryColor: string;
-  onConsult: ConsultHandler;
+  sectionLabel?: string;
   chooseLabel?: string;
 }) {
   const [activeTier, setActiveTier] = useState<WebsiteOperationTierKey>("yeu");
   const meta = WEBSITE_OPERATION_TIER_META[activeTier];
   const packages = WEBSITE_OPERATION_PACKAGES.filter((p) => p.tier === activeTier);
-  const activeTab = TIER_TABS.find((t) => t.key === activeTier)!;
 
   return (
     <div className="space-y-8">
@@ -76,15 +72,11 @@ export function WebsiteOperationSection({
               key={pkg.id}
               accent={accent}
               title={pkg.name}
-              price={formatPriceVnd(pkg.price)}
-              priceNote="/ năm"
+              sectionLabel={`${sectionLabel} — ${pkg.name}`}
               compareItems={compareItems.length > 0 ? compareItems : undefined}
               features={compareItems.length === 0 ? pkg.works : undefined}
               featured={featured}
               ctaLabel={chooseLabel}
-              onCta={() =>
-                onConsult(`Vận hành ${pkg.name}`, formatPriceVnd(pkg.price), `Gói vận hành — ${activeTab.label}`)
-              }
             />
           );
         })}

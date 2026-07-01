@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
+import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Check, Search, Target, Zap, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
-import { GOOGLE_MAPS_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
+import { GOOGLE_MAPS_PACKAGES } from "@/lib/service-pricing";
 
 const GM_ICONS = [Wrench, Building2, Star] as const;
 
@@ -49,18 +49,8 @@ const config: PlatformConfig = {
 };
 
 export default function GoogleMapsPage() {
-  const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
-
-  const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
-    setCheckoutPkg({
-      name: pkgName,
-      price: pkgPrice,
-      color: config.color,
-      tabLabel: tabLabel
-    });
-  };
 
   return (
     <PlatformPage config={config}>
@@ -93,24 +83,18 @@ export default function GoogleMapsPage() {
           </div>
 
           <PackageCarousel accent={config.color} itemCount={GOOGLE_MAPS_PACKAGES.length} desktopCols={3}>
-            {GOOGLE_MAPS_PACKAGES.map((pkg, i) => {
-              const priceStr = formatPriceVnd(pkg.price);
-              return (
-                <PricingTierCard
-                  key={pkg.id}
-                  accent={config.color}
-                  title={pkg.name}
-                  price={priceStr}
-                  features={pkg.works}
-                  icon={GM_ICONS[i]}
-                  featured={i === 2}
-                  featuredLabel="Lựa chọn tốt"
-                  ctaLabel="Đăng ký ngay"
-                  onCta={() => handleOpenConsult(pkg.name, priceStr, "Gói Google Maps")}
-                  onSecondaryCta={() => handleOpenConsult(pkg.name, priceStr, "Gói Google Maps")}
-                />
-              );
-            })}
+            {GOOGLE_MAPS_PACKAGES.map((pkg, i) => (
+              <PricingTierCard
+                key={pkg.id}
+                accent={config.color}
+                title={pkg.name}
+                sectionLabel="Gói Google Maps"
+                features={pkg.works}
+                icon={GM_ICONS[i]}
+                featured={i === 2}
+                featuredLabel="Lựa chọn tốt"
+              />
+            ))}
           </PackageCarousel>
         </section>
 
@@ -128,7 +112,6 @@ export default function GoogleMapsPage() {
                 title: "Gói cơ bản",
                 icon: Target,
                 featured: true,
-                note: "Ngân sách dưới 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)",
                 features: [
                   "Setup chiến dịch Google Maps",
                   "Tối ưu hiển thị địa điểm trên Google",
@@ -137,12 +120,10 @@ export default function GoogleMapsPage() {
                   "Theo dõi & tối ưu quảng cáo mỗi ngày",
                   "Báo cáo hiệu quả định kỳ",
                 ],
-                price: "1.000.000đ",
               },
               {
                 title: "Gói nâng cao",
                 icon: Zap,
-                note: "Ngân sách từ 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)",
                 features: [
                   "Setup chiến dịch chuyên sâu Google Maps",
                   "Tối ưu từ khóa + vị trí hiển thị TOP",
@@ -152,23 +133,18 @@ export default function GoogleMapsPage() {
                   "Theo dõi & tối ưu liên tục",
                   "Báo cáo chi tiết + đề xuất chiến lược",
                 ],
-                price: "2.000.000đ",
               },
             ].map((ads) => (
               <PricingTierCard
                 key={ads.title}
                 accent={config.color}
                 title={ads.title}
-                price={ads.price}
-                priceNote={ads.note}
+                sectionLabel="Quảng cáo Google Maps"
                 features={ads.features}
                 icon={ads.icon}
                 featured={ads.featured}
                 featuredLabel="Bán chạy"
                 variant="ads"
-                ctaLabel="Đăng ký quảng cáo"
-                onCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
-                onSecondaryCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Google Maps")}
               />
             ))}
           </PackageCarousel>
@@ -223,14 +199,6 @@ export default function GoogleMapsPage() {
         source="Phân tích Google Maps"
         platformColor={config.color}
       />
-
-      {checkoutPkg && (
-        <ConsultationModal 
-          pkg={checkoutPkg} 
-          platformKey="googlemaps" 
-          onClose={() => setCheckoutPkg(null)} 
-        />
-      )}
     </PlatformPage>
   );
 }

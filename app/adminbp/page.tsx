@@ -58,7 +58,33 @@ type VisitorRecord = {
   lastSeenAt: string;
   hits: number;
   paths: string[];
+  city?: string | null;
+  region?: string | null;
+  country?: string | null;
+  countryCode?: string | null;
+  riskScore?: number;
+  riskLevel?: "normal" | "watch" | "alert";
+  riskFlags?: string[];
+  linkedLeadPhone?: string | null;
+  linkedLeadName?: string | null;
 };
+
+function formatVisitorLocation(visitor: VisitorRecord) {
+  const parts = [visitor.city, visitor.region, visitor.country || visitor.countryCode].filter(Boolean);
+  return parts.length > 0 ? parts.join(", ") : "—";
+}
+
+function visitorRiskLabel(level: VisitorRecord["riskLevel"]) {
+  if (level === "alert") return "Cảnh báo";
+  if (level === "watch") return "Theo dõi";
+  return "Bình thường";
+}
+
+function visitorRiskColor(level: VisitorRecord["riskLevel"]) {
+  if (level === "alert") return "#EF4444";
+  if (level === "watch") return "#F59E0B";
+  return "#10B981";
+}
 
 function parseResponsibilityEditor(raw: string) {
   const lines = raw
@@ -173,6 +199,8 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [visitors, setVisitors] = useState<VisitorRecord[]>([]);
   const [totalVisitorHits, setTotalVisitorHits] = useState(0);
+  const [suspiciousVisitorCount, setSuspiciousVisitorCount] = useState(0);
+  const [visitorFilterSuspicious, setVisitorFilterSuspicious] = useState(false);
   const [clientReviews, setClientReviews] = useState<ClientReview[]>([]);
   const [isReviewsLoading, setIsReviewsLoading] = useState(false);
   const [newReview, setNewReview] = useState<Omit<ClientReview, "id" | "createdAt">>({
@@ -637,13 +665,15 @@ export default function AdminPage() {
     else setClientReviews([...(result.data || [])].reverse());
     setIsReviewsLoading(false);
   };
-  const refreshVisitors = async () => {
+  const refreshVisitors = async (suspiciousOnly = visitorFilterSuspicious) => {
     try {
-      const res = await fetch("/api/visitors", { cache: "no-store", credentials: "include" });
+      const query = suspiciousOnly ? "?suspicious=1" : "";
+      const res = await fetch(`/api/visitors${query}`, { cache: "no-store", credentials: "include" });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) return;
       setVisitors(Array.isArray(data.visitors) ? data.visitors : []);
       setTotalVisitorHits(typeof data.totalHits === "number" ? data.totalHits : 0);
+      setSuspiciousVisitorCount(typeof data.suspiciousCount === "number" ? data.suspiciousCount : 0);
     } catch (visitorError) {
       console.error("Visitors error:", visitorError);
     }
@@ -1044,7 +1074,7 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <button type="button" onClick={() => refreshVisitors()} className="text-left">
-                  <StatCard value={visitors.length} label="Truy cập" icon={BarChart2} color="#10B981" />
+                  <StatCard value={suspiciousVisitorCount} label="Nghi ngờ" icon={BarChart2} color="#EF4444" />
                 </button>
                 <button type="button" onClick={() => setActiveTab("settings")} className="text-left">
                   <StatCard value="Đổi" label="Mật khẩu" icon={Lock} color="#F59E0B" />
@@ -1069,7 +1099,7 @@ export default function AdminPage() {
               <div className="rounded-2xl border border-white/10 bg-card p-6">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-lg font-bold text-white">Khách truy cập website</h2>
-                  <button type="button" onClick={refreshVisitors} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white">
+                  <button type="button" onClick={() => void refreshVisitors()} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white">
                     Làm mới
                   </button>
                 </div>
@@ -1096,35 +1126,109 @@ export default function AdminPage() {
                     <p className="mt-2 text-2xl font-black text-white">{totalVisitorHits.toLocaleString()}</p>
                   </div>
                   <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-wide text-gray-400">Khách truy cập thực</p>
-                    <p className="mt-2 text-2xl font-black text-white">{visitors.length.toLocaleString()}</p>
+                    <p className="text-xs uppercase tracking-wide text-gray-400">IP nghi ngờ</p>
+                    <p className="mt-2 text-2xl font-black text-white">{suspiciousVisitorCount.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-card p-6">
-                <h2 className="mb-4 text-lg font-bold text-white">Người truy cập và IP</h2>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg font-bold text-white">Người truy cập và IP</h2>
+                    <p className="mt-1 text-xs text-gray-400">Theo dõi địa điểm, lượt truy cập và cảnh báo lead lạ trên toàn website.</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setVisitorFilterSuspicious(false);
+                        void refreshVisitors(false);
+                      }}
+                      className={`rounded-lg border px-3 py-1.5 text-xs transition ${
+                        !visitorFilterSuspicious
+                          ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-100"
+                          : "border-white/10 bg-white/5 text-white"
+                      }`}
+                    >
+                      Tất cả
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setVisitorFilterSuspicious(true);
+                        void refreshVisitors(true);
+                      }}
+                      className={`rounded-lg border px-3 py-1.5 text-xs transition ${
+                        visitorFilterSuspicious
+                          ? "border-amber-400/40 bg-amber-500/15 text-amber-100"
+                          : "border-white/10 bg-white/5 text-white"
+                      }`}
+                    >
+                      Chỉ nghi ngờ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => refreshVisitors(visitorFilterSuspicious)}
+                      className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white"
+                    >
+                      Làm mới
+                    </button>
+                  </div>
+                </div>
                 <div className="overflow-x-auto">
-                  <table className="min-w-[760px] w-full text-left text-sm">
+                  <table className="min-w-[980px] w-full text-left text-sm">
                     <thead className="bg-white/5 text-gray-400">
                       <tr>
                         <th className="px-4 py-3">IP</th>
+                        <th className="px-4 py-3">Địa điểm</th>
+                        <th className="px-4 py-3">Mức</th>
                         <th className="px-4 py-3">Lượt</th>
+                        <th className="px-4 py-3">Lead</th>
                         <th className="px-4 py-3">Lần cuối</th>
-                        <th className="px-4 py-3">Trang đã vào</th>
+                        <th className="px-4 py-3">Trang / dấu hiệu</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
                       {visitors.length === 0 ? (
                         <tr>
-                          <td colSpan={4} className="px-4 py-6 text-center text-gray-400">Chưa có dữ liệu truy cập thực.</td>
+                          <td colSpan={7} className="px-4 py-6 text-center text-gray-400">
+                            {visitorFilterSuspicious ? "Chưa có IP nghi ngờ." : "Chưa có dữ liệu truy cập thực."}
+                          </td>
                         </tr>
                       ) : (
-                        visitors.slice(0, 20).map((visitor) => (
+                        visitors.slice(0, 30).map((visitor) => (
                           <tr key={visitor.id} className="text-gray-200">
                             <td className="px-4 py-3 font-mono text-xs">{visitor.ip}</td>
+                            <td className="px-4 py-3 text-xs">{formatVisitorLocation(visitor)}</td>
+                            <td className="px-4 py-3">
+                              <span
+                                className="inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                                style={{
+                                  color: visitorRiskColor(visitor.riskLevel),
+                                  backgroundColor: `${visitorRiskColor(visitor.riskLevel)}20`,
+                                }}
+                              >
+                                {visitorRiskLabel(visitor.riskLevel)}
+                              </span>
+                            </td>
                             <td className="px-4 py-3">{visitor.hits}</td>
+                            <td className="px-4 py-3 text-xs">
+                              {visitor.linkedLeadPhone ? (
+                                <span>
+                                  {visitor.linkedLeadName ? `${visitor.linkedLeadName} · ` : ""}
+                                  {visitor.linkedLeadPhone}
+                                </span>
+                              ) : (
+                                <span className="text-gray-500">Chưa có</span>
+                              )}
+                            </td>
                             <td className="px-4 py-3 text-xs">{formatDate(visitor.lastSeenAt)}</td>
-                            <td className="px-4 py-3 text-xs text-gray-400">{visitor.paths.join(", ") || "/"}</td>
+                            <td className="px-4 py-3 text-xs text-gray-400">
+                              <div>{visitor.paths.slice(-4).join(", ") || "/"}</div>
+                              {visitor.riskFlags && visitor.riskFlags.length > 0 && (
+                                <div className="mt-1 text-[11px] text-amber-200/90">{visitor.riskFlags.join(" · ")}</div>
+                              )}
+                            </td>
                           </tr>
                         ))
                       )}

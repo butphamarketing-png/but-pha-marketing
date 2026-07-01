@@ -56,6 +56,25 @@ export function getZaloUrl(settingsHotline?: string | null) {
   return `https://zalo.me/${resolveHotlineDigits(settingsHotline)}`;
 }
 
+export const BANGGIA_PUBLIC_PATH = "/banggia";
+
+export function buildZaloPackageUrl(
+  packageName: string,
+  sectionLabel?: string,
+  settingsHotline?: string | null,
+) {
+  const phone = resolveHotlineDigits(settingsHotline);
+  const message = [
+    "Xin chào Bứt Phá Marketing,",
+    sectionLabel
+      ? `Tôi quan tâm gói "${packageName}" (${sectionLabel}).`
+      : `Tôi quan tâm gói "${packageName}".`,
+    "Nhờ tư vấn chi tiết ạ.",
+  ].join(" ");
+
+  return `https://zalo.me/${phone}?msg=${encodeURIComponent(message)}`;
+}
+
 export function getMailtoHref(settingsEmail?: string | null) {
   return `mailto:${resolveEmail(settingsEmail)}`;
 }

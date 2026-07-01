@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PlatformPage, PlatformConfig, ConsultationModal } from "@/components/shared/PlatformPage";
+import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { Target, Rocket, Settings, UserCheck, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { AuditModal } from "@/components/shared/AuditModal";
-import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
+import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES } from "@/lib/service-pricing";
 
 const BUILD_ICONS = [Settings, UserCheck, Rocket] as const;
 
@@ -51,16 +51,6 @@ const config: PlatformConfig = {
 export default function FacebookPage() {
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditOpen, setIsAuditOpen] = useState(false);
-  const [checkoutPkg, setCheckoutPkg] = useState<{ name: string; price: string; color: string; tabLabel: string } | null>(null);
-
-  const handleOpenConsult = (pkgName: string, pkgPrice: string, tabLabel: string) => {
-    setCheckoutPkg({
-      name: pkgName,
-      price: pkgPrice,
-      color: config.color,
-      tabLabel: tabLabel
-    });
-  };
 
   return (
     <PlatformPage config={config}>
@@ -89,7 +79,6 @@ export default function FacebookPage() {
           ]}
         />
         
-        {/* 1. DỊCH VỤ XÂY DỰNG FANPAGE */}
         <section id="build" className="space-y-16 scroll-mt-24">
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
@@ -102,28 +91,21 @@ export default function FacebookPage() {
           </div>
 
           <PackageCarousel accent={config.color} itemCount={FANPAGE_BUILD_PACKAGES.length} desktopCols={3}>
-            {FANPAGE_BUILD_PACKAGES.map((pkg, i) => {
-              const priceStr = formatPriceVnd(pkg.price);
-              return (
-                <PricingTierCard
-                  key={pkg.id}
-                  accent={config.color}
-                  title={pkg.name}
-                  price={priceStr}
-                  features={pkg.works}
-                  icon={BUILD_ICONS[i]}
-                  featured={i === 2}
-                  featuredLabel="Bán chạy"
-                  ctaLabel="Đăng ký ngay"
-                  onCta={() => handleOpenConsult(pkg.name, priceStr, "Xây dựng Fanpage")}
-                  onSecondaryCta={() => handleOpenConsult(pkg.name, priceStr, "Xây dựng Fanpage")}
-                />
-              );
-            })}
+            {FANPAGE_BUILD_PACKAGES.map((pkg, i) => (
+              <PricingTierCard
+                key={pkg.id}
+                accent={config.color}
+                title={pkg.name}
+                sectionLabel="Xây dựng Fanpage"
+                features={pkg.works}
+                icon={BUILD_ICONS[i]}
+                featured={i === 2}
+                featuredLabel="Bán chạy"
+              />
+            ))}
           </PackageCarousel>
         </section>
 
-        {/* 2. CHĂM SÓC FANPAGE */}
         <section id="care" className="space-y-16 scroll-mt-24">
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
@@ -139,26 +121,20 @@ export default function FacebookPage() {
           <PackageCarousel accent={config.color} itemCount={FANPAGE_CARE_PACKAGES.length} desktopCols={3}>
             {FANPAGE_CARE_PACKAGES.map((pkg, i) => {
               const label = `${pkg.posts} bài / tháng`;
-              const priceStr = formatPriceVnd(pkg.price);
               return (
                 <PricingTierCard
                   key={pkg.id}
                   accent={config.color}
                   title={label}
-                  price={priceStr}
-                  priceNote="/ tháng"
+                  sectionLabel="Chăm sóc Fanpage"
                   features={pkg.works}
                   featured={i === 1}
-                  ctaLabel="Đăng ký ngay"
-                  onCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Fanpage")}
-                  onSecondaryCta={() => handleOpenConsult(label, priceStr, "Chăm sóc Fanpage")}
                 />
               );
             })}
           </PackageCarousel>
         </section>
 
-        {/* 3. QUẢNG CÁO FANPAGE */}
         <section id="ads" className="space-y-16 scroll-mt-24">
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
@@ -176,29 +152,21 @@ export default function FacebookPage() {
                 title: "Ngân sách dưới 10 triệu",
                 icon: Target,
                 features: ["Thiết lập và tối ưu chiến dịch quảng cáo", "Nghiên cứu khách hàng mục tiêu", "Lên nội dung và hình ảnh quảng cáo", "Theo dõi, tối ưu hiệu quả", "Báo cáo kết quả"],
-                price: "1.000.000đ",
-                note: "Chưa bao gồm VAT Facebook · / tháng",
               },
               {
                 title: "Ngân sách trên 10 triệu",
                 icon: Zap,
                 features: ["Thiết lập và tối ưu chiến dịch quảng cáo", "Nghiên cứu khách hàng mục tiêu", "Lên nội dung và hình ảnh quảng cáo", "Theo dõi, tối ưu hiệu quả", "Báo cáo kết quả", "A/B Testing chiến dịch", "Tối ưu hóa chuyển đổi"],
-                price: "2.000.000đ",
-                note: "Chưa bao gồm VAT Facebook · / tháng",
               },
             ].map((ads) => (
               <PricingTierCard
                 key={ads.title}
                 accent={config.color}
                 title={ads.title}
-                price={ads.price}
-                priceNote={ads.note}
+                sectionLabel="Quảng cáo Fanpage"
                 features={ads.features}
                 icon={ads.icon}
                 variant="ads"
-                ctaLabel="Đăng ký quảng cáo"
-                onCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Fanpage")}
-                onSecondaryCta={() => handleOpenConsult(ads.title, ads.price, "Quảng cáo Fanpage")}
               />
             ))}
           </PackageCarousel>
@@ -213,16 +181,6 @@ export default function FacebookPage() {
         source="Phân tích Fanpage"
         platformColor={config.color}
       />
-
-      {checkoutPkg && (
-        <ConsultationModal 
-          pkg={checkoutPkg} 
-          platformKey="facebook" 
-          onClose={() => setCheckoutPkg(null)} 
-        />
-      )}
     </PlatformPage>
   );
 }
-
-

@@ -97,7 +97,7 @@ export function CustomWebsiteModal({
   isOpen,
   onClose,
   primaryColor,
-  hidePrices = false,
+  hidePrices = true,
 }: {
   isOpen: boolean;
   onClose: () => void;
