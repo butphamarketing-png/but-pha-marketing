@@ -130,16 +130,21 @@ export function SiteConsultPopup() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[75] flex items-end justify-center bg-black/55 p-4 pb-24 md:items-center md:pb-4">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-black p-5 shadow-2xl">
+    <div className="fixed inset-0 z-[75] flex items-end justify-center bg-indigo-950/55 p-4 pb-24 backdrop-blur-sm md:items-center md:pb-4">
+      <div className="w-full max-w-md rounded-2xl border border-violet-400/25 bg-gradient-to-br from-indigo-950 via-[#4c1d95] to-indigo-950 p-5 shadow-[0_24px_64px_rgba(76,29,149,0.45)]">
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
             <p className="text-lg font-bold text-white">Đặt lịch tư vấn miễn phí</p>
-            <p className="mt-1 text-sm text-white/70 leading-snug">
+            <p className="mt-1 text-sm leading-snug text-violet-100/75">
               Để lại thông tin, đội ngũ chuyên gia sẽ liên hệ đúng khung giờ bạn chọn.
             </p>
           </div>
-          <button type="button" onClick={dismissForSession} className="text-white/60 hover:text-white" aria-label="Đóng">
+          <button
+            type="button"
+            onClick={dismissForSession}
+            className="rounded-lg p-1 text-violet-200/60 transition hover:bg-white/10 hover:text-white"
+            aria-label="Đóng"
+          >
             <X size={18} />
           </button>
         </div>
@@ -149,17 +154,17 @@ export function SiteConsultPopup() {
             value={form.name}
             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
             placeholder="Họ và tên *"
-            className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/30"
+            className="w-full rounded-xl border border-violet-400/20 bg-violet-950/35 px-4 py-3 text-sm text-white outline-none placeholder:text-violet-200/40 focus:border-violet-400/55 focus:ring-2 focus:ring-violet-500/20"
           />
           <input
             type="tel"
             value={form.phone}
             onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
             placeholder="Số điện thoại *"
-            className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/30"
+            className="w-full rounded-xl border border-violet-400/20 bg-violet-950/35 px-4 py-3 text-sm text-white outline-none placeholder:text-violet-200/40 focus:border-violet-400/55 focus:ring-2 focus:ring-violet-500/20"
           />
           <div className="space-y-1">
-            <label className="flex items-center gap-1.5 text-xs font-medium text-white/55">
+            <label className="flex items-center gap-1.5 text-xs font-medium text-violet-200/65">
               <CalendarDays size={14} />
               Thời gian tư vấn mong muốn *
             </label>
@@ -167,7 +172,7 @@ export function SiteConsultPopup() {
               type="datetime-local"
               value={form.consultTime}
               onChange={(e) => setForm((prev) => ({ ...prev, consultTime: e.target.value }))}
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-white/30 [color-scheme:dark]"
+              className="w-full rounded-xl border border-violet-400/20 bg-violet-950/35 px-4 py-3 text-sm text-white outline-none focus:border-violet-400/55 focus:ring-2 focus:ring-violet-500/20 [color-scheme:dark]"
             />
           </div>
           <textarea
@@ -175,23 +180,23 @@ export function SiteConsultPopup() {
             onChange={(e) => setForm((prev) => ({ ...prev, note: e.target.value }))}
             placeholder="Nội dung cần tư vấn (tuỳ chọn)"
             rows={2}
-            className="w-full resize-none rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/30"
+            className="w-full resize-none rounded-xl border border-violet-400/20 bg-violet-950/35 px-4 py-3 text-sm text-white outline-none placeholder:text-violet-200/40 focus:border-violet-400/55 focus:ring-2 focus:ring-violet-500/20"
           />
 
-          {message && <p className="text-sm text-red-300">{message}</p>}
+          {message && <p className="text-sm text-rose-300">{message}</p>}
 
           <div className="flex flex-wrap gap-2 pt-1">
             <button
               type="submit"
               disabled={loading}
-              className="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
+              className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(124,58,237,0.35)] transition hover:from-violet-500 hover:to-indigo-500 disabled:opacity-60"
             >
               {loading ? "Đang gửi..." : "Xác nhận hẹn tư vấn"}
             </button>
             <button
               type="button"
               onClick={dismissForSession}
-              className="rounded-xl border border-white/30 px-4 py-2.5 text-sm text-white hover:bg-white/10"
+              className="rounded-xl border border-violet-400/35 px-4 py-2.5 text-sm text-violet-100 transition hover:bg-violet-500/15"
             >
               Để sau
             </button>

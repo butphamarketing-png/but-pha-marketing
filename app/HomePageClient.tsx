@@ -36,6 +36,7 @@ import { fadeUpChild, scaleIn, slideLeft, staggerIntro, VIEWPORT_ONCE } from "@/
 
 const ConsultModal = dynamic(() => import("@/components/shared/ConsultModal").then((mod) => mod.ConsultModal), { ssr: false });
 const ParticleBackground = dynamic(() => import("@/components/shared/ParticleBackground").then((mod) => mod.ParticleBackground), { ssr: false });
+import { LoadingScreen } from "@/components/loading/LoadingScreen";
 
 type ContactFormState = {
   name: string;
@@ -72,8 +73,9 @@ function slugify(value: string) {
 }
 
 export default function HomePageClient() {
-  const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [showLoader, setShowLoader] = useState(true);
+  const [siteReady, setSiteReady] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [showConsult, setShowConsult] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
@@ -87,6 +89,10 @@ export default function HomePageClient() {
   });
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -214,28 +220,6 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    let raf = 0;
-    const durationMs = 250;
-    const startedAt = performance.now();
-
-    const tick = (now: number) => {
-      const elapsed = now - startedAt;
-      const nextProgress = Math.min(100, Math.round((elapsed / durationMs) * 100));
-      setProgress(nextProgress);
-
-      if (elapsed >= durationMs) {
-        setLoading(false);
-        return;
-      }
-
-      raf = window.requestAnimationFrame(tick);
-    };
-
-    raf = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(raf);
-  }, []);
-
-  useEffect(() => {
     const timer = window.setInterval(() => {
       setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
     }, 4800);
@@ -327,23 +311,22 @@ export default function HomePageClient() {
   const topReviews = reviews.slice(0, 3);
   const topBlogs = blogs.slice(0, 4);
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background">
-        <div className="relative h-24 w-24">
-          <div className="absolute inset-0 animate-ping rounded-full bg-violet-600/20" />
-          <img src={logoSrc} alt="Loading" className="relative z-10 h-24 w-24 rounded-full object-cover shadow-[0_0_40px_rgba(124,58,237,0.4)]" />
-        </div>
-        <div className="mt-8 w-48 overflow-hidden rounded-full bg-indigo-50 p-1">
-          <div className="h-1 rounded-full bg-gradient-to-r from-indigo-900 to-violet-600 transition-all duration-300" style={{ width: `${progress}%` }} />
-        </div>
-        <p className="mt-4 text-sm font-medium text-slate-500">Đang khởi tạo hệ thống...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="relative min-h-screen bg-background font-sans selection:bg-violet-600/30">
+    <>
+      {isClient && showLoader && (
+        <LoadingScreen
+          logoSrc={logoSrc}
+          onComplete={() => {
+            setShowLoader(false);
+            setSiteReady(true);
+          }}
+        />
+      )}
+
+      <div
+        className="relative min-h-screen bg-background font-sans selection:bg-violet-600/30 transition-opacity duration-500 ease-out"
+        style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
+      >
       <ParticleBackground />
       
       <div className="relative z-10 flex flex-col">
@@ -922,6 +905,7 @@ export default function HomePageClient() {
       </div>
 
       <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} />
-    </div>
+      </div>
+    </>
   );
 }
