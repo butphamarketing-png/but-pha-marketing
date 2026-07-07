@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKienTrucImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_CONG_TY_XAY_DUNG = {
     "Thiết kế website công ty xây dựng: portfolio công trình, form báo giá, hồ sơ năng lực, SEO local nhà thầu. Giá 4–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website công ty xây dựng: showcase công trình, báo giá minh bạch, SEO địa phương và quy trình triển khai cho nhà thầu.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-cong-ty-xay-dung" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Công Ty Xây Dựng | SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -63,7 +63,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 4–12 triệu; landing theo hạng mục (trọn gói, phần thô, cải tạo).",
 ])}
 
-${wpImg(2, "Thiết kế website công ty xây dựng với portfolio công trình và form báo giá")}
+${wpKienTrucImg(0, "Thiết kế website công ty xây dựng với portfolio công trình và form báo giá")}
 
 <h2 id="xay-dung-la-gi">Thiết kế website công ty xây dựng là gì?</h2>
 
@@ -112,7 +112,7 @@ ${wpImg(2, "Thiết kế website công ty xây dựng với portfolio công trì
   <li>Video timelapse (nếu có) — tăng engagement</li>
 </ul>
 
-${wpImg(6, "Portfolio công trình xây dựng trên website nhà thầu chuyên nghiệp")}
+${wpKienTrucImg(1, "Portfolio công trình xây dựng trên website nhà thầu chuyên nghiệp")}
 
 <h2 id="bao-gia-form">Form báo giá &amp; khảo sát hiện trường</h2>
 
@@ -139,6 +139,8 @@ ${wpImg(6, "Portfolio công trình xây dựng trên website nhà thầu chuyên
   <li>Đối tác vật liệu, nhà cung cấp</li>
   <li>PDF hồ sơ năng lực tải về — cho tender B2B</li>
 </ul>
+
+${wpKienTrucImg(2, "Thiết kế website công ty xây dựng — trang năng lực và hồ sơ nhà thầu")}
 
 <h2 id="cau-truc">Cấu trúc website công ty xây dựng (10–14 trang)</h2>
 
@@ -168,6 +170,8 @@ ${wpImg(6, "Portfolio công trình xây dựng trên website nhà thầu chuyên
 </ol>
 
 <p><strong>Thời gian:</strong> 4–8 tuần tùy số trang và số công trình portfolio.</p>
+
+${wpKienTrucImg(3, "Quy trình thiết kế website công ty xây dựng chuẩn SEO")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website công ty xây dựng 2026</h2>
 
@@ -214,6 +218,8 @@ ${wpImg(6, "Portfolio công trình xây dựng trên website nhà thầu chuyên
 </ul>
 
 <p>Xem <a href="${SITE}/blog/thiet-ke-website-tphcm">thiết kế website TPHCM</a> hoặc <a href="${SITE}/blog/thiet-ke-website-ha-noi">thiết kế website Hà Nội</a> cho SEO địa phương.</p>
+
+${wpKienTrucImg(4, "SEO local thiết kế website công ty xây dựng theo tỉnh thành")}
 
 <h2 id="sai-lam">Sai lầm khi làm website xây dựng</h2>
 

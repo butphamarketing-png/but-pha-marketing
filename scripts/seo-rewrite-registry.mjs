@@ -53,13 +53,19 @@ import { REWRITE_THIET_KE_WEBSITE_NOI_THAT_SHOWROOM } from "./seo-rewrite-thiet-
 import { REWRITE_THIET_KE_WEBSITE_XE_HOI_O_TO } from "./seo-rewrite-thiet-ke-website-xe-hoi-o-to.mjs";
 import { REWRITE_THIET_KE_WEBSITE_THOI_TRANG_FASHION } from "./seo-rewrite-thiet-ke-website-thoi-trang-fashion.mjs";
 import { REWRITE_THIET_KE_WEBSITE_MY_PHAM_LAM_DEP } from "./seo-rewrite-thiet-ke-website-my-pham-lam-dep.mjs";
+import { REWRITE_THIET_KE_WEBSITE_MY_PHAM } from "./seo-rewrite-thiet-ke-website-my-pham.mjs";
+import { REWRITE_THIET_KE_WEBSITE_THANG_MAY } from "./seo-rewrite-thiet-ke-website-thang-may.mjs";
 import { REWRITE_THIET_KE_WEBSITE_NONG_SAN_ORGANIC } from "./seo-rewrite-thiet-ke-website-nong-san-organic.mjs";
 import { REWRITE_THIET_KE_WEBSITE_XAY_DUNG_NHA_THAU } from "./seo-rewrite-thiet-ke-website-xay-dung-nha-thau.mjs";
 import { REWRITE_THIET_KE_WEBSITE_IN_AN_BAO_BI } from "./seo-rewrite-thiet-ke-website-in-an-bao-bi.mjs";
+import { REWRITE_THIET_KE_WEBSITE_TU_DONG_HOA } from "./seo-rewrite-thiet-ke-website-tu-dong-hoa.mjs";
+import { REWRITE_THIET_KE_WEBSITE_DIEN_CONG_NGHIEP } from "./seo-rewrite-thiet-ke-website-dien-cong-nghiep.mjs";
 import { REWRITE_THIET_KE_WEBSITE_LOGISTICS_VAN_TAI } from "./seo-rewrite-thiet-ke-website-logistics-van-tai.mjs";
 import { REWRITE_THIET_KE_WEBSITE_NHA_KHOA_NIENG_RANG } from "./seo-rewrite-thiet-ke-website-nha-khoa-nieng-rang.mjs";
 import { REWRITE_THIET_KE_WEBSITE_GYM_YOGA_PILATES } from "./seo-rewrite-thiet-ke-website-gym-yoga-pilates.mjs";
 import { REWRITE_THIET_KE_WEBSITE_TRE_EM_MAM_NON } from "./seo-rewrite-thiet-ke-website-tre-em-mam-non.mjs";
+import { REWRITE_THIET_KE_WEBSITE_PCCC } from "./seo-rewrite-thiet-ke-website-pccc.mjs";
+import { REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC } from "./seo-rewrite-thiet-ke-website-thiet-bi-pccc.mjs";
 
 export const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
@@ -114,13 +120,19 @@ export const REWRITE_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_XE_HOI_O_TO,
   REWRITE_THIET_KE_WEBSITE_THOI_TRANG_FASHION,
   REWRITE_THIET_KE_WEBSITE_MY_PHAM_LAM_DEP,
+  REWRITE_THIET_KE_WEBSITE_MY_PHAM,
+  REWRITE_THIET_KE_WEBSITE_THANG_MAY,
   REWRITE_THIET_KE_WEBSITE_NONG_SAN_ORGANIC,
   REWRITE_THIET_KE_WEBSITE_XAY_DUNG_NHA_THAU,
   REWRITE_THIET_KE_WEBSITE_IN_AN_BAO_BI,
+  REWRITE_THIET_KE_WEBSITE_TU_DONG_HOA,
+  REWRITE_THIET_KE_WEBSITE_DIEN_CONG_NGHIEP,
   REWRITE_THIET_KE_WEBSITE_LOGISTICS_VAN_TAI,
   REWRITE_THIET_KE_WEBSITE_NHA_KHOA_NIENG_RANG,
   REWRITE_THIET_KE_WEBSITE_GYM_YOGA_PILATES,
   REWRITE_THIET_KE_WEBSITE_TRE_EM_MAM_NON,
+  REWRITE_THIET_KE_WEBSITE_PCCC,
+  REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC,
 ];
 
 export const REWRITE_BY_SLUG = Object.fromEntries(REWRITE_ARTICLES.map((a) => [a.slug, a]));

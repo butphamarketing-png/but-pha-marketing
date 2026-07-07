@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpLogisticsImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_LOGISTICS_VAN_TAI = {
     "Thiết kế website logistics: báo giá cước, tra cứu vận đơn, dịch vụ vận tải B2B và SEO local. Quy trình 7 bước, giá 8–16 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website logistics và vận tải: tracking đơn, báo giá cước, dịch vụ kho vận tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-logistics-van-tai" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Logistics | Tracking & Báo Giá 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -63,7 +63,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website logistics 8–16 triệu tùy tracking API và portal.",
 ])}
 
-${wpImg(1, "Thiết kế website logistics vận tải tra cứu vận đơn và báo giá cước")}
+${wpLogisticsImg(0, "Thiết kế website logistics vận tải tra cứu vận đơn và báo giá cước")}
 
 <h2 id="logistics-web-la-gi">Website logistics / vận tải là gì?</h2>
 
@@ -121,6 +121,8 @@ ${wpImg(1, "Thiết kế website logistics vận tải tra cứu vận đơn và
   <li><strong>Hỗ trợ:</strong> FAQ, hotline, Zalo CSKH</li>
 </ol>
 
+${wpLogisticsImg(1, "Cấu trúc website logistics — dịch vụ vận tải và tra cứu vận đơn")}
+
 <h2 id="tracking">Tra cứu vận đơn &amp; tracking đơn hàng</h2>
 
 <p>Tính năng must-have trong <strong>${KEYWORD}</strong>:</p>
@@ -134,7 +136,7 @@ ${wpImg(1, "Thiết kế website logistics vận tải tra cứu vận đơn và
   <li><strong>Multi-order:</strong> Đăng nhập xem tất cả đơn — portal B2B</li>
 </ul>
 
-${wpImg(2, "Giao diện tra cứu vận đơn tracking logistics trên website vận tải")}
+${wpLogisticsImg(2, "Giao diện tra cứu vận đơn tracking logistics trên website vận tải")}
 
 <h2 id="bao-gia-cuoc">Báo giá cước vận chuyển online</h2>
 
@@ -182,6 +184,8 @@ ${wpImg(2, "Giao diện tra cứu vận đơn tracking logistics trên website v
   <li><strong>GBP:</strong> Hub kho — review B2B local</li>
 </ul>
 
+${wpLogisticsImg(3, "SEO thiết kế website logistics — landing tuyến vận chuyển B2B")}
+
 <h2 id="quy-trinh">Quy trình thiết kế website logistics — 7 bước</h2>
 
 <ol>
@@ -195,6 +199,8 @@ ${wpImg(2, "Giao diện tra cứu vận đơn tracking logistics trên website v
 </ol>
 
 <p><strong>Thời gian:</strong> 5–8 tuần (tracking + form); 10–14 tuần portal B2B + API.</p>
+
+${wpLogisticsImg(4, "Giao diện thiết kế website logistics — form báo giá cước và portal B2B")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website logistics 2026</h2>
 

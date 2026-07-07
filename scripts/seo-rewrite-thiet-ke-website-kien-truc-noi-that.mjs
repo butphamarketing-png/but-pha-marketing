@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKienTrucImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_KIEN_TRUC_NOI_THAT = {
     "Thiết kế website kiến trúc nội thất: portfolio phong cách, before/after, form tư vấn, blog xu hướng. Layout tối giản, ảnh lớn. Giá 5–15 triệu. Bứt Phá.",
   description:
     "Hướng dẫn thiết kế website kiến trúc nội thất: portfolio visual, quy trình tư vấn, 3D viewer và SEO cho studio thiết kế.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-kien-truc-noi-that" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Kiến Trúc Nội Thất | SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–15 triệu; nhúng tour 360° nếu có file sẵn.",
 ])}
 
-${wpImg(1, "Thiết kế website kiến trúc nội thất với portfolio phong cách và layout tối giản")}
+${wpKienTrucImg(0, "Thiết kế website kiến trúc nội thất với portfolio phong cách và layout tối giản")}
 
 <h2 id="kien-truc-la-gi">Thiết kế website kiến trúc nội thất là gì?</h2>
 
@@ -125,7 +125,7 @@ ${wpImg(1, "Thiết kế website kiến trúc nội thất với portfolio phong
   <li>CTA: “Dự án tương tự? Tư vấn miễn phí”</li>
 </ul>
 
-${wpImg(9, "Gallery portfolio kiến trúc nội thất — filter phong cách trên website")}
+${wpKienTrucImg(1, "Gallery portfolio kiến trúc nội thất — filter phong cách trên website")}
 
 <h2 id="quy-trinh-tu-van">Quy trình tư vấn hiển thị trên website</h2>
 
@@ -139,6 +139,8 @@ ${wpImg(9, "Gallery portfolio kiến trúc nội thất — filter phong cách t
 </ol>
 
 <p>Studio có hạng mục thi công xem thêm <a href="${SITE}/blog/thiet-ke-website-cong-ty-xay-dung">thiết kế website công ty xây dựng</a>.</p>
+
+${wpKienTrucImg(2, "Quy trình tư vấn thiết kế website kiến trúc nội thất")}
 
 <h2 id="3d-viewer">Tích hợp 3D viewer &amp; tour 360°</h2>
 
@@ -175,6 +177,8 @@ ${wpImg(9, "Gallery portfolio kiến trúc nội thất — filter phong cách t
 </ol>
 
 <p><strong>Thời gian:</strong> 5–10 tuần tùy số dự án portfolio và mức animation.</p>
+
+${wpKienTrucImg(3, "Cấu trúc website kiến trúc nội thất chuẩn SEO")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website kiến trúc nội thất 2026</h2>
 
@@ -220,6 +224,8 @@ ${wpImg(9, "Gallery portfolio kiến trúc nội thất — filter phong cách t
 </ul>
 
 <p>Tham khảo <a href="${SITE}/blog/thiet-ke-website-theo-yeu-cau">thiết kế website theo yêu cầu</a> cho studio cần custom cao.</p>
+
+${wpKienTrucImg(4, "SEO blog xu hướng trên website kiến trúc nội thất")}
 
 <h2 id="sai-lam">Sai lầm khi làm website kiến trúc nội thất</h2>
 

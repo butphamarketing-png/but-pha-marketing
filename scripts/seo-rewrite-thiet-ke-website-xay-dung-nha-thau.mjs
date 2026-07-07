@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKienTrucImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_XAY_DUNG_NHA_THAU = {
     "Thiết kế website xây dựng: gallery công trình, form báo giá, hồ sơ năng lực nhà thầu và SEO local. Quy trình 7 bước, giá 6–14 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website xây dựng và nhà thầu: project gallery, báo giá online, trust và SEO tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-xay-dung-nha-thau" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Xây Dựng | Nhà Thầu & Gallery 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +62,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website xây dựng 6–14 triệu tùy gallery và form CRM.",
 ])}
 
-${wpImg(1, "Thiết kế website xây dựng nhà thầu project gallery và form báo giá")}
+${wpKienTrucImg(0, "Thiết kế website xây dựng nhà thầu project gallery và form báo giá")}
 
 <h2 id="xay-dung-web-la-gi">Website xây dựng / nhà thầu là gì?</h2>
 
@@ -117,7 +117,7 @@ ${wpImg(1, "Thiết kế website xây dựng nhà thầu project gallery và for
   <li><strong>Lightbox:</strong> Xem chi tiết vật liệu, mỹ thuật</li>
 </ul>
 
-${wpImg(2, "Project gallery công trình xây dựng — filter nhà phố biệt thự trên website nhà thầu")}
+${wpKienTrucImg(1, "Project gallery công trình xây dựng — filter nhà phố biệt thự trên website nhà thầu")}
 
 <h2 id="bao-gia">Form báo giá &amp; khảo sát công trình</h2>
 
@@ -150,6 +150,8 @@ ${wpImg(2, "Project gallery công trình xây dựng — filter nhà phố biệ
   <li><strong>Download PDF HSNL:</strong> Thu email B2B — lead magnet</li>
 </ul>
 
+${wpKienTrucImg(2, "Hồ sơ năng lực nhà thầu trên website xây dựng")}
+
 <h2 id="seo">SEO local cho nhà thầu xây dựng</h2>
 
 <ul>
@@ -173,6 +175,8 @@ ${wpImg(2, "Project gallery công trình xây dựng — filter nhà phố biệ
 </ol>
 
 <p><strong>Thời gian:</strong> 4–7 tuần (gallery + form); 8–10 tuần nếu HSNL phức tạp multi-branch.</p>
+
+${wpKienTrucImg(3, "Quy trình thiết kế website xây dựng cho nhà thầu")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website xây dựng 2026</h2>
 
@@ -207,6 +211,8 @@ ${wpImg(2, "Project gallery công trình xây dựng — filter nhà phố biệ
     </tr>
   </tbody>
 </table>
+
+${wpKienTrucImg(4, "Bảng giá thiết kế website xây dựng nhà thầu minh bạch")}
 
 <h2 id="sai-lam">Sai lầm khi làm website nhà thầu</h2>
 

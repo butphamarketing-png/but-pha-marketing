@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpBaoBiImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_IN_AN_BAO_BI = {
     "Thiết kế website in ấn: catalog dịch vụ in, form báo giá, upload file thiết kế và portfolio bao bì. Quy trình 7 bước, giá 6–13 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website in ấn và bao bì đặt hàng online: báo giá, portfolio và vận hành xưởng in tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-in-an-bao-bi" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website In Ấn | Bao Bì & Báo Giá 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +62,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website in ấn 6–13 triệu tùy catalog và form đặt hàng.",
 ])}
 
-${wpImg(1, "Thiết kế website in ấn bao bì form báo giá và portfolio mẫu in")}
+${wpBaoBiImg(0, "Thiết kế website in ấn bao bì form báo giá và portfolio mẫu in")}
 
 <h2 id="in-an-web-la-gi">Website in ấn &amp; bao bì là gì?</h2>
 
@@ -124,6 +124,8 @@ ${wpImg(1, "Thiết kế website in ấn bao bì form báo giá và portfolio m�
   <li><strong>Liên hệ:</strong> Xưởng, map, giờ làm việc, Zalo OA</li>
 </ol>
 
+${wpBaoBiImg(1, "Cấu trúc website in ấn bao bì — catalog dịch vụ và form báo giá")}
+
 <h2 id="bao-gia">Form báo giá &amp; đặt in online</h2>
 
 <h3>Trường form chuẩn</h3>
@@ -152,7 +154,7 @@ ${wpImg(1, "Thiết kế website in ấn bao bì form báo giá và portfolio m�
   <li><strong>Before/after:</strong> File khách → thành phẩm in</li>
 </ul>
 
-${wpImg(2, "Portfolio mẫu in namecard catalogue và bao bì trên website xưởng in")}
+${wpBaoBiImg(2, "Portfolio mẫu in namecard catalogue và bao bì trên website xưởng in")}
 
 <h2 id="upload">Upload file, quy cách &amp; giảm lỗi in</h2>
 
@@ -174,6 +176,8 @@ ${wpImg(2, "Portfolio mẫu in namecard catalogue và bao bì trên website xư�
   <li><strong>GBP:</strong> Ảnh xưởng, máy in — trust local</li>
 </ul>
 
+${wpBaoBiImg(3, "SEO thiết kế website in ấn bao bì — landing dịch vụ in local")}
+
 <h2 id="quy-trinh">Quy trình thiết kế website in ấn — 7 bước</h2>
 
 <ol>
@@ -187,6 +191,8 @@ ${wpImg(2, "Portfolio mẫu in namecard catalogue và bao bì trên website xư�
 </ol>
 
 <p><strong>Thời gian:</strong> 3–6 tuần (catalog + form); +2 tuần calculator/tracking custom.</p>
+
+${wpBaoBiImg(4, "Giao diện thiết kế website in ấn bao bì — form upload file và báo giá")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website in ấn 2026</h2>
 

@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpLuatImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_CONG_TY_LUAT = {
     "Thiết kế website công ty luật: lĩnh vực tư vấn, profile luật sư, form bảo mật, blog pháp lý. HTTPS, đạo đức nghề. Giá 5–12 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website công ty luật: trang lĩnh vực, đặt lịch tư vấn, thư viện văn bản, SEO intent pháp lý và tuân thủ đạo đức nghề.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-cong-ty-luat" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Công Ty Luật | SEO & Trust | Bứt Phá",
     keyword: KEYWORD,
@@ -65,7 +65,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–12 triệu; đặt lịch hẹn + CRM lead.",
 ])}
 
-${wpImg(4, "Thiết kế website công ty luật với trang lĩnh vực và form tư vấn bảo mật")}
+${wpLuatImg(0, "Thiết kế website công ty luật với trang lĩnh vực và form tư vấn bảo mật")}
 
 <h2 id="luat-la-gi">Thiết kế website công ty luật là gì?</h2>
 
@@ -139,7 +139,7 @@ ${wpImg(4, "Thiết kế website công ty luật với trang lĩnh vực và for
   <li>CTA: “Đặt lịch với [Tên LS]”</li>
 </ul>
 
-${wpImg(8, "Trang đội ngũ luật sư trên website công ty luật chuyên nghiệp")}
+${wpLuatImg(1, "Trang đội ngũ luật sư trên website công ty luật chuyên nghiệp")}
 
 <h2 id="form-bao-mat">Form tư vấn, đặt lịch &amp; bảo mật dữ liệu</h2>
 
@@ -188,6 +188,8 @@ ${wpImg(8, "Trang đội ngũ luật sư trên website công ty luật chuyên n
 
 <p><strong>Thời gian:</strong> 5–8 tuần tùy số lĩnh vực và volume blog ban đầu.</p>
 
+${wpLuatImg(3, "Quy trình thiết kế website công ty luật chuẩn SEO")}
+
 <h2 id="bang-gia">Bảng giá thiết kế website công ty luật 2026</h2>
 
 <table class="w-full border-collapse text-sm my-6">
@@ -232,7 +234,9 @@ ${wpImg(8, "Trang đội ngũ luật sư trên website công ty luật chuyên n
   <li><strong>E-E-A-T:</strong> Tác giả là luật sư, ngày cập nhật, nguồn văn bản</li>
 </ul>
 
-<p>Xem <a href="${SITE}/blog/thiet-ke-website-cong-ty">thiết kế website công ty</a> và <a href="${SITE}/blog/thiet-ke-website-doanh-nghiep">thiết kế website doanh nghiệp</a>.</p>
+${wpLuatImg(2, "SEO thiết kế website công ty luật — kiến thức pháp lý và lĩnh vực tư vấn")}
+
+<p>Xem <a href="${SITE}/blog/thiet-ke-website-phap-luat-luat-su">thiết kế website pháp lý</a>, <a href="${SITE}/blog/thiet-ke-website-cong-ty">thiết kế website công ty</a> và <a href="${SITE}/blog/thiet-ke-website-doanh-nghiep">thiết kế website doanh nghiệp</a>.</p>
 
 <h2 id="sai-lam">Sai lầm khi làm website công ty luật</h2>
 
@@ -243,6 +247,8 @@ ${wpImg(8, "Trang đội ngũ luật sư trên website công ty luật chuyên n
   <li>Web không mobile — khách tìm “luật sư gần đây” trên phone</li>
   <li>Không có privacy policy — thiếu minh bạch bảo mật</li>
 </ul>
+
+${wpLuatImg(4, "Giao diện thiết kế website công ty luật — form tư vấn pháp lý bảo mật")}
 
 ${wpRelatedLinks([
   {

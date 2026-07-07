@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpMyPhamImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_MY_PHAM_LAM_DEP = {
     "Thiết kế website mỹ phẩm: skincare brand, review, thành phần INCI, shop COD/MoMo và SEO làm đẹp. Quy trình 7 bước, giá 9–18 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website mỹ phẩm chuẩn SEO và bán online: skincare brand, review, ingredients và TMĐT tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-my-pham-lam-dep" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Mỹ Phẩm | Skincare SEO & Shop 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -63,7 +63,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website mỹ phẩm 9–18 triệu tùy shop và landing ads.",
 ])}
 
-${wpImg(1, "Thiết kế website mỹ phẩm skincare brand shop online và review sản phẩm")}
+${wpMyPhamImg(0, "Thiết kế website mỹ phẩm skincare brand shop online và review sản phẩm")}
 
 <h2 id="my-pham-web-la-gi">Website mỹ phẩm / skincare brand là gì?</h2>
 
@@ -128,7 +128,7 @@ ${wpImg(1, "Thiết kế website mỹ phẩm skincare brand shop online và revi
   <li><strong>Disclaimer:</strong> Không thay thuốc điều trị — tránh vi phạm quảng cáo</li>
 </ul>
 
-${wpImg(2, "Trang sản phẩm mỹ phẩm — thành phần INCI review và add to cart")}
+${wpMyPhamImg(1, "Trang sản phẩm mỹ phẩm — thành phần INCI review và add to cart")}
 
 <h2 id="review">Review, rating &amp; UGC</h2>
 
@@ -152,6 +152,8 @@ ${wpImg(2, "Trang sản phẩm mỹ phẩm — thành phần INCI review và add
   <li><strong>Schema Product:</strong> name, image, offers, aggregateRating</li>
   <li><strong>E-E-A-T:</strong> Bài do chuyên gia/cofounder duyệt — author box</li>
 </ul>
+
+${wpMyPhamImg(2, "SEO thiết kế website mỹ phẩm — blog ingredient và routine skincare")}
 
 <h2 id="ban-hang">Bán online, COD &amp; combo</h2>
 
@@ -189,6 +191,8 @@ ${wpImg(2, "Trang sản phẩm mỹ phẩm — thành phần INCI review và add
 </ol>
 
 <p><strong>Thời gian:</strong> 5–8 tuần (brand shop 20–50 SKU).</p>
+
+${wpMyPhamImg(3, "Quy trình thiết kế website mỹ phẩm D2C brand chuẩn SEO")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website mỹ phẩm 2026</h2>
 
@@ -236,7 +240,14 @@ ${wpImg(2, "Trang sản phẩm mỹ phẩm — thành phần INCI review và add
   <li>Bỏ qua mobile — 85% mua mỹ phẩm online từ điện thoại VN.</li>
 </ul>
 
+${wpMyPhamImg(4, "Giao diện thiết kế website mỹ phẩm premium — catalog và checkout mobile")}
+
 ${wpRelatedLinks([
+  {
+    href: `${SITE}/blog/thiet-ke-website-my-pham`,
+    label: "Website cửa hàng mỹ phẩm",
+    desc: "Shop đa brand.",
+  },
   {
     href: `${SITE}/blog/thiet-ke-website-tham-my-vien`,
     label: "Website thẩm mỹ viện",

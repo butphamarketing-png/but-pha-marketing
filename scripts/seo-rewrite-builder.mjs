@@ -1,6 +1,8 @@
 import { NEWS_THUMBNAIL, buildSeoMetaTitle, ensureTitleHasKeyword, newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
+import { KEYWORD_ENTRIES } from "./seo-keyword-data.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
+import { LOCAL_SEO_ENTRIES } from "./seo-local-data.mjs";
 import { WEBSITE_SEEDS } from "./seo-website-seeds.mjs";
 import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
 import {
@@ -25,7 +27,11 @@ import {
 } from "./seo-wp-structure.mjs";
 
 const industryBySlug = Object.fromEntries(INDUSTRY_ENTRIES.map((e) => [e.slug, e]));
-const laGiBySlug = Object.fromEntries(LA_GI_ENTRIES.map((e) => [e.slug, e]));
+const keywordEntryBySlug = Object.fromEntries(KEYWORD_ENTRIES.map((e) => [e.slug, e]));
+const laGiBySlug = Object.fromEntries([
+  ...LA_GI_ENTRIES.map((e) => [e.slug, e]),
+  ...LOCAL_SEO_ENTRIES.map((e) => [e.slug, e]),
+]);
 
 const websiteSeedBySlug = Object.fromEntries(
   WEBSITE_SEEDS.map((s) => {
@@ -133,15 +139,41 @@ function processSection(keyword) {
 <p>Xem pillar <a href="${SITE}/blog/thiet-ke-website">quy trình thiết kế website</a> để biết chi tiết từng bước.</p>`;
 }
 
+function buildKeywordChecklistSection(keywordEntry, keyword) {
+  if (!keywordEntry?.checklist?.length) return "";
+  const lis = keywordEntry.checklist.map((c) => `<li>${c}</li>`).join("\n");
+  return `
+<h2 id="checklist">Checklist ${keyword}</h2>
+<p>Áp dụng checklist sau khi triển khai hoặc khi đánh giá đối tác — đảm bảo <strong>${keyword}</strong> đạt mục tiêu kinh doanh, không chỉ giao diện đẹp:</p>
+<ul class="list-disc space-y-2 pl-5">${lis}</ul>
+<p>Mỗi mục nên có người phụ trách và deadline trong timeline dự án. Review lại sau 30 ngày go-live để đo KPI thực tế.</p>`;
+}
+
+function buildSecondaryKeywordsSection(keyword, secondary) {
+  const parts = (secondary || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s && s.toLowerCase() !== keyword.toLowerCase());
+  if (parts.length === 0) return "";
+  return `
+<h2 id="tu-khoa-lien-quan">Từ khóa &amp; chủ đề liên quan</h2>
+<p>Khi làm SEO cho <strong>${keyword}</strong>, nên kết hợp các cụm long-tail sau trong nội dung blog và landing phụ:</p>
+<ul>${parts.map((p) => `<li><strong>${p}</strong> — dùng trong H2/H3 hoặc bài viết con.</li>`).join("\n")}</ul>`;
+}
+
 function buildWebsiteRewrite(base) {
   const keyword = base.keywordsMain?.trim() || "thiết kế website";
   const title = base.title?.trim() || keyword;
   const industry = industryBySlug[base.slug];
+  const keywordEntry = keywordEntryBySlug[base.slug];
   const seed = websiteSeedBySlug[base.slug];
-  const angle = seed?.angle || base.description?.split(":")[1]?.trim() || "doanh nghiệp Việt Nam";
+  const angle = keywordEntry?.angle || seed?.angle || base.description?.split(":")[1]?.trim() || "doanh nghiệp Việt Nam";
   const features = industry?.features || DEFAULT_FEATURES;
   const faqExtras = industry ? buildIndustryFaqExtras(industry, keyword) : [];
-  const faqItems = [...(industry?.faq || defaultFaq(keyword, title.split("—")[0].trim())), ...faqExtras].slice(0, 8);
+  const faqItems = [
+    ...(keywordEntry?.faq || industry?.faq || defaultFaq(keyword, title.split("—")[0].trim())),
+    ...faqExtras,
+  ].slice(0, 8);
   const imgIdx = Math.abs(hashSlug(base.slug)) % 11;
 
   const introParagraphs = industry
@@ -219,6 +251,8 @@ ${industrySection}
 
 ${wpImg(imgIdx + 1, `Giao diện ${keyword} tối ưu mobile`)}
 
+${buildKeywordChecklistSection(keywordEntry, keyword)}
+
 <h2 id="cau-truc">Cấu trúc trang gợi ý</h2>
 <ul>
   <li><strong>Trang chủ:</strong> Value proposition, dịch vụ nổi bật, social proof, CTA.</li>
@@ -241,7 +275,11 @@ ${pricingExtra}
   <li>Schema Organization / LocalBusiness nếu có địa chỉ cố định.</li>
   <li>CTA trên mobile: nút Zalo + gọi sticky.</li>
 </ul>
-<p>Tham khảo thêm <a href="${SITE}/blog/thiet-ke-website-chuan-seo">thiết kế website chuẩn SEO</a>.</p>
+<p>Tham khảo thêm <a href="${SITE}/blog/thiet-ke-website">thiết kế website (pillar)</a> và <a href="${SITE}/blog/thiet-ke-website-chuan-seo">thiết kế website chuẩn SEO</a>.</p>
+
+${buildSecondaryKeywordsSection(keyword, base.keywordsSecondary || keywordEntry?.keywordsSecondary)}
+
+${wpImg(imgIdx + 2, `${keyword} — tối ưu SEO và chuyển đổi khách hàng`)}
 
 <h2 id="chon-doi-tac">Chọn đối tác ${keyword}</h2>
 <ul>
@@ -370,6 +408,16 @@ ${wpImg(imgIdx + 1, `${keyword} — ví dụ ứng dụng doanh nghiệp`)}
 <h2 id="do-luong">Đo lường và tối ưu liên tục</h2>
 <p>Với <strong>${keyword}</strong>, nên theo dõi chỉ số phù hợp loại hình: traffic organic, tốc độ trang, số lead, tỷ lệ chuyển đổi hoặc chi phí/lead. Dùng GA4, Search Console và báo cáo nội bộ — họp review marketing hàng tháng.</p>
 <p>Đọc thêm <a href="${SITE}/blog/marketing-online-la-gi">marketing online</a> để đặt ${keyword} vào bức tranh tổng thể.</p>
+
+<h2 id="ket-hop-marketing">Kết hợp ${keyword} với marketing tổng thể</h2>
+<p><strong>${keyword}</strong> hiệu quả nhất khi gắn với website, quảng cáo và chăm sóc khách — không chạy độc lập. Lộ trình gợi ý cho SME Việt Nam:</p>
+<ul>
+  <li><strong>Tháng 1–2:</strong> Audit hiện trạng, chuẩn hóa hồ sơ và tracking (GA4, conversion).</li>
+  <li><strong>Tháng 3–4:</strong> Triển khai nội dung/landing message-match, test ads nhỏ đo CPA.</li>
+  <li><strong>Tháng 5–6:</strong> Scale kênh hiệu quả, tối ưu ${keyword} theo dữ liệu Search Console và báo cáo nội bộ.</li>
+  <li><strong>Liên tục:</strong> Cập nhật bài cũ, xử lý review và duy trì NAP — đặc biệt quan trọng với dịch vụ địa phương.</li>
+</ul>
+<p>Đội Bứt Phá Marketing hỗ trợ triển khai trọn gói hoặc tư vấn theo module — báo giá minh bạch sau khảo sát mục tiêu.</p>
 `;
 }
 
@@ -485,10 +533,10 @@ function buildGuideRewrite(base) {
 function finalizeArticle({ base, keyword, title, html }) {
   const safeTitle = ensureTitleHasKeyword(title, keyword);
   const metaTitle = buildSeoMetaTitle(keyword);
-  const metaDescription = `${keyword} — hướng dẫn chi tiết, quy trình, bảng giá và FAQ. Tư vấn miễn phí Bứt Phá Marketing.`.slice(
-    0,
-    158,
-  );
+  const metaDescBase =
+    base.metaDescription ||
+    `${keyword} — hướng dẫn chi tiết, quy trình, bảng giá và FAQ. Tư vấn miễn phí Bứt Phá Marketing.`;
+  const metaDescription = metaDescBase.slice(0, 160);
 
   return {
     title: safeTitle,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { resolveBlogTag, type BlogCardItem } from "@/lib/blog-utils";
+import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 import { BlogTrackedLink } from "@/components/blog/BlogTrackedLink";
 
@@ -35,7 +36,11 @@ export function RelatedPosts({ posts, currentSlug }: { posts: BlogCardItem[]; cu
             <div className="relative overflow-hidden">
               <BlogOptimizedImage
                 src={blog.imageUrl || "/logo.png"}
-                alt={blog.title}
+                alt={getBlogThumbnailAlt({
+                  slug: blog.slug,
+                  keywordsMain: blog.keywordsMain,
+                  title: blog.title,
+                })}
                 width={640}
                 height={360}
                 sizes="card"

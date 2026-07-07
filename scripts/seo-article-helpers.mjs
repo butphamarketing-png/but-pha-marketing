@@ -2,6 +2,328 @@ const SITE = "https://www.butphamarketing.com";
 const FB = "https://www.facebook.com/butphamarketing";
 const ZALO = "https://zalo.me/0937417982";
 const NEWS_DIR = "/tin-tuc";
+const KIEN_TRUC_DIR = `${NEWS_DIR}/kien-truc`;
+const PCCC_DIR = `${NEWS_DIR}/pccc`;
+const MY_PHAM_DIR = `${NEWS_DIR}/my-pham`;
+const THANG_MAY_DIR = `${NEWS_DIR}/thang-may`;
+const NHA_KHOA_DIR = `${NEWS_DIR}/nha-khoa`;
+const LUAT_DIR = `${NEWS_DIR}/luat`;
+const THAM_MY_DIR = `${NEWS_DIR}/tham-my`;
+const PHONG_KHAM_DIR = `${NEWS_DIR}/phong-kham`;
+const LOGISTICS_DIR = `${NEWS_DIR}/logistics`;
+const CO_KHI_DIR = `${NEWS_DIR}/co-khi`;
+const BAO_BI_DIR = `${NEWS_DIR}/bao-bi`;
+const TU_DONG_HOA_DIR = `${NEWS_DIR}/tu-dong-hoa`;
+
+/** Bài website cơ khí / gia công CNC — thumbnail trong public/tin-tuc/co-khi */
+export const CO_KHI_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-co-khi": {
+    file: "co-khi-1.png",
+    keywordsMain: "thiết kế website cơ khí",
+  },
+  "thiet-ke-website-gia-cong-cnc": {
+    file: "co-khi-2.png",
+    keywordsMain: "thiết kế website gia công cnc",
+  },
+};
+
+export function coKhiThumbnailPath(slug) {
+  const entry = slug ? CO_KHI_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${CO_KHI_DIR}/${entry.file}` : null;
+}
+
+export function coKhiThumbnailUrl(slug) {
+  const path = coKhiThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isCoKhiSlug(slug) {
+  return Boolean(slug && CO_KHI_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website in ấn / bao bì — thumbnail trong public/tin-tuc/bao-bi */
+export const BAO_BI_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-in-an-bao-bi": {
+    file: "bao-bi-1.png",
+    keywordsMain: "thiết kế website in ấn",
+  },
+};
+
+export function baoBiThumbnailPath(slug) {
+  const entry = slug ? BAO_BI_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${BAO_BI_DIR}/${entry.file}` : null;
+}
+
+export function baoBiThumbnailUrl(slug) {
+  const path = baoBiThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isBaoBiSlug(slug) {
+  return Boolean(slug && BAO_BI_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website tự động hóa công nghiệp — thumbnail trong public/tin-tuc/tu-dong-hoa */
+export const TU_DONG_HOA_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-tu-dong-hoa": {
+    file: "tu-dong-hoa-1.png",
+    keywordsMain: "thiết kế website công ty tự động hóa",
+  },
+  "thiet-ke-website-dien-cong-nghiep": {
+    file: "tu-dong-hoa-3.png",
+    keywordsMain: "thiết kế website điện công nghiệp",
+  },
+};
+
+export function tuDongHoaThumbnailPath(slug) {
+  const entry = slug ? TU_DONG_HOA_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${TU_DONG_HOA_DIR}/${entry.file}` : null;
+}
+
+export function tuDongHoaThumbnailUrl(slug) {
+  const path = tuDongHoaThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isTuDongHoaSlug(slug) {
+  return Boolean(slug && TU_DONG_HOA_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website logistics / vận tải — thumbnail trong public/tin-tuc/logistics */
+export const LOGISTICS_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-logistics-van-tai": {
+    file: "logistics-1.png",
+    keywordsMain: "thiết kế website logistics",
+  },
+};
+
+export function logisticsThumbnailPath(slug) {
+  const entry = slug ? LOGISTICS_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${LOGISTICS_DIR}/${entry.file}` : null;
+}
+
+export function logisticsThumbnailUrl(slug) {
+  const path = logisticsThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isLogisticsSlug(slug) {
+  return Boolean(slug && LOGISTICS_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website spa / thẩm mỹ viện — thumbnail trong public/tin-tuc/tham-my */
+export const THAM_MY_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-tham-my-vien": {
+    file: "tham-my-1.png",
+    keywordsMain: "thiết kế website thẩm mỹ viện",
+  },
+  "thiet-ke-website-spa": {
+    file: "tham-my-2.png",
+    keywordsMain: "thiết kế website spa",
+  },
+};
+
+export function thamMyThumbnailPath(slug) {
+  const entry = slug ? THAM_MY_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${THAM_MY_DIR}/${entry.file}` : null;
+}
+
+export function thamMyThumbnailUrl(slug) {
+  const path = thamMyThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isThamMySlug(slug) {
+  return Boolean(slug && THAM_MY_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website phòng khám đa khoa — thumbnail trong public/tin-tuc/phong-kham */
+export const PHONG_KHAM_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-phong-kham-da-khoa": {
+    file: "phong-kham-1.png",
+    keywordsMain: "thiết kế website phòng khám đa khoa",
+  },
+};
+
+export function phongKhamThumbnailPath(slug) {
+  const entry = slug ? PHONG_KHAM_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${PHONG_KHAM_DIR}/${entry.file}` : null;
+}
+
+export function phongKhamThumbnailUrl(slug) {
+  const path = phongKhamThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isPhongKhamSlug(slug) {
+  return Boolean(slug && PHONG_KHAM_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website luật / văn phòng luật — thumbnail trong public/tin-tuc/luat */
+export const LUAT_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-cong-ty-luat": {
+    file: "luat-1.png",
+    keywordsMain: "thiết kế website công ty luật",
+  },
+  "thiet-ke-website-phap-luat-luat-su": {
+    file: "luat-2.png",
+    keywordsMain: "thiết kế website pháp lý",
+  },
+};
+
+export function luatThumbnailPath(slug) {
+  const entry = slug ? LUAT_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${LUAT_DIR}/${entry.file}` : null;
+}
+
+export function luatThumbnailUrl(slug) {
+  const path = luatThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isLuatSlug(slug) {
+  return Boolean(slug && LUAT_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website nha khoa — thumbnail trong public/tin-tuc/nha-khoa */
+export const NHA_KHOA_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-nha-khoa": {
+    file: "nha-khoa-1.png",
+    keywordsMain: "thiết kế website nha khoa",
+  },
+  "thiet-ke-website-nha-khoa-nieng-rang": {
+    file: "nha-khoa-2.png",
+    keywordsMain: "thiết kế website nha khoa niềng răng",
+  },
+};
+
+export function nhaKhoaThumbnailPath(slug) {
+  const entry = slug ? NHA_KHOA_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${NHA_KHOA_DIR}/${entry.file}` : null;
+}
+
+export function nhaKhoaThumbnailUrl(slug) {
+  const path = nhaKhoaThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isNhaKhoaSlug(slug) {
+  return Boolean(slug && NHA_KHOA_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website thang máy — thumbnail trong public/tin-tuc/thang-may */
+export const THANG_MAY_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-thang-may": {
+    file: "thang-may-1.png",
+    keywordsMain: "thiết kế website công ty thang máy",
+  },
+};
+
+export function thangMayThumbnailPath(slug) {
+  const entry = slug ? THANG_MAY_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${THANG_MAY_DIR}/${entry.file}` : null;
+}
+
+export function thangMayThumbnailUrl(slug) {
+  const path = thangMayThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isThangMaySlug(slug) {
+  return Boolean(slug && THANG_MAY_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website mỹ phẩm / làm đẹp — thumbnail trong public/tin-tuc/my-pham */
+export const MY_PHAM_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-my-pham-lam-dep": {
+    file: "my-pham-1.png",
+    keywordsMain: "thiết kế website mỹ phẩm",
+  },
+  "thiet-ke-website-my-pham": {
+    file: "my-pham-2.png",
+    keywordsMain: "thiết kế website cửa hàng mỹ phẩm",
+  },
+};
+
+export function myPhamThumbnailPath(slug) {
+  const entry = slug ? MY_PHAM_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${MY_PHAM_DIR}/${entry.file}` : null;
+}
+
+export function myPhamThumbnailUrl(slug) {
+  const path = myPhamThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isMyPhamSlug(slug) {
+  return Boolean(slug && MY_PHAM_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website phòng cháy chữa cháy — thumbnail trong public/tin-tuc/pccc */
+export const PCCC_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-pccc": {
+    file: "pccc-1.png",
+    keywordsMain: "thiết kế website công ty PCCC",
+  },
+  "thiet-ke-website-thiet-bi-pccc": {
+    file: "pccc-2.png",
+    keywordsMain: "thiết kế website thiết bị PCCC",
+  },
+};
+
+export function pcccThumbnailPath(slug) {
+  const entry = slug ? PCCC_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${PCCC_DIR}/${entry.file}` : null;
+}
+
+export function pcccThumbnailUrl(slug) {
+  const path = pcccThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function isPcccSlug(slug) {
+  return Boolean(slug && PCCC_ARTICLE_THUMBNAILS[slug]);
+}
+
+/** Bài website xây dựng / kiến trúc / nội thất — thumbnail trong public/tin-tuc/kien-truc */
+export const KIEN_TRUC_ARTICLE_THUMBNAILS = {
+  "thiet-ke-website-kien-truc-noi-that": {
+    file: "kien-truc-1.png",
+    keywordsMain: "thiết kế website kiến trúc nội thất",
+  },
+  "thiet-ke-website-cong-ty-xay-dung": {
+    file: "kien-truc-2.png",
+    keywordsMain: "thiết kế website công ty xây dựng",
+  },
+  "thiet-ke-website-xay-dung-nha-thau": {
+    file: "kien-truc-3.png",
+    keywordsMain: "thiết kế website xây dựng",
+  },
+  "thiet-ke-website-vat-lieu-xay-dung": {
+    file: "kien-truc-4.png",
+    keywordsMain: "thiết kế website vật liệu xây dựng",
+  },
+  "thiet-ke-website-ho-so-nang-luc": {
+    file: "kien-truc-5.png",
+    keywordsMain: "thiết kế website hồ sơ năng lực",
+  },
+  "thiet-ke-website-noi-that-showroom": {
+    file: "kien-truc-6.png",
+    keywordsMain: "thiết kế website nội thất showroom",
+  },
+  "thiet-ke-website-noi-that": {
+    file: "kien-truc-7.png",
+    keywordsMain: "thiết kế website nội thất",
+  },
+  "thiet-ke-website-noi-that-van-phong": {
+    file: "kien-truc-6.png",
+    keywordsMain: "thiết kế website nội thất văn phòng",
+  },
+  "thiet-ke-website-go-noi-that": {
+    file: "kien-truc-7.png",
+    keywordsMain: "thiết kế website gỗ nội thất",
+  },
+};
 
 function newsImageUrl(filename) {
   return `${SITE}${NEWS_DIR}/${filename}`;
@@ -11,12 +333,49 @@ function newsImagePath(filename) {
   return `${NEWS_DIR}/${filename}`;
 }
 
+export function kienTrucThumbnailPath(slug) {
+  const entry = slug ? KIEN_TRUC_ARTICLE_THUMBNAILS[slug] : null;
+  return entry ? `${KIEN_TRUC_DIR}/${entry.file}` : null;
+}
+
+export function kienTrucThumbnailUrl(slug) {
+  const path = kienTrucThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
 const THUMBNAIL_FILES = {
   website: "thiet-ke-website.png",
   facebook: "facebook-marketing.png",
   "google-maps": "google-maps-marketing.png",
   marketing: "tin-tuc-marketing.png",
 };
+
+const KIEN_TRUC_CONTENT_FILES = Array.from(
+  { length: 7 },
+  (_, i) => `kien-truc/kien-truc-${i + 1}.png`,
+);
+
+const PCCC_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `pccc/pccc-${i + 1}.png`);
+
+const MY_PHAM_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `my-pham/my-pham-${i + 1}.png`);
+
+const THANG_MAY_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `thang-may/thang-may-${i + 1}.png`);
+
+const NHA_KHOA_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `nha-khoa/nha-khoa-${i + 1}.png`);
+
+const LUAT_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `luat/luat-${i + 1}.png`);
+
+const THAM_MY_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `tham-my/tham-my-${i + 1}.png`);
+
+const PHONG_KHAM_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `phong-kham/phong-kham-${i + 1}.png`);
+
+const LOGISTICS_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `logistics/logistics-${i + 1}.png`);
+
+const CO_KHI_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `co-khi/co-khi-${i + 1}.png`);
+
+const BAO_BI_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `bao-bi/bao-bi-${i + 1}.png`);
+
+const TU_DONG_HOA_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `tu-dong-hoa/tu-dong-hoa-${i + 1}.png`);
 
 const CONTENT_IMAGE_FILES = {
   website: [
@@ -32,7 +391,36 @@ const CONTENT_IMAGE_FILES = {
     ...Array.from({ length: 5 }, (_, i) => `google-maps-marketing-${i + 1}.png`),
   ],
   marketing: ["tin-tuc-marketing.png"],
+  "kien-truc": KIEN_TRUC_CONTENT_FILES,
+  pccc: PCCC_CONTENT_FILES,
+  "my-pham": MY_PHAM_CONTENT_FILES,
+  "thang-may": THANG_MAY_CONTENT_FILES,
+  "nha-khoa": NHA_KHOA_CONTENT_FILES,
+  luat: LUAT_CONTENT_FILES,
+  "tham-my": THAM_MY_CONTENT_FILES,
+  "phong-kham": PHONG_KHAM_CONTENT_FILES,
+  logistics: LOGISTICS_CONTENT_FILES,
+  "co-khi": CO_KHI_CONTENT_FILES,
+  "bao-bi": BAO_BI_CONTENT_FILES,
+  "tu-dong-hoa": TU_DONG_HOA_CONTENT_FILES,
 };
+
+export const KIEN_TRUC_CONTENT_IMAGE_COUNT = KIEN_TRUC_CONTENT_FILES.length;
+export const PCCC_CONTENT_IMAGE_COUNT = PCCC_CONTENT_FILES.length;
+export const MY_PHAM_CONTENT_IMAGE_COUNT = MY_PHAM_CONTENT_FILES.length;
+export const THANG_MAY_CONTENT_IMAGE_COUNT = THANG_MAY_CONTENT_FILES.length;
+export const NHA_KHOA_CONTENT_IMAGE_COUNT = NHA_KHOA_CONTENT_FILES.length;
+export const LUAT_CONTENT_IMAGE_COUNT = LUAT_CONTENT_FILES.length;
+export const THAM_MY_CONTENT_IMAGE_COUNT = THAM_MY_CONTENT_FILES.length;
+export const PHONG_KHAM_CONTENT_IMAGE_COUNT = PHONG_KHAM_CONTENT_FILES.length;
+export const LOGISTICS_CONTENT_IMAGE_COUNT = LOGISTICS_CONTENT_FILES.length;
+export const CO_KHI_CONTENT_IMAGE_COUNT = CO_KHI_CONTENT_FILES.length;
+export const BAO_BI_CONTENT_IMAGE_COUNT = BAO_BI_CONTENT_FILES.length;
+export const TU_DONG_HOA_CONTENT_IMAGE_COUNT = TU_DONG_HOA_CONTENT_FILES.length;
+
+export function isKienTrucSlug(slug) {
+  return Boolean(slug && KIEN_TRUC_ARTICLE_THUMBNAILS[slug]);
+}
 
 /** Thumbnail danh sách tin tức / blog card / OG — marketing tổng quát */
 export const NEWS_THUMBNAIL = newsImageUrl(THUMBNAIL_FILES.marketing);
@@ -152,6 +540,30 @@ export function newsContentImagesForTopic(topic = "website") {
 }
 
 export function newsThumbnailForArticle(article = {}) {
+  const tuDongHoa = tuDongHoaThumbnailUrl(article.slug);
+  if (tuDongHoa) return tuDongHoa;
+  const baoBi = baoBiThumbnailUrl(article.slug);
+  if (baoBi) return baoBi;
+  const coKhi = coKhiThumbnailUrl(article.slug);
+  if (coKhi) return coKhi;
+  const logistics = logisticsThumbnailUrl(article.slug);
+  if (logistics) return logistics;
+  const phongKham = phongKhamThumbnailUrl(article.slug);
+  if (phongKham) return phongKham;
+  const thamMy = thamMyThumbnailUrl(article.slug);
+  if (thamMy) return thamMy;
+  const luat = luatThumbnailUrl(article.slug);
+  if (luat) return luat;
+  const nhaKhoa = nhaKhoaThumbnailUrl(article.slug);
+  if (nhaKhoa) return nhaKhoa;
+  const thangMay = thangMayThumbnailUrl(article.slug);
+  if (thangMay) return thangMay;
+  const myPham = myPhamThumbnailUrl(article.slug);
+  if (myPham) return myPham;
+  const pccc = pcccThumbnailUrl(article.slug);
+  if (pccc) return pccc;
+  const kienTruc = kienTrucThumbnailUrl(article.slug);
+  if (kienTruc) return kienTruc;
   return newsThumbnailUrl(detectNewsTopic(article));
 }
 
@@ -177,7 +589,7 @@ export function keywordInText(text, keyword) {
 export function altFromKeyword(keywordsMain) {
   const kw = String(keywordsMain || "").trim();
   if (!kw) return "Thiết kế website Bứt Phá Marketing";
-  return kw.charAt(0).toUpperCase() + kw.slice(1);
+  return toTitleCaseVi(kw);
 }
 
 /** Alt ảnh có từ khóa chính — dùng cho wpImg / validate SEO. */
@@ -189,11 +601,57 @@ export function seoImageAlt(keywordsMain, detail) {
   return `${base} — ${text}`;
 }
 
+/** Viết hoa từng từ cho title/meta SERP — giữ acronym phổ biến. */
+export function toTitleCaseVi(text) {
+  const acronyms = new Set([
+    "seo",
+    "ppc",
+    "crm",
+    "b2b",
+    "b2c",
+    "ga4",
+    "gtm",
+    "api",
+    "ui",
+    "ux",
+    "cdn",
+    "ssl",
+    "erp",
+    "plc",
+    "scada",
+    "hmi",
+    "tmđt",
+    "fdi",
+    "sme",
+    "kpi",
+    "roi",
+    "roas",
+    "cpa",
+    "cpc",
+    "cta",
+    "zalo",
+    "gbp",
+    "oa",
+  ]);
+
+  return String(text || "")
+    .trim()
+    .split(/\s+/)
+    .map((word) => {
+      if (!word) return word;
+      const bare = word.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+      if (acronyms.has(bare)) return bare.toUpperCase();
+      if (/^[A-Z0-9]{2,}$/.test(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
 /** Meta title gọn cho SERP (~55 ký tự trước brand). */
 export function buildSeoMetaTitle(primary, brand = "Bứt Phá") {
   const suffix = ` | ${brand}`;
   const maxPrimary = 60 - suffix.length;
-  let head = String(primary || "").trim();
+  let head = toTitleCaseVi(String(primary || "").trim());
   if (head.length > maxPrimary) {
     head = head.slice(0, maxPrimary).replace(/\s+\S*$/, "").trim();
   }
@@ -203,7 +661,7 @@ export function buildSeoMetaTitle(primary, brand = "Bứt Phá") {
 /** Meta description ≤160 ký tự, luôn chứa từ khóa chính. */
 export function buildSeoMetaDescription(keywordsMain, hint = "") {
   const kw = String(keywordsMain || "").trim();
-  const kwCap = kw ? kw.charAt(0).toUpperCase() + kw.slice(1) : "";
+  const kwCap = kw ? toTitleCaseVi(kw) : "";
   const extra = String(hint || "").trim();
   let desc = extra
     ? `${kwCap} — ${extra.replace(/^[^:]+:\s*/, "").slice(0, 90)}. Tư vấn Bứt Phá Marketing.`
@@ -216,8 +674,13 @@ export function buildSeoMetaDescription(keywordsMain, hint = "") {
 export function ensureTitleHasKeyword(title, keywordsMain) {
   const t = String(title || "").trim();
   const kw = String(keywordsMain || "").trim();
-  if (!kw || keywordInText(t, kw)) return t;
-  const kwCap = kw.charAt(0).toUpperCase() + kw.slice(1);
+  if (!kw || keywordInText(t, kw)) {
+    if (t && t[0] === t[0].toLowerCase() && t[0] !== t[0].toUpperCase()) {
+      return toTitleCaseVi(t);
+    }
+    return t;
+  }
+  const kwCap = toTitleCaseVi(kw);
   return `${kwCap} — ${t}`;
 }
 

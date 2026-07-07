@@ -6,6 +6,7 @@ import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
 import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
 import { detectPillarTopic } from "@/lib/seo-pillar-hub";
 import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
+import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { BlogPillarHub } from "@/components/blog/BlogPillarHub";
@@ -34,7 +35,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const blogPath = blog.slug || blog.id;
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
-  const imageAlt = blog.keywordsMain?.trim() || blog.title;
+  const imageAlt = getBlogThumbnailAlt({
+    slug: blogPath,
+    keywordsMain: blog.keywordsMain,
+    title: blog.title,
+  });
   const keywords = buildBlogMetadataKeywords(blog);
   const title = buildBlogAbsoluteTitle(blog.metaTitle || blog.title);
   const description = blog.metaDescription || blog.description;
@@ -82,7 +87,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const blogPath = blog.slug || blog.id;
   const canonical = `${BASE_URL}/blog/${blogPath}`;
   const image = blog.imageUrl || `${BASE_URL}/opengraph.jpg`;
-  const imageAlt = blog.keywordsMain?.trim() || blog.title;
+  const imageAlt = getBlogThumbnailAlt({
+    slug: blogPath,
+    keywordsMain: blog.keywordsMain,
+    title: blog.title,
+  });
   const publishedLabel = new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN");
   const jsonLd = buildBlogJsonLd({ blog, canonical, baseUrl: BASE_URL, image });
   const topic = detectPillarTopic({ slug: blogPath, keywordsMain: blog.keywordsMain, title: blog.title });

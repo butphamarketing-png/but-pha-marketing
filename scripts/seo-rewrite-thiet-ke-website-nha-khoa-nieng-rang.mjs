@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpNhaKhoaImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_NHA_KHOA_NIENG_RANG = {
     "Thiết kế website nha khoa niềng răng: before/after, tư vấn Invisalign, đặt lịch khám và SEO local. Quy trình 7 bước, giá 8–16 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website nha khoa niềng răng: chỉnh nha, before/after, form tư vấn và đặt lịch tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-nha-khoa-nieng-rang" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Nha Khoa Niềng Răng | Chỉnh Nha 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +62,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website niềng răng 8–16 triệu tùy case gallery và booking.",
 ])}
 
-${wpImg(1, "Thiết kế website nha khoa niềng răng before after và form tư vấn chỉnh nha")}
+${wpNhaKhoaImg(0, "Thiết kế website nha khoa niềng răng before after và form tư vấn chỉnh nha")}
 
 <h2 id="nieng-rang-web-la-gi">Website nha khoa niềng răng là gì?</h2>
 
@@ -117,7 +117,7 @@ ${wpImg(1, "Thiết kế website nha khoa niềng răng before after và form t�
   <li><strong>Disclaimer:</strong> “Kết quả phụ thuộc tình trạng từng người”</li>
 </ul>
 
-${wpImg(2, "Gallery before after niềng răng trên website nha khoa chỉnh nha")}
+${wpNhaKhoaImg(1, "Gallery before after niềng răng trên website nha khoa chỉnh nha")}
 
 <h2 id="dich-vu">Niềng mắc cài vs Invisalign — landing riêng</h2>
 
@@ -170,6 +170,8 @@ ${wpImg(2, "Gallery before after niềng răng trên website nha khoa chỉnh nh
   <li><strong>E-E-A-T:</strong> Bài blog bác sĩ chỉnh nha ký duyệt</li>
 </ul>
 
+${wpNhaKhoaImg(2, "SEO thiết kế website nha khoa niềng răng Invisalign và chỉnh nha local")}
+
 <h2 id="quy-trinh">Quy trình thiết kế website niềng răng — 7 bước</h2>
 
 <ol>
@@ -183,6 +185,8 @@ ${wpImg(2, "Gallery before after niềng răng trên website nha khoa chỉnh nh
 </ol>
 
 <p><strong>Thời gian:</strong> 4–7 tuần (website + gallery); +1 tuần landing ads riêng.</p>
+
+${wpNhaKhoaImg(3, "Quy trình thiết kế website nha khoa niềng răng chuẩn SEO")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website nha khoa niềng răng 2026</h2>
 
@@ -229,6 +233,8 @@ ${wpImg(2, "Gallery before after niềng răng trên website nha khoa chỉnh nh
   <li>Không có profile bác sĩ chỉnh nha — khách nghi general dentist.</li>
   <li>Giá ẩn hoàn toàn — inquiry rác hoặc bounce.</li>
 </ul>
+
+${wpNhaKhoaImg(4, "Landing Invisalign và mắc cài trên thiết kế website nha khoa niềng răng")}
 
 ${wpRelatedLinks([
   {

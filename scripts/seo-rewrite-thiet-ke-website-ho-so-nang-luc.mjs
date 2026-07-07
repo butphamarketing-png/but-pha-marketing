@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKienTrucImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_HO_SO_NANG_LUC = {
     "Thiết kế website hồ sơ năng lực: giấy phép, máy móc, dự án tiêu biểu, PDF tải về và SEO B2B. Quy trình 7 bước, giá 4–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website hồ sơ năng lực cho nhà thầu và agency: HSNL trực tuyến thuyết phục khách B2B, tender và procurement.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-ho-so-nang-luc" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Hồ Sơ Năng Lực | B2B & SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: gói HSNL 4–12 triệu; tích hợp form RFQ và khu vực tài liệu tải về.",
 ])}
 
-${wpImg(7, "Thiết kế website hồ sơ năng lực cho nhà thầu và agency B2B")}
+${wpKienTrucImg(0, "Thiết kế website hồ sơ năng lực cho nhà thầu và agency B2B")}
 
 <h2 id="hsnl-la-gi">Website hồ sơ năng lực (HSNL) là gì?</h2>
 
@@ -168,7 +168,7 @@ ${wpImg(7, "Thiết kế website hồ sơ năng lực cho nhà thầu và agency
   <li>Ảnh hiện trường, biên bản nghiệm thu (có phép)</li>
 </ul>
 
-${wpImg(8, "Nội dung website hồ sơ năng lực — dự án tiêu biểu và chứng chỉ")}
+${wpKienTrucImg(1, "Nội dung website hồ sơ năng lực — dự án tiêu biểu và chứng chỉ")}
 
 <h2 id="cau-truc">Cấu trúc trang website HSNL chuẩn</h2>
 
@@ -184,6 +184,8 @@ ${wpImg(8, "Nội dung website hồ sơ năng lực — dự án tiêu biểu v�
 </ol>
 
 <p>Website HSNL B2B thường <strong>10–20 trang</strong> — nhiều hơn web giới thiệu SME vì depth of content.</p>
+
+${wpKienTrucImg(2, "Cấu trúc website hồ sơ năng lực chuẩn B2B")}
 
 <h2 id="pdf-vs-web">PDF HSNL vs website — dùng song song thế nào?</h2>
 
@@ -240,6 +242,8 @@ ${wpImg(8, "Nội dung website hồ sơ năng lực — dự án tiêu biểu v�
 
 <p><strong>Thời gian:</strong> 4–8 tuần — phụ thuộc khối lượng dự án và scan tài liệu.</p>
 
+${wpKienTrucImg(3, "Quy trình thiết kế website hồ sơ năng lực")}
+
 <h2 id="bang-gia">Bảng giá thiết kế website hồ sơ năng lực 2026</h2>
 
 <table class="w-full border-collapse text-sm my-6">
@@ -285,6 +289,8 @@ ${wpImg(8, "Nội dung website hồ sơ năng lực — dự án tiêu biểu v�
   <li><strong>E-E-A-T:</strong> Profile nhân sự thật, chứng chỉ có ngày, dự án có số liệu.</li>
   <li><strong>Internal link:</strong> HSNL ↔ dịch vụ ↔ blog kỹ thuật.</li>
 </ul>
+
+${wpKienTrucImg(4, "SEO B2B cho website hồ sơ năng lực nhà thầu")}
 
 <h2 id="chon-doi-tac">Chọn đối tác thiết kế website HSNL</h2>
 

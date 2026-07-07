@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpLuatImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_PHAP_LUAT_LUAT_SU = {
     "Thiết kế website pháp lý: trust văn phòng luật, lĩnh vực tư vấn, form bảo mật HTTPS và SEO thủ tục. Quy trình 7 bước, giá 6–14 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website pháp lý và văn phòng luật: xây dựng trust, form tư vấn, profile luật sư và SEO tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-phap-luat-luat-su" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Pháp Lý | Văn Phòng Luật 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website pháp lý 6–14 triệu tùy lĩnh vực và CRM.",
 ])}
 
-${wpImg(1, "Thiết kế website pháp lý văn phòng luật form tư vấn bảo mật chuyên nghiệp")}
+${wpLuatImg(0, "Thiết kế website pháp lý văn phòng luật form tư vấn bảo mật chuyên nghiệp")}
 
 <h2 id="phap-ly-web-la-gi">Website pháp lý / văn phòng luật là gì?</h2>
 
@@ -137,7 +137,7 @@ ${wpImg(1, "Thiết kế website pháp lý văn phòng luật form tư vấn b�
   <li><strong>Liên hệ:</strong> Map nhiều chi nhánh, giờ làm việc</li>
 </ol>
 
-${wpImg(2, "Trang lĩnh vực tư vấn pháp lý và profile luật sư trên website văn phòng luật")}
+${wpLuatImg(1, "Trang lĩnh vực tư vấn pháp lý và profile luật sư trên website văn phòng luật")}
 
 <h2 id="linh-vuc">Trang lĩnh vực tư vấn pháp lý</h2>
 
@@ -204,6 +204,8 @@ ${wpImg(2, "Trang lĩnh vực tư vấn pháp lý và profile luật sư trên w
   <li><strong>E-E-A-T:</strong> Author box luật sư viết bài — link profile</li>
 </ul>
 
+${wpLuatImg(2, "SEO thiết kế website pháp lý — kiến thức luật và thủ tục pháp lý")}
+
 <h2 id="quy-trinh">Quy trình thiết kế website pháp lý — 7 bước</h2>
 
 <ol>
@@ -217,6 +219,8 @@ ${wpImg(2, "Trang lĩnh vực tư vấn pháp lý và profile luật sư trên w
 </ol>
 
 <p><strong>Thời gian:</strong> 4–8 tuần (VP SME); 8–12 tuần công ty luật lớn multi-language.</p>
+
+${wpLuatImg(3, "Quy trình thiết kế website pháp lý văn phòng luật chuẩn SEO")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website pháp lý 2026</h2>
 
@@ -263,6 +267,8 @@ ${wpImg(2, "Trang lĩnh vực tư vấn pháp lý và profile luật sư trên w
   <li>Web template luật nước ngoài — không phù hợp luật VN.</li>
   <li>Không phản hồi inquiry 48h — lead chuyển sang đối thủ.</li>
 </ul>
+
+${wpLuatImg(4, "Giao diện thiết kế website pháp lý — đội ngũ luật sư và form tư vấn")}
 
 ${wpRelatedLinks([
   {

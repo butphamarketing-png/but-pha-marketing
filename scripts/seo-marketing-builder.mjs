@@ -188,6 +188,39 @@ function defaultLongFaq(keyword, h1) {
   ];
 }
 
+function buildMarketingDepthSection(keyword, entry, imgIdx) {
+  return `
+<h2 id="boi-canh">Bối cảnh và xu hướng ${keyword} 2026</h2>
+<p>Thị trường digital Việt Nam tiếp tục tăng trưởng mạnh: người dùng tìm kiếm trên Google trước khi mua, so sánh 3–5 đối thủ và đọc review. Với <strong>${keyword}</strong>, doanh nghiệp cần ${entry.angle} — không chỉ “có mặt” trên mạng mà phải chuyển đổi được khách hàng thực.</p>
+<p>Xu hướng nổi bật: AI hỗ trợ viết content và tối ưu ads; video ngắn (Reels, TikTok) kéo awareness; SEO local và Google Maps quan trọng với dịch vụ địa phương; đo lường first-party data khi cookie third-party suy yếu. Kế hoạch <strong>${keyword}</strong> nên linh hoạt theo quý, không khóa cứng 12 tháng.</p>
+<ul>
+  <li><strong>Mobile-first:</strong> Hơn 75% traffic từ điện thoại — mọi landing và form phải tối ưu mobile.</li>
+  <li><strong>Trust signal:</strong> Review Google, case study, chứng chỉ — tăng tỷ lệ chốt đặc biệt ngành dịch vụ.</li>
+  <li><strong>Omnichannel:</strong> Đồng bộ thông điệp website, fanpage, Zalo OA và email nurture.</li>
+  <li><strong>Automation:</strong> CRM, chatbot, email drip — không bỏ sót lead sau chiến dịch.</li>
+</ul>
+
+<h2 id="tu-lam-agency">Tự làm hay thuê agency cho ${keyword}?</h2>
+<p>Doanh nghiệp nhỏ thường cân nhắc tự triển khai để tiết kiệm. Tuy nhiên <strong>${keyword}</strong> đòi hỏi kỹ năng đa dạng: chiến lược, creative, kỹ thuật tracking và phân tích số liệu. Bảng so sánh gợi ý:</p>
+<table class="w-full border-collapse text-sm my-6">
+  <thead><tr class="bg-indigo-50">
+    <th class="border border-indigo-100 px-3 py-2 text-left">Tiêu chí</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">Tự làm in-house</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">Thuê agency</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="border border-indigo-100 px-3 py-2">Chi phí ban đầu</td><td class="border border-indigo-100 px-3 py-2">Thấp (thời gian nội bộ)</td><td class="border border-indigo-100 px-3 py-2">Phí dịch vụ rõ ràng</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Tốc độ triển khai</td><td class="border border-indigo-100 px-3 py-2">Chậm nếu thiếu kinh nghiệm</td><td class="border border-indigo-100 px-3 py-2">Nhanh — đã có quy trình</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Chất lượng &amp; KPI</td><td class="border border-indigo-100 px-3 py-2">Dao động, khó benchmark</td><td class="border border-indigo-100 px-3 py-2">Cam kết báo cáo định kỳ</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Phù hợp</td><td class="border border-indigo-100 px-3 py-2">Founder có nền marketing</td><td class="border border-indigo-100 px-3 py-2">SME muốn kết quả nhanh</td></tr>
+  </tbody>
+</table>
+<p>Nhiều khách hàng Bứt Phá chọn mô hình hybrid: agency triển khai ${keyword} 3–6 tháng đầu, đồng thời đào tạo team nội bộ vận hành sau đó.</p>
+
+${wpImg(imgIdx + 3, `Triển khai ${keyword} — chiến lược dài hạn`)}
+`;
+}
+
 function pillarRelatedLinks(entry) {
   const hub = getPillarHubForArticle({
     slug: entry.slug,
@@ -221,6 +254,8 @@ ${wpToc([
   { id: "chien-luoc", label: "Chiến lược triển khai" },
   { id: "quy-trinh", label: "Quy trình 5 bước" },
   { id: "do-luong", label: "Đo lường KPI" },
+  { id: "boi-canh", label: "Xu hướng 2026" },
+  { id: "tu-lam-agency", label: "Tự làm vs agency" },
   { id: "sai-lam", label: "Sai lầm cần tránh" },
   { id: "faq", label: "FAQ" },
   { id: "ket-luan", label: "Kết luận" },
@@ -290,6 +325,8 @@ ${checklist(checklistItems)}
 <p>Dùng GA4, Meta Pixel, Google Ads conversion và CRM để có một nguồn sự thật. Đồng bộ marketing — sales về định nghĩa “lead chất lượng”.</p>
 
 ${wpImg(imgIdx + 2, `Đo lường ${kw}`)}
+
+${buildMarketingDepthSection(kw, entry, imgIdx)}
 
 <h2 id="sai-lam">Sai lầm thường gặp khi làm ${kw}</h2>
 <ul>

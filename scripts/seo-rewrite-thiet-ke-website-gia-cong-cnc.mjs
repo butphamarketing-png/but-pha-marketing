@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpCoKhiImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_GIA_CONG_CNC = {
     "Thiết kế website gia công CNC: upload CAD/STEP, báo giá B2B, gallery mẫu, bảng vật liệu & dung sai. SEO gia công CNC theo khu vực. Giá 5–12 triệu. Bứt Phá.",
   description:
     "Hướng dẫn thiết kế website gia công CNC: form upload bản vẽ, dịch vụ phay tiện laser, SEO local và quy trình triển khai cho xưởng CNC.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-gia-cong-cnc" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Gia Công CNC | B2B & SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–12 triệu; EN cho khách FDI/xuất khẩu.",
 ])}
 
-${wpImg(4, "Thiết kế website gia công CNC với form upload bản vẽ và báo giá B2B")}
+${wpCoKhiImg(0, "Thiết kế website gia công CNC với form upload bản vẽ và báo giá B2B")}
 
 <h2 id="cnc-la-gi">Thiết kế website gia công CNC là gì?</h2>
 
@@ -127,7 +127,7 @@ ${wpImg(4, "Thiết kế website gia công CNC với form upload bản vẽ và 
 
 <p>Lưu ý bảo mật: file bản vẽ khách hàng — HTTPS, không public link, xóa file cũ định kỳ.</p>
 
-${wpImg(8, "Form báo giá gia công CNC — upload bản vẽ CAD trên website")}
+${wpCoKhiImg(1, "Form báo giá gia công CNC — upload bản vẽ CAD trên website")}
 
 <h2 id="gallery-mau">Gallery sản phẩm mẫu theo ngành</h2>
 
@@ -174,6 +174,8 @@ ${wpImg(8, "Form báo giá gia công CNC — upload bản vẽ CAD trên website
 
 <p>Ghi rõ dung sai đạt được: ±0.01mm (precision), ±0.05mm (standard) — tránh hứa quá mức năng lực máy.</p>
 
+${wpCoKhiImg(2, "Gallery sản phẩm mẫu gia công CNC theo ngành trên website")}
+
 <h2 id="cau-truc">Cấu trúc website gia công CNC (10–14 trang)</h2>
 
 <ol>
@@ -201,6 +203,8 @@ ${wpImg(8, "Form báo giá gia công CNC — upload bản vẽ CAD trên website
 </ol>
 
 <p><strong>Thời gian:</strong> 5–8 tuần tùy số trang dịch vụ và upload phức tạp.</p>
+
+${wpCoKhiImg(3, "Quy trình thiết kế website gia công CNC chuẩn SEO và form báo giá")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website gia công CNC 2026</h2>
 
@@ -245,6 +249,8 @@ ${wpImg(8, "Form báo giá gia công CNC — upload bản vẽ CAD trên website
   <li><strong>Blog:</strong> “DFM tips”, “giảm chi phí prototype CNC”</li>
   <li><strong>Tránh:</strong> Copy spec đối thủ — Google duplicate</li>
 </ul>
+
+${wpCoKhiImg(4, "Giao diện thiết kế website gia công CNC — máy móc và gallery sản phẩm mẫu")}
 
 <h2 id="sai-lam">Sai lầm khi làm website gia công CNC</h2>
 

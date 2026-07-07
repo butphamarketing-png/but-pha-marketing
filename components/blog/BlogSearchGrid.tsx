@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Flame, Search, X } from "lucide-react";
 import { matchesBlogSearch, resolveBlogTag, type BlogListItem } from "@/lib/blog-utils";
+import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { BlogLeadPopup } from "@/components/blog/BlogLeadPopup";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
@@ -63,7 +64,11 @@ export function BlogSearchGrid({ blogs }: { blogs: BlogListItem[] }) {
               <div className="relative overflow-hidden">
                 <BlogOptimizedImage
                   src={blog.imageUrl || "/logo.png"}
-                  alt={blog.title}
+                  alt={getBlogThumbnailAlt({
+                    slug: blog.slug,
+                    keywordsMain: blog.keywordsMain,
+                    title: blog.title,
+                  })}
                   width={640}
                   height={448}
                   sizes="card"

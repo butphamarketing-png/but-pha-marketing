@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpNhaKhoaImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_NHA_KHOA = {
     "Thiết kế website nha khoa: implant, niềng răng, đặt lịch online, bảng giá, SEO local Y tế. Quy trình 7 bước, giá 3–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website nha khoa hiện đại: tính năng đặt khám, tuân thủ quảng cáo y tế, SEO Maps và chọn đối tác uy tín.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-nha-khoa" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Nha Khoa | Đặt Lịch & SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +62,7 @@ ${wpKeyTakeaways([
   "Mobile-first: bệnh nhân tìm và đặt lịch chủ yếu trên điện thoại.",
 ])}
 
-${wpImg(1, "Thiết kế website nha khoa hiện đại với đặt lịch khám online")}
+${wpNhaKhoaImg(0, "Thiết kế website nha khoa hiện đại với đặt lịch khám online")}
 
 <h2 id="nha-khoa-la-gi">Thiết kế website nha khoa là gì?</h2>
 
@@ -142,7 +142,7 @@ ${wpImg(1, "Thiết kế website nha khoa hiện đại với đặt lịch khá
   <li><strong>Liên hệ:</strong> Maps, giờ làm việc, nhiều chi nhánh.</li>
 </ol>
 
-${wpImg(2, "Website phòng khám nha khoa — trang dịch vụ implant và niềng răng")}
+${wpNhaKhoaImg(1, "Website phòng khám nha khoa — trang dịch vụ implant và niềng răng")}
 
 <h2 id="quy-dinh-y-te">Quy định nội dung &amp; quảng cáo y tế trên web</h2>
 
@@ -169,6 +169,8 @@ ${wpImg(2, "Website phòng khám nha khoa — trang dịch vụ implant và ni�
 </ol>
 
 <p><strong>Thời gian:</strong> 3–5 tuần cho website nha khoa 8–10 trang.</p>
+
+${wpNhaKhoaImg(3, "Quy trình thiết kế website nha khoa chuẩn SEO và đặt lịch")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website nha khoa 2026</h2>
 
@@ -214,6 +216,8 @@ ${wpImg(2, "Website phòng khám nha khoa — trang dịch vụ implant và ni�
   <li><strong>NAP nhất quán:</strong> Tên, địa chỉ, SĐT giống Maps và Facebook.</li>
 </ul>
 
+${wpNhaKhoaImg(2, "SEO thiết kế website nha khoa local và Google Maps phòng khám")}
+
 <p>Tham khảo thêm <a href="${SITE}/blog/thiet-ke-website-nha-khoa-nieng-rang">thiết kế website nha khoa niềng răng</a> (nếu chuyên sâu niềng) và <a href="${SITE}/google-maps">dịch vụ Google Maps</a>.</p>
 
 <h2 id="chon-doi-tac">Chọn đối tác thiết kế website nha khoa</h2>
@@ -235,7 +239,14 @@ ${wpImg(2, "Website phòng khám nha khoa — trang dịch vụ implant và ni�
   <li>Web chậm trên mobile — bounce cao.</li>
 </ul>
 
+${wpNhaKhoaImg(4, "Giao diện thiết kế website nha khoa — đội ngũ bác sĩ và form đặt lịch")}
+
 ${wpRelatedLinks([
+  {
+    href: `${SITE}/blog/thiet-ke-website-nha-khoa-nieng-rang`,
+    label: "Website niềng răng",
+    desc: "Chuyên chỉnh nha.",
+  },
   {
     href: `${SITE}/blog/thiet-ke-website-spa`,
     label: "Thiết kế website spa",

@@ -4,27 +4,39 @@ import {
   toc,
   internalLinks,
   externalLinks,
-  NEWS_THUMBNAIL,
   NEWS_CONTENT_IMAGE_COUNT,
   altFromKeyword,
-  detectNewsTopic,
   newsThumbnailForArticle,
-  newsContentImageCountForTopic,
+  isKienTrucSlug,
+  KIEN_TRUC_ARTICLE_THUMBNAILS,
 } from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 
 const SKIP_SLUGS = new Set([
   "thiet-ke-website-spa",
   "thiet-ke-website-nha-khoa",
+  "thiet-ke-website-nha-khoa-nieng-rang",
   "thiet-ke-website-nha-hang",
   "thiet-ke-website-khach-san",
   "thiet-ke-website-resort",
   "thiet-ke-website-cong-ty-xay-dung",
   "thiet-ke-website-kien-truc-noi-that",
+  "thiet-ke-website-pccc",
+  "thiet-ke-website-thiet-bi-pccc",
+  "thiet-ke-website-my-pham",
+  "thiet-ke-website-my-pham-lam-dep",
+  "thiet-ke-website-thang-may",
   "thiet-ke-website-co-khi",
   "thiet-ke-website-gia-cong-cnc",
   "thiet-ke-website-bat-dong-san",
   "thiet-ke-website-cong-ty-luat",
+  "thiet-ke-website-phap-luat-luat-su",
+  "thiet-ke-website-tham-my-vien",
+  "thiet-ke-website-phong-kham-da-khoa",
+  "thiet-ke-website-logistics-van-tai",
+  "thiet-ke-website-in-an-bao-bi",
+  "thiet-ke-website-tu-dong-hoa",
+  "thiet-ke-website-dien-cong-nghiep",
 ]);
 
 function faq(items) {
@@ -43,11 +55,13 @@ function featureList(features) {
 }
 
 function buildIndustryContent(entry, imgOffset) {
-  const topic = "website";
-  const kw = entry.keywordsSecondary.split(",")[0].trim();
+  const isKienTruc = isKienTrucSlug(entry.slug);
+  const topic = isKienTruc ? "kien-truc" : "website";
+  const keywordsMain = industryKeywordsMain(entry);
+  const kw = isKienTruc ? keywordsMain : entry.keywordsSecondary.split(",")[0].trim();
   const niche = entry.niche;
   const industry = entry.industry;
-  const alt = altFromKeyword(entry.keywordsMain);
+  const alt = altFromKeyword(keywordsMain);
 
   return `
 ${toc([
@@ -58,26 +72,27 @@ ${toc([
   { id: "faq", label: "Câu hỏi thường gặp" },
 ])}
 <p><strong>${entry.title}</strong> là giải pháp giúp doanh nghiệp ngành ${niche} xây dựng thương hiệu số chuyên nghiệp, thu hút khách hàng tiềm năng và tối ưu hiển thị trên Google. Trong thời đại khách hàng tìm kiếm dịch vụ trên mạng trước khi quyết định, một website chuẩn SEO trở thành kênh bán hàng và tư vấn hoạt động 24/7.</p>
-<p>Khi triển khai <strong>thiết kế website</strong> cho lĩnh vực ${industry}, doanh nghiệp cần giao diện phù hợp ngành, nội dung trả lời đúng câu hỏi khách hàng và cấu trúc kỹ thuật thân thiện với công cụ tìm kiếm. Đây không chỉ là “có mặt online” mà là đầu tư vào chuyển đổi bền vững.</p>
-${img(imgOffset, alt, topic)}
+<p>Khi triển khai <strong>${keywordsMain}</strong> cho lĩnh vực ${industry}, doanh nghiệp cần giao diện phù hợp ngành, nội dung trả lời đúng câu hỏi khách hàng và cấu trúc kỹ thuật thân thiện với công cụ tìm kiếm. Đây không chỉ là “có mặt online” mà là đầu tư vào chuyển đổi bền vững.</p>
+${img(isKienTruc ? 0 : imgOffset, alt, topic)}
 <h2 id="tong-quan">${entry.h1} — Tổng quan và vai trò</h2>
-<p>Website ngành ${niche} đóng vai trò trung tâm trong hệ sinh thái marketing. Fanpage thu hút tương tác, Google Maps tăng hiện diện địa phương, nhưng website mới là nơi bạn kiểm soát hoàn toàn nội dung, dữ liệu khách hàng và hành trình chuyển đổi. <strong>Thiết kế website</strong> đúng chuẩn giúp mọi chiến dịch quảng cáo đều có điểm đến thống nhất.</p>
+<p>Website ngành ${niche} đóng vai trò trung tâm trong hệ sinh thái marketing. Fanpage thu hút tương tác, Google Maps tăng hiện diện địa phương, nhưng website mới là nơi bạn kiểm soát hoàn toàn nội dung, dữ liệu khách hàng và hành trình chuyển đổi. <strong>${keywordsMain}</strong> đúng chuẩn giúp mọi chiến dịch quảng cáo đều có điểm đến thống nhất.</p>
 <p>Khách hàng ngành ${industry} thường so sánh 3–5 đơn vị trong vài phút. Website thiếu thông tin, load chậm hoặc không có form liên hệ rõ ràng khiến tỷ lệ rời trang tăng cao. Ngược lại, website chuyên nghiệp với ${kw} tạo ấn tượng tin cậy ngay lần truy cập đầu tiên.</p>
 <h3>Vì sao doanh nghiệp ${industry} cần website riêng?</h3>
 <p>Thị trường ${niche} cạnh tranh khốc liệt. Website giúp bạn thể hiện năng lực, dịch vụ, bảng giá tham khảo và case study thực tế — những yếu tố khách hàng luôn tìm kiếm trước khi gọi điện hoặc nhắn Zalo.</p>
-${img(imgOffset + 1, alt, topic)}
-<h2 id="loi-ich">Lợi ích thiết kế website cho ngành ${industry}</h2>
+${img(isKienTruc ? 1 : imgOffset + 1, alt, topic)}
+<h2 id="loi-ich">Lợi ích ${keywordsMain} cho ngành ${industry}</h2>
 <p><strong>Uy tín thương hiệu:</strong> Giao diện đồng bộ nhận diện, nội dung chuyên nghiệp tạo cảm giác tin cậy. <strong>SEO &amp; Google Maps:</strong> Website chuẩn kỹ thuật kết hợp từ khóa ${entry.keywordsSecondary} giúp xuất hiện khi khách tìm kiếm. <strong>Tăng chuyển đổi:</strong> Form liên hệ, nút gọi, chat Zalo đặt đúng vị trí trên mobile mang về lead chất lượng.</p>
 <p>Bên cạnh đó, website hỗ trợ retargeting ads, email marketing và xây dựng nội dung blog theo thời gian — tích lũy traffic organic thay vì phụ thuộc hoàn toàn vào quảng cáo trả phí.</p>
 <h2 id="tinh-nang">Tính năng website ${industry} cần có</h2>
-<p>Mỗi ngành có yêu cầu riêng. Dưới đây là các module quan trọng khi triển khai <strong>thiết kế website</strong> cho ${niche}:</p>
+<p>Mỗi ngành có yêu cầu riêng. Dưới đây là các module quan trọng khi triển khai <strong>${keywordsMain}</strong> cho ${niche}:</p>
 ${featureList(entry.features)}
 <p>Các tính năng trên được tùy biến theo quy mô và mục tiêu KPI: tăng lead, đặt lịch, bán hàng online hoặc xây dựng thương hiệu.</p>
-${img(imgOffset + 2, alt, topic)}
+${img(isKienTruc ? 2 : imgOffset + 2, alt, topic)}
 <h2 id="quy-trinh">Quy trình triển khai website chuẩn SEO</h2>
 <p><strong>Giai đoạn 1 — Khảo sát:</strong> Mục tiêu kinh doanh, chân dung khách hàng, đối thủ và từ khóa mục tiêu (${entry.keywordsSecondary}). <strong>Giai đoạn 2 — Thiết kế:</strong> Wireframe, UI theo nhận diện thương hiệu, tối ưu mobile-first. <strong>Giai đoạn 3 — Lập trình:</strong> Tích hợp form, analytics, pixel quảng cáo. <strong>Giai đoạn 4 — SEO on-page:</strong> Meta title, description, heading, schema, tốc độ tải. <strong>Giai đoạn 5 — Bàn giao:</strong> Đào tạo vận hành và bảo trì định kỳ.</p>
 <p>Đội triển khai nên bàn giao tài liệu sitemap, hướng dẫn cập nhật nội dung và quy trình backup — giúp doanh nghiệp ${industry} chủ động vận hành lâu dài.</p>
-${img(imgOffset + 3, alt, topic)}
+${img(isKienTruc ? 3 : imgOffset + 3, alt, topic)}
+${isKienTruc ? `${img(4, alt, topic)}` : ""}
 <p>Nếu bạn đang cân nhắc <strong>${entry.title.toLowerCase()}</strong>, hãy ưu tiên đối tác có portfolio ngành tương đồng và cam kết minh bạch tiến độ. Đầu tư website đúng từ đầu tiết kiệm chi phí sửa chữa và tối ưu SEO về sau.</p>
 ${internalLinks()}
 ${externalLinks()}
@@ -95,7 +110,9 @@ export function industryKeywordsMain(entry) {
 
 function buildIndustryArticle(entry, index) {
   const imgOffset = index % NEWS_CONTENT_IMAGE_COUNT;
-  const keywordsMain = industryKeywordsMain(entry);
+  const keywordsMain = isKienTrucSlug(entry.slug)
+    ? KIEN_TRUC_ARTICLE_THUMBNAILS[entry.slug].keywordsMain
+    : industryKeywordsMain(entry);
   const primaryKw = keywordsMain;
   const metaDescription = `${entry.title} — Giải pháp ${primaryKw} chuẩn SEO, tối ưu chuyển đổi và tăng khách hàng. Tư vấn miễn phí tại Bứt Phá Marketing.`;
   const description = `Hướng dẫn ${primaryKw}: lợi ích, tính năng cần có, quy trình triển khai và FAQ dành cho doanh nghiệp ngành ${entry.niche}.`;

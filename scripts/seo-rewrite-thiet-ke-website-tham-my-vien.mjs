@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpThamMyImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_THAM_MY_VIEN = {
     "Thiết kế website thẩm mỹ viện: filler, botox, hồ sơ bác sĩ, đặt lịch, before/after và SEO local. Quy trình 7 bước, giá 3–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website thẩm mỹ viện: uy tín y khoa, dịch vụ làm đẹp, đặt lịch online, tuân thủ quảng cáo và SEO Google Maps.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-tham-my-vien" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Thẩm Mỹ Viện | SEO & Báo Giá | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: gói 3–12 triệu; pixel Meta + landing theo dịch vụ.",
 ])}
 
-${wpImg(2, "Thiết kế website thẩm mỹ viện chuyên nghiệp với hồ sơ bác sĩ và đặt lịch")}
+${wpThamMyImg(0, "Thiết kế website thẩm mỹ viện chuyên nghiệp với hồ sơ bác sĩ và đặt lịch")}
 
 <h2 id="tham-my-la-gi">Thiết kế website thẩm mỹ viện là gì?</h2>
 
@@ -192,7 +192,7 @@ ${wpImg(2, "Thiết kế website thẩm mỹ viện chuyên nghiệp với hồ 
   <li><strong>Liên hệ:</strong> Maps, hotline, Zalo OA, giờ làm việc, nhiều chi nhánh.</li>
 </ol>
 
-${wpImg(3, "Cấu trúc website thẩm mỹ viện — trang dịch vụ và hồ sơ bác sĩ")}
+${wpThamMyImg(1, "Cấu trúc website thẩm mỹ viện — trang dịch vụ và hồ sơ bác sĩ")}
 
 <h2 id="bac-si-uy-tin">Hồ sơ bác sĩ &amp; xây uy tín trên web</h2>
 
@@ -207,6 +207,8 @@ ${wpImg(3, "Cấu trúc website thẩm mỹ viện — trang dịch vụ và h�
 </ul>
 
 <p>Hiển thị <strong>giấy phép hoạt động phòng khám</strong> và MST ở footer — procurement cá nhân cũng kiểm tra khi chi phí cao.</p>
+
+${wpThamMyImg(2, "Hồ sơ bác sĩ trên website thẩm mỹ viện — xây uy tín y khoa")}
 
 <h2 id="quy-dinh">Quy định nội dung &amp; quảng cáo làm đẹp</h2>
 
@@ -247,6 +249,8 @@ ${wpImg(3, "Cấu trúc website thẩm mỹ viện — trang dịch vụ và h�
 </ol>
 
 <p><strong>Thời gian:</strong> 3–6 tuần cho website 8–12 trang chuẩn SEO.</p>
+
+${wpThamMyImg(3, "Quy trình thiết kế website thẩm mỹ viện chuẩn SEO và đặt lịch tư vấn")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website thẩm mỹ viện 2026</h2>
 
@@ -292,6 +296,8 @@ ${wpImg(3, "Cấu trúc website thẩm mỹ viện — trang dịch vụ và h�
   <li><strong>Review Google:</strong> Nhắc khách review sau liệu trình — link từ web.</li>
   <li><strong>Schema:</strong> MedicalBusiness, Physician — rich snippet local.</li>
 </ul>
+
+${wpThamMyImg(4, "Giao diện thiết kế website thẩm mỹ viện — before/after và form đặt lịch")}
 
 <p>Xem thêm <a href="${SITE}/blog/thiet-ke-website-my-pham-lam-dep">thiết kế website mỹ phẩm</a> nếu bán skincare kèm dịch vụ.</p>
 

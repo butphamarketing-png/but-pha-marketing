@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpThamMyImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_SPA = {
     "Thiết kế website spa: đặt lịch online, bảng giá liệu trình, gallery, SEO local & Google Maps. Quy trình 7 bước, giá 3–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website spa chuyên nghiệp: tính năng booking, UX mobile, SEO địa phương, bảng giá và quy trình triển khai cho spa & wellness.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-spa" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Spa | SEO & Báo Giá 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +62,7 @@ ${wpKeyTakeaways([
   "Tránh web chỉ đẹp — cần CTA đặt lịch trên mọi trang dịch vụ.",
 ])}
 
-${wpImg(6, "Thiết kế website spa chuyên nghiệp chuẩn SEO với đặt lịch online")}
+${wpThamMyImg(0, "Thiết kế website spa chuyên nghiệp chuẩn SEO với đặt lịch online")}
 
 <h2 id="spa-la-gi">Thiết kế website spa là gì?</h2>
 
@@ -142,7 +142,7 @@ ${wpImg(6, "Thiết kế website spa chuyên nghiệp chuẩn SEO với đặt l
   <li><strong>Liên hệ:</strong> Maps, giờ mở cửa, nhiều chi nhánh (nếu có).</li>
 </ol>
 
-${wpImg(7, "Cấu trúc website spa — trang dịch vụ và đặt lịch online")}
+${wpThamMyImg(1, "Cấu trúc website spa — trang dịch vụ và đặt lịch online")}
 
 <h2 id="ux-mobile">UX mobile &amp; luồng đặt lịch spa</h2>
 
@@ -169,6 +169,8 @@ ${wpImg(7, "Cấu trúc website spa — trang dịch vụ và đặt lịch onli
 </ol>
 
 <p><strong>Thời gian:</strong> 3–5 tuần cho website spa 7–8 trang chuẩn SEO.</p>
+
+${wpThamMyImg(2, "Quy trình thiết kế website spa chuẩn SEO và đặt lịch online")}
 
 <h2 id="bang-gia">Bảng giá thiết kế website spa 2026</h2>
 
@@ -206,6 +208,8 @@ ${wpImg(7, "Cấu trúc website spa — trang dịch vụ và đặt lịch onli
 
 <p>Plugin booking nâng cao hoặc tích hợp app quản lý spa — báo giá riêng sau khảo sát.</p>
 
+${wpThamMyImg(3, "SEO thiết kế website spa local và Google Maps spa gần tôi")}
+
 <h2 id="seo-local">SEO local &amp; Google Maps cho spa</h2>
 
 <ul>
@@ -226,6 +230,8 @@ ${wpImg(7, "Cấu trúc website spa — trang dịch vụ và đặt lịch onli
   <li>Demo mobile đặt lịch trước khi ký</li>
   <li>Bảo hành sửa giá combo, thêm dịch vụ mới</li>
 </ul>
+
+${wpThamMyImg(4, "Giao diện thiết kế website spa — gallery phòng và form đặt lịch")}
 
 <h2 id="sai-lam">Sai lầm khi làm website spa</h2>
 

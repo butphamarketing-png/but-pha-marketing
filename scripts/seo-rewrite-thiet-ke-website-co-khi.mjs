@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpCoKhiImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_CO_KHI = {
     "Thiết kế website cơ khí: catalog sản phẩm, RFQ báo giá B2B, ISO, đa ngôn ngữ xuất khẩu. Schema Product, SEO ngành sản xuất. Giá 5–15 triệu. Bứt Phá.",
   description:
     "Hướng dẫn thiết kế website cơ khí chuẩn SEO: catalog kỹ thuật, form RFQ, năng lực sản xuất và tối ưu cho khách B2B/xuất khẩu.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-co-khi" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Cơ Khí | B2B & SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -65,7 +65,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–15 triệu; tích hợp CRM/Sheet cho sales follow-up.",
 ])}
 
-${wpImg(3, "Thiết kế website cơ khí với catalog sản phẩm và form báo giá B2B")}
+${wpCoKhiImg(0, "Thiết kế website cơ khí với catalog sản phẩm và form báo giá B2B")}
 
 <h2 id="co-khi-la-gi">Thiết kế website cơ khí là gì?</h2>
 
@@ -149,7 +149,7 @@ ${wpImg(3, "Thiết kế website cơ khí với catalog sản phẩm và form b�
   <li>Schema Product — hỗ trợ rich snippet (không hiển thị giá nếu B2B quote)</li>
 </ul>
 
-${wpImg(7, "Catalog máy móc cơ khí — thông số kỹ thuật trên website B2B")}
+${wpCoKhiImg(1, "Catalog máy móc cơ khí — thông số kỹ thuật trên website B2B")}
 
 <h2 id="rfq-bao-gia">Form RFQ &amp; báo giá B2B</h2>
 
@@ -164,6 +164,8 @@ ${wpImg(7, "Catalog máy móc cơ khí — thông số kỹ thuật trên websit
 </ul>
 
 <p>Tham khảo <a href="${SITE}/blog/thiet-ke-website-doanh-nghiep">thiết kế website doanh nghiệp</a> cho cấu trúc corporate B2B tổng quát.</p>
+
+${wpCoKhiImg(2, "Form RFQ báo giá B2B trên website cơ khí — upload bản vẽ kỹ thuật")}
 
 <h2 id="nang-luc-iso">Trang năng lực sản xuất &amp; chứng nhận ISO</h2>
 
@@ -213,6 +215,8 @@ ${wpImg(7, "Catalog máy móc cơ khí — thông số kỹ thuật trên websit
 
 <p><strong>Thời gian:</strong> 6–10 tuần tùy số SKU catalog và đa ngôn ngữ.</p>
 
+${wpCoKhiImg(3, "Quy trình thiết kế website cơ khí chuẩn SEO và catalog B2B")}
+
 <h2 id="bang-gia">Bảng giá thiết kế website cơ khí 2026</h2>
 
 <table class="w-full border-collapse text-sm my-6">
@@ -258,6 +262,8 @@ ${wpImg(7, "Catalog máy móc cơ khí — thông số kỹ thuật trên websit
 </ul>
 
 <p>Xem thêm <a href="${SITE}/blog/thiet-ke-website-cong-ty-xay-dung">thiết kế website công ty xây dựng</a> cho mô hình portfolio B2B tương tự.</p>
+
+${wpCoKhiImg(4, "Giao diện thiết kế website cơ khí — năng lực sản xuất và chứng nhận ISO")}
 
 <h2 id="sai-lam">Sai lầm khi làm website cơ khí</h2>
 

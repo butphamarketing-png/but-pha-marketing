@@ -1,4 +1,24 @@
-import { wrapArticle, img, seoImageAlt, NEWS_CONTENT_IMAGE_COUNT, SITE, ZALO, FB } from "./seo-article-helpers.mjs";
+import {
+  wrapArticle,
+  img,
+  seoImageAlt,
+  NEWS_CONTENT_IMAGE_COUNT,
+  KIEN_TRUC_CONTENT_IMAGE_COUNT,
+  PCCC_CONTENT_IMAGE_COUNT,
+  MY_PHAM_CONTENT_IMAGE_COUNT,
+  THANG_MAY_CONTENT_IMAGE_COUNT,
+  NHA_KHOA_CONTENT_IMAGE_COUNT,
+  LUAT_CONTENT_IMAGE_COUNT,
+  THAM_MY_CONTENT_IMAGE_COUNT,
+  PHONG_KHAM_CONTENT_IMAGE_COUNT,
+  LOGISTICS_CONTENT_IMAGE_COUNT,
+  CO_KHI_CONTENT_IMAGE_COUNT,
+  BAO_BI_CONTENT_IMAGE_COUNT,
+  TU_DONG_HOA_CONTENT_IMAGE_COUNT,
+  SITE,
+  ZALO,
+  FB,
+} from "./seo-article-helpers.mjs";
 
 function ensureKeywordInImageAlts(html, keyword) {
   if (!keyword) return html;
@@ -65,6 +85,66 @@ export function wpExternalCta() {
 
 export function wpImg(index, alt) {
   return img(index % NEWS_CONTENT_IMAGE_COUNT, alt);
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/kien-truc (5 ảnh / bài: index 0–4). */
+export function wpKienTrucImg(index, alt) {
+  return img(index % KIEN_TRUC_CONTENT_IMAGE_COUNT, alt, "kien-truc");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/pccc (5 ảnh / bài: index 0–4). */
+export function wpPcccImg(index, alt) {
+  return img(index % PCCC_CONTENT_IMAGE_COUNT, alt, "pccc");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/my-pham (5 ảnh / bài: index 0–4). */
+export function wpMyPhamImg(index, alt) {
+  return img(index % MY_PHAM_CONTENT_IMAGE_COUNT, alt, "my-pham");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/thang-may (5 ảnh / bài: index 0–4). */
+export function wpThangMayImg(index, alt) {
+  return img(index % THANG_MAY_CONTENT_IMAGE_COUNT, alt, "thang-may");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/nha-khoa (5 ảnh / bài: index 0–4). */
+export function wpNhaKhoaImg(index, alt) {
+  return img(index % NHA_KHOA_CONTENT_IMAGE_COUNT, alt, "nha-khoa");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/luat (5 ảnh / bài: index 0–4). */
+export function wpLuatImg(index, alt) {
+  return img(index % LUAT_CONTENT_IMAGE_COUNT, alt, "luat");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/tham-my (5 ảnh / bài: index 0–4). */
+export function wpThamMyImg(index, alt) {
+  return img(index % THAM_MY_CONTENT_IMAGE_COUNT, alt, "tham-my");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/phong-kham (5 ảnh / bài: index 0–4). */
+export function wpPhongKhamImg(index, alt) {
+  return img(index % PHONG_KHAM_CONTENT_IMAGE_COUNT, alt, "phong-kham");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/logistics (5 ảnh / bài: index 0–4). */
+export function wpLogisticsImg(index, alt) {
+  return img(index % LOGISTICS_CONTENT_IMAGE_COUNT, alt, "logistics");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/co-khi (5 ảnh / bài: index 0–4). */
+export function wpCoKhiImg(index, alt) {
+  return img(index % CO_KHI_CONTENT_IMAGE_COUNT, alt, "co-khi");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/bao-bi (5 ảnh / bài: index 0–4). */
+export function wpBaoBiImg(index, alt) {
+  return img(index % BAO_BI_CONTENT_IMAGE_COUNT, alt, "bao-bi");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/tu-dong-hoa (5 ảnh / bài: index 0–4). */
+export function wpTuDongHoaImg(index, alt) {
+  return img(index % TU_DONG_HOA_CONTENT_IMAGE_COUNT, alt, "tu-dong-hoa");
 }
 
 /**

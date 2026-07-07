@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKienTrucImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_NOI_THAT_SHOWROOM = {
     "Thiết kế website nội thất showroom: gallery 3D, catalog sản phẩm, dự án thực tế và form báo giá. Visual-heavy, SEO local. Giá 8–18 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website nội thất showroom 3D và catalog: showcase visual, thu lead và SEO tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-noi-that-showroom" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Nội Thất Showroom | 3D Catalog 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -63,7 +63,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website showroom 8–18 triệu tùy 3D tour và catalog.",
 ])}
 
-${wpImg(1, "Thiết kế website nội thất showroom gallery 3D và catalog sản phẩm")}
+${wpKienTrucImg(0, "Thiết kế website nội thất showroom gallery 3D và catalog sản phẩm")}
 
 <h2 id="showroom-web-la-gi">Website showroom nội thất là gì?</h2>
 
@@ -117,7 +117,7 @@ ${wpImg(1, "Thiết kế website nội thất showroom gallery 3D và catalog s�
   <li><strong>Video walkthrough:</strong> Reel 60s embed — social proof</li>
 </ul>
 
-${wpImg(2, "Gallery dự án nội thất và render 3D trên website showroom")}
+${wpKienTrucImg(1, "Gallery dự án nội thất và render 3D trên website showroom")}
 
 <h2 id="catalog">Catalog sản phẩm nội thất trên web</h2>
 
@@ -131,6 +131,8 @@ ${wpImg(2, "Gallery dự án nội thất và render 3D trên website showroom")
   <li><strong>PDF catalog:</strong> Download brochure B2B — thu email (lead magnet)</li>
   <li><strong>Combo phòng:</strong> Phòng khách set A — upsell trọn gói</li>
 </ul>
+
+${wpKienTrucImg(2, "Catalog sản phẩm nội thất trên website showroom")}
 
 <h2 id="visual-ux">UX visual, ảnh nặng &amp; tốc độ web</h2>
 
@@ -188,6 +190,8 @@ ${wpImg(2, "Gallery dự án nội thất và render 3D trên website showroom")
 
 <p><strong>Thời gian:</strong> 4–8 tuần (gallery + catalog); +2 tuần nếu virtual tour 360°.</p>
 
+${wpKienTrucImg(3, "Quy trình thiết kế website nội thất showroom")}
+
 <h2 id="bang-gia">Bảng giá thiết kế website nội thất showroom 2026</h2>
 
 <table class="w-full border-collapse text-sm my-6">
@@ -221,6 +225,8 @@ ${wpImg(2, "Gallery dự án nội thất và render 3D trên website showroom")
     </tr>
   </tbody>
 </table>
+
+${wpKienTrucImg(4, "SEO local cho website nội thất showroom")}
 
 <h2 id="sai-lam">Sai lầm khi làm website showroom nội thất</h2>
 

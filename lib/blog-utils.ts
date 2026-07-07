@@ -126,7 +126,7 @@ export type BlogListItem = Pick<
 
 export type BlogCardItem = Pick<
   BlogListItem,
-  "id" | "title" | "description" | "imageUrl" | "slug" | "hot" | "publishedAt" | "timestamp"
+  "id" | "title" | "description" | "keywordsMain" | "imageUrl" | "slug" | "hot" | "publishedAt" | "timestamp"
 >;
 
 export function toBlogCardItem(item: ServerBlogItem | BlogListItem): BlogCardItem {
@@ -134,6 +134,7 @@ export function toBlogCardItem(item: ServerBlogItem | BlogListItem): BlogCardIte
     id: item.id,
     title: item.title,
     description: item.description,
+    keywordsMain: item.keywordsMain,
     imageUrl: item.imageUrl,
     slug: item.slug,
     hot: item.hot,

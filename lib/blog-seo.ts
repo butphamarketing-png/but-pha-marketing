@@ -16,8 +16,21 @@ const PILLAR_SLUGS = new Set([
 
 /** Title tuyệt đối — tránh template root layout chèn thêm "| Bứt Phá Marketing". */
 export function buildBlogAbsoluteTitle(rawTitle: string): string {
-  const title = rawTitle.trim();
+  let title = rawTitle.trim();
   if (!title) return "Bứt Phá Marketing";
+
+  // Viết hoa chữ cái đầu mỗi từ nếu title đang toàn chữ thường (SERP đẹp hơn)
+  if (title[0] === title[0].toLowerCase()) {
+    title = title
+      .split(/\s+/)
+      .map((word) => {
+        const lower = word.toLowerCase();
+        if (lower === "seo") return "SEO";
+        if (/^[a-z]/.test(word)) return word.charAt(0).toUpperCase() + word.slice(1);
+        return word;
+      })
+      .join(" ");
+  }
 
   if (/bứt phá\s*marketing/i.test(title)) return title;
   if (/bứt phá/i.test(title)) {

@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpPhongKhamImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_PHONG_KHAM_DA_KHOA = {
     "Thiết kế website phòng khám đa khoa: chuyên khoa, bác sĩ trực, đặt lịch, BHYT và SEO local. Quy trình 7 bước, giá 4–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website phòng khám đa khoa: danh mục chuyên khoa, đặt lịch theo ca, portal xét nghiệm và SEO y tế local.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-phong-kham-da-khoa" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Phòng Khám Đa Khoa | SEO & Báo Giá | Bứt Phá",
     keyword: KEYWORD,
@@ -64,7 +64,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: gói 4–12 triệu; đa chi nhánh + schema LocalBusiness.",
 ])}
 
-${wpImg(0, "Thiết kế website phòng khám đa khoa với đặt lịch theo chuyên khoa")}
+${wpPhongKhamImg(0, "Thiết kế website phòng khám đa khoa với đặt lịch theo chuyên khoa")}
 
 <h2 id="da-khoa-la-gi">Thiết kế website phòng khám đa khoa là gì?</h2>
 
@@ -188,7 +188,7 @@ ${wpImg(0, "Thiết kế website phòng khám đa khoa với đặt lịch theo 
   <li><strong>Liên hệ:</strong> Form, hotline cấp cứu (nếu có), email, Zalo.</li>
 </ol>
 
-${wpImg(1, "Cấu trúc website phòng khám đa khoa — danh mục chuyên khoa")}
+${wpPhongKhamImg(1, "Cấu trúc website phòng khám đa khoa — danh mục chuyên khoa")}
 
 <h2 id="dat-lich">Đặt lịch khám theo chuyên khoa &amp; ca trực</h2>
 
@@ -203,6 +203,8 @@ ${wpImg(1, "Cấu trúc website phòng khám đa khoa — danh mục chuyên kho
 </ol>
 
 <p>Tích hợp plugin booking hoặc form gửi về email/CRM phòng khám. Tránh form 15 trường — tỷ lệ hoàn thành thấp trên mobile.</p>
+
+${wpPhongKhamImg(2, "Đặt lịch khám online trên website phòng khám đa khoa theo chuyên khoa")}
 
 <h2 id="bhyt-quy-trinh">Thông tin BHYT &amp; quy trình khám trên web</h2>
 
@@ -242,6 +244,8 @@ ${wpImg(1, "Cấu trúc website phòng khám đa khoa — danh mục chuyên kho
 
 <p><strong>Thời gian:</strong> 4–7 tuần cho website 10–15 trang + đa chuyên khoa.</p>
 
+${wpPhongKhamImg(3, "Quy trình thiết kế website phòng khám đa khoa chuẩn SEO")}
+
 <h2 id="bang-gia">Bảng giá thiết kế website phòng khám đa khoa 2026</h2>
 
 <table class="w-full border-collapse text-sm my-6">
@@ -275,6 +279,8 @@ ${wpImg(1, "Cấu trúc website phòng khám đa khoa — danh mục chuyên kho
     </tr>
   </tbody>
 </table>
+
+${wpPhongKhamImg(4, "Giao diện thiết kế website phòng khám đa khoa — đội ngũ bác sĩ và form đặt lịch")}
 
 <h2 id="seo-local">SEO local &amp; Google Maps cho phòng khám</h2>
 

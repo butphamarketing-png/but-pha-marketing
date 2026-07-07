@@ -49,7 +49,7 @@ export function buildRewriteSeedPayload(article) {
   };
 }
 
-export async function seedRewriteArticle(article, { log = true } = {}) {
+export async function seedRewriteArticle(article, { log = true, revalidate = true } = {}) {
   const payload = buildRewriteSeedPayload(article);
   const check = payload._seoCheck;
   delete payload._seoCheck;
@@ -78,6 +78,6 @@ export async function seedRewriteArticle(article, { log = true } = {}) {
     console.log(`${existing ? "Updated" : "Created"}: ${article.slug} (${article.content.length} chars)`);
   }
 
-  await revalidateBlogAfterSeed(article.slug);
+  if (revalidate) await revalidateBlogAfterSeed(article.slug);
   return { slug: article.slug, seoOk: check.ok, hot: payload.hot };
 }
