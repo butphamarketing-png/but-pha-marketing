@@ -250,6 +250,21 @@ ${wpLogisticsImg(4, "Giao diện thiết kế website logistics — form báo gi
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-logistics-2026`,
+    label: "Checklist website logistics 2026",
+    desc: "20 mục tra cứu & báo giá B2B.",
+  },
+  {
+    href: `${SITE}/blog/template-website-logistics-2026`,
+    label: "Template website logistics 2026",
+    desc: "Cấu trúc 8 trang vận tải B2B.",
+  },
+  {
+    href: `${SITE}/blog/nganh/logistics`,
+    label: "Hub silo logistics",
+    desc: "Vận tải & kho bãi.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-thuong-mai-dien-tu`,
     label: "Website TMĐT",
     desc: "Shop cần logistics.",

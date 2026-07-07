@@ -315,6 +315,26 @@ ${wpThamMyImg(4, "Giao diện thiết kế website thẩm mỹ viện — before
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-tham-my-vien-2026`,
+    label: "Checklist thẩm mỹ viện 2026",
+    desc: "20 mục chuẩn y khoa & SEO.",
+  },
+  {
+    href: `${SITE}/blog/template-website-tham-my-vien-2026`,
+    label: "Template thẩm mỹ viện 2026",
+    desc: "Cấu trúc 8 trang aesthetic.",
+  },
+  {
+    href: `${SITE}/blog/nganh/tham-my`,
+    label: "Hub silo thẩm mỹ",
+    desc: "Tất cả bài ngành thẩm mỹ.",
+  },
+  {
+    href: `${SITE}/du-an/tham-my-thien-hoang-kim`,
+    label: "Case study Thiên Hoàng Kim",
+    desc: "Website aesthetic clinic + fanpage thẩm mỹ.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website`,
     label: "Thiết kế website — pillar",
     desc: "Quy trình và giá tổng quan.",

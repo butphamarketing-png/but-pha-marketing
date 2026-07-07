@@ -63,6 +63,10 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–12 triệu; landing theo dịch vụ và blog cập nhật quy định PCCC.",
 ])}
 
+<div class="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-5 my-6">
+<p><strong>Proof triển khai gần ngành:</strong> Cụm dự án dịch vụ địa phương của Bứt Phá ghi nhận tín hiệu tăng trưởng rõ ràng, tiêu biểu <a href="${SITE}/du-an/nha-khoa-dang-khoa">Nha Khoa Đăng Khoa</a> với <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ GSC. Với ngành PCCC, mô hình tương tự là: landing dịch vụ + portfolio dự án + form khảo sát hiện trường để tăng lead B2B.</p>
+</div>
+
 ${wpPcccImg(0, "Thiết kế website công ty PCCC — giải pháp phòng cháy chữa cháy toàn diện")}
 
 <h2 id="pccc-web-la-gi">Thiết kế website công ty PCCC là gì?</h2>
@@ -233,6 +237,21 @@ ${wpPcccImg(4, "SEO thiết kế website công ty PCCC theo dịch vụ và đ�
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-pccc-2026`,
+    label: "Checklist website PCCC 2026",
+    desc: "20 mục năng lực & SEO B2B.",
+  },
+  {
+    href: `${SITE}/blog/template-website-pccc-2026`,
+    label: "Template website PCCC 2026",
+    desc: "Cấu trúc 9 trang thi công B2B.",
+  },
+  {
+    href: `${SITE}/blog/nganh/pccc`,
+    label: "Hub silo PCCC",
+    desc: "Tất cả bài ngành phòng cháy.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-thiet-bi-pccc`,
     label: "Website thiết bị PCCC",
     desc: "Catalog bình chữa cháy, báo cháy.",
@@ -251,6 +270,11 @@ ${wpRelatedLinks([
     href: `${SITE}/blog/bao-gia-thiet-ke-website`,
     label: "Báo giá thiết kế website",
     desc: "Minh bạch chi phí web.",
+  },
+  {
+    href: `${SITE}/du-an/nha-khoa-dang-khoa`,
+    label: "Case study có số liệu GSC",
+    desc: "15,4K impressions và 471 clicks.",
   },
   {
     href: `${SITE}/website`,

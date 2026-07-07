@@ -268,7 +268,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     cta: {
       title: "Website cần được vận hành — không chỉ xây dựng",
       subtitle: "Đừng đợi sự cố mới quan tâm bảo trì.",
-      relatedHref: "/website/thietkewebsite",
+      relatedHref: "/website",
       relatedLabel: "Thiết kế website mới",
     },
   },
@@ -394,7 +394,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     cta: {
       title: "Giữ website sống động mỗi tháng",
       subtitle: "Content đều đặn giúp SEO bền vững.",
-      relatedHref: "/website/thietkewebsite",
+      relatedHref: "/website",
       relatedLabel: "Thiết kế website mới",
     },
   },
@@ -445,7 +445,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     cta: {
       title: "Biến traffic thành khách hàng thật",
       subtitle: "Landing page + ads + đo lường — một hệ thống.",
-      relatedHref: "/website/thietkewebsite",
+      relatedHref: "/website",
       relatedLabel: "Thiết kế landing page",
     },
   },

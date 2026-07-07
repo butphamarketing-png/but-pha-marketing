@@ -36,7 +36,7 @@ const nextConfig = {
       },
       {
         source: '/website/thiet-ke-website',
-        destination: '/website/thietkewebsite',
+        destination: '/website',
         permanent: true,
       },
       {

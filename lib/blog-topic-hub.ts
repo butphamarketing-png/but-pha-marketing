@@ -26,7 +26,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicSlug, BlogTopicHubConfig> = {
     title: "Tin tức Website & SEO",
     headline: "Thiết kế website, SEO & báo giá",
     description:
-      "Thư viện bài viết về thiết kế website, làm web chuẩn SEO, báo giá và tối ưu chuyển đổi cho doanh nghiệp Việt Nam.",
+      "Thư viện bài viết về thiết kế website, làm web chuẩn SEO, báo giá và tối ưu chuyển đổi. Bắt đầu từ pillar thiết kế website hoặc trang dịch vụ chính thức.",
     serviceHref: "/website",
     serviceLabel: "Dịch vụ thiết kế website",
   },

@@ -1,0 +1,25 @@
+{
+  "items": [
+    { "slug": "website", "url": "/website", "intent": "money", "priority": 101, "cluster": "website" },
+    { "slug": "thiet-ke-website", "url": "/blog/thiet-ke-website", "intent": "pillar", "priority": 100, "cluster": "website" },
+    { "slug": "bao-gia-thiet-ke-website", "url": "/blog/bao-gia-thiet-ke-website", "intent": "money", "priority": 99, "cluster": "website" },
+    { "slug": "thiet-ke-website-chuan-seo", "url": "/blog/thiet-ke-website-chuan-seo", "intent": "money", "priority": 98, "cluster": "website" },
+    { "slug": "thiet-ke-website-wordpress", "url": "/blog/thiet-ke-website-wordpress", "intent": "comparison", "priority": 95, "cluster": "website" },
+    { "slug": "thiet-ke-website-nha-khoa", "url": "/blog/thiet-ke-website-nha-khoa", "intent": "industry", "priority": 93, "cluster": "nha-khoa" },
+    { "slug": "checklist-website-nha-khoa-2026", "url": "/blog/checklist-website-nha-khoa-2026", "intent": "checklist", "priority": 91, "cluster": "nha-khoa" },
+    { "slug": "template-website-nha-khoa-2026", "url": "/blog/template-website-nha-khoa-2026", "intent": "template", "priority": 89, "cluster": "nha-khoa" },
+    { "slug": "thiet-ke-website-xay-dung-nha-thau", "url": "/blog/thiet-ke-website-xay-dung-nha-thau", "intent": "industry", "priority": 88, "cluster": "xay-dung" },
+    { "slug": "checklist-website-xay-dung-2026", "url": "/blog/checklist-website-xay-dung-2026", "intent": "checklist", "priority": 87, "cluster": "xay-dung" },
+    { "slug": "template-website-xay-dung-2026", "url": "/blog/template-website-xay-dung-2026", "intent": "template", "priority": 86, "cluster": "xay-dung" },
+    { "slug": "thiet-ke-website-spa", "url": "/blog/thiet-ke-website-spa", "intent": "industry", "priority": 85, "cluster": "spa" },
+    { "slug": "checklist-website-spa-2026", "url": "/blog/checklist-website-spa-2026", "intent": "checklist", "priority": 84, "cluster": "spa" },
+    { "slug": "template-website-spa-2026", "url": "/blog/template-website-spa-2026", "intent": "template", "priority": 83, "cluster": "spa" },
+    { "slug": "thiet-ke-website-pccc", "url": "/blog/thiet-ke-website-pccc", "intent": "industry", "priority": 82, "cluster": "pccc" },
+    { "slug": "checklist-website-pccc-2026", "url": "/blog/checklist-website-pccc-2026", "intent": "checklist", "priority": 80, "cluster": "pccc" },
+    { "slug": "template-website-pccc-2026", "url": "/blog/template-website-pccc-2026", "intent": "template", "priority": 79, "cluster": "pccc" },
+    { "slug": "seo-website-pillar", "url": "/seo-website", "intent": "service", "priority": 90, "cluster": "seo-website" },
+    { "slug": "seo-website-hcm", "url": "/seo-website/dia-phuong/ho-chi-minh", "intent": "local", "priority": 81, "cluster": "seo-website" },
+    { "slug": "marketing-automation-pillar", "url": "/marketing-automation", "intent": "service", "priority": 78, "cluster": "automation" },
+    { "slug": "ai-marketing-pillar", "url": "/ai-marketing", "intent": "service", "priority": 77, "cluster": "ai" }
+  ]
+}

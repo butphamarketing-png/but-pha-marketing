@@ -24,6 +24,8 @@ import {
   X,
 } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
+import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
+import { getFeaturedCaseStudies } from "@/lib/case-studies";
 import { SiFacebook } from "react-icons/si";
 import { AnimatePresence, motion } from "framer-motion";
 import { sanitizeSlideshowItems, DEFAULT_HERO_SLIDE, DEFAULT_INTRO_IMAGE } from "@/lib/media-assets";
@@ -273,8 +275,8 @@ export default function HomePageClient() {
   const serviceCards = [
     {
       key: "website",
-      title: "Website",
-      description: "Thiết kế website chuẩn SEO, tối ưu chuyển đổi và trải nghiệm người dùng.",
+      title: "Thiết kế website",
+      description: "Dịch vụ thiết kế website chuẩn SEO, tối ưu chuyển đổi và trải nghiệm người dùng.",
       image: "/Website.png",
       href: "/website",
       accent: "from-emerald-500/20",
@@ -310,6 +312,7 @@ export default function HomePageClient() {
 
   const topReviews = reviews.slice(0, 3);
   const topBlogs = blogs.slice(0, 4);
+  const featuredCaseStudies = useMemo(() => getFeaturedCaseStudies(), []);
 
   return (
     <>
@@ -411,7 +414,7 @@ export default function HomePageClient() {
           <section id="hero" className="relative w-full overflow-hidden">
             <h1 className="sr-only">
               {settings?.heroTitle?.trim() ||
-                `${brandName} — Giải pháp marketing thực chiến cho doanh nghiệp Việt Nam`}
+                `${brandName} — Thiết kế website & marketing thực chiến cho doanh nghiệp Việt Nam`}
             </h1>
             <div className="relative aspect-[16/9] w-full overflow-hidden">
               <img
@@ -460,7 +463,11 @@ export default function HomePageClient() {
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-violet-600">Bứt Phá</span> của bạn
                   </motion.h2>
                   <motion.p variants={fadeUpChild} className="text-lg font-medium leading-relaxed text-slate-600">
-                    Chúng tôi không chỉ cung cấp dịch vụ marketing rời rạc. Bứt Phá Marketing xây dựng hệ thống tăng trưởng toàn diện, giúp doanh nghiệp tối ưu hóa từng điểm chạm trên hành trình khách hàng.
+                    Chúng tôi không chỉ cung cấp dịch vụ marketing rời rạc. Bứt Phá Marketing xây dựng hệ thống tăng trưởng toàn diện — từ{" "}
+                    <Link href="/website" className="font-semibold text-violet-700 hover:text-violet-900 hover:underline">
+                      thiết kế website
+                    </Link>{" "}
+                    chuẩn SEO đến Facebook Ads và Google Maps — giúp doanh nghiệp tối ưu từng điểm chạm trên hành trình khách hàng.
                   </motion.p>
                 </div>
 
@@ -557,8 +564,54 @@ export default function HomePageClient() {
             </div>
           </section>
 
+          <section id="du-an" className="brand-section-muted">
+            <SectionWaveDivider from="#ffffff" to="#eef2ff" />
+            <div className="brand-section-inner px-4 py-16 lg:px-6 lg:py-20">
+              <motion.div
+                variants={staggerIntro}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT_ONCE}
+                className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+              >
+                <div>
+                  <motion.p variants={fadeUpChild} className="brand-eyebrow">
+                    Dự án tiêu biểu
+                  </motion.p>
+                  <motion.h2 variants={fadeUpChild} className="mt-2 text-3xl font-bold text-indigo-950 md:text-4xl">
+                    Case study có số liệu thật
+                  </motion.h2>
+                  <motion.p variants={fadeUpChild} className="mt-3 max-w-2xl text-slate-600">
+                    Website + SEO + Facebook — minh bạch GSC và kết quả đo lường, không chỉ portfolio ảnh.
+                  </motion.p>
+                </div>
+                <motion.div variants={fadeUpChild}>
+                  <Link href="/du-an" className="brand-btn-secondary px-5 py-3 text-sm font-semibold">
+                    Xem tất cả dự án
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </motion.div>
+              </motion.div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {featuredCaseStudies.map((study, i) => (
+                  <motion.div
+                    key={study.slug}
+                    variants={scaleIn}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={VIEWPORT_ONCE}
+                    custom={i * 0.08}
+                  >
+                    <CaseStudyCard study={study} />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
           <section id="why-choose" className="brand-section-white">
-            <SectionWaveDivider from="#f4f6fc" to="#ffffff" />
+            <SectionWaveDivider from="#eef2ff" to="#ffffff" />
             <div className="brand-section-inner px-8 py-24 lg:px-12">
             <motion.div
               variants={staggerIntro}
@@ -809,6 +862,12 @@ export default function HomePageClient() {
               <div>
                 <h4 className="text-sm font-bold uppercase tracking-widest text-violet-300 mb-6">Dịch vụ</h4>
                 <ul className="space-y-4">
+                  <li>
+                    <Link href="/blog/thiet-ke-website" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      Hướng dẫn thiết kế website
+                    </Link>
+                  </li>
                   <li>
                     <Link href="/website" className="text-violet-100 hover:text-white transition-all hover:pl-2 flex items-center gap-2 group">
                       <span className="w-1 h-1 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity"></span>

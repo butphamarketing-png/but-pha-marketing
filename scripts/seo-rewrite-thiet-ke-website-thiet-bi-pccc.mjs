@@ -234,6 +234,16 @@ ${wpPcccImg(4, "SEO thiết kế website thiết bị PCCC — bình chữa chá
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-pccc-2026`,
+    label: "Checklist website PCCC 2026",
+    desc: "20 mục năng lực & SEO.",
+  },
+  {
+    href: `${SITE}/blog/nganh/pccc`,
+    label: "Hub silo PCCC",
+    desc: "Tất cả bài ngành phòng cháy.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-pccc`,
     label: "Website công ty PCCC",
     desc: "Dịch vụ thi công hệ thống.",

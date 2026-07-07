@@ -3,7 +3,7 @@ import { createServiceLandingPage, generateLandingMetadata } from "@/lib/service
 const PATH = "website/thietkewebsite";
 
 export async function generateMetadata() {
-  return generateLandingMetadata(PATH);
+  return generateLandingMetadata(PATH, { canonicalPath: "/website" });
 }
 
 export default function Page() {

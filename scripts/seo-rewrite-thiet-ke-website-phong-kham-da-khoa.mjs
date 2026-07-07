@@ -309,6 +309,26 @@ ${wpPhongKhamImg(4, "Giao diện thiết kế website phòng khám đa khoa — 
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-phong-kham-2026`,
+    label: "Checklist website phòng khám 2026",
+    desc: "20 mục đặt lịch & SEO local.",
+  },
+  {
+    href: `${SITE}/blog/template-website-phong-kham-2026`,
+    label: "Template website phòng khám 2026",
+    desc: "Cấu trúc 9 trang đa khoa.",
+  },
+  {
+    href: `${SITE}/blog/nganh/phong-kham`,
+    label: "Hub silo phòng khám",
+    desc: "Y tế & đặt khám online.",
+  },
+  {
+    href: `${SITE}/du-an/nha-khoa-dang-khoa`,
+    label: "Case study Nha Khoa Đăng Khoa",
+    desc: "471 click GSC — SEO y tế.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website`,
     label: "Thiết kế website — pillar",
     desc: "Quy trình và giá tổng quan.",

@@ -264,6 +264,16 @@ ${wpCoKhiImg(4, "Giao diện thiết kế website gia công CNC — máy móc v�
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-co-khi-2026`,
+    label: "Checklist website cơ khí 2026",
+    desc: "20 mục catalog & gia công CNC.",
+  },
+  {
+    href: `${SITE}/blog/nganh/co-khi`,
+    label: "Hub silo cơ khí",
+    desc: "Gia công CNC & xưởng.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-co-khi`,
     label: "Website cơ khí",
     desc: "Catalog B2B tổng quát.",

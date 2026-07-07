@@ -243,6 +243,26 @@ ${wpNhaKhoaImg(4, "Giao diện thiết kế website nha khoa — đội ngũ bá
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-nha-khoa-2026`,
+    label: "Checklist website nha khoa 2026",
+    desc: "20 mục chuẩn SEO & đặt lịch.",
+  },
+  {
+    href: `${SITE}/blog/template-website-nha-khoa-2026`,
+    label: "Template website nha khoa 2026",
+    desc: "Cấu trúc 8 trang mẫu.",
+  },
+  {
+    href: `${SITE}/blog/nganh/nha-khoa`,
+    label: "Hub silo nha khoa",
+    desc: "Tất cả bài ngành nha khoa.",
+  },
+  {
+    href: `${SITE}/du-an/nha-khoa-dang-khoa`,
+    label: "Case study Nha Khoa Đăng Khoa",
+    desc: "471 click GSC, SEO implant Tây Ninh.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-nha-khoa-nieng-rang`,
     label: "Website niềng răng",
     desc: "Chuyên chỉnh nha.",

@@ -16,7 +16,8 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
     href: "/website",
     children: [
       { label: "Tên miền website", href: "/website/ten-mien-website" },
-      { label: "Thiết kế Website", href: "/website/thietkewebsite" },
+      { label: "Thiết kế website", href: "/website" },
+      { label: "Website theo ngành", href: "/website/nganh/nha-khoa" },
       { label: "Vận hành website", href: "/website/van-hanh-website" },
       { label: "Chăm sóc Website", href: "/website/cham-soc-website" },
       { label: "Quảng cáo Website", href: "/website/quang-cao-website" },
@@ -39,11 +40,44 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
       { label: "Quảng cáo Google Maps", href: "/google-maps/quang-cao-google-maps" },
     ],
   },
+  {
+    label: "SEO Website",
+    href: "/seo-website",
+    children: [
+      { label: "Dịch vụ SEO Website", href: "/seo-website" },
+      { label: "Technical SEO", href: "/seo-website/technical-seo" },
+      { label: "SEO Content", href: "/seo-website/seo-content" },
+      { label: "SEO theo địa phương", href: "/seo-website/dia-phuong/ho-chi-minh" },
+      { label: "Kiến thức SEO", href: "/kien-thuc/seo-website" },
+    ],
+  },
+  {
+    label: "Automation",
+    href: "/marketing-automation",
+    children: [
+      { label: "Marketing Automation", href: "/marketing-automation" },
+      { label: "Lead Nurturing", href: "/marketing-automation/lead-nurturing" },
+      { label: "CRM Automation", href: "/marketing-automation/crm-automation" },
+      { label: "Kiến thức Automation", href: "/kien-thuc/marketing-automation" },
+    ],
+  },
+  {
+    label: "AI Marketing",
+    href: "/ai-marketing",
+    children: [
+      { label: "AI Marketing", href: "/ai-marketing" },
+      { label: "AI Content Ops", href: "/ai-marketing/ai-content" },
+      { label: "AI Search Optimization", href: "/ai-marketing/ai-search-optimization" },
+      { label: "Kiến thức AI", href: "/kien-thuc/ai-marketing" },
+    ],
+  },
 ];
 
 export const SIMPLE_NAV_LINKS: SiteNavLink[] = [
   { label: "Trang Chủ", href: "/" },
   { label: "Giới Thiệu", href: "/gioi-thieu" },
+  { label: "Dự Án", href: "/du-an" },
+  { label: "Kiến Thức", href: "/kien-thuc" },
   { label: "Tin Tức", href: "/blog" },
   { label: "Liên Hệ", href: "/lien-he" },
 ];

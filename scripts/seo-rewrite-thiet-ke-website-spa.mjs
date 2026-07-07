@@ -245,6 +245,31 @@ ${wpThamMyImg(4, "Giao diện thiết kế website spa — gallery phòng và fo
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-spa-2026`,
+    label: "Checklist website spa 2026",
+    desc: "20 mục booking & SEO local.",
+  },
+  {
+    href: `${SITE}/blog/template-website-spa-2026`,
+    label: "Template website spa 2026",
+    desc: "Cấu trúc 7 trang booking.",
+  },
+  {
+    href: `${SITE}/blog/nganh/spa`,
+    label: "Hub silo spa & làm đẹp",
+    desc: "Spa, phun xăm, nail — tất cả bài.",
+  },
+  {
+    href: `${SITE}/du-an/halee-tram`,
+    label: "Case study Halee Trâm",
+    desc: "Nail nối mi & academy làm đẹy.",
+  },
+  {
+    href: `${SITE}/du-an/phuoc-lai-luxury`,
+    label: "Case study Phước Lai Luxury",
+    desc: "Website spa luxury & phun xăm Vũng Tàu.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website`,
     label: "Thiết kế website — pillar",
     desc: "Quy trình và giá tổng quan.",

@@ -55,6 +55,8 @@ export function isQualitySeoArticle(blog: Pick<ServerBlogItem, "slug" | "keyword
 export function blogSitemapPriority(
   blog: Pick<ServerBlogItem, "slug" | "keywordsMain" | "hot">,
 ): number {
+  if (blog.slug === "thiet-ke-website") return 0.99;
+  if (blog.slug === "bao-gia-thiet-ke-website") return 0.97;
   if (PILLAR_SLUGS.has(blog.slug || "")) return 0.95;
   if (blog.hot) return 0.9;
   if (isQualitySeoArticle(blog)) return 0.85;

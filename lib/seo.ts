@@ -3,6 +3,39 @@ import { createServerClient } from "./supabase";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.butphamarketing.com";
 const BASE_URL = SITE_URL;
+const ADMIN_SETTINGS_TTL_MS = 10 * 60 * 1000;
+
+type AdminSettingsValue = {
+  seoPages?: Record<string, { title?: string; desc?: string; keywords?: string }>;
+  googleConsole?: string;
+};
+
+let adminSettingsCache: { expiresAt: number; value: AdminSettingsValue | null } = {
+  expiresAt: 0,
+  value: null,
+};
+
+async function getAdminSettingsCached(): Promise<AdminSettingsValue | null> {
+  if (adminSettingsCache.expiresAt > Date.now()) return adminSettingsCache.value;
+
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "admin_settings")
+      .maybeSingle();
+
+    const value = (data?.value ?? null) as AdminSettingsValue | null;
+    adminSettingsCache = {
+      expiresAt: Date.now() + ADMIN_SETTINGS_TTL_MS,
+      value,
+    };
+    return value;
+  } catch {
+    return null;
+  }
+}
 
 type SeoInput = {
   title: string;
@@ -18,14 +51,8 @@ export async function getDynamicMetadata(path: string, fallback: Partial<SeoInpu
   let dynamicSeo = null;
 
   try {
-    const supabase = createServerClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "admin_settings")
-      .maybeSingle();
-
-    const seoPages = data?.value?.seoPages ?? {};
+    const settings = await getAdminSettingsCached();
+    const seoPages = settings?.seoPages ?? {};
     dynamicSeo = seoPages[key] || (key === "google-maps" ? seoPages.googlemaps : undefined) || null;
   } catch (error) {
     console.error(`[SEO] Failed to fetch dynamic metadata for ${path}:`, error);
@@ -58,13 +85,8 @@ export async function getGoogleSiteVerification(): Promise<string[]> {
   if (fromEnv?.length) fromEnv.forEach((c) => codes.add(c));
 
   try {
-    const supabase = createServerClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "admin_settings")
-      .maybeSingle();
-    const code = typeof data?.value?.googleConsole === "string" ? data.value.googleConsole.trim() : "";
+    const settings = await getAdminSettingsCached();
+    const code = typeof settings?.googleConsole === "string" ? settings.googleConsole.trim() : "";
     if (code) codes.add(code);
   } catch (error) {
     console.error("[SEO] Failed to fetch Google site verification:", error);

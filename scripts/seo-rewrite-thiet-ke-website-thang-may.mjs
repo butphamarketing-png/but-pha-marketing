@@ -256,6 +256,16 @@ ${wpThangMayImg(4, "SEO thiết kế website công ty thang máy — lắp đặ
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-thang-may-2026`,
+    label: "Checklist website thang máy 2026",
+    desc: "20 mục catalog & dự án.",
+  },
+  {
+    href: `${SITE}/blog/nganh/thang-may`,
+    label: "Hub silo thang máy",
+    desc: "Tất cả bài ngành thang máy.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-cong-ty-xay-dung`,
     label: "Website công ty xây dựng",
     desc: "Ngành xây dựng liên quan.",

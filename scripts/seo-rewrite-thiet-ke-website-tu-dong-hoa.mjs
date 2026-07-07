@@ -358,6 +358,16 @@ ${wpTuDongHoaImg(4, "Giao diện thiết kế website công ty tự động hóa
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-tu-dong-hoa-2026`,
+    label: "Checklist website tự động hóa 2026",
+    desc: "20 mục PLC/SCADA & dự án.",
+  },
+  {
+    href: `${SITE}/blog/nganh/tu-dong-hoa`,
+    label: "Hub silo tự động hóa",
+    desc: "Giải pháp nhà máy.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-co-khi`,
     label: "Thiết kế website cơ khí",
     desc: "Catalog B2B & form RFQ báo giá.",

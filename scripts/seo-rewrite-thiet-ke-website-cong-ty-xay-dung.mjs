@@ -233,6 +233,11 @@ ${wpKienTrucImg(4, "SEO local thiết kế website công ty xây dựng theo t�
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/du-an/kien-truc-sao-khue`,
+    label: "Case study Kiến Trúc Sao Khuê",
+    desc: "Website xây dựng thực tế + số GSC.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-cong-ty`,
     label: "Website công ty",
     desc: "Corporate tổng quan.",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { CustomWebsiteModal } from "@/components/shared/CustomWebsiteModal";
 import { WebsiteOperationSection } from "@/components/shared/WebsiteOperationSection";
@@ -17,8 +18,8 @@ const config: PlatformConfig = {
   name: "Website",
   color: PLATFORM_COLORS.website,
   auditPlatform: "website",
-  heroTitle: "Website chuẩn SEO",
-  heroSubtitle: "Thiết kế nhanh, tối ưu chuyển đổi và bảo trì bền vững",
+  heroTitle: "Thiết kế website chuẩn SEO",
+  heroSubtitle: "Dịch vụ thiết kế website chuyên nghiệp — tối ưu chuyển đổi và bảo trì bền vững",
   vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
   mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
   responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",
@@ -59,7 +60,52 @@ export default function WebsitePage() {
   return (
     <PlatformPage config={config}>
       <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
-        
+        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 p-6 md:p-10">
+          <p className="brand-eyebrow mb-3">Dịch vụ #1 — Head term</p>
+          <h2 className="text-3xl font-black tracking-tight text-indigo-950 md:text-4xl">
+            Thiết kế website chuyên nghiệp cho doanh nghiệp
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
+            <strong>Thiết kế website</strong> tại Bứt Phá Marketing gồm khảo sát, UI/UX, lập trình chuẩn SEO,
+            tích hợp form/Zalo và bàn giao quy trình vận hành. Đây là money page chính cho từ khóa volume cao —
+            đọc hướng dẫn chi tiết tại pillar hoặc nhận báo giá ngay.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/lien-he" className="brand-btn-primary">
+              Tư vấn thiết kế website
+            </Link>
+            <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
+              Hướng dẫn thiết kế website A-Z
+            </Link>
+            <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
+              Báo giá thiết kế website
+            </Link>
+            <Link href="/du-an" className="brand-btn-secondary">
+              Case study có số liệu
+            </Link>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Proof thực chiến</p>
+          <h2 className="mt-2 text-2xl font-bold text-emerald-900">Thiết kế website có số liệu SEO</h2>
+          <ul className="mt-4 space-y-2 text-emerald-950">
+            <li>Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search sau triển khai website + SEO.</li>
+            <li>Mô hình: website chuẩn kỹ thuật → content cluster → internal link theo silo ngành.</li>
+            <li>
+              So sánh gói và quy trình tại{" "}
+              <Link href="/blog/thiet-ke-website" className="font-semibold underline">
+                pillar thiết kế website
+              </Link>{" "}
+              hoặc xem{" "}
+              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold underline">
+                case study nha khoa
+              </Link>
+              .
+            </li>
+          </ul>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Chuẩn đoán website miễn phí"
@@ -78,6 +124,31 @@ export default function WebsitePage() {
         />
 
         <div className="space-y-32">
+          <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Programmatic SEO</p>
+            <h2 className="mt-2 text-2xl font-bold text-indigo-950">Landing theo ngành</h2>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link href="/blog/chu-de/website" className="brand-btn-secondary">
+                Hub chủ đề Website
+              </Link>
+              <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
+                Pillar: Thiết kế website
+              </Link>
+              <Link href="/seo-website" className="brand-btn-secondary">
+                SEO Website
+              </Link>
+              <Link href="/website/nganh/nha-khoa" className="brand-btn-secondary">
+                Nha khoa
+              </Link>
+              <Link href="/website/nganh/xay-dung" className="brand-btn-secondary">
+                Xây dựng
+              </Link>
+              <Link href="/website/nganh/logistics" className="brand-btn-secondary">
+                Logistics (pilot)
+              </Link>
+            </div>
+          </section>
+
           {/* Custom & Domain Section */}
           <div id="domain" className="grid gap-6 scroll-mt-24 md:grid-cols-2">
             {/* Custom Website Button */}

@@ -1,13 +1,27 @@
 import { getDynamicMetadata } from "@/lib/seo";
+import { WebsiteSchema } from "./WebsiteSchema";
 
 export async function generateMetadata() {
   return getDynamicMetadata("/website", {
-    title: "Dịch vụ Website Marketing, thiết kế web và SEO website",
-    description: "Dịch vụ Website Marketing bao gồm thiết kế website, tối ưu SEO website và bảo trì kỹ thuật để tăng tốc độ tải trang, trải nghiệm người dùng và chuyển đổi kinh doanh.",
-    keywords: ["dịch vụ website marketing", "thiết kế website", "seo website", "bảo trì website", "thiết kế web chuẩn seo"],
+    title: "Thiết kế website chuyên nghiệp chuẩn SEO | Bứt Phá Marketing",
+    description:
+      "Dịch vụ thiết kế website cho doanh nghiệp: giao diện chuyên nghiệp, chuẩn SEO, tốc độ nhanh, báo giá 3–12 triệu. Tư vấn miễn phí — Bứt Phá Marketing.",
+    keywords: [
+      "thiết kế website",
+      "làm website",
+      "thiết kế web",
+      "báo giá thiết kế website",
+      "dịch vụ thiết kế website",
+      "website chuẩn seo",
+    ],
   });
 }
 
 export default function WebsiteLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <WebsiteSchema />
+      {children}
+    </>
+  );
 }

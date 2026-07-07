@@ -12,7 +12,7 @@ import {
   SITE,
 } from "./seo-wp-structure.mjs";
 
-const KEYWORD = "thiết kế website chuẩn seo";
+const KEYWORD = "thiết kế website chuẩn SEO";
 const TITLE = "Thiết Kế Website Chuẩn SEO Giúp Tăng Thứ Hạng Google";
 
 export const REWRITE_THIET_KE_WEBSITE_CHUAN_SEO = {
@@ -61,6 +61,19 @@ ${wpKeyTakeaways([
   "Core Web Vitals (LCP, INP, CLS) ảnh hưởng trải nghiệm và khả năng cạnh tranh trên SERP.",
   "Thứ hạng Google thường cần 3–6 tháng nội dung + kỹ thuật ổn — tránh cam kết top 7 ngày.",
 ])}
+
+<div class="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-5 my-6">
+<p><strong>Proof thực chiến:</strong> Dự án <a href="${SITE}/du-an/nha-khoa-dang-khoa">Nha Khoa Đăng Khoa</a> ghi nhận <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search sau giai đoạn tối ưu cấu trúc web + nội dung chuẩn SEO. Tham khảo thêm <a href="${SITE}/du-an/kien-truc-sao-khue">Kiến Trúc Sao Khuê</a> và <a href="${SITE}/du-an/tham-my-thien-hoang-kim">Thẩm Mỹ Thiên Hoàng Kim</a> để xem mô hình triển khai theo ngành.</p>
+</div>
+
+<div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 my-6">
+<p><strong>Liên kết bắt buộc trong cụm Website:</strong></p>
+<ul class="list-disc pl-6 mt-2 space-y-1">
+  <li><a href="${SITE}/seo-website">Dịch vụ SEO Website</a></li>
+  <li><a href="${SITE}/blog/chu-de/website">Hub chủ đề Website</a></li>
+  <li><a href="${SITE}/lien-he">Liên hệ tư vấn</a></li>
+</ul>
+</div>
 
 ${wpImg(1, "Thiết kế website chuẩn SEO giúp tăng thứ hạng Google")}
 

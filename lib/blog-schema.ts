@@ -89,7 +89,18 @@ export function buildBlogJsonLd({ blog, canonical, baseUrl, image }: BuildBlogJs
           }
         : {}),
       ...(wordCount ? { wordCount } : {}),
-      author: [{ "@type": "Organization", name: "Bứt Phá Marketing", url: baseUrl }],
+      author: [
+        {
+          "@type": "Organization",
+          name: "Bứt Phá Marketing",
+          url: baseUrl,
+        },
+      ],
+      editor: {
+        "@type": "Organization",
+        name: "Bứt Phá Marketing",
+        url: baseUrl,
+      },
       publisher: {
         "@type": "Organization",
         name: "Bứt Phá Marketing",

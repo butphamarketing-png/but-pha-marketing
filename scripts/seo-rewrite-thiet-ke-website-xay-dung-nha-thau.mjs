@@ -228,6 +228,26 @@ ${wpKienTrucImg(4, "Bảng giá thiết kế website xây dựng nhà thầu min
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-xay-dung-2026`,
+    label: "Checklist website xây dựng 2026",
+    desc: "20 mục gallery, báo giá, SEO local.",
+  },
+  {
+    href: `${SITE}/blog/template-website-xay-dung-2026`,
+    label: "Template website xây dựng 2026",
+    desc: "Cấu trúc 9 trang nhà thầu.",
+  },
+  {
+    href: `${SITE}/blog/nganh/xay-dung`,
+    label: "Hub silo xây dựng",
+    desc: "Tất cả bài ngành xây dựng.",
+  },
+  {
+    href: `${SITE}/du-an/kien-truc-sao-khue`,
+    label: "Case study Kiến Trúc Sao Khuê",
+    desc: "Website xây dựng + SEO đa tỉnh — có số GSC.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-cong-ty-xay-dung`,
     label: "Website công ty xây dựng",
     desc: "Góc nhìn corporate.",

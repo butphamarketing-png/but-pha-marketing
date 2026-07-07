@@ -384,7 +384,8 @@ export default function AboutPageClient() {
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.24em] text-slate-900">Dịch vụ</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-400">
-              <li><Link href="/website">Thiết kế Website</Link></li>
+              <li><Link href="/website">Thiết kế website</Link></li>
+              <li><Link href="/blog/thiet-ke-website">Hướng dẫn thiết kế website</Link></li>
               <li><Link href="/facebook">Quản trị Fanpage</Link></li>
               <li><Link href="/google-maps">Google Maps Marketing</Link></li>
               <li><Link href="/blog">AI Content / SEO</Link></li>

@@ -1,0 +1,84 @@
+{
+  "websiteIndustry": [
+    {
+      "slug": "nha-khoa",
+      "title": "Thiết kế website nha khoa chuẩn SEO",
+      "description": "Landing theo ngành nha khoa tập trung chuyển đổi đặt lịch và SEO local.",
+      "primaryKeyword": "thiết kế website nha khoa",
+      "wordCount": 1850,
+      "faqCount": 5,
+      "internalLinkCount": 12,
+      "proofCount": 3,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    },
+    {
+      "slug": "xay-dung",
+      "title": "Thiết kế website công ty xây dựng",
+      "description": "Landing theo ngành xây dựng tập trung hồ sơ năng lực và lead B2B.",
+      "primaryKeyword": "thiết kế website xây dựng",
+      "wordCount": 1680,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    },
+    {
+      "slug": "logistics",
+      "title": "Thiết kế website logistics và vận tải",
+      "description": "Landing pilot cho ngành logistics, cần bổ sung thêm bằng chứng dự án.",
+      "primaryKeyword": "thiết kế website logistics",
+      "wordCount": 940,
+      "faqCount": 2,
+      "internalLinkCount": 6,
+      "proofCount": 0,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "medium"
+    }
+  ],
+  "localSeo": [
+    {
+      "slug": "ho-chi-minh",
+      "title": "SEO Website tại TP.HCM",
+      "description": "Landing local SEO tại TP.HCM cho doanh nghiệp SME.",
+      "primaryKeyword": "seo website tphcm",
+      "wordCount": 1720,
+      "faqCount": 4,
+      "internalLinkCount": 11,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    },
+    {
+      "slug": "ha-noi",
+      "title": "SEO Website tại Hà Nội",
+      "description": "Landing local SEO tại Hà Nội theo cụm ngành và intent chuyển đổi.",
+      "primaryKeyword": "seo website ha noi",
+      "wordCount": 1650,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    },
+    {
+      "slug": "da-nang",
+      "title": "SEO Website tại Đà Nẵng",
+      "description": "Landing pilot local SEO Đà Nẵng.",
+      "primaryKeyword": "seo website da nang",
+      "wordCount": 880,
+      "faqCount": 1,
+      "internalLinkCount": 5,
+      "proofCount": 0,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "medium"
+    }
+  ]
+}

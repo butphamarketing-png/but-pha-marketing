@@ -22,7 +22,7 @@ export const SEO_PILLARS = [
     keyword: "SEO",
     label: "SEO — tối ưu lên top Google",
     topic: "website",
-    serviceHref: "/website/thietkewebsite",
+    serviceHref: "/seo-website",
     serviceLabel: "Dịch vụ SEO website",
   },
   {

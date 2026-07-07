@@ -277,6 +277,21 @@ ${wpCoKhiImg(4, "Giao diện thiết kế website cơ khí — năng lực sản
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-co-khi-2026`,
+    label: "Checklist website cơ khí 2026",
+    desc: "20 mục catalog & gia công CNC.",
+  },
+  {
+    href: `${SITE}/blog/template-website-co-khi-2026`,
+    label: "Template website cơ khí 2026",
+    desc: "Cấu trúc 8 trang gia công B2B.",
+  },
+  {
+    href: `${SITE}/blog/nganh/co-khi`,
+    label: "Hub silo cơ khí",
+    desc: "Gia công CNC & xưởng.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-doanh-nghiep`,
     label: "Website doanh nghiệp",
     desc: "B2B corporate tổng quát.",

@@ -895,9 +895,25 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
     },
   };
 
+  const faqLd =
+    config.faqs?.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: config.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: { "@type": "Answer", text: faq.a },
+          })),
+        }
+      : null;
+
   return (
     <SubPageLayout platformName={config.name} primaryColor={platformColor} customSections={config.customSections}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      {faqLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      )}
 
       <h1 className="sr-only">{pageH1}</h1>
 

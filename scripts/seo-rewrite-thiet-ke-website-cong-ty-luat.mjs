@@ -252,6 +252,21 @@ ${wpLuatImg(4, "Giao diện thiết kế website công ty luật — form tư v�
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-luat-2026`,
+    label: "Checklist website luật 2026",
+    desc: "20 mục uy tín & SEO local.",
+  },
+  {
+    href: `${SITE}/blog/template-website-luat-2026`,
+    label: "Template website luật 2026",
+    desc: "Cấu trúc 8 trang văn phòng luật.",
+  },
+  {
+    href: `${SITE}/blog/nganh/luat`,
+    label: "Hub silo luật",
+    desc: "Tất cả bài ngành pháp lý.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-phap-luat-luat-su`,
     label: "Website pháp lý",
     desc: "Góc nhìn văn phòng luật.",

@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 import HomePageClient from "./HomePageClient";
 import { getDynamicMetadata, SITE_URL } from "@/lib/seo";
@@ -6,12 +6,15 @@ import { SITE_CONTACT } from "@/lib/site-contact";
 
 export async function generateMetadata() {
   return getDynamicMetadata("/", {
-    title: "Bứt Phá Marketing | Giải pháp marketing thực chiến",
-    description: "Agency marketing toàn diện tại Việt Nam. Dịch vụ Facebook, Website, Local SEO và chiến lược tăng trưởng doanh thu.",
+    title: "Thiết kế website & Marketing thực chiến | Bứt Phá Marketing",
+    description:
+      "Agency thiết kế website chuẩn SEO, Facebook Ads, Google Maps và marketing automation. Tư vấn miễn phí — tăng trưởng doanh thu bền vững.",
     keywords: [
+      "thiết kế website",
+      "làm website",
+      "dịch vụ thiết kế website",
       "marketing",
       "facebook ads",
-      "website marketing",
       "local seo",
       "agency marketing",
     ],
@@ -47,6 +50,12 @@ export default function Home() {
         inLanguage: "vi-VN",
         publisher: {
           "@id": `${baseUrl}#organization`,
+        },
+        about: {
+          "@type": "Service",
+          name: "Thiết kế website",
+          url: `${baseUrl}/website`,
+          provider: { "@id": `${baseUrl}#organization` },
         },
       },
     ],

@@ -41,7 +41,34 @@ ${toc([
 
 <p><strong>Thiết kế website</strong> là quá trình xây dựng một hệ thống trang web hoàn chỉnh — từ giao diện, trải nghiệm người dùng (UI/UX), lập trình chức năng đến tối ưu SEO — nhằm biến website thành kênh bán hàng và xây dựng thương hiệu hoạt động 24/7. Trong bối cảnh khách hàng tìm kiếm <em>"thiet ke website"</em>, <em>"báo giá thiết kế website"</em> hoặc so sánh đối thủ trên Google trước khi gọi điện, một website chậm, thiếu thông tin hoặc không hiển thị tốt trên điện thoại có thể khiến bạn mất lead ngay từ lần click đầu tiên.</p>
 
+<div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 my-6" id="quick-answer">
+<p class="font-bold text-emerald-900">Trả lời nhanh: Thiết kế website là gì và giá bao nhiêu?</p>
+<p class="mt-2 text-emerald-950"><strong>Thiết kế website</strong> là xây dựng website hoàn chỉnh (giao diện + chức năng + SEO) để doanh nghiệp có kênh tìm khách trên Google 24/7. Giá tham chiếu 2026: <strong>3–12 triệu</strong> tùy gói; thời gian 2–4 tuần cho website doanh nghiệp. Cần tư vấn ngay → <a href="https://www.butphamarketing.com/website">dịch vụ thiết kế website</a> hoặc <a href="https://www.butphamarketing.com/lien-he">liên hệ</a>.</p>
+</div>
+
+<div class="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-5 my-6">
+<p class="font-bold text-emerald-900">Proof thực chiến — thiết kế website có kết quả SEO</p>
+<ul class="mt-2 list-disc pl-5 space-y-1 text-emerald-950">
+  <li>Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search sau triển khai website + SEO.</li>
+  <li>Mô hình: website chuẩn kỹ thuật → content cluster → internal link theo silo ngành.</li>
+  <li>Xem <a href="https://www.butphamarketing.com/du-an/nha-khoa-dang-khoa">case study nha khoa</a> và <a href="https://www.butphamarketing.com/du-an">dự án tiêu biểu</a>.</li>
+</ul>
+</div>
+
 <p>Bài viết này là hướng dẫn pillar dành cho chủ doanh nghiệp, marketer và người mới kinh doanh tại Việt Nam. Bạn sẽ nắm được: website cần những gì, triển khai ra sao, chi phí thực tế bao nhiêu, và cách chọn đơn vị <strong>thiết kế website</strong> uy tín — không cam kết ảo, không checklist chung chung.</p>
+
+<div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 my-6">
+<p><strong>Cụm từ khóa ưu tiên:</strong> Nếu bạn đang tìm từ khóa volume cao liên quan <strong>thiết kế website</strong>, nên đọc theo thứ tự:</p>
+<ul class="list-disc pl-6 mt-2 space-y-1">
+  <li><a href="https://www.butphamarketing.com/website">Dịch vụ thiết kế website (money page)</a> — conversion intent</li>
+  <li><a href="https://www.butphamarketing.com/blog/bao-gia-thiet-ke-website">Báo giá thiết kế website</a> (commercial intent)</li>
+  <li><a href="https://www.butphamarketing.com/blog/thiet-ke-website-chuan-seo">Thiết kế website chuẩn SEO</a> (informational + commercial)</li>
+  <li><a href="https://www.butphamarketing.com/blog/thiet-ke-website-wordpress">Thiết kế website WordPress</a> (platform intent)</li>
+  <li><a href="https://www.butphamarketing.com/seo-website">Dịch vụ SEO Website</a> (service intent)</li>
+  <li><a href="https://www.butphamarketing.com/blog/chu-de/website">Hub chủ đề Website</a> (cluster hub)</li>
+  <li><a href="https://www.butphamarketing.com/lien-he">Liên hệ tư vấn</a> (conversion)</li>
+</ul>
+</div>
 
 ${img(0, "Thiết kế website chuyên nghiệp chuẩn SEO — Bứt Phá Marketing")}
 

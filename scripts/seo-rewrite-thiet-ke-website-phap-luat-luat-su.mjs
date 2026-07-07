@@ -272,6 +272,16 @@ ${wpLuatImg(4, "Giao diện thiết kế website pháp lý — đội ngũ luậ
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-luat-2026`,
+    label: "Checklist website luật 2026",
+    desc: "20 mục uy tín & SEO local.",
+  },
+  {
+    href: `${SITE}/blog/nganh/luat`,
+    label: "Hub silo luật",
+    desc: "Tất cả bài ngành pháp lý.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-cong-ty-luat`,
     label: "Website công ty luật",
     desc: "Chi tiết công ty luật.",

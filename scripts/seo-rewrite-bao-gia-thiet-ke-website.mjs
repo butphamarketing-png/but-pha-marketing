@@ -12,8 +12,8 @@ import {
   SITE,
 } from "./seo-wp-structure.mjs";
 
-const KEYWORD = "báo giá website";
-const TITLE = "Báo Giá Website — Bảng Giá Thiết Kế Website 2026 & Yếu Tố Ảnh Hưởng";
+const KEYWORD = "báo giá thiết kế website";
+const TITLE = "Báo Giá Thiết Kế Website 2026 — Bảng Giá & Yếu Tố Ảnh Hưởng";
 
 export const REWRITE_BAO_GIA_THIET_KE_WEBSITE = {
   title: TITLE,
@@ -21,9 +21,9 @@ export const REWRITE_BAO_GIA_THIET_KE_WEBSITE = {
   keywordsMain: KEYWORD,
   keywordsSecondary:
     "báo giá thiết kế website, chi phí làm website, giá web doanh nghiệp, giá thiết kế website 2026",
-  metaTitle: "Báo Giá Website 2026 | Bảng Giá Thiết Kế Web | Bứt Phá",
+  metaTitle: "Báo Giá Thiết Kế Website 2026 | Bảng Giá Thiết Kế Web | Bứt Phá",
   metaDescription:
-    "Báo giá website & thiết kế website 2026: gói 3–12 triệu, hosting, tên miền, phí ẩn cần hỏi. Yếu tố ảnh hưởng giá. Tư vấn miễn phí.",
+    "Báo giá thiết kế website 2026: gói 3–12 triệu, hosting, tên miền, phí ẩn cần hỏi. Yếu tố ảnh hưởng giá. Tư vấn miễn phí.",
   description:
     "Cập nhật báo giá thiết kế website minh bạch: bảng giá gói, chi phí duy trì, yếu tố làm tăng giá và checklist so sánh báo giá từ đối tác.",
   imageUrl: NEWS_THUMBNAIL,
@@ -59,6 +59,17 @@ ${wpKeyTakeaways([
   "Hỏi rõ: số vòng sửa, bảo hành, SEO on-page, quyền sở hữu code.",
   "MVP 3–6 triệu + mở rộng phase 2 thường hiệu quả hơn làm hết một lần vượt ngân sách.",
 ])}
+
+<div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 my-6">
+<p><strong>Cụm từ khóa «thiết kế website» — đọc theo thứ tự:</strong></p>
+<ul class="list-disc pl-6 mt-2 space-y-1">
+  <li><a href="${SITE}/blog/thiet-ke-website">Thiết kế website — hướng dẫn A-Z (pillar)</a></li>
+  <li><a href="${SITE}/website">Dịch vụ thiết kế website (money page)</a></li>
+  <li><a href="${SITE}/seo-website">Dịch vụ SEO Website</a></li>
+  <li><a href="${SITE}/blog/chu-de/website">Hub chủ đề Website</a></li>
+  <li><a href="${SITE}/lien-he">Liên hệ tư vấn</a></li>
+</ul>
+</div>
 
 ${wpImg(0, "Báo giá thiết kế website và các yếu tố ảnh hưởng chi phí")}
 
@@ -275,6 +286,11 @@ ${wpRelatedLinks([
     href: `${SITE}/blog/thiet-ke-website-doanh-nghiep`,
     label: "Website doanh nghiệp",
     desc: "Cấu trúc web corporate và gói phù hợp.",
+  },
+  {
+    href: `${SITE}/blog/thiet-ke-website-chuan-seo`,
+    label: "Thiết kế website chuẩn SEO",
+    desc: "Checklist kỹ thuật giúp tăng hạng Google.",
   },
   {
     href: `${SITE}/blog/thiet-ke-website-tron-goi`,

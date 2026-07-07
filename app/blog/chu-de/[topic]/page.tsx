@@ -61,6 +61,23 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
   const topicBlogs = sortTopicBlogs(filterBlogsByTopic(allBlogs, topic));
   const pillars = getPillarsForTopic(topic);
   const canonical = `${BASE_URL}/blog/chu-de/${topic}`;
+  const strategicPillars = [
+    {
+      href: "/seo-website",
+      title: "SEO Website",
+      desc: "Audit kỹ thuật, content cluster và lộ trình tăng trưởng organic.",
+    },
+    {
+      href: "/marketing-automation",
+      title: "Marketing Automation",
+      desc: "Hệ thống thu lead, nuôi dưỡng và đồng bộ marketing-sales.",
+    },
+    {
+      href: "/ai-marketing",
+      title: "AI Marketing",
+      desc: "Ứng dụng AI cho content ops và AI search optimization.",
+    },
+  ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -127,7 +144,48 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
           <BlogTopicNav active={topic} />
         </div>
 
+        {topic === "website" && (
+          <section className="mb-8 rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50/80 via-white to-indigo-50/40 p-6 md:p-8">
+            <p className="brand-eyebrow mb-2">Từ khóa ưu tiên</p>
+            <h2 className="text-2xl font-black text-indigo-950 md:text-3xl">Cụm «thiết kế website»</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
+              Đọc theo thứ tự: money page → pillar → báo giá. Tránh nhảy thẳng vào bài ngành khi chưa nắm quy trình và giá.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/website" className="brand-btn-primary">
+                Thiết kế website (dịch vụ)
+              </Link>
+              <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
+                Pillar thiết kế website
+              </Link>
+              <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
+                Báo giá thiết kế website
+              </Link>
+              <Link href="/seo-website" className="brand-btn-secondary">
+                SEO Website
+              </Link>
+            </div>
+          </section>
+        )}
+
         <BlogTopicPillarCards pillars={pillars} />
+
+        <section className="mb-8 rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Strategic Pillars</p>
+          <h2 className="text-2xl font-bold tracking-tight text-indigo-950">Trụ cột tăng trưởng liên quan</h2>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {strategicPillars.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-2xl border border-indigo-100 p-4 transition hover:border-violet-300"
+              >
+                <p className="font-semibold text-indigo-950">{item.title}</p>
+                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <BlogInlineCTA slug={`chu-de-${topic}`} topic={hub.topic} />
 

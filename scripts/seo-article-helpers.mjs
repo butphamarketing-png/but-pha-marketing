@@ -693,6 +693,20 @@ export function patchNewsContentMetaTitle(content, metaTitle) {
   return prefix + String(content || "");
 }
 
+/** Chuẩn hóa alt ảnh trong HTML để chứa keywordsMain (audit SEO on-page). */
+export function patchImageAltsInHtml(html, keywordsMain) {
+  const kw = String(keywordsMain || "").trim();
+  if (!kw) return html;
+
+  const safeAlt = toTitleCaseVi(kw);
+  const fallbackAlt = `${safeAlt} — Bứt Phá Marketing`.replace(/"/g, "&quot;");
+
+  return String(html || "").replace(/alt="([^"]*)"/g, (match, alt) => {
+    if (keywordInText(alt, kw)) return match;
+    return `alt="${fallbackAlt}"`;
+  });
+}
+
 export function validateSeoKeywordPlacement({
   keywordsMain,
   title,

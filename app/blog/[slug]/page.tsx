@@ -5,10 +5,12 @@ import { SITE_URL } from "@/lib/seo";
 import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
 import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
 import { detectPillarTopic } from "@/lib/seo-pillar-hub";
+import { getCaseStudySlugForBlog } from "@/lib/case-study-industry-map";
 import { getBlogBySlug, getPublishedBlogSlugs, getRelatedBlogsForSlug } from "@/lib/server-blog";
 import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { toBlogCardItem } from "@/lib/blog-utils";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { BlogCaseStudyBanner } from "@/components/blog/BlogCaseStudyBanner";
 import { BlogPillarHub } from "@/components/blog/BlogPillarHub";
 import { BlogInlineCTA } from "@/components/blog/BlogInlineCTA";
 import { BlogArticleExtras } from "@/components/blog/BlogArticleExtras";
@@ -95,6 +97,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const publishedLabel = new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN");
   const jsonLd = buildBlogJsonLd({ blog, canonical, baseUrl: BASE_URL, image });
   const topic = detectPillarTopic({ slug: blogPath, keywordsMain: blog.keywordsMain, title: blog.title });
+  const linkedCaseStudy = getCaseStudySlugForBlog(blogPath);
 
   return (
     <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
@@ -162,6 +165,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
           <article className="article-prose">
             <BlogArticleContent html={blog.content} />
           </article>
+          {linkedCaseStudy && <BlogCaseStudyBanner caseStudySlug={linkedCaseStudy} />}
         </div>
       </section>
 

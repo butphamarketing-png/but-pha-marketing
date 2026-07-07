@@ -242,6 +242,16 @@ ${wpBaoBiImg(4, "Giao diện thiết kế website in ấn bao bì — form uploa
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-bao-bi-2026`,
+    label: "Checklist website bao bì 2026",
+    desc: "20 mục catalog & đặt hàng.",
+  },
+  {
+    href: `${SITE}/blog/nganh/bao-bi`,
+    label: "Hub silo bao bì",
+    desc: "Tất cả bài ngành in ấn.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-catalog-san-pham`,
     label: "Catalog sản phẩm",
     desc: "Showcase B2B.",

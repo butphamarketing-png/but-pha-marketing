@@ -3,6 +3,7 @@ import {
   buildSeoMetaDescription,
   ensureTitleHasKeyword,
   patchNewsContentMetaTitle,
+  patchImageAltsInHtml,
   validateSeoKeywordPlacement,
   keywordInText,
 } from "./seo-article-helpers.mjs";
@@ -17,6 +18,7 @@ export function buildSeoMetaFix(row) {
   let metaTitle = buildSeoMetaTitle(keywordsMain);
   let metaDescription = buildSeoMetaDescription(keywordsMain, row.description || row.meta_description || "");
   let content = patchNewsContentMetaTitle(row.content || "", metaTitle);
+  content = patchImageAltsInHtml(content, keywordsMain);
 
   let check = validateSeoKeywordPlacement({
     keywordsMain,
@@ -30,6 +32,7 @@ export function buildSeoMetaFix(row) {
   if (!keywordInText(metaTitle, keywordsMain)) {
     metaTitle = buildSeoMetaTitle(title);
     content = patchNewsContentMetaTitle(row.content || "", metaTitle);
+    content = patchImageAltsInHtml(content, keywordsMain);
     check = validateSeoKeywordPlacement({
       keywordsMain,
       title,

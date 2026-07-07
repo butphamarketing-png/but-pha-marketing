@@ -63,6 +63,15 @@ ${wpKeyTakeaways([
   "Bứt Phá triển khai web doanh nghiệp 3–12 triệu — WordPress hoặc stack hiện đại tùy nhu cầu.",
 ])}
 
+<div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 my-6">
+<p><strong>Liên kết bắt buộc trong cụm Website:</strong></p>
+<ul class="list-disc pl-6 mt-2 space-y-1">
+  <li><a href="${SITE}/seo-website">Dịch vụ SEO Website</a></li>
+  <li><a href="${SITE}/blog/chu-de/website">Hub chủ đề Website</a></li>
+  <li><a href="${SITE}/lien-he">Liên hệ tư vấn</a></li>
+</ul>
+</div>
+
 ${wpImg(2, "Thiết kế website WordPress chuyên nghiệp cho doanh nghiệp")}
 
 <h2 id="wordpress-la-gi">WordPress là gì? Vì sao doanh nghiệp hay chọn?</h2>

@@ -244,6 +244,26 @@ ${wpMyPhamImg(4, "Giao diện thiết kế website mỹ phẩm premium — catal
 
 ${wpRelatedLinks([
   {
+    href: `${SITE}/blog/checklist-website-my-pham-2026`,
+    label: "Checklist website mỹ phẩm 2026",
+    desc: "20 mục SEO & bán online.",
+  },
+  {
+    href: `${SITE}/blog/template-website-my-pham-2026`,
+    label: "Template website mỹ phẩm 2026",
+    desc: "Cấu trúc 8 trang shop & brand.",
+  },
+  {
+    href: `${SITE}/blog/nganh/my-pham`,
+    label: "Hub silo mỹ phẩm",
+    desc: "Skincare, nail, làm đẹp.",
+  },
+  {
+    href: `${SITE}/du-an/halee-tram`,
+    label: "Case study Halee Trâm",
+    desc: "Website nail nối mi & academy.",
+  },
+  {
     href: `${SITE}/blog/thiet-ke-website-my-pham`,
     label: "Website cửa hàng mỹ phẩm",
     desc: "Shop đa brand.",

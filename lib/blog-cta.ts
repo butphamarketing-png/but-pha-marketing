@@ -33,10 +33,10 @@ export function getBlogCtaConfig(topic: PillarTopic): BlogCtaConfig {
       return {
         topic,
         topicLabel,
-        headline: "Cần báo giá website hoặc tư vấn SEO?",
-        subline: "Bứt Phá Marketing triển khai website chuẩn SEO, tốc độ nhanh và form thu lead — báo giá minh bạch.",
-        primary: { href: "/website", label: "Xem gói website" },
-        secondary: { href: "/lien-he", label: "Đặt lịch tư vấn" },
+        headline: "Cần dịch vụ thiết kế website chuẩn SEO?",
+        subline: "Bứt Phá Marketing triển khai thiết kế website chuyên nghiệp — tốc độ nhanh, form thu lead và báo giá minh bạch 3–12 triệu.",
+        primary: { href: "/website", label: "Thiết kế website" },
+        secondary: { href: "/blog/thiet-ke-website", label: "Hướng dẫn A-Z" },
         zalo,
       };
     case "facebook":

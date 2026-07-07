@@ -5,6 +5,8 @@ import { SITE_URL } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 import { BlogSearchGrid } from "@/components/blog/BlogSearchGrid";
 import { BlogTopicNav } from "@/components/blog/BlogTopicNav";
+import { BlogCaseStudyStrip } from "@/components/blog/BlogCaseStudyStrip";
+import { BlogIndustryNav } from "@/components/blog/BlogIndustryNav";
 
 const BASE_URL = SITE_URL;
 
@@ -32,6 +34,23 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const blogs = await getPublishedBlogs();
+  const growthPillars = [
+    {
+      href: "/seo-website",
+      title: "SEO Website",
+      desc: "Trụ cột SEO tổng thể: kỹ thuật, nội dung và chuyển đổi.",
+    },
+    {
+      href: "/marketing-automation",
+      title: "Marketing Automation",
+      desc: "Tự động hóa lead và tối ưu pipeline marketing-sales.",
+    },
+    {
+      href: "/ai-marketing",
+      title: "AI Marketing",
+      desc: "Ứng dụng AI để tăng tốc sản xuất và tối ưu hiệu suất.",
+    },
+  ];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -84,9 +103,33 @@ export default async function BlogPage() {
           </Link>
         </div>
 
-        <div className="mb-8">
+        <div className="mb-4">
           <BlogTopicNav active="all" />
         </div>
+
+        <div className="mb-8">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Silo theo ngành</p>
+          <BlogIndustryNav />
+        </div>
+
+        <BlogCaseStudyStrip />
+
+        <section className="mb-8 rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">Growth Pillars</p>
+          <h2 className="text-2xl font-bold tracking-tight text-indigo-950">Nền tảng tăng trưởng mới</h2>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {growthPillars.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-2xl border border-indigo-100 p-4 transition hover:border-violet-300"
+              >
+                <p className="font-semibold text-indigo-950">{item.title}</p>
+                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <BlogSearchGrid blogs={listItems} />
       </div>

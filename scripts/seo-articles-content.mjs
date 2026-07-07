@@ -23,7 +23,9 @@ import { REWRITE_THIET_KE_WEBSITE_DAT_PHONG_KHACH_SAN } from "./seo-rewrite-thie
 import { REWRITE_THIET_KE_WEBSITE_CONG_TY_XAY_DUNG } from "./seo-rewrite-thiet-ke-website-cong-ty-xay-dung.mjs";
 import { REWRITE_THIET_KE_WEBSITE_KIEN_TRUC_NOI_THAT } from "./seo-rewrite-thiet-ke-website-kien-truc-noi-that.mjs";
 import { REWRITE_THIET_KE_WEBSITE_PCCC } from "./seo-rewrite-thiet-ke-website-pccc.mjs";
+import { REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC } from "./seo-rewrite-thiet-ke-website-thiet-bi-pccc.mjs";
 import { REWRITE_THIET_KE_WEBSITE_MY_PHAM_LAM_DEP } from "./seo-rewrite-thiet-ke-website-my-pham-lam-dep.mjs";
+import { REWRITE_THIET_KE_WEBSITE_MY_PHAM } from "./seo-rewrite-thiet-ke-website-my-pham.mjs";
 import { REWRITE_THIET_KE_WEBSITE_THANG_MAY } from "./seo-rewrite-thiet-ke-website-thang-may.mjs";
 import { REWRITE_THIET_KE_WEBSITE_CO_KHI } from "./seo-rewrite-thiet-ke-website-co-khi.mjs";
 import { REWRITE_THIET_KE_WEBSITE_GIA_CONG_CNC } from "./seo-rewrite-thiet-ke-website-gia-cong-cnc.mjs";

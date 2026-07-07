@@ -2,9 +2,13 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { blogSitemapChangeFrequency, blogSitemapPriority } from "@/lib/blog-seo";
 import { BLOG_TOPIC_SLUGS } from "@/lib/blog-topic-hub";
+import { INDUSTRY_HUB_SLUGS } from "@/lib/industry-hub";
+import { CASE_STUDY_SLUGS } from "@/lib/case-studies";
 import { getPublishedBlogs } from "@/lib/server-blog";
+import { getIndexableProgrammaticPaths } from "@/lib/programmatic-seo";
 
 const baseUrl = SITE_URL;
+const STATIC_LAST_MODIFIED = new Date("2026-07-07T00:00:00.000Z");
 
 /** Next.js yêu cầu literal — không import biến cho segment config. */
 export const revalidate = 3600;
@@ -12,6 +16,10 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
+    "/kien-thuc",
+    "/kien-thuc/seo-website",
+    "/kien-thuc/marketing-automation",
+    "/kien-thuc/ai-marketing",
     "/facebook",
     "/facebook/thiet-ke-fanpage",
     "/facebook/cham-soc-fanpage",
@@ -25,16 +33,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/website/ten-mien-website",
     "/website/cham-soc-website",
     "/website/quang-cao-website",
+    "/seo-website",
+    "/seo-website/technical-seo",
+    "/seo-website/seo-content",
+    "/marketing-automation",
+    "/marketing-automation/lead-nurturing",
+    "/marketing-automation/crm-automation",
+    "/ai-marketing",
+    "/ai-marketing/ai-content",
+    "/ai-marketing/ai-search-optimization",
     "/blog",
+    "/du-an",
     "/gioi-thieu",
     "/lien-he",
     "/banggia",
   ];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: new Date(),
-    changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1 : 0.8,
+    lastModified: STATIC_LAST_MODIFIED,
+    changeFrequency: path === "" || path === "/website" ? "daily" : "weekly",
+    priority:
+      path === ""
+        ? 1
+        : path === "/website"
+          ? 0.98
+          : path === "/website/thietkewebsite"
+            ? 0.45
+            : 0.8,
+  }));
+  const programmaticEntries: MetadataRoute.Sitemap = getIndexableProgrammaticPaths().map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: STATIC_LAST_MODIFIED,
+    changeFrequency: "weekly",
+    priority: 0.78,
   }));
 
   const blogs = await getPublishedBlogs();
@@ -47,11 +78,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const topicHubEntries: MetadataRoute.Sitemap = BLOG_TOPIC_SLUGS.map((slug) => ({
     url: `${baseUrl}/blog/chu-de/${slug}`,
-    lastModified: new Date(),
+    lastModified: STATIC_LAST_MODIFIED,
     changeFrequency: "weekly",
     priority: 0.88,
   }));
 
-  return [...staticEntries, ...topicHubEntries, ...blogEntries];
+  const industryHubEntries: MetadataRoute.Sitemap = INDUSTRY_HUB_SLUGS.map((slug) => ({
+    url: `${baseUrl}/blog/nganh/${slug}`,
+    lastModified: STATIC_LAST_MODIFIED,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  }));
+
+  const caseStudyEntries: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.map((slug) => ({
+    url: `${baseUrl}/du-an/${slug}`,
+    lastModified: STATIC_LAST_MODIFIED,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  }));
+
+  return [
+    ...staticEntries,
+    ...programmaticEntries,
+    ...topicHubEntries,
+    ...industryHubEntries,
+    ...caseStudyEntries,
+    ...blogEntries,
+  ];
 }
 
