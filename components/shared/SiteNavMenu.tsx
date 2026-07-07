@@ -86,7 +86,7 @@ function NavGroupDesktop({
         <Link
           href={group.href}
           onClick={onNavigate}
-          className={`inline-flex items-center text-sm font-semibold transition ${groupButtonTone(tone)}`}
+          className={`inline-flex items-center whitespace-nowrap px-1 py-1 text-[13px] font-semibold transition xl:text-sm ${groupButtonTone(tone)}`}
         >
           {group.label}
         </Link>
@@ -225,15 +225,29 @@ export function SiteNavMenu({
   }
 
   return (
-    <nav className="flex items-center gap-8">
+    <nav className="flex max-w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 xl:gap-x-5">
       {lead.map((item) => (
-        <NavSimpleLink key={item.href} item={item} tone={tone} onNavigate={onNavigate} activeHref={activeHref} />
+        <NavSimpleLink
+          key={item.href}
+          item={item}
+          tone={tone}
+          onNavigate={onNavigate}
+          activeHref={activeHref}
+          className="whitespace-nowrap px-1 py-1 text-[13px] font-semibold transition xl:text-sm"
+        />
       ))}
       {SERVICE_NAV_GROUPS.map((group) => (
         <NavGroupDesktop key={group.label} group={group} tone={tone} onNavigate={onNavigate} />
       ))}
       {trail.map((item) => (
-        <NavSimpleLink key={item.href} item={item} tone={tone} onNavigate={onNavigate} activeHref={activeHref} />
+        <NavSimpleLink
+          key={item.href}
+          item={item}
+          tone={tone}
+          onNavigate={onNavigate}
+          activeHref={activeHref}
+          className="whitespace-nowrap px-1 py-1 text-[13px] font-semibold transition xl:text-sm"
+        />
       ))}
     </nav>
   );

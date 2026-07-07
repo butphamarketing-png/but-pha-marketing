@@ -336,39 +336,47 @@ export default function HomePageClient() {
         <header 
           className={`sticky top-0 z-50 w-full transition-all duration-500 ${isScrolled ? 'bg-white/95 border-b border-indigo-100/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(49,46,129,0.04)]' : 'border-b border-white/10 bg-indigo-950/35 backdrop-blur-md'}`}
         >
-          <div className={`mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 transition-all duration-500 lg:px-8 ${isScrolled ? "py-2.5" : "py-4"}`}>
-            <div className="flex min-w-0 flex-1 items-center gap-3">
-              <Link href="/" className="group flex min-w-0 items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95 sm:gap-4">
-                <div className="relative shrink-0">
-                  <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <img
-                    src={logoSrc}
-                    alt={brandName}
-                    className={`relative rounded-full border border-indigo-200 object-cover shadow-2xl transition-all duration-500 ${isScrolled ? "h-9 w-9 sm:h-10 sm:w-10" : "h-11 w-11 sm:h-12 sm:w-12"}`}
-                  />
-                </div>
-                <div className="min-w-0 flex flex-col">
-                  <span className={`truncate text-lg font-bold tracking-tight sm:text-xl md:text-2xl leading-none ${isScrolled ? "text-indigo-950" : "text-white"}`}>{brandName}</span>
-                  <span className={`text-[11px] font-medium mt-1 sm:text-xs ${isScrolled ? "text-violet-600" : "text-violet-300"}`}>Bứt Phá để dẫn đầu</span>
-                </div>
-              </Link>
+          <div className={`mx-auto flex max-w-7xl items-center gap-2 px-4 transition-all duration-500 sm:gap-3 sm:px-6 lg:gap-4 lg:px-8 ${isScrolled ? "py-2.5" : "py-4"}`}>
+            <Link href="/" className="group flex shrink-0 items-center gap-2.5 transition-transform hover:scale-[1.02] active:scale-95 sm:gap-3">
+              <div className="relative shrink-0">
+                <div className="absolute -inset-2 rounded-full bg-violet-600/20 blur-lg opacity-0 transition-opacity group-hover:opacity-100" />
+                <img
+                  src={logoSrc}
+                  alt={brandName}
+                  className={`relative rounded-full border border-indigo-200 object-cover shadow-2xl transition-all duration-500 ${isScrolled ? "h-9 w-9 sm:h-10 sm:w-10" : "h-11 w-11 sm:h-12 sm:w-12"}`}
+                />
+              </div>
+              <div className="hidden min-w-0 flex-col xl:flex">
+                <span
+                  className={`whitespace-nowrap text-base font-bold leading-tight tracking-tight sm:text-lg ${isScrolled ? "text-indigo-950" : "text-white"}`}
+                  style={{ fontFamily: "'Be Vietnam Pro', sans-serif" }}
+                >
+                  {brandName}
+                </span>
+                <span
+                  className={`mt-0.5 whitespace-nowrap text-[11px] font-medium leading-none sm:text-xs ${isScrolled ? "text-violet-600" : "text-violet-200"}`}
+                  style={{ fontFamily: "'Be Vietnam Pro', sans-serif" }}
+                >
+                  Bứt Phá để dẫn đầu
+                </span>
+              </div>
+            </Link>
 
-              <button
-                type="button"
-                aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
-                aria-expanded={mobileMenuOpen}
-                onClick={() => { playClickSound(); setMobileMenuOpen((open) => !open); }}
-                className={`ml-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition lg:hidden ${isScrolled ? "border-indigo-200 bg-white text-indigo-950 hover:bg-indigo-50" : "border-white/20 bg-white/10 text-white hover:bg-white/15"}`}
-              >
-                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-              </button>
-            </div>
-
-            <div className="hidden lg:block">
+            <div className="hidden min-w-0 flex-1 justify-center lg:flex">
               <SiteNavMenu tone={headerNavTone} layout="horizontal" />
             </div>
 
-            <div className="flex items-center gap-4">
+            <button
+              type="button"
+              aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
+              aria-expanded={mobileMenuOpen}
+              onClick={() => { playClickSound(); setMobileMenuOpen((open) => !open); }}
+              className={`ml-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition lg:hidden ${isScrolled ? "border-indigo-200 bg-white text-indigo-950 hover:bg-indigo-50" : "border-white/20 bg-white/10 text-white hover:bg-white/15"}`}
+            >
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+
+            <div className="flex shrink-0 items-center gap-4">
               <button
                 onClick={() => { playClickSound(); (document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })) }}
                 className={`hidden px-8 py-3.5 sm:inline-flex rounded-full font-bold transition-all ${isScrolled ? 'brand-btn-primary' : 'bg-white text-violet-700 hover:bg-violet-50 shadow-lg hover:shadow-xl'}`}

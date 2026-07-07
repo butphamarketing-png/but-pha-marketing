@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { generateLandingMetadata } from "@/lib/landing-seo";
+import { SubLandingPage } from "@/components/landing/SubLandingPage";
+import { buildFaqSchema, generateLandingMetadata } from "@/lib/landing-seo";
 
 export const metadata = generateLandingMetadata({
   path: "/kien-thuc/marketing-automation",
@@ -9,30 +9,60 @@ export const metadata = generateLandingMetadata({
   keywords: ["kien thuc marketing automation", "lead nurturing", "crm automation"],
 });
 
-const links = [
-  { label: "Lead Nurturing", href: "/marketing-automation/lead-nurturing" },
-  { label: "CRM Automation", href: "/marketing-automation/crm-automation" },
-  { label: "Pillar Marketing Automation", href: "/marketing-automation" },
+const faqs = [
+  {
+    q: "Marketing Automation bắt đầu từ đâu?",
+    a: "Bắt đầu từ thu lead tập trung (website, form, Zalo) → CRM → workflow phân loại → nurturing → báo cáo funnel.",
+  },
+  {
+    q: "SME cần tool gì cho automation?",
+    a: "Tùy quy mô: từ Google Sheet + Zalo đến CRM (HubSpot, Zoho, Pipedrive...) — quan trọng là quy trình rõ, không phụ thuộc tool đắt.",
+  },
 ];
 
 export default function KnowledgeMarketingAutomationPage() {
+  const faqLd = buildFaqSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
+
   return (
     <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl space-y-6">
-        <h1 className="text-4xl font-black tracking-tight text-indigo-950">
-          Knowledge Hub: Marketing Automation
-        </h1>
-        <p className="text-lg text-slate-600">
-          Nơi tổng hợp tài nguyên tự động hóa marketing để giảm thất thoát lead và tăng hiệu suất chuyển đổi.
-        </p>
-        <div className="grid gap-3 md:grid-cols-3">
-          {links.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-2xl border border-indigo-100 bg-white p-4">
-              <p className="font-semibold text-indigo-900">{item.label}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <SubLandingPage
+        config={{
+          breadcrumbs: [
+            { label: "Trang chủ", href: "/" },
+            { label: "Kiến thức", href: "/kien-thuc" },
+            { label: "Marketing Automation" },
+          ],
+          eyebrow: "Resource Center",
+          title: "Knowledge Hub: Marketing Automation",
+          intro:
+            "Tổng hợp framework tự động hóa marketing — từ thu lead, nuôi dưỡng, CRM đến đo funnel — giúp SME giảm thất thoát cơ hội và tăng hiệu suất sales.",
+          ctas: [
+            { label: "Tư vấn automation", href: "/lien-he", primary: true },
+            { label: "Pillar Automation", href: "/marketing-automation" },
+          ],
+          features: [
+            "Lead capture đa kênh: website, fanpage, Google Maps",
+            "Lead scoring & routing cho đội sales",
+            "Workflow nurturing theo hành vi (email, Zalo, remarketing)",
+            "CRM pipeline: mới → tư vấn → báo giá → chốt",
+            "Dashboard funnel và KPI theo nguồn lead",
+            "Tích hợp với website chuẩn SEO và form thu lead",
+          ],
+          relatedLinks: [
+            { href: "/marketing-automation", label: "Marketing Automation", desc: "Dịch vụ pillar" },
+            { href: "/marketing-automation/lead-nurturing", label: "Lead Nurturing", desc: "Nuôi dưỡng tự động" },
+            { href: "/marketing-automation/crm-automation", label: "CRM Automation", desc: "Pipeline & sales ops" },
+            { href: "/website", label: "Thiết kế website", desc: "Nguồn lead đầu vào" },
+          ],
+          faqs,
+          ctaBand: {
+            title: "Cần lộ trình automation phù hợp quy mô?",
+            subline: "Bứt Phá khảo sát quy trình hiện tại và đề xuất triển khai từng phase — không làm phức tạp ngay từ đầu.",
+            primary: { label: "Liên hệ tư vấn", href: "/lien-he" },
+          },
+        }}
+      />
     </main>
   );
 }

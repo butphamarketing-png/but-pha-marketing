@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { generateLandingMetadata } from "@/lib/landing-seo";
+import { SubLandingPage } from "@/components/landing/SubLandingPage";
+import { buildFaqSchema, generateLandingMetadata } from "@/lib/landing-seo";
 
 export const metadata = generateLandingMetadata({
   path: "/kien-thuc/ai-marketing",
@@ -9,28 +9,60 @@ export const metadata = generateLandingMetadata({
   keywords: ["kien thuc ai marketing", "ai content ops", "ai search optimization"],
 });
 
-const links = [
-  { label: "AI Content Ops", href: "/ai-marketing/ai-content" },
-  { label: "AI Search Optimization", href: "/ai-marketing/ai-search-optimization" },
-  { label: "Pillar AI Marketing", href: "/ai-marketing" },
+const faqs = [
+  {
+    q: "AI Marketing có thay thế agency không?",
+    a: "AI là công cụ tăng tốc — chiến lược, kiểm duyệt chất lượng và dữ liệu thật vẫn cần chuyên gia.",
+  },
+  {
+    q: "Làm AI Marketing sao cho an toàn thương hiệu?",
+    a: "Workflow có human review, fact-check, không publish draft thô, và gắn proof/case study vào mọi cụm nội dung quan trọng.",
+  },
 ];
 
 export default function KnowledgeAiMarketingPage() {
+  const faqLd = buildFaqSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
+
   return (
     <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl space-y-6">
-        <h1 className="text-4xl font-black tracking-tight text-indigo-950">Knowledge Hub: AI Marketing</h1>
-        <p className="text-lg text-slate-600">
-          Tập hợp phương pháp ứng dụng AI vào nội dung, SEO và vận hành để tăng tốc tăng trưởng bền vững.
-        </p>
-        <div className="grid gap-3 md:grid-cols-3">
-          {links.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-2xl border border-indigo-100 bg-white p-4">
-              <p className="font-semibold text-indigo-900">{item.label}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <SubLandingPage
+        config={{
+          breadcrumbs: [
+            { label: "Trang chủ", href: "/" },
+            { label: "Kiến thức", href: "/kien-thuc" },
+            { label: "AI Marketing" },
+          ],
+          eyebrow: "Resource Center",
+          title: "Knowledge Hub: AI Marketing",
+          intro:
+            "Phương pháp ứng dụng AI vào content, SEO và vận hành marketing — tăng tốc sản xuất mà vẫn giữ EEAT, proof và chuyển đổi.",
+          ctas: [
+            { label: "Tư vấn AI Marketing", href: "/lien-he", primary: true },
+            { label: "Pillar AI Marketing", href: "/ai-marketing" },
+          ],
+          features: [
+            "AI Content Ops: brief → draft → review → publish",
+            "AI Search Optimization: answer-first, llms.txt, entity",
+            "AI hỗ trợ ads creative & A/B testing",
+            "AI lead assistant: phân loại, gợi ý phản hồi",
+            "Governance: checklist chất lượng trước xuất bản",
+            "KPI: tốc độ, pass rate QA, traffic/lead per cluster",
+          ],
+          relatedLinks: [
+            { href: "/ai-marketing", label: "AI Marketing", desc: "Dịch vụ pillar" },
+            { href: "/ai-marketing/ai-content", label: "AI Content Ops", desc: "Quy trình nội dung AI" },
+            { href: "/ai-marketing/ai-search-optimization", label: "AI Search Optimization", desc: "Tối ưu AI Overview" },
+            { href: "/blog/chu-de/website", label: "Hub Website", desc: "Áp dụng cho SEO content" },
+          ],
+          faqs,
+          ctaBand: {
+            title: "Muốn triển khai AI có kiểm soát?",
+            subline: "Bứt Phá thiết kế workflow AI + human review — không spam nội dung mỏng.",
+            primary: { label: "Đặt lịch tư vấn", href: "/lien-he" },
+          },
+        }}
+      />
     </main>
   );
 }
