@@ -21,6 +21,55 @@ import { PricingTabs } from "./PricingTabs";
 
 const TAB_ORDER: PricingPlatformId[] = ["website", "facebook", "googlemaps"];
 
+const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links: { href: string; label: string }[] }> = {
+  website: {
+    title: "Bảng giá thiết kế website",
+    body: "Gói từ Landing Page đến E-commerce — bao gồm UI/UX, lập trình chuẩn SEO, form/Zalo và bàn giao admin. Giá tham khảo, báo giá chính xác sau khảo sát nhu cầu.",
+    links: [
+      { href: "/website", label: "Dịch vụ thiết kế website" },
+      { href: "/blog/bao-gia-thiet-ke-website", label: "Hướng dẫn báo giá" },
+      { href: "/du-an", label: "Case study" },
+    ],
+  },
+  facebook: {
+    title: "Bảng giá Facebook Marketing",
+    body: "Gói thiết kế Fanpage, chăm sóc content theo tháng và phí quản lý Meta Ads (chưa gồm ngân sách ads). Funnel khuyến nghị: Fanpage → care → ads.",
+    links: [
+      { href: "/facebook", label: "Dịch vụ Facebook" },
+      { href: "/du-an/sao-khue", label: "Case study Fanpage" },
+      { href: "/blog/chu-de/facebook", label: "Kiến thức Facebook" },
+    ],
+  },
+  googlemaps: {
+    title: "Bảng giá Google Maps",
+    body: "Gói tối ưu Google Business Profile, Local SEO và phí quản lý Local Ads. Phù hợp doanh nghiệp có địa điểm vật lý cần tăng lượt gọi và chỉ đường.",
+    links: [
+      { href: "/google-maps", label: "Dịch vụ Google Maps" },
+      { href: "/seo-website/dia-phuong/ho-chi-minh", label: "SEO địa phương" },
+      { href: "/blog/chu-de/google-maps", label: "Kiến thức Local SEO" },
+    ],
+  },
+};
+
+const PRICING_FAQS = [
+  {
+    q: "Giá trên bảng giá có phải giá cuối cùng không?",
+    a: "Đây là giá tham khảo. Báo giá chính xác sau khi khảo sát quy mô, tính năng và timeline dự án.",
+  },
+  {
+    q: "Có hỗ trợ trả góp hoặc chia đợt thanh toán không?",
+    a: "Có. Thường chia 50% ký hợp đồng — 50% nghiệm thu, hoặc theo milestone dự án lớn.",
+  },
+  {
+    q: "Phí quảng cáo Facebook/Google Maps có nằm trong bảng giá không?",
+    a: "Không. Ngân sách ads trả trực tiếp cho Meta/Google. Bảng giá chỉ gồm phí setup và quản lý chiến dịch.",
+  },
+  {
+    q: "Làm sao chọn gói phù hợp?",
+    a: "Website mới: bắt đầu gói cơ bản hoặc doanh nghiệp. Đã có traffic: nâng cấp SEO + care. Có cửa hàng: thêm Google Maps.",
+  },
+];
+
 function getTabDirection(from: PricingPlatformId, to: PricingPlatformId) {
   return TAB_ORDER.indexOf(to) >= TAB_ORDER.indexOf(from) ? 1 : -1;
 }
@@ -37,6 +86,7 @@ export function BanggiaPageClient() {
   const prevTabRef = useRef<PricingPlatformId>("website");
 
   const activeColor = PRICING_PLATFORMS.find((p) => p.id === activeTab)?.color ?? "#7C3AED";
+  const tabIntro = TAB_INTROS[activeTab];
 
   useEffect(() => {
     setHydrated(true);
@@ -127,6 +177,28 @@ export function BanggiaPageClient() {
           </p>
         </motion.div>
 
+        <motion.section
+          key={activeTab}
+          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-8 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6"
+        >
+          <h2 className="text-lg font-bold text-indigo-950 sm:text-xl">{tabIntro.title}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">{tabIntro.body}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {tabIntro.links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-full border border-indigo-100 bg-indigo-50/50 px-3 py-1.5 text-xs font-semibold text-indigo-800 transition hover:border-violet-300 hover:bg-violet-50"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </motion.section>
+
         <div className="relative">
           <AnimatePresence mode="wait">
             {showGate ? (
@@ -156,6 +228,34 @@ export function BanggiaPageClient() {
             )}
           </AnimatePresence>
         </div>
+
+        <section className="mt-12 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
+          <h2 className="text-xl font-bold text-indigo-950">Câu hỏi thường gặp về bảng giá</h2>
+          <div className="mt-5 space-y-3">
+            {PRICING_FAQS.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-xl border border-indigo-100 bg-indigo-50/20 p-4 open:border-violet-200 open:bg-violet-50/30"
+              >
+                <summary className="cursor-pointer list-none text-sm font-bold text-indigo-950 marker:hidden sm:text-base">
+                  {item.q}
+                </summary>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.a}</p>
+              </details>
+            ))}
+          </div>
+          <p className="mt-6 text-sm text-slate-600">
+            Cần báo giá chi tiết?{" "}
+            <Link href="/lien-he" className="font-semibold text-violet-700 underline">
+              Liên hệ tư vấn miễn phí
+            </Link>{" "}
+            hoặc đọc{" "}
+            <Link href="/blog/bao-gia-thiet-ke-website" className="font-semibold text-violet-700 underline">
+              hướng dẫn báo giá website
+            </Link>
+            .
+          </p>
+        </section>
       </main>
 
       {unlocked && !showGate ? <PricingStickyBar /> : null}

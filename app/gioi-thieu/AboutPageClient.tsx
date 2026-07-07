@@ -243,6 +243,40 @@ export default function AboutPageClient() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
+          <div className="rounded-3xl border border-emerald-200 bg-emerald-50/60 p-6 lg:p-8">
+            <div className="flex items-center gap-3">
+              <span className="brand-step-badge">Proof</span>
+              <h2 className="text-3xl font-bold tracking-tight text-emerald-900">Dự án có số liệu thật</h2>
+            </div>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-emerald-950">
+              Bứt Phá Marketing đo lường kết quả bằng Google Search Console, Facebook Insights và lead thực tế — không chỉ báo cáo vanity metrics.
+            </p>
+            <ul className="mt-5 space-y-2 text-emerald-950">
+              <li>
+                Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search.
+              </li>
+              <li>
+                Sao Khuê: Fanpage <strong>83.374 lượt xem</strong> trong 90 ngày — kênh lead song song website.
+              </li>
+              <li>
+                Thiên Hoàng Kim, Phước Lai Luxury: website + Fanpage đồng bộ thương hiệu, nuôi lead inbox.
+              </li>
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/du-an" className="brand-btn-primary">
+                Xem tất cả case study
+              </Link>
+              <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
+                Case study nha khoa
+              </Link>
+              <Link href="/du-an/sao-khue" className="brand-btn-secondary">
+                Case study Sao Khuê
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
           <div className="brand-card p-6 lg:p-8">
             <div className="flex items-center gap-3">
@@ -318,6 +352,43 @@ export default function AboutPageClient() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-7xl px-4 py-2 lg:px-6">
+          <div className="brand-card p-6 lg:p-8">
+            <div className="flex items-center gap-3">
+              <span className="brand-step-badge">FAQ</span>
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">Câu hỏi thường gặp</h2>
+            </div>
+            <div className="mt-6 space-y-3">
+              {[
+                {
+                  q: "Bứt Phá Marketing phù hợp doanh nghiệp nào?",
+                  a: "SME và doanh nghiệp địa phương cần website, SEO, Facebook, Google Maps hoặc automation — muốn đo lường được kết quả.",
+                },
+                {
+                  q: "Có cam kết top Google không?",
+                  a: "Không cam kết thứ hạng cứng. Cam kết quy trình minh bạch, báo cáo GSC/ads và tối ưu liên tục theo dữ liệu thật.",
+                },
+                {
+                  q: "Làm việc từ xa hay tại chỗ?",
+                  a: "Chủ yếu online — khảo sát, triển khai và báo cáo qua Zalo/email. Hỗ trợ gặp trực tiếp khi cần (TP.HCM và khu vực lân cận).",
+                },
+                {
+                  q: "Xem dự án đã làm ở đâu?",
+                  a: "Tại trang Case Study (/du-an) — có số liệu GSC, ảnh trước/sau và link website/Fanpage thực tế.",
+                },
+              ].map((item) => (
+                <details
+                  key={item.q}
+                  className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200 open:bg-violet-50/30"
+                >
+                  <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">{item.q}</summary>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="consultation" className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:pb-16">
           <div
             className="overflow-hidden rounded-[2.2rem] border border-indigo-300/30 p-6 shadow-brand-lg lg:p-8"
@@ -388,6 +459,7 @@ export default function AboutPageClient() {
               <li><Link href="/blog/thiet-ke-website">Hướng dẫn thiết kế website</Link></li>
               <li><Link href="/facebook">Quản trị Fanpage</Link></li>
               <li><Link href="/google-maps">Google Maps Marketing</Link></li>
+              <li><Link href="/du-an">Case study có số liệu</Link></li>
               <li><Link href="/blog">AI Content / SEO</Link></li>
             </ul>
           </div>

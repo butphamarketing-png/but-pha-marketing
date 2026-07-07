@@ -1,7 +1,48 @@
 import AboutPageClient from "./AboutPageClient";
-import { getDynamicMetadata } from "@/lib/seo";
+import { getDynamicMetadata, SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Bứt Phá Marketing phù hợp doanh nghiệp nào?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "SME và doanh nghiệp địa phương cần website, SEO, Facebook, Google Maps hoặc automation — muốn đo lường được kết quả.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Có cam kết top Google không?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Không cam kết thứ hạng cứng. Cam kết quy trình minh bạch, báo cáo GSC/ads và tối ưu liên tục theo dữ liệu thật.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Xem dự án đã làm ở đâu?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Tại trang Case Study (/du-an) — có số liệu GSC, ảnh trước/sau và link website/Fanpage thực tế.",
+      },
+    },
+  ],
+};
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Bứt Phá Marketing",
+  url: SITE_URL,
+  description:
+    "Đơn vị marketing thực chiến: thiết kế website chuẩn SEO, Facebook Marketing, Google Maps và automation.",
+  sameAs: [SITE_URL],
+};
 
 export async function generateMetadata() {
   return getDynamicMetadata("/gioi-thieu", {
@@ -19,5 +60,11 @@ export async function generateMetadata() {
 }
 
 export default function AboutPage() {
-  return <AboutPageClient />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <AboutPageClient />
+    </>
+  );
 }

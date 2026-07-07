@@ -36,9 +36,9 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicSlug, BlogTopicHubConfig> = {
     title: "Tin tức Facebook & Fanpage",
     headline: "Quảng cáo Facebook, fanpage & content",
     description:
-      "Hướng dẫn chạy Facebook Ads, thiết kế fanpage, chăm sóc content và tối ưu inbox — thực chiến cho SME.",
-    serviceHref: "/facebook/quang-cao-fanpage",
-    serviceLabel: "Dịch vụ quảng cáo Facebook",
+      "Thư viện bài viết về thiết kế Fanpage, chăm sóc content, Meta Ads và tối ưu inbox chuyển đổi. Funnel đầy đủ: xây dựng Fanpage → care hàng tháng → quảng cáo — có case study Sao Khuê 83K lượt xem Fanpage.",
+    serviceHref: "/facebook",
+    serviceLabel: "Dịch vụ Facebook Marketing",
   },
   "google-maps": {
     slug: "google-maps",
@@ -46,9 +46,9 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicSlug, BlogTopicHubConfig> = {
     title: "Tin tức Google Maps & SEO Local",
     headline: "SEO Google Maps & Local Pack",
     description:
-      "Tối ưu Google Business Profile, SEO địa phương, review và đưa doanh nghiệp lên bản đồ Google.",
-    serviceHref: "/google-maps/thiet-ke-google-maps",
-    serviceLabel: "Dịch vụ Google Maps",
+      "Hướng dẫn tối ưu Google Business Profile, Local SEO, thu review thật và đưa doanh nghiệp lên Local Pack. Kết hợp website chuẩn SEO để tăng lượt gọi và khách đến cửa hàng.",
+    serviceHref: "/google-maps",
+    serviceLabel: "Dịch vụ Google Maps Marketing",
   },
   marketing: {
     slug: "marketing",
@@ -56,9 +56,9 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicSlug, BlogTopicHubConfig> = {
     title: "Tin tức Marketing Online",
     headline: "Marketing online & chiến lược đa kênh",
     description:
-      "Chiến lược marketing online, Google Ads, tư vấn agency và KPI — giúp doanh nghiệp tăng trưởng bền vững.",
-    serviceHref: "/lien-he",
-    serviceLabel: "Tư vấn marketing",
+      "Chiến lược marketing online đa kênh: website, SEO, Facebook, Google Maps, automation và AI. KPI thực chiến, so sánh agency và lộ trình tăng trưởng bền vững cho SME.",
+    serviceHref: "/kien-thuc",
+    serviceLabel: "Trung tâm kiến thức",
   },
 };
 

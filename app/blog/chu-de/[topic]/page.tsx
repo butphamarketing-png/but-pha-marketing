@@ -168,6 +168,54 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
           </section>
         )}
 
+        {topic === "facebook" && (
+          <section className="mb-8 rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/40 p-6 md:p-8">
+            <p className="brand-eyebrow mb-2">Funnel Facebook</p>
+            <h2 className="text-2xl font-black text-indigo-950 md:text-3xl">Fanpage → Care → Meta Ads</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
+              Thiết kế Fanpage chuẩn thương hiệu trước, chăm sóc content đều đặn, sau đó mới scale Meta Ads. Case Sao Khuê: 83K lượt xem Fanpage trong 90 ngày.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/facebook" className="brand-btn-primary">
+                Dịch vụ Facebook
+              </Link>
+              <Link href="/facebook/thiet-ke-fanpage" className="brand-btn-secondary">
+                Thiết kế Fanpage
+              </Link>
+              <Link href="/du-an/sao-khue" className="brand-btn-secondary">
+                Case study Fanpage
+              </Link>
+              <Link href="/banggia" className="brand-btn-secondary">
+                Bảng giá
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {topic === "google-maps" && (
+          <section className="mb-8 rounded-3xl border border-orange-200 bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 p-6 md:p-8">
+            <p className="brand-eyebrow mb-2">Local SEO</p>
+            <h2 className="text-2xl font-black text-indigo-950 md:text-3xl">Google Maps + GBP + Review</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
+              Tối ưu Google Business Profile, thu review thật và content Maps trước khi chạy Local Ads. Kết hợp website chuẩn SEO để tăng chuyển đổi.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/google-maps" className="brand-btn-primary">
+                Dịch vụ Google Maps
+              </Link>
+              <Link href="/google-maps/thiet-ke-google-maps" className="brand-btn-secondary">
+                Thiết kế GBP
+              </Link>
+              <Link href="/seo-website/dia-phuong/ho-chi-minh" className="brand-btn-secondary">
+                SEO địa phương HCM
+              </Link>
+              <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
+                Case study SEO
+              </Link>
+            </div>
+          </section>
+        )}
+
         <BlogTopicPillarCards pillars={pillars} />
 
         <section className="mb-8 rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
