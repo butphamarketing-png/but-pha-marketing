@@ -470,6 +470,32 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     },
     sections: [
       {
+        kind: "check-grid",
+        id: "pain",
+        label: "Vấn đề",
+        title: "Fanpage kém chuyên nghiệp — khách không tin",
+        variant: "cross",
+        items: [
+          "Ảnh bìa/logo không đồng bộ thương hiệu",
+          "Thiếu thông tin liên hệ và CTA rõ ràng",
+          "Không tối ưu SEO Fanpage — khó tìm trên Facebook",
+          "Inbox chậm — mất lead vào tay đối thủ",
+        ],
+      },
+      {
+        kind: "check-grid",
+        id: "deliverables",
+        label: "Bàn giao",
+        title: "Bạn nhận được gì?",
+        variant: "check",
+        items: [
+          "Logo & ảnh bìa chuẩn brand guideline",
+          "Setup thông tin, danh mục và nút CTA",
+          "SEO Fanpage: từ khóa, mô tả, URL thân thiện",
+          "Hướng dẫn vận hành và checklist đăng bài",
+        ],
+      },
+      {
         kind: "steps",
         id: "process",
         label: "Quy trình",
@@ -486,12 +512,23 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         hidePrices: true,
         chooseLabel: "Chọn gói",
       },
+      {
+        kind: "faq",
+        id: "faq",
+        label: "FAQ",
+        title: "Câu hỏi thường gặp",
+        items: [
+          { q: "Thiết kế Fanpage mất bao lâu?", a: "Thường 3-7 ngày làm việc tùy số lượt chỉnh sửa và tài liệu brand." },
+          { q: "Có cần có logo sẵn không?", a: "Nên có. Nếu chưa có, team tư vấn gói thiết kế logo riêng hoặc tạm dùng visual theo ngành." },
+          { q: "Fanpage xong có chạy ads ngay được không?", a: "Có, nhưng nên có 5-10 bài nội dung cơ bản trước khi chạy ads để tăng độ tin cậy." },
+        ],
+      },
     ],
     cta: {
       title: "Fanpage chuyên nghiệp — khách tin ngay lần đầu",
-      subtitle: "Đầu tư visual một lần, dùng lâu dài.",
-      relatedHref: "/facebook/cham-soc-fanpage",
-      relatedLabel: "Chăm sóc Fanpage hàng tháng",
+      subtitle: "Đầu tư visual một lần, dùng lâu dài. Xem case Sao Khuê: 83K lượt xem Fanpage.",
+      relatedHref: "/du-an/sao-khue",
+      relatedLabel: "Case study Fanpage Sao Khuê",
     },
   },
 
@@ -563,6 +600,14 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
     },
     sections: [
       {
+        kind: "check-grid",
+        id: "commit",
+        label: "Cam kết",
+        title: "Cam kết của Bứt Phá",
+        variant: "rocket",
+        items: ["Báo cáo minh bạch hàng tuần", "Không cam kết like ảo", "Tối ưu liên tục", "Tư vấn ngân sách hợp lý"],
+      },
+      {
         kind: "pricing",
         id: "pricing",
         label: "Phí quản lý",
@@ -573,19 +618,22 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         chooseLabel: "Đăng ký quảng cáo",
       },
       {
-        kind: "check-grid",
-        id: "commit",
-        label: "Cam kết",
-        title: "Cam kết của Bứt Phá",
-        variant: "rocket",
-        items: ["Báo cáo minh bạch hàng tuần", "Không cam kết like ảo", "Tối ưu liên tục", "Tư vấn ngân sách hợp lý"],
+        kind: "faq",
+        id: "faq",
+        label: "FAQ",
+        title: "Câu hỏi thường gặp",
+        items: [
+          { q: "Ngân sách ads tối thiểu bao nhiêu?", a: "Khuyến nghị từ 3-5 triệu/tháng để thuật toán học và có đủ data tối ưu." },
+          { q: "Meta Ads khác Google Ads thế nào?", a: "Meta mạnh ở social intent và remarketing. Google mạnh ở search intent. Nên kết hợp cả hai nếu ngân sách cho phép." },
+          { q: "Có cam kết số lead không?", a: "Không cam kết số cứng vì phụ thuộc sản phẩm, giá và landing page. Cam kết tối ưu liên tục và báo cáo minh bạch." },
+        ],
       },
     ],
     cta: {
       title: "Đầu tư ads đúng cách — không đốt ngân sách",
       subtitle: "Chiến dịch có đo lường, có tối ưu.",
-      relatedHref: "/facebook/thiet-ke-fanpage",
-      relatedLabel: "Thiết kế Fanpage trước",
+      relatedHref: "/du-an/sao-khue",
+      relatedLabel: "Case study Fanpage + Ads",
     },
   },
 
@@ -638,12 +686,23 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         columns: 5,
         steps: ["Audit hồ sơ hiện tại", "Tối ưu thông tin", "Ảnh & bài viết", "Chiến lược review", "Theo dõi thứ hạng"],
       },
+      {
+        kind: "faq",
+        id: "faq",
+        label: "FAQ",
+        title: "Câu hỏi thường gặp",
+        items: [
+          { q: "Google Business Profile mất bao lâu để xác minh?", a: "Thường 3-14 ngày tùy phương thức xác minh (thẻ bưu điện, điện thoại, email)." },
+          { q: "Có cần website để làm Local SEO không?", a: "Không bắt buộc nhưng website chuẩn SEO tăng hiệu quả đáng kể — đặc biệt với từ khóa cạnh tranh." },
+          { q: "Review có bị Google phạt không?", a: "Chúng tôi chỉ hướng dẫn thu review thật từ khách hàng — không dùng dịch vụ review giả." },
+        ],
+      },
     ],
     cta: {
       title: "Xuất hiện trên Maps khi khách đang cần bạn",
       subtitle: "Local Search có ý định mua cao nhất.",
-      relatedHref: "/google-maps/quang-cao-google-maps",
-      relatedLabel: "Quảng cáo Google Maps",
+      relatedHref: "/du-an/nha-khoa-dang-khoa",
+      relatedLabel: "Case study SEO + Maps",
     },
   },
 
@@ -687,12 +746,23 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
           { title: "Đã tối ưu hồ sơ", desc: "Ads hiệu quả nhất khi GBP đã chuẩn — kết hợp gói thiết kế Maps." },
         ],
       },
+      {
+        kind: "faq",
+        id: "faq",
+        label: "FAQ",
+        title: "Câu hỏi thường gặp",
+        items: [
+          { q: "Local Ads đo được gì?", a: "Lượt gọi, chỉ đường, click website và form — báo cáo theo chiến dịch và khu vực." },
+          { q: "Có nên chạy Local Ads khi chưa có review?", a: "Nên có ít nhất 5-10 review thật trước — ads + hồ sơ yếu sẽ tốn ngân sách mà chuyển đổi thấp." },
+          { q: "Local Ads khác SEO Maps thế nào?", a: "Ads cho hiển thị ngay. SEO Maps xây thứ hạng bền vững. Nên kết hợp cả hai." },
+        ],
+      },
     ],
     cta: {
       title: "Khách quanh bạn đang tìm — hãy xuất hiện trước",
       subtitle: "Local Ads + hồ sơ chuẩn = lượt gọi tăng.",
-      relatedHref: "/google-maps/thiet-ke-google-maps",
-      relatedLabel: "Tối ưu Google Maps trước",
+      relatedHref: "/seo-website/dia-phuong/ho-chi-minh",
+      relatedLabel: "SEO địa phương HCM",
     },
   },
 };

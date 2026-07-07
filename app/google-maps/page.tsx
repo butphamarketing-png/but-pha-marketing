@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Check, Search, Target, Zap, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
@@ -55,7 +56,55 @@ export default function GoogleMapsPage() {
   return (
     <PlatformPage config={config}>
       <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
-        
+        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 p-6 md:p-10">
+          <p className="brand-eyebrow mb-3">Dịch vụ Google Maps Marketing</p>
+          <h2 className="text-3xl font-black tracking-tight text-indigo-950 md:text-4xl">
+            Tối ưu Google Business Profile và Local SEO
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
+            <strong>Google Maps Marketing</strong> giúp doanh nghiệp xuất hiện khi khách tìm kiếm địa phương — intent
+            mua hàng cao nhất. Bứt Phá triển khai audit GBP, tối ưu thông tin, thu review thật, content Maps và Local
+            Ads — kết hợp website chuẩn SEO để tăng lượt gọi và khách đến cửa hàng.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/lien-he" className="brand-btn-primary">
+              Tư vấn Google Maps
+            </Link>
+            <Link href="/google-maps/thiet-ke-google-maps" className="brand-btn-secondary">
+              Thiết kế Google Maps
+            </Link>
+            <Link href="/blog/chu-de/google-maps" className="brand-btn-secondary">
+              Kiến thức Local SEO
+            </Link>
+            <Link href="/seo-website/dia-phuong/ho-chi-minh" className="brand-btn-secondary">
+              SEO địa phương HCM
+            </Link>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Proof thực chiến</p>
+          <h2 className="mt-2 text-2xl font-bold text-emerald-900">Local SEO gắn với website và lead</h2>
+          <ul className="mt-4 space-y-2 text-emerald-950">
+            <li>
+              Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search
+              sau triển khai website + SEO — GBP và Maps bổ sung kênh gọi điện/chỉ đường.
+            </li>
+            <li>Mô hình: GBP chuẩn → review thật → content Maps → landing page message-match.</li>
+            <li>
+              Xem{" "}
+              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold underline">
+                case study nha khoa
+              </Link>{" "}
+              hoặc hub{" "}
+              <Link href="/seo-website" className="font-semibold underline">
+                SEO Website
+              </Link>
+              .
+            </li>
+          </ul>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Kiểm tra doanh nghiệp trên Google Maps"

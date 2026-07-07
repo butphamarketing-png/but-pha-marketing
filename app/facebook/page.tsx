@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { Target, Rocket, Settings, UserCheck, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
@@ -55,7 +56,55 @@ export default function FacebookPage() {
   return (
     <PlatformPage config={config}>
       <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
-        
+        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/40 p-6 md:p-10">
+          <p className="brand-eyebrow mb-3">Dịch vụ Facebook Marketing</p>
+          <h2 className="text-3xl font-black tracking-tight text-indigo-950 md:text-4xl">
+            Thiết kế Fanpage, chăm sóc nội dung và quảng cáo Meta Ads
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
+            <strong>Facebook Marketing</strong> tại Bứt Phá gồm xây dựng Fanpage chuẩn thương hiệu, chăm sóc
+            content đều đặn và chạy Meta Ads tối ưu chuyển đổi tin nhắn/lead. Funnel đầy đủ: thiết kế → care → ads —
+            đồng bộ với website và Google Maps để không mất lead giữa các kênh.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/lien-he" className="brand-btn-primary">
+              Tư vấn Facebook Marketing
+            </Link>
+            <Link href="/facebook/thiet-ke-fanpage" className="brand-btn-secondary">
+              Thiết kế Fanpage
+            </Link>
+            <Link href="/blog/chu-de/facebook" className="brand-btn-secondary">
+              Kiến thức Facebook
+            </Link>
+            <Link href="/du-an/sao-khue" className="brand-btn-secondary">
+              Case study Fanpage
+            </Link>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Proof thực chiến</p>
+          <h2 className="mt-2 text-2xl font-bold text-emerald-900">Fanpage có số liệu, không chỉ đẹp</h2>
+          <ul className="mt-4 space-y-2 text-emerald-950">
+            <li>
+              Sao Khuê: Fanpage đạt <strong>83.374 lượt xem</strong> trong 90 ngày và{" "}
+              <strong>4.329 lượt xem video</strong> ≥3 giây — bổ sung kênh lead song song Google.
+            </li>
+            <li>Thiên Hoàng Kim, Nha Khoa Đăng Khoa: Fanpage đồng bộ cover, bio và website — nuôi lead inbox.</li>
+            <li>
+              Xem chi tiết tại{" "}
+              <Link href="/du-an/sao-khue" className="font-semibold underline">
+                case study Sao Khuê
+              </Link>{" "}
+              hoặc{" "}
+              <Link href="/du-an/thien-hoang-kim" className="font-semibold underline">
+                Thiên Hoàng Kim
+              </Link>
+              .
+            </li>
+          </ul>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Chuẩn đoán Fanpage miễn phí"

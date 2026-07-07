@@ -21,6 +21,29 @@ const childPages = [
   },
 ];
 
+const processSteps = [
+  { step: "01", title: "Audit workflow hiện tại", desc: "Map quy trình content, ads và lead hiện có." },
+  { step: "02", title: "Thiết lập governance", desc: "Brief, fact-check, human review trước publish." },
+  { step: "03", title: "AI Content Ops", desc: "Brief → draft → optimize → publish theo cluster SEO." },
+  { step: "04", title: "AI Search Optimization", desc: "Answer-first, entity, llms.txt cho AI crawler." },
+  { step: "05", title: "Đo KPI & scale", desc: "Tốc độ xuất bản, pass rate QA, traffic/lead per cluster." },
+];
+
+const visibleFaqs = [
+  {
+    q: "AI Marketing có thay thế đội content không?",
+    a: "AI giúp tăng tốc sản xuất nhưng vẫn cần biên tập và kiểm định bởi chuyên gia để đảm bảo EEAT.",
+  },
+  {
+    q: "Làm AI Marketing sao cho không bị nội dung mỏng?",
+    a: "Cần workflow có dữ liệu thật, case study, kiểm duyệt chuyên môn và chuẩn internal link theo cụm chủ đề.",
+  },
+  {
+    q: "AI Search Optimization là gì?",
+    a: "Tối ưu nội dung để xuất hiện trong Google AI Overview, Perplexity và LLM retrieval — answer-first, entity rõ, proof thật.",
+  },
+];
+
 export default function AiMarketingPage() {
   const canonical = `${SITE_URL}/ai-marketing`;
   const webPageLd = {
@@ -96,10 +119,29 @@ export default function AiMarketingPage() {
               <li key={item}>- {item}</li>
             ))}
           </ul>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/lien-he" className="brand-btn-primary">
               Tư vấn triển khai AI Marketing
             </Link>
+            <Link href="/kien-thuc/ai-marketing" className="brand-btn-secondary">
+              Knowledge Hub AI
+            </Link>
+            <Link href="/blog/chu-de/marketing" className="brand-btn-secondary">
+              Blog Marketing
+            </Link>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-indigo-950">Quy trình triển khai AI Marketing</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {processSteps.map((item) => (
+              <article key={item.step} className="rounded-2xl border border-indigo-100 p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-violet-600">Bước {item.step}</p>
+                <h3 className="mt-2 font-bold text-indigo-950">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -132,6 +174,21 @@ export default function AiMarketingPage() {
               - Hub AI: <Link href="/kien-thuc/ai-marketing" className="underline">/kien-thuc/ai-marketing</Link>.
             </li>
           </ul>
+        </section>
+
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
+          <div className="mt-5 space-y-3">
+            {visibleFaqs.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200 open:bg-violet-50/30"
+              >
+                <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">{item.q}</summary>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+              </details>
+            ))}
+          </div>
         </section>
       </div>
     </main>

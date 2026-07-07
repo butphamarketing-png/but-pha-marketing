@@ -11,14 +11,17 @@ const pillars = [
   {
     title: "Technical SEO",
     desc: "Crawl/index/Core Web Vitals/schema/canonical.",
+    href: "/seo-website/technical-seo",
   },
   {
     title: "Content SEO",
     desc: "Topic cluster, search intent và topical authority.",
+    href: "/seo-website/seo-content",
   },
   {
     title: "Local SEO",
     desc: "Khai thác truy vấn địa phương và chuyển đổi cao.",
+    href: "/seo-website/dia-phuong/ho-chi-minh",
   },
 ];
 
@@ -37,6 +40,29 @@ const childPages = [
     href: "/seo-website/dia-phuong/ho-chi-minh",
     title: "SEO theo địa phương",
     desc: "Cụm landing local SEO với quality gate index/noindex.",
+  },
+];
+
+const processSteps = [
+  { step: "01", title: "Audit kỹ thuật", desc: "Crawl, index, canonical, schema, CWV — mở trần cho content." },
+  { step: "02", title: "Keyword & intent map", desc: "Phân cụm head/mid/long-tail theo funnel chuyển đổi." },
+  { step: "03", title: "Content cluster", desc: "Pillar + cluster + internal link silo theo chủ đề." },
+  { step: "04", title: "On-page & proof", desc: "EEAT, case study, FAQ intent, CTA rõ trên mỗi URL." },
+  { step: "05", title: "Đo lường & tối ưu", desc: "GSC weekly, điều chỉnh cluster và technical fixes." },
+];
+
+const visibleFaqs = [
+  {
+    q: "SEO Website mất bao lâu để thấy kết quả?",
+    a: "Thông thường bắt đầu thấy tín hiệu trong 8-12 tuần và rõ ràng hơn sau 4-6 tháng tùy cạnh tranh ngành.",
+  },
+  {
+    q: "Nên ưu tiên Technical SEO hay Content SEO?",
+    a: "Nên xử lý nền tảng kỹ thuật trước để đảm bảo index/crawl tốt, sau đó mở rộng content cluster để tăng phủ từ khóa.",
+  },
+  {
+    q: "SEO Website có cần website mới không?",
+    a: "Không bắt buộc. Nếu CWV kém hoặc cấu trúc URL lộn xộn — nên cải tạo kỹ thuật song song với content.",
   },
 ];
 
@@ -142,12 +168,40 @@ export default function SeoWebsitePage() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-2">
-          {pillars.map((item) => (
-            <article key={item.title} className="rounded-2xl border border-indigo-100 bg-white p-6">
-              <h2 className="text-xl font-bold text-indigo-950">{item.title}</h2>
-              <p className="mt-2 text-slate-600">{item.desc}</p>
-            </article>
-          ))}
+          {pillars.map((item) => {
+            const inner = (
+              <>
+                <h2 className="text-xl font-bold text-indigo-950">{item.title}</h2>
+                <p className="mt-2 text-slate-600">{item.desc}</p>
+              </>
+            );
+            return "href" in item && item.href ? (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="rounded-2xl border border-indigo-100 bg-white p-6 transition hover:border-violet-300"
+              >
+                {inner}
+              </Link>
+            ) : (
+              <article key={item.title} className="rounded-2xl border border-indigo-100 bg-white p-6">
+                {inner}
+              </article>
+            );
+          })}
+        </section>
+
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-indigo-950">Quy trình SEO Website (checklist)</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {processSteps.map((item) => (
+              <article key={item.step} className="rounded-2xl border border-indigo-100 p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-violet-600">Bước {item.step}</p>
+                <h3 className="mt-2 font-bold text-indigo-950">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
@@ -176,6 +230,21 @@ export default function SeoWebsitePage() {
                 <p className="font-bold text-indigo-950">{item.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
               </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
+          <div className="mt-5 space-y-3">
+            {visibleFaqs.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200 open:bg-violet-50/30"
+              >
+                <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">{item.q}</summary>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+              </details>
             ))}
           </div>
         </section>
