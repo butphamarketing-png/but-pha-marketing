@@ -1,4 +1,5 @@
 import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { wpProofFanpageBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -61,6 +62,8 @@ ${wpKeyTakeaways([
   "HSNL online thay PDF nặng — xem mobile tại công trình.",
   "Bứt Phá: website xây dựng 6–14 triệu tùy gallery và form CRM.",
 ])}
+
+${wpProofFanpageBand()}
 
 ${wpKienTrucImg(0, "Thiết kế website xây dựng nhà thầu project gallery và form báo giá")}
 

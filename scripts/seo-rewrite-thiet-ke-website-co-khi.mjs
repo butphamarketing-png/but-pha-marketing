@@ -1,4 +1,5 @@
 import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { wpProofGscBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -64,6 +65,8 @@ ${wpKeyTakeaways([
   "Đa ngôn ngữ EN (tối thiểu) cho thị trường quốc tế.",
   "Bứt Phá: 5–15 triệu; tích hợp CRM/Sheet cho sales follow-up.",
 ])}
+
+${wpProofGscBand()}
 
 ${wpCoKhiImg(0, "Thiết kế website cơ khí với catalog sản phẩm và form báo giá B2B")}
 

@@ -1,4 +1,5 @@
 import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { wpProofGscBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -70,6 +71,8 @@ ${wpKeyTakeaways([
   <li><a href="${SITE}/lien-he">Liên hệ tư vấn</a></li>
 </ul>
 </div>
+
+${wpProofGscBand()}
 
 ${wpImg(0, "Báo giá thiết kế website và các yếu tố ảnh hưởng chi phí")}
 

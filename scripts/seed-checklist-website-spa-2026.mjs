@@ -32,7 +32,7 @@ ${toc([
 ])}
 
 <div class="rounded-2xl border border-violet-200 bg-violet-50/80 p-5 my-6">
-<p><strong>Tóm tắt nhanh:</strong> <strong>${KEYWORD}</strong> gồm 20 mục: booking 1-click, bảng giá liệu trình, gallery không gian, SEO “spa + quận” và Zalo chat. Tham chiếu <a href="${SITE}/du-an/phuoc-lai-luxury">Phước Lai Luxury</a> và <a href="${SITE}/du-an/halee-tram">Halee Trâm</a>.</p>
+<p><strong>Tóm tắt nhanh:</strong> <strong>${KEYWORD}</strong> gồm 20 mục: booking 1-click, bảng giá liệu trình, gallery không gian, SEO “spa + quận” và Zalo chat. Tham chiếu <a href="${SITE}/du-an/phuoc-lai-luxury">Phước Lai Luxury</a> và <a href="${SITE}/du-an/halee-tram">Halee Trâm</a>. Case <a href="${SITE}/du-an/sao-khue">Sao Khuê</a>: Fanpage <strong>83.374 lượt xem</strong> trong 90 ngày.</p>
 </div>
 
 <h2 id="tom-tat">Checklist website spa là gì?</h2>

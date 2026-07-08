@@ -34,7 +34,7 @@ ${toc([
 ])}
 
 <div class="rounded-2xl border border-violet-200 bg-violet-50/80 p-5 my-6">
-<p><strong>Tóm tắt:</strong> <strong>${KEYWORD}</strong> — khung 9 trang cho nhà thầu: gallery công trình, hồ sơ năng lực PDF, form báo giá và landing đa tỉnh. Tham chiếu <a href="${SITE}/du-an/kien-truc-sao-khue">Kiến Trúc Sao Khuê</a> · <a href="${SITE}/blog/checklist-website-xay-dung-2026">checklist</a>.</p>
+<p><strong>Tóm tắt:</strong> <strong>${KEYWORD}</strong> — khung 9 trang cho nhà thầu: gallery công trình, hồ sơ năng lực PDF, form báo giá và landing đa tỉnh. Tham chiếu <a href="${SITE}/du-an/kien-truc-sao-khue">Kiến Trúc Sao Khuê</a> — Fanpage <strong>83.374 lượt xem</strong> trong 90 ngày · <a href="${SITE}/blog/checklist-website-xay-dung-2026">checklist</a>.</p>
 </div>
 
 <h2 id="tom-tat">Template website xây dựng là gì?</h2>

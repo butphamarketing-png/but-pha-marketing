@@ -1,4 +1,5 @@
 import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { wpProofGscBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -62,6 +63,8 @@ ${wpKeyTakeaways([
   "Flash sale landing + coupon — conversion cho khách quen săn deal.",
   "Bứt Phá: website cửa hàng mỹ phẩm 8–16 triệu tùy SKU và tích hợp.",
 ])}
+
+${wpProofGscBand()}
 
 ${wpMyPhamImg(0, "Thiết kế website cửa hàng mỹ phẩm — giao diện shop skincare đa thương hiệu")}
 

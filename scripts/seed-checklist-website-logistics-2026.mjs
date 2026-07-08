@@ -31,7 +31,7 @@ ${toc([
 ])}
 
 <div class="rounded-2xl border border-violet-200 bg-violet-50/80 p-5 my-6">
-<p><strong>Tóm tắt nhanh:</strong> <strong>${KEYWORD}</strong> gồm 20 mục: tra cứu vận đơn, báo giá cước, mạng lưới tuyến, đội xe và SEO “vận tải + tỉnh/khu công nghiệp”. Xem <a href="${SITE}/blog/nganh/logistics">hub silo logistics</a>.</p>
+<p><strong>Tóm tắt nhanh:</strong> <strong>${KEYWORD}</strong> gồm 20 mục: tra cứu vận đơn, báo giá cước, mạng lưới tuyến, đội xe và SEO “vận tải + tỉnh/khu công nghiệp”. Proof B2B: <a href="${SITE}/du-an/nha-khoa-dang-khoa">Nha Khoa Đăng Khoa</a> — <strong>15,4K impressions</strong> và <strong>471 clicks</strong> GSC. Xem <a href="${SITE}/blog/nganh/logistics">hub silo logistics</a>.</p>
 </div>
 
 <h2 id="tom-tat">Checklist website logistics là gì?</h2>

@@ -1,4 +1,5 @@
 import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { wpProofGscBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -62,6 +63,8 @@ ${wpKeyTakeaways([
   "Portal B2B: lịch sử đơn, COD, đối soát — khách enterprise.",
   "Bứt Phá: website logistics 8–16 triệu tùy tracking API và portal.",
 ])}
+
+${wpProofGscBand()}
 
 ${wpLogisticsImg(0, "Thiết kế website logistics vận tải tra cứu vận đơn và báo giá cước")}
 

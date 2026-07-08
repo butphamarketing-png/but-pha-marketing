@@ -34,7 +34,7 @@ ${toc([
 ])}
 
 <div class="rounded-2xl border border-violet-200 bg-violet-50/80 p-5 my-6">
-<p><strong>Tóm tắt:</strong> <strong>${KEYWORD}</strong> — 7 trang tối ưu booking: menu dịch vụ, combo giá, gallery không gian, CTA Zalo/đặt lịch. Tham chiếu <a href="${SITE}/du-an/phuoc-lai-luxury">Phước Lai Luxury</a>.</p>
+<p><strong>Tóm tắt:</strong> <strong>${KEYWORD}</strong> — 7 trang tối ưu booking: menu dịch vụ, combo giá, gallery không gian, CTA Zalo/đặt lịch. Tham chiếu <a href="${SITE}/du-an/phuoc-lai-luxury">Phước Lai Luxury</a>. Benchmark Fanpage: <strong>83.374 lượt xem</strong> / 90 ngày (<a href="${SITE}/du-an/sao-khue">Sao Khuê</a>).</p>
 </div>
 
 <h2 id="menu">Menu &amp; sitemap 7 trang</h2>

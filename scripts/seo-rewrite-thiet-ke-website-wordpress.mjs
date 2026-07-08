@@ -1,4 +1,5 @@
 import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { wpProofGscBand } from "./seo-proof-blocks.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -71,6 +72,8 @@ ${wpKeyTakeaways([
   <li><a href="${SITE}/lien-he">Liên hệ tư vấn</a></li>
 </ul>
 </div>
+
+${wpProofGscBand()}
 
 ${wpImg(2, "Thiết kế website WordPress chuyên nghiệp cho doanh nghiệp")}
 
