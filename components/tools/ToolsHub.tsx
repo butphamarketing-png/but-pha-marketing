@@ -1,7 +1,7 @@
 "use client";
 
-import { Stamp, Wand2 } from "lucide-react";
-import { ToolHubCard, ToolShell } from "@/components/tools/watermark-ui";
+import { ImageIcon, Stamp, Wand2, Zap } from "lucide-react";
+import { HubSeoBlock, ToolHubCard, ToolHubHeader, ToolShell } from "@/components/tools/watermark-ui";
 import { WatermarkLoginGate, useWatermarkSession } from "@/components/tools/WatermarkLoginGate";
 
 function ToolsHubContent() {
@@ -9,16 +9,13 @@ function ToolsHubContent() {
   if (!session) return null;
 
   return (
-    <ToolShell>
+    <ToolShell userName={session.fullName}>
       <div className="space-y-6">
-        <header className="rounded-[1.75rem] border border-white/60 bg-white/80 p-6 shadow-brand backdrop-blur-md">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">Bứt Phá Marketing</p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-indigo-950">Bộ công cụ xử lý ảnh</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-            Xin chào <span className="font-semibold text-indigo-900">{session.fullName}</span>. Tất cả công cụ chạy 100% trên
-            trình duyệt — ảnh của bạn không được upload lên server.
-          </p>
-        </header>
+        <ToolHubHeader
+          userName={session.fullName}
+          title="Bộ công cụ xử lý ảnh"
+          subtitle="Tất cả công cụ chạy 100% trên trình duyệt — ảnh của bạn không được upload lên server."
+        />
 
         <div className="grid gap-4 sm:grid-cols-2">
           <ToolHubCard
@@ -34,7 +31,22 @@ function ToolsHubContent() {
             description="Xóa nền logo hoặc ảnh sản phẩm bằng AI chạy trên trình duyệt. Offline sau lần tải model đầu."
             icon={<Wand2 size={22} />}
           />
+          <ToolHubCard
+            title="Nén ảnh WebP"
+            description="Giảm dung lượng ảnh sản phẩm mà vẫn giữ chất lượng hiển thị tốt trên web."
+            icon={<Zap size={22} />}
+            badge="Sắp ra"
+            disabled
+          />
+          <ToolHubCard
+            title="Resize hàng loạt"
+            description="Đổi kích thước ảnh theo tỷ lệ chuẩn cho Shopee, Facebook, website."
+            icon={<ImageIcon size={22} />}
+            disabled
+          />
         </div>
+
+        <HubSeoBlock />
       </div>
     </ToolShell>
   );

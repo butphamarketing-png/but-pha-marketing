@@ -1228,3 +1228,42 @@
     display: block !important;
   }
 }
+
+/* /cong-cu tool UI */
+.tool-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #7c3aed, #312e81);
+  outline: none;
+}
+.tool-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: white;
+  border: 2px solid #7c3aed;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+  cursor: pointer;
+}
+.tool-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: white;
+  border: 2px solid #7c3aed;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+  cursor: pointer;
+}
+@keyframes tool-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.tool-shimmer {
+  background: linear-gradient(90deg, #eef2ff 25%, #e9d5ff 50%, #eef2ff 75%);
+  background-size: 200% 100%;
+  animation: tool-shimmer 1.4s ease-in-out infinite;
+}

@@ -3,13 +3,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { saveAs } from "file-saver";
 import { Download, ImagePlus, Layers, Stamp } from "lucide-react";
+import { useToolToast } from "@/components/tools/ToolToast";
 import { WatermarkLoginGate, useWatermarkSession } from "@/components/tools/WatermarkLoginGate";
 import {
+  BatchProgressBar,
   BtnPrimary,
   BtnSecondary,
   CanvasToolbar,
   CompareSlider,
+  FullscreenPreview,
   ImageThumbStrip,
+  KeyboardShortcutsModal,
+  MobileStickyBar,
+  MobileToolTabs,
+  OnboardingTip,
   PresetGrid,
   PreviewFrame,
   RangeField,
@@ -23,6 +30,8 @@ import {
 } from "@/components/tools/watermark-ui";
 import { usePresetHistory } from "@/hooks/usePresetHistory";
 import { useWatermarkBatch } from "@/hooks/useWatermarkBatch";
+import { ONBOARDING_DRAG_KEY, REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
+import { loadSampleImage } from "@/lib/tool-samples";
 import {
   PRESET_KEY,
   LOGO_KEY,
@@ -43,9 +52,45 @@ import {
 } from "@/lib/watermark-core";
 
 type LoadedImage = LoadedImageMeta & { file: File };
+type MobileTab = "upload" | "edit" | "export";
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function drawLogoOverlay(
+  ctx: CanvasRenderingContext2D,
+  placement: { x: number; y: number; logoWidth: number; logoHeight: number },
+) {
+  const { x, y, logoWidth, logoHeight } = placement;
+  ctx.save();
+  ctx.strokeStyle = "rgba(124,58,237,0.9)";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  if ("roundRect" in ctx && typeof ctx.roundRect === "function") {
+    ctx.roundRect(x, y, logoWidth, logoHeight, 4);
+    ctx.stroke();
+  } else {
+    ctx.strokeRect(x, y, logoWidth, logoHeight);
+  }
+  ctx.setLineDash([]);
+  const hx = x + logoWidth;
+  const hy = y + logoHeight;
+  ctx.beginPath();
+  ctx.arc(hx, hy, 8, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+  ctx.strokeStyle = "#7c3aed";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.restore();
+}
 
 function LogoWatermarkContent() {
   const session = useWatermarkSession();
+  const { toast } = useToolToast();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [images, setImages] = useState<LoadedImage[]>([]);
@@ -70,6 +115,11 @@ function LogoWatermarkContent() {
 
   const [dragMode, setDragMode] = useState<"move" | "resize" | null>(null);
   const dragStartRef = useRef({ x: 0, y: 0, startXP: 0, startYP: 0, startWidth: 0 });
+  const [mobileTab, setMobileTab] = useState<MobileTab>("upload");
+  const [canvasZoom, setCanvasZoom] = useState<"fit" | "100">("fit");
+  const [showGrid, setShowGrid] = useState(false);
+  const [fullscreenUrl, setFullscreenUrl] = useState("");
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   const { progress: batchProgress, isPaused, runBatch, pause, resume, cancel } = useWatermarkBatch();
 
@@ -81,24 +131,44 @@ function LogoWatermarkContent() {
 
   const { canUndo, canRedo, undo, redo, beginDrag, endDrag, recordChange } = usePresetHistory(activePreset, restorePreset);
 
+  const imagesMeta = useMemo(() => {
+    const totalBytes = images.reduce((sum, img) => sum + img.file.size, 0);
+    return images.length > 0 ? `${images.length} ảnh · ${formatBytes(totalBytes)}` : undefined;
+  }, [images]);
+
   useEffect(() => {
     const rawPresets = localStorage.getItem(PRESET_KEY);
     if (rawPresets) setPresets(JSON.parse(rawPresets) as Preset[]);
-    const rawLogo = localStorage.getItem(LOGO_KEY);
+    const transferred = sessionStorage.getItem(REMOVE_BG_LOGO_TRANSFER_KEY);
+    const rawLogo = transferred || localStorage.getItem(LOGO_KEY);
+    if (transferred) sessionStorage.removeItem(REMOVE_BG_LOGO_TRANSFER_KEY);
     if (rawLogo) {
       setLogoDataUrl(rawLogo);
+      localStorage.setItem(LOGO_KEY, rawLogo);
       dataUrlToImageBitmap(rawLogo)
         .then((bmp) => {
           setLogoNaturalSize({ width: bmp.width, height: bmp.height });
           bmp.close();
         })
         .catch(() => undefined);
+      if (transferred) toast("Đã nhận logo từ công cụ xóa nền");
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
   }, [presets]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "?" && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setShortcutsOpen(true);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const updateActivePreset = useCallback(
     (partial: Partial<Preset>, trackHistory = true) => {
@@ -118,7 +188,7 @@ function LogoWatermarkContent() {
     canvas.width = baseBitmap.width;
     canvas.height = baseBitmap.height;
     const maxPreviewWidth = 880;
-    const ratio = baseBitmap.width > maxPreviewWidth ? maxPreviewWidth / baseBitmap.width : 1;
+    const ratio = canvasZoom === "fit" && baseBitmap.width > maxPreviewWidth ? maxPreviewWidth / baseBitmap.width : 1;
     canvas.style.width = `${Math.round(baseBitmap.width * ratio)}px`;
     canvas.style.height = `${Math.round(baseBitmap.height * ratio)}px`;
 
@@ -128,18 +198,12 @@ function LogoWatermarkContent() {
       const logoWidth = (baseBitmap.width * activePreset.logoWidthPercent) / 100;
       const logoHeight = logoWidth * (logoNaturalSize.height / logoNaturalSize.width);
       const placement = computePlacement(baseBitmap.width, baseBitmap.height, logoWidth, logoHeight, activePreset);
-      ctx.save();
-      ctx.strokeStyle = "rgba(124,58,237,0.9)";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(placement.x, placement.y, placement.logoWidth, placement.logoHeight);
-      ctx.fillStyle = "rgba(124,58,237,1)";
-      ctx.fillRect(placement.x + placement.logoWidth - 12, placement.y + placement.logoHeight - 12, 12, 12);
-      ctx.restore();
+      drawLogoOverlay(ctx, placement);
     }
 
     baseBitmap.close();
     setPreviewOutputUrl(canvas.toDataURL("image/png"));
-  }, [selectedImage, logoDataUrl, activePreset, textWatermark, logoNaturalSize]);
+  }, [selectedImage, logoDataUrl, activePreset, textWatermark, logoNaturalSize, canvasZoom]);
 
   useEffect(() => {
     drawPreview().catch(() => undefined);
@@ -149,22 +213,52 @@ function LogoWatermarkContent() {
     if (!selectedImage) setPreviewOutputUrl("");
   }, [selectedImage]);
 
-  const onPickImages = useCallback(async (fileList: FileList | null) => {
-    if (!fileList) return;
-    const loaded = await Promise.all(Array.from(fileList).filter(isImageFile).map(loadImageFromFile));
-    if (!loaded.length) return;
-    setImages(loaded);
-    setSelectedImageIndex(0);
-  }, []);
+  const onPickImages = useCallback(
+    async (fileList: FileList | null) => {
+      if (!fileList) return;
+      const loaded = await Promise.all(Array.from(fileList).filter(isImageFile).map(loadImageFromFile));
+      if (!loaded.length) return;
+      setImages(loaded);
+      setSelectedImageIndex(0);
+      toast(`Đã tải ${loaded.length} ảnh`);
+    },
+    [toast],
+  );
 
-  const onPickLogo = useCallback(async (fileList: FileList | null) => {
-    const file = fileList?.[0];
-    if (!file || !isImageFile(file)) return;
-    const loaded = await loadImageFromFile(file);
-    setLogoDataUrl(loaded.dataUrl);
-    setLogoNaturalSize({ width: loaded.width, height: loaded.height });
-    localStorage.setItem(LOGO_KEY, loaded.dataUrl);
-  }, []);
+  const onPickLogo = useCallback(
+    async (fileList: FileList | null) => {
+      const file = fileList?.[0];
+      if (!file || !isImageFile(file)) return;
+      const loaded = await loadImageFromFile(file);
+      setLogoDataUrl(loaded.dataUrl);
+      setLogoNaturalSize({ width: loaded.width, height: loaded.height });
+      localStorage.setItem(LOGO_KEY, loaded.dataUrl);
+      toast("Logo đã lưu cho lần sau");
+    },
+    [toast],
+  );
+
+  const loadSample = useCallback(async () => {
+    const loaded = await loadSampleImage();
+    setImages([loaded]);
+    setSelectedImageIndex(0);
+    toast("Đã tải ảnh mẫu");
+  }, [toast]);
+
+  const removeImageAt = useCallback(
+    (index: number) => {
+      setImages((prev) => {
+        const next = prev.filter((_, i) => i !== index);
+        return next;
+      });
+      setSelectedImageIndex((prev) => {
+        if (index < prev) return prev - 1;
+        if (prev >= images.length - 1) return Math.max(0, images.length - 2);
+        return prev;
+      });
+    },
+    [images.length],
+  );
 
   const saveCurrentAsPreset = useCallback(() => {
     if (!activePreset) return;
@@ -174,7 +268,8 @@ function LogoWatermarkContent() {
     setPresets((prev) => [...prev, { ...activePreset, id, name }]);
     setActivePresetId(id);
     setNewPresetName("");
-  }, [activePreset, newPresetName]);
+    toast("Đã lưu preset");
+  }, [activePreset, newPresetName, toast]);
 
   const deletePreset = useCallback(
     (id: string) => {
@@ -187,16 +282,21 @@ function LogoWatermarkContent() {
 
   const exportPresetJson = useCallback(() => {
     saveAs(new Blob([JSON.stringify(presets, null, 2)], { type: "application/json" }), "butpha-watermark-presets.json");
-  }, [presets]);
+    toast("Đã export preset");
+  }, [presets, toast]);
 
-  const importPresetJson = useCallback(async (fileList: FileList | null) => {
-    const file = fileList?.[0];
-    if (!file) return;
-    const parsed = JSON.parse(await file.text()) as Preset[];
-    if (!Array.isArray(parsed)) return;
-    setPresets(parsed);
-    setActivePresetId(parsed[0]?.id ?? defaultPresets[0].id);
-  }, []);
+  const importPresetJson = useCallback(
+    async (fileList: FileList | null) => {
+      const file = fileList?.[0];
+      if (!file) return;
+      const parsed = JSON.parse(await file.text()) as Preset[];
+      if (!Array.isArray(parsed)) return;
+      setPresets(parsed);
+      setActivePresetId(parsed[0]?.id ?? defaultPresets[0].id);
+      toast("Đã import preset");
+    },
+    [toast],
+  );
 
   const handleCanvasPointerDown = useCallback(
     (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -211,13 +311,8 @@ function LogoWatermarkContent() {
       const logoHeight = (activePreset.logoWidthPercent * selectedImage.width * logoNaturalSize.height) / (100 * logoNaturalSize.width);
       const logoWidth = (selectedImage.width * activePreset.logoWidthPercent) / 100;
       const place = computePlacement(selectedImage.width, selectedImage.height, logoWidth, logoHeight, activePreset);
-      const hitResize =
-        pointerX >= place.x + place.logoWidth - 20 &&
-        pointerX <= place.x + place.logoWidth + 2 &&
-        pointerY >= place.y + place.logoHeight - 20 &&
-        pointerY <= place.y + place.logoHeight + 2;
-      const hitLogo =
-        pointerX >= place.x && pointerX <= place.x + place.logoWidth && pointerY >= place.y && pointerY <= place.y + place.logoHeight;
+      const hitResize = Math.hypot(pointerX - (place.x + place.logoWidth), pointerY - (place.y + place.logoHeight)) <= 14;
+      const hitLogo = pointerX >= place.x && pointerX <= place.x + place.logoWidth && pointerY >= place.y && pointerY <= place.y + place.logoHeight;
       if (!hitLogo && !hitResize) {
         endDrag();
         return;
@@ -277,232 +372,245 @@ function LogoWatermarkContent() {
     if (!selectedImage || !activePreset || !canExportWatermark(logoDataUrl, textWatermark)) return;
     const blob = await drawWatermarkBlob(selectedImage, logoDataUrl || null, activePreset, textWatermark, exportType);
     saveAs(blob, `${fileNameWithoutExt(selectedImage.file.name)}-watermark.${extensionForMime(exportType)}`);
-  }, [selectedImage, logoDataUrl, activePreset, textWatermark, exportType]);
+    toast("Đã tải ảnh");
+  }, [selectedImage, logoDataUrl, activePreset, textWatermark, exportType, toast]);
 
   const handleExportBatch = useCallback(async () => {
     if (!images.length || !activePreset || !canExportWatermark(logoDataUrl, textWatermark)) return;
     try {
-      await runBatch({
-        images,
-        logoDataUrl: logoDataUrl || null,
-        presets,
-        activePreset,
-        textSettings: textWatermark,
-        exportType,
-      });
+      await runBatch({ images, logoDataUrl: logoDataUrl || null, presets, activePreset, textSettings: textWatermark, exportType });
+      toast("Đã xuất ZIP hàng loạt");
     } catch (error) {
-      console.error(error);
+      toast(error instanceof Error ? error.message : "Lỗi xuất ZIP", "error");
     }
-  }, [images, logoDataUrl, activePreset, textWatermark, exportType, presets, runBatch]);
+  }, [images, logoDataUrl, activePreset, textWatermark, exportType, presets, runBatch, toast]);
 
   const exportReady = canExportWatermark(logoDataUrl, textWatermark);
+
+  const showUpload = mobileTab === "upload";
+  const showEdit = mobileTab === "edit";
+  const showExport = mobileTab === "export";
+
+  const uploadPanel = (
+    <>
+      <ToolPanel>
+        <WatermarkDropZone
+          step={1}
+          label="Ảnh cần đóng dấu"
+          hint="JPG, PNG, WebP — 1 ảnh hoặc nhiều ảnh"
+          accept="image/png,image/jpeg,image/webp"
+          multiple
+          onFiles={onPickImages}
+          previewUrl={selectedImage?.dataUrl}
+          fileName={selectedImage ? `${selectedImage.file.name}${images.length > 1 ? ` (+${images.length - 1})` : ""}` : undefined}
+          fileMeta={imagesMeta}
+        />
+        <div className="mt-3 space-y-2">
+          <UploadActionRow onPickImages={onPickImages} onPickFolder={onPickImages} />
+          <button type="button" onClick={loadSample} className="w-full rounded-xl border border-dashed border-violet-200 py-2 text-xs font-semibold text-violet-700 hover:bg-violet-50">
+            Dùng ảnh mẫu
+          </button>
+        </div>
+      </ToolPanel>
+      <ToolPanel>
+        <WatermarkDropZone step={2} label="Logo watermark" hint="PNG trong suốt khuyến nghị · tự lưu cho lần sau" accept="image/png,image/jpeg,image/webp" onFiles={onPickLogo} previewUrl={logoDataUrl || undefined} fileName={logoDataUrl ? "Logo đã tải" : undefined} />
+      </ToolPanel>
+    </>
+  );
+
+  const editPanel = (
+    <>
+      <ToolSection title="Vị trí logo nhanh" icon={<Layers size={16} className="text-violet-600" />}>
+        <PresetGrid
+          presets={defaultPresets}
+          activeId={activePresetId}
+          onSelect={(id) => {
+            if (activePreset) recordChange(activePreset);
+            setActivePresetId(id);
+          }}
+        />
+        <select
+          value={activePreset?.id}
+          onChange={(e) => {
+            if (activePreset) recordChange(activePreset);
+            setActivePresetId(e.target.value);
+          }}
+          className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 dark:border-slate-600 dark:bg-slate-800"
+        >
+          {presets.map((preset) => (
+            <option key={preset.id} value={preset.id}>
+              {preset.name}
+            </option>
+          ))}
+        </select>
+      </ToolSection>
+      <ToolSection title="Tuỳ chỉnh chi tiết" defaultOpen={false}>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vị trí & kích thước</p>
+        <RangeField label="Kích thước logo" value={activePreset?.logoWidthPercent ?? 16} min={3} max={90} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ logoWidthPercent: v })} />
+        <RangeField label="Lề ngang" value={activePreset?.marginXPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginXPercent: v })} />
+        <RangeField label="Lề dọc" value={activePreset?.marginYPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginYPercent: v })} />
+        <p className="pt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Hiệu ứng</p>
+        <RangeField label="Độ mờ logo" value={activePreset?.opacity ?? 85} min={0} max={100} step={1} suffix="%" onChange={(v) => updateActivePreset({ opacity: v })} />
+        <RangeField label="Xoay logo" value={activePreset?.rotation ?? 0} min={-45} max={45} step={1} suffix="°" onChange={(v) => updateActivePreset({ rotation: v })} />
+        <div className="flex flex-wrap gap-2 pt-1">
+          <input value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800" placeholder="Tên preset" />
+          <button type="button" className="rounded-xl bg-violet-600 px-3 py-2 text-xs font-bold text-white" onClick={saveCurrentAsPreset}>
+            Lưu
+          </button>
+          <button type="button" className="rounded-xl border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-600" onClick={() => deletePreset(activePreset?.id ?? "")}>
+            Xóa
+          </button>
+        </div>
+        <div className="flex gap-2">
+          <button type="button" className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50" onClick={exportPresetJson}>
+            Export
+          </button>
+          <label className="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50">
+            Import
+            <input type="file" accept="application/json" className="hidden" onChange={(e) => importPresetJson(e.target.files)} />
+          </label>
+        </div>
+      </ToolSection>
+      <ToolSection title="Watermark chữ" defaultOpen={false}>
+        <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2.5">
+          <input type="checkbox" checked={textWatermark.enabled} onChange={(e) => setTextWatermark((prev) => ({ ...prev, enabled: e.target.checked }))} className="h-4 w-4 accent-violet-600" />
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Bật watermark chữ</span>
+        </label>
+        <input value={textWatermark.content} onChange={(e) => setTextWatermark((prev) => ({ ...prev, content: e.target.value }))} placeholder="Nội dung chữ" className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm dark:border-slate-600 dark:bg-slate-800" />
+        <RangeField label="Cỡ chữ" value={textWatermark.fontSizePercent} min={1.2} max={8} step={0.1} suffix="%" onChange={(v) => setTextWatermark((prev) => ({ ...prev, fontSizePercent: v }))} />
+        <div className="flex items-center gap-3">
+          <label className="text-xs font-medium text-slate-600">Màu chữ</label>
+          <input type="color" value={textWatermark.color} onChange={(e) => setTextWatermark((prev) => ({ ...prev, color: e.target.value }))} className="h-9 w-14 cursor-pointer rounded-lg border border-slate-200" />
+        </div>
+      </ToolSection>
+    </>
+  );
+
+  const exportPanel = (
+    <ToolPanel>
+      <p className="mb-3 flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-white">
+        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-600 text-[11px] font-bold text-white">3</span>
+        Xuất ảnh
+      </p>
+      <select value={exportType} onChange={(e) => setExportType(e.target.value as "image/png" | "image/jpeg")} className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm dark:border-slate-600 dark:bg-slate-800">
+        <option value="image/png">PNG chất lượng cao</option>
+        <option value="image/jpeg">JPG chất lượng cao</option>
+      </select>
+      {!exportReady ? <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-800">Tải logo hoặc bật watermark chữ để xuất.</p> : null}
+      <div className="mt-3 space-y-2">
+        <BtnPrimary onClick={handleExportSingle} disabled={!selectedImage || !exportReady} icon={<Download size={16} />}>
+          Tải ảnh hiện tại
+        </BtnPrimary>
+        <BtnSecondary onClick={handleExportBatch} disabled={!images.length || !exportReady || batchProgress.running} icon={<Download size={16} />}>
+          Xuất ZIP ({images.length || 0} ảnh)
+        </BtnSecondary>
+      </div>
+      <BatchProgressBar current={batchProgress.current} total={batchProgress.total} running={batchProgress.running} isPaused={isPaused} onPause={pause} onResume={resume} onCancel={cancel} />
+    </ToolPanel>
+  );
+
+  const previewPanel = (
+    <ToolPanel className="lg:p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-extrabold text-indigo-950 dark:text-white">Xem trước</h2>
+          <p className="mt-0.5 text-xs text-slate-500">
+            {selectedImage ? `${selectedImage.width} × ${selectedImage.height}px` : "Chưa có ảnh"}
+            {logoDataUrl ? " · Kéo logo để chỉnh vị trí" : ""}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {logoDataUrl ? (
+            <CanvasToolbar
+              canUndo={canUndo}
+              canRedo={canRedo}
+              onUndo={undo}
+              onRedo={redo}
+              zoom={canvasZoom}
+              onZoomChange={setCanvasZoom}
+              showGrid={showGrid}
+              onToggleGrid={() => setShowGrid((v) => !v)}
+              onFullscreen={() => previewOutputUrl && setFullscreenUrl(previewOutputUrl)}
+            />
+          ) : null}
+          {images.length > 1 ? <span className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-800 px-3 py-1 text-xs font-bold text-white">{images.length} ảnh</span> : null}
+        </div>
+      </div>
+
+      {selectedImage ? (
+        <div className="space-y-4">
+          {images.length > 1 ? <ImageThumbStrip images={images} selectedIndex={selectedImageIndex} onSelect={setSelectedImageIndex} onRemove={removeImageAt} /> : null}
+          <PreviewFrame showGrid={showGrid}>
+            <canvas
+              ref={canvasRef}
+              className={`max-w-full rounded-xl shadow-lg ring-1 ring-black/5 ${logoDataUrl ? "cursor-move" : "cursor-default"}`}
+              onPointerDown={handleCanvasPointerDown}
+              onPointerMove={handleCanvasPointerMove}
+              onPointerUp={handleCanvasPointerUp}
+            />
+          </PreviewFrame>
+          {!logoDataUrl ? (
+            <p className="rounded-xl border border-amber-200/60 bg-amber-50/80 px-4 py-2.5 text-xs leading-relaxed text-amber-900">Ảnh đã hiển thị. Tải logo để đóng dấu, hoặc bật watermark chữ để xuất ngay.</p>
+          ) : (
+            <p className="text-center text-xs text-slate-500">Kéo logo · kéo chấm góc để resize · Ctrl+Z hoàn tác · ? phím tắt</p>
+          )}
+          {previewOutputUrl ? <CompareSlider beforeUrl={selectedImage.dataUrl} afterUrl={previewOutputUrl} split={compareSplit} onSplitChange={setCompareSplit} /> : null}
+        </div>
+      ) : (
+        <PreviewFrame
+          empty={
+            <div className="px-6 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700">
+                <ImagePlus size={28} />
+              </div>
+              <p className="text-sm font-bold text-indigo-950 dark:text-white">Chưa có ảnh</p>
+              <p className="mt-1 max-w-xs text-xs leading-relaxed text-slate-500">Kéo thả ảnh hoặc dùng ảnh mẫu để bắt đầu.</p>
+              <button type="button" onClick={loadSample} className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-xs font-bold text-white">
+                Tải ảnh mẫu
+              </button>
+            </div>
+          }
+        />
+      )}
+    </ToolPanel>
+  );
 
   if (!session) return null;
 
   return (
-    <ToolShell>
-      <div className="space-y-5">
-        <ToolPageHeader
-          userName={session.fullName}
-          title="Đóng dấu logo"
-          subtitle="Xử lý 100% trên trình duyệt — không upload ảnh lên server."
-          icon={<Stamp size={26} />}
-        />
+    <ToolShell userName={session.fullName}>
+      <div className="space-y-5 pb-20 lg:pb-0">
+        <ToolPageHeader userName={session.fullName} title="Đóng dấu logo" subtitle="Xử lý 100% trên trình duyệt — không upload ảnh lên server." icon={<Stamp size={26} />} />
 
-        <section className="grid gap-5 xl:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
-          <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
-            <StepProgress
-              steps={[
-                { label: "Tải ảnh", done: images.length > 0 },
-                { label: "Thêm logo", done: Boolean(logoDataUrl) },
-                { label: "Xuất file", done: exportReady },
-              ]}
-            />
+        <StepProgress steps={[{ label: "Tải ảnh", done: images.length > 0 }, { label: "Thêm logo", done: Boolean(logoDataUrl) }, { label: "Xuất file", done: exportReady }]} />
 
-            <ToolPanel>
-              <WatermarkDropZone
-                step={1}
-                label="Ảnh cần đóng dấu"
-                hint="JPG, PNG, WebP — 1 ảnh hoặc nhiều ảnh"
-                accept="image/png,image/jpeg,image/webp"
-                multiple
-                onFiles={onPickImages}
-                previewUrl={selectedImage?.dataUrl}
-                fileName={selectedImage ? `${selectedImage.file.name}${images.length > 1 ? ` (+${images.length - 1})` : ""}` : undefined}
-              />
-              <div className="mt-3">
-                <UploadActionRow onPickImages={onPickImages} onPickFolder={onPickImages} />
-              </div>
-            </ToolPanel>
+        <MobileToolTabs active={mobileTab} onChange={(id) => setMobileTab(id as MobileTab)} tabs={[{ id: "upload", label: "Tải ảnh" }, { id: "edit", label: "Chỉnh" }, { id: "export", label: "Xuất" }]} />
 
-            <ToolPanel>
-              <WatermarkDropZone
-                step={2}
-                label="Logo watermark"
-                hint="PNG trong suốt khuyến nghị · tự lưu cho lần sau"
-                accept="image/png,image/jpeg,image/webp"
-                onFiles={onPickLogo}
-                previewUrl={logoDataUrl || undefined}
-                fileName={logoDataUrl ? "Logo đã tải" : undefined}
-              />
-            </ToolPanel>
+        <OnboardingTip storageKey={ONBOARDING_DRAG_KEY} message="Mẹo: Kéo logo trực tiếp trên ảnh để đổi vị trí. Kéo chấm tròn góc phải dưới để thay đổi kích thước." />
 
-            <ToolSection title="Vị trí logo nhanh" icon={<Layers size={16} className="text-violet-600" />}>
-              <PresetGrid
-                presets={defaultPresets}
-                activeId={activePresetId}
-                onSelect={(id) => {
-                  if (activePreset) recordChange(activePreset);
-                  setActivePresetId(id);
-                }}
-              />
-              <select
-                value={activePreset?.id}
-                onChange={(e) => {
-                  if (activePreset) recordChange(activePreset);
-                  setActivePresetId(e.target.value);
-                }}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
-              >
-                {presets.map((preset) => (
-                  <option key={preset.id} value={preset.id}>
-                    {preset.name}
-                  </option>
-                ))}
-              </select>
-            </ToolSection>
-
-            <ToolSection title="Tuỳ chỉnh chi tiết" defaultOpen={false}>
-              <RangeField label="Kích thước logo" value={activePreset?.logoWidthPercent ?? 16} min={3} max={90} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ logoWidthPercent: v })} />
-              <RangeField label="Lề ngang" value={activePreset?.marginXPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginXPercent: v })} />
-              <RangeField label="Lề dọc" value={activePreset?.marginYPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginYPercent: v })} />
-              <RangeField label="Độ mờ logo" value={activePreset?.opacity ?? 85} min={0} max={100} step={1} suffix="%" onChange={(v) => updateActivePreset({ opacity: v })} />
-              <RangeField label="Xoay logo" value={activePreset?.rotation ?? 0} min={-45} max={45} step={1} suffix="°" onChange={(v) => updateActivePreset({ rotation: v })} />
-              <div className="flex flex-wrap gap-2 pt-1">
-                <input value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="Tên preset" />
-                <button type="button" className="rounded-xl bg-violet-600 px-3 py-2 text-xs font-bold text-white" onClick={saveCurrentAsPreset}>
-                  Lưu
-                </button>
-                <button type="button" className="rounded-xl border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-600" onClick={() => deletePreset(activePreset?.id ?? "")}>
-                  Xóa
-                </button>
-              </div>
-              <div className="flex gap-2">
-                <button type="button" className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50" onClick={exportPresetJson}>
-                  Export
-                </button>
-                <label className="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50">
-                  Import
-                  <input type="file" accept="application/json" className="hidden" onChange={(e) => importPresetJson(e.target.files)} />
-                </label>
-              </div>
-            </ToolSection>
-
-            <ToolSection title="Watermark chữ" defaultOpen={false}>
-              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2.5">
-                <input type="checkbox" checked={textWatermark.enabled} onChange={(e) => setTextWatermark((prev) => ({ ...prev, enabled: e.target.checked }))} className="h-4 w-4 accent-violet-600" />
-                <span className="text-sm font-medium text-slate-700">Bật watermark chữ</span>
-              </label>
-              <input value={textWatermark.content} onChange={(e) => setTextWatermark((prev) => ({ ...prev, content: e.target.value }))} placeholder="Nội dung chữ" className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm" />
-              <RangeField label="Cỡ chữ" value={textWatermark.fontSizePercent} min={1.2} max={8} step={0.1} suffix="%" onChange={(v) => setTextWatermark((prev) => ({ ...prev, fontSizePercent: v }))} />
-            </ToolSection>
-
-            <ToolPanel>
-              <p className="mb-3 flex items-center gap-2 text-sm font-bold text-indigo-950">
-                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-600 text-[11px] font-bold text-white">3</span>
-                Xuất ảnh
-              </p>
-              <select value={exportType} onChange={(e) => setExportType(e.target.value as "image/png" | "image/jpeg")} className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm">
-                <option value="image/png">PNG chất lượng cao</option>
-                <option value="image/jpeg">JPG chất lượng cao</option>
-              </select>
-              {!exportReady ? <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-800">Tải logo hoặc bật watermark chữ để xuất.</p> : null}
-              <div className="mt-3 space-y-2">
-                <BtnPrimary onClick={handleExportSingle} disabled={!selectedImage || !exportReady} icon={<Download size={16} />}>
-                  Tải ảnh hiện tại
-                </BtnPrimary>
-                <BtnSecondary onClick={handleExportBatch} disabled={!images.length || !exportReady || batchProgress.running} icon={<Download size={16} />}>
-                  Xuất ZIP ({images.length || 0} ảnh)
-                </BtnSecondary>
-              </div>
-              {batchProgress.total > 0 ? (
-                <div className="mt-4 space-y-2">
-                  <div className="h-2 overflow-hidden rounded-full bg-violet-100">
-                    <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-700 transition-all" style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }} />
-                  </div>
-                  <p className="text-center text-xs font-medium text-slate-600">
-                    {batchProgress.current} / {batchProgress.total} ảnh
-                  </p>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={isPaused ? resume : pause} disabled={!batchProgress.running} className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-semibold disabled:opacity-40">
-                      {isPaused ? "Tiếp tục" : "Tạm dừng"}
-                    </button>
-                    <button type="button" onClick={cancel} disabled={!batchProgress.running} className="flex-1 rounded-xl border border-rose-200 py-2 text-xs font-semibold text-rose-600 disabled:opacity-40">
-                      Hủy
-                    </button>
-                  </div>
-                </div>
-              ) : null}
-            </ToolPanel>
+        <section className="grid gap-5 xl:grid-cols-[minmax(0,300px)_minmax(0,1fr)_minmax(0,260px)]">
+          <aside className={`space-y-4 xl:sticky xl:top-6 xl:self-start ${!showUpload && !showEdit ? "hidden xl:block" : ""}`}>
+            <div className={`space-y-4 ${showUpload ? "block" : "hidden xl:block"}`}>{uploadPanel}</div>
+            <div className={`space-y-4 ${showEdit ? "block" : "hidden xl:block"}`}>{editPanel}</div>
           </aside>
 
-          <ToolPanel className="lg:p-6">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-extrabold text-indigo-950">Xem trước</h2>
-                <p className="mt-0.5 text-xs text-slate-500">
-                  {selectedImage ? `${selectedImage.width} × ${selectedImage.height}px` : "Chưa có ảnh"}
-                  {logoDataUrl ? " · Kéo logo để chỉnh vị trí" : ""}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                {logoDataUrl ? <CanvasToolbar canUndo={canUndo} canRedo={canRedo} onUndo={undo} onRedo={redo} /> : null}
-                {images.length > 1 ? (
-                  <span className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-800 px-3 py-1 text-xs font-bold text-white">{images.length} ảnh</span>
-                ) : null}
-              </div>
-            </div>
+          <div className="order-first xl:order-none">{previewPanel}</div>
 
-            {selectedImage ? (
-              <div className="space-y-4">
-                {images.length > 1 ? <ImageThumbStrip images={images} selectedIndex={selectedImageIndex} onSelect={setSelectedImageIndex} /> : null}
-
-                <PreviewFrame>
-                  <canvas
-                    ref={canvasRef}
-                    className={`max-w-full rounded-xl shadow-lg ring-1 ring-black/5 ${logoDataUrl ? "cursor-move" : "cursor-default"}`}
-                    onPointerDown={handleCanvasPointerDown}
-                    onPointerMove={handleCanvasPointerMove}
-                    onPointerUp={handleCanvasPointerUp}
-                  />
-                </PreviewFrame>
-
-                {!logoDataUrl ? (
-                  <p className="rounded-xl border border-amber-200/60 bg-amber-50/80 px-4 py-2.5 text-xs leading-relaxed text-amber-900">
-                    Ảnh đã hiển thị. Tải logo để đóng dấu hình ảnh, hoặc bật watermark chữ để xuất ngay.
-                  </p>
-                ) : (
-                  <p className="text-center text-xs text-slate-500">Kéo logo để đổi vị trí · kéo góc phải dưới để resize · Ctrl+Z hoàn tác</p>
-                )}
-
-                {previewOutputUrl ? <CompareSlider beforeUrl={selectedImage.dataUrl} afterUrl={previewOutputUrl} split={compareSplit} onSplitChange={setCompareSplit} /> : null}
-              </div>
-            ) : (
-              <PreviewFrame
-                empty={
-                  <div className="px-6 text-center">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700">
-                      <ImagePlus size={28} />
-                    </div>
-                    <p className="text-sm font-bold text-indigo-950">Chưa có ảnh</p>
-                    <p className="mt-1 max-w-xs text-xs leading-relaxed text-slate-500">Kéo thả ảnh vào khung bên trái để bắt đầu chỉnh sửa.</p>
-                  </div>
-                }
-              />
-            )}
-          </ToolPanel>
+          <aside className={`space-y-4 xl:sticky xl:top-6 xl:self-start ${showExport ? "block" : "hidden xl:block"}`}>{exportPanel}</aside>
         </section>
       </div>
+
+      <MobileStickyBar>
+        <BtnPrimary className="!py-2.5 !text-xs" onClick={handleExportSingle} disabled={!selectedImage || !exportReady} icon={<Download size={14} />}>
+          Tải ảnh
+        </BtnPrimary>
+        <BtnSecondary className="!py-2.5 !text-xs" onClick={handleExportBatch} disabled={!images.length || !exportReady || batchProgress.running} icon={<Download size={14} />}>
+          ZIP
+        </BtnSecondary>
+      </MobileStickyBar>
+
+      <KeyboardShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      {fullscreenUrl ? <FullscreenPreview url={fullscreenUrl} onClose={() => setFullscreenUrl("")} /> : null}
     </ToolShell>
   );
 }

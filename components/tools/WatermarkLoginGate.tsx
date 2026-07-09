@@ -1,8 +1,9 @@
 "use client";
 
-import { LoginCard } from "@/components/tools/watermark-ui";
+import { ToolToastProvider } from "@/components/tools/ToolToast";
 import { WatermarkAuthProvider } from "@/components/tools/WatermarkAuthProvider";
 import { useWatermarkAuth } from "@/hooks/useWatermarkAuth";
+import { LoginCard } from "@/components/tools/watermark-ui";
 
 function WatermarkLoginGateInner({ children }: { children: React.ReactNode }) {
   const { session, fullName, setFullName, email, setEmail, phone, setPhone, loginError, handleLogin } = useWatermarkAuth();
@@ -39,15 +40,10 @@ function WatermarkLoginGateInner({ children }: { children: React.ReactNode }) {
             />
           </label>
           {loginError ? <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-600">{loginError}</p> : null}
-          <button
-            type="submit"
-            className="w-full rounded-xl bg-gradient-to-r from-indigo-900 to-violet-600 px-4 py-3 text-sm font-bold text-white shadow-brand-accent transition hover:opacity-95"
-          >
+          <button type="submit" className="w-full rounded-xl bg-gradient-to-r from-indigo-900 to-violet-600 px-4 py-3 text-sm font-bold text-white shadow-brand-accent transition hover:opacity-95">
             Đăng nhập
           </button>
-          <p className="text-center text-xs leading-relaxed text-slate-500">
-            Mỗi Gmail + số điện thoại chỉ được đăng nhập một lần trên thiết bị hiện tại.
-          </p>
+          <p className="text-center text-xs leading-relaxed text-slate-500">Mỗi Gmail + số điện thoại chỉ được đăng nhập một lần trên thiết bị hiện tại.</p>
         </form>
       </LoginCard>
     );
@@ -59,7 +55,9 @@ function WatermarkLoginGateInner({ children }: { children: React.ReactNode }) {
 export function WatermarkLoginGate({ children }: { children: React.ReactNode }) {
   return (
     <WatermarkAuthProvider>
-      <WatermarkLoginGateInner>{children}</WatermarkLoginGateInner>
+      <ToolToastProvider>
+        <WatermarkLoginGateInner>{children}</WatermarkLoginGateInner>
+      </ToolToastProvider>
     </WatermarkAuthProvider>
   );
 }
