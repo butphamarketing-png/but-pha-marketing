@@ -124,6 +124,13 @@ export const WEBSITE_INDUSTRY_GENERATED: ProgrammaticGeneratedLanding[] = [
     qualityScore: 70
   },
   {
+    slug: "mam-non",
+    title: "Thiết kế website trường mầm non",
+    description: "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — SEO tuyển sinh.",
+    primaryKeyword: "thiết kế website trường mầm non",
+    qualityScore: 70
+  },
+  {
     slug: "khach-san",
     title: "Thiết kế website khách sạn",
     description: "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality.",

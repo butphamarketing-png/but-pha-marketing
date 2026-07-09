@@ -5,6 +5,8 @@ import {
   NEWS_CONTENT_IMAGE_COUNT,
   KIEN_TRUC_CONTENT_IMAGE_COUNT,
   NHA_HANG_CONTENT_IMAGE_COUNT,
+  KHACH_SAN_CONTENT_IMAGE_COUNT,
+  MAM_NON_CONTENT_IMAGE_COUNT,
   PCCC_CONTENT_IMAGE_COUNT,
   MY_PHAM_CONTENT_IMAGE_COUNT,
   THANG_MAY_CONTENT_IMAGE_COUNT,
@@ -18,6 +20,8 @@ import {
   TU_DONG_HOA_CONTENT_IMAGE_COUNT,
   getKienTrucContentImageAlt,
   getNhaHangContentImageAlt,
+  getKhachSanContentImageAlt,
+  getMamNonContentImageAlt,
   SITE,
   ZALO,
   FB,
@@ -100,6 +104,18 @@ export function wpKienTrucImg(index, alt) {
 export function wpNhaHangImg(index, alt) {
   const resolvedAlt = alt || getNhaHangContentImageAlt(index);
   return img(index % NHA_HANG_CONTENT_IMAGE_COUNT, resolvedAlt, "nha-hang");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/khach-san (6 ảnh nội dung: index 0–5). */
+export function wpKhachSanImg(index, alt) {
+  const resolvedAlt = alt || getKhachSanContentImageAlt(index);
+  return img(index % KHACH_SAN_CONTENT_IMAGE_COUNT, resolvedAlt, "khach-san");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/mam-non (5 ảnh: index 0–4). */
+export function wpMamNonImg(index, alt) {
+  const resolvedAlt = alt || getMamNonContentImageAlt(index);
+  return img(index % MAM_NON_CONTENT_IMAGE_COUNT, resolvedAlt, "mam-non");
 }
 
 /** Ảnh minh họa trong bài — pool public/tin-tuc/pccc (5 ảnh / bài: index 0–4). */

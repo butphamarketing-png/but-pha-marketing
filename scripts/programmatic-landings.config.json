@@ -225,6 +225,20 @@
       "indexOverride": "index"
     },
     {
+      "slug": "mam-non",
+      "title": "Thiết kế website trường mầm non",
+      "description": "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — SEO tuyển sinh.",
+      "primaryKeyword": "thiết kế website trường mầm non",
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 1,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low",
+      "indexOverride": "index"
+    },
+    {
       "slug": "khach-san",
       "title": "Thiết kế website khách sạn",
       "description": "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality.",

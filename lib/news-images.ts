@@ -12,6 +12,20 @@ import {
   resolveNhaHangArticleSlug,
 } from "./nha-hang-images";
 
+import {
+  KHACH_SAN_ARTICLE_THUMBNAILS,
+  getKhachSanThumbnailAlt,
+  getKhachSanThumbnailPath,
+  resolveKhachSanArticleSlug,
+} from "./khach-san-images";
+
+import {
+  MAM_NON_ARTICLE_THUMBNAILS,
+  getMamNonThumbnailAlt,
+  getMamNonThumbnailPath,
+  resolveMamNonArticleSlug,
+} from "./mam-non-images";
+
 export type NewsImageTopic = "website" | "facebook" | "google-maps" | "marketing";
 
 export {
@@ -27,6 +41,20 @@ export {
   getNhaHangThumbnailAlt,
   resolveNhaHangArticleSlug,
 } from "./nha-hang-images";
+
+export {
+  KHACH_SAN_ARTICLE_THUMBNAILS,
+  getKhachSanThumbnailPath,
+  getKhachSanThumbnailAlt,
+  resolveKhachSanArticleSlug,
+} from "./khach-san-images";
+
+export {
+  MAM_NON_ARTICLE_THUMBNAILS,
+  getMamNonThumbnailPath,
+  getMamNonThumbnailAlt,
+  resolveMamNonArticleSlug,
+} from "./mam-non-images";
 
 const NEWS_DIR = "/tin-tuc";
 const PCCC_DIR = `${NEWS_DIR}/pccc`;
@@ -64,6 +92,14 @@ export const BAO_BI_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsM
     file: "bao-bi-1.png",
     keywordsMain: "thiết kế website in ấn",
   },
+  "thiet-ke-website-bao-bi": {
+    file: "bao-bi-2.png",
+    keywordsMain: "thiết kế website bao bì",
+  },
+  "thiet-ke-website-in-an-quang-cao": {
+    file: "bao-bi-3.png",
+    keywordsMain: "thiết kế website in ấn quảng cáo",
+  },
 };
 
 export function getBaoBiThumbnailPath(slug?: string): string | null {
@@ -93,6 +129,10 @@ export const LOGISTICS_ARTICLE_THUMBNAILS: Record<string, { file: string; keywor
   "thiet-ke-website-logistics-van-tai": {
     file: "logistics-1.png",
     keywordsMain: "thiết kế website logistics",
+  },
+  "thiet-ke-website-van-tai": {
+    file: "logistics-1.png",
+    keywordsMain: "thiết kế website vận tải",
   },
 };
 
@@ -213,6 +253,16 @@ export function getPcccThumbnailPath(slug?: string): string | null {
 }
 
 function nicheKeywordsMain(slug?: string): string | undefined {
+  const mamNonResolved = resolveMamNonArticleSlug(slug);
+  if (mamNonResolved) {
+    return MAM_NON_ARTICLE_THUMBNAILS[mamNonResolved]?.keywordsMain;
+  }
+
+  const khachSanResolved = resolveKhachSanArticleSlug(slug);
+  if (khachSanResolved) {
+    return KHACH_SAN_ARTICLE_THUMBNAILS[khachSanResolved]?.keywordsMain;
+  }
+
   const nhaHangResolved = resolveNhaHangArticleSlug(slug);
   if (nhaHangResolved) {
     return NHA_HANG_ARTICLE_THUMBNAILS[nhaHangResolved]?.keywordsMain;
@@ -243,6 +293,12 @@ export function getBlogThumbnailAlt(input: {
   keywordsMain?: string;
   title?: string;
 }): string {
+  const fromMamNonAlt = getMamNonThumbnailAlt(input.slug);
+  if (fromMamNonAlt) return fromMamNonAlt;
+
+  const fromKhachSanAlt = getKhachSanThumbnailAlt(input.slug);
+  if (fromKhachSanAlt) return fromKhachSanAlt;
+
   const fromNhaHangAlt = getNhaHangThumbnailAlt(input.slug);
   if (fromNhaHangAlt) return fromNhaHangAlt;
 
@@ -442,6 +498,12 @@ export function resolveBlogImageUrl(input: {
 
   const nhaHang = getNhaHangThumbnailPath(input.slug);
   if (nhaHang) return nhaHang;
+
+  const khachSan = getKhachSanThumbnailPath(input.slug);
+  if (khachSan) return khachSan;
+
+  const mamNon = getMamNonThumbnailPath(input.slug);
+  if (mamNon) return mamNon;
 
   const topic = detectNewsTopic(input);
   const expected = getNewsThumbnailPath(topic);

@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_DAT_PHONG_KHACH_SAN = {
     "Thiết kế website đặt phòng khách sạn: booking engine, phòng trống realtime, add-on spa, thanh toán online. So sánh form vs PMS. Giá 4–15 triệu. Bứt Phá.",
   description:
     "Hướng dẫn thiết kế website đặt phòng khách sạn: engine booking, luồng đặt phòng, tích hợp PMS và tối ưu conversion direct booking.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-dat-phong-khach-san" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Đặt Phòng Khách Sạn | Booking | Bứt Phá",
     keyword: KEYWORD,

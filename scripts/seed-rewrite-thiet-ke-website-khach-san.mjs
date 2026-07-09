@@ -17,7 +17,13 @@ const check = validateSeoKeywordPlacement({
   metaTitle: article.metaTitle,
   metaDescription: article.metaDescription,
   description: article.description,
-  imageAlts: ["Thiết kế website khách sạn với catalog phòng và đặt phòng online"],
+  imageAlts: [
+    "Thiết kế website khách sạn sang trọng",
+    "Thiết kế website khách sạn 5 sao",
+    "Giao diện đặt phòng khách sạn trực tuyến",
+    "Website resort nghỉ dưỡng chuẩn SEO",
+    "Mẫu thiết kế website khách sạn đẹp",
+  ],
 });
 console.log("SEO check:", check.ok ? "OK" : check.missing.join(", "));
 

@@ -305,8 +305,30 @@ export {
   isNhaHangSlug,
 } from "./nha-hang-images.mjs";
 
+export {
+  KHACH_SAN_ARTICLE_THUMBNAILS,
+  KHACH_SAN_IMAGE_ALTS,
+  khachSanThumbnailPath,
+  getKhachSanThumbnailAlt,
+  getKhachSanContentImageAlt,
+  resolveKhachSanArticleSlug,
+  isKhachSanSlug,
+} from "./khach-san-images.mjs";
+
+export {
+  MAM_NON_ARTICLE_THUMBNAILS,
+  MAM_NON_IMAGE_ALTS,
+  mamNonThumbnailPath,
+  getMamNonThumbnailAlt,
+  getMamNonContentImageAlt,
+  resolveMamNonArticleSlug,
+  isMamNonSlug,
+} from "./mam-non-images.mjs";
+
 import { kienTrucThumbnailPath } from "./kien-truc-images.mjs";
 import { nhaHangThumbnailPath } from "./nha-hang-images.mjs";
+import { khachSanThumbnailPath } from "./khach-san-images.mjs";
+import { mamNonThumbnailPath } from "./mam-non-images.mjs";
 
 function newsImageUrl(filename) {
   return `${SITE}${NEWS_DIR}/${filename}`;
@@ -314,6 +336,16 @@ function newsImageUrl(filename) {
 
 function newsImagePath(filename) {
   return `${NEWS_DIR}/${filename}`;
+}
+
+export function khachSanThumbnailUrl(slug) {
+  const path = khachSanThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function mamNonThumbnailUrl(slug) {
+  const path = mamNonThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
 }
 
 export function nhaHangThumbnailUrl(slug) {
@@ -342,6 +374,13 @@ const NHA_HANG_CONTENT_FILES = Array.from(
   { length: 5 },
   (_, i) => `nha-hang/nha-hang-${i + 1}.png`,
 );
+
+const KHACH_SAN_CONTENT_FILES = Array.from(
+  { length: 6 },
+  (_, i) => `khach-san/khach-san-${i + 1}.png`,
+);
+
+const MAM_NON_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `mam-non/mam-non-${i + 1}.png`);
 
 const PCCC_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `pccc/pccc-${i + 1}.png`);
 
@@ -381,6 +420,8 @@ const CONTENT_IMAGE_FILES = {
   marketing: ["tin-tuc-marketing.png"],
   "kien-truc": KIEN_TRUC_CONTENT_FILES,
   "nha-hang": NHA_HANG_CONTENT_FILES,
+  "khach-san": KHACH_SAN_CONTENT_FILES,
+  "mam-non": MAM_NON_CONTENT_FILES,
   pccc: PCCC_CONTENT_FILES,
   "my-pham": MY_PHAM_CONTENT_FILES,
   "thang-may": THANG_MAY_CONTENT_FILES,
@@ -396,6 +437,8 @@ const CONTENT_IMAGE_FILES = {
 
 export const KIEN_TRUC_CONTENT_IMAGE_COUNT = KIEN_TRUC_CONTENT_FILES.length;
 export const NHA_HANG_CONTENT_IMAGE_COUNT = NHA_HANG_CONTENT_FILES.length;
+export const KHACH_SAN_CONTENT_IMAGE_COUNT = KHACH_SAN_CONTENT_FILES.length;
+export const MAM_NON_CONTENT_IMAGE_COUNT = MAM_NON_CONTENT_FILES.length;
 export const PCCC_CONTENT_IMAGE_COUNT = PCCC_CONTENT_FILES.length;
 export const MY_PHAM_CONTENT_IMAGE_COUNT = MY_PHAM_CONTENT_FILES.length;
 export const THANG_MAY_CONTENT_IMAGE_COUNT = THANG_MAY_CONTENT_FILES.length;
@@ -552,6 +595,10 @@ export function newsThumbnailForArticle(article = {}) {
   if (kienTruc) return kienTruc;
   const nhaHang = nhaHangThumbnailUrl(article.slug);
   if (nhaHang) return nhaHang;
+  const khachSan = khachSanThumbnailUrl(article.slug);
+  if (khachSan) return khachSan;
+  const mamNon = mamNonThumbnailUrl(article.slug);
+  if (mamNon) return mamNon;
   return newsThumbnailUrl(detectNewsTopic(article));
 }
 

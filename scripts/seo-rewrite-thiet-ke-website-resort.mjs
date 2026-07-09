@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_RESORT = {
     "Thiết kế website resort cao cấp: villa, spa, package honeymoon, video hero, booking add-on. SEO nghỉ dưỡng theo vùng. Giá 6–15 triệu. Tư vấn Bứt Phá.",
   description:
     "Hướng dẫn thiết kế website resort chuẩn SEO: visual storytelling, package trọn gói, booking engine và tối ưu ảnh/video nặng.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-resort" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Resort Cao Cấp | SEO & Booking 2026 | Bứt Phá",
     keyword: KEYWORD,

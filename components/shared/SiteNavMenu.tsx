@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { SERVICE_NAV_GROUPS, SIMPLE_NAV_LINKS, WEBSITE_INDUSTRY_NAV_LINKS, type SiteNavLink } from "@/lib/site-navigation";
 
@@ -102,7 +103,7 @@ function NavGroupDesktop({
       </div>
       <div
         className={`absolute left-0 top-full z-[60] pt-2 transition-all ${
-          group.industryMegaMenu ? "min-w-[42rem] max-w-[48rem]" : "min-w-[15rem]"
+          group.industryMegaMenu ? "min-w-[44rem] max-w-[52rem]" : "min-w-[15rem]"
         } ${
           open
             ? "visible opacity-100"
@@ -132,7 +133,7 @@ function NavGroupDesktop({
                 <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-violet-600">
                   Thiết kế website theo ngành
                 </p>
-                <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-3">
+                <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
                   {WEBSITE_INDUSTRY_NAV_LINKS.map((child) => (
                     <Link
                       key={child.href}
@@ -141,9 +142,19 @@ function NavGroupDesktop({
                         setOpen(false);
                         onNavigate?.();
                       }}
-                      className={`rounded-lg px-2.5 py-2 text-xs font-semibold transition sm:text-sm ${childLinkTone("light")}`}
+                      className={`flex items-center gap-2 rounded-lg px-2 py-1.5 transition sm:px-2.5 sm:py-2 ${childLinkTone("light")}`}
                     >
-                      {child.label}
+                      <span className="relative h-8 w-12 shrink-0 overflow-hidden rounded-md border border-indigo-100 bg-indigo-50">
+                        <Image
+                          src={child.imageSrc}
+                          alt=""
+                          fill
+                          sizes="48px"
+                          className="object-cover object-top"
+                          aria-hidden
+                        />
+                      </span>
+                      <span className="text-xs font-semibold sm:text-sm">{child.label}</span>
                     </Link>
                   ))}
                 </div>
@@ -223,8 +234,18 @@ function NavGroupStack({
                   key={child.href}
                   href={child.href}
                   onClick={onNavigate}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition ${childLinkTone(tone)}`}
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${childLinkTone(tone)}`}
                 >
+                  <span className="relative h-7 w-10 shrink-0 overflow-hidden rounded border border-indigo-100 bg-indigo-50">
+                    <Image
+                      src={child.imageSrc}
+                      alt=""
+                      fill
+                      sizes="40px"
+                      className="object-cover object-top"
+                      aria-hidden
+                    />
+                  </span>
                   {child.label}
                 </Link>
               ))}

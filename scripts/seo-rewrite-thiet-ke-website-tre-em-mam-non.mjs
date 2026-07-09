@@ -1,4 +1,4 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +8,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpMamNonImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +26,7 @@ export const REWRITE_THIET_KE_WEBSITE_TRE_EM_MAM_NON = {
     "Thiết kế website mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học và SEO local. Quy trình 7 bước, giá 7–14 triệu. Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website mầm non và trường học: xây dựng trust phụ huynh, đăng ký tham quan, nhập học và portal thông báo tại Việt Nam.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-tre-em-mam-non" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Mầm Non | Nhập Học & Phụ Huynh 2026 | Bứt Phá",
     keyword: KEYWORD,
@@ -63,7 +63,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: website mầm non 7–14 triệu tùy portal phụ huynh và đa cơ sở.",
 ])}
 
-${wpImg(1, "Thiết kế website mầm non chương trình giáo dục và form đăng ký tham quan")}
+${wpMamNonImg(0, "Thiết kế website mầm non chương trình giáo dục và form đăng ký tham quan")}
 
 <h2 id="mam-non-web-la-gi">Website mầm non &amp; trường học là gì?</h2>
 
@@ -107,7 +107,7 @@ ${wpImg(1, "Thiết kế website mầm non chương trình giáo dục và form 
   <li><strong>Consent ảnh trẻ:</strong> Chỉ đăng ảnh học sinh có phép phụ huynh — ethical bắt buộc</li>
 </ul>
 
-${wpImg(2, "Gallery cơ sở vật chất an toàn trên website trường mầm non thu hút phụ huynh")}
+${wpMamNonImg(1, "Gallery cơ sở vật chất an toàn trên website trường mầm non thu hút phụ huynh")}
 
 <h2 id="cau-truc">Cấu trúc website mầm non chuẩn</h2>
 

@@ -1,4 +1,5 @@
-import { NEWS_THUMBNAIL } from "./seo-article-helpers.mjs";
+import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { KHACH_SAN_IMAGE_ALTS } from "./khach-san-images.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -8,7 +9,7 @@ import {
   wpRelatedLinks,
   wpConclusion,
   wpExternalCta,
-  wpImg,
+  wpKhachSanImg,
   SITE,
 } from "./seo-wp-structure.mjs";
 
@@ -26,7 +27,7 @@ export const REWRITE_THIET_KE_WEBSITE_KHACH_SAN = {
     "Thiết kế website khách sạn: catalog phòng, đặt phòng online, đa ngôn ngữ, SEO local. Giảm phụ thuộc OTA. Giá 3–12 triệu. Tư vấn Bứt Phá Marketing.",
   description:
     "Hướng dẫn thiết kế website khách sạn tăng đặt phòng trực tiếp: booking engine, catalog phòng, OTA vs web riêng và SEO Maps.",
-  imageUrl: NEWS_THUMBNAIL,
+  imageUrl: newsThumbnailForArticle({ slug: "thiet-ke-website-khach-san" }),
   content: buildWpSeoArticle({
     metaTitle: "Thiết Kế Website Khách Sạn | Đặt Phòng & SEO | Bứt Phá",
     keyword: KEYWORD,
@@ -62,7 +63,7 @@ ${wpKeyTakeaways([
   "SEO + retargeting ads về site chủ — kết hợp OTA, không thay hoàn toàn.",
 ])}
 
-${wpImg(10, "Thiết kế website khách sạn với catalog phòng và đặt phòng online")}
+${wpKhachSanImg(0, KHACH_SAN_IMAGE_ALTS[1])}
 
 <h2 id="khach-san-la-gi">Thiết kế website khách sạn là gì?</h2>
 
@@ -120,6 +121,8 @@ ${wpImg(10, "Thiết kế website khách sạn với catalog phòng và đặt p
   </tbody>
 </table>
 
+${wpKhachSanImg(1, KHACH_SAN_IMAGE_ALTS[2])}
+
 <h2 id="tinh-nang">Tính năng website khách sạn bắt buộc</h2>
 
 <ul>
@@ -146,7 +149,7 @@ ${wpImg(10, "Thiết kế website khách sạn với catalog phòng và đặt p
 
 <p>Tham khảo thêm <a href="${SITE}/blog/thiet-ke-website-dat-phong-khach-san">thiết kế website đặt phòng khách sạn</a>.</p>
 
-${wpImg(3, "Catalog phòng khách sạn — ảnh tiện nghi và nút đặt phòng")}
+${wpKhachSanImg(2, KHACH_SAN_IMAGE_ALTS[3])}
 
 <h2 id="cau-truc">Cấu trúc trang website khách sạn (8–12 trang)</h2>
 
@@ -209,6 +212,8 @@ ${wpImg(3, "Catalog phòng khách sạn — ảnh tiện nghi và nút đặt ph
   </tbody>
 </table>
 
+${wpKhachSanImg(3, KHACH_SAN_IMAGE_ALTS[4])}
+
 <h2 id="seo-local">SEO, đa ngôn ngữ &amp; Google Maps</h2>
 
 <ul>
@@ -230,6 +235,8 @@ ${wpImg(3, "Catalog phòng khách sạn — ảnh tiện nghi và nút đặt ph
   <li>Không cập nhật ưu đãi mùa — web trông “chết”.</li>
 </ul>
 
+${wpKhachSanImg(4, KHACH_SAN_IMAGE_ALTS[5])}
+
 ${wpRelatedLinks([
   {
     href: `${SITE}/blog/thiet-ke-website-dat-phong-khach-san`,
@@ -238,7 +245,7 @@ ${wpRelatedLinks([
   },
   {
     href: `${SITE}/blog/thiet-ke-website-nha-hang`,
-    label: "Website nhà hạn trong KS",
+    label: "Website nhà hàng trong KS",
     desc: "F&B tích hợp khách sạn.",
   },
   {

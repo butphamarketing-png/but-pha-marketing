@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
+import { getWebsiteIndustryHero } from "@/lib/website-industry-images";
 
 export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
   return (
@@ -9,19 +11,39 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
         22+ ngành — landing chuyên sâu chuẩn SEO
       </h2>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 md:text-base">
-        Mỗi ngành có trang dịch vụ riêng: tính năng đặc thù, FAQ, liên kết hub blog và case study — mô hình silo
-        giống đối thủ hàng đầu, tối ưu cho từ khóa «thiết kế website + ngành».
+        Mỗi ngành có trang dịch vụ riêng kèm mockup thật: tính năng đặc thù, FAQ, liên kết hub blog và case study —
+        mô hình silo tối ưu từ khóa «thiết kế website + ngành».
       </p>
-      <div className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {WEBSITE_INDUSTRY_CATALOG.map((item) => (
-          <Link
-            key={item.slug}
-            href={`/website/nganh/${item.slug}`}
-            className="rounded-xl border border-indigo-50 bg-indigo-50/20 px-4 py-3 text-sm font-semibold text-indigo-900 transition hover:border-violet-200 hover:bg-violet-50/50 hover:text-violet-900"
-          >
-            {item.label}
-          </Link>
-        ))}
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {WEBSITE_INDUSTRY_CATALOG.map((item) => {
+          const hero = getWebsiteIndustryHero({
+            catalogSlug: item.slug,
+            primaryKeyword: item.primaryKeyword,
+            blogMoneySlug: item.blogMoneySlug,
+            title: item.title,
+          });
+          return (
+            <Link
+              key={item.slug}
+              href={`/website/nganh/${item.slug}`}
+              className="group overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-sm transition hover:border-violet-200 hover:shadow-md"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden bg-indigo-50">
+                <Image
+                  src={hero.src}
+                  alt={hero.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+                />
+              </div>
+              <div className="px-4 py-3">
+                <p className="text-sm font-bold text-indigo-950 group-hover:text-violet-800">{item.label}</p>
+                <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">{item.primaryKeyword}</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
       <p className="mt-6 text-sm text-slate-500">
         Không thấy ngành của bạn?{" "}

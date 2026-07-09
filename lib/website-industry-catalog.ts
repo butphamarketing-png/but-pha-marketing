@@ -1,4 +1,5 @@
 import type { IndustryHubSlug } from "@/lib/industry-hub";
+import { getWebsiteIndustryHero } from "@/lib/website-industry-images";
 
 export type WebsiteIndustryCatalogItem = {
   slug: string;
@@ -485,6 +486,31 @@ export const WEBSITE_INDUSTRY_CATALOG: WebsiteIndustryCatalogItem[] = [
     ],
   }),
   item({
+    slug: "mam-non",
+    label: "Trường mầm non",
+    title: "Thiết kế website trường mầm non",
+    description: "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — SEO tuyển sinh.",
+    primaryKeyword: "thiết kế website trường mầm non",
+    blogMoneySlug: "thiet-ke-website-truong-mam-non",
+    hasCaseStudy: false,
+    hasLocalEntity: true,
+    duplicateRisk: "low",
+    features: [
+      "Giới thiệu chương trình theo độ tuổi",
+      "Gallery cơ sở vật chất an toàn",
+      "Form đăng ký tham quan & nhập học",
+      "Đội ngũ giáo viên và thực đơn",
+      "Blog nuôi dạy con cho phụ huynh",
+      "Schema EducationalOrganization",
+    ],
+    faqs: [
+      { q: "Website mầm non cần tone màu gì?", a: "Tông tươi sáng, thân thiện — xanh, vàng, hồng nhạt tạo cảm giác an toàn." },
+      { q: "Có portal phụ huynh?", a: "Tùy chọn — thông báo, album ảnh lớp học riêng." },
+      { q: "Giá?", a: "Từ 7–14 triệu." },
+      { q: "SEO?", a: "Từ khóa trường mầm non + quận, nội dung chương trình & cơ sở." },
+    ],
+  }),
+  item({
     slug: "khach-san",
     label: "Khách sạn",
     title: "Thiết kế website khách sạn",
@@ -640,11 +666,28 @@ export function getWebsiteIndustryCatalogItem(slug: string) {
   return WEBSITE_INDUSTRY_CATALOG.find((item) => item.slug === slug);
 }
 
-export function getWebsiteIndustryNavLinks() {
-  return WEBSITE_INDUSTRY_CATALOG.map((item) => ({
-    label: item.label,
-    href: `/website/nganh/${item.slug}`,
-  }));
+export type WebsiteIndustryNavLink = {
+  label: string;
+  href: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+export function getWebsiteIndustryNavLinks(): WebsiteIndustryNavLink[] {
+  return WEBSITE_INDUSTRY_CATALOG.map((item) => {
+    const hero = getWebsiteIndustryHero({
+      catalogSlug: item.slug,
+      primaryKeyword: item.primaryKeyword,
+      blogMoneySlug: item.blogMoneySlug,
+      title: item.title,
+    });
+    return {
+      label: item.label,
+      href: `/website/nganh/${item.slug}`,
+      imageSrc: hero.src,
+      imageAlt: hero.alt,
+    };
+  });
 }
 
 /** Chuyển catalog → config cho seed-programmatic-landings.mjs */
