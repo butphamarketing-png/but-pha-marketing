@@ -4,6 +4,24 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { removeBackground } from "@imgly/background-removal";
+import { Download, ImagePlus, Layers, Wand2 } from "lucide-react";
+import {
+  BtnPrimary,
+  BtnSecondary,
+  CompareSlider,
+  ImageThumbStrip,
+  LoginCard,
+  PresetGrid,
+  PreviewFrame,
+  RangeField,
+  StepProgress,
+  ToolHero,
+  ToolPanel,
+  ToolSection,
+  ToolShell,
+  UploadActionRow,
+  WatermarkDropZone,
+} from "@/components/tools/watermark-ui";
 
 type Orientation = "any" | "landscape" | "portrait";
 type Anchor = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "center" | "custom";
@@ -190,14 +208,13 @@ async function loadImageFromFile(file: File): Promise<LoadedImage> {
 
 async function drawWatermarkBlob(
   image: LoadedImage,
-  logoDataUrl: string,
+  logoDataUrl: string | null,
   preset: Preset,
   textSettings: TextWatermarkSettings,
   exportType: "image/png" | "image/jpeg",
   quality = 0.95,
 ): Promise<Blob> {
   const baseImg = await imageFromDataUrl(image.dataUrl);
-  const logoImg = await imageFromDataUrl(logoDataUrl);
   const canvas = document.createElement("canvas");
   canvas.width = baseImg.width;
   canvas.height = baseImg.height;
@@ -205,17 +222,20 @@ async function drawWatermarkBlob(
   if (!ctx) throw new Error("Trình duyệt không hỗ trợ Canvas");
   ctx.drawImage(baseImg, 0, 0);
 
-  const logoWidth = (baseImg.width * preset.logoWidthPercent) / 100;
-  const logoHeight = logoWidth * (logoImg.height / logoImg.width);
-  const placement = computePlacement(baseImg.width, baseImg.height, logoWidth, logoHeight, preset);
-  const opacity = clamp(preset.opacity, 0, 100) / 100;
-  const rotationRadians = (preset.rotation * Math.PI) / 180;
-  ctx.save();
-  ctx.globalAlpha = opacity;
-  ctx.translate(placement.x + placement.logoWidth / 2, placement.y + placement.logoHeight / 2);
-  ctx.rotate(rotationRadians);
-  ctx.drawImage(logoImg, -placement.logoWidth / 2, -placement.logoHeight / 2, placement.logoWidth, placement.logoHeight);
-  ctx.restore();
+  if (logoDataUrl) {
+    const logoImg = await imageFromDataUrl(logoDataUrl);
+    const logoWidth = (baseImg.width * preset.logoWidthPercent) / 100;
+    const logoHeight = logoWidth * (logoImg.height / logoImg.width);
+    const placement = computePlacement(baseImg.width, baseImg.height, logoWidth, logoHeight, preset);
+    const opacity = clamp(preset.opacity, 0, 100) / 100;
+    const rotationRadians = (preset.rotation * Math.PI) / 180;
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    ctx.translate(placement.x + placement.logoWidth / 2, placement.y + placement.logoHeight / 2);
+    ctx.rotate(rotationRadians);
+    ctx.drawImage(logoImg, -placement.logoWidth / 2, -placement.logoHeight / 2, placement.logoWidth, placement.logoHeight);
+    ctx.restore();
+  }
 
   if (textSettings.enabled && textSettings.content.trim()) {
     const textSize = Math.max(14, (baseImg.width * textSettings.fontSizePercent) / 100);
@@ -267,7 +287,12 @@ function resizeImageForRemoval(file: File, maxEdge: number): Promise<Blob> {
 }
 
 function isImageFile(file: File): boolean {
-  return ["image/jpeg", "image/png", "image/webp"].includes(file.type);
+  if (["image/jpeg", "image/png", "image/webp"].includes(file.type)) return true;
+  return /\.(jpe?g|png|webp)$/i.test(file.name);
+}
+
+function canExportWatermark(logoDataUrl: string, textSettings: TextWatermarkSettings): boolean {
+  return Boolean(logoDataUrl) || (textSettings.enabled && textSettings.content.trim().length > 0);
 }
 
 export function LogoWatermarkTool() {
@@ -346,12 +371,11 @@ export function LogoWatermarkTool() {
   );
 
   const drawPreview = useCallback(async () => {
-    if (!canvasRef.current || !selectedImage || !logoDataUrl || !activePreset) return;
+    if (!canvasRef.current || !selectedImage || !activePreset) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const base = await imageFromDataUrl(selectedImage.dataUrl);
-    const logo = await imageFromDataUrl(logoDataUrl);
     canvas.width = base.width;
     canvas.height = base.height;
     const maxPreviewWidth = 880;
@@ -361,15 +385,27 @@ export function LogoWatermarkTool() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(base, 0, 0);
-    const logoWidth = (base.width * activePreset.logoWidthPercent) / 100;
-    const logoHeight = logoWidth * (logo.height / logo.width);
-    const placement = computePlacement(base.width, base.height, logoWidth, logoHeight, activePreset);
-    ctx.save();
-    ctx.globalAlpha = clamp(activePreset.opacity, 0, 100) / 100;
-    ctx.translate(placement.x + placement.logoWidth / 2, placement.y + placement.logoHeight / 2);
-    ctx.rotate((activePreset.rotation * Math.PI) / 180);
-    ctx.drawImage(logo, -placement.logoWidth / 2, -placement.logoHeight / 2, placement.logoWidth, placement.logoHeight);
-    ctx.restore();
+
+    if (logoDataUrl) {
+      const logo = await imageFromDataUrl(logoDataUrl);
+      const logoWidth = (base.width * activePreset.logoWidthPercent) / 100;
+      const logoHeight = logoWidth * (logo.height / logo.width);
+      const placement = computePlacement(base.width, base.height, logoWidth, logoHeight, activePreset);
+      ctx.save();
+      ctx.globalAlpha = clamp(activePreset.opacity, 0, 100) / 100;
+      ctx.translate(placement.x + placement.logoWidth / 2, placement.y + placement.logoHeight / 2);
+      ctx.rotate((activePreset.rotation * Math.PI) / 180);
+      ctx.drawImage(logo, -placement.logoWidth / 2, -placement.logoHeight / 2, placement.logoWidth, placement.logoHeight);
+      ctx.restore();
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(124,58,237,0.9)";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(placement.x, placement.y, placement.logoWidth, placement.logoHeight);
+      ctx.fillStyle = "rgba(124,58,237,1)";
+      ctx.fillRect(placement.x + placement.logoWidth - 12, placement.y + placement.logoHeight - 12, 12, 12);
+      ctx.restore();
+    }
 
     if (textWatermark.enabled && textWatermark.content.trim()) {
       const textSize = Math.max(14, (base.width * textWatermark.fontSizePercent) / 100);
@@ -387,14 +423,6 @@ export function LogoWatermarkTool() {
     }
 
     setPreviewOutputUrl(canvas.toDataURL("image/png"));
-
-    ctx.save();
-    ctx.strokeStyle = "rgba(124,58,237,0.9)";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(placement.x, placement.y, placement.logoWidth, placement.logoHeight);
-    ctx.fillStyle = "rgba(124,58,237,1)";
-    ctx.fillRect(placement.x + placement.logoWidth - 12, placement.y + placement.logoHeight - 12, 12, 12);
-    ctx.restore();
   }, [selectedImage, logoDataUrl, activePreset, textWatermark]);
 
   useEffect(() => {
@@ -402,10 +430,10 @@ export function LogoWatermarkTool() {
   }, [drawPreview]);
 
   useEffect(() => {
-    if (!selectedImage || !logoDataUrl) {
+    if (!selectedImage) {
       setPreviewOutputUrl("");
     }
-  }, [selectedImage, logoDataUrl]);
+  }, [selectedImage]);
 
   const handleLogin = useCallback(
     (event: React.FormEvent) => {
@@ -576,14 +604,14 @@ export function LogoWatermarkTool() {
   }, []);
 
   const handleExportSingle = useCallback(async () => {
-    if (!selectedImage || !logoDataUrl || !activePreset) return;
-    const blob = await drawWatermarkBlob(selectedImage, logoDataUrl, activePreset, textWatermark, exportType);
+    if (!selectedImage || !activePreset || !canExportWatermark(logoDataUrl, textWatermark)) return;
+    const blob = await drawWatermarkBlob(selectedImage, logoDataUrl || null, activePreset, textWatermark, exportType);
     const ext = extensionForMime(exportType);
     saveAs(blob, `${fileNameWithoutExt(selectedImage.file.name)}-watermark.${ext}`);
   }, [selectedImage, logoDataUrl, activePreset, textWatermark, exportType]);
 
   const handleExportBatch = useCallback(async () => {
-    if (!images.length || !logoDataUrl || !activePreset) return;
+    if (!images.length || !activePreset || !canExportWatermark(logoDataUrl, textWatermark)) return;
     const zip = new JSZip();
     batchControlRef.current = { paused: false, cancelled: false };
     setBatchProgress({ current: 0, total: images.length, running: true });
@@ -600,7 +628,7 @@ export function LogoWatermarkTool() {
         presets.find((preset) => preset.id === activePreset.id && (preset.orientation === "any" || preset.orientation === imageOrientation)) ??
         presets.find((preset) => preset.orientation === imageOrientation) ??
         activePreset;
-      const blob = await drawWatermarkBlob(image, logoDataUrl, matchedPreset, textWatermark, exportType);
+      const blob = await drawWatermarkBlob(image, logoDataUrl || null, matchedPreset, textWatermark, exportType);
       const ext = extensionForMime(exportType);
       const relativePath = image.file.webkitRelativePath?.trim();
       const fallbackName = `${fileNameWithoutExt(image.file.name)}-watermark.${ext}`;
@@ -618,6 +646,12 @@ export function LogoWatermarkTool() {
     saveAs(zipBlob, "butpha-watermark-batch.zip");
     setBatchProgress((prev) => ({ ...prev, running: false }));
   }, [images, logoDataUrl, activePreset, textWatermark, exportType, presets]);
+
+  const applyPresetById = useCallback((id: string) => {
+    setActivePresetId(id);
+  }, []);
+
+  const exportReady = canExportWatermark(logoDataUrl, textWatermark);
 
   const runRemoveBackground = useCallback(async () => {
     if (!removeFile) return;
@@ -643,482 +677,322 @@ export function LogoWatermarkTool() {
 
   if (!session) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-10">
-        <div className="mx-auto max-w-xl rounded-3xl border border-violet-100 bg-white p-8 shadow-brand">
-          <h1 className="text-3xl font-bold text-indigo-950">Bứt Phá Marketing</h1>
-          <p className="mt-2 text-sm text-slate-600">Đăng nhập để dùng công cụ Đóng dấu logo (client-side).</p>
-          <form className="mt-6 space-y-4" onSubmit={handleLogin}>
-            <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Họ và tên</span>
-              <input
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-violet-500"
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Gmail</span>
-              <input
-                value={email}
-                type="email"
-                onChange={(event) => setEmail(event.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-violet-500"
-                placeholder="example@gmail.com"
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Số điện thoại</span>
-              <input
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-violet-500"
-                placeholder="09xxxxxxxx"
-              />
-            </label>
-            {loginError ? <p className="text-sm text-rose-600">{loginError}</p> : null}
-            <button type="submit" className="w-full rounded-xl bg-violet-600 px-4 py-2.5 font-semibold text-white hover:bg-violet-700">
-              Đăng nhập
-            </button>
-            <p className="text-xs text-slate-500">Mỗi Gmail + số điện thoại chỉ được đăng nhập một lần trên thiết bị hiện tại.</p>
-          </form>
-        </div>
-      </main>
+      <LoginCard>
+        <form className="space-y-4" onSubmit={handleLogin}>
+          <label className="block">
+            <span className="text-sm font-semibold text-slate-700">Họ và tên</span>
+            <input
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white focus:ring-2 focus:ring-violet-100"
+            />
+          </label>
+          <label className="block">
+            <span className="text-sm font-semibold text-slate-700">Gmail</span>
+            <input
+              value={email}
+              type="email"
+              onChange={(event) => setEmail(event.target.value)}
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white focus:ring-2 focus:ring-violet-100"
+              placeholder="example@gmail.com"
+            />
+          </label>
+          <label className="block">
+            <span className="text-sm font-semibold text-slate-700">Số điện thoại</span>
+            <input
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white focus:ring-2 focus:ring-violet-100"
+              placeholder="09xxxxxxxx"
+            />
+          </label>
+          {loginError ? <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-600">{loginError}</p> : null}
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-gradient-to-r from-indigo-900 to-violet-600 px-4 py-3 text-sm font-bold text-white shadow-brand-accent transition hover:opacity-95"
+          >
+            Đăng nhập
+          </button>
+          <p className="text-center text-xs leading-relaxed text-slate-500">
+            Mỗi Gmail + số điện thoại chỉ được đăng nhập một lần trên thiết bị hiện tại.
+          </p>
+        </form>
+      </LoginCard>
     );
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-3 py-8 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <header className="rounded-3xl border border-violet-100 bg-white p-6 shadow-brand">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h1 className="text-3xl font-bold text-indigo-950">Bứt Phá Marketing - Đóng dấu logo</h1>
-              <p className="mt-1 text-sm text-slate-600">
-                Xin chào {session.fullName}. Toàn bộ xử lý ảnh chạy trên trình duyệt, không upload lên server.
-              </p>
-            </div>
-            <div className="inline-flex rounded-xl bg-violet-100 p-1 text-sm font-semibold text-violet-900">
-              <button
-                type="button"
-                onClick={() => setActiveTab("watermark")}
-                className={`rounded-lg px-4 py-2 ${activeTab === "watermark" ? "bg-violet-600 text-white" : ""}`}
-              >
-                Đóng dấu logo
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("remove-bg")}
-                className={`rounded-lg px-4 py-2 ${activeTab === "remove-bg" ? "bg-violet-600 text-white" : ""}`}
-              >
-                Xóa nền
-              </button>
-            </div>
-          </div>
-        </header>
+    <ToolShell>
+      <div className="space-y-5">
+        <ToolHero userName={session.fullName} activeTab={activeTab} onTabChange={setActiveTab} />
 
         {activeTab === "watermark" ? (
-          <section className="grid gap-6 lg:grid-cols-[380px_minmax(0,1fr)]">
-            <aside className="space-y-4 rounded-3xl border border-violet-100 bg-white p-4 shadow-brand">
-              <h2 className="text-lg font-bold text-indigo-950">Thiết lập</h2>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-700">Ảnh đầu vào (single/batch/folder)</p>
-                <input type="file" accept="image/png,image/jpeg,image/webp" multiple onChange={(e) => onPickImages(e.target.files)} />
-                <input
-                  type="file"
-                  multiple
-                  // @ts-expect-error webkitdirectory only exists on Chromium
-                  webkitdirectory=""
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={(e) => onPickImages(e.target.files)}
-                />
-                <p className="text-xs text-slate-500">Hỗ trợ JPG/PNG/WebP, bao gồm chọn cả folder.</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-700">Logo</p>
-                <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => onPickLogo(e.target.files)} />
-                <p className="text-xs text-slate-500">Logo sẽ lưu localStorage làm mặc định cho lần sau.</p>
-              </div>
-              <div className="space-y-2 rounded-2xl border border-violet-100 bg-violet-50/40 p-3">
-                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={textWatermark.enabled}
-                    onChange={(e) => setTextWatermark((prev) => ({ ...prev, enabled: e.target.checked }))}
-                  />
-                  Watermark chữ
-                </label>
-                <input
-                  value={textWatermark.content}
-                  onChange={(e) => setTextWatermark((prev) => ({ ...prev, content: e.target.value }))}
-                  placeholder="Nhập watermark text"
-                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm"
-                />
-                <label className="block text-xs text-slate-600">Cỡ chữ: {textWatermark.fontSizePercent.toFixed(1)}% theo chiều ngang ảnh</label>
-                <input
-                  type="range"
-                  min={1.2}
-                  max={8}
-                  step={0.1}
-                  value={textWatermark.fontSizePercent}
-                  onChange={(e) => setTextWatermark((prev) => ({ ...prev, fontSizePercent: Number(e.target.value) }))}
-                  className="w-full"
-                />
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-slate-600">Màu</label>
-                  <input
-                    type="color"
-                    value={textWatermark.color}
-                    onChange={(e) => setTextWatermark((prev) => ({ ...prev, color: e.target.value }))}
-                    className="h-8 w-11 rounded border border-slate-200"
-                  />
-                  <span className="text-xs text-slate-500">{textWatermark.color}</span>
-                </div>
-                <label className="block text-xs text-slate-600">Opacity chữ: {textWatermark.opacity}%</label>
-                <input
-                  type="range"
-                  min={5}
-                  max={100}
-                  step={1}
-                  value={textWatermark.opacity}
-                  onChange={(e) => setTextWatermark((prev) => ({ ...prev, opacity: Number(e.target.value) }))}
-                  className="w-full"
-                />
-              </div>
+          <section className="grid gap-5 xl:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
+            <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
+              <StepProgress
+                steps={[
+                  { label: "Tải ảnh", done: images.length > 0 },
+                  { label: "Thêm logo", done: Boolean(logoDataUrl) },
+                  { label: "Xuất file", done: exportReady },
+                ]}
+              />
 
-              <div className="space-y-2 rounded-2xl border border-violet-100 bg-violet-50/40 p-3">
-                <label className="text-sm font-semibold text-slate-700">Preset</label>
+              <ToolPanel>
+                <WatermarkDropZone
+                  step={1}
+                  label="Ảnh cần đóng dấu"
+                  hint="JPG, PNG, WebP — 1 ảnh hoặc nhiều ảnh"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  onFiles={onPickImages}
+                  previewUrl={selectedImage?.dataUrl}
+                  fileName={selectedImage ? `${selectedImage.file.name}${images.length > 1 ? ` (+${images.length - 1})` : ""}` : undefined}
+                />
+                <div className="mt-3">
+                  <UploadActionRow onPickImages={onPickImages} onPickFolder={onPickImages} />
+                </div>
+              </ToolPanel>
+
+              <ToolPanel>
+                <WatermarkDropZone
+                  step={2}
+                  label="Logo watermark"
+                  hint="PNG trong suốt khuyến nghị · tự lưu cho lần sau"
+                  accept="image/png,image/jpeg,image/webp"
+                  onFiles={onPickLogo}
+                  previewUrl={logoDataUrl || undefined}
+                  fileName={logoDataUrl ? "Logo đã tải" : undefined}
+                />
+              </ToolPanel>
+
+              <ToolSection title="Vị trí logo nhanh" icon={<Layers size={16} className="text-violet-600" />}>
+                <PresetGrid presets={defaultPresets} activeId={activePresetId} onSelect={applyPresetById} />
                 <select
                   value={activePreset?.id}
                   onChange={(e) => setActivePresetId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
                 >
                   {presets.map((preset) => (
                     <option key={preset.id} value={preset.id}>
-                      {preset.name} ({preset.orientation})
+                      {preset.name}
                     </option>
                   ))}
                 </select>
+              </ToolSection>
 
-                <label className="block text-xs text-slate-600">Anchor</label>
-                <select
-                  value={activePreset?.anchor}
-                  onChange={(e) => updateActivePreset({ anchor: e.target.value as Anchor })}
-                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm"
-                >
-                  <option value="top-left">top-left</option>
-                  <option value="top-right">top-right</option>
-                  <option value="bottom-left">bottom-left</option>
-                  <option value="bottom-right">bottom-right</option>
-                  <option value="center">center</option>
-                  <option value="custom">custom</option>
-                </select>
-
-                <label className="block text-xs text-slate-600">Orientation</label>
-                <select
-                  value={activePreset?.orientation}
-                  onChange={(e) => updateActivePreset({ orientation: e.target.value as Orientation })}
-                  className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm"
-                >
-                  <option value="any">any</option>
-                  <option value="landscape">landscape</option>
-                  <option value="portrait">portrait</option>
-                </select>
-
-                <label className="block text-xs text-slate-600">logoWidthPercent: {activePreset?.logoWidthPercent.toFixed(1)}%</label>
-                <input
-                  type="range"
-                  min={3}
-                  max={90}
-                  step={0.2}
-                  value={activePreset?.logoWidthPercent}
-                  onChange={(e) => updateActivePreset({ logoWidthPercent: Number(e.target.value) })}
-                  className="w-full"
-                />
-
-                <label className="block text-xs text-slate-600">marginXPercent: {activePreset?.marginXPercent.toFixed(1)}%</label>
-                <input
-                  type="range"
-                  min={0}
-                  max={25}
-                  step={0.2}
-                  value={activePreset?.marginXPercent}
-                  onChange={(e) => updateActivePreset({ marginXPercent: Number(e.target.value) })}
-                  className="w-full"
-                />
-
-                <label className="block text-xs text-slate-600">marginYPercent: {activePreset?.marginYPercent.toFixed(1)}%</label>
-                <input
-                  type="range"
-                  min={0}
-                  max={25}
-                  step={0.2}
-                  value={activePreset?.marginYPercent}
-                  onChange={(e) => updateActivePreset({ marginYPercent: Number(e.target.value) })}
-                  className="w-full"
-                />
-
-                <label className="block text-xs text-slate-600">opacity: {activePreset?.opacity.toFixed(0)}%</label>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={activePreset?.opacity}
-                  onChange={(e) => updateActivePreset({ opacity: Number(e.target.value) })}
-                  className="w-full"
-                />
-
-                <label className="block text-xs text-slate-600">rotation: {activePreset?.rotation.toFixed(0)}°</label>
-                <input
-                  type="range"
-                  min={-45}
-                  max={45}
-                  step={1}
-                  value={activePreset?.rotation}
-                  onChange={(e) => updateActivePreset({ rotation: Number(e.target.value) })}
-                  className="w-full"
-                />
-
-                {activePreset?.anchor === "custom" ? (
-                  <>
-                    <label className="block text-xs text-slate-600">xPercent: {(activePreset?.xPercent ?? 0).toFixed(1)}%</label>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      step={0.2}
-                      value={activePreset?.xPercent ?? 0}
-                      onChange={(e) => updateActivePreset({ xPercent: Number(e.target.value) })}
-                      className="w-full"
-                    />
-                    <label className="block text-xs text-slate-600">yPercent: {(activePreset?.yPercent ?? 0).toFixed(1)}%</label>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      step={0.2}
-                      value={activePreset?.yPercent ?? 0}
-                      onChange={(e) => updateActivePreset({ yPercent: Number(e.target.value) })}
-                      className="w-full"
-                    />
-                  </>
-                ) : null}
-
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <input
-                    value={newPresetName}
-                    onChange={(e) => setNewPresetName(e.target.value)}
-                    className="min-w-0 flex-1 rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
-                    placeholder="Tên preset custom"
-                  />
-                  <button type="button" className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-semibold text-white" onClick={saveCurrentAsPreset}>
-                    Lưu preset
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-semibold text-white"
-                    onClick={() => deletePreset(activePreset?.id ?? "")}
-                  >
-                    Xóa preset
-                  </button>
+              <ToolSection title="Tuỳ chỉnh chi tiết" defaultOpen={false}>
+                <RangeField label="Kích thước logo" value={activePreset?.logoWidthPercent ?? 16} min={3} max={90} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ logoWidthPercent: v })} />
+                <RangeField label="Lề ngang" value={activePreset?.marginXPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginXPercent: v })} />
+                <RangeField label="Lề dọc" value={activePreset?.marginYPercent ?? 3} min={0} max={25} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ marginYPercent: v })} />
+                <RangeField label="Độ mờ logo" value={activePreset?.opacity ?? 85} min={0} max={100} step={1} suffix="%" onChange={(v) => updateActivePreset({ opacity: v })} />
+                <RangeField label="Xoay logo" value={activePreset?.rotation ?? 0} min={-45} max={45} step={1} suffix="°" onChange={(v) => updateActivePreset({ rotation: v })} />
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <input value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="Tên preset" />
+                  <button type="button" className="rounded-xl bg-violet-600 px-3 py-2 text-xs font-bold text-white" onClick={saveCurrentAsPreset}>Lưu</button>
+                  <button type="button" className="rounded-xl border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-600" onClick={() => deletePreset(activePreset?.id ?? "")}>Xóa</button>
                 </div>
                 <div className="flex gap-2">
-                  <button type="button" className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm" onClick={exportPresetJson}>
-                    Export JSON
-                  </button>
-                  <label className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm">
-                    Import JSON
+                  <button type="button" className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50" onClick={exportPresetJson}>Export</button>
+                  <label className="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50">
+                    Import
                     <input type="file" accept="application/json" className="hidden" onChange={(e) => importPresetJson(e.target.files)} />
                   </label>
                 </div>
-              </div>
+              </ToolSection>
 
-              <div className="space-y-2 rounded-2xl border border-slate-200 p-3">
-                <p className="text-sm font-semibold text-slate-700">Export</p>
-                <select value={exportType} onChange={(e) => setExportType(e.target.value as "image/png" | "image/jpeg")} className="w-full rounded-lg border border-slate-200 px-2 py-2 text-sm">
+              <ToolSection title="Watermark chữ" defaultOpen={false}>
+                <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2.5">
+                  <input type="checkbox" checked={textWatermark.enabled} onChange={(e) => setTextWatermark((prev) => ({ ...prev, enabled: e.target.checked }))} className="h-4 w-4 accent-violet-600" />
+                  <span className="text-sm font-medium text-slate-700">Bật watermark chữ</span>
+                </label>
+                <input value={textWatermark.content} onChange={(e) => setTextWatermark((prev) => ({ ...prev, content: e.target.value }))} placeholder="Nội dung chữ" className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm" />
+                <RangeField label="Cỡ chữ" value={textWatermark.fontSizePercent} min={1.2} max={8} step={0.1} suffix="%" onChange={(v) => setTextWatermark((prev) => ({ ...prev, fontSizePercent: v }))} />
+              </ToolSection>
+
+              <ToolPanel>
+                <p className="mb-3 flex items-center gap-2 text-sm font-bold text-indigo-950">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-600 text-[11px] font-bold text-white">3</span>
+                  Xuất ảnh
+                </p>
+                <select value={exportType} onChange={(e) => setExportType(e.target.value as "image/png" | "image/jpeg")} className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-sm">
                   <option value="image/png">PNG chất lượng cao</option>
                   <option value="image/jpeg">JPG chất lượng cao</option>
                 </select>
-                <button
-                  type="button"
-                  onClick={handleExportSingle}
-                  disabled={!selectedImage || !logoDataUrl}
-                  className="w-full rounded-lg bg-indigo-900 px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
-                >
-                  Tải ảnh hiện tại
-                </button>
-                <button
-                  type="button"
-                  onClick={handleExportBatch}
-                  disabled={!images.length || !logoDataUrl || batchProgress.running}
-                  className="w-full rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
-                >
-                  Xuất batch ZIP
-                </button>
+                {!exportReady ? (
+                  <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-800">Tải logo hoặc bật watermark chữ để xuất.</p>
+                ) : null}
+                <div className="mt-3 space-y-2">
+                  <BtnPrimary onClick={handleExportSingle} disabled={!selectedImage || !exportReady} icon={<Download size={16} />}>
+                    Tải ảnh hiện tại
+                  </BtnPrimary>
+                  <BtnSecondary onClick={handleExportBatch} disabled={!images.length || !exportReady || batchProgress.running} icon={<Download size={16} />}>
+                    Xuất ZIP ({images.length || 0} ảnh)
+                  </BtnSecondary>
+                </div>
                 {batchProgress.total > 0 ? (
-                  <div className="space-y-2">
-                    <p className="text-xs text-slate-600">
-                      Tiến trình batch: {batchProgress.current}/{batchProgress.total}
-                    </p>
+                  <div className="mt-4 space-y-2">
+                    <div className="h-2 overflow-hidden rounded-full bg-violet-100">
+                      <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-700 transition-all" style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }} />
+                    </div>
+                    <p className="text-center text-xs font-medium text-slate-600">{batchProgress.current} / {batchProgress.total} ảnh</p>
                     <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          batchControlRef.current.paused = !batchControlRef.current.paused;
-                          setBatchProgress((prev) => ({ ...prev }));
-                        }}
-                        disabled={!batchProgress.running}
-                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold disabled:opacity-50"
-                      >
+                      <button type="button" onClick={() => { batchControlRef.current.paused = !batchControlRef.current.paused; setBatchProgress((prev) => ({ ...prev })); }} disabled={!batchProgress.running} className="flex-1 rounded-xl border border-slate-200 py-2 text-xs font-semibold disabled:opacity-40">
                         {batchControlRef.current.paused ? "Tiếp tục" : "Tạm dừng"}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          batchControlRef.current.cancelled = true;
-                        }}
-                        disabled={!batchProgress.running}
-                        className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-semibold text-rose-600 disabled:opacity-50"
-                      >
-                        Hủy batch
+                      <button type="button" onClick={() => { batchControlRef.current.cancelled = true; }} disabled={!batchProgress.running} className="flex-1 rounded-xl border border-rose-200 py-2 text-xs font-semibold text-rose-600 disabled:opacity-40">
+                        Hủy
                       </button>
                     </div>
                   </div>
                 ) : null}
-              </div>
+              </ToolPanel>
             </aside>
 
-            <section className="rounded-3xl border border-violet-100 bg-white p-4 shadow-brand">
-              <h2 className="mb-3 text-lg font-bold text-indigo-950">Preview canvas</h2>
+            <ToolPanel className="lg:p-6">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-extrabold text-indigo-950">Xem trước</h2>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {selectedImage ? `${selectedImage.width} × ${selectedImage.height}px` : "Chưa có ảnh"}
+                    {logoDataUrl ? " · Kéo logo để chỉnh vị trí" : ""}
+                  </p>
+                </div>
+                {images.length > 1 ? (
+                  <span className="rounded-full bg-gradient-to-r from-violet-600 to-indigo-800 px-3 py-1 text-xs font-bold text-white">
+                    {images.length} ảnh
+                  </span>
+                ) : null}
+              </div>
+
               {selectedImage ? (
-                <>
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    {images.map((img, index) => (
-                      <button
-                        key={`${img.file.name}-${index}`}
-                        type="button"
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`rounded-lg border px-3 py-1.5 text-xs ${
-                          selectedImageIndex === index ? "border-violet-600 bg-violet-600 text-white" : "border-slate-200"
-                        }`}
-                      >
-                        {img.file.name}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="overflow-auto rounded-2xl border border-dashed border-violet-200 bg-slate-50 p-2">
+                <div className="space-y-4">
+                  {images.length > 1 ? (
+                    <ImageThumbStrip images={images} selectedIndex={selectedImageIndex} onSelect={setSelectedImageIndex} />
+                  ) : null}
+
+                  <PreviewFrame>
                     <canvas
                       ref={canvasRef}
-                      className="max-w-full cursor-move rounded-xl"
+                      className={`max-w-full rounded-xl shadow-lg ring-1 ring-black/5 ${logoDataUrl ? "cursor-move" : "cursor-default"}`}
                       onPointerDown={handleCanvasPointerDown}
                       onPointerMove={handleCanvasPointerMove}
                       onPointerUp={handleCanvasPointerUp}
                     />
-                  </div>
-                  <p className="mt-2 text-xs text-slate-500">Kéo logo để đổi vị trí; kéo ô vuông góc phải dưới để resize trực tiếp trên canvas.</p>
+                  </PreviewFrame>
+
+                  {!logoDataUrl ? (
+                    <p className="rounded-xl border border-amber-200/60 bg-amber-50/80 px-4 py-2.5 text-xs leading-relaxed text-amber-900">
+                      Ảnh đã hiển thị. Tải logo để đóng dấu hình ảnh, hoặc bật watermark chữ để xuất ngay.
+                    </p>
+                  ) : (
+                    <p className="text-center text-xs text-slate-500">Kéo logo để đổi vị trí · kéo góc phải dưới để resize</p>
+                  )}
+
                   {previewOutputUrl ? (
-                    <div className="mt-4 rounded-2xl border border-slate-200 p-3">
-                      <div className="mb-2 flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">So sánh trước/sau</p>
-                        <span className="text-xs text-slate-500">{compareSplit}%</span>
-                      </div>
-                      <div className="relative overflow-hidden rounded-xl bg-slate-100">
-                        <img src={selectedImage.dataUrl} alt="Ảnh gốc" className="block w-full" />
-                        <img
-                          src={previewOutputUrl}
-                          alt="Ảnh sau khi đóng dấu"
-                          className="absolute inset-0 h-full w-full object-cover"
-                          style={{ clipPath: `inset(0 ${100 - compareSplit}% 0 0)` }}
-                        />
-                        <div className="pointer-events-none absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-[11px] text-white">Kéo thanh để so sánh</div>
-                      </div>
-                      <input
-                        type="range"
-                        min={0}
-                        max={100}
-                        step={1}
-                        value={compareSplit}
-                        onChange={(e) => setCompareSplit(Number(e.target.value))}
-                        className="mt-2 w-full"
-                      />
-                    </div>
+                    <CompareSlider beforeUrl={selectedImage.dataUrl} afterUrl={previewOutputUrl} split={compareSplit} onSplitChange={setCompareSplit} />
                   ) : null}
-                </>
+                </div>
               ) : (
-                <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-16 text-center text-slate-500">
-                  Chưa có ảnh đầu vào. Hãy upload ảnh ở panel bên trái.
-                </p>
+                <PreviewFrame
+                  empty={
+                    <div className="px-6 text-center">
+                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700">
+                        <ImagePlus size={28} />
+                      </div>
+                      <p className="text-sm font-bold text-indigo-950">Chưa có ảnh</p>
+                      <p className="mt-1 max-w-xs text-xs leading-relaxed text-slate-500">Kéo thả ảnh vào khung bên trái để bắt đầu chỉnh sửa.</p>
+                    </div>
+                  }
+                />
               )}
-            </section>
+            </ToolPanel>
           </section>
         ) : (
-          <section className="rounded-3xl border border-violet-100 bg-white p-5 shadow-brand">
-            <h2 className="text-xl font-bold text-indigo-950">Xóa nền bằng AI (trên trình duyệt)</h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Hỗ trợ xóa nền logo hoặc ảnh khách. Sau lần tải model đầu tiên, trình duyệt có thể dùng lại cache để chạy offline.
-            </p>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              <div className="space-y-3 rounded-2xl border border-violet-100 p-4">
-                <label className="text-sm font-semibold text-slate-700">Loại ảnh</label>
-                <div className="flex gap-2 text-sm">
+          <ToolPanel className="lg:p-6">
+            <div className="mb-5">
+              <h2 className="text-xl font-extrabold text-indigo-950">Xóa nền bằng AI</h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Chạy 100% trên trình duyệt. Sau lần tải model đầu, có thể dùng offline.
+              </p>
+            </div>
+            <div className="grid gap-5 lg:grid-cols-2">
+              <div className="space-y-4">
+                <div className="inline-flex rounded-xl border border-violet-100 bg-violet-50/60 p-1">
                   <button
                     type="button"
                     onClick={() => setRemoveTarget("logo")}
-                    className={`rounded-lg px-3 py-1.5 ${removeTarget === "logo" ? "bg-violet-600 text-white" : "bg-slate-100"}`}
+                    className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${removeTarget === "logo" ? "bg-white text-violet-700 shadow-sm" : "text-slate-600"}`}
                   >
                     Logo
                   </button>
                   <button
                     type="button"
                     onClick={() => setRemoveTarget("image")}
-                    className={`rounded-lg px-3 py-1.5 ${removeTarget === "image" ? "bg-violet-600 text-white" : "bg-slate-100"}`}
+                    className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${removeTarget === "image" ? "bg-white text-violet-700 shadow-sm" : "text-slate-600"}`}
                   >
                     Ảnh khách
                   </button>
                 </div>
-                <input
-                  type="file"
+                <WatermarkDropZone
+                  label={`Tải ${removeTarget === "logo" ? "logo" : "ảnh"} cần xóa nền`}
+                  hint="JPG, PNG, WebP"
                   accept="image/png,image/jpeg,image/webp"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0] ?? null;
+                  onFiles={(files) => {
+                    const file = files?.[0] ?? null;
                     setRemoveFile(file);
                     setRemoveAfterUrl("");
                     if (file) setRemoveBeforeUrl(URL.createObjectURL(file));
                   }}
+                  previewUrl={removeBeforeUrl || undefined}
+                  fileName={removeFile?.name}
                 />
-                <label className="flex items-center gap-2 text-sm text-slate-700">
-                  <input type="checkbox" checked={resizeBeforeRemove} onChange={(e) => setResizeBeforeRemove(e.target.checked)} />
-                  Resize trước khi xóa nền (max cạnh 1920)
+                <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/40 px-3 py-2.5 text-sm text-slate-700">
+                  <input type="checkbox" checked={resizeBeforeRemove} onChange={(e) => setResizeBeforeRemove(e.target.checked)} className="h-4 w-4 accent-violet-600" />
+                  Resize trước khi xóa (max 1920px)
                 </label>
-                <button
-                  type="button"
-                  onClick={runRemoveBackground}
-                  disabled={!removeFile || removeBusy}
-                  className="w-full rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-300"
-                >
-                  {removeBusy ? "Đang xử lý..." : `Xóa nền ${removeTarget === "logo" ? "logo" : "ảnh"}`}
-                </button>
-                {removeProgressText ? <p className="text-xs text-slate-500">{removeProgressText}</p> : null}
+                <BtnPrimary onClick={runRemoveBackground} disabled={!removeFile || removeBusy} icon={<Wand2 size={16} />}>
+                  {removeBusy ? "Đang xử lý..." : "Xóa nền ngay"}
+                </BtnPrimary>
+                {removeProgressText ? (
+                  <p className="rounded-xl bg-violet-50 px-3 py-2 text-center text-xs font-medium text-violet-800">{removeProgressText}</p>
+                ) : null}
                 {removeAfterUrl ? (
-                  <a href={removeAfterUrl} download={`butpha-remove-bg-${Date.now()}.png`} className="inline-block rounded-lg border border-violet-300 px-3 py-2 text-sm font-semibold text-violet-700">
+                  <a
+                    href={removeAfterUrl}
+                    download={`butpha-remove-bg-${Date.now()}.png`}
+                    className="flex items-center justify-center gap-2 rounded-xl border-2 border-violet-200 bg-white py-3 text-sm font-bold text-violet-700 transition hover:bg-violet-50"
+                  >
+                    <Download size={16} />
                     Tải PNG trong suốt
                   </a>
                 ) : null}
               </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200 p-2">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Trước</p>
-                  {removeBeforeUrl ? <img src={removeBeforeUrl} alt="Trước xóa nền" className="h-60 w-full rounded-lg object-contain bg-slate-50" /> : <div className="h-60 rounded-lg bg-slate-50" />}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="overflow-hidden rounded-2xl border border-violet-100 bg-white">
+                  <p className="border-b border-violet-50 px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">Trước</p>
+                  <div className="p-2">
+                    {removeBeforeUrl ? (
+                      <img src={removeBeforeUrl} alt="Trước" className="h-56 w-full rounded-xl object-contain bg-slate-50" />
+                    ) : (
+                      <div className="flex h-56 items-center justify-center rounded-xl bg-slate-50 text-xs text-slate-400">Chưa có ảnh</div>
+                    )}
+                  </div>
                 </div>
-                <div className="rounded-2xl border border-slate-200 p-2">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Sau</p>
-                  {removeAfterUrl ? <img src={removeAfterUrl} alt="Sau xóa nền" className="h-60 w-full rounded-lg object-contain bg-[url('/1.png')] bg-cover" /> : <div className="h-60 rounded-lg bg-slate-50" />}
+                <div className="overflow-hidden rounded-2xl border border-violet-100 bg-white">
+                  <p className="border-b border-violet-50 px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">Sau</p>
+                  <div className="p-2">
+                    {removeAfterUrl ? (
+                      <img src={removeAfterUrl} alt="Sau" className="h-56 w-full rounded-xl object-contain bg-[linear-gradient(45deg,#eef2ff_25%,transparent_25%)] bg-[length:12px_12px]" />
+                    ) : (
+                      <div className="flex h-56 items-center justify-center rounded-xl bg-[linear-gradient(45deg,#eef2ff_25%,transparent_25%)] bg-[length:12px_12px] text-xs text-slate-400">Kết quả hiện ở đây</div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
+          </ToolPanel>
         )}
       </div>
-    </main>
+    </ToolShell>
   );
 }

@@ -4,6 +4,7 @@ export function isInternalAppPath(pathname: string | null | undefined): boolean 
   return (
     pathname.startsWith("/adminbp") ||
     pathname.startsWith("/cms") ||
+    pathname.startsWith("/cong-cu") ||
     pathname === "/admin"
   );
 }
