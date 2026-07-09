@@ -65,7 +65,8 @@ export function getMamNonThumbnailAlt(slug) {
 }
 
 export function getMamNonContentImageAlt(index) {
-  return MAM_NON_IMAGE_ALTS[index % MAM_NON_IMAGE_ALTS.length] ?? "Thiết kế website trường mầm non";
+  const contentAlts = MAM_NON_IMAGE_ALTS.slice(1);
+  return contentAlts[index % contentAlts.length] ?? "Thiết kế website trường mầm non";
 }
 
 export function isMamNonSlug(slug) {

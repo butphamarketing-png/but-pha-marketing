@@ -325,10 +325,39 @@ export {
   isMamNonSlug,
 } from "./mam-non-images.mjs";
 
+export {
+  THIET_BI_VE_SINH_ARTICLE_THUMBNAILS,
+  THIET_BI_VE_SINH_IMAGE_ALTS,
+  thietBiVeSinhThumbnailPath,
+  getThietBiVeSinhThumbnailAlt,
+  getThietBiVeSinhContentImageAlt,
+  resolveThietBiVeSinhArticleSlug,
+  isThietBiVeSinhSlug,
+} from "./thiet-bi-ve-sinh-images.mjs";
+
+export {
+  BAT_DONG_SAN_ARTICLE_THUMBNAILS,
+  BAT_DONG_SAN_IMAGE_ALTS,
+  batDongSanThumbnailPath,
+  getBatDongSanThumbnailAlt,
+  getBatDongSanContentImageAlt,
+  resolveBatDongSanArticleSlug,
+  isBatDongSanSlug,
+} from "./bat-dong-san-images.mjs";
+
+import { getIndustryMockupContentAlt, nicheContentImageFiles } from "./industry-mockup-alts.mjs";
+export {
+  getIndustryMockupContentAlt,
+  getIndustryMockupThumbnailAlt,
+  INDUSTRY_MOCKUP_ALTS,
+} from "./industry-mockup-alts.mjs";
+
 import { kienTrucThumbnailPath } from "./kien-truc-images.mjs";
 import { nhaHangThumbnailPath } from "./nha-hang-images.mjs";
 import { khachSanThumbnailPath } from "./khach-san-images.mjs";
 import { mamNonThumbnailPath } from "./mam-non-images.mjs";
+import { thietBiVeSinhThumbnailPath } from "./thiet-bi-ve-sinh-images.mjs";
+import { batDongSanThumbnailPath } from "./bat-dong-san-images.mjs";
 
 function newsImageUrl(filename) {
   return `${SITE}${NEWS_DIR}/${filename}`;
@@ -345,6 +374,16 @@ export function khachSanThumbnailUrl(slug) {
 
 export function mamNonThumbnailUrl(slug) {
   const path = mamNonThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function thietBiVeSinhThumbnailUrl(slug) {
+  const path = thietBiVeSinhThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
+}
+
+export function batDongSanThumbnailUrl(slug) {
+  const path = batDongSanThumbnailPath(slug);
   return path ? `${SITE}${path}` : null;
 }
 
@@ -365,44 +404,39 @@ const THUMBNAIL_FILES = {
   marketing: "tin-tuc-marketing.png",
 };
 
-const KIEN_TRUC_CONTENT_FILES = Array.from(
-  { length: 7 },
-  (_, i) => `kien-truc/kien-truc-${i + 1}.png`,
-);
+const KIEN_TRUC_CONTENT_FILES = nicheContentImageFiles("kien-truc", "kien-truc", 7);
 
-const NHA_HANG_CONTENT_FILES = Array.from(
-  { length: 5 },
-  (_, i) => `nha-hang/nha-hang-${i + 1}.png`,
-);
+const NHA_HANG_CONTENT_FILES = nicheContentImageFiles("nha-hang", "nha-hang", 6);
 
-const KHACH_SAN_CONTENT_FILES = Array.from(
-  { length: 6 },
-  (_, i) => `khach-san/khach-san-${i + 1}.png`,
-);
+const KHACH_SAN_CONTENT_FILES = nicheContentImageFiles("khach-san", "khach-san", 7);
 
-const MAM_NON_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `mam-non/mam-non-${i + 1}.png`);
+const MAM_NON_CONTENT_FILES = nicheContentImageFiles("mam-non", "mam-non", 5);
 
-const PCCC_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `pccc/pccc-${i + 1}.png`);
+const THIET_BI_VE_SINH_CONTENT_FILES = nicheContentImageFiles("thiet-bi-ve-sinh", "thiet-bi-ve-sinh", 7);
 
-const MY_PHAM_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `my-pham/my-pham-${i + 1}.png`);
+const BAT_DONG_SAN_CONTENT_FILES = nicheContentImageFiles("bat-dong-san", "bat-dong-san", 6);
 
-const THANG_MAY_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `thang-may/thang-may-${i + 1}.png`);
+const PCCC_CONTENT_FILES = nicheContentImageFiles("pccc", "pccc", 5);
 
-const NHA_KHOA_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `nha-khoa/nha-khoa-${i + 1}.png`);
+const MY_PHAM_CONTENT_FILES = nicheContentImageFiles("my-pham", "my-pham", 5);
 
-const LUAT_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `luat/luat-${i + 1}.png`);
+const THANG_MAY_CONTENT_FILES = nicheContentImageFiles("thang-may", "thang-may", 5);
 
-const THAM_MY_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `tham-my/tham-my-${i + 1}.png`);
+const NHA_KHOA_CONTENT_FILES = nicheContentImageFiles("nha-khoa", "nha-khoa", 5);
 
-const PHONG_KHAM_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `phong-kham/phong-kham-${i + 1}.png`);
+const LUAT_CONTENT_FILES = nicheContentImageFiles("luat", "luat", 5);
 
-const LOGISTICS_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `logistics/logistics-${i + 1}.png`);
+const THAM_MY_CONTENT_FILES = nicheContentImageFiles("tham-my", "tham-my", 5);
 
-const CO_KHI_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `co-khi/co-khi-${i + 1}.png`);
+const PHONG_KHAM_CONTENT_FILES = nicheContentImageFiles("phong-kham", "phong-kham", 5);
 
-const BAO_BI_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `bao-bi/bao-bi-${i + 1}.png`);
+const LOGISTICS_CONTENT_FILES = nicheContentImageFiles("logistics", "logistics", 5);
 
-const TU_DONG_HOA_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `tu-dong-hoa/tu-dong-hoa-${i + 1}.png`);
+const CO_KHI_CONTENT_FILES = nicheContentImageFiles("co-khi", "co-khi", 5);
+
+const BAO_BI_CONTENT_FILES = nicheContentImageFiles("bao-bi", "bao-bi", 5);
+
+const TU_DONG_HOA_CONTENT_FILES = nicheContentImageFiles("tu-dong-hoa", "tu-dong-hoa", 5);
 
 const CONTENT_IMAGE_FILES = {
   website: [
@@ -422,6 +456,8 @@ const CONTENT_IMAGE_FILES = {
   "nha-hang": NHA_HANG_CONTENT_FILES,
   "khach-san": KHACH_SAN_CONTENT_FILES,
   "mam-non": MAM_NON_CONTENT_FILES,
+  "thiet-bi-ve-sinh": THIET_BI_VE_SINH_CONTENT_FILES,
+  "bat-dong-san": BAT_DONG_SAN_CONTENT_FILES,
   pccc: PCCC_CONTENT_FILES,
   "my-pham": MY_PHAM_CONTENT_FILES,
   "thang-may": THANG_MAY_CONTENT_FILES,
@@ -439,6 +475,8 @@ export const KIEN_TRUC_CONTENT_IMAGE_COUNT = KIEN_TRUC_CONTENT_FILES.length;
 export const NHA_HANG_CONTENT_IMAGE_COUNT = NHA_HANG_CONTENT_FILES.length;
 export const KHACH_SAN_CONTENT_IMAGE_COUNT = KHACH_SAN_CONTENT_FILES.length;
 export const MAM_NON_CONTENT_IMAGE_COUNT = MAM_NON_CONTENT_FILES.length;
+export const THIET_BI_VE_SINH_CONTENT_IMAGE_COUNT = THIET_BI_VE_SINH_CONTENT_FILES.length;
+export const BAT_DONG_SAN_CONTENT_IMAGE_COUNT = BAT_DONG_SAN_CONTENT_FILES.length;
 export const PCCC_CONTENT_IMAGE_COUNT = PCCC_CONTENT_FILES.length;
 export const MY_PHAM_CONTENT_IMAGE_COUNT = MY_PHAM_CONTENT_FILES.length;
 export const THANG_MAY_CONTENT_IMAGE_COUNT = THANG_MAY_CONTENT_FILES.length;
@@ -599,6 +637,10 @@ export function newsThumbnailForArticle(article = {}) {
   if (khachSan) return khachSan;
   const mamNon = mamNonThumbnailUrl(article.slug);
   if (mamNon) return mamNon;
+  const thietBiVeSinh = thietBiVeSinhThumbnailUrl(article.slug);
+  if (thietBiVeSinh) return thietBiVeSinh;
+  const batDongSan = batDongSanThumbnailUrl(article.slug);
+  if (batDongSan) return batDongSan;
   return newsThumbnailUrl(detectNewsTopic(article));
 }
 

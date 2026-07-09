@@ -135,5 +135,6 @@ export function getKienTrucThumbnailAlt(slug?: string): string | null {
 }
 
 export function getKienTrucContentImageAlt(index: number): string {
-  return KIEN_TRUC_IMAGE_ALTS[index % KIEN_TRUC_IMAGE_ALTS.length] ?? "Minh họa thiết kế website nội thất";
+  const contentAlts = KIEN_TRUC_IMAGE_ALTS.slice(1);
+  return contentAlts[index % contentAlts.length] ?? "Thiết kế website nội thất";
 }

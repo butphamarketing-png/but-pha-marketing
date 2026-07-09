@@ -26,6 +26,20 @@ import {
   resolveMamNonArticleSlug,
 } from "./mam-non-images";
 
+import {
+  THIET_BI_VE_SINH_ARTICLE_THUMBNAILS,
+  getThietBiVeSinhThumbnailAlt,
+  getThietBiVeSinhThumbnailPath,
+  resolveThietBiVeSinhArticleSlug,
+} from "./thiet-bi-ve-sinh-images";
+
+import {
+  BAT_DONG_SAN_ARTICLE_THUMBNAILS,
+  getBatDongSanThumbnailAlt,
+  getBatDongSanThumbnailPath,
+  resolveBatDongSanArticleSlug,
+} from "./bat-dong-san-images";
+
 export type NewsImageTopic = "website" | "facebook" | "google-maps" | "marketing";
 
 export {
@@ -55,6 +69,20 @@ export {
   getMamNonThumbnailAlt,
   resolveMamNonArticleSlug,
 } from "./mam-non-images";
+
+export {
+  THIET_BI_VE_SINH_ARTICLE_THUMBNAILS,
+  getThietBiVeSinhThumbnailPath,
+  getThietBiVeSinhThumbnailAlt,
+  resolveThietBiVeSinhArticleSlug,
+} from "./thiet-bi-ve-sinh-images";
+
+export {
+  BAT_DONG_SAN_ARTICLE_THUMBNAILS,
+  getBatDongSanThumbnailPath,
+  getBatDongSanThumbnailAlt,
+  resolveBatDongSanArticleSlug,
+} from "./bat-dong-san-images";
 
 const NEWS_DIR = "/tin-tuc";
 const PCCC_DIR = `${NEWS_DIR}/pccc`;
@@ -253,6 +281,16 @@ export function getPcccThumbnailPath(slug?: string): string | null {
 }
 
 function nicheKeywordsMain(slug?: string): string | undefined {
+  const batDongSanResolved = resolveBatDongSanArticleSlug(slug);
+  if (batDongSanResolved) {
+    return BAT_DONG_SAN_ARTICLE_THUMBNAILS[batDongSanResolved]?.keywordsMain;
+  }
+
+  const thietBiVeSinhResolved = resolveThietBiVeSinhArticleSlug(slug);
+  if (thietBiVeSinhResolved) {
+    return THIET_BI_VE_SINH_ARTICLE_THUMBNAILS[thietBiVeSinhResolved]?.keywordsMain;
+  }
+
   const mamNonResolved = resolveMamNonArticleSlug(slug);
   if (mamNonResolved) {
     return MAM_NON_ARTICLE_THUMBNAILS[mamNonResolved]?.keywordsMain;
@@ -293,6 +331,12 @@ export function getBlogThumbnailAlt(input: {
   keywordsMain?: string;
   title?: string;
 }): string {
+  const fromBatDongSanAlt = getBatDongSanThumbnailAlt(input.slug);
+  if (fromBatDongSanAlt) return fromBatDongSanAlt;
+
+  const fromThietBiVeSinhAlt = getThietBiVeSinhThumbnailAlt(input.slug);
+  if (fromThietBiVeSinhAlt) return fromThietBiVeSinhAlt;
+
   const fromMamNonAlt = getMamNonThumbnailAlt(input.slug);
   if (fromMamNonAlt) return fromMamNonAlt;
 
@@ -504,6 +548,12 @@ export function resolveBlogImageUrl(input: {
 
   const mamNon = getMamNonThumbnailPath(input.slug);
   if (mamNon) return mamNon;
+
+  const thietBiVeSinh = getThietBiVeSinhThumbnailPath(input.slug);
+  if (thietBiVeSinh) return thietBiVeSinh;
+
+  const batDongSan = getBatDongSanThumbnailPath(input.slug);
+  if (batDongSan) return batDongSan;
 
   const topic = detectNewsTopic(input);
   const expected = getNewsThumbnailPath(topic);

@@ -7,6 +7,8 @@ import {
   NHA_HANG_CONTENT_IMAGE_COUNT,
   KHACH_SAN_CONTENT_IMAGE_COUNT,
   MAM_NON_CONTENT_IMAGE_COUNT,
+  THIET_BI_VE_SINH_CONTENT_IMAGE_COUNT,
+  BAT_DONG_SAN_CONTENT_IMAGE_COUNT,
   PCCC_CONTENT_IMAGE_COUNT,
   MY_PHAM_CONTENT_IMAGE_COUNT,
   THANG_MAY_CONTENT_IMAGE_COUNT,
@@ -22,6 +24,9 @@ import {
   getNhaHangContentImageAlt,
   getKhachSanContentImageAlt,
   getMamNonContentImageAlt,
+  getThietBiVeSinhContentImageAlt,
+  getBatDongSanContentImageAlt,
+  getIndustryMockupContentAlt,
   SITE,
   ZALO,
   FB,
@@ -118,59 +123,82 @@ export function wpMamNonImg(index, alt) {
   return img(index % MAM_NON_CONTENT_IMAGE_COUNT, resolvedAlt, "mam-non");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/pccc (5 ảnh / bài: index 0–4). */
+/** Ảnh minh họa trong bài — pool public/tin-tuc/thiet-bi-ve-sinh (7 ảnh: index 0–6). */
+export function wpThietBiVeSinhImg(index, alt) {
+  const resolvedAlt = alt || getThietBiVeSinhContentImageAlt(index);
+  return img(index % THIET_BI_VE_SINH_CONTENT_IMAGE_COUNT, resolvedAlt, "thiet-bi-ve-sinh");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/bat-dong-san (6 ảnh: index 0–5). */
+export function wpBatDongSanImg(index, alt) {
+  const resolvedAlt = alt || getBatDongSanContentImageAlt(index);
+  return img(index % BAT_DONG_SAN_CONTENT_IMAGE_COUNT, resolvedAlt, "bat-dong-san");
+}
+
+/** Ảnh nội dung bài — pool ảnh #2..n (ảnh #1 = thumbnail, không lặp trong bài). */
 export function wpPcccImg(index, alt) {
-  return img(index % PCCC_CONTENT_IMAGE_COUNT, alt, "pccc");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("pccc", index);
+  return img(index % PCCC_CONTENT_IMAGE_COUNT, resolvedAlt, "pccc");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/my-pham (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpMyPhamImg(index, alt) {
-  return img(index % MY_PHAM_CONTENT_IMAGE_COUNT, alt, "my-pham");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("my-pham", index);
+  return img(index % MY_PHAM_CONTENT_IMAGE_COUNT, resolvedAlt, "my-pham");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/thang-may (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpThangMayImg(index, alt) {
-  return img(index % THANG_MAY_CONTENT_IMAGE_COUNT, alt, "thang-may");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("thang-may", index);
+  return img(index % THANG_MAY_CONTENT_IMAGE_COUNT, resolvedAlt, "thang-may");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/nha-khoa (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpNhaKhoaImg(index, alt) {
-  return img(index % NHA_KHOA_CONTENT_IMAGE_COUNT, alt, "nha-khoa");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("nha-khoa", index);
+  return img(index % NHA_KHOA_CONTENT_IMAGE_COUNT, resolvedAlt, "nha-khoa");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/luat (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpLuatImg(index, alt) {
-  return img(index % LUAT_CONTENT_IMAGE_COUNT, alt, "luat");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("luat", index);
+  return img(index % LUAT_CONTENT_IMAGE_COUNT, resolvedAlt, "luat");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/tham-my (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpThamMyImg(index, alt) {
-  return img(index % THAM_MY_CONTENT_IMAGE_COUNT, alt, "tham-my");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("tham-my", index);
+  return img(index % THAM_MY_CONTENT_IMAGE_COUNT, resolvedAlt, "tham-my");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/phong-kham (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpPhongKhamImg(index, alt) {
-  return img(index % PHONG_KHAM_CONTENT_IMAGE_COUNT, alt, "phong-kham");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("phong-kham", index);
+  return img(index % PHONG_KHAM_CONTENT_IMAGE_COUNT, resolvedAlt, "phong-kham");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/logistics (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpLogisticsImg(index, alt) {
-  return img(index % LOGISTICS_CONTENT_IMAGE_COUNT, alt, "logistics");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("logistics", index);
+  return img(index % LOGISTICS_CONTENT_IMAGE_COUNT, resolvedAlt, "logistics");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/co-khi (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpCoKhiImg(index, alt) {
-  return img(index % CO_KHI_CONTENT_IMAGE_COUNT, alt, "co-khi");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("co-khi", index);
+  return img(index % CO_KHI_CONTENT_IMAGE_COUNT, resolvedAlt, "co-khi");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/bao-bi (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpBaoBiImg(index, alt) {
-  return img(index % BAO_BI_CONTENT_IMAGE_COUNT, alt, "bao-bi");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("bao-bi", index);
+  return img(index % BAO_BI_CONTENT_IMAGE_COUNT, resolvedAlt, "bao-bi");
 }
 
-/** Ảnh minh họa trong bài — pool public/tin-tuc/tu-dong-hoa (5 ảnh / bài: index 0–4). */
+/** Ảnh nội dung bài — pool ảnh #2..n. */
 export function wpTuDongHoaImg(index, alt) {
-  return img(index % TU_DONG_HOA_CONTENT_IMAGE_COUNT, alt, "tu-dong-hoa");
+  const resolvedAlt = alt || getIndustryMockupContentAlt("tu-dong-hoa", index);
+  return img(index % TU_DONG_HOA_CONTENT_IMAGE_COUNT, resolvedAlt, "tu-dong-hoa");
 }
 
 /**
