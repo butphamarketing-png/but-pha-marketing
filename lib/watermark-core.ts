@@ -109,6 +109,27 @@ export function matchPresetForImage(presets: Preset[], activePreset: Preset, wid
   );
 }
 
+export type OrientationPairSettings = {
+  enabled: boolean;
+  landscapePresetId: string;
+  portraitPresetId: string;
+};
+
+export function resolvePresetForImage(
+  presets: Preset[],
+  activePreset: Preset,
+  width: number,
+  height: number,
+  pair?: OrientationPairSettings | null,
+): Preset {
+  if (pair?.enabled) {
+    const imageOrientation = detectOrientation(width, height);
+    const targetId = imageOrientation === "landscape" ? pair.landscapePresetId : pair.portraitPresetId;
+    return presets.find((p) => p.id === targetId) ?? matchPresetForImage(presets, activePreset, width, height);
+  }
+  return matchPresetForImage(presets, activePreset, width, height);
+}
+
 export function canExportWatermark(logoDataUrl: string, textSettings: TextWatermarkSettings): boolean {
   return Boolean(logoDataUrl) || (textSettings.enabled && textSettings.content.trim().length > 0);
 }

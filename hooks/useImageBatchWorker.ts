@@ -2,30 +2,24 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { saveAs } from "file-saver";
-import type { LoadedImageMeta, OrientationPairSettings, Preset, TextWatermarkSettings } from "@/lib/watermark-core";
 
 type BatchProgress = { current: number; total: number; running: boolean };
 
-export function useWatermarkBatch() {
+export function useImageBatchWorker(zipName: string) {
   const workerRef = useRef<Worker | null>(null);
   const [progress, setProgress] = useState<BatchProgress>({ current: 0, total: 0, running: false });
   const [isPaused, setIsPaused] = useState(false);
-  const pausedRef = useRef(false);
 
   useEffect(() => {
-    return () => {
-      workerRef.current?.terminate();
-    };
+    return () => workerRef.current?.terminate();
   }, []);
 
   const pause = useCallback(() => {
-    pausedRef.current = true;
     setIsPaused(true);
     workerRef.current?.postMessage({ type: "pause" });
   }, []);
 
   const resume = useCallback(() => {
-    pausedRef.current = false;
     setIsPaused(false);
     workerRef.current?.postMessage({ type: "resume" });
   }, []);
@@ -36,22 +30,14 @@ export function useWatermarkBatch() {
   }, []);
 
   const runBatch = useCallback(
-    async (args: {
-      images: LoadedImageMeta[];
-      logoDataUrl: string | null;
-      presets: Preset[];
-      activePreset: Preset;
-      orientationPair?: OrientationPairSettings | null;
-      textSettings: TextWatermarkSettings;
-      exportType: "image/png" | "image/jpeg";
-    }) => {
+    (payload: Record<string, unknown>) => {
       workerRef.current?.terminate();
-      const worker = new Worker(new URL("../components/tools/watermark-batch.worker.ts", import.meta.url));
+      const worker = new Worker(new URL("../components/tools/image-batch.worker.ts", import.meta.url));
       workerRef.current = worker;
-      pausedRef.current = false;
       setIsPaused(false);
 
-      setProgress({ current: 0, total: args.images.length, running: true });
+      const total = Array.isArray(payload.images) ? payload.images.length : 0;
+      setProgress({ current: 0, total, running: true });
 
       return new Promise<void>((resolve, reject) => {
         worker.onmessage = (event) => {
@@ -59,8 +45,7 @@ export function useWatermarkBatch() {
           if (data.type === "progress") {
             setProgress({ current: data.current ?? 0, total: data.total ?? 0, running: true });
           } else if (data.type === "done" && data.buffer) {
-            const blob = new Blob([data.buffer], { type: "application/zip" });
-            saveAs(blob, "butpha-watermark-batch.zip");
+            saveAs(new Blob([data.buffer], { type: "application/zip" }), zipName);
             setProgress((prev) => ({ ...prev, running: false }));
             worker.terminate();
             resolve();
@@ -74,28 +59,16 @@ export function useWatermarkBatch() {
             reject(new Error(data.message ?? "Lỗi batch"));
           }
         };
-
         worker.onerror = () => {
           setProgress((prev) => ({ ...prev, running: false }));
           worker.terminate();
-          reject(new Error("Worker batch thất bại"));
+          reject(new Error("Worker thất bại"));
         };
-
-        worker.postMessage({
-          type: "start",
-          payload: { ...args, quality: 0.95 },
-        });
+        worker.postMessage({ type: "start", payload });
       });
     },
-    [],
+    [zipName],
   );
 
-  return {
-    progress,
-    isPaused,
-    runBatch,
-    pause,
-    resume,
-    cancel,
-  };
+  return { progress, isPaused, runBatch, pause, resume, cancel };
 }

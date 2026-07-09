@@ -21,3 +21,5 @@ export const PRESET_ANCHOR_VISUAL: Record<string, { x: string; y: string }> = {
 
 export const ONBOARDING_DRAG_KEY = "bp-watermark-onboarding-drag-v1";
 export const REMOVE_BG_LOGO_TRANSFER_KEY = "bp-remove-bg-logo-transfer-v1";
+export const REMOVE_BG_IMAGES_TRANSFER_KEY = "bp-remove-bg-images-transfer-v1";
+export const ORIENTATION_PRESET_KEY = "bp-watermark-orientation-pair-v1";

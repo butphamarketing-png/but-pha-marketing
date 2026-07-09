@@ -17,7 +17,7 @@ import {
   WatermarkDropZone,
 } from "@/components/tools/watermark-ui";
 import { WatermarkLoginGate, useWatermarkSession } from "@/components/tools/WatermarkLoginGate";
-import { REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
+import { REMOVE_BG_IMAGES_TRANSFER_KEY, REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
 import { loadImageFromFile } from "@/lib/watermark-core";
 
 function resizeImageForRemoval(file: File, maxEdge: number): Promise<Blob> {
@@ -99,6 +99,35 @@ function RemoveBgContent() {
     reader.readAsDataURL(blob);
   }, [removeAfterUrl, router, toast]);
 
+  const stampOnOriginal = useCallback(async () => {
+    if (!removeAfterUrl || !removeBeforeUrl) return;
+    const [logoBlob, beforeBlob] = await Promise.all([fetch(removeAfterUrl).then((r) => r.blob()), fetch(removeBeforeUrl).then((r) => r.blob())]);
+    const logoDataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(logoBlob);
+    });
+    const beforeDataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(beforeBlob);
+    });
+    const bitmap = await createImageBitmap(beforeBlob);
+    const meta = {
+      dataUrl: beforeDataUrl,
+      fileName: removeFile?.name || "anh-goc.jpg",
+      width: bitmap.width,
+      height: bitmap.height,
+    };
+    bitmap.close();
+    sessionStorage.setItem(REMOVE_BG_LOGO_TRANSFER_KEY, logoDataUrl);
+    sessionStorage.setItem(REMOVE_BG_IMAGES_TRANSFER_KEY, JSON.stringify([meta]));
+    toast("Mở đóng dấu với logo + ảnh gốc...");
+    router.push("/cong-cu/dong-dau-logo");
+  }, [removeAfterUrl, removeBeforeUrl, removeFile, router, toast]);
+
   if (!session) return null;
 
   return (
@@ -157,6 +186,11 @@ function RemoveBgContent() {
                 <BtnSecondary onClick={useAsLogo} icon={<Stamp size={16} />}>
                   Dùng làm logo đóng dấu
                 </BtnSecondary>
+                {removeTarget === "logo" && removeBeforeUrl ? (
+                  <BtnSecondary onClick={stampOnOriginal} icon={<Stamp size={16} />}>
+                    Đóng dấu thử trên ảnh gốc
+                  </BtnSecondary>
+                ) : null}
               </div>
             ) : null}
           </ToolPanel>

@@ -5,9 +5,10 @@ import {
   dataUrlToImageBitmap,
   extensionForMime,
   fileNameWithoutExt,
-  matchPresetForImage,
+  resolvePresetForImage,
   renderWatermarkOnContext,
   type LoadedImageMeta,
+  type OrientationPairSettings,
   type Preset,
   type TextWatermarkSettings,
 } from "../../lib/watermark-core";
@@ -17,6 +18,7 @@ type BatchPayload = {
   logoDataUrl: string | null;
   presets: Preset[];
   activePreset: Preset;
+  orientationPair?: OrientationPairSettings | null;
   textSettings: TextWatermarkSettings;
   exportType: "image/png" | "image/jpeg";
   quality: number;
@@ -50,7 +52,7 @@ self.onmessage = async (event: MessageEvent<{ type: string; payload?: BatchPaylo
 
   try {
     const zip = new JSZip();
-    const { images, logoDataUrl, presets, activePreset, textSettings, exportType, quality } = payload;
+    const { images, logoDataUrl, presets, activePreset, orientationPair, textSettings, exportType, quality } = payload;
 
     for (let i = 0; i < images.length; i += 1) {
       while (paused && !cancelled) {
@@ -62,7 +64,7 @@ self.onmessage = async (event: MessageEvent<{ type: string; payload?: BatchPaylo
       }
 
       const image = images[i];
-      const preset = matchPresetForImage(presets, activePreset, image.width, image.height);
+      const preset = resolvePresetForImage(presets, activePreset, image.width, image.height, orientationPair);
       const baseBitmap = await dataUrlToImageBitmap(image.dataUrl);
       const canvas = new OffscreenCanvas(baseBitmap.width, baseBitmap.height);
       const ctx = canvas.getContext("2d");

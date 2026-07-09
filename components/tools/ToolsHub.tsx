@@ -32,17 +32,18 @@ function ToolsHubContent() {
             icon={<Wand2 size={22} />}
           />
           <ToolHubCard
+            href="/cong-cu/nen-anh"
             title="Nén ảnh WebP"
-            description="Giảm dung lượng ảnh sản phẩm mà vẫn giữ chất lượng hiển thị tốt trên web."
+            description="Giảm dung lượng ảnh sản phẩm, so sánh trước/sau, xuất ZIP WebP hoặc JPG."
             icon={<Zap size={22} />}
-            badge="Sắp ra"
-            disabled
+            badge="Mới"
           />
           <ToolHubCard
+            href="/cong-cu/resize-anh"
             title="Resize hàng loạt"
-            description="Đổi kích thước ảnh theo tỷ lệ chuẩn cho Shopee, Facebook, website."
+            description="Đổi kích thước theo chuẩn Shopee 1:1, Facebook 4:5, Story 9:16, banner web."
             icon={<ImageIcon size={22} />}
-            disabled
+            badge="Mới"
           />
         </div>
 

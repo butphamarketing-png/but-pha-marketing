@@ -30,7 +30,8 @@ import {
 } from "@/components/tools/watermark-ui";
 import { usePresetHistory } from "@/hooks/usePresetHistory";
 import { useWatermarkBatch } from "@/hooks/useWatermarkBatch";
-import { ONBOARDING_DRAG_KEY, REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
+import { ONBOARDING_DRAG_KEY, ORIENTATION_PRESET_KEY, REMOVE_BG_IMAGES_TRANSFER_KEY, REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
+import { formatBytes } from "@/lib/image-processing-core";
 import { loadSampleImage } from "@/lib/tool-samples";
 import {
   PRESET_KEY,
@@ -49,15 +50,14 @@ import {
   type Preset,
   type TextWatermarkSettings,
   type LoadedImageMeta,
+  type OrientationPairSettings,
 } from "@/lib/watermark-core";
 
 type LoadedImage = LoadedImageMeta & { file: File };
 type MobileTab = "upload" | "edit" | "export";
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+function dataUrlToLoadedImage(meta: LoadedImageMeta): LoadedImage {
+  return { ...meta, file: new File([], meta.fileName, { type: "image/jpeg" }) };
 }
 
 function drawLogoOverlay(
@@ -120,6 +120,11 @@ function LogoWatermarkContent() {
   const [showGrid, setShowGrid] = useState(false);
   const [fullscreenUrl, setFullscreenUrl] = useState("");
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [orientationPair, setOrientationPair] = useState<OrientationPairSettings>({
+    enabled: false,
+    landscapePresetId: defaultPresets[3].id,
+    portraitPresetId: defaultPresets[3].id,
+  });
 
   const { progress: batchProgress, isPaused, runBatch, pause, resume, cancel } = useWatermarkBatch();
 
@@ -139,6 +144,24 @@ function LogoWatermarkContent() {
   useEffect(() => {
     const rawPresets = localStorage.getItem(PRESET_KEY);
     if (rawPresets) setPresets(JSON.parse(rawPresets) as Preset[]);
+    const rawPair = localStorage.getItem(ORIENTATION_PRESET_KEY);
+    if (rawPair) setOrientationPair(JSON.parse(rawPair) as OrientationPairSettings);
+
+    const transferredImages = sessionStorage.getItem(REMOVE_BG_IMAGES_TRANSFER_KEY);
+    if (transferredImages) {
+      sessionStorage.removeItem(REMOVE_BG_IMAGES_TRANSFER_KEY);
+      try {
+        const items = JSON.parse(transferredImages) as LoadedImageMeta[];
+        if (Array.isArray(items) && items.length) {
+          setImages(items.map(dataUrlToLoadedImage));
+          setSelectedImageIndex(0);
+          toast("Đã nhận ảnh từ công cụ xóa nền");
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+
     const transferred = sessionStorage.getItem(REMOVE_BG_LOGO_TRANSFER_KEY);
     const rawLogo = transferred || localStorage.getItem(LOGO_KEY);
     if (transferred) sessionStorage.removeItem(REMOVE_BG_LOGO_TRANSFER_KEY);
@@ -158,6 +181,10 @@ function LogoWatermarkContent() {
   useEffect(() => {
     localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
   }, [presets]);
+
+  useEffect(() => {
+    localStorage.setItem(ORIENTATION_PRESET_KEY, JSON.stringify(orientationPair));
+  }, [orientationPair]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -378,12 +405,20 @@ function LogoWatermarkContent() {
   const handleExportBatch = useCallback(async () => {
     if (!images.length || !activePreset || !canExportWatermark(logoDataUrl, textWatermark)) return;
     try {
-      await runBatch({ images, logoDataUrl: logoDataUrl || null, presets, activePreset, textSettings: textWatermark, exportType });
+      await runBatch({
+        images,
+        logoDataUrl: logoDataUrl || null,
+        presets,
+        activePreset,
+        orientationPair: orientationPair.enabled ? orientationPair : null,
+        textSettings: textWatermark,
+        exportType,
+      });
       toast("Đã xuất ZIP hàng loạt");
     } catch (error) {
       toast(error instanceof Error ? error.message : "Lỗi xuất ZIP", "error");
     }
-  }, [images, logoDataUrl, activePreset, textWatermark, exportType, presets, runBatch, toast]);
+  }, [images, logoDataUrl, activePreset, textWatermark, exportType, presets, orientationPair, runBatch, toast]);
 
   const exportReady = canExportWatermark(logoDataUrl, textWatermark);
 
@@ -444,6 +479,77 @@ function LogoWatermarkContent() {
           ))}
         </select>
       </ToolSection>
+
+      <ToolSection title="Preset theo hướng ảnh" defaultOpen={false} icon={<Layers size={16} className="text-violet-600" />}>
+        <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/50 px-3 py-2.5">
+          <input
+            type="checkbox"
+            checked={orientationPair.enabled}
+            onChange={(e) => setOrientationPair((prev) => ({ ...prev, enabled: e.target.checked }))}
+            className="h-4 w-4 accent-violet-600"
+          />
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Tự chọn preset ngang / dọc khi xuất ZIP</span>
+        </label>
+        {orientationPair.enabled ? (
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="block text-xs text-slate-600 dark:text-slate-300">
+              Ảnh ngang
+              <select
+                value={orientationPair.landscapePresetId}
+                onChange={(e) => setOrientationPair((prev) => ({ ...prev, landscapePresetId: e.target.value }))}
+                className="mt-1 w-full rounded-xl border border-slate-200 px-2 py-2 text-sm dark:border-slate-600 dark:bg-slate-800"
+              >
+                {presets.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block text-xs text-slate-600 dark:text-slate-300">
+              Ảnh dọc
+              <select
+                value={orientationPair.portraitPresetId}
+                onChange={(e) => setOrientationPair((prev) => ({ ...prev, portraitPresetId: e.target.value }))}
+                className="mt-1 w-full rounded-xl border border-slate-200 px-2 py-2 text-sm dark:border-slate-600 dark:bg-slate-800"
+              >
+                {presets.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        ) : (
+          <p className="text-xs text-slate-500">Hữu ích khi batch có cả ảnh vuông và story dọc.</p>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-lg border border-violet-200 px-2 py-1 text-[10px] font-bold text-violet-800"
+            onClick={() => {
+              if (!activePreset) return;
+              updateActivePreset({ orientation: "landscape" }, false);
+              toast("Đã gắn preset hiện tại cho ảnh ngang");
+            }}
+          >
+            Gắn preset → ngang
+          </button>
+          <button
+            type="button"
+            className="rounded-lg border border-violet-200 px-2 py-1 text-[10px] font-bold text-violet-800"
+            onClick={() => {
+              if (!activePreset) return;
+              updateActivePreset({ orientation: "portrait" }, false);
+              toast("Đã gắn preset hiện tại cho ảnh dọc");
+            }}
+          >
+            Gắn preset → dọc
+          </button>
+        </div>
+      </ToolSection>
+
       <ToolSection title="Tuỳ chỉnh chi tiết" defaultOpen={false}>
         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vị trí & kích thước</p>
         <RangeField label="Kích thước logo" value={activePreset?.logoWidthPercent ?? 16} min={3} max={90} step={0.2} suffix="%" onChange={(v) => updateActivePreset({ logoWidthPercent: v })} />
