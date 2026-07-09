@@ -31,13 +31,14 @@ const HUB_TO_BLOG_SLUG = {
 };
 
 const CITY_SUFFIX_RE =
-  /-(quy-nhon|buon-ma-thuot|quang-ngai|ha-giang|lao-cai|yen-bai|lang-son|thai-nguyen|viet-tri|sam-son|pleiku|da-lat|dak-nong|nha-trang|hue|da-nang|binh-thuan|binh-phuoc|quang-nam|hoi-an|cao-bang|bac-kan|tuyen-quang|dien-bien|son-la|hoa-binh|bac-giang|bac-ninh|hai-phong|ha-long|phu-quoc|long-xuyen|soc-trang|ben-tre|tra-vinh|vinh-long|tien-giang|dong-xoai|tan-an|bac-lieu|bien-hoa|ca-mau|hai-duong|hung-yen|ninh-binh|nam-dinh|thanh-hoa|vinh|quang-binh|quang-tri|kon-tum|gia-lai|ho-chi-minh|ha-noi|tp-hcm|tphcm|can-tho|da-nang|hcm)$/i;
+  /-(quy-nhon|buon-ma-thuot|quang-ngai|ha-giang|lao-cai|yen-bai|lang-son|thai-nguyen|viet-tri|sam-son|pleiku|da-lat|dak-nong|nha-trang|hue|da-nang|binh-thuan|binh-phuoc|quang-nam|hoi-an|cao-bang|bac-kan|tuyen-quang|dien-bien|son-la|hoa-binh|bac-giang|bac-ninh|hai-phong|ha-long|phu-quoc|long-xuyen|soc-trang|ben-tre|tra-vinh|vinh-long|tien-giang|dong-xoai|tan-an|bac-lieu|bien-hoa|ca-mau|hai-duong|hung-yen|ninh-binh|nam-dinh|thanh-hoa|vinh|quang-binh|quang-tri|kon-tum|gia-lai|ho-chi-minh|ha-noi|tp-hcm|tphcm|can-tho|hcm|binh-duong|dong-nai|vung-tau|ba-ria|long-an|an-giang|kien-giang|tay-ninh|binh-dinh|phu-yen|khanh-hoa)$/i;
 
 const BATCH_SUFFIX_RE = /-b\d+$/i;
 
-/** Các token ngành trong slug batch (ưu tiên dài trước) */
+/** Các token ngành trong slug batch (ưu tiên dài trước) — derive từ INDUSTRY_ENTRIES + hub. */
 const SLUG_INDUSTRY_KEYS = [
   ...Object.keys(HUB_TO_BLOG_SLUG),
+  ...INDUSTRY_ENTRIES.map((e) => e.slug.replace(/^thiet-ke-website-/, "")),
   "phong-kham-da-khoa",
   "phong-kham",
   "tham-my-vien",
@@ -66,7 +67,9 @@ const SLUG_INDUSTRY_KEYS = [
   "tu-dong-hoa",
   "pccc",
   "spa",
-].sort((a, b) => b.length - a.length);
+]
+  .filter((v, i, arr) => arr.indexOf(v) === i)
+  .sort((a, b) => b.length - a.length);
 
 function stripSlugSuffixes(slug) {
   let s = slug;

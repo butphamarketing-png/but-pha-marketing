@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Có case study thật không?",
-    a: "Có. Mỗi hub liên kết tới case study có số liệu GSC, Facebook Insights — xem tại /du-an.",
+    a: "Có. Mỗi hub liên kết tới case study có số liệu GSC, Facebook Insights — xem tại /du-an/.",
   },
 ];
 
@@ -88,7 +88,7 @@ export default function KnowledgeCenterPage() {
             { step: "01", title: "Chọn hub chủ đề", desc: "SEO, Automation, AI — theo mục tiêu kinh doanh hiện tại." },
             { step: "02", title: "Đọc pillar + checklist", desc: "Nắm framework trước khi đọc bài lẻ trong blog." },
             { step: "03", title: "Áp dụng template", desc: "Dùng template/checklist ngành để triển khai nhanh hơn." },
-            { step: "04", title: "Đối chiếu proof", desc: "So sánh với case study có số liệu thật tại /du-an." },
+            { step: "04", title: "Đối chiếu proof", desc: "So sánh với case study có số liệu thật tại /du-an/." },
             { step: "05", title: "Liên hệ tư vấn", desc: "Khi cần triển khai dịch vụ — Bứt Phá hỗ trợ end-to-end." },
           ],
           kpiTitle: "Tài nguyên nổi bật",
@@ -107,7 +107,7 @@ export default function KnowledgeCenterPage() {
             { href: "/blog/chu-de/website", label: "Hub blog Website", desc: "Cụm bài theo chủ đề website." },
             { href: "/blog/chu-de/facebook", label: "Hub blog Facebook", desc: "Kiến thức Fanpage và Meta Ads." },
             { href: "/blog/chu-de/google-maps", label: "Hub blog Google Maps", desc: "Local SEO và GBP." },
-            { href: "/du-an", label: "Case study", desc: "Dự án có số liệu GSC và social proof." },
+            { href: "/du-an/", label: "Case study", desc: "Dự án có số liệu GSC và social proof." },
           ],
           faqs,
           ctaBand: {

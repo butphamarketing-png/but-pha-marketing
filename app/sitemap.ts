@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { blogSitemapChangeFrequency, blogSitemapPriority } from "@/lib/blog-seo";
+import { shouldExcludeBlogFromSitemap } from "@/lib/blog-index-policy";
 import { BLOG_TOPIC_SLUGS } from "@/lib/blog-topic-hub";
 import { INDUSTRY_HUB_SLUGS } from "@/lib/industry-hub";
 import { CASE_STUDY_SLUGS } from "@/lib/case-studies";
@@ -76,7 +77,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const blogs = await getPublishedBlogs();
-  const blogEntries: MetadataRoute.Sitemap = blogs.map((blog) => ({
+  const blogEntries: MetadataRoute.Sitemap = blogs
+    .filter((blog) => !shouldExcludeBlogFromSitemap(blog))
+    .map((blog) => ({
     url: `${baseUrl}/blog/${blog.slug || blog.id}`,
     lastModified: new Date(blog.updatedAt || blog.publishedAt || blog.timestamp),
     changeFrequency: blogSitemapChangeFrequency(blog),

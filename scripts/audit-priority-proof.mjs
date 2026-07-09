@@ -18,11 +18,11 @@ const SERVICE_PAGE_SOURCE_MAP = {
     "app/website/layout.tsx",
     "app/website/WebsiteSchema.tsx",
   ],
-  "/facebook": "app/facebook/page.tsx",
-  "/google-maps": "app/google-maps/page.tsx",
+  "/facebook": ["app/facebook/page.tsx", "components/shared/PlatformPage.tsx"],
+  "/google-maps": ["app/google-maps/page.tsx", "components/shared/PlatformPage.tsx"],
   "/banggia": ["app/banggia/page.tsx", "components/pricing/BanggiaPageClient.tsx"],
   "/gioi-thieu": ["app/gioi-thieu/page.tsx", "app/gioi-thieu/AboutPageClient.tsx"],
-  "/kien-thuc": "app/kien-thuc/page.tsx",
+  "/kien-thuc": ["app/kien-thuc/page.tsx", "components/landing/SubLandingPage.tsx"],
   "/seo-website": "app/seo-website/page.tsx",
   "/seo-website/dia-phuong/ho-chi-minh": "app/seo-website/dia-phuong/[location]/page.tsx",
   "/marketing-automation": "app/marketing-automation/page.tsx",
@@ -44,7 +44,11 @@ function scoreProof(content = "") {
   const lower = content.toLowerCase();
   const hasCaseStudyLink = lower.includes("/du-an/");
   const hasNumberEvidence = /(\d{2,}|\d+,\d+|\d+\.\d+)\s*(click|impression|%|lead|khách|đơn)/i.test(content);
-  const hasFaq = lower.includes("<h2 id=\"faq\"") || lower.includes("câu hỏi thường gặp") || lower.includes("faqpage");
+  const hasFaq =
+    lower.includes("<h2 id=\"faq\"") ||
+    lower.includes('id="faq"') ||
+    lower.includes("câu hỏi thường gặp") ||
+    lower.includes("faqpage");
   const hasMethodology = lower.includes("quy trình") || lower.includes("checklist");
   const score =
     (hasCaseStudyLink ? 30 : 0) +

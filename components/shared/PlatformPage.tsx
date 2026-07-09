@@ -594,7 +594,9 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
             Quy trình làm việc
           </motion.div>
           <h2 className="brand-section-title mb-6">Quy trình <span style={{ color }}>chuyên nghiệp</span></h2>
-          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">Chúng tôi áp dụng mô hình triển khai bài bản, đảm bảo tính minh bạch và hiệu quả cao nhất cho từng dự án.</p>
+          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">
+            Checklist quy trình triển khai 5 bước — minh bạch, đo lường được và tối ưu liên tục cho từng dự án.
+          </p>
         </div>
 
         {processTabs.length > 1 && (
@@ -680,10 +682,10 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
-    <section data-section="faq" id="faq" className="py-24 px-4">
+    <section data-section="faq" className="py-24 px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
         <div className="mb-16 text-center">
-          <h2 className="brand-section-title mb-4">Câu hỏi thường gặp</h2>
+          <h2 id="faq" className="brand-section-title mb-4">Câu hỏi thường gặp</h2>
           <p className="text-slate-600">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
         </div>
         <div className="space-y-4">

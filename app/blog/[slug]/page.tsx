@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { buildBlogJsonLd, buildBlogMetadataKeywords } from "@/lib/blog-schema";
+import { getBlogIndexDecision } from "@/lib/blog-index-policy";
 import { buildBlogAbsoluteTitle } from "@/lib/blog-seo";
 import { detectPillarTopic } from "@/lib/seo-pillar-hub";
 import { getCaseStudySlugForBlog } from "@/lib/case-study-industry-map";
@@ -45,22 +46,24 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const keywords = buildBlogMetadataKeywords(blog);
   const title = buildBlogAbsoluteTitle(blog.metaTitle || blog.title);
   const description = blog.metaDescription || blog.description;
+  const indexDecision = getBlogIndexDecision(blog);
+  const robotsCanonical = indexDecision.index ? canonical : indexDecision.canonical;
 
   return {
     title: { absolute: title },
     description,
     keywords,
     robots: {
-      index: true,
+      index: indexDecision.index,
       follow: true,
       googleBot: {
-        index: true,
+        index: indexDecision.index,
         follow: true,
         "max-image-preview": "large",
         "max-snippet": -1,
       },
     },
-    alternates: { canonical },
+    alternates: { canonical: robotsCanonical },
     openGraph: {
       title,
       description,

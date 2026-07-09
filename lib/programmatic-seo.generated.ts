@@ -185,8 +185,71 @@ export const LOCAL_SEO_GENERATED: ProgrammaticGeneratedLanding[] = [
   {
     slug: "da-nang",
     title: "SEO Website tại Đà Nẵng",
-    description: "Landing pilot local SEO Đà Nẵng.",
+    description: "Landing local SEO Đà Nẵng cho SME — cụm ngành dịch vụ, du lịch và y tế.",
     primaryKeyword: "seo website da nang",
-    qualityScore: 19
+    qualityScore: 74
+  },
+  {
+    slug: "can-tho",
+    title: "SEO Website tại Cần Thơ",
+    description: "Landing local SEO Cần Thơ — tối ưu Google Maps và website cho doanh nghiệp ĐBSCL.",
+    primaryKeyword: "seo website can tho",
+    qualityScore: 74
+  },
+  {
+    slug: "binh-duong",
+    title: "SEO Website tại Bình Dương",
+    description: "Landing local SEO Bình Dương cho khu công nghiệp và SME khu vực TP.HCM mở rộng.",
+    primaryKeyword: "seo website binh duong",
+    qualityScore: 74
+  },
+  {
+    slug: "dong-nai",
+    title: "SEO Website tại Đồng Nai",
+    description: "Landing local SEO Đồng Nai — Biên Hòa, khu công nghiệp và dịch vụ địa phương.",
+    primaryKeyword: "seo website dong nai",
+    qualityScore: 74
+  },
+  {
+    slug: "hai-phong",
+    title: "SEO Website tại Hải Phòng",
+    description: "Landing local SEO Hải Phòng cho doanh nghiệp cảng, logistics và dịch vụ miền Bắc.",
+    primaryKeyword: "seo website hai phong",
+    qualityScore: 74
+  },
+  {
+    slug: "nha-trang",
+    title: "SEO Website tại Nha Trang",
+    description: "Landing local SEO Nha Trang — du lịch, khách sạn, spa và dịch vụ địa phương.",
+    primaryKeyword: "seo website nha trang",
+    qualityScore: 74
+  },
+  {
+    slug: "hue",
+    title: "SEO Website tại Huế",
+    description: "Landing local SEO Huế cho doanh nghiệp du lịch, F&B và dịch vụ miền Trung.",
+    primaryKeyword: "seo website hue",
+    qualityScore: 74
+  },
+  {
+    slug: "vinh",
+    title: "SEO Website tại Vinh",
+    description: "Landing local SEO Vinh — Nghệ An, doanh nghiệp địa phương và chuỗi chi nhánh.",
+    primaryKeyword: "seo website vinh",
+    qualityScore: 74
+  },
+  {
+    slug: "thanh-hoa",
+    title: "SEO Website tại Thanh Hóa",
+    description: "Landing local SEO Thanh Hóa cho SME và doanh nghiệp dịch vụ tỉnh lớn miền Trung.",
+    primaryKeyword: "seo website thanh hoa",
+    qualityScore: 74
+  },
+  {
+    slug: "binh-thuan",
+    title: "SEO Website tại Bình Thuận",
+    description: "Landing local SEO Bình Thuận — Phan Thiết, resort và doanh nghiệp du lịch biển.",
+    primaryKeyword: "seo website binh thuan",
+    qualityScore: 74
   },
 ];

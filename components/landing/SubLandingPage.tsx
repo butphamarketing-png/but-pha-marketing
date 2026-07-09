@@ -182,7 +182,7 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
 
       {config.faqs && config.faqs.length > 0 && (
         <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
+          <h2 id="faq" className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
           <div className="mt-5 space-y-3">
             {config.faqs.map((item) => (
               <details
