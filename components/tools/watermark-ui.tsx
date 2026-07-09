@@ -2,16 +2,20 @@
 
 import { useRef, useState, type ReactNode } from "react";
 import {
+  ArrowLeft,
   Check,
   ChevronDown,
   Download,
   FolderOpen,
   ImageIcon,
+  Redo2,
   Sparkles,
   Stamp,
+  Undo2,
   Upload,
   Wand2,
 } from "lucide-react";
+import Link from "next/link";
 
 const checkerBg =
   "bg-[linear-gradient(45deg,#eef2ff_25%,transparent_25%,transparent_75%,#eef2ff_75%),linear-gradient(45deg,#eef2ff_25%,transparent_25%,transparent_75%,#eef2ff_75%)] bg-[length:16px_16px] bg-[position:0_0,8px_8px]";
@@ -29,6 +33,124 @@ export function ToolShell({ children }: { children: ReactNode }) {
   );
 }
 
+export function ToolPageHeader({
+  userName,
+  title,
+  subtitle,
+  icon,
+  backHref = "/cong-cu",
+}: {
+  userName: string;
+  title: string;
+  subtitle: string;
+  icon: ReactNode;
+  backHref?: string;
+}) {
+  return (
+    <header className="overflow-hidden rounded-[1.75rem] border border-white/60 bg-white/80 p-5 shadow-brand backdrop-blur-md sm:p-6">
+      <Link
+        href={backHref}
+        className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-violet-700 transition hover:text-indigo-900"
+      >
+        <ArrowLeft size={14} />
+        Tất cả công cụ
+      </Link>
+      <div className="flex items-start gap-4">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-900 to-violet-600 text-white shadow-brand-accent">
+          {icon}
+        </div>
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">Công cụ miễn phí</p>
+          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-indigo-950 sm:text-3xl">{title}</h1>
+          <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-slate-600">
+            Xin chào <span className="font-semibold text-indigo-900">{userName}</span>. {subtitle}
+          </p>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function ToolHubCard({
+  href,
+  title,
+  description,
+  icon,
+  badge,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  icon: ReactNode;
+  badge?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group relative overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/90 p-5 shadow-brand backdrop-blur-sm transition hover:-translate-y-0.5 hover:shadow-brand-lg sm:p-6"
+    >
+      <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-violet-100/60 transition group-hover:bg-violet-200/60" />
+      <div className="relative flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-900 to-violet-600 text-white shadow-sm">
+          {icon}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-bold text-indigo-950">{title}</h2>
+            {badge ? (
+              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-700">
+                {badge}
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-slate-600">{description}</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-violet-700 group-hover:gap-2 transition-all">
+            Mở công cụ →
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export function CanvasToolbar({
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+}: {
+  canUndo: boolean;
+  canRedo: boolean;
+  onUndo: () => void;
+  onRedo: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-1 rounded-xl border border-violet-100 bg-white/90 p-1 shadow-sm">
+      <button
+        type="button"
+        onClick={onUndo}
+        disabled={!canUndo}
+        title="Hoàn tác (Ctrl+Z)"
+        className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-violet-50 disabled:opacity-40"
+      >
+        <Undo2 size={14} />
+        Undo
+      </button>
+      <button
+        type="button"
+        onClick={onRedo}
+        disabled={!canRedo}
+        title="Làm lại (Ctrl+Y)"
+        className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-violet-50 disabled:opacity-40"
+      >
+        <Redo2 size={14} />
+        Redo
+      </button>
+    </div>
+  );
+}
+
+/** @deprecated Use ToolPageHeader on sub-routes */
 export function ToolHero({
   userName,
   activeTab,

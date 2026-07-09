@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LogoWatermarkTool } from "@/components/tools/LogoWatermarkTool";
+import { ToolsHub } from "@/components/tools/ToolsHub";
 
 export const metadata: Metadata = {
-  title: "Công cụ | Đóng dấu logo",
-  description:
-    "Đóng dấu logo hàng loạt, lưu preset theo tỷ lệ %, và xóa nền AI trực tiếp trên trình duyệt.",
+  title: "Công cụ xử lý ảnh | Bứt Phá Marketing",
+  description: "Bộ công cụ miễn phí: đóng dấu logo hàng loạt, xóa nền AI — chạy 100% trên trình duyệt.",
 };
 
 export default function CongCuPage() {
-  return <LogoWatermarkTool />;
+  return <ToolsHub />;
 }
