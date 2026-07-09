@@ -13,6 +13,7 @@ import {
   industryPricingNote,
   buildIndustryFaqExtras,
 } from "./seo-phase10-industry.mjs";
+import { resolveIndustryEntryFromSlug } from "./seo-industry-resolve.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -164,7 +165,7 @@ function buildSecondaryKeywordsSection(keyword, secondary) {
 function buildWebsiteRewrite(base) {
   const keyword = base.keywordsMain?.trim() || "thiết kế website";
   const title = base.title?.trim() || keyword;
-  const industry = industryBySlug[base.slug];
+  const industry = industryBySlug[base.slug] || resolveIndustryEntryFromSlug(base.slug);
   const keywordEntry = keywordEntryBySlug[base.slug];
   const seed = websiteSeedBySlug[base.slug];
   const angle = keywordEntry?.angle || seed?.angle || base.description?.split(":")[1]?.trim() || "doanh nghiệp Việt Nam";

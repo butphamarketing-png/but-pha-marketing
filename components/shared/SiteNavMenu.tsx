@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { SERVICE_NAV_GROUPS, SIMPLE_NAV_LINKS, type SiteNavLink } from "@/lib/site-navigation";
+import { SERVICE_NAV_GROUPS, SIMPLE_NAV_LINKS, WEBSITE_INDUSTRY_NAV_LINKS, type SiteNavLink } from "@/lib/site-navigation";
 
 type NavTone = "light" | "dark" | "panel";
 
@@ -101,26 +101,69 @@ function NavGroupDesktop({
         </button>
       </div>
       <div
-        className={`absolute left-0 top-full z-[60] min-w-[15rem] pt-2 transition-all ${
+        className={`absolute left-0 top-full z-[60] pt-2 transition-all ${
+          group.industryMegaMenu ? "min-w-[42rem] max-w-[48rem]" : "min-w-[15rem]"
+        } ${
           open
             ? "visible opacity-100"
             : "pointer-events-none invisible opacity-0 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100"
         }`}
       >
-        <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white p-2 shadow-xl">
-          {group.children.map((child) => (
-            <Link
-              key={child.href}
-              href={child.href}
-              onClick={() => {
-                setOpen(false);
-                onNavigate?.();
-              }}
-              className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${childLinkTone("light")}`}
-            >
-              {child.label}
-            </Link>
-          ))}
+        <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white p-3 shadow-xl">
+          {group.industryMegaMenu ? (
+            <div className="flex flex-col gap-3 lg:flex-row">
+              <div className="shrink-0 border-b border-indigo-50 pb-3 lg:w-44 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-3">
+                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Dịch vụ</p>
+                {group.children.map((child) => (
+                  <Link
+                    key={child.href}
+                    href={child.href}
+                    onClick={() => {
+                      setOpen(false);
+                      onNavigate?.();
+                    }}
+                    className={`block rounded-xl px-3 py-2 text-sm font-medium transition ${childLinkTone("light")}`}
+                  >
+                    {child.label}
+                  </Link>
+                ))}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-violet-600">
+                  Thiết kế website theo ngành
+                </p>
+                <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-3">
+                  {WEBSITE_INDUSTRY_NAV_LINKS.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={() => {
+                        setOpen(false);
+                        onNavigate?.();
+                      }}
+                      className={`rounded-lg px-2.5 py-2 text-xs font-semibold transition sm:text-sm ${childLinkTone("light")}`}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            group.children.map((child) => (
+              <Link
+                key={child.href}
+                href={child.href}
+                onClick={() => {
+                  setOpen(false);
+                  onNavigate?.();
+                }}
+                className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${childLinkTone("light")}`}
+              >
+                {child.label}
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -172,6 +215,21 @@ function NavGroupStack({
               {child.label}
             </Link>
           ))}
+          {group.industryMegaMenu && (
+            <>
+              <p className="mt-2 px-4 text-[10px] font-bold uppercase tracking-wider text-violet-600">Theo ngành</p>
+              {WEBSITE_INDUSTRY_NAV_LINKS.map((child) => (
+                <Link
+                  key={child.href}
+                  href={child.href}
+                  onClick={onNavigate}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition ${childLinkTone(tone)}`}
+                >
+                  {child.label}
+                </Link>
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>

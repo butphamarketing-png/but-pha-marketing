@@ -11,6 +11,7 @@ import { DomainSelectionModal } from "@/components/shared/DomainSelectionModal";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, FileText, LayoutTemplate, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
+import { WebsiteIndustryGrid } from "@/components/website/WebsiteIndustryGrid";
 import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
@@ -124,30 +125,7 @@ export default function WebsitePage() {
         />
 
         <div className="space-y-32">
-          <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Programmatic SEO</p>
-            <h2 className="mt-2 text-2xl font-bold text-indigo-950">Landing theo ngành</h2>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link href="/blog/chu-de/website" className="brand-btn-secondary">
-                Hub chủ đề Website
-              </Link>
-              <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
-                Pillar: Thiết kế website
-              </Link>
-              <Link href="/seo-website" className="brand-btn-secondary">
-                SEO Website
-              </Link>
-              <Link href="/website/nganh/nha-khoa" className="brand-btn-secondary">
-                Nha khoa
-              </Link>
-              <Link href="/website/nganh/xay-dung" className="brand-btn-secondary">
-                Xây dựng
-              </Link>
-              <Link href="/website/nganh/logistics" className="brand-btn-secondary">
-                Logistics (pilot)
-              </Link>
-            </div>
-          </section>
+          <WebsiteIndustryGrid id="theo-nganh" />
 
           {/* Custom & Domain Section */}
           <div id="domain" className="grid gap-6 scroll-mt-24 md:grid-cols-2">

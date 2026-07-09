@@ -79,7 +79,7 @@
     "setup:supabase": "node scripts/apply-supabase-schema.mjs && npm run check:supabase && npm run seed:seo-articles",
     "sync:cms-api": "node scripts/sync-cms-api.mjs",
     "setup:cms-db": "node scripts/setup-cms-db.mjs",
-    "sync:customers": "npx tsx --tsconfig tsconfig.json scripts/sync-customers.mjs",
+    "sync:industry-landings": "npx tsx --tsconfig tsconfig.json scripts/sync-industry-landings-config.mjs && node scripts/seed-programmatic-landings.mjs --write-module",
     "start": "next start",
     "lint": "next lint"
   },

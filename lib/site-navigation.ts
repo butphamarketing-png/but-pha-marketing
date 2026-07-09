@@ -1,3 +1,5 @@
+import { getWebsiteIndustryNavLinks } from "@/lib/website-industry-catalog";
+
 export type SiteNavLink = {
   label: string;
   href: string;
@@ -7,6 +9,8 @@ export type SiteNavGroup = {
   label: string;
   href: string;
   children: SiteNavLink[];
+  /** Mega menu 3 cột — danh sách ngành website */
+  industryMegaMenu?: boolean;
 };
 
 /** Menu dịch vụ xổ cấp — trang landing riêng từng dịch vụ */
@@ -14,13 +18,14 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
   {
     label: "Website",
     href: "/website",
+    industryMegaMenu: true,
     children: [
       { label: "Tên miền website", href: "/website/ten-mien-website" },
       { label: "Thiết kế website", href: "/website" },
-      { label: "Website theo ngành", href: "/website/nganh/nha-khoa" },
       { label: "Vận hành website", href: "/website/van-hanh-website" },
       { label: "Chăm sóc Website", href: "/website/cham-soc-website" },
       { label: "Quảng cáo Website", href: "/website/quang-cao-website" },
+      { label: "Xem tất cả ngành →", href: "/website#theo-nganh" },
     ],
   },
   {
@@ -72,6 +77,8 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
     ],
   },
 ];
+
+export const WEBSITE_INDUSTRY_NAV_LINKS = getWebsiteIndustryNavLinks();
 
 export const SIMPLE_NAV_LINKS: SiteNavLink[] = [
   { label: "Trang Chủ", href: "/" },

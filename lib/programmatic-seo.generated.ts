@@ -14,23 +14,156 @@ export const WEBSITE_INDUSTRY_GENERATED: ProgrammaticGeneratedLanding[] = [
   {
     slug: "nha-khoa",
     title: "Thiết kế website nha khoa chuẩn SEO",
-    description: "Landing theo ngành nha khoa tập trung chuyển đổi đặt lịch và SEO local.",
+    description: "Website nha khoa chuyên sâu: implant, niềng răng, đặt lịch online, SEO local và case study Nha Khoa Đăng Khoa có số liệu GSC.",
     primaryKeyword: "thiết kế website nha khoa",
-    qualityScore: 88
+    qualityScore: 92
+  },
+  {
+    slug: "spa",
+    title: "Thiết kế website spa chuyên nghiệp",
+    description: "Website spa: đặt lịch liệu trình, gallery dịch vụ, SEO local — case study Phước Lai Luxury & Halee Trâm.",
+    primaryKeyword: "thiết kế website spa",
+    qualityScore: 92
+  },
+  {
+    slug: "tham-my",
+    title: "Thiết kế website thẩm mỹ viện",
+    description: "Website thẩm mỹ viện: showcase dịch vụ filler/botox, đặt lịch, SEO local TP.HCM — case study Thiên Hoàng Kim.",
+    primaryKeyword: "thiết kế website thẩm mỹ viện",
+    qualityScore: 92
+  },
+  {
+    slug: "phong-kham",
+    title: "Thiết kế website phòng khám đa khoa",
+    description: "Website phòng khám: chuyên khoa, đặt lịch, tra cứu kết quả — SEO y tế và case study Nha Khoa Đăng Khoa.",
+    primaryKeyword: "thiết kế website phòng khám",
+    qualityScore: 92
   },
   {
     slug: "xay-dung",
     title: "Thiết kế website công ty xây dựng",
-    description: "Landing theo ngành xây dựng tập trung hồ sơ năng lực và lead B2B.",
+    description: "Website nhà thầu: hồ sơ năng lực, dự án tiêu biểu, SEO B2B — case study Kiến Trúc Sao Khuê.",
     primaryKeyword: "thiết kế website xây dựng",
-    qualityScore: 70
+    qualityScore: 88
+  },
+  {
+    slug: "my-pham",
+    title: "Thiết kế website mỹ phẩm",
+    description: "Website shop mỹ phẩm / thương hiệu làm đẹp: catalog, review, SEO ecommerce nhẹ.",
+    primaryKeyword: "thiết kế website mỹ phẩm",
+    qualityScore: 78
+  },
+  {
+    slug: "pccc",
+    title: "Thiết kế website công ty PCCC",
+    description: "Website PCCC: thiết bị chữa cháy, tư vấn, chứng chỉ — B2B và SEO ngành an toàn.",
+    primaryKeyword: "thiết kế website pccc",
+    qualityScore: 88
   },
   {
     slug: "logistics",
-    title: "Thiết kế website logistics và vận tải",
-    description: "Landing pilot cho ngành logistics, cần bổ sung thêm bằng chứng dự án.",
+    title: "Thiết kế website logistics & vận tải",
+    description: "Website công ty vận tải, kho bãi, freight — lead B2B và SEO ngành logistics.",
     primaryKeyword: "thiết kế website logistics",
-    qualityScore: 27
+    qualityScore: 68
+  },
+  {
+    slug: "co-khi",
+    title: "Thiết kế website cơ khí & gia công",
+    description: "Website xưởng cơ khí, CNC, gia công chính xác — catalog B2B và SEO ngành.",
+    primaryKeyword: "thiết kế website cơ khí",
+    qualityScore: 74
+  },
+  {
+    slug: "bao-bi",
+    title: "Thiết kế website công ty bao bì",
+    description: "Website in ấn bao bì, nhãn mác — catalog sản phẩm và lead B2B.",
+    primaryKeyword: "thiết kế website bao bì",
+    qualityScore: 74
+  },
+  {
+    slug: "luat",
+    title: "Thiết kế website công ty luật",
+    description: "Website văn phòng luật: lĩnh vực tư vấn, đội ngũ luật sư, SEO legal.",
+    primaryKeyword: "thiết kế website công ty luật",
+    qualityScore: 78
+  },
+  {
+    slug: "thang-may",
+    title: "Thiết kế website công ty thang máy",
+    description: "Website thang máy: sản phẩm, bảo trì, chứng chỉ — B2B và SEO ngành.",
+    primaryKeyword: "thiết kế website thang máy",
+    qualityScore: 74
+  },
+  {
+    slug: "tu-dong-hoa",
+    title: "Thiết kế website công ty tự động hóa",
+    description: "Website PLC, SCADA, giải pháp nhà máy — B2B và SEO ngành tự động hóa.",
+    primaryKeyword: "thiết kế website tự động hóa",
+    qualityScore: 74
+  },
+  {
+    slug: "nha-hang",
+    title: "Thiết kế website nhà hàng",
+    description: "Website nhà hàng: menu online, đặt bàn, gallery món — SEO local F&B.",
+    primaryKeyword: "thiết kế website nhà hàng",
+    qualityScore: 70
+  },
+  {
+    slug: "bat-dong-san",
+    title: "Thiết kế website bất động sản",
+    description: "Website BĐS: dự án, filter căn hộ, lead form — SEO real estate.",
+    primaryKeyword: "thiết kế website bất động sản",
+    qualityScore: 64
+  },
+  {
+    slug: "anh-ngu",
+    title: "Thiết kế website trung tâm anh ngữ",
+    description: "Website trung tâm ngoại ngữ: khóa học, lịch khai giảng, đăng ký học.",
+    primaryKeyword: "thiết kế website trung tâm anh ngữ",
+    qualityScore: 70
+  },
+  {
+    slug: "khach-san",
+    title: "Thiết kế website khách sạn",
+    description: "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality.",
+    primaryKeyword: "thiết kế website khách sạn",
+    qualityScore: 64
+  },
+  {
+    slug: "noi-that",
+    title: "Thiết kế website nội thất",
+    description: "Website studio nội thất: portfolio, dịch vụ thiết kế thi công.",
+    primaryKeyword: "thiết kế website nội thất",
+    qualityScore: 70
+  },
+  {
+    slug: "o-to",
+    title: "Thiết kế website đại lý ô tô",
+    description: "Website showroom xe: catalog, trả góp, đăng ký lái thử.",
+    primaryKeyword: "thiết kế website đại lý ô tô",
+    qualityScore: 64
+  },
+  {
+    slug: "thiet-bi-ve-sinh",
+    title: "Thiết kế website thiết bị vệ sinh",
+    description: "Website showroom thiết bị vệ sinh: catalog, báo giá, SEO ngành.",
+    primaryKeyword: "thiết kế website thiết bị vệ sinh",
+    qualityScore: 70
+  },
+  {
+    slug: "in-an",
+    title: "Thiết kế website công ty in ấn",
+    description: "Website in ấn quảng cáo: dịch vụ in, báo giá nhanh, portfolio.",
+    primaryKeyword: "thiết kế website in ấn",
+    qualityScore: 66
+  },
+  {
+    slug: "landing-page",
+    title: "Thiết kế landing page chuyển đổi cao",
+    description: "Landing page cho chiến dịch ads, ra mắt sản phẩm — tối ưu CRO.",
+    primaryKeyword: "thiết kế landing page",
+    qualityScore: 66
   },
 ];
 
