@@ -385,7 +385,7 @@ emitBatch(9, "500 từ khóa long-tail batch 9 — SEO on-page, TikTok Shop, ORM
   { name: "E_TIKTOK_SHOP", label: "E — 30", entries: tiktokShopBlock(B9_TIKTOK_SHOP) },
   { name: "F_ORM", label: "F — 25", entries: ormBlock(B9_ORM) },
   { name: "G_MAPS", label: "G — 30", entries: mapBlock(B9_MAPS) },
-  { name: "H_MKT", label: "H — 30", entries: B9_EXTRA.mkt },
+  { name: "H_MKT", label: "H — 18", entries: B9_EXTRA.mkt },
   { name: "I_COMPARE", label: "I — 25", marketing: true, entries: B9_COMPARE },
   { name: "J_PAIN", label: "J — 25", marketing: true, entries: B9_PAIN },
   { name: "K_LAGI", label: "K — 20", marketing: true, entries: B9_LAGI },
@@ -423,7 +423,7 @@ function uxUi(slug, kw, angle) {
   };
 }`, [
   { name: "A_WEB_CITY", label: "A — 200", entries: webCityBlock(B10_ALL.industries, B10_ALL.cities) },
-  { name: "B_EXTRA_WEB", label: "B — 50", entries: webIndBlock(B10_ALL.extraWeb) },
+  { name: "B_EXTRA_WEB", label: "B — 40", entries: webIndBlock(B10_ALL.extraWeb) },
   { name: "C_PRICING", label: "C — 40", entries: priceBlock(B10_ALL.pricing) },
   { name: "D_LOCAL_SEO", label: "D — 35", entries: localSeoBlock(B10_ALL.localSeo) },
   { name: "E_ZALO_OA", label: "E — 30", entries: zaloOaBlock(B10_ALL.zaloOa) },

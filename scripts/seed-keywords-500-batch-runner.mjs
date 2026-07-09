@@ -1,22 +1,36 @@
 /**
- * Seed 500 bài từ khóa long-tail batch 10.
- * Chạy: npm run seed:keywords-500-batch10
+ * Seed 500 bài từ khóa theo batch number (11, 12, …).
+ * Chạy: node scripts/seed-keywords-500-batch-runner.mjs 11
+ *       node scripts/seed-keywords-500-batch-runner.mjs 12 --dry-run --limit=5
  */
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { KEYWORDS_500_BATCH10 } from "./seo-keywords-500-batch10.mjs";
 import { upgradeArticle } from "./seo-upgrade-article.mjs";
 import { seedRewriteArticle } from "./seed-rewrite-utils.mjs";
 import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
+
+const batchNum = process.argv[2];
+if (!batchNum || !/^\d+$/.test(batchNum)) {
+  console.error("Usage: node scripts/seed-keywords-500-batch-runner.mjs <batchNumber> [--dry-run] [--limit=N] [--slug=x]");
+  process.exit(1);
+}
+
+const exportName = `KEYWORDS_500_BATCH${batchNum}`;
+const mod = await import(`./seo-keywords-500-batch${batchNum}.mjs`);
+const KEYWORDS = mod[exportName];
+if (!KEYWORDS?.length) {
+  console.error(`Missing export ${exportName} in seo-keywords-500-batch${batchNum}.mjs`);
+  process.exit(1);
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
 dotenv.config({ path: path.join(root, ".env") });
 
 const args = Object.fromEntries(
-  process.argv.slice(2).map((a) => {
+  process.argv.slice(3).map((a) => {
     const [k, v] = a.replace(/^--/, "").split("=");
     return [k, v ?? true];
   }),
@@ -50,20 +64,21 @@ while (true) {
 }
 
 const dbSlugs = new Set(allRows.map((r) => r.slug));
-let targets = KEYWORDS_500_BATCH10.filter((e) => !dbSlugs.has(e.slug));
+let targets = KEYWORDS.filter((e) => !dbSlugs.has(e.slug));
 
 if (onlySlug) {
-  targets = KEYWORDS_500_BATCH10.filter((e) => e.slug === onlySlug);
+  targets = KEYWORDS.filter((e) => e.slug === onlySlug);
   if (!targets.length) {
-    console.error(`Slug "${onlySlug}" không có trong KEYWORDS_500_BATCH10.`);
+    console.error(`Slug "${onlySlug}" không có trong ${exportName}.`);
     process.exit(1);
   }
 }
 
 targets = targets.slice(0, limit);
+const indexBase = Number(batchNum) * 500;
 
-console.log(`=== Seed 500 từ khóa batch 10 ===`);
-console.log(`Batch: ${KEYWORDS_500_BATCH10.length} | DB: ${dbSlugs.size} | Mới: ${targets.length}`);
+console.log(`=== Seed 500 từ khóa batch ${batchNum} ===`);
+console.log(`Batch: ${KEYWORDS.length} | DB: ${dbSlugs.size} | Mới: ${targets.length}`);
 console.log(`Dry run: ${dryRun ? "YES" : "NO"}\n`);
 
 let created = 0;
@@ -80,7 +95,7 @@ for (let i = 0; i < targets.length; i++) {
   };
 
   try {
-    const article = upgradeArticle(row, i + 4500);
+    const article = upgradeArticle(row, i + indexBase);
     if (dryRun) {
       created++;
       continue;
@@ -102,9 +117,11 @@ if (!dryRun && created > 0) {
   await revalidateBlogAfterSeed();
 }
 
-console.log(`\n=== Kết quả ===`);
+console.log(`\n=== Kết quả batch ${batchNum} ===`);
 if (dryRun) {
   console.log(`Sẽ tạo ${created} bài mới`);
 } else {
   console.log(`Tạo mới: ${created} | Lỗi: ${fail} | Cảnh báo SEO: ${warned}`);
 }
+
+if (fail > 0) process.exit(1);

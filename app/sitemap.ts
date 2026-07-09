@@ -6,9 +6,16 @@ import { INDUSTRY_HUB_SLUGS } from "@/lib/industry-hub";
 import { CASE_STUDY_SLUGS } from "@/lib/case-studies";
 import { getPublishedBlogs } from "@/lib/server-blog";
 import { getIndexableProgrammaticPaths } from "@/lib/programmatic-seo";
+import {
+  lastModifiedForCaseStudy,
+  lastModifiedForIndustryHub,
+  lastModifiedForProgrammaticRoute,
+  lastModifiedForStaticRoute,
+  lastModifiedForTopicHub,
+} from "@/lib/sitemap-dates";
+import type { IndustryHubSlug } from "@/lib/industry-hub";
 
 const baseUrl = SITE_URL;
-const STATIC_LAST_MODIFIED = new Date("2026-07-07T00:00:00.000Z");
 
 /** Next.js yêu cầu literal — không import biến cho segment config. */
 export const revalidate = 3600;
@@ -50,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: STATIC_LAST_MODIFIED,
+    lastModified: lastModifiedForStaticRoute(path),
     changeFrequency: path === "" || path === "/website" ? "daily" : "weekly",
     priority:
       path === ""
@@ -63,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
   const programmaticEntries: MetadataRoute.Sitemap = getIndexableProgrammaticPaths().map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: STATIC_LAST_MODIFIED,
+    lastModified: lastModifiedForProgrammaticRoute(),
     changeFrequency: "weekly",
     priority: 0.78,
   }));
@@ -78,21 +85,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const topicHubEntries: MetadataRoute.Sitemap = BLOG_TOPIC_SLUGS.map((slug) => ({
     url: `${baseUrl}/blog/chu-de/${slug}`,
-    lastModified: STATIC_LAST_MODIFIED,
+    lastModified: lastModifiedForTopicHub(),
     changeFrequency: "weekly",
     priority: 0.88,
   }));
 
   const industryHubEntries: MetadataRoute.Sitemap = INDUSTRY_HUB_SLUGS.map((slug) => ({
     url: `${baseUrl}/blog/nganh/${slug}`,
-    lastModified: STATIC_LAST_MODIFIED,
+    lastModified: lastModifiedForIndustryHub(slug as IndustryHubSlug),
     changeFrequency: "weekly",
     priority: 0.9,
   }));
 
   const caseStudyEntries: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.map((slug) => ({
     url: `${baseUrl}/du-an/${slug}`,
-    lastModified: STATIC_LAST_MODIFIED,
+    lastModified: lastModifiedForCaseStudy(slug),
     changeFrequency: "weekly",
     priority: 0.9,
   }));

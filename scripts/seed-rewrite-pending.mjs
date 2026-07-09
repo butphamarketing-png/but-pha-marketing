@@ -14,6 +14,7 @@ import { PILLAR_THIET_KE_WEBSITE } from "./seo-pillar-thiet-ke-website.mjs";
 import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
 import { upgradeArticle } from "./seo-upgrade-article.mjs";
 import { seedRewriteArticle } from "./seed-rewrite-utils.mjs";
+import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
@@ -38,24 +39,64 @@ const args = Object.fromEntries(
 );
 
 const dryRun = args["dry-run"] === true;
-const limit = args.limit ? Number(args.limit) : 50;
+const limit = args.limit ? Number(args.limit) : Infinity;
 const onlySlug = typeof args.slug === "string" ? args.slug : null;
+const quiet = args.quiet === true;
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
 );
 
-const { data: rows, error } = await supabase
-  .from("news")
-  .select("slug,title,keywords_main,description,content,hot")
-  .eq("category", "blog")
-  .eq("published", true)
-  .order("slug");
+let rows = [];
+let slugs = [];
+let from = 0;
+while (true) {
+  const { data: page, error: pageError } = await supabase
+    .from("news")
+    .select("slug")
+    .eq("category", "blog")
+    .eq("published", true)
+    .order("slug")
+    .range(from, from + 999);
+  if (pageError) {
+    console.error(pageError.message);
+    process.exit(1);
+  }
+  if (!page?.length) break;
+  slugs = slugs.concat(page.map((r) => r.slug));
+  if (page.length < 1000) break;
+  from += 1000;
+}
 
-if (error) {
-  console.error(error.message);
-  process.exit(1);
+const BATCH = 40;
+for (let i = 0; i < slugs.length; i += BATCH) {
+  const chunk = slugs.slice(i, i + BATCH);
+  const { data: page, error: pageError } = await supabase
+    .from("news")
+    .select("slug,title,keywords_main,description,content,hot")
+    .in("slug", chunk);
+  if (pageError) {
+    console.error(pageError.message);
+    process.exit(1);
+  }
+  rows = rows.concat(page || []);
+}
+
+if (onlySlug) {
+  const found = rows.find((r) => r.slug === onlySlug);
+  if (!found) {
+    const { data: one, error: oneErr } = await supabase
+      .from("news")
+      .select("slug,title,keywords_main,description,content,hot")
+      .eq("slug", onlySlug)
+      .maybeSingle();
+    if (oneErr) {
+      console.error(oneErr.message);
+      process.exit(1);
+    }
+    if (one) rows.push(one);
+  }
 }
 
 let pending = (rows || []).filter((r) => !REWRITE_SLUGS.has(r.slug) && !PILLAR_SLUG_SET.has(r.slug));
@@ -111,7 +152,10 @@ for (let i = 0; i < targets.length; i++) {
       ok++;
       continue;
     }
-    const result = await seedRewriteArticle(article, { log: true });
+    const result = await seedRewriteArticle(article, { log: !quiet, revalidate: false });
+    if (!quiet && ((i + 1) % 25 === 0 || i === targets.length - 1)) {
+      console.log(`  … ${i + 1}/${targets.length} (${row.slug})`);
+    }
     if (result.seoOk) ok++;
     else {
       warned++;
@@ -121,6 +165,10 @@ for (let i = 0; i < targets.length; i++) {
     fail++;
     console.error(`  ✗ FAIL ${row.slug}:`, err.message);
   }
+}
+
+if (!dryRun && ok > 0) {
+  await revalidateBlogAfterSeed();
 }
 
 console.log(`\nHoàn tất: ${ok} OK, ${fail} lỗi, ${warned} cảnh báo SEO${dryRun ? " (dry-run)" : ""}.`);

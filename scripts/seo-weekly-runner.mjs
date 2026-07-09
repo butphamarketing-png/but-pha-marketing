@@ -22,6 +22,7 @@ const STEPS = [
   { label: "Generate programmatic module", cmd: "npm", args: ["run", "seed:programmatic-landings:write-module"] },
   { label: "Build backlink brand plan", cmd: "npm", args: ["run", "build:backlink-brand-signals"] },
   { label: "Build SEO health scorecard", cmd: "npm", args: ["run", "build:seo-health-scorecard"] },
+  { label: "Build vertical proof KPI", cmd: "npm", args: ["run", "build:vertical-kpi"] },
   { label: "Build SEO execution board", cmd: "npm", args: ["run", "build:seo-execution-board"] },
   { label: "Build SEO ops KPI", cmd: "npm", args: ["run", "build:seo-ops-kpi"] },
   { label: "Build SEO autopilot summary", cmd: "npm", args: ["run", "build:seo-autopilot-summary"] },

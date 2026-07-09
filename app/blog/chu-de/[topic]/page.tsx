@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, buildHubMetadata } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 import { BlogSearchGrid } from "@/components/blog/BlogSearchGrid";
 import { BlogTopicNav } from "@/components/blog/BlogTopicNav";
@@ -34,22 +34,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!isBlogTopicSlug(topic)) return {};
 
   const hub = getBlogTopicHub(topic);
-  const canonical = `${BASE_URL}/blog/chu-de/${topic}`;
 
-  return {
+  return buildHubMetadata({
     title: `${hub.title} | Bứt Phá Marketing`,
     description: hub.description,
-    alternates: { canonical },
-    openGraph: {
-      title: hub.title,
-      description: hub.description,
-      url: canonical,
-      type: "website",
-      locale: "vi_VN",
-      siteName: "Bứt Phá Marketing",
-      images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: hub.title }],
-    },
-  };
+    path: `/blog/chu-de/${topic}`,
+  });
 }
 
 export default async function BlogTopicHubPage({ params }: { params: Promise<Params> }) {
@@ -211,6 +201,30 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
               </Link>
               <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
                 Case study SEO
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {topic === "marketing" && (
+          <section className="mb-8 rounded-3xl border border-violet-200 bg-gradient-to-br from-violet-50/80 via-white to-fuchsia-50/40 p-6 md:p-8">
+            <p className="brand-eyebrow mb-2">Chiến lược đa kênh</p>
+            <h2 className="text-2xl font-black text-indigo-950 md:text-3xl">Website + SEO + Ads + Automation</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
+              Marketing online hiệu quả cần nền tảng website chuẩn SEO, kênh thu lead (Facebook, Google Maps) và hệ thống đo lường KPI. Đọc pillar theo mục tiêu: tăng traffic organic, giảm CPA ads hoặc nuôi dưỡng lead B2B — tránh nhồi nhét kênh khi chưa có landing page chuyển đổi.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/kien-thuc" className="brand-btn-primary">
+                Trung tâm kiến thức
+              </Link>
+              <Link href="/blog/marketing-online-la-gi" className="brand-btn-secondary">
+                Marketing online là gì
+              </Link>
+              <Link href="/marketing-automation" className="brand-btn-secondary">
+                Marketing Automation
+              </Link>
+              <Link href="/lien-he" className="brand-btn-secondary">
+                Tư vấn chiến lược
               </Link>
             </div>
           </section>

@@ -1,12 +1,12 @@
 /**
- * Seed 500 bài từ khóa long-tail batch 8.
- * Chạy: npm run seed:keywords-500-batch8
+ * Seed 500 bài từ khóa long-tail batch 9.
+ * Chạy: npm run seed:keywords-500-batch9
  */
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { KEYWORDS_500_BATCH8 } from "./seo-keywords-500-batch8.mjs";
+import { KEYWORDS_500_BATCH9 } from "./seo-keywords-500-batch9.mjs";
 import { upgradeArticle } from "./seo-upgrade-article.mjs";
 import { seedRewriteArticle } from "./seed-rewrite-utils.mjs";
 import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
@@ -50,20 +50,20 @@ while (true) {
 }
 
 const dbSlugs = new Set(allRows.map((r) => r.slug));
-let targets = KEYWORDS_500_BATCH8.filter((e) => !dbSlugs.has(e.slug));
+let targets = KEYWORDS_500_BATCH9.filter((e) => !dbSlugs.has(e.slug));
 
 if (onlySlug) {
-  targets = KEYWORDS_500_BATCH8.filter((e) => e.slug === onlySlug);
+  targets = KEYWORDS_500_BATCH9.filter((e) => e.slug === onlySlug);
   if (!targets.length) {
-    console.error(`Slug "${onlySlug}" không có trong KEYWORDS_500_BATCH8.`);
+    console.error(`Slug "${onlySlug}" không có trong KEYWORDS_500_BATCH9.`);
     process.exit(1);
   }
 }
 
 targets = targets.slice(0, limit);
 
-console.log(`=== Seed 500 từ khóa batch 8 ===`);
-console.log(`Batch: ${KEYWORDS_500_BATCH8.length} | DB: ${dbSlugs.size} | Mới: ${targets.length}`);
+console.log(`=== Seed 500 từ khóa batch 9 ===`);
+console.log(`Batch: ${KEYWORDS_500_BATCH9.length} | DB: ${dbSlugs.size} | Mới: ${targets.length}`);
 console.log(`Dry run: ${dryRun ? "YES" : "NO"}\n`);
 
 let created = 0;
@@ -80,7 +80,7 @@ for (let i = 0; i < targets.length; i++) {
   };
 
   try {
-    const article = upgradeArticle(row, i + 3500);
+    const article = upgradeArticle(row, i + 4000);
     if (dryRun) {
       created++;
       continue;

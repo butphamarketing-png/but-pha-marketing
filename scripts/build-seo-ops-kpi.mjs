@@ -41,6 +41,7 @@ function computeKpi() {
   const links = readJsonSafe(sources.links, []);
   const freshness = readJsonSafe(sources.freshness, []);
   const promotion = readJsonSafe(sources.promotion, []);
+  const verticalKpi = readJsonSafe(path.join(outDir, "vertical-kpi-latest.json"), null);
 
   return {
     generatedAt: new Date().toISOString(),
@@ -50,6 +51,10 @@ function computeKpi() {
     failedLinkUrls: links.filter((x) => x.status === "fail").length,
     staleUrls: freshness.filter((x) => x.stale).length,
     promotableUrls: promotion.filter((x) => x.promotable).length,
+    verticalAvgProofPct: verticalKpi?.avgProofPct ?? null,
+    verticalComplete: verticalKpi
+      ? `${verticalKpi.completeVerticals}/${verticalKpi.totalVerticals}`
+      : null,
   };
 }
 
@@ -86,6 +91,9 @@ function main() {
   lines.push(`- Failed link URLs: **${current.failedLinkUrls}** (${formatDelta(currentWithDelta.delta.failedLinkUrls)})`);
   lines.push(`- Stale URLs: **${current.staleUrls}** (${formatDelta(currentWithDelta.delta.staleUrls)})`);
   lines.push(`- Promotable URLs: **${current.promotableUrls}** (${formatDelta(currentWithDelta.delta.promotableUrls)})`);
+  if (current.verticalAvgProofPct != null) {
+    lines.push(`- Vertical proof avg: **${current.verticalAvgProofPct}%** (${current.verticalComplete} verticals 7/7)`);
+  }
   lines.push("");
   lines.push("## Interpretation");
   lines.push("- Health score should stay >= 85.");

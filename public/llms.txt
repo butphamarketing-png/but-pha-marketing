@@ -30,6 +30,7 @@
 - [Phước Lai Luxury — Phun xăm & Spa Vũng Tàu](https://www.butphamarketing.com/du-an/phuoc-lai-luxury): Website phunxamvungtau.com + fanpage, luxury spa & academy.
 - [Nha Khoa Đăng Khoa — SEO Tây Ninh](https://www.butphamarketing.com/du-an/nha-khoa-dang-khoa): 15,4K impression GSC, 471 click, implant & niềng răng Tây Ninh.
 - [Halee Trâm — Nail Nối Mi Academy](https://www.butphamarketing.com/du-an/halee-tram): Website haleetram.com eyelash, nail & đào tạo nghề.
+- [Bảo An Fire — Website PCCC B2B](https://www.butphamarketing.com/du-an/pccc-bao-an-fire): Portfolio dự án, form khảo sát hiện trường, silo proof 7/7 URL ngành phòng cháy.
 
 ## Chủ đề website theo ngành (blog)
 
@@ -51,6 +52,8 @@
 - Xây dựng: /blog/nganh/xay-dung
 - Thẩm mỹ viện: /blog/nganh/tham-my
 - Spa & làm đẹp: /blog/nganh/spa
+- PCCC: /blog/nganh/pccc
+- Case study PCCC Bảo An Fire: /du-an/pccc-bao-an-fire
 - Checklist nha khoa: /blog/checklist-website-nha-khoa-2026
 - Template nha khoa: /blog/template-website-nha-khoa-2026
 - Checklist xây dựng: /blog/checklist-website-xay-dung-2026

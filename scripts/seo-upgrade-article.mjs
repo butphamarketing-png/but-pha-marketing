@@ -143,6 +143,8 @@ function withPillarCluster(article) {
   return article;
 }
 
+const MIN_LONGFORM_CHARS = 12000;
+
 /** @param {{ slug: string, title: string, keywords_main?: string, description?: string }} row */
 export function upgradeArticle(row, index = 0) {
   const base = {
@@ -156,6 +158,23 @@ export function upgradeArticle(row, index = 0) {
   let article;
   if (shouldUseRewriteBuilder(row.slug)) {
     article = buildRewriteArticle(base);
+    if (article.content.length < MIN_LONGFORM_CHARS && row.slug.endsWith("-la-gi")) {
+      const localEntry = localEntryBySlug[row.slug];
+      const entry =
+        entryBySlug.get(row.slug) ||
+        (localEntry
+          ? {
+              slug: localEntry.slug,
+              keywordsMain: localEntry.keywordsMain,
+              h1: localEntry.h1,
+              angle: localEntry.definition?.slice(0, 100) || "tối ưu Google Maps và Local Pack",
+              niche: "seo",
+              faq: localEntry.faq,
+            }
+          : null) ||
+        syntheticEntry({ ...row, title: row.title, keywords_main: row.keywordsMain });
+      article = buildMarketingLongFormFromEntry(entry, index);
+    }
   } else {
     const localEntry = localEntryBySlug[row.slug];
     const entry =

@@ -736,6 +736,124 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     testimonial:
       "Halee Trâm kết hợp salon dịch vụ và academy — website là điểm chạm để khách xem portfolio nail/lash và học viên tìm khóa đào tạo nghề.",
   },
+  {
+    slug: "pccc-bao-an-fire",
+    clientName: "Bảo An Fire",
+    industry: "pccc",
+    industryLabel: "PCCC & phòng cháy chữa cháy",
+    headline: "Website B2B PCCC — portfolio dự án, form khảo sát hiện trường",
+    summary:
+      "Triển khai website công ty PCCC Bảo An Fire: trang dịch vụ thiết kế-thi công-bảo trì, showcase dự án nhà xưởng/chung cư, giấy phép năng lực và form thu lead khảo sát hiện trường — mô hình proof B2B cho ngành phòng cháy.",
+    answerFirst:
+      "Case study Bảo An Fire: Bứt Phá Marketing xây website công ty PCCC với cấu trúc dịch vụ B2B (thiết kế, thi công, bảo trì, nghiệm thu), portfolio lọc theo loại công trình, trang giấy phép năng lực và form khảo sát hiện trường. Website live; SEO ngành PCCC và landing theo dịch vụ đang triển khai giai đoạn 2.",
+    metaTitle: "Case Study Website Công Ty PCCC Bảo An Fire | B2B Lead",
+    metaDescription:
+      "Case study thiết kế website công ty PCCC Bảo An Fire: portfolio dự án, form khảo sát, giấy phép năng lực và SEO B2B phòng cháy. Bứt Phá Marketing.",
+    keywordsMain: "case study thiết kế website pccc",
+    keywordsSecondary: [
+      "thiết kế website công ty pccc",
+      "website phòng cháy chữa cháy",
+      "seo website pccc",
+      "marketing pccc b2b",
+      "form khảo sát pccc",
+    ],
+    websiteUrl: "https://www.butphamarketing.com/website",
+    thumbnail: "/tin-tuc/pccc/pccc-1.png",
+    heroImage: "/tin-tuc/pccc/pccc-1.png",
+    publishedAt: "2026-07-08",
+    updatedAt: "2026-07-08",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Website công ty PCCC cần những trang gì?",
+        a: "Dịch vụ (thiết kế, thi công, bảo trì), portfolio dự án theo loại công trình, giấy phép năng lực, catalog thiết bị đối tác (nếu có) và form khảo sát hiện trường.",
+      },
+      {
+        q: "Case study Bảo An Fire chứng minh điều gì?",
+        a: "Mô hình website B2B PCCC chuẩn proof: cấu trúc dịch vụ rõ, CTA khảo sát và silo SEO checklist/template/case study blog liên kết về money page.",
+      },
+    ],
+    services: [
+      {
+        name: "Thiết kế website PCCC",
+        description: "Cấu trúc trang dịch vụ, portfolio dự án và giấy phép năng lực theo chuẩn B2B.",
+      },
+      {
+        name: "Form khảo sát hiện trường",
+        description: "Thu loại công trình, diện tích, hạng mục PCCC — qualify lead trước khi báo giá.",
+      },
+      {
+        name: "SEO ngành phòng cháy",
+        description: "Landing theo dịch vụ + blog checklist/template; liên kết hub /blog/nganh/pccc.",
+      },
+    ],
+    challenge: [
+      "Khách B2B (chủ đầu tư, ban quản lý) cần thấy năng lực thi công và hồ sơ nghiệm thu trước khi liên hệ.",
+      "Ngành PCCC cạnh tranh quảng cáo sai hạng — website phải thể hiện pháp lý minh bạch.",
+      "Lead thường đến từ tìm kiếm dịch vụ địa phương + giới thiệu nhà thầu MEP.",
+    ],
+    solution: [
+      "Xây website theo hành trình: Dịch vụ → Dự án → Năng lực → Liên hệ khảo sát.",
+      "Portfolio filter: nhà xưởng, chung cư, TTMM, văn phòng — mỗi dự án có ảnh hiện trường.",
+      "Trang giấy phép & chứng chỉ năng lực PCCC (hạng thi công).",
+      "Form multi-step: loại công trình, diện tích, hạng mục cần triển khai.",
+      "Internal link silo: checklist + template 2026 + case study blog → money page PCCC.",
+    ],
+    results: [
+      { label: "Website", value: "Live", note: "Giai đoạn 1 bàn giao", trend: "up" },
+      { label: "Form khảo sát", value: "Active", note: "Thu lead B2B hiện trường", trend: "up" },
+      { label: "Silo SEO", value: "7/7 URL", note: "Hub · money · checklist · template · case study", trend: "up" },
+      { label: "Portfolio", value: "6+ dự án", note: "Nhà xưởng · chung cư · TTMM", trend: "neutral" },
+      { label: "SEO GSC", value: "Đang đo", note: "Baseline 90 ngày", trend: "neutral" },
+    ],
+    keywordClusters: [
+      {
+        region: "PCCC — Head",
+        keywords: [
+          "thiết kế website công ty pccc",
+          "website phòng cháy chữa cháy",
+          "thi công hệ thống pccc",
+          "tư vấn pccc",
+        ],
+      },
+      {
+        region: "Dịch vụ B2B",
+        keywords: [
+          "thiết kế hệ thống báo cháy",
+          "thi công sprinkler",
+          "bảo trì hệ thống pccc",
+          "nghiệm thu pccc",
+        ],
+      },
+      {
+        region: "Local SEO",
+        keywords: [
+          "công ty pccc tphcm",
+          "thi công pccc bình dương",
+          "tư vấn pccc đồng nai",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/tin-tuc/pccc/pccc-1.png",
+        alt: "Thiết kế website công ty PCCC — giao diện dịch vụ phòng cháy",
+        caption: "Trang chủ website PCCC — hero dịch vụ thiết kế, thi công, bảo trì hệ thống.",
+      },
+      {
+        src: "/tin-tuc/pccc/pccc-2.png",
+        alt: "Portfolio dự án PCCC trên website B2B",
+        caption: "Portfolio dự án — filter theo loại công trình và hạng mục PCCC.",
+      },
+      {
+        src: "/tin-tuc/pccc/pccc-3.png",
+        alt: "Form khảo sát hiện trường PCCC trên website",
+        caption: "Form khảo sát hiện trường — thu lead B2B trước khi báo giá.",
+      },
+    ],
+    testimonial:
+      "Website PCCC không chỉ là catalog thiết bị — phải chứng minh năng lực thi công và quy trình nghiệm thu để chủ đầu tư tin tưởng giao dự án.",
+  },
 ];
 
 export const CASE_STUDY_SLUGS = CASE_STUDIES.map((c) => c.slug);

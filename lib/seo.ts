@@ -104,6 +104,7 @@ export function buildMetadata({
   image = "/opengraph.jpg",
 }: SeoInput): Metadata {
   const canonical = `${BASE_URL}${path}`;
+  const imageUrl = image.startsWith("http") ? image : `${BASE_URL}${image}`;
 
   return {
     title,
@@ -123,13 +124,45 @@ export function buildMetadata({
       siteName: "Bứt Phá Marketing",
       locale: "vi_VN",
       type,
-      images: [{ url: image, alt: title }],
+      images: [{ url: imageUrl, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [imageUrl],
     },
   };
+}
+
+/** Metadata hub blog (ngành / chủ đề) — đồng bộ twitter + robots. */
+export function buildHubMetadata({
+  title,
+  description,
+  path,
+}: {
+  title: string;
+  description: string;
+  path: string;
+}): Metadata {
+  return buildMetadata({ title, description, path, type: "website" });
+}
+
+/** Homepage — metadata tĩnh, không gọi Supabase (giảm TTFB ISR). */
+export function getHomepageMetadata(): Metadata {
+  return buildMetadata({
+    title: "Thiết kế website & Marketing thực chiến | Bứt Phá Marketing",
+    description:
+      "Agency thiết kế website chuẩn SEO, Facebook Ads, Google Maps và marketing automation. Tư vấn miễn phí — tăng trưởng doanh thu bền vững.",
+    path: "/",
+    keywords: [
+      "thiết kế website",
+      "làm website",
+      "dịch vụ thiết kế website",
+      "marketing",
+      "facebook ads",
+      "local seo",
+      "agency marketing",
+    ],
+  });
 }

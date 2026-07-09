@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, buildHubMetadata } from "@/lib/seo";
 import { getPublishedBlogs } from "@/lib/server-blog";
 import { getCaseStudyBySlug } from "@/lib/case-studies";
 import { BlogSearchGrid } from "@/components/blog/BlogSearchGrid";
@@ -15,6 +15,7 @@ import {
   INDUSTRY_HUB_SLUGS,
   toIndustryBlogListItems,
 } from "@/lib/industry-hub";
+import { getVerticalProofLinks, isPriorityVertical } from "@/lib/vertical-proof-engine";
 
 const BASE_URL = SITE_URL;
 
@@ -34,20 +35,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const hub = getIndustryHub(industry);
   const canonical = `${BASE_URL}/blog/nganh/${industry}`;
 
-  return {
+  return buildHubMetadata({
     title: `${hub.title} | Silo SEO | Bứt Phá Marketing`,
     description: hub.description,
-    alternates: { canonical },
-    openGraph: {
-      title: hub.title,
-      description: hub.description,
-      url: canonical,
-      type: "website",
-      locale: "vi_VN",
-      siteName: "Bứt Phá Marketing",
-      images: [{ url: `${BASE_URL}/opengraph.jpg`, alt: hub.title }],
-    },
-  };
+    path: `/blog/nganh/${industry}`,
+  });
 }
 
 export default async function IndustryHubPage({ params }: { params: Promise<Params> }) {
@@ -59,6 +51,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
   const industryBlogs = filterBlogsByIndustryHub(allBlogs, industry);
   const caseStudy = hub.caseStudySlug ? getCaseStudyBySlug(hub.caseStudySlug) : undefined;
   const canonical = `${BASE_URL}/blog/nganh/${industry}`;
+  const proofLinks = isPriorityVertical(industry) ? getVerticalProofLinks(industry) : [];
   const strategicLinks = [
     {
       href: "/website",
@@ -156,6 +149,27 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
               <CaseStudyCard study={caseStudy} />
             </div>
           </div>
+        )}
+
+        {proofLinks.length > 0 && (
+          <section className="mb-8 rounded-3xl border border-violet-100 bg-violet-50/50 p-6 md:p-8">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-violet-600">Vertical Proof Engine</p>
+            <h2 className="text-2xl font-bold tracking-tight text-indigo-950">Bộ URL proof đầy đủ</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Money · Checklist · Template · Hub · Case study · Cluster — liên kết chéo chuẩn intent.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {proofLinks.map((link) => (
+                <Link
+                  key={link.slot}
+                  href={link.href}
+                  className="rounded-full border border-violet-200 bg-white px-4 py-2 text-sm font-semibold text-violet-800 hover:border-violet-400"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
 
         <section className="mb-8 rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">

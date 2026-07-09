@@ -1,24 +1,11 @@
 export const revalidate = 3600;
 
 import HomePageClient from "./HomePageClient";
-import { getDynamicMetadata, SITE_URL } from "@/lib/seo";
+import { getHomepageMetadata, SITE_URL } from "@/lib/seo";
 import { SITE_CONTACT } from "@/lib/site-contact";
 
 export async function generateMetadata() {
-  return getDynamicMetadata("/", {
-    title: "Thiết kế website & Marketing thực chiến | Bứt Phá Marketing",
-    description:
-      "Agency thiết kế website chuẩn SEO, Facebook Ads, Google Maps và marketing automation. Tư vấn miễn phí — tăng trưởng doanh thu bền vững.",
-    keywords: [
-      "thiết kế website",
-      "làm website",
-      "dịch vụ thiết kế website",
-      "marketing",
-      "facebook ads",
-      "local seo",
-      "agency marketing",
-    ],
-  });
+  return getHomepageMetadata();
 }
 
 export default function Home() {

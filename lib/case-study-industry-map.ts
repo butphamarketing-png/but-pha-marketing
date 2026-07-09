@@ -27,11 +27,28 @@ export const BLOG_SLUG_TO_CASE_STUDY: Record<string, string> = {
   "template-website-my-pham-2026": "halee-tram",
   "checklist-website-phong-kham-2026": "nha-khoa-dang-khoa",
   "template-website-phong-kham-2026": "nha-khoa-dang-khoa",
+  "thiet-ke-website-pccc": "pccc-bao-an-fire",
+  "thiet-ke-website-thiet-bi-pccc": "pccc-bao-an-fire",
+  "checklist-website-pccc-2026": "pccc-bao-an-fire",
+  "template-website-pccc-2026": "pccc-bao-an-fire",
+  "case-study-thiet-ke-website-pccc-bao-an": "pccc-bao-an-fire",
 };
 
+export type RelatedBlogLink = { slug: string; label: string; keyword: string };
+
+/** Loại bỏ slug trùng trong danh sách related blogs. */
+export function dedupeRelatedBlogs(links: RelatedBlogLink[]): RelatedBlogLink[] {
+  const seen = new Set<string>();
+  return links.filter((link) => {
+    if (seen.has(link.slug)) return false;
+    seen.add(link.slug);
+    return true;
+  });
+}
+
 /** Case study → blog cluster (internal link hub). */
-export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: string; keyword: string }[]> = {
-  "kien-truc-sao-khue": [
+export const CASE_STUDY_RELATED_BLOGS: Record<string, RelatedBlogLink[]> = {
+  "kien-truc-sao-khue": dedupeRelatedBlogs([
     {
       slug: "thiet-ke-website-xay-dung-nha-thau",
       label: "Thiết kế website xây dựng nhà thầu",
@@ -67,8 +84,8 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: str
       label: "Thiết kế website — pillar",
       keyword: "thiết kế website",
     },
-  ],
-  "tham-my-thien-hoang-kim": [
+  ]),
+  "tham-my-thien-hoang-kim": dedupeRelatedBlogs([
     {
       slug: "thiet-ke-website-tham-my-vien",
       label: "Thiết kế website thẩm mỹ viện",
@@ -95,17 +112,12 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: str
       keyword: "thiết kế website phòng khám",
     },
     {
-      slug: "thiet-ke-website-phong-kham-da-khoa",
-      label: "Website phòng khám",
-      keyword: "thiết kế website phòng khám",
-    },
-    {
       slug: "thiet-ke-website",
       label: "Thiết kế website — pillar",
       keyword: "thiết kế website",
     },
-  ],
-  "phuoc-lai-luxury": [
+  ]),
+  "phuoc-lai-luxury": dedupeRelatedBlogs([
     {
       slug: "thiet-ke-website-spa",
       label: "Thiết kế website spa",
@@ -141,8 +153,8 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: str
       label: "Thiết kế website — pillar",
       keyword: "thiết kế website",
     },
-  ],
-  "nha-khoa-dang-khoa": [
+  ]),
+  "nha-khoa-dang-khoa": dedupeRelatedBlogs([
     {
       slug: "thiet-ke-website-nha-khoa",
       label: "Thiết kế website nha khoa",
@@ -188,8 +200,8 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: str
       label: "Thiết kế website — pillar",
       keyword: "thiết kế website",
     },
-  ],
-  "halee-tram": [
+  ]),
+  "halee-tram": dedupeRelatedBlogs([
     {
       slug: "thiet-ke-website-my-pham-lam-dep",
       label: "Thiết kế website mỹ phẩm làm đẹp",
@@ -225,7 +237,39 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, { slug: string; label: str
       label: "Thiết kế website — pillar",
       keyword: "thiết kế website",
     },
-  ],
+  ]),
+  "pccc-bao-an-fire": dedupeRelatedBlogs([
+    {
+      slug: "thiet-ke-website-pccc",
+      label: "Thiết kế website công ty PCCC",
+      keyword: "thiết kế website công ty pccc",
+    },
+    {
+      slug: "checklist-website-pccc-2026",
+      label: "Checklist website PCCC 2026",
+      keyword: "checklist website pccc",
+    },
+    {
+      slug: "template-website-pccc-2026",
+      label: "Template website PCCC 2026",
+      keyword: "template website pccc",
+    },
+    {
+      slug: "thiet-ke-website-thiet-bi-pccc",
+      label: "Website thiết bị PCCC",
+      keyword: "thiết kế website thiết bị pccc",
+    },
+    {
+      slug: "case-study-thiet-ke-website-pccc-bao-an",
+      label: "Case study PCCC Bảo An Fire",
+      keyword: "case study thiết kế website pccc",
+    },
+    {
+      slug: "thiet-ke-website",
+      label: "Thiết kế website — pillar",
+      keyword: "thiết kế website",
+    },
+  ]),
 };
 
 export function getCaseStudySlugForBlog(blogSlug: string): string | undefined {

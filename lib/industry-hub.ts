@@ -27,6 +27,8 @@ export type IndustryHubConfig = {
   blogSlugs: string[];
   serviceHref: string;
   serviceLabel: string;
+  /** ISO date — dùng cho sitemap lastModified hub ngành */
+  proofReviewedAt?: string;
 };
 
 export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
@@ -38,6 +40,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo kiến thức thiết kế website nha khoa: implant, niềng răng, đặt lịch, SEO local và case study Nha Khoa Đăng Khoa có số liệu GSC.",
     keywordsMain: "thiết kế website nha khoa",
     caseStudySlug: "nha-khoa-dang-khoa",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-nha-khoa",
       "checklist-website-nha-khoa-2026",
@@ -58,6 +61,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo thiết kế website công ty xây dựng, nhà thầu, kiến trúc — case study Kiến Trúc Sao Khuê và cluster SEO đa tỉnh.",
     keywordsMain: "thiết kế website xây dựng",
     caseStudySlug: "kien-truc-sao-khue",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-xay-dung-nha-thau",
       "checklist-website-xay-dung-2026",
@@ -79,6 +83,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo thiết kế website thẩm mỹ viện, aesthetic clinic — case study Thiên Hoàng Kim, đặt lịch, SEO local TP.HCM.",
     keywordsMain: "thiết kế website thẩm mỹ viện",
     caseStudySlug: "tham-my-thien-hoang-kim",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-tham-my-vien",
       "checklist-website-tham-my-vien-2026",
@@ -99,6 +104,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo website spa, phun xăm, nail — case study Phước Lai Luxury & Halee Trâm, booking và SEO local.",
     keywordsMain: "thiết kế website spa",
     caseStudySlug: "phuoc-lai-luxury",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-spa",
       "checklist-website-spa-2026",
@@ -117,13 +123,16 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
     title: "Thiết kế website công ty PCCC",
     headline: "Website & SEO ngành PCCC",
     description:
-      "Silo thiết kế website công ty PCCC, thiết bị phòng cháy — dự án, giấy phép năng lực, form khảo sát hiện trường.",
+      "Silo thiết kế website công ty PCCC, thiết bị phòng cháy — dự án, giấy phép năng lực, form khảo sát hiện trường và case study B2B Bảo An Fire.",
     keywordsMain: "thiết kế website công ty pccc",
+    caseStudySlug: "pccc-bao-an-fire",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-pccc",
       "checklist-website-pccc-2026",
       "template-website-pccc-2026",
       "thiet-ke-website-thiet-bi-pccc",
+      "case-study-thiet-ke-website-pccc-bao-an",
       "thiet-ke-website",
     ],
     serviceHref: "/website",
@@ -137,6 +146,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo website mỹ phẩm, skincare, nail & lash — case study Halee Trâm, shop online và SEO brand.",
     keywordsMain: "thiết kế website mỹ phẩm",
     caseStudySlug: "halee-tram",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-my-pham-lam-dep",
       "checklist-website-my-pham-2026",
@@ -258,6 +268,7 @@ export const INDUSTRY_HUBS: Record<IndustryHubSlug, IndustryHubConfig> = {
       "Silo website phòng khám đa khoa — đặt lịch, hồ sơ bác sĩ, SEO local và case study Nha Khoa Đăng Khoa.",
     keywordsMain: "thiết kế website phòng khám đa khoa",
     caseStudySlug: "nha-khoa-dang-khoa",
+    proofReviewedAt: "2026-07-08T00:00:00.000Z",
     blogSlugs: [
       "thiet-ke-website-phong-kham-da-khoa",
       "checklist-website-phong-kham-2026",

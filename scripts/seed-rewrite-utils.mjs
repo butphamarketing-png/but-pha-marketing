@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { validateSeoKeywordPlacement } from "./seo-article-helpers.mjs";
 import { revalidateBlogAfterSeed } from "./blog-revalidate.mjs";
 import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
+import { runPipelineGuardrails } from "./seo-pipeline-guardrails.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
@@ -49,7 +50,22 @@ export function buildRewriteSeedPayload(article) {
   };
 }
 
-export async function seedRewriteArticle(article, { log = true, revalidate = true } = {}) {
+export async function seedRewriteArticle(article, { log = true, revalidate = true, skipGuardrails = false } = {}) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+
+  if (!skipGuardrails) {
+    const guard = await runPipelineGuardrails(article, supabase);
+    if (log && guard.warnings.length) {
+      console.warn(`  ⚠ Guardrails [${article.slug}]:`, guard.warnings.join("; "));
+    }
+    if (!guard.ok) {
+      throw new Error(`Pipeline guardrails blocked ${article.slug}: ${guard.blockers.join("; ")}`);
+    }
+  }
+
   const payload = buildRewriteSeedPayload(article);
   const check = payload._seoCheck;
   delete payload._seoCheck;
@@ -61,11 +77,6 @@ export async function seedRewriteArticle(article, { log = true, revalidate = tru
       payload.hot ? "(hot)" : "",
     );
   }
-
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY,
-  );
 
   const { data: existing } = await supabase.from("news").select("id").eq("slug", article.slug).maybeSingle();
   const { error } = existing
