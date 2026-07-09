@@ -1,7 +1,34 @@
+import {
+  KIEN_TRUC_ARTICLE_THUMBNAILS,
+  getKienTrucThumbnailAlt,
+  getKienTrucThumbnailPath,
+  resolveKienTrucArticleSlug,
+} from "./kien-truc-images";
+
+import {
+  NHA_HANG_ARTICLE_THUMBNAILS,
+  getNhaHangThumbnailAlt,
+  getNhaHangThumbnailPath,
+  resolveNhaHangArticleSlug,
+} from "./nha-hang-images";
+
 export type NewsImageTopic = "website" | "facebook" | "google-maps" | "marketing";
 
+export {
+  KIEN_TRUC_ARTICLE_THUMBNAILS,
+  getKienTrucThumbnailPath,
+  getKienTrucThumbnailAlt,
+  resolveKienTrucArticleSlug,
+} from "./kien-truc-images";
+
+export {
+  NHA_HANG_ARTICLE_THUMBNAILS,
+  getNhaHangThumbnailPath,
+  getNhaHangThumbnailAlt,
+  resolveNhaHangArticleSlug,
+} from "./nha-hang-images";
+
 const NEWS_DIR = "/tin-tuc";
-const KIEN_TRUC_DIR = `${NEWS_DIR}/kien-truc`;
 const PCCC_DIR = `${NEWS_DIR}/pccc`;
 const MY_PHAM_DIR = `${NEWS_DIR}/my-pham`;
 const THANG_MAY_DIR = `${NEWS_DIR}/thang-may`;
@@ -186,6 +213,16 @@ export function getPcccThumbnailPath(slug?: string): string | null {
 }
 
 function nicheKeywordsMain(slug?: string): string | undefined {
+  const nhaHangResolved = resolveNhaHangArticleSlug(slug);
+  if (nhaHangResolved) {
+    return NHA_HANG_ARTICLE_THUMBNAILS[nhaHangResolved]?.keywordsMain;
+  }
+
+  const kienTrucResolved = resolveKienTrucArticleSlug(slug);
+  if (kienTrucResolved) {
+    return KIEN_TRUC_ARTICLE_THUMBNAILS[kienTrucResolved]?.keywordsMain;
+  }
+
   return (
     TU_DONG_HOA_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     BAO_BI_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
@@ -197,54 +234,8 @@ function nicheKeywordsMain(slug?: string): string | undefined {
     NHA_KHOA_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     THANG_MAY_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     MY_PHAM_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
-    PCCC_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
-    KIEN_TRUC_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain
+    PCCC_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain
   );
-}
-
-/** Bài viết website xây dựng / kiến trúc / nội thất — thumbnail riêng trong public/tin-tuc/kien-truc */
-export const KIEN_TRUC_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
-  "thiet-ke-website-kien-truc-noi-that": {
-    file: "kien-truc-1.png",
-    keywordsMain: "thiết kế website kiến trúc nội thất",
-  },
-  "thiet-ke-website-cong-ty-xay-dung": {
-    file: "kien-truc-2.png",
-    keywordsMain: "thiết kế website công ty xây dựng",
-  },
-  "thiet-ke-website-xay-dung-nha-thau": {
-    file: "kien-truc-3.png",
-    keywordsMain: "thiết kế website xây dựng",
-  },
-  "thiet-ke-website-vat-lieu-xay-dung": {
-    file: "kien-truc-4.png",
-    keywordsMain: "thiết kế website vật liệu xây dựng",
-  },
-  "thiet-ke-website-ho-so-nang-luc": {
-    file: "kien-truc-5.png",
-    keywordsMain: "thiết kế website hồ sơ năng lực",
-  },
-  "thiet-ke-website-noi-that-showroom": {
-    file: "kien-truc-6.png",
-    keywordsMain: "thiết kế website nội thất showroom",
-  },
-  "thiet-ke-website-noi-that": {
-    file: "kien-truc-7.png",
-    keywordsMain: "thiết kế website nội thất",
-  },
-  "thiet-ke-website-noi-that-van-phong": {
-    file: "kien-truc-6.png",
-    keywordsMain: "thiết kế website nội thất văn phòng",
-  },
-  "thiet-ke-website-go-noi-that": {
-    file: "kien-truc-7.png",
-    keywordsMain: "thiết kế website gỗ nội thất",
-  },
-};
-
-export function getKienTrucThumbnailPath(slug?: string): string | null {
-  const entry = slug ? KIEN_TRUC_ARTICLE_THUMBNAILS[slug] : undefined;
-  return entry ? `${KIEN_TRUC_DIR}/${entry.file}` : null;
 }
 
 export function getBlogThumbnailAlt(input: {
@@ -252,6 +243,12 @@ export function getBlogThumbnailAlt(input: {
   keywordsMain?: string;
   title?: string;
 }): string {
+  const fromNhaHangAlt = getNhaHangThumbnailAlt(input.slug);
+  if (fromNhaHangAlt) return fromNhaHangAlt;
+
+  const fromKienTrucAlt = getKienTrucThumbnailAlt(input.slug);
+  if (fromKienTrucAlt) return fromKienTrucAlt;
+
   const fromSlug = nicheKeywordsMain(input.slug);
   const kw = (input.keywordsMain || "").trim();
   if (kw && kw.toLowerCase() !== "thiết kế website") {
@@ -442,6 +439,9 @@ export function resolveBlogImageUrl(input: {
 
   const kienTruc = getKienTrucThumbnailPath(input.slug);
   if (kienTruc) return kienTruc;
+
+  const nhaHang = getNhaHangThumbnailPath(input.slug);
+  if (nhaHang) return nhaHang;
 
   const topic = detectNewsTopic(input);
   const expected = getNewsThumbnailPath(topic);

@@ -285,45 +285,28 @@ export function isPcccSlug(slug) {
   return Boolean(slug && PCCC_ARTICLE_THUMBNAILS[slug]);
 }
 
-/** Bài website xây dựng / kiến trúc / nội thất — thumbnail trong public/tin-tuc/kien-truc */
-export const KIEN_TRUC_ARTICLE_THUMBNAILS = {
-  "thiet-ke-website-kien-truc-noi-that": {
-    file: "kien-truc-1.png",
-    keywordsMain: "thiết kế website kiến trúc nội thất",
-  },
-  "thiet-ke-website-cong-ty-xay-dung": {
-    file: "kien-truc-2.png",
-    keywordsMain: "thiết kế website công ty xây dựng",
-  },
-  "thiet-ke-website-xay-dung-nha-thau": {
-    file: "kien-truc-3.png",
-    keywordsMain: "thiết kế website xây dựng",
-  },
-  "thiet-ke-website-vat-lieu-xay-dung": {
-    file: "kien-truc-4.png",
-    keywordsMain: "thiết kế website vật liệu xây dựng",
-  },
-  "thiet-ke-website-ho-so-nang-luc": {
-    file: "kien-truc-5.png",
-    keywordsMain: "thiết kế website hồ sơ năng lực",
-  },
-  "thiet-ke-website-noi-that-showroom": {
-    file: "kien-truc-6.png",
-    keywordsMain: "thiết kế website nội thất showroom",
-  },
-  "thiet-ke-website-noi-that": {
-    file: "kien-truc-7.png",
-    keywordsMain: "thiết kế website nội thất",
-  },
-  "thiet-ke-website-noi-that-van-phong": {
-    file: "kien-truc-6.png",
-    keywordsMain: "thiết kế website nội thất văn phòng",
-  },
-  "thiet-ke-website-go-noi-that": {
-    file: "kien-truc-7.png",
-    keywordsMain: "thiết kế website gỗ nội thất",
-  },
-};
+export {
+  KIEN_TRUC_ARTICLE_THUMBNAILS,
+  KIEN_TRUC_IMAGE_ALTS,
+  kienTrucThumbnailPath,
+  getKienTrucThumbnailAlt,
+  getKienTrucContentImageAlt,
+  resolveKienTrucArticleSlug,
+  isKienTrucSlug,
+} from "./kien-truc-images.mjs";
+
+export {
+  NHA_HANG_ARTICLE_THUMBNAILS,
+  NHA_HANG_IMAGE_ALTS,
+  nhaHangThumbnailPath,
+  getNhaHangThumbnailAlt,
+  getNhaHangContentImageAlt,
+  resolveNhaHangArticleSlug,
+  isNhaHangSlug,
+} from "./nha-hang-images.mjs";
+
+import { kienTrucThumbnailPath } from "./kien-truc-images.mjs";
+import { nhaHangThumbnailPath } from "./nha-hang-images.mjs";
 
 function newsImageUrl(filename) {
   return `${SITE}${NEWS_DIR}/${filename}`;
@@ -333,9 +316,9 @@ function newsImagePath(filename) {
   return `${NEWS_DIR}/${filename}`;
 }
 
-export function kienTrucThumbnailPath(slug) {
-  const entry = slug ? KIEN_TRUC_ARTICLE_THUMBNAILS[slug] : null;
-  return entry ? `${KIEN_TRUC_DIR}/${entry.file}` : null;
+export function nhaHangThumbnailUrl(slug) {
+  const path = nhaHangThumbnailPath(slug);
+  return path ? `${SITE}${path}` : null;
 }
 
 export function kienTrucThumbnailUrl(slug) {
@@ -353,6 +336,11 @@ const THUMBNAIL_FILES = {
 const KIEN_TRUC_CONTENT_FILES = Array.from(
   { length: 7 },
   (_, i) => `kien-truc/kien-truc-${i + 1}.png`,
+);
+
+const NHA_HANG_CONTENT_FILES = Array.from(
+  { length: 5 },
+  (_, i) => `nha-hang/nha-hang-${i + 1}.png`,
 );
 
 const PCCC_CONTENT_FILES = Array.from({ length: 5 }, (_, i) => `pccc/pccc-${i + 1}.png`);
@@ -392,6 +380,7 @@ const CONTENT_IMAGE_FILES = {
   ],
   marketing: ["tin-tuc-marketing.png"],
   "kien-truc": KIEN_TRUC_CONTENT_FILES,
+  "nha-hang": NHA_HANG_CONTENT_FILES,
   pccc: PCCC_CONTENT_FILES,
   "my-pham": MY_PHAM_CONTENT_FILES,
   "thang-may": THANG_MAY_CONTENT_FILES,
@@ -406,6 +395,7 @@ const CONTENT_IMAGE_FILES = {
 };
 
 export const KIEN_TRUC_CONTENT_IMAGE_COUNT = KIEN_TRUC_CONTENT_FILES.length;
+export const NHA_HANG_CONTENT_IMAGE_COUNT = NHA_HANG_CONTENT_FILES.length;
 export const PCCC_CONTENT_IMAGE_COUNT = PCCC_CONTENT_FILES.length;
 export const MY_PHAM_CONTENT_IMAGE_COUNT = MY_PHAM_CONTENT_FILES.length;
 export const THANG_MAY_CONTENT_IMAGE_COUNT = THANG_MAY_CONTENT_FILES.length;
@@ -417,10 +407,6 @@ export const LOGISTICS_CONTENT_IMAGE_COUNT = LOGISTICS_CONTENT_FILES.length;
 export const CO_KHI_CONTENT_IMAGE_COUNT = CO_KHI_CONTENT_FILES.length;
 export const BAO_BI_CONTENT_IMAGE_COUNT = BAO_BI_CONTENT_FILES.length;
 export const TU_DONG_HOA_CONTENT_IMAGE_COUNT = TU_DONG_HOA_CONTENT_FILES.length;
-
-export function isKienTrucSlug(slug) {
-  return Boolean(slug && KIEN_TRUC_ARTICLE_THUMBNAILS[slug]);
-}
 
 /** Thumbnail danh sách tin tức / blog card / OG — marketing tổng quát */
 export const NEWS_THUMBNAIL = newsImageUrl(THUMBNAIL_FILES.marketing);
@@ -564,6 +550,8 @@ export function newsThumbnailForArticle(article = {}) {
   if (pccc) return pccc;
   const kienTruc = kienTrucThumbnailUrl(article.slug);
   if (kienTruc) return kienTruc;
+  const nhaHang = nhaHangThumbnailUrl(article.slug);
+  if (nhaHang) return nhaHang;
   return newsThumbnailUrl(detectNewsTopic(article));
 }
 

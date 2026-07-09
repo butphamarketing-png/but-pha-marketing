@@ -4,6 +4,7 @@ import {
   seoImageAlt,
   NEWS_CONTENT_IMAGE_COUNT,
   KIEN_TRUC_CONTENT_IMAGE_COUNT,
+  NHA_HANG_CONTENT_IMAGE_COUNT,
   PCCC_CONTENT_IMAGE_COUNT,
   MY_PHAM_CONTENT_IMAGE_COUNT,
   THANG_MAY_CONTENT_IMAGE_COUNT,
@@ -15,6 +16,8 @@ import {
   CO_KHI_CONTENT_IMAGE_COUNT,
   BAO_BI_CONTENT_IMAGE_COUNT,
   TU_DONG_HOA_CONTENT_IMAGE_COUNT,
+  getKienTrucContentImageAlt,
+  getNhaHangContentImageAlt,
   SITE,
   ZALO,
   FB,
@@ -89,7 +92,14 @@ export function wpImg(index, alt) {
 
 /** Ảnh minh họa trong bài — pool public/tin-tuc/kien-truc (5 ảnh / bài: index 0–4). */
 export function wpKienTrucImg(index, alt) {
-  return img(index % KIEN_TRUC_CONTENT_IMAGE_COUNT, alt, "kien-truc");
+  const resolvedAlt = alt || getKienTrucContentImageAlt(index);
+  return img(index % KIEN_TRUC_CONTENT_IMAGE_COUNT, resolvedAlt, "kien-truc");
+}
+
+/** Ảnh minh họa trong bài — pool public/tin-tuc/nha-hang (5 ảnh / bài: index 0–4). */
+export function wpNhaHangImg(index, alt) {
+  const resolvedAlt = alt || getNhaHangContentImageAlt(index);
+  return img(index % NHA_HANG_CONTENT_IMAGE_COUNT, resolvedAlt, "nha-hang");
 }
 
 /** Ảnh minh họa trong bài — pool public/tin-tuc/pccc (5 ảnh / bài: index 0–4). */

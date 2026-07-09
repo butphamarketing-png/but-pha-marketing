@@ -1,4 +1,5 @@
 import { newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import { KIEN_TRUC_IMAGE_ALTS } from "./kien-truc-images.mjs";
 import {
   buildWpSeoArticle,
   wpToc,
@@ -64,7 +65,7 @@ ${wpKeyTakeaways([
   "Bứt Phá: 5–15 triệu; nhúng tour 360° nếu có file sẵn.",
 ])}
 
-${wpKienTrucImg(0, "Thiết kế website kiến trúc nội thất với portfolio phong cách và layout tối giản")}
+${wpKienTrucImg(0, KIEN_TRUC_IMAGE_ALTS[0])}
 
 <h2 id="kien-truc-la-gi">Thiết kế website kiến trúc nội thất là gì?</h2>
 
@@ -125,7 +126,7 @@ ${wpKienTrucImg(0, "Thiết kế website kiến trúc nội thất với portfol
   <li>CTA: “Dự án tương tự? Tư vấn miễn phí”</li>
 </ul>
 
-${wpKienTrucImg(1, "Gallery portfolio kiến trúc nội thất — filter phong cách trên website")}
+${wpKienTrucImg(1, KIEN_TRUC_IMAGE_ALTS[1])}
 
 <h2 id="quy-trinh-tu-van">Quy trình tư vấn hiển thị trên website</h2>
 
@@ -140,7 +141,7 @@ ${wpKienTrucImg(1, "Gallery portfolio kiến trúc nội thất — filter phong
 
 <p>Studio có hạng mục thi công xem thêm <a href="${SITE}/blog/thiet-ke-website-cong-ty-xay-dung">thiết kế website công ty xây dựng</a>.</p>
 
-${wpKienTrucImg(2, "Quy trình tư vấn thiết kế website kiến trúc nội thất")}
+${wpKienTrucImg(2, KIEN_TRUC_IMAGE_ALTS[2])}
 
 <h2 id="3d-viewer">Tích hợp 3D viewer &amp; tour 360°</h2>
 
@@ -178,7 +179,7 @@ ${wpKienTrucImg(2, "Quy trình tư vấn thiết kế website kiến trúc nội
 
 <p><strong>Thời gian:</strong> 5–10 tuần tùy số dự án portfolio và mức animation.</p>
 
-${wpKienTrucImg(3, "Cấu trúc website kiến trúc nội thất chuẩn SEO")}
+${wpKienTrucImg(3, KIEN_TRUC_IMAGE_ALTS[3])}
 
 <h2 id="bang-gia">Bảng giá thiết kế website kiến trúc nội thất 2026</h2>
 
@@ -225,7 +226,7 @@ ${wpKienTrucImg(3, "Cấu trúc website kiến trúc nội thất chuẩn SEO")}
 
 <p>Tham khảo <a href="${SITE}/blog/thiet-ke-website-theo-yeu-cau">thiết kế website theo yêu cầu</a> cho studio cần custom cao.</p>
 
-${wpKienTrucImg(4, "SEO blog xu hướng trên website kiến trúc nội thất")}
+${wpKienTrucImg(4, KIEN_TRUC_IMAGE_ALTS[4])}
 
 <h2 id="sai-lam">Sai lầm khi làm website kiến trúc nội thất</h2>
 
