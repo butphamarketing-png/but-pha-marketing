@@ -17,6 +17,7 @@
     "seed:phase7": "node scripts/seed-phase7.mjs",
     "seed:pillar-cluster-links": "node scripts/seed-pillar-cluster-links.mjs",
     "seed:rewrite-pending": "node scripts/seed-rewrite-pending.mjs",
+    "seed:rewrite-website-industry": "node scripts/seed-rewrite-website-industry.mjs --quiet",
     "seed:rewrite-gsc-unindexed": "node scripts/seed-rewrite-gsc-unindexed.mjs",
     "seed:priority-blog-push": "node scripts/seed-priority-blog-push.mjs",
     "seed:longtail-gaps": "node scripts/seed-longtail-gaps.mjs",
