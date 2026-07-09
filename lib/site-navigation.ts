@@ -83,6 +83,7 @@ export const WEBSITE_INDUSTRY_NAV_LINKS = getWebsiteIndustryNavLinks();
 export const SIMPLE_NAV_LINKS: SiteNavLink[] = [
   { label: "Trang Chủ", href: "/" },
   { label: "Giới Thiệu", href: "/gioi-thieu" },
+  { label: "Công Cụ", href: "/cong-cu" },
   { label: "Dự Án", href: "/du-an" },
   { label: "Kiến Thức", href: "/kien-thuc" },
   { label: "Tin Tức", href: "/blog" },
