@@ -1,9 +1,9 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import type { ProgrammaticLanding } from "@/lib/programmatic-seo";
 import type { WebsiteIndustryCatalogItem } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryGallery, getWebsiteIndustryHero } from "@/lib/website-industry-images";
+import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
 
 type ClusterLink = { href: string; name: string };
 
@@ -115,16 +115,9 @@ export function ProgrammaticLandingPage({
       </section>
 
       {heroImage && (
-        <section className="overflow-hidden rounded-3xl border border-indigo-100 bg-white shadow-sm">
-          <div className="relative aspect-[21/9] w-full bg-indigo-50 md:aspect-[2.4/1]">
-            <Image
-              src={heroImage.src}
-              alt={heroImage.alt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover object-top"
-            />
+        <section className="overflow-hidden rounded-3xl border border-indigo-100 bg-white p-4 shadow-sm md:p-8">
+          <div className="mx-auto w-full max-w-[485px]">
+            <IndustryMockupImage src={heroImage.src} alt={heroImage.alt} priority className="mx-auto rounded-xl shadow-md" />
           </div>
         </section>
       )}
@@ -135,20 +128,14 @@ export function ProgrammaticLandingPage({
           <p className="mt-2 text-sm text-slate-600">
             Bộ mockup website chuyên ngành — dùng cho thumbnail blog, nội dung bài viết và landing chuyển đổi.
           </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {galleryImages.map((img) => (
               <div
                 key={img.src}
                 className="overflow-hidden rounded-2xl border border-indigo-50 bg-indigo-50/30"
               >
-                <div className="relative aspect-[16/10]">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover object-top"
-                  />
+                <div className="flex items-start justify-center p-3">
+                  <IndustryMockupImage src={img.src} alt={img.alt} sizes="(max-width: 640px) 45vw, 240px" />
                 </div>
                 <p className="px-3 py-2 text-xs font-medium leading-snug text-slate-600">{img.alt}</p>
               </div>

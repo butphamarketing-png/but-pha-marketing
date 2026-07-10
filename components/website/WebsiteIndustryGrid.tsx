@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryHero } from "@/lib/website-industry-images";
+import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
 
 export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
   return (
@@ -28,13 +28,12 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
               href={`/website/nganh/${item.slug}`}
               className="group overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-sm transition hover:border-violet-200 hover:shadow-md"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-indigo-50">
-                <Image
+              <div className="flex items-start justify-center bg-indigo-50 p-2">
+                <IndustryMockupImage
                   src={hero.src}
                   alt={hero.alt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+                  sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
+                  className="max-h-56"
                 />
               </div>
               <div className="px-4 py-3">

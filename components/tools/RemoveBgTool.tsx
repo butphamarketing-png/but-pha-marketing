@@ -18,26 +18,31 @@ import {
 } from "@/components/tools/watermark-ui";
 import { WatermarkLoginGate, useWatermarkSession } from "@/components/tools/WatermarkLoginGate";
 import { REMOVE_BG_IMAGES_TRANSFER_KEY, REMOVE_BG_LOGO_TRANSFER_KEY } from "@/lib/tool-design-tokens";
-import { loadImageFromFile } from "@/lib/watermark-core";
+const REMOVE_BG_MAX_EDGE = 4096;
 
-function resizeImageForRemoval(file: File, maxEdge: number): Promise<Blob> {
-  return loadImageFromFile(file).then(async (loaded) => {
-    if (Math.max(loaded.width, loaded.height) <= maxEdge) return file;
-    const ratio = maxEdge / Math.max(loaded.width, loaded.height);
+type RemoveBgModel = "isnet" | "isnet_fp16";
+
+async function resizeImageForRemoval(file: File, maxEdge: number): Promise<Blob | File> {
+  const bitmap = await createImageBitmap(file);
+  try {
+    if (Math.max(bitmap.width, bitmap.height) <= maxEdge) return file;
+    const ratio = maxEdge / Math.max(bitmap.width, bitmap.height);
+    const width = Math.round(bitmap.width * ratio);
+    const height = Math.round(bitmap.height * ratio);
     const canvas = document.createElement("canvas");
-    canvas.width = Math.round(loaded.width * ratio);
-    canvas.height = Math.round(loaded.height * ratio);
-    const ctx = canvas.getContext("2d");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) throw new Error("Không hỗ trợ canvas");
-    const response = await fetch(loaded.dataUrl);
-    const blob = await response.blob();
-    const bitmap = await createImageBitmap(blob);
-    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    bitmap.close();
-    return new Promise<Blob>((resolve, reject) => {
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    return await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Resize thất bại"))), "image/png");
     });
-  });
+  } finally {
+    bitmap.close();
+  }
 }
 
 function parseProgressPercent(text: string): number {
@@ -56,7 +61,8 @@ function RemoveBgContent() {
   const [removeBusy, setRemoveBusy] = useState(false);
   const [removeProgressText, setRemoveProgressText] = useState("");
   const [removeProgressPct, setRemoveProgressPct] = useState(0);
-  const [resizeBeforeRemove, setResizeBeforeRemove] = useState(true);
+  const [resizeBeforeRemove, setResizeBeforeRemove] = useState(false);
+  const [qualityModel, setQualityModel] = useState<RemoveBgModel>("isnet");
   const [compareSplit, setCompareSplit] = useState(50);
 
   const runRemoveBackground = useCallback(async () => {
@@ -65,8 +71,15 @@ function RemoveBgContent() {
     setRemoveProgressPct(5);
     setRemoveProgressText("Đang tải model AI...");
     try {
-      const source = resizeBeforeRemove ? await resizeImageForRemoval(removeFile, 1920) : removeFile;
+      const source = resizeBeforeRemove
+        ? await resizeImageForRemoval(removeFile, REMOVE_BG_MAX_EDGE)
+        : removeFile;
       const resultBlob = await removeBackground(source, {
+        model: qualityModel,
+        device: "gpu",
+        output: {
+          format: "image/png",
+        },
         progress: (phase, current, total) => {
           const pct = Math.round((current / total) * 100);
           setRemoveProgressPct(pct);
@@ -83,7 +96,7 @@ function RemoveBgContent() {
     } finally {
       setRemoveBusy(false);
     }
-  }, [removeFile, resizeBeforeRemove, toast]);
+  }, [removeFile, resizeBeforeRemove, qualityModel, toast]);
 
   const useAsLogo = useCallback(async () => {
     if (!removeAfterUrl) return;
@@ -163,10 +176,32 @@ function RemoveBgContent() {
               fileName={removeFile?.name}
               fileMeta={removeFile ? formatBytes(removeFile.size) : undefined}
             />
-            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-violet-100 bg-violet-50/40 px-3 py-2.5 text-sm text-slate-700 dark:border-slate-600 dark:text-slate-200">
-              <input type="checkbox" checked={resizeBeforeRemove} onChange={(e) => setResizeBeforeRemove(e.target.checked)} className="h-4 w-4 accent-violet-600" />
-              Resize trước khi xóa (max 1920px)
-            </label>
+            <div className="space-y-2 rounded-xl border border-violet-100 bg-violet-50/40 px-3 py-3 dark:border-slate-600">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Chất lượng xuất</p>
+              <div className="inline-flex w-full rounded-lg border border-violet-100 bg-white p-1 dark:border-slate-600 dark:bg-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setQualityModel("isnet")}
+                  className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${qualityModel === "isnet" ? "bg-violet-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-300"}`}
+                >
+                  Cao (khuyên dùng)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setQualityModel("isnet_fp16")}
+                  className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${qualityModel === "isnet_fp16" ? "bg-violet-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-300"}`}
+                >
+                  Nhanh hơn
+                </button>
+              </div>
+              <label className="flex cursor-pointer items-start gap-3 text-sm text-slate-700 dark:text-slate-200">
+                <input type="checkbox" checked={resizeBeforeRemove} onChange={(e) => setResizeBeforeRemove(e.target.checked)} className="mt-0.5 h-4 w-4 accent-violet-600" />
+                <span>
+                  Giảm kích thước trước khi xóa (max {REMOVE_BG_MAX_EDGE}px)
+                  <span className="mt-0.5 block text-xs text-slate-500">Chỉ bật khi ảnh rất lớn hoặc máy chậm. Tắt để giữ độ phân giải gốc.</span>
+                </span>
+              </label>
+            </div>
             <BtnPrimary onClick={runRemoveBackground} disabled={!removeFile || removeBusy} icon={<Wand2 size={16} />}>
               {removeBusy ? "Đang xử lý..." : "Xóa nền ngay"}
             </BtnPrimary>

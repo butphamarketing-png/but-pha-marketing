@@ -698,7 +698,7 @@ export function CompareSlider({
         }}
       >
         <img src={beforeUrl} alt="Trước" className="block w-full" draggable={false} />
-        <img src={afterUrl} alt="Sau" className="absolute inset-0 h-full w-full object-cover" style={{ clipPath: `inset(0 ${100 - split}% 0 0)` }} draggable={false} />
+        <img src={afterUrl} alt="Sau" className="absolute inset-0 h-full w-full object-contain" style={{ clipPath: `inset(0 ${100 - split}% 0 0)` }} draggable={false} />
         <div className="pointer-events-none absolute bottom-2 left-2 rounded bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white">Trước</div>
         <div className="pointer-events-none absolute bottom-2 right-2 rounded bg-violet-600/80 px-2 py-0.5 text-[10px] font-bold text-white">Sau</div>
         <div className="pointer-events-none absolute bottom-0 top-0 w-1 bg-white shadow-lg" style={{ left: `${split}%`, transform: "translateX(-50%)" }}>
