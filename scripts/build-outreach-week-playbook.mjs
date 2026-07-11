@@ -201,8 +201,8 @@ lines.push("| Hotfrog / Cylex / Yelp VN | Directory | NAP block ở trên |");
 lines.push("| Cộng đồng ngành (FB group logistics, beauty) | Vertical | Case study link |");
 lines.push("");
 lines.push("## Snippet bổ sung");
-lines.push("- Head term: `tmp-programmatic/head-term-syndication-snippets.md`");
-lines.push("- Vertical 7 ngành: `tmp-programmatic/vertical-syndication-snippets.md`");
+lines.push("- Guest post emails: `tmp-programmatic/guest-post-pitch-pack.md`");
+lines.push("- Directory VN: `tmp-programmatic/directory-citation-pack-vn.md`");
 lines.push("- Tracker: `npm run build:backlink-weekly-tracker`");
 lines.push("- GSC paste: `tmp-programmatic/gsc-copy-paste.md`");
 

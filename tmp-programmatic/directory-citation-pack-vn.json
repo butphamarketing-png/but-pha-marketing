@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-07-11T17:39:56.988Z",
+  "nap": {
+    "name": "Bứt Phá Marketing",
+    "nameEn": "But Pha Marketing",
+    "category": "Dịch vụ marketing / Thiết kế website",
+    "categoryEn": "Marketing agency / Web design",
+    "phone": "0937417982",
+    "email": "butphamarketing@gmail.com",
+    "address": "Tổ 8 ấp 6 Bình Mỹ Hồ Chí Minh",
+    "city": "Hồ Chí Minh",
+    "country": "Việt Nam",
+    "website": "https://www.butphamarketing.com",
+    "linkTarget": "https://www.butphamarketing.com/website",
+    "description": "Bứt Phá Marketing — agency thiết kế website, SEO và Facebook Marketing cho SME Việt Nam. Gói 3–12 triệu, có case study GSC thật.",
+    "descriptionShort": "Thiết kế website & SEO cho doanh nghiệp Việt Nam.",
+    "hours": "Thứ 2–Thứ 7, 8:00–18:00",
+    "zalo": "https://zalo.me/0937417982"
+  },
+  "directories": [
+    {
+      "tier": "P0",
+      "name": "Google Business Profile",
+      "url": "https://business.google.com/",
+      "submit": "https://business.google.com/create",
+      "linkType": "nofollow / brand",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Quan trọng nhất — NAP phải khớp 100% với website schema",
+      "week1": true
+    },
+    {
+      "tier": "P0",
+      "name": "Bing Places for Business",
+      "url": "https://www.bingplaces.com/",
+      "submit": "https://www.bingplaces.com/Dashboard/Home",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Import từ Google nếu có — verify bằng phone/email",
+      "week1": true
+    },
+    {
+      "tier": "P0",
+      "name": "Facebook Business Page",
+      "url": "https://www.facebook.com/",
+      "submit": "Tạo/cập nhật Page → About → Contact",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com/website",
+      "notes": "Điền website, phone, email, địa chỉ — đồng bộ NAP",
+      "week1": true
+    },
+    {
+      "tier": "P0",
+      "name": "LinkedIn Company Page",
+      "url": "https://www.linkedin.com/company/",
+      "submit": "Company admin → Edit page → Website",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com/website",
+      "notes": "Thêm website + mô tả dịch vụ thiết kế website",
+      "week1": true
+    },
+    {
+      "tier": "P1",
+      "name": "Hotfrog Vietnam",
+      "url": "https://www.hotfrog.vn/",
+      "submit": "https://www.hotfrog.vn/add-your-business",
+      "linkType": "dofollow possible",
+      "linkTarget": "https://www.butphamarketing.com/website",
+      "notes": "Free listing · chọn category Marketing/Web design",
+      "week1": true
+    },
+    {
+      "tier": "P1",
+      "name": "Cylex Vietnam",
+      "url": "https://www.cylex.vn/",
+      "submit": "https://www.cylex.vn/signin/register",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Đăng ký free · upload logo nếu có",
+      "week1": false
+    },
+    {
+      "tier": "P1",
+      "name": "Yellow Pages Vietnam",
+      "url": "https://www.yellowpages.vn/",
+      "submit": "https://www.yellowpages.vn/dang-ky",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Form đăng ký doanh nghiệp VN",
+      "week1": false
+    },
+    {
+      "tier": "P1",
+      "name": "Foursquare / Swarm",
+      "url": "https://foursquare.com/",
+      "submit": "https://foursquare.com/add-place",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Claim business · category Professional Services",
+      "week1": false
+    },
+    {
+      "tier": "P2",
+      "name": "Diadiem.vn",
+      "url": "https://www.diadiem.vn/",
+      "submit": "https://www.diadiem.vn/them-dia-diem",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Local directory VN · pin TP.HCM",
+      "week1": false
+    },
+    {
+      "tier": "P2",
+      "name": "Cybo Vietnam",
+      "url": "https://www.cybo.com/VN/",
+      "submit": "https://www.cybo.com/add-business",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "International directory · chọn Vietnam",
+      "week1": false
+    },
+    {
+      "tier": "P2",
+      "name": "Tuugo Vietnam",
+      "url": "https://www.tuugo.vn/",
+      "submit": "https://www.tuugo.vn/AddYourBusiness",
+      "linkType": "nofollow",
+      "linkTarget": "https://www.butphamarketing.com",
+      "notes": "Free business listing",
+      "week1": false
+    },
+    {
+      "tier": "P2",
+      "name": "Brownbook.net",
+      "url": "https://www.brownbook.net/",
+      "submit": "https://www.brownbook.net/business/add/",
+      "linkType": "dofollow possible",
+      "linkTarget": "https://www.butphamarketing.com/website",
+      "notes": "Global directory · category Web design",
+      "week1": false
+    }
+  ],
+  "week1Count": 5,
+  "week1Names": [
+    "Google Business Profile",
+    "Bing Places for Business",
+    "Facebook Business Page",
+    "LinkedIn Company Page",
+    "Hotfrog Vietnam"
+  ]
+}

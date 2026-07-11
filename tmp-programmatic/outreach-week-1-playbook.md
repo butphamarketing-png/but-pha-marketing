@@ -1,6 +1,6 @@
 # Outreach Week 1 Playbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:36:15.103Z
+- Generated at: 2026-07-11T17:39:58.827Z
 - Mục tiêu tuần: **6 placements** (1 guest · 1 case · 2 social · 1 vertical · 1 directory)
 - IndexNow: đã ping 30 URL · GSC request indexing vẫn cần làm thủ công
 
@@ -169,7 +169,7 @@ Hotline: 0937417982
 | Cộng đồng ngành (FB group logistics, beauty) | Vertical | Case study link |
 
 ## Snippet bổ sung
-- Head term: `tmp-programmatic/head-term-syndication-snippets.md`
-- Vertical 7 ngành: `tmp-programmatic/vertical-syndication-snippets.md`
+- Guest post emails: `tmp-programmatic/guest-post-pitch-pack.md`
+- Directory VN: `tmp-programmatic/directory-citation-pack-vn.md`
 - Tracker: `npm run build:backlink-weekly-tracker`
 - GSC paste: `tmp-programmatic/gsc-copy-paste.md`

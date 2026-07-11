@@ -1,6 +1,6 @@
 # SEO Ops Runbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:36:18.275Z
+- Generated at: 2026-07-11T17:40:00.492Z
 - Health score: **100 (A)**
 - Autopilot: **GREEN**
 
@@ -12,9 +12,9 @@
 ## Tuần này (manual + semi-auto)
 1. **GSC indexing** — `tmp-programmatic/gsc-copy-paste.md` (30 URL copy-paste)
 2. **Outreach tuần 1** — `tmp-programmatic/outreach-week-1-playbook.md`
-3. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log="..."`
-4. **IndexNow** — `npm run ping:indexnow` (đã ping · chạy lại sau deploy mới)
-5. **Mockup HD** — `npm run generate:mockup-hd` · verify **0/13 needs**
+3. **Guest post pitch** — `tmp-programmatic/guest-post-pitch-pack.md`
+4. **Directory VN** — `tmp-programmatic/directory-citation-pack-vn.md` (6 citation tuần 1)
+5. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log="..."`
 
 ## Scripts hữu ích
 | Lệnh | Mục đích |
@@ -27,6 +27,8 @@
 | `npm run build:gsc-indexing-checklist` | Regen checklist GSC |
 | `npm run build:gsc-copy-paste` | GSC copy-paste 30 URL |
 | `npm run build:outreach-week-playbook` | Playbook outreach tuần 1 |
+| `npm run build:guest-post-pitch-pack` | Email pitch guest post |
+| `npm run build:directory-citation-pack` | Directory citation VN + NAP |
 | `npm run build:backlink-weekly-tracker` | Log placement backlink |
 | `npm run build:vertical-syndication` | Snippet outreach 7 ngành |
 | `npm run sync:industry-landings` | Sync catalog → programmatic |

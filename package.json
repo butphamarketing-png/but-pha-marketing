@@ -41,6 +41,8 @@
     "build:gsc-indexing-checklist": "node scripts/build-gsc-indexing-checklist.mjs",
     "build:gsc-copy-paste": "node scripts/build-gsc-copy-paste.mjs",
     "build:outreach-week-playbook": "node scripts/build-outreach-week-playbook.mjs",
+    "build:guest-post-pitch-pack": "node scripts/build-guest-post-pitch-pack.mjs",
+    "build:directory-citation-pack": "node scripts/build-directory-citation-pack.mjs",
     "build:backlink-weekly-tracker": "node scripts/build-backlink-weekly-tracker.mjs",
     "export:gsc-urls": "node scripts/export-gsc-urls.mjs",
     "ping:indexnow": "node scripts/ping-indexnow.mjs",

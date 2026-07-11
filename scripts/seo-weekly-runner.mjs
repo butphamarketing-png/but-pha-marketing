@@ -27,6 +27,8 @@ const STEPS = [
   { label: "GSC indexing checklist", cmd: "npm", args: ["run", "build:gsc-indexing-checklist"] },
   { label: "GSC copy-paste checklist", cmd: "npm", args: ["run", "build:gsc-copy-paste"] },
   { label: "Outreach week 1 playbook", cmd: "npm", args: ["run", "build:outreach-week-playbook"] },
+  { label: "Guest post pitch pack", cmd: "npm", args: ["run", "build:guest-post-pitch-pack"] },
+  { label: "Directory citation pack VN", cmd: "npm", args: ["run", "build:directory-citation-pack"] },
   { label: "Backlink weekly tracker", cmd: "npm", args: ["run", "build:backlink-weekly-tracker"] },
   { label: "SEO ops runbook", cmd: "npm", args: ["run", "build:seo-ops-runbook"] },
   { label: "Build SEO health scorecard", cmd: "npm", args: ["run", "build:seo-health-scorecard"] },
