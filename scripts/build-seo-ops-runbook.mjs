@@ -43,7 +43,7 @@ lines.push("1. **Smoke test** — `npm run smoke:gsc-urls` (30 URL phải 200)")
 lines.push("2. **IndexNow ping** — `npm run ping:indexnow` (sau khi key file deploy)");
 lines.push("3. **GSC indexing** — `tmp-programmatic/gsc-indexing-checklist.md` (30 URL)");
 lines.push("4. **Backlink** — copy `vertical-syndication-snippets.md` + log `npm run build:backlink-weekly-tracker -- --log=\"...\"`");
-lines.push("5. **Mockup HD** — drop WebP 1920px vào `public/tin-tuc/{ngành}/hd/` → `npm run audit:industry-mockup-dimensions`");
+lines.push("5. **Mockup HD** — `npm run generate:mockup-hd` (auto) · verify `npm run build:mockup-hd-gap` → **0/13 needs**");
 lines.push("");
 lines.push("## Scripts hữu ích");
 lines.push("| Lệnh | Mục đích |");
@@ -51,6 +51,7 @@ lines.push("|---|---|");
 lines.push("| `npm run seed:fix-checklist-silo` | Sửa silo checklist/template/case study |");
 lines.push("| `npm run audit:silo-coverage` | Audit silo 14+ slug P2 |");
 lines.push("| `npm run build:mockup-hd-gap` | Báo cáo mockup cần HD |");
+lines.push("| `npm run generate:mockup-hd` | Upscale PNG → WebP 1920px (sharp) |");
 lines.push("| `npm run scaffold:mockup-hd-dirs` | Tạo thư mục hd/ |");
 lines.push("| `npm run build:gsc-indexing-checklist` | Regen checklist GSC |");
 lines.push("| `npm run smoke:gsc-urls` | Smoke test 30 URL production |");

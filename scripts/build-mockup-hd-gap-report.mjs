@@ -57,20 +57,41 @@ const gaps = [];
 for (const [slug, files] of Object.entries(INDUSTRY_POOLS)) {
   for (const src of files) {
     const d = dims[src];
+    const suggestedHd = hdPath(src);
+    const hd = dims[suggestedHd];
+
     if (!d) {
-      gaps.push({ slug, src, width: null, height: null, status: "missing-dim", suggestedHd: hdPath(src) });
+      gaps.push({ slug, src, width: null, height: null, status: "missing-dim", suggestedHd });
       continue;
     }
-    if (d.width < MIN_OK_WIDTH) {
+
+    if (d.width >= MIN_OK_WIDTH) {
+      gaps.push({ slug, src, width: d.width, height: d.height, status: "ok-native", suggestedHd });
+      continue;
+    }
+
+    if (hd && hd.width >= HD_TARGET) {
       gaps.push({
         slug,
         src,
         width: d.width,
         height: d.height,
-        status: "needs-hd",
-        suggestedHd: hdPath(src),
+        hdWidth: hd.width,
+        hdHeight: hd.height,
+        status: "hd-ready",
+        suggestedHd,
       });
+      continue;
     }
+
+    gaps.push({
+      slug,
+      src,
+      width: d.width,
+      height: d.height,
+      status: "needs-hd",
+      suggestedHd,
+    });
   }
 }
 
@@ -80,6 +101,7 @@ const report = {
   minOkWidth: MIN_OK_WIDTH,
   industryPoolsChecked: Object.keys(INDUSTRY_POOLS).length,
   needsHd: gaps.filter((g) => g.status === "needs-hd").length,
+  hdReady: gaps.filter((g) => g.status === "hd-ready").length,
   gaps,
 };
 
@@ -92,23 +114,26 @@ lines.push("");
 lines.push(`- Generated at: ${report.generatedAt}`);
 lines.push(`- HD target: **${HD_TARGET}px** wide (WebP khuyên dùng)`);
 lines.push(`- Ngành cần nâng: **${report.needsHd}/${report.industryPoolsChecked}**`);
+lines.push(`- HD ready: **${report.hdReady}/${report.industryPoolsChecked}**`);
 lines.push("");
 lines.push("## Hướng dẫn");
-lines.push("1. Export mockup mới **1920px** rộng (giữ tỉ lệ portrait ~9:19 hoặc landscape 16:9 tùy ngành)");
+lines.push("1. Export mockup mới **1920px** rộng — hoặc chạy `npm run generate:mockup-hd` (sharp upscale)");
 lines.push("2. Lưu vào path `suggestedHd` bên dưới (thư mục `hd/` cạnh file gốc)");
 lines.push("3. Chạy `npm run audit:industry-mockup-dimensions`");
 lines.push("4. Deploy — hero landing tự chọn ảnh rộng nhất");
 lines.push("");
-lines.push("| Ngành | File hiện tại | Kích thước | Path HD đề xuất |");
-lines.push("|---|---|---|---|");
+lines.push("| Ngành | Status | File | Kích thước | HD path |");
+lines.push("|---|---|---|---|---|");
 for (const g of gaps) {
   const size = g.width ? `${g.width}×${g.height}` : "—";
-  lines.push(`| ${g.slug} | \`${g.src}\` | ${size} | \`${g.suggestedHd}\` |`);
+  const hdSize = g.hdWidth ? `${g.hdWidth}×${g.hdHeight}` : "—";
+  lines.push(`| ${g.slug} | ${g.status} | \`${g.src}\` | ${size} | \`${g.suggestedHd}\` ${hdSize !== "—" ? `(${hdSize})` : ""} |`);
 }
 lines.push("");
 
 fs.writeFileSync(outMd, lines.join("\n"), "utf8");
 console.log("=== Mockup HD gap report ===");
 console.log(`Needs HD: ${report.needsHd}/${report.industryPoolsChecked}`);
+console.log(`HD ready: ${report.hdReady}/${report.industryPoolsChecked}`);
 console.log(`JSON: ${outJson}`);
 console.log(`MD: ${outMd}`);

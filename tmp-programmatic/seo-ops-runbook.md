@@ -1,6 +1,6 @@
 # SEO Ops Runbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:24:13.600Z
+- Generated at: 2026-07-11T17:30:29.238Z
 - Health score: **100 (A)**
 - Autopilot: **GREEN**
 
@@ -14,7 +14,7 @@
 2. **IndexNow ping** — `npm run ping:indexnow` (sau khi key file deploy)
 3. **GSC indexing** — `tmp-programmatic/gsc-indexing-checklist.md` (30 URL)
 4. **Backlink** — copy `vertical-syndication-snippets.md` + log `npm run build:backlink-weekly-tracker -- --log="..."`
-5. **Mockup HD** — drop WebP 1920px vào `public/tin-tuc/{ngành}/hd/` → `npm run audit:industry-mockup-dimensions`
+5. **Mockup HD** — `npm run generate:mockup-hd` (auto) · verify `npm run build:mockup-hd-gap` → **0/13 needs**
 
 ## Scripts hữu ích
 | Lệnh | Mục đích |
@@ -22,6 +22,7 @@
 | `npm run seed:fix-checklist-silo` | Sửa silo checklist/template/case study |
 | `npm run audit:silo-coverage` | Audit silo 14+ slug P2 |
 | `npm run build:mockup-hd-gap` | Báo cáo mockup cần HD |
+| `npm run generate:mockup-hd` | Upscale PNG → WebP 1920px (sharp) |
 | `npm run scaffold:mockup-hd-dirs` | Tạo thư mục hd/ |
 | `npm run build:gsc-indexing-checklist` | Regen checklist GSC |
 | `npm run smoke:gsc-urls` | Smoke test 30 URL production |

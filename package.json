@@ -36,6 +36,7 @@
     "build:vertical-syndication": "node scripts/build-vertical-syndication-snippets.mjs",
     "audit:industry-mockup-dimensions": "node scripts/audit-industry-mockup-dimensions.mjs",
     "build:mockup-hd-gap": "node scripts/build-mockup-hd-gap-report.mjs",
+    "generate:mockup-hd": "node scripts/generate-mockup-hd-variants.mjs",
     "scaffold:mockup-hd-dirs": "node scripts/scaffold-mockup-hd-dirs.mjs",
     "build:gsc-indexing-checklist": "node scripts/build-gsc-indexing-checklist.mjs",
     "export:gsc-urls": "node scripts/export-gsc-urls.mjs",

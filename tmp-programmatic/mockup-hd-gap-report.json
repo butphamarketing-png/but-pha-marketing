@@ -1,16 +1,19 @@
 {
-  "generatedAt": "2026-07-11T17:10:30.564Z",
+  "generatedAt": "2026-07-11T17:30:17.032Z",
   "hdTarget": 1920,
   "minOkWidth": 800,
   "industryPoolsChecked": 13,
-  "needsHd": 13,
+  "needsHd": 0,
+  "hdReady": 13,
   "gaps": [
     {
       "slug": "nha-khoa",
       "src": "/tin-tuc/nha-khoa/nha-khoa-1.png",
       "width": 421,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4670,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-1-1920.webp"
     },
     {
@@ -18,7 +21,9 @@
       "src": "/tin-tuc/tham-my/tham-my-1.png",
       "width": 484,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-1-1920.webp"
     },
     {
@@ -26,7 +31,9 @@
       "src": "/tin-tuc/phong-kham/phong-kham-1.png",
       "width": 485,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-1-1920.webp"
     },
     {
@@ -34,7 +41,9 @@
       "src": "/tin-tuc/my-pham/my-pham-1.png",
       "width": 341,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 5766,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-1-1920.webp"
     },
     {
@@ -42,7 +51,9 @@
       "src": "/tin-tuc/pccc/pccc-1.png",
       "width": 402,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4891,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/pccc/hd/pccc-1-1920.webp"
     },
     {
@@ -50,7 +61,9 @@
       "src": "/tin-tuc/logistics/logistics-1.png",
       "width": 472,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4165,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/logistics/hd/logistics-1-1920.webp"
     },
     {
@@ -58,7 +71,9 @@
       "src": "/tin-tuc/co-khi/co-khi-1.png",
       "width": 485,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-1-1920.webp"
     },
     {
@@ -66,7 +81,9 @@
       "src": "/tin-tuc/nha-hang/thiet-ke-website-nha-hang.png",
       "width": 484,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/nha-hang/hd/thiet-ke-website-nha-hang-1920.webp"
     },
     {
@@ -74,7 +91,9 @@
       "src": "/tin-tuc/khach-san/khach-san-1.png",
       "width": 471,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4174,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-1-1920.webp"
     },
     {
@@ -82,7 +101,9 @@
       "src": "/tin-tuc/bat-dong-san/thiet-ke-website-bat-dong-san.png",
       "width": 485,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/bat-dong-san/hd/thiet-ke-website-bat-dong-san-1920.webp"
     },
     {
@@ -90,7 +111,9 @@
       "src": "/tin-tuc/mam-non/thiet-ke-website-truong-mam-non.png",
       "width": 682,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/mam-non/hd/thiet-ke-website-truong-mam-non-1920.webp"
     },
     {
@@ -98,7 +121,9 @@
       "src": "/tin-tuc/kien-truc/kien-truc-1.png",
       "width": 484,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-1-1920.webp"
     },
     {
@@ -106,7 +131,9 @@
       "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-ke-website-thiet-bi-ve-sinh.png",
       "width": 485,
       "height": 1024,
-      "status": "needs-hd",
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
       "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-ke-website-thiet-bi-ve-sinh-1920.webp"
     }
   ]

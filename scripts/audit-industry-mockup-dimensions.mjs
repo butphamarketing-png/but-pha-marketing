@@ -5,6 +5,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import sharp from "sharp";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicRoot = path.join(root, "public", "tin-tuc");
@@ -29,28 +30,43 @@ function jpegSize(buf) {
   return null;
 }
 
-function readDimensions(filePath) {
+function readRasterDimensions(filePath) {
   const buf = fs.readFileSync(filePath);
   return pngSize(buf) ?? jpegSize(buf);
 }
 
-function walk(dir, relPrefix, out) {
+async function readDimensions(filePath) {
+  if (/\.webp$/i.test(filePath)) {
+    const meta = await sharp(filePath).metadata();
+    if (meta.width && meta.height) return { width: meta.width, height: meta.height };
+    return null;
+  }
+  return readRasterDimensions(filePath);
+}
+
+function collectFiles(dir, relPrefix, out) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     const abs = path.join(dir, ent.name);
     const rel = relPrefix ? `${relPrefix}/${ent.name}` : ent.name;
     if (ent.isDirectory()) {
-      walk(abs, rel, out);
+      collectFiles(abs, rel, out);
       continue;
     }
-    if (!/\.(png|jpe?g)$/i.test(ent.name)) continue;
-    const dims = readDimensions(abs);
-    if (!dims) continue;
-    out[`/tin-tuc/${rel.replace(/\\/g, "/")}`] = dims;
+    if (!/\.(png|jpe?g|webp)$/i.test(ent.name)) continue;
+    out.push({ abs, rel });
   }
 }
 
+async function main() {
+const files = [];
+collectFiles(publicRoot, "", files);
+
 const dimensions = {};
-walk(publicRoot, "", dimensions);
+for (const { abs, rel } of files) {
+  const dims = await readDimensions(abs);
+  if (!dims) continue;
+  dimensions[`/tin-tuc/${rel.replace(/\\/g, "/")}`] = dims;
+}
 
 const lines = [];
 lines.push("/* eslint-disable */");
@@ -94,3 +110,9 @@ console.log(`Scanned: ${values.length} images`);
 console.log(`Under 800px wide: ${under800}`);
 console.log(`At/above 1536px: ${at1536}`);
 console.log(`Generated: ${outPath}`);
+}
+
+main().catch((err) => {
+  console.error(err.message || err);
+  process.exitCode = 1;
+});
