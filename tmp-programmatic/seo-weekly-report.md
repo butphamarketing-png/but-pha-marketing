@@ -1,8 +1,8 @@
 # SEO Weekly Runner Report
 
-- Generated at: 2026-07-11T17:01:58.941Z
-- Total steps: 20
-- Passed: 20
+- Generated at: 2026-07-11T17:18:34.415Z
+- Total steps: 22
+- Passed: 22
 - Failed: 0
 
 ## PASS - Schema coverage audit
@@ -35,8 +35,8 @@ Failed: 0
 > but-pha-marketing@0.1.0 audit:priority-proof
 > node scripts/audit-priority-proof.mjs
 
-◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
-◇ injected env (1) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (13) from .env.local // tip: ⌘ enable debugging { debug: true }
+◇ injected env (1) from .env // tip: ⌘ enable debugging { debug: true }
 === Priority proof audit ===
 Total: 20
 Need proof push (<70): 0
@@ -51,8 +51,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-intent-coverage
 > node scripts/audit-priority-intent-coverage.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
 === Priority intent coverage audit ===
 Total: 20
 Fail: 0
@@ -67,8 +67,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-i
 > but-pha-marketing@0.1.0 audit:priority-content-freshness
 > node scripts/audit-priority-content-freshness.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ enable debugging { debug: true }
-◇ injected env (1) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (13) from .env.local // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (1) from .env // tip: ⌁ auth for agents [www.vestauth.com]
 === Priority content freshness audit ===
 Total: 20
 Stale: 0
@@ -96,11 +96,11 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-internal-links
 > node scripts/audit-priority-internal-links.mjs
 
-◇ injected env (13) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
-◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
 === Priority internal-links audit ===
 Total: 20
-Fail: 4
+Fail: 0
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-internal-links-audit.md
 ```
 
@@ -113,7 +113,7 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-i
 > node scripts/build-internal-link-fix-checklist.mjs
 
 === Internal-link fix checklist generated ===
-Failed URLs: 4
+Failed URLs: 0
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-internal-links-fix-checklist.md
 ```
 
@@ -234,6 +234,31 @@ JSON: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-ga
 MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-report.md
 ```
 
+## PASS - GSC indexing checklist
+- Command: `npm run build:gsc-indexing-checklist`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:gsc-indexing-checklist
+> node scripts/build-gsc-indexing-checklist.mjs
+
+=== GSC indexing checklist ===
+URLs: 30 (23 landings)
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\gsc-indexing-checklist.md
+```
+
+## PASS - SEO ops runbook
+- Command: `npm run build:seo-ops-runbook`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:seo-ops-runbook
+> node scripts/build-seo-ops-runbook.mjs
+
+=== SEO ops runbook ===
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-ops-runbook.md
+```
+
 ## PASS - Build SEO health scorecard
 - Command: `npm run build:seo-health-scorecard`
 - Exit code: 0
@@ -243,7 +268,7 @@ MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-
 > node scripts/build-seo-health-scorecard.mjs
 
 === SEO health scorecard generated ===
-Score: 91.6 (A)
+Score: 100 (A)
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-health-scorecard.md
 ```
 
@@ -268,7 +293,7 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\vertical-k
 > node scripts/build-seo-execution-board.mjs
 
 === SEO execution board generated ===
-Tasks: 4
+Tasks: 1
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-execution-board.md
 ```
 
@@ -281,7 +306,7 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-execut
 > node scripts/build-seo-ops-kpi.mjs
 
 === SEO ops KPI generated ===
-Health: 91.6 (A)
+Health: 100 (A)
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-ops-kpi.md
 ```
 
@@ -294,6 +319,6 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-ops-kp
 > node scripts/build-seo-autopilot-summary.mjs
 
 === SEO autopilot summary generated ===
-Status: YELLOW
+Status: GREEN
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\seo-autopilot-summary.md
 ```
