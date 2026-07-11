@@ -20,6 +20,27 @@ const SERVICE_PAGE_SOURCE_MAP = {
     "app/website/WebsiteSchema.tsx",
     "components/website/WebsiteProofSection.tsx",
   ],
+  "/facebook": [
+    "app/facebook/page.tsx",
+    "components/shared/ServiceConversionFooter.tsx",
+  ],
+  "/google-maps": [
+    "app/google-maps/page.tsx",
+    "components/shared/ServiceConversionFooter.tsx",
+  ],
+  "/banggia": [
+    "app/banggia/page.tsx",
+    "components/pricing/BanggiaPageClient.tsx",
+    "components/shared/ServiceConversionFooter.tsx",
+  ],
+  "/kien-thuc": [
+    "app/kien-thuc/page.tsx",
+    "components/landing/SubLandingPage.tsx",
+  ],
+  "/gioi-thieu": [
+    "app/gioi-thieu/page.tsx",
+    "app/gioi-thieu/AboutPageClient.tsx",
+  ],
   "/seo-website": "app/seo-website/page.tsx",
   "/seo-website/dia-phuong/ho-chi-minh": "app/seo-website/dia-phuong/[location]/page.tsx",
   "/marketing-automation": "app/marketing-automation/page.tsx",

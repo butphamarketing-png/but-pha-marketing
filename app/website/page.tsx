@@ -96,6 +96,33 @@ export default function WebsitePage() {
 
         <WebsiteProofSection />
 
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-10">
+          <p className="text-xs font-bold uppercase tracking-wider text-violet-700">So sánh giải pháp</p>
+          <h2 className="mt-2 text-2xl font-bold text-indigo-950 md:text-3xl">
+            Template, WordPress hay website custom?
+          </h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {[
+              ["Website template", "Ra mắt nhanh, chi phí thấp; phù hợp landing hoặc doanh nghiệp mới cần kiểm chứng thị trường."],
+              ["Website WordPress", "Dễ quản trị nội dung, hệ sinh thái plugin lớn; phù hợp SME, blog SEO và WooCommerce."],
+              ["Website custom", "Thiết kế và tính năng theo quy trình riêng; phù hợp hệ thống cần tích hợp, bảo mật hoặc mở rộng dài hạn."],
+            ].map(([title, desc]) => (
+              <article key={title} className="rounded-2xl border border-indigo-100 bg-indigo-50/30 p-5">
+                <h3 className="font-bold text-indigo-950">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/banggia" className="brand-btn-secondary">
+              So sánh bảng giá
+            </Link>
+            <Link href="/lien-he" className="brand-btn-primary">
+              Chọn giải pháp phù hợp
+            </Link>
+          </div>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Chuẩn đoán website miễn phí"

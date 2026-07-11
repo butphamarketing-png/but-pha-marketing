@@ -106,6 +106,23 @@ export default function FacebookPage() {
           </ul>
         </section>
 
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-violet-700">So sánh giải pháp</p>
+          <h2 className="mt-2 text-2xl font-bold text-indigo-950">Nên xây Fanpage, chăm sóc hay chạy quảng cáo?</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {[
+              ["Thiết kế Fanpage", "Phù hợp trang mới hoặc nhận diện chưa đồng bộ. Ưu tiên avatar, cover, bio và cấu trúc dịch vụ."],
+              ["Chăm sóc nội dung", "Phù hợp Fanpage đã có nền tảng nhưng đăng bài thiếu đều đặn, tương tác và thông điệp chưa nhất quán."],
+              ["Meta Ads", "Phù hợp khi đã có nội dung, offer và quy trình xử lý inbox. Quảng cáo giúp mở rộng lead nhanh hơn."],
+            ].map(([title, desc]) => (
+              <article key={title} className="rounded-2xl border border-indigo-100 bg-indigo-50/30 p-5">
+                <h3 className="font-bold text-indigo-950">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Chuẩn đoán Fanpage miễn phí"

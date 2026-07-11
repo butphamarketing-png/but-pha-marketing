@@ -43,6 +43,7 @@ ${wpToc([
   { id: "seo-dia-phuong", label: "SEO địa phương trên website" },
   { id: "checklist-ban-giao", label: "Checklist SEO bàn giao" },
   { id: "do-luong", label: "Đo lường & tối ưu liên tục" },
+  { id: "so-sanh", label: "So sánh website chuẩn SEO và website thường" },
   { id: "faq", label: "Câu hỏi thường gặp" },
   { id: "ket-luan", label: "Kết luận" },
 ])}
@@ -311,6 +312,28 @@ ${wpImg(4, "Nội dung và SEO địa phương trên website")}
 </ul>
 
 ${wpImg(5, "Đo lường SEO website qua Search Console và GA4")}
+
+<h2 id="so-sanh">So sánh website chuẩn SEO và website làm đẹp trước, SEO sau</h2>
+
+<div class="overflow-x-auto my-6">
+<table class="w-full border-collapse">
+  <thead>
+    <tr>
+      <th class="border border-indigo-100 px-3 py-2 text-left">Tiêu chí</th>
+      <th class="border border-indigo-100 px-3 py-2 text-left">Website chuẩn SEO từ đầu</th>
+      <th class="border border-indigo-100 px-3 py-2 text-left">Website thường, SEO sau</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="border border-indigo-100 px-3 py-2">Kiến trúc URL</td><td class="border border-indigo-100 px-3 py-2">Chốt theo silo và intent trước khi code</td><td class="border border-indigo-100 px-3 py-2">Dễ phải đổi URL và làm redirect sau launch</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Tốc độ</td><td class="border border-indigo-100 px-3 py-2">Ảnh, font, script được kiểm soát ngay từ theme</td><td class="border border-indigo-100 px-3 py-2">Plugin và hiệu ứng tích lũy gây chậm</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Schema & metadata</td><td class="border border-indigo-100 px-3 py-2">Có template đồng nhất theo loại trang</td><td class="border border-indigo-100 px-3 py-2">Bổ sung rời rạc, dễ thiếu hoặc trùng</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Chi phí tối ưu</td><td class="border border-indigo-100 px-3 py-2">Nằm trong quy trình thiết kế và nghiệm thu</td><td class="border border-indigo-100 px-3 py-2">Có thể phải sửa theme, nội dung và cấu trúc</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Khác nhau lớn nhất không nằm ở một plugin SEO, mà ở việc technical SEO, cấu trúc nội dung và đo lường được thiết kế như một phần của sản phẩm ngay từ đầu.</p>
 
 ${wpRelatedLinks([
   {

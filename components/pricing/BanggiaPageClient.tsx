@@ -231,6 +231,25 @@ export function BanggiaPageClient() {
         </div>
 
         <section className="mt-12 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
+          <h2 className="text-xl font-bold text-indigo-950">Quy trình chọn gói và nhận báo giá</h2>
+          <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              "Chọn nhóm dịch vụ cần triển khai",
+              "Đối chiếu phạm vi và ngân sách tham khảo",
+              "Gửi yêu cầu để được khảo sát chi tiết",
+              "Nhận báo giá, timeline và checklist bàn giao",
+            ].map((step, index) => (
+              <li key={step} className="rounded-xl border border-indigo-100 bg-indigo-50/30 p-4 text-sm text-slate-700">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-violet-700">
+                  Bước {index + 1}
+                </span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="mt-12 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-xl font-bold text-indigo-950">Câu hỏi thường gặp về bảng giá</h2>
           <div className="mt-5 space-y-3">
             {PRICING_FAQS.map((item) => (

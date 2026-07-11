@@ -106,6 +106,23 @@ export default function GoogleMapsPage() {
           </ul>
         </section>
 
+        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-orange-700">So sánh giải pháp</p>
+          <h2 className="mt-2 text-2xl font-bold text-indigo-950">Google Maps, Local SEO hay Local Ads?</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {[
+              ["Tối ưu Google Maps", "Dành cho hồ sơ thiếu thông tin, danh mục, hình ảnh hoặc review. Đây là nền tảng cần hoàn thiện trước."],
+              ["Local SEO", "Dành cho doanh nghiệp muốn tăng thứ hạng bền vững bằng GBP, website địa phương, citation và nội dung."],
+              ["Local Ads", "Dành cho chiến dịch cần lượt gọi nhanh. Hiệu quả tốt nhất khi hồ sơ Maps và landing page đã chuẩn chuyển đổi."],
+            ].map(([title, desc]) => (
+              <article key={title} className="rounded-2xl border border-orange-100 bg-orange-50/30 p-5">
+                <h3 className="font-bold text-indigo-950">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <PlatformAuditSection
           accentColor={config.color}
           badge="Kiểm tra doanh nghiệp trên Google Maps"

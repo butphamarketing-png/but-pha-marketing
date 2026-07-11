@@ -23,17 +23,23 @@ const CHECKS = [
   },
   {
     label: "Knowledge center",
-    file: "app/kien-thuc/page.tsx",
+    files: ["app/kien-thuc/page.tsx", "components/landing/SubLandingPage.tsx"],
     requiredSnippets: ["WebPage", 'aria-label="Breadcrumb"'],
   },
   {
     label: "Programmatic industry page",
-    file: "app/website/nganh/[industry]/page.tsx",
+    files: [
+      "app/website/nganh/[industry]/page.tsx",
+      "components/landing/ProgrammaticLandingPage.tsx",
+    ],
     requiredSnippets: ["BreadcrumbList", "ItemList", "Service", 'aria-label="Breadcrumb"'],
   },
   {
     label: "Programmatic local SEO page",
-    file: "app/seo-website/dia-phuong/[location]/page.tsx",
+    files: [
+      "app/seo-website/dia-phuong/[location]/page.tsx",
+      "components/landing/ProgrammaticLandingPage.tsx",
+    ],
     requiredSnippets: ["BreadcrumbList", "ItemList", "Service", 'aria-label="Breadcrumb"'],
   },
   {
@@ -58,15 +64,19 @@ function hasAllSnippets(content, snippets) {
 
 function main() {
   const results = CHECKS.map((check) => {
-    const abs = path.join(root, check.file);
-    if (!fs.existsSync(abs)) {
-      return { label: check.label, file: check.file, ok: false, missing: ["FILE_NOT_FOUND"] };
+    const files = check.files ?? [check.file];
+    const missingFiles = files.filter((file) => !fs.existsSync(path.join(root, file)));
+    const fileLabel = files.join(" + ");
+    if (missingFiles.length > 0) {
+      return { label: check.label, file: fileLabel, ok: false, missing: ["FILE_NOT_FOUND"] };
     }
-    const content = fs.readFileSync(abs, "utf8");
+    const content = files
+      .map((file) => fs.readFileSync(path.join(root, file), "utf8"))
+      .join("\n");
     const match = hasAllSnippets(content, check.requiredSnippets);
     return {
       label: check.label,
-      file: check.file,
+      file: fileLabel,
       ok: match.ok,
       missing: match.missing,
     };
