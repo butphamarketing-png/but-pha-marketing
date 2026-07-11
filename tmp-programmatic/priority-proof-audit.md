@@ -1,6 +1,6 @@
 # Priority URL Proof Audit
 
-- Generated at: 2026-07-11T17:09:55.541Z
+- Generated at: 2026-07-11T17:17:47.233Z
 - URLs audited: 20
 
 | Slug | URL | Proof Score | Gaps |

@@ -1,6 +1,6 @@
 # Vertical Syndication Snippets — Outreach theo ngành
 
-- Generated at: 2026-07-11T17:10:30.002Z
+- Generated at: 2026-07-11T17:18:24.047Z
 - Mục tiêu: 2 placement/tuần/vertical (guest post, cộng đồng ngành, LinkedIn)
 
 ## Ma trận vertical

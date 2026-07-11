@@ -1,6 +1,6 @@
 # Priority Content Freshness Audit
 
-- Generated at: 2026-07-11T17:10:09.717Z
+- Generated at: 2026-07-11T17:17:56.579Z
 - URLs audited: 20
 - Stale URLs (>= 90 days): 0
 

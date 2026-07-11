@@ -1,6 +1,6 @@
 # Priority Intent Coverage Audit
 
-- Generated at: 2026-07-11T17:09:58.630Z
+- Generated at: 2026-07-11T17:17:48.513Z
 - URLs audited: 20
 
 | Slug | URL | Intent | Score | Status | Missing |

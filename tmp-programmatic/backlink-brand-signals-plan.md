@@ -1,6 +1,6 @@
 # Backlink & Brand Signals Plan
 
-- Generated at: 2026-07-11T17:10:28.857Z
+- Generated at: 2026-07-11T17:18:20.542Z
 - Focus: Top 12 priority URLs
 
 ## Weekly Channels

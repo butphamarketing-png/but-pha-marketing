@@ -1,6 +1,6 @@
 # Vertical Proof KPI
 
-- Generated: 2026-07-11T17:01:57.125Z
+- Generated: 2026-07-11T17:18:30.544Z
 - Avg proof completeness: **100%**
 - Verticals 7/7: **7/7**
 
