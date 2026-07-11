@@ -1,6 +1,6 @@
 # Outreach Week 1 Playbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:39:58.827Z
+- Generated at: 2026-07-11T17:42:56.855Z
 - Mục tiêu tuần: **6 placements** (1 guest · 1 case · 2 social · 1 vertical · 1 directory)
 - IndexNow: đã ping 30 URL · GSC request indexing vẫn cần làm thủ công
 
@@ -171,5 +171,7 @@ Hotline: 0937417982
 ## Snippet bổ sung
 - Guest post emails: `tmp-programmatic/guest-post-pitch-pack.md`
 - Directory VN: `tmp-programmatic/directory-citation-pack-vn.md`
+- LinkedIn: `tmp-programmatic/linkedin-outreach-pack.md`
+- Zalo group: `tmp-programmatic/zalo-group-post-pack.md`
 - Tracker: `npm run build:backlink-weekly-tracker`
 - GSC paste: `tmp-programmatic/gsc-copy-paste.md`

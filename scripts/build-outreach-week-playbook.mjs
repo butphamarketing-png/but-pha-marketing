@@ -203,6 +203,8 @@ lines.push("");
 lines.push("## Snippet bổ sung");
 lines.push("- Guest post emails: `tmp-programmatic/guest-post-pitch-pack.md`");
 lines.push("- Directory VN: `tmp-programmatic/directory-citation-pack-vn.md`");
+lines.push("- LinkedIn: `tmp-programmatic/linkedin-outreach-pack.md`");
+lines.push("- Zalo group: `tmp-programmatic/zalo-group-post-pack.md`");
 lines.push("- Tracker: `npm run build:backlink-weekly-tracker`");
 lines.push("- GSC paste: `tmp-programmatic/gsc-copy-paste.md`");
 

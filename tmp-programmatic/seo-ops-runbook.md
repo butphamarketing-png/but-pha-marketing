@@ -1,6 +1,6 @@
 # SEO Ops Runbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:40:00.492Z
+- Generated at: 2026-07-11T17:42:59.232Z
 - Health score: **100 (A)**
 - Autopilot: **GREEN**
 
@@ -13,8 +13,9 @@
 1. **GSC indexing** — `tmp-programmatic/gsc-copy-paste.md` (30 URL copy-paste)
 2. **Outreach tuần 1** — `tmp-programmatic/outreach-week-1-playbook.md`
 3. **Guest post pitch** — `tmp-programmatic/guest-post-pitch-pack.md`
-4. **Directory VN** — `tmp-programmatic/directory-citation-pack-vn.md` (6 citation tuần 1)
-5. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log="..."`
+4. **Directory VN** — `tmp-programmatic/directory-citation-pack-vn.md` (5 citation tuần 1)
+5. **LinkedIn + Zalo group** — `linkedin-outreach-pack.md` · `zalo-group-post-pack.md`
+6. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log="..."`
 
 ## Scripts hữu ích
 | Lệnh | Mục đích |
@@ -29,6 +30,8 @@
 | `npm run build:outreach-week-playbook` | Playbook outreach tuần 1 |
 | `npm run build:guest-post-pitch-pack` | Email pitch guest post |
 | `npm run build:directory-citation-pack` | Directory citation VN + NAP |
+| `npm run build:linkedin-outreach-pack` | LinkedIn connect + post |
+| `npm run build:zalo-group-post-pack` | Zalo group post 7 vertical |
 | `npm run build:backlink-weekly-tracker` | Log placement backlink |
 | `npm run build:vertical-syndication` | Snippet outreach 7 ngành |
 | `npm run sync:industry-landings` | Sync catalog → programmatic |

@@ -29,6 +29,8 @@ const STEPS = [
   { label: "Outreach week 1 playbook", cmd: "npm", args: ["run", "build:outreach-week-playbook"] },
   { label: "Guest post pitch pack", cmd: "npm", args: ["run", "build:guest-post-pitch-pack"] },
   { label: "Directory citation pack VN", cmd: "npm", args: ["run", "build:directory-citation-pack"] },
+  { label: "LinkedIn outreach pack", cmd: "npm", args: ["run", "build:linkedin-outreach-pack"] },
+  { label: "Zalo group post pack", cmd: "npm", args: ["run", "build:zalo-group-post-pack"] },
   { label: "Backlink weekly tracker", cmd: "npm", args: ["run", "build:backlink-weekly-tracker"] },
   { label: "SEO ops runbook", cmd: "npm", args: ["run", "build:seo-ops-runbook"] },
   { label: "Build SEO health scorecard", cmd: "npm", args: ["run", "build:seo-health-scorecard"] },
