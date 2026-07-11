@@ -1,7 +1,7 @@
 # Backlink Weekly Tracker
 
 - Week: **2026-W29**
-- Updated: 2026-07-11T17:07:09.731Z
+- Updated: 2026-07-11T17:36:16.731Z
 
 ## Targets tuần
 - [ ] guestPost: 0/1

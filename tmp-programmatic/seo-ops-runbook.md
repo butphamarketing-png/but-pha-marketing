@@ -1,6 +1,6 @@
 # SEO Ops Runbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:30:29.238Z
+- Generated at: 2026-07-11T17:36:18.275Z
 - Health score: **100 (A)**
 - Autopilot: **GREEN**
 
@@ -10,11 +10,11 @@
 - Weekly: `npm run run:seo-weekly` · apply: `npm run run:seo-weekly:apply`
 
 ## Tuần này (manual + semi-auto)
-1. **Smoke test** — `npm run smoke:gsc-urls` (30 URL phải 200)
-2. **IndexNow ping** — `npm run ping:indexnow` (sau khi key file deploy)
-3. **GSC indexing** — `tmp-programmatic/gsc-indexing-checklist.md` (30 URL)
-4. **Backlink** — copy `vertical-syndication-snippets.md` + log `npm run build:backlink-weekly-tracker -- --log="..."`
-5. **Mockup HD** — `npm run generate:mockup-hd` (auto) · verify `npm run build:mockup-hd-gap` → **0/13 needs**
+1. **GSC indexing** — `tmp-programmatic/gsc-copy-paste.md` (30 URL copy-paste)
+2. **Outreach tuần 1** — `tmp-programmatic/outreach-week-1-playbook.md`
+3. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log="..."`
+4. **IndexNow** — `npm run ping:indexnow` (đã ping · chạy lại sau deploy mới)
+5. **Mockup HD** — `npm run generate:mockup-hd` · verify **0/13 needs**
 
 ## Scripts hữu ích
 | Lệnh | Mục đích |
@@ -25,8 +25,9 @@
 | `npm run generate:mockup-hd` | Upscale PNG → WebP 1920px (sharp) |
 | `npm run scaffold:mockup-hd-dirs` | Tạo thư mục hd/ |
 | `npm run build:gsc-indexing-checklist` | Regen checklist GSC |
-| `npm run smoke:gsc-urls` | Smoke test 30 URL production |
-| `npm run ping:indexnow` | Ping Bing/Yandex IndexNow |
+| `npm run build:gsc-copy-paste` | GSC copy-paste 30 URL |
+| `npm run build:outreach-week-playbook` | Playbook outreach tuần 1 |
+| `npm run build:backlink-weekly-tracker` | Log placement backlink |
 | `npm run build:vertical-syndication` | Snippet outreach 7 ngành |
 | `npm run sync:industry-landings` | Sync catalog → programmatic |
 
