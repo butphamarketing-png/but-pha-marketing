@@ -1,0 +1,9 @@
+{
+  "scanned": 11086,
+  "thinUnder12k": 0,
+  "criticalUnder4k": 0,
+  "warnUnder8k": 0,
+  "byType": {},
+  "thinnest10": [],
+  "note": "Re-audit 2026-07-11 after P2.2 seed-thin-content-p2-batch.mjs (13 articles upgraded via upgradeArticle)"
+}

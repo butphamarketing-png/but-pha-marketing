@@ -1,0 +1,17 @@
+{
+  "weeks": [
+    {
+      "week": "2026-W29",
+      "startedAt": "2026-07-11T17:07:09.730Z",
+      "placements": [],
+      "counts": {
+        "guestPost": 0,
+        "caseStudyShare": 0,
+        "socialPillar": 0,
+        "directoryCitation": 0,
+        "verticalSnippet": 0,
+        "other": 0
+      }
+    }
+  ]
+}

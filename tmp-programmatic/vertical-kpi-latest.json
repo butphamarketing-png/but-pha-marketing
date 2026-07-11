@@ -1,0 +1,279 @@
+{
+  "generatedAt": "2026-07-11T17:01:57.125Z",
+  "avgProofPct": 100,
+  "completeVerticals": 7,
+  "totalVerticals": 7,
+  "verticals": [
+    {
+      "slug": "nha-khoa",
+      "label": "Nha khoa",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "xay-dung",
+      "label": "Xây dựng",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "tham-my",
+      "label": "Thẩm mỹ",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "spa",
+      "label": "Spa",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "phong-kham",
+      "label": "Phòng khám",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "my-pham",
+      "label": "Mỹ phẩm",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "slug": "pccc",
+      "label": "PCCC",
+      "score": 7,
+      "total": 7,
+      "pct": 100,
+      "complete": true,
+      "slots": [
+        {
+          "key": "hub",
+          "ok": true
+        },
+        {
+          "key": "money",
+          "ok": true
+        },
+        {
+          "key": "checklist",
+          "ok": true
+        },
+        {
+          "key": "template",
+          "ok": true
+        },
+        {
+          "key": "caseStudy",
+          "ok": true
+        },
+        {
+          "key": "caseStudyBlog",
+          "ok": true
+        },
+        {
+          "key": "pillar",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "kpiTargets": {
+    "avgProofPct": 100,
+    "completeVerticals": 7,
+    "weakProofUrls": 0
+  }
+}

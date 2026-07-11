@@ -49,9 +49,9 @@ export const WEBSITE_INDUSTRY_GENERATED: ProgrammaticGeneratedLanding[] = [
   {
     slug: "my-pham",
     title: "Thiết kế website mỹ phẩm",
-    description: "Website shop mỹ phẩm / thương hiệu làm đẹp: catalog, review, SEO ecommerce nhẹ.",
+    description: "Website shop mỹ phẩm / thương hiệu làm đẹp: catalog, review, SEO ecommerce — case study Glow Dew Beauty (skincare D2C).",
     primaryKeyword: "thiết kế website mỹ phẩm",
-    qualityScore: 78
+    qualityScore: 92
   },
   {
     slug: "pccc",
@@ -63,9 +63,9 @@ export const WEBSITE_INDUSTRY_GENERATED: ProgrammaticGeneratedLanding[] = [
   {
     slug: "logistics",
     title: "Thiết kế website logistics & vận tải",
-    description: "Website công ty vận tải, kho bãi, freight — lead B2B và SEO ngành logistics.",
+    description: "Website công ty vận tải, kho bãi, freight — lead B2B, SEO ngành logistics và case study Vận Tốc Express (form báo giá + tra cứu vận đơn).",
     primaryKeyword: "thiết kế website logistics",
-    qualityScore: 68
+    qualityScore: 92
   },
   {
     slug: "co-khi",
@@ -105,72 +105,72 @@ export const WEBSITE_INDUSTRY_GENERATED: ProgrammaticGeneratedLanding[] = [
   {
     slug: "nha-hang",
     title: "Thiết kế website nhà hàng",
-    description: "Website nhà hàng: menu online, đặt bàn, gallery món — SEO local F&B.",
+    description: "Website nhà hàng: menu online, đặt bàn, gallery món — SEO local F&B và hub silo nhà hàng.",
     primaryKeyword: "thiết kế website nhà hàng",
-    qualityScore: 70
+    qualityScore: 78
   },
   {
     slug: "bat-dong-san",
     title: "Thiết kế website bất động sản",
-    description: "Website BĐS: dự án, filter căn hộ, lead form — SEO real estate.",
+    description: "Website BĐS: dự án, filter căn hộ, lead form — SEO real estate và case study Kiến Trúc Sao Khuê (3,4K impression GSC).",
     primaryKeyword: "thiết kế website bất động sản",
-    qualityScore: 64
+    qualityScore: 92
   },
   {
     slug: "anh-ngu",
     title: "Thiết kế website trung tâm anh ngữ",
-    description: "Website trung tâm ngoại ngữ: khóa học, lịch khai giảng, đăng ký học.",
+    description: "Website trung tâm ngoại ngữ: khóa học, lịch khai giảng, đăng ký học — hub silo anh ngữ và SEO tuyển sinh.",
     primaryKeyword: "thiết kế website trung tâm anh ngữ",
-    qualityScore: 70
+    qualityScore: 78
   },
   {
     slug: "mam-non",
     title: "Thiết kế website trường mầm non",
-    description: "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — SEO tuyển sinh.",
+    description: "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — hub silo mầm non và SEO tuyển sinh.",
     primaryKeyword: "thiết kế website trường mầm non",
-    qualityScore: 70
+    qualityScore: 78
   },
   {
     slug: "khach-san",
     title: "Thiết kế website khách sạn",
-    description: "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality.",
+    description: "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality, hub silo đặt phòng và đa ngôn ngữ EN/VI.",
     primaryKeyword: "thiết kế website khách sạn",
-    qualityScore: 64
+    qualityScore: 78
   },
   {
     slug: "noi-that",
     title: "Thiết kế website nội thất",
-    description: "Website studio nội thất: portfolio, dịch vụ thiết kế thi công.",
+    description: "Website studio nội thất: portfolio, dịch vụ thiết kế thi công — hub silo nội thất và SEO phong cách.",
     primaryKeyword: "thiết kế website nội thất",
-    qualityScore: 70
+    qualityScore: 78
   },
   {
     slug: "o-to",
     title: "Thiết kế website đại lý ô tô",
-    description: "Website showroom xe: catalog, trả góp, đăng ký lái thử.",
+    description: "Website showroom xe: catalog, trả góp, đăng ký lái thử — hub silo đại lý ô tô và SEO local.",
     primaryKeyword: "thiết kế website đại lý ô tô",
-    qualityScore: 64
+    qualityScore: 78
   },
   {
     slug: "thiet-bi-ve-sinh",
     title: "Thiết kế website thiết bị vệ sinh",
-    description: "Website showroom thiết bị vệ sinh: catalog, báo giá, SEO ngành.",
+    description: "Website showroom thiết bị vệ sinh: catalog, báo giá, SEO ngành — hub silo thiết bị vệ sinh B2B.",
     primaryKeyword: "thiết kế website thiết bị vệ sinh",
-    qualityScore: 70
+    qualityScore: 78
   },
   {
     slug: "in-an",
     title: "Thiết kế website công ty in ấn",
-    description: "Website in ấn quảng cáo: dịch vụ in, báo giá nhanh, portfolio.",
+    description: "Website in ấn quảng cáo: dịch vụ in, báo giá nhanh, portfolio — hub silo in ấn B2B và upload file online.",
     primaryKeyword: "thiết kế website in ấn",
-    qualityScore: 66
+    qualityScore: 78
   },
   {
     slug: "landing-page",
     title: "Thiết kế landing page chuyển đổi cao",
-    description: "Landing page cho chiến dịch ads, ra mắt sản phẩm — tối ưu CRO.",
+    description: "Landing page cho chiến dịch ads, ra mắt sản phẩm — tối ưu CRO và case study Sao Khuê (83K view Fanpage chuyển hướng về web).",
     primaryKeyword: "thiết kế landing page",
-    qualityScore: 66
+    qualityScore: 84
   },
 ];
 

@@ -50,12 +50,15 @@ function computeScorecard() {
   const intentAvg = avg(intent.map((x) => x.intentCoverageScore || 0));
   const intentFail = intent.filter((x) => x.status === "fail").length;
 
+  // 0 promotable = pipeline đã apply hết; >0 = còn URL chờ promote
+  const promotionBucket = promotable > 0 ? 88 : 100;
+
   const score =
     proofAvg * 0.35 +
     linkAvg * 0.25 +
     intentAvg * 0.1 +
     (100 - Math.min(100, stale * 10)) * 0.2 +
-    (promotable > 0 ? 90 : 75) * 0.1;
+    promotionBucket * 0.1;
 
   const rounded = Math.round(score * 10) / 10;
   const grade = rounded >= 90 ? "A" : rounded >= 80 ? "B" : rounded >= 70 ? "C" : "D";

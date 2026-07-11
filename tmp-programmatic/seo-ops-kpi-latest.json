@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-07-11T17:10:33.460Z",
+  "healthScore": 100,
+  "healthGrade": "A",
+  "weakProofUrls": 0,
+  "failedLinkUrls": 0,
+  "staleUrls": 0,
+  "promotableUrls": 0,
+  "verticalAvgProofPct": 100,
+  "verticalComplete": "7/7",
+  "delta": {
+    "healthScore": 0,
+    "weakProofUrls": 0,
+    "failedLinkUrls": 0,
+    "staleUrls": 0,
+    "promotableUrls": 0
+  }
+}

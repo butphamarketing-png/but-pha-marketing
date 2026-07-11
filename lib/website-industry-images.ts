@@ -1,4 +1,5 @@
 import { INDUSTRY_MOCKUP_ALTS } from "./industry-mockup-alts";
+import { getMockupDimensions, hdMockupVariantSrc } from "./industry-mockup-dimensions.generated";
 import { KHACH_SAN_IMAGE_ALTS } from "./khach-san-images";
 import { MAM_NON_IMAGE_ALTS } from "./mam-non-images";
 import { THIET_BI_VE_SINH_IMAGE_ALTS } from "./thiet-bi-ve-sinh-images";
@@ -209,6 +210,26 @@ function poolAlt(pool: ImagePoolDef, index: number, keyword: string): string {
   return `${keyword} — mẫu giao diện ${index + 1}`;
 }
 
+function expandWithHdVariants(images: WebsiteIndustryImage[]): WebsiteIndustryImage[] {
+  const out = [...images];
+  for (const img of images) {
+    const hdSrc = hdMockupVariantSrc(img.src);
+    if (hdSrc && getMockupDimensions(hdSrc)) {
+      out.push({ src: hdSrc, alt: img.alt });
+    }
+  }
+  return out;
+}
+
+function mockupWidth(src: string): number {
+  return getMockupDimensions(src)?.width ?? 0;
+}
+
+function pickWidestImage(images: WebsiteIndustryImage[]): WebsiteIndustryImage | null {
+  if (!images.length) return null;
+  return [...images].sort((a, b) => mockupWidth(b.src) - mockupWidth(a.src))[0]!;
+}
+
 export function getWebsiteIndustryGallery(
   catalogSlug: string,
   primaryKeyword: string,
@@ -226,6 +247,17 @@ export function getWebsiteIndustryHero(input: {
   blogMoneySlug: string;
   title: string;
 }): WebsiteIndustryImage {
+  const gallery = expandWithHdVariants(
+    getWebsiteIndustryGallery(input.catalogSlug, input.primaryKeyword),
+  );
+  const highResFallback = expandWithHdVariants(
+    DEFAULT_POOL.files.map((file, index) => ({
+      src: `${DEFAULT_POOL.dir}/${file}`,
+      alt: poolAlt(DEFAULT_POOL, index, input.primaryKeyword),
+    })),
+  );
+  const bestMockup = pickWidestImage([...gallery, ...highResFallback]);
+
   const fromBlog = resolveBlogImageUrl({
     slug: input.blogMoneySlug,
     keywordsMain: input.primaryKeyword,
@@ -238,10 +270,15 @@ export function getWebsiteIndustryHero(input: {
       title: input.title,
     }) || input.primaryKeyword;
 
-  if (fromBlog && !fromBlog.endsWith("tin-tuc-marketing.png")) {
+  if (
+    fromBlog &&
+    !fromBlog.endsWith("tin-tuc-marketing.png") &&
+    mockupWidth(fromBlog) > mockupWidth(bestMockup?.src ?? "")
+  ) {
     return { src: fromBlog, alt };
   }
 
-  const [first] = getWebsiteIndustryGallery(input.catalogSlug, input.primaryKeyword);
-  return first ?? { src: "/tin-tuc/thiet-ke-website.png", alt: input.primaryKeyword };
+  if (bestMockup) return bestMockup;
+
+  return { src: "/tin-tuc/thiet-ke-website.png", alt: input.primaryKeyword };
 }

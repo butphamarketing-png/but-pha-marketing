@@ -1,0 +1,582 @@
+[
+  {
+    "slug": "website",
+    "url": "/website",
+    "intent": "money",
+    "priority": 101,
+    "cluster": "website",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website",
+    "url": "/blog/thiet-ke-website",
+    "intent": "pillar",
+    "priority": 100,
+    "cluster": "website",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pillar_guide",
+        "pass": true
+      },
+      {
+        "key": "cluster_links",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "bao-gia-thiet-ke-website",
+    "url": "/blog/bao-gia-thiet-ke-website",
+    "intent": "money",
+    "priority": 99,
+    "cluster": "website",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-chuan-seo",
+    "url": "/blog/thiet-ke-website-chuan-seo",
+    "intent": "money",
+    "priority": 98,
+    "cluster": "website",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "facebook-pillar",
+    "url": "/facebook",
+    "intent": "money",
+    "priority": 96,
+    "cluster": "facebook",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "google-maps-pillar",
+    "url": "/google-maps",
+    "intent": "money",
+    "priority": 95,
+    "cluster": "google-maps",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "banggia",
+    "url": "/banggia",
+    "intent": "money",
+    "priority": 94,
+    "cluster": "pricing",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "pricing",
+        "pass": true
+      },
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "kien-thuc-hub",
+    "url": "/kien-thuc",
+    "intent": "hub",
+    "priority": 76,
+    "cluster": "knowledge",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "gioi-thieu",
+    "url": "/gioi-thieu",
+    "intent": "about",
+    "priority": 75,
+    "cluster": "brand",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "faq",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-wordpress",
+    "url": "/blog/thiet-ke-website-wordpress",
+    "intent": "comparison",
+    "priority": 95,
+    "cluster": "website",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "comparison",
+        "pass": true
+      },
+      {
+        "key": "pros_cons",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-nha-khoa",
+    "url": "/blog/thiet-ke-website-nha-khoa",
+    "intent": "industry",
+    "priority": 93,
+    "cluster": "nha-khoa",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-tham-my-vien",
+    "url": "/blog/thiet-ke-website-tham-my-vien",
+    "intent": "industry",
+    "priority": 92,
+    "cluster": "tham-my",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-phong-kham-da-khoa",
+    "url": "/blog/thiet-ke-website-phong-kham-da-khoa",
+    "intent": "industry",
+    "priority": 91,
+    "cluster": "phong-kham",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-logistics-van-tai",
+    "url": "/blog/thiet-ke-website-logistics-van-tai",
+    "intent": "industry",
+    "priority": 90,
+    "cluster": "logistics",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "checklist-website-nha-khoa-2026",
+    "url": "/blog/checklist-website-nha-khoa-2026",
+    "intent": "checklist",
+    "priority": 91,
+    "cluster": "nha-khoa",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "step_or_structure",
+        "pass": true
+      },
+      {
+        "key": "related_money_page",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "checklist-website-tham-my-vien-2026",
+    "url": "/blog/checklist-website-tham-my-vien-2026",
+    "intent": "checklist",
+    "priority": 89,
+    "cluster": "tham-my",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "step_or_structure",
+        "pass": true
+      },
+      {
+        "key": "related_money_page",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "checklist-website-phong-kham-2026",
+    "url": "/blog/checklist-website-phong-kham-2026",
+    "intent": "checklist",
+    "priority": 88,
+    "cluster": "phong-kham",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "step_or_structure",
+        "pass": true
+      },
+      {
+        "key": "related_money_page",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "checklist-website-logistics-2026",
+    "url": "/blog/checklist-website-logistics-2026",
+    "intent": "checklist",
+    "priority": 87,
+    "cluster": "logistics",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "step_or_structure",
+        "pass": true
+      },
+      {
+        "key": "related_money_page",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-my-pham-lam-dep",
+    "url": "/blog/thiet-ke-website-my-pham-lam-dep",
+    "intent": "industry",
+    "priority": 86,
+    "cluster": "my-pham",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  },
+  {
+    "slug": "thiet-ke-website-my-pham",
+    "url": "/blog/thiet-ke-website-my-pham",
+    "intent": "industry",
+    "priority": 85,
+    "cluster": "my-pham",
+    "intentCoverageScore": 100,
+    "checks": [
+      {
+        "key": "industry_hub",
+        "pass": true
+      },
+      {
+        "key": "proof",
+        "pass": true
+      },
+      {
+        "key": "checklist_or_template",
+        "pass": true
+      },
+      {
+        "key": "cta",
+        "pass": true
+      }
+    ],
+    "missing": [],
+    "status": "pass"
+  }
+]

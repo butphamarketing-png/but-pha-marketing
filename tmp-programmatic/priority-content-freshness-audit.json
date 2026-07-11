@@ -1,0 +1,292 @@
+[
+  {
+    "slug": "website",
+    "url": "/website",
+    "intent": "money",
+    "priority": 101,
+    "cluster": "website",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 101,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website",
+    "url": "/blog/thiet-ke-website",
+    "intent": "pillar",
+    "priority": 100,
+    "cluster": "website",
+    "title": "Thiết Kế Website — Báo Giá, Quy Trình & Làm Website Chuẩn SEO 2026",
+    "lastUpdated": "2026-07-11T14:38:38.211+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 100,
+    "tasks": [
+      "Đảm bảo link tới /seo-website, /blog/chu-de/website, /lien-he."
+    ]
+  },
+  {
+    "slug": "bao-gia-thiet-ke-website",
+    "url": "/blog/bao-gia-thiet-ke-website",
+    "intent": "money",
+    "priority": 99,
+    "cluster": "website",
+    "title": "Báo Giá Thiết Kế Website 2026 — Bảng Giá & Yếu Tố Ảnh Hưởng",
+    "lastUpdated": "2026-07-11T14:27:51.092+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 99,
+    "tasks": [
+      "Thêm section so sánh giá trị/chi phí và CTA tư vấn rõ hơn.",
+      "Đảm bảo link tới /seo-website, /blog/chu-de/website, /lien-he."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-chuan-seo",
+    "url": "/blog/thiet-ke-website-chuan-seo",
+    "intent": "money",
+    "priority": 98,
+    "cluster": "website",
+    "title": "Thiết Kế Website Chuẩn SEO Giúp Tăng Thứ Hạng Google",
+    "lastUpdated": "2026-07-11T15:48:54.183+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 98,
+    "tasks": [
+      "Thêm section so sánh giá trị/chi phí và CTA tư vấn rõ hơn.",
+      "Đảm bảo link tới /seo-website, /blog/chu-de/website, /lien-he."
+    ]
+  },
+  {
+    "slug": "facebook-pillar",
+    "url": "/facebook",
+    "intent": "money",
+    "priority": 96,
+    "cluster": "facebook",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 96,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  },
+  {
+    "slug": "google-maps-pillar",
+    "url": "/google-maps",
+    "intent": "money",
+    "priority": 95,
+    "cluster": "google-maps",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 95,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-wordpress",
+    "url": "/blog/thiet-ke-website-wordpress",
+    "intent": "comparison",
+    "priority": 95,
+    "cluster": "website",
+    "title": "Thiết Kế Website WordPress Có Phải Lựa Chọn Tối Ưu",
+    "lastUpdated": "2026-07-11T14:39:40.084+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 95,
+    "tasks": [
+      "Đảm bảo link tới /seo-website, /blog/chu-de/website, /lien-he."
+    ]
+  },
+  {
+    "slug": "banggia",
+    "url": "/banggia",
+    "intent": "money",
+    "priority": 94,
+    "cluster": "pricing",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 94,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-nha-khoa",
+    "url": "/blog/thiet-ke-website-nha-khoa",
+    "intent": "industry",
+    "priority": 93,
+    "cluster": "nha-khoa",
+    "title": "Thiết Kế Website Nha Khoa Hiện Đại Thu Hút Khách Hàng",
+    "lastUpdated": "2026-07-11T14:39:01.193+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 93,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-tham-my-vien",
+    "url": "/blog/thiet-ke-website-tham-my-vien",
+    "intent": "industry",
+    "priority": 92,
+    "cluster": "tham-my",
+    "title": "Thiết Kế Website Thẩm Mỹ Viện Chuyên Nghiệp Chuẩn SEO",
+    "lastUpdated": "2026-07-11T14:39:18.505+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 92,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-phong-kham-da-khoa",
+    "url": "/blog/thiet-ke-website-phong-kham-da-khoa",
+    "intent": "industry",
+    "priority": 91,
+    "cluster": "phong-kham",
+    "title": "Thiết Kế Website Phòng Khám Đa Khoa Chuẩn SEO",
+    "lastUpdated": "2026-07-11T14:39:11.885+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 91,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "checklist-website-nha-khoa-2026",
+    "url": "/blog/checklist-website-nha-khoa-2026",
+    "intent": "checklist",
+    "priority": 91,
+    "cluster": "nha-khoa",
+    "title": "Checklist Website Nha Khoa 2026 — 20 Mục Chuẩn SEO & Đặt Lịch",
+    "lastUpdated": "2026-07-11T17:03:37.366+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 91,
+    "tasks": [
+      "Cập nhật checklist/template theo phiên bản năm hiện tại."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-logistics-van-tai",
+    "url": "/blog/thiet-ke-website-logistics-van-tai",
+    "intent": "industry",
+    "priority": 90,
+    "cluster": "logistics",
+    "title": "Thiết Kế Website Logistics Và Vận Tải Theo Dõi Đơn",
+    "lastUpdated": "2026-07-11T14:39:00.464+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 90,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "checklist-website-tham-my-vien-2026",
+    "url": "/blog/checklist-website-tham-my-vien-2026",
+    "intent": "checklist",
+    "priority": 89,
+    "cluster": "tham-my",
+    "title": "Checklist Website Thẩm Mỹ Viện 2026 — 20 Mục Chuẩn Y Khoa & SEO",
+    "lastUpdated": "2026-07-11T17:03:38.343+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 89,
+    "tasks": [
+      "Cập nhật checklist/template theo phiên bản năm hiện tại."
+    ]
+  },
+  {
+    "slug": "checklist-website-phong-kham-2026",
+    "url": "/blog/checklist-website-phong-kham-2026",
+    "intent": "checklist",
+    "priority": 88,
+    "cluster": "phong-kham",
+    "title": "Checklist Website Phòng Khám Đa Khoa 2026 — 20 Mục Chuẩn SEO & Đặt Lịch",
+    "lastUpdated": "2026-07-11T17:03:39.05+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 88,
+    "tasks": [
+      "Cập nhật checklist/template theo phiên bản năm hiện tại."
+    ]
+  },
+  {
+    "slug": "checklist-website-logistics-2026",
+    "url": "/blog/checklist-website-logistics-2026",
+    "intent": "checklist",
+    "priority": 87,
+    "cluster": "logistics",
+    "title": "Checklist Website Logistics 2026 — 20 Mục Chuẩn SEO & B2B",
+    "lastUpdated": "2026-07-11T17:03:39.738+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 87,
+    "tasks": [
+      "Cập nhật checklist/template theo phiên bản năm hiện tại."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-my-pham-lam-dep",
+    "url": "/blog/thiet-ke-website-my-pham-lam-dep",
+    "intent": "industry",
+    "priority": 86,
+    "cluster": "my-pham",
+    "title": "Thiết Kế Website Mỹ Phẩm Chuẩn SEO Và Bán Online",
+    "lastUpdated": "2026-07-11T14:39:01.033+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 86,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "thiet-ke-website-my-pham",
+    "url": "/blog/thiet-ke-website-my-pham",
+    "intent": "industry",
+    "priority": 85,
+    "cluster": "my-pham",
+    "title": "Thiết Kế Website Cửa Hàng Mỹ Phẩm Chuyên Nghiệp",
+    "lastUpdated": "2026-07-11T14:39:00.965+00:00",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 85,
+    "tasks": [
+      "Bổ sung 1 case theo ngành + liên kết hub ngành."
+    ]
+  },
+  {
+    "slug": "kien-thuc-hub",
+    "url": "/kien-thuc",
+    "intent": "hub",
+    "priority": 76,
+    "cluster": "knowledge",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 76,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  },
+  {
+    "slug": "gioi-thieu",
+    "url": "/gioi-thieu",
+    "intent": "about",
+    "priority": 75,
+    "cluster": "brand",
+    "ageDays": 0,
+    "stale": false,
+    "refreshPriority": 75,
+    "tasks": [
+      "Trang non-blog: rà soát nội dung thủ công theo quý."
+    ]
+  }
+]

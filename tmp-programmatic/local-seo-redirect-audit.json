@@ -1,0 +1,128 @@
+{
+  "redirects": [
+    {
+      "source": "/blog/thiet-ke-website-tphcm",
+      "destination": "/seo-website/dia-phuong/ho-chi-minh",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-ha-noi",
+      "destination": "/seo-website/dia-phuong/ha-noi",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-da-nang",
+      "destination": "/seo-website/dia-phuong/da-nang",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-can-tho",
+      "destination": "/seo-website/dia-phuong/can-tho",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-binh-duong",
+      "destination": "/seo-website/dia-phuong/binh-duong",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-dong-nai",
+      "destination": "/seo-website/dia-phuong/dong-nai",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-hai-phong",
+      "destination": "/seo-website/dia-phuong/hai-phong",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-nha-trang",
+      "destination": "/seo-website/dia-phuong/nha-trang",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-hue",
+      "destination": "/seo-website/dia-phuong/hue",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-thanh-hoa",
+      "destination": "/seo-website/dia-phuong/thanh-hoa",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-tphcm-uy-tin",
+      "destination": "/seo-website/dia-phuong/ho-chi-minh",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-ha-noi-chuyen-nghiep",
+      "destination": "/seo-website/dia-phuong/ha-noi",
+      "permanent": true
+    },
+    {
+      "source": "/blog/thiet-ke-website-da-nang-du-lich",
+      "destination": "/seo-website/dia-phuong/da-nang",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-tphcm",
+      "destination": "/seo-website/dia-phuong/ho-chi-minh",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-ha-noi",
+      "destination": "/seo-website/dia-phuong/ha-noi",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-da-nang",
+      "destination": "/seo-website/dia-phuong/da-nang",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-can-tho",
+      "destination": "/seo-website/dia-phuong/can-tho",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-binh-duong",
+      "destination": "/seo-website/dia-phuong/binh-duong",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-hai-phong",
+      "destination": "/seo-website/dia-phuong/hai-phong",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seo-local-nha-trang",
+      "destination": "/seo-website/dia-phuong/nha-trang",
+      "permanent": true
+    }
+  ],
+  "map": {
+    "thiet-ke-website-tphcm": "ho-chi-minh",
+    "thiet-ke-website-ha-noi": "ha-noi",
+    "thiet-ke-website-da-nang": "da-nang",
+    "thiet-ke-website-can-tho": "can-tho",
+    "thiet-ke-website-binh-duong": "binh-duong",
+    "thiet-ke-website-dong-nai": "dong-nai",
+    "thiet-ke-website-hai-phong": "hai-phong",
+    "thiet-ke-website-nha-trang": "nha-trang",
+    "thiet-ke-website-hue": "hue",
+    "thiet-ke-website-thanh-hoa": "thanh-hoa",
+    "thiet-ke-website-tphcm-uy-tin": "ho-chi-minh",
+    "thiet-ke-website-ha-noi-chuyen-nghiep": "ha-noi",
+    "thiet-ke-website-da-nang-du-lich": "da-nang",
+    "seo-local-tphcm": "ho-chi-minh",
+    "seo-local-ha-noi": "ha-noi",
+    "seo-local-da-nang": "da-nang",
+    "seo-local-can-tho": "can-tho",
+    "seo-local-binh-duong": "binh-duong",
+    "seo-local-hai-phong": "hai-phong",
+    "seo-local-nha-trang": "nha-trang"
+  },
+  "missingLanding": [],
+  "total": 20
+}

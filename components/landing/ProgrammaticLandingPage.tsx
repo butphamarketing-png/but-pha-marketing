@@ -4,6 +4,7 @@ import type { ProgrammaticLanding } from "@/lib/programmatic-seo";
 import type { WebsiteIndustryCatalogItem } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryGallery, getWebsiteIndustryHero } from "@/lib/website-industry-images";
 import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
+import { mockupDisplayWidth } from "@/lib/industry-mockup-dimensions.generated";
 
 type ClusterLink = { href: string; name: string };
 
@@ -116,7 +117,10 @@ export function ProgrammaticLandingPage({
 
       {heroImage && (
         <section className="overflow-hidden rounded-3xl border border-indigo-100 bg-white p-4 shadow-sm md:p-8">
-          <div className="mx-auto w-full max-w-[485px]">
+          <div
+            className="mx-auto w-full"
+            style={{ maxWidth: `${mockupDisplayWidth(heroImage.src)}px` }}
+          >
             <IndustryMockupImage src={heroImage.src} alt={heroImage.alt} priority className="mx-auto rounded-xl shadow-md" />
           </div>
         </section>

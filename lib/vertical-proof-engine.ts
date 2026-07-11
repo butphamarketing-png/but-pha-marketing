@@ -74,8 +74,8 @@ export const VERTICAL_PROOF_CONFIG: Record<(typeof PRIORITY_VERTICAL_SLUGS)[numb
     moneySlug: "thiet-ke-website-my-pham-lam-dep",
     checklistSlug: "checklist-website-my-pham-2026",
     templateSlug: "template-website-my-pham-2026",
-    caseStudySlug: "halee-tram",
-    caseStudyBlogSlug: "case-study-thiet-ke-website-halee-tram",
+    caseStudySlug: "glow-dew-cosmetics",
+    caseStudyBlogSlug: "case-study-thiet-ke-website-glow-dew-cosmetics",
     pillarSlug: "thiet-ke-website",
   },
   pccc: {

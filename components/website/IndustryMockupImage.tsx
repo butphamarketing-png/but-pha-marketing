@@ -1,6 +1,11 @@
 import Image from "next/image";
+import {
+  getMockupDimensions,
+  INDUSTRY_MOCKUP_HD_TARGET,
+  mockupDisplayWidth,
+} from "@/lib/industry-mockup-dimensions.generated";
 
-/** Mockup ngành export ~485×1024 (JPEG trong file .png) — không upscale quá kích thước gốc. */
+/** Fallback khi chưa có entry trong dimension map. */
 export const INDUSTRY_MOCKUP_WIDTH = 485;
 export const INDUSTRY_MOCKUP_HEIGHT = 1024;
 
@@ -22,6 +27,12 @@ export function IndustryMockupImage({
   sizes,
   variant = "hero",
 }: IndustryMockupImageProps) {
+  const dims = getMockupDimensions(src);
+  const displayWidth = mockupDisplayWidth(src, INDUSTRY_MOCKUP_WIDTH);
+  const displayHeight = dims
+    ? Math.round((displayWidth / dims.width) * dims.height)
+    : INDUSTRY_MOCKUP_HEIGHT;
+
   if (variant === "card") {
     return (
       <div
@@ -44,12 +55,13 @@ export function IndustryMockupImage({
     <Image
       src={src}
       alt={alt}
-      width={INDUSTRY_MOCKUP_WIDTH}
-      height={INDUSTRY_MOCKUP_HEIGHT}
+      width={displayWidth}
+      height={displayHeight}
       unoptimized
       priority={priority}
-      sizes={sizes ?? `(max-width: 768px) 100vw, ${INDUSTRY_MOCKUP_WIDTH}px`}
-      className={`mx-auto h-auto w-full max-w-[485px] ${className}`}
+      sizes={sizes ?? `(max-width: 768px) 100vw, min(100vw, ${displayWidth}px)`}
+      className={`mx-auto h-auto w-full ${className}`}
+      style={{ maxWidth: `${Math.min(displayWidth, INDUSTRY_MOCKUP_HD_TARGET)}px` }}
     />
   );
 }

@@ -1,0 +1,562 @@
+[
+  {
+    "routePath": "/website/nganh/nha-khoa",
+    "title": "Thiết kế website nha khoa chuẩn SEO",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/spa",
+    "title": "Thiết kế website spa chuyên nghiệp",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/tham-my",
+    "title": "Thiết kế website thẩm mỹ viện",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/phong-kham",
+    "title": "Thiết kế website phòng khám đa khoa",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/xay-dung",
+    "title": "Thiết kế website công ty xây dựng",
+    "qualityScore": 88,
+    "previousQualityScore": 88,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/my-pham",
+    "title": "Thiết kế website mỹ phẩm",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/pccc",
+    "title": "Thiết kế website công ty PCCC",
+    "qualityScore": 88,
+    "previousQualityScore": 88,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/logistics",
+    "title": "Thiết kế website logistics & vận tải",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/co-khi",
+    "title": "Thiết kế website cơ khí & gia công",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/bao-bi",
+    "title": "Thiết kế website công ty bao bì",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/luat",
+    "title": "Thiết kế website công ty luật",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/thang-may",
+    "title": "Thiết kế website công ty thang máy",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/tu-dong-hoa",
+    "title": "Thiết kế website công ty tự động hóa",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/nha-hang",
+    "title": "Thiết kế website nhà hàng",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/bat-dong-san",
+    "title": "Thiết kế website bất động sản",
+    "qualityScore": 92,
+    "previousQualityScore": 92,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/anh-ngu",
+    "title": "Thiết kế website trung tâm anh ngữ",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/mam-non",
+    "title": "Thiết kế website trường mầm non",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/khach-san",
+    "title": "Thiết kế website khách sạn",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/noi-that",
+    "title": "Thiết kế website nội thất",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/o-to",
+    "title": "Thiết kế website đại lý ô tô",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/thiet-bi-ve-sinh",
+    "title": "Thiết kế website thiết bị vệ sinh",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/in-an",
+    "title": "Thiết kế website công ty in ấn",
+    "qualityScore": 78,
+    "previousQualityScore": 78,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/website/nganh/landing-page",
+    "title": "Thiết kế landing page chuyển đổi cao",
+    "qualityScore": 84,
+    "previousQualityScore": 84,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/ho-chi-minh",
+    "title": "SEO Website tại TP.HCM",
+    "qualityScore": 79,
+    "previousQualityScore": 79,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": true,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/ha-noi",
+    "title": "SEO Website tại Hà Nội",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/da-nang",
+    "title": "SEO Website tại Đà Nẵng",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/can-tho",
+    "title": "SEO Website tại Cần Thơ",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/binh-duong",
+    "title": "SEO Website tại Bình Dương",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/dong-nai",
+    "title": "SEO Website tại Đồng Nai",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/hai-phong",
+    "title": "SEO Website tại Hải Phòng",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/nha-trang",
+    "title": "SEO Website tại Nha Trang",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/hue",
+    "title": "SEO Website tại Huế",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/vinh",
+    "title": "SEO Website tại Vinh",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/thanh-hoa",
+    "title": "SEO Website tại Thanh Hóa",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  },
+  {
+    "routePath": "/seo-website/dia-phuong/binh-thuan",
+    "title": "SEO Website tại Bình Thuận",
+    "qualityScore": 74,
+    "previousQualityScore": 74,
+    "scoreDelta": 0,
+    "previousPolicy": "index",
+    "currentPolicy": "index",
+    "promotable": false,
+    "gates": {
+      "nowIndexable": true,
+      "passScore": false,
+      "passDelta": false,
+      "hasProof": true
+    }
+  }
+]

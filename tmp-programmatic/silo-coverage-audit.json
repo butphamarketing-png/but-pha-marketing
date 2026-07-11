@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-07-11T17:10:26.626Z",
+  "results": [
+    {
+      "slug": "checklist-website-nha-khoa-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-tham-my-vien-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-phong-kham-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-logistics-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-my-pham-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-co-khi-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "checklist-website-pccc-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "template-website-nha-khoa-2026",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "case-study-thiet-ke-website-van-toc-express-logistics",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "case-study-thiet-ke-website-glow-dew-cosmetics",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "thiet-ke-website-noi-that",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "thiet-ke-website-go-noi-that",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "thiet-ke-website-noi-that-van-phong",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    },
+    {
+      "slug": "thiet-ke-website-vat-lieu-xay-dung",
+      "status": "pass",
+      "issues": [],
+      "hasSiloBlock": true
+    }
+  ]
+}

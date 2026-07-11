@@ -1,0 +1,702 @@
+[
+  {
+    "type": "websiteIndustry",
+    "slug": "nha-khoa",
+    "title": "Thiết kế website nha khoa chuẩn SEO",
+    "description": "Website nha khoa chuyên sâu: implant, niềng răng, đặt lịch online, SEO local và case study Nha Khoa Đăng Khoa có số liệu GSC.",
+    "primaryKeyword": "thiết kế website nha khoa",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/nha-khoa",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "spa",
+    "title": "Thiết kế website spa chuyên nghiệp",
+    "description": "Website spa: đặt lịch liệu trình, gallery dịch vụ, SEO local — case study Phước Lai Luxury & Halee Trâm.",
+    "primaryKeyword": "thiết kế website spa",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/spa",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "tham-my",
+    "title": "Thiết kế website thẩm mỹ viện",
+    "description": "Website thẩm mỹ viện: showcase dịch vụ filler/botox, đặt lịch, SEO local TP.HCM — case study Thiên Hoàng Kim.",
+    "primaryKeyword": "thiết kế website thẩm mỹ viện",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/tham-my",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "phong-kham",
+    "title": "Thiết kế website phòng khám đa khoa",
+    "description": "Website phòng khám: chuyên khoa, đặt lịch, tra cứu kết quả — SEO y tế và case study Nha Khoa Đăng Khoa.",
+    "primaryKeyword": "thiết kế website phòng khám",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/phong-kham",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "xay-dung",
+    "title": "Thiết kế website công ty xây dựng",
+    "description": "Website nhà thầu: hồ sơ năng lực, dự án tiêu biểu, SEO B2B — case study Kiến Trúc Sao Khuê.",
+    "primaryKeyword": "thiết kế website xây dựng",
+    "qualityScore": 88,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/xay-dung",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "my-pham",
+    "title": "Thiết kế website mỹ phẩm",
+    "description": "Website shop mỹ phẩm / thương hiệu làm đẹp: catalog, review, SEO ecommerce — case study Glow Dew Beauty (skincare D2C).",
+    "primaryKeyword": "thiết kế website mỹ phẩm",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/my-pham",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "pccc",
+    "title": "Thiết kế website công ty PCCC",
+    "description": "Website PCCC: thiết bị chữa cháy, tư vấn, chứng chỉ — B2B và SEO ngành an toàn.",
+    "primaryKeyword": "thiết kế website pccc",
+    "qualityScore": 88,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/pccc",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "logistics",
+    "title": "Thiết kế website logistics & vận tải",
+    "description": "Website công ty vận tải, kho bãi, freight — lead B2B, SEO ngành logistics và case study Vận Tốc Express (form báo giá + tra cứu vận đơn).",
+    "primaryKeyword": "thiết kế website logistics",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/logistics",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "co-khi",
+    "title": "Thiết kế website cơ khí & gia công",
+    "description": "Website xưởng cơ khí, CNC, gia công chính xác — catalog B2B và SEO ngành.",
+    "primaryKeyword": "thiết kế website cơ khí",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/co-khi",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "bao-bi",
+    "title": "Thiết kế website công ty bao bì",
+    "description": "Website in ấn bao bì, nhãn mác — catalog sản phẩm và lead B2B.",
+    "primaryKeyword": "thiết kế website bao bì",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/bao-bi",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "luat",
+    "title": "Thiết kế website công ty luật",
+    "description": "Website văn phòng luật: lĩnh vực tư vấn, đội ngũ luật sư, SEO legal.",
+    "primaryKeyword": "thiết kế website công ty luật",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/luat",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "thang-may",
+    "title": "Thiết kế website công ty thang máy",
+    "description": "Website thang máy: sản phẩm, bảo trì, chứng chỉ — B2B và SEO ngành.",
+    "primaryKeyword": "thiết kế website thang máy",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/thang-may",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "tu-dong-hoa",
+    "title": "Thiết kế website công ty tự động hóa",
+    "description": "Website PLC, SCADA, giải pháp nhà máy — B2B và SEO ngành tự động hóa.",
+    "primaryKeyword": "thiết kế website tự động hóa",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/tu-dong-hoa",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "nha-hang",
+    "title": "Thiết kế website nhà hàng",
+    "description": "Website nhà hàng: menu online, đặt bàn, gallery món — SEO local F&B và hub silo nhà hàng.",
+    "primaryKeyword": "thiết kế website nhà hàng",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/nha-hang",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "bat-dong-san",
+    "title": "Thiết kế website bất động sản",
+    "description": "Website BĐS: dự án, filter căn hộ, lead form — SEO real estate và case study Kiến Trúc Sao Khuê (3,4K impression GSC).",
+    "primaryKeyword": "thiết kế website bất động sản",
+    "qualityScore": 92,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/bat-dong-san",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 16,
+      "proofCount": 4,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "anh-ngu",
+    "title": "Thiết kế website trung tâm anh ngữ",
+    "description": "Website trung tâm ngoại ngữ: khóa học, lịch khai giảng, đăng ký học — hub silo anh ngữ và SEO tuyển sinh.",
+    "primaryKeyword": "thiết kế website trung tâm anh ngữ",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/anh-ngu",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "mam-non",
+    "title": "Thiết kế website trường mầm non",
+    "description": "Website trường mầm non: chương trình giáo dục, gallery an toàn, form tham quan nhập học — hub silo mầm non và SEO tuyển sinh.",
+    "primaryKeyword": "thiết kế website trường mầm non",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/mam-non",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "khach-san",
+    "title": "Thiết kế website khách sạn",
+    "description": "Website khách sạn: phòng, đặt phòng, gallery — SEO hospitality, hub silo đặt phòng và đa ngôn ngữ EN/VI.",
+    "primaryKeyword": "thiết kế website khách sạn",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/khach-san",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "noi-that",
+    "title": "Thiết kế website nội thất",
+    "description": "Website studio nội thất: portfolio, dịch vụ thiết kế thi công — hub silo nội thất và SEO phong cách.",
+    "primaryKeyword": "thiết kế website nội thất",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/noi-that",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "o-to",
+    "title": "Thiết kế website đại lý ô tô",
+    "description": "Website showroom xe: catalog, trả góp, đăng ký lái thử — hub silo đại lý ô tô và SEO local.",
+    "primaryKeyword": "thiết kế website đại lý ô tô",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/o-to",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "thiet-bi-ve-sinh",
+    "title": "Thiết kế website thiết bị vệ sinh",
+    "description": "Website showroom thiết bị vệ sinh: catalog, báo giá, SEO ngành — hub silo thiết bị vệ sinh B2B.",
+    "primaryKeyword": "thiết kế website thiết bị vệ sinh",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/thiet-bi-ve-sinh",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "in-an",
+    "title": "Thiết kế website công ty in ấn",
+    "description": "Website in ấn quảng cáo: dịch vụ in, báo giá nhanh, portfolio — hub silo in ấn B2B và upload file online.",
+    "primaryKeyword": "thiết kế website in ấn",
+    "qualityScore": 78,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/in-an",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 14,
+      "proofCount": 2,
+      "hasCaseStudy": false,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "websiteIndustry",
+    "slug": "landing-page",
+    "title": "Thiết kế landing page chuyển đổi cao",
+    "description": "Landing page cho chiến dịch ads, ra mắt sản phẩm — tối ưu CRO và case study Sao Khuê (83K view Fanpage chuyển hướng về web).",
+    "primaryKeyword": "thiết kế landing page",
+    "qualityScore": 84,
+    "indexPolicy": "index",
+    "routePath": "/website/nganh/landing-page",
+    "indexOverride": "index",
+    "checklist": {
+      "wordCount": 2210,
+      "faqCount": 4,
+      "internalLinkCount": 12,
+      "proofCount": 3,
+      "hasCaseStudy": true,
+      "hasLocalEntity": false,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "ho-chi-minh",
+    "title": "SEO Website tại TP.HCM",
+    "description": "Landing local SEO tại TP.HCM cho doanh nghiệp SME.",
+    "primaryKeyword": "seo website tphcm",
+    "qualityScore": 79,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/ho-chi-minh",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1720,
+      "faqCount": 4,
+      "internalLinkCount": 11,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "ha-noi",
+    "title": "SEO Website tại Hà Nội",
+    "description": "Landing local SEO tại Hà Nội theo cụm ngành và intent chuyển đổi.",
+    "primaryKeyword": "seo website ha noi",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/ha-noi",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1650,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "da-nang",
+    "title": "SEO Website tại Đà Nẵng",
+    "description": "Landing local SEO Đà Nẵng cho SME — cụm ngành dịch vụ, du lịch và y tế.",
+    "primaryKeyword": "seo website da nang",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/da-nang",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1680,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "can-tho",
+    "title": "SEO Website tại Cần Thơ",
+    "description": "Landing local SEO Cần Thơ — tối ưu Google Maps và website cho doanh nghiệp ĐBSCL.",
+    "primaryKeyword": "seo website can tho",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/can-tho",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1620,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "binh-duong",
+    "title": "SEO Website tại Bình Dương",
+    "description": "Landing local SEO Bình Dương cho khu công nghiệp và SME khu vực TP.HCM mở rộng.",
+    "primaryKeyword": "seo website binh duong",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/binh-duong",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1650,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "dong-nai",
+    "title": "SEO Website tại Đồng Nai",
+    "description": "Landing local SEO Đồng Nai — Biên Hòa, khu công nghiệp và dịch vụ địa phương.",
+    "primaryKeyword": "seo website dong nai",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/dong-nai",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1640,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "hai-phong",
+    "title": "SEO Website tại Hải Phòng",
+    "description": "Landing local SEO Hải Phòng cho doanh nghiệp cảng, logistics và dịch vụ miền Bắc.",
+    "primaryKeyword": "seo website hai phong",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/hai-phong",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1630,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "nha-trang",
+    "title": "SEO Website tại Nha Trang",
+    "description": "Landing local SEO Nha Trang — du lịch, khách sạn, spa và dịch vụ địa phương.",
+    "primaryKeyword": "seo website nha trang",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/nha-trang",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1610,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "hue",
+    "title": "SEO Website tại Huế",
+    "description": "Landing local SEO Huế cho doanh nghiệp du lịch, F&B và dịch vụ miền Trung.",
+    "primaryKeyword": "seo website hue",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/hue",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1600,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "vinh",
+    "title": "SEO Website tại Vinh",
+    "description": "Landing local SEO Vinh — Nghệ An, doanh nghiệp địa phương và chuỗi chi nhánh.",
+    "primaryKeyword": "seo website vinh",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/vinh",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1580,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "thanh-hoa",
+    "title": "SEO Website tại Thanh Hóa",
+    "description": "Landing local SEO Thanh Hóa cho SME và doanh nghiệp dịch vụ tỉnh lớn miền Trung.",
+    "primaryKeyword": "seo website thanh hoa",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/thanh-hoa",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1570,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  },
+  {
+    "type": "localSeo",
+    "slug": "binh-thuan",
+    "title": "SEO Website tại Bình Thuận",
+    "description": "Landing local SEO Bình Thuận — Phan Thiết, resort và doanh nghiệp du lịch biển.",
+    "primaryKeyword": "seo website binh thuan",
+    "qualityScore": 74,
+    "indexPolicy": "index",
+    "routePath": "/seo-website/dia-phuong/binh-thuan",
+    "indexOverride": null,
+    "checklist": {
+      "wordCount": 1560,
+      "faqCount": 4,
+      "internalLinkCount": 10,
+      "proofCount": 2,
+      "hasCaseStudy": true,
+      "hasLocalEntity": true,
+      "duplicateRisk": "low"
+    }
+  }
+]

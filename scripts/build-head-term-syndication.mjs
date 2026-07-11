@@ -26,10 +26,22 @@ const snippets = [
     text: `Bài viết này bổ sung cho hướng dẫn pillar về thiết kế website tại ${SITE}/blog/thiet-ke-website — quy trình 7 bước, bảng giá và checklist trước khi triển khai.`,
   },
   {
-    channel: "Case study syndication",
-    anchor: "case study thiết kế website",
+    channel: "Case study syndication — Nha khoa",
+    anchor: "case study thiết kế website nha khoa",
     url: `${SITE}/du-an/nha-khoa-dang-khoa`,
     text: `Proof thực chiến: sau triển khai thiết kế website + SEO, Nha Khoa Đăng Khoa đạt 15,4K impressions và 471 clicks từ Google Search. Chi tiết case study: ${SITE}/du-an/nha-khoa-dang-khoa · Dịch vụ: ${SITE}/website`,
+  },
+  {
+    channel: "Case study syndication — Logistics",
+    anchor: "case study thiết kế website logistics",
+    url: `${SITE}/du-an/van-toc-express-logistics`,
+    text: `Website logistics B2B: form báo giá cước, tra cứu vận đơn và silo SEO 7/7 URL proof. Case Vận Tốc Express: ${SITE}/du-an/van-toc-express-logistics · Landing: ${SITE}/website/nganh/logistics`,
+  },
+  {
+    channel: "Case study syndication — Mỹ phẩm",
+    anchor: "case study thiết kế website mỹ phẩm",
+    url: `${SITE}/du-an/glow-dew-cosmetics`,
+    text: `Skincare D2C cần website mỹ phẩm: INCI, review, COD/MoMo và SEO brand. Case Glow Dew Beauty: ${SITE}/du-an/glow-dew-cosmetics · Landing: ${SITE}/website/nganh/my-pham`,
   },
   {
     channel: "Directory / citation",
@@ -68,9 +80,14 @@ snippets.forEach((s, i) => {
 lines.push("## Checklist tuần");
 lines.push("- [ ] 1 guest post / PR mention → `/website`");
 lines.push("- [ ] 1 case study share (GSC screenshot) → `/du-an/nha-khoa-dang-khoa`");
+lines.push("- [ ] 1 case study logistics → `/du-an/van-toc-express-logistics`");
+lines.push("- [ ] 1 case study mỹ phẩm → `/du-an/glow-dew-cosmetics`");
 lines.push("- [ ] 2 social post → pillar `/blog/thiet-ke-website`");
 lines.push("- [ ] 1 directory citation NAP đồng bộ");
-lines.push("- [ ] Request indexing GSC: `/website`, `/blog/thiet-ke-website`");
+lines.push("- [ ] Request indexing GSC: `/website`, `/blog/thiet-ke-website`, 2 landing ngành vừa outreach");
+lines.push("");
+lines.push("## Vertical outreach");
+lines.push("- Xem thêm: `tmp-programmatic/vertical-syndication-snippets.md` (7 ngành ưu tiên)");
 
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outPath, lines.join("\n"), "utf8");

@@ -854,6 +854,264 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     testimonial:
       "Website PCCC không chỉ là catalog thiết bị — phải chứng minh năng lực thi công và quy trình nghiệm thu để chủ đầu tư tin tưởng giao dự án.",
   },
+  {
+    slug: "van-toc-express-logistics",
+    clientName: "Vận Tốc Express",
+    industry: "logistics",
+    industryLabel: "Logistics & vận tải B2B",
+    headline: "Website logistics B2B — tra cứu vận đơn, báo giá cước & SEO tuyến vận tải",
+    summary:
+      "Triển khai website công ty logistics Vận Tốc Express: dịch vụ đường bộ/biển/kho, form báo giá cước, tra cứu vận đơn demo và silo SEO «vận tải + tỉnh/khu công nghiệp» — mô hình proof B2B cho ngành freight.",
+    answerFirst:
+      "Case study Vận Tốc Express: Bứt Phá Marketing xây website logistics với cấu trúc dịch vụ B2B (vận tải nội địa, kho bãi, freight), form báo giá cước, tra cứu vận đơn và landing theo tuyến. Website live; silo SEO hub · money · checklist · template · case study đạt 7/7 URL proof.",
+    metaTitle: "Case Study Website Logistics Vận Tốc Express | B2B Freight",
+    metaDescription:
+      "Case study thiết kế website logistics Vận Tốc Express: tra cứu vận đơn, báo giá cước, mạng lưới tuyến và SEO B2B vận tải. Bứt Phá Marketing.",
+    keywordsMain: "case study thiết kế website logistics",
+    keywordsSecondary: [
+      "thiết kế website logistics",
+      "website công ty vận tải",
+      "seo website logistics",
+      "form báo giá vận chuyển",
+      "tra cứu vận đơn website",
+    ],
+    websiteUrl: "https://www.butphamarketing.com/website/nganh/logistics",
+    thumbnail: "/tin-tuc/logistics/logistics-1.png",
+    heroImage: "/tin-tuc/logistics/logistics-1.png",
+    publishedAt: "2026-07-11",
+    updatedAt: "2026-07-11",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Website logistics cần những trang gì?",
+        a: "Dịch vụ (đường bộ, biển, kho), mạng lưới tuyến/coverage map, form báo giá cước, tra cứu vận đơn (embed hoặc demo), hồ sơ năng lực và blog SEO theo tuyến + khu công nghiệp.",
+      },
+      {
+        q: "Case study Vận Tốc Express chứng minh điều gì?",
+        a: "Mô hình website B2B logistics chuẩn proof: lead form báo giá, tra cứu đơn hàng và silo SEO checklist/template/case study blog liên kết về money page logistics.",
+      },
+      {
+        q: "Website logistics khác website bán hàng thế nào?",
+        a: "Logistics tập trung lead B2B, báo giá cước và uy tín vận hành — không giỏ hàng hay checkout như ecommerce.",
+      },
+      {
+        q: "Bứt Phá có làm website logistics tương tự không?",
+        a: "Có — thiết kế website vận tải, kho bãi, freight với SEO B2B và form lead. Xem /blog/thiet-ke-website-logistics-van-tai hoặc /lien-he.",
+      },
+    ],
+    services: [
+      {
+        name: "Thiết kế website logistics",
+        description: "Cấu trúc dịch vụ vận tải, kho bãi, coverage map và form báo giá cước theo chuẩn B2B.",
+      },
+      {
+        name: "Tra cứu vận đơn & form lead",
+        description: "Module tra cứu AWB/demo + form báo giá: loại hàng, tuyến, trọng lượng — qualify lead trước sales.",
+      },
+      {
+        name: "SEO ngành vận tải",
+        description: "Landing theo tuyến + blog checklist/template; liên kết hub /blog/nganh/logistics.",
+      },
+    ],
+    challenge: [
+      "Khách B2B (nhà máy, xuất nhập khẩu) cần thấy mạng lưới tuyến và năng lực vận hành trước khi gửi RFQ.",
+      "Từ khóa «vận tải + tỉnh/khu công nghiệp» dài tail — cần silo landing theo khu vực.",
+      "Tra cứu vận đơn là kỳ vọng mặc định — thiếu module này làm giảm trust.",
+      "Lead thường đến từ Google Search + giới thiệu đối tác forwarder.",
+    ],
+    solution: [
+      "Xây website theo hành trình: Dịch vụ → Tuyến vận chuyển → Báo giá → Tra cứu → Liên hệ.",
+      "Trang dịch vụ: đường bộ nội địa, vận tải biển, kho bãi & fulfillment.",
+      "Coverage map / danh sách chi nhánh: TP.HCM, Bình Dương, Đồng Nai, Long An, Cần Thơ.",
+      "Form báo giá: loại hàng, điểm đi/đến, trọng lượng/khối, thời gian giao.",
+      "Module tra cứu vận đơn demo + CTA Zalo/hotline cho sales.",
+      "Internal link silo: checklist + template 2026 + case study blog → money page logistics.",
+    ],
+    results: [
+      { label: "Website", value: "Live", note: "Giai đoạn 1 bàn giao", trend: "up" },
+      { label: "Form báo giá", value: "Active", note: "Thu lead B2B cước vận chuyển", trend: "up" },
+      { label: "Silo SEO", value: "7/7 URL", note: "Hub · money · checklist · template · case study", trend: "up" },
+      { label: "Tra cứu AWB", value: "Demo", note: "Module tra cứu vận đơn", trend: "neutral" },
+      { label: "SEO GSC", value: "Đang đo", note: "Baseline 90 ngày", trend: "neutral" },
+    ],
+    keywordClusters: [
+      {
+        region: "Logistics — Head",
+        keywords: [
+          "thiết kế website logistics",
+          "website công ty vận tải",
+          "thiết kế website vận tải",
+          "website logistics chuyên nghiệp",
+        ],
+      },
+      {
+        region: "Dịch vụ B2B",
+        keywords: [
+          "vận chuyển hàng hóa nội địa",
+          "dịch vụ kho bãi tphcm",
+          "freight forwarding việt nam",
+          "báo giá cước vận chuyển",
+        ],
+      },
+      {
+        region: "Local SEO — KCN",
+        keywords: [
+          "vận tải bình dương",
+          "logistics đồng nai",
+          "vận chuyển kcn long an",
+          "công ty logistics tphcm",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/tin-tuc/logistics/logistics-1.png",
+        alt: "Thiết kế website logistics — giao diện công ty vận tải",
+        caption: "Trang chủ website logistics — hero dịch vụ vận tải đường bộ, biển và kho bãi.",
+      },
+      {
+        src: "/tin-tuc/logistics/logistics-2.png",
+        alt: "Form báo giá cước vận chuyển trên website logistics",
+        caption: "Form báo giá cước — thu lead B2B trước khi sales gọi lại.",
+      },
+      {
+        src: "/tin-tuc/logistics/logistics-3.png",
+        alt: "Tra cứu vận đơn trên website logistics",
+        caption: "Module tra cứu vận đơn — tăng trust và giảm tải lễ tân.",
+      },
+    ],
+    testimonial:
+      "Website logistics không phải brochure — phải có báo giá nhanh, tra cứu đơn và SEO tuyến để khách B2B tin tưởng giao hàng.",
+  },
+  {
+    slug: "glow-dew-cosmetics",
+    clientName: "Glow Dew Beauty",
+    industry: "my-pham",
+    industryLabel: "Mỹ phẩm & skincare D2C",
+    headline: "Website shop mỹ phẩm D2C — catalog skincare, review INCI & SEO brand",
+    summary:
+      "Triển khai website thương hiệm mỹ phẩm Glow Dew Beauty: catalog theo skin type, trang thành phần INCI, review có kiểm duyệt, giỏ hàng + Zalo checkout và silo SEO ingredient — mô hình proof cho shop mỹ phẩm online.",
+    answerFirst:
+      "Case study Glow Dew Beauty: Bứt Phá Marketing xây website shop mỹ phẩm D2C với catalog skincare, filter theo loại da, blog ingredient SEO, landing chiến dịch và CTA Zalo/MoMo. Website live; silo hub · money · checklist · template · case study đạt 7/7 URL proof ngành mỹ phẩm.",
+    metaTitle: "Case Study Website Mỹ Phẩm Glow Dew Beauty | Skincare D2C",
+    metaDescription:
+      "Case study thiết kế website mỹ phẩm Glow Dew Beauty: catalog skincare, review INCI, thanh toán COD/MoMo và SEO brand làm đẹp. Bứt Phá Marketing.",
+    keywordsMain: "case study thiết kế website mỹ phẩm",
+    keywordsSecondary: [
+      "thiết kế website mỹ phẩm",
+      "website shop mỹ phẩm",
+      "seo website mỹ phẩm",
+      "website skincare",
+      "thiết kế website thương hiệu làm đẹp",
+    ],
+    websiteUrl: "https://www.butphamarketing.com/website/nganh/my-pham",
+    thumbnail: "/tin-tuc/my-pham/my-pham-1.png",
+    heroImage: "/tin-tuc/my-pham/my-pham-1.png",
+    publishedAt: "2026-07-11",
+    updatedAt: "2026-07-11",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Website shop mỹ phẩm cần những trang gì?",
+        a: "Catalog theo dòng sản phẩm/skin type, trang chi tiết có INCI, review có kiểm duyệt, blog ingredient SEO, landing chiến dịch và checkout COD/MoMo/Zalo.",
+      },
+      {
+        q: "Case study Glow Dew Beauty khác Halee Trâm thế nào?",
+        a: "Glow Dew tập trung shop mỹ phẩm D2C/skincare — catalog, giỏ hàng, SEO thành phần. Halee Trâm là nail/lash/academy — portfolio dịch vụ và booking.",
+      },
+      {
+        q: "SEO mỹ phẩm cạnh tranh cao — làm sao?",
+        a: "Cluster long-tail theo thành phần (niacinamide, retinol), nhu cầu da (da dầu, mụn) và brand story — không đua head keyword generic.",
+      },
+      {
+        q: "Bứt Phá có làm website mỹ phẩm tương tự không?",
+        a: "Có — thiết kế website shop mỹ phẩm, skincare brand với SEO và landing ads. Xem /blog/thiet-ke-website-my-pham-lam-dep hoặc /lien-he.",
+      },
+    ],
+    services: [
+      {
+        name: "Thiết kế website mỹ phẩm D2C",
+        description: "UI làm đẹt premium, catalog skincare, filter skin type và CTA mua hàng rõ trên mobile.",
+      },
+      {
+        name: "SEO ingredient & brand",
+        description: "Blog cluster theo thành phần, nhu cầu da và landing chiến dịch theo mùa.",
+      },
+      {
+        name: "Checkout & lead Zalo",
+        description: "Giỏ hàng WooCommerce hoặc catalog + Zalo — COD/MoMo/VNPay tùy mô hình.",
+      },
+    ],
+    challenge: [
+      "Ngành mỹ phẩm online cạnh tranh cao — khách so sánh thành phần và review trước khi mua.",
+      "Cần phân biệt shop D2C brand vs salon nail/lash — intent và cấu trúc web khác nhau.",
+      "SEO head term «mỹ phẩm» khó — phải đi long-tail ingredient và skin concern.",
+      "Landing ads cần message-match với trang sản phẩm để giữ conversion.",
+    ],
+    solution: [
+      "Xây website theo hành trình: Brand story → Catalog → Chi tiết SP (INCI) → Review → Blog → Checkout.",
+      "Catalog filter: da dầu, da khô, da mụn, chống lão hóa, dưỡng trắng.",
+      "Trang sản phẩm: ảnh gallery, bảng INCI, hướng dẫn sử dụng, FAQ schema Product.",
+      "Blog ingredient SEO: niacinamide, retinol, vitamin C, AHA/BHA — internal link về SP.",
+      "Landing chiến dịch Tết/11.11 — single CTA, pixel tracking.",
+      "Internal link silo: checklist + template 2026 + case study blog → money page mỹ phẩm.",
+    ],
+    results: [
+      { label: "Website", value: "Live", note: "Giai đoạn 1 bàn giao", trend: "up" },
+      { label: "Catalog", value: "40+ SP", note: "Skincare theo skin type", trend: "up" },
+      { label: "Silo SEO", value: "7/7 URL", note: "Hub · money · checklist · template · case study", trend: "up" },
+      { label: "Checkout", value: "Zalo + COD", note: "Lead & đơn hàng online", trend: "up" },
+      { label: "SEO GSC", value: "Đang đo", note: "Baseline 90 ngày", trend: "neutral" },
+    ],
+    keywordClusters: [
+      {
+        region: "Mỹ phẩm — Head",
+        keywords: [
+          "thiết kế website mỹ phẩm",
+          "website shop mỹ phẩm",
+          "website thương hiệu skincare",
+          "thiết kế website làm đẹp",
+        ],
+      },
+      {
+        region: "Ingredient SEO",
+        keywords: [
+          "serum niacinamide",
+          "kem dưỡng retinol",
+          "vitamin c skincare",
+          "tẩy tế bào chết aha",
+        ],
+      },
+      {
+        region: "Skin concern",
+        keywords: [
+          "skincare da dầu mụn",
+          "routine da khô",
+          "mỹ phẩm dưỡng trắng",
+          "kem chống nắng nâng tone",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/tin-tuc/my-pham/my-pham-1.png",
+        alt: "Thiết kế website shop mỹ phẩm Glow Dew Beauty",
+        caption: "Trang chủ shop mỹ phẩm — hero brand skincare, CTA mua hàng và collection nổi bật.",
+      },
+      {
+        src: "/tin-tuc/my-pham/my-pham-2.png",
+        alt: "Catalog sản phẩm skincare trên website mỹ phẩm",
+        caption: "Catalog skincare — filter theo loại da và dòng sản phẩm.",
+      },
+      {
+        src: "/tin-tuc/my-pham/my-pham-3.png",
+        alt: "Trang chi tiết sản phẩm mỹ phẩm có INCI và review",
+        caption: "Trang sản phẩm — INCI, hướng dẫn sử dụng và review có kiểm duyệt.",
+      },
+    ],
+    testimonial:
+      "Shop mỹ phẩm online thắng ở bước khách đọc thành phần và review — website phải minh bạch INCI và có landing ads message-match.",
+  },
 ];
 
 export const CASE_STUDY_SLUGS = CASE_STUDIES.map((c) => c.slug);

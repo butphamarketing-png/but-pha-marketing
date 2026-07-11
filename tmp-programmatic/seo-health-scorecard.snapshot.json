@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-07-11T17:10:32.299Z",
+  "score": 100,
+  "grade": "A",
+  "metrics": {
+    "proofAvg": 100,
+    "proofWeak": 0,
+    "linkAvg": 100,
+    "linkFail": 0,
+    "stale": 0,
+    "freshnessAvg": 100,
+    "promotable": 0,
+    "intentAvg": 100,
+    "intentFail": 0
+  },
+  "blockers": []
+}

@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import { buildLocalSeoNextRedirects } from './lib/local-seo-redirects.mjs';
+
 const nextConfig = {
   serverExternalPackages: ["pg", "express"],
   images: {
@@ -12,6 +14,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      ...buildLocalSeoNextRedirects(),
       { source: '/admin', destination: '/adminbp', permanent: true },
       { source: '/khachhang', destination: '/cms/khach-hang', permanent: true },
       { source: '/khachhang/:path*', destination: '/cms/khach-hang', permanent: true },
@@ -20,21 +23,6 @@ const nextConfig = {
       { source: '/cms/khachhang', destination: '/cms/khach-hang', permanent: true },
       { source: '/cms/khachhang/:path*', destination: '/cms/khach-hang', permanent: true },
       { source: '/cms/cms/:path*', destination: '/cms/:path*', permanent: false },
-      {
-        source: '/blog/thiet-ke-website-tphcm-uy-tin',
-        destination: '/blog/thiet-ke-website-tphcm',
-        permanent: true,
-      },
-      {
-        source: '/blog/thiet-ke-website-ha-noi-chuyen-nghiep',
-        destination: '/blog/thiet-ke-website-ha-noi',
-        permanent: true,
-      },
-      {
-        source: '/blog/thiet-ke-website-da-nang-du-lich',
-        destination: '/blog/thiet-ke-website-da-nang',
-        permanent: true,
-      },
       {
         source: '/website/thiet-ke-website',
         destination: '/website',

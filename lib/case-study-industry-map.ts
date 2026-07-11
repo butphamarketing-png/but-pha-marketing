@@ -7,8 +7,9 @@ export const BLOG_SLUG_TO_CASE_STUDY: Record<string, string> = {
   "case-study-thiet-ke-website-xay-dung-sao-khue": "kien-truc-sao-khue",
   "thiet-ke-website-tham-my-vien": "tham-my-thien-hoang-kim",
   "case-study-thiet-ke-website-tham-my-thien-hoang-kim": "tham-my-thien-hoang-kim",
-  "thiet-ke-website-my-pham-lam-dep": "halee-tram",
+  "thiet-ke-website-my-pham-lam-dep": "glow-dew-cosmetics",
   "case-study-thiet-ke-website-halee-tram": "halee-tram",
+  "case-study-thiet-ke-website-glow-dew-cosmetics": "glow-dew-cosmetics",
   "thiet-ke-website-spa": "phuoc-lai-luxury",
   "case-study-thiet-ke-website-spa-phuoc-lai-luxury": "phuoc-lai-luxury",
   "thiet-ke-website-nha-khoa": "nha-khoa-dang-khoa",
@@ -23,8 +24,12 @@ export const BLOG_SLUG_TO_CASE_STUDY: Record<string, string> = {
   "template-website-tham-my-vien-2026": "tham-my-thien-hoang-kim",
   "checklist-website-spa-2026": "phuoc-lai-luxury",
   "template-website-spa-2026": "phuoc-lai-luxury",
-  "checklist-website-my-pham-2026": "halee-tram",
-  "template-website-my-pham-2026": "halee-tram",
+  "checklist-website-my-pham-2026": "glow-dew-cosmetics",
+  "template-website-my-pham-2026": "glow-dew-cosmetics",
+  "checklist-website-logistics-2026": "van-toc-express-logistics",
+  "template-website-logistics-2026": "van-toc-express-logistics",
+  "thiet-ke-website-logistics-van-tai": "van-toc-express-logistics",
+  "case-study-thiet-ke-website-van-toc-express-logistics": "van-toc-express-logistics",
   "checklist-website-phong-kham-2026": "nha-khoa-dang-khoa",
   "template-website-phong-kham-2026": "nha-khoa-dang-khoa",
   "thiet-ke-website-pccc": "pccc-bao-an-fire",
@@ -203,11 +208,6 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, RelatedBlogLink[]> = {
   ]),
   "halee-tram": dedupeRelatedBlogs([
     {
-      slug: "thiet-ke-website-my-pham-lam-dep",
-      label: "Thiết kế website mỹ phẩm làm đẹp",
-      keyword: "thiết kế website mỹ phẩm",
-    },
-    {
       slug: "thiet-ke-website-spa",
       label: "Thiết kế website spa",
       keyword: "thiết kế website spa",
@@ -216,6 +216,28 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, RelatedBlogLink[]> = {
       slug: "case-study-thiet-ke-website-halee-tram",
       label: "Case study Halee Trâm",
       keyword: "case study thiết kế website nail nối mi",
+    },
+    {
+      slug: "thiet-ke-website-my-pham-lam-dep",
+      label: "Website mỹ phẩm làm đẹp",
+      keyword: "thiết kế website mỹ phẩm",
+    },
+    {
+      slug: "thiet-ke-website",
+      label: "Thiết kế website — pillar",
+      keyword: "thiết kế website",
+    },
+  ]),
+  "glow-dew-cosmetics": dedupeRelatedBlogs([
+    {
+      slug: "thiet-ke-website-my-pham-lam-dep",
+      label: "Thiết kế website mỹ phẩm làm đẹp",
+      keyword: "thiết kế website mỹ phẩm",
+    },
+    {
+      slug: "case-study-thiet-ke-website-glow-dew-cosmetics",
+      label: "Case study Glow Dew Beauty",
+      keyword: "case study thiết kế website mỹ phẩm",
     },
     {
       slug: "checklist-website-my-pham-2026",
@@ -228,9 +250,46 @@ export const CASE_STUDY_RELATED_BLOGS: Record<string, RelatedBlogLink[]> = {
       keyword: "template website mỹ phẩm",
     },
     {
-      slug: "thiet-ke-website-tham-my-vien",
-      label: "Website thẩm mỹ viện",
-      keyword: "thiết kế website thẩm mỹ viện",
+      slug: "thiet-ke-website-my-pham",
+      label: "Website cửa hàng mỹ phẩm",
+      keyword: "thiết kế website cửa hàng mỹ phẩm",
+    },
+    {
+      slug: "case-study-thiet-ke-website-halee-tram",
+      label: "Case study Halee Trâm (nail/lash)",
+      keyword: "case study website nail nối mi",
+    },
+    {
+      slug: "thiet-ke-website",
+      label: "Thiết kế website — pillar",
+      keyword: "thiết kế website",
+    },
+  ]),
+  "van-toc-express-logistics": dedupeRelatedBlogs([
+    {
+      slug: "thiet-ke-website-logistics-van-tai",
+      label: "Thiết kế website logistics vận tải",
+      keyword: "thiết kế website logistics",
+    },
+    {
+      slug: "case-study-thiet-ke-website-van-toc-express-logistics",
+      label: "Case study Vận Tốc Express",
+      keyword: "case study thiết kế website logistics",
+    },
+    {
+      slug: "checklist-website-logistics-2026",
+      label: "Checklist website logistics 2026",
+      keyword: "checklist website logistics",
+    },
+    {
+      slug: "template-website-logistics-2026",
+      label: "Template website logistics 2026",
+      keyword: "template website logistics",
+    },
+    {
+      slug: "thiet-ke-website-thuong-mai-dien-tu",
+      label: "Website thương mại điện tử",
+      keyword: "thiết kế website thương mại điện tử",
     },
     {
       slug: "thiet-ke-website",
