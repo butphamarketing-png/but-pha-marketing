@@ -74,7 +74,7 @@ ${img(0, "Checklist thiết kế website thẩm mỹ viện chuẩn SEO", "tham-
 <p>3–12 triệu tùy booking và số dịch vụ. <a href="${SITE}/blog/thiet-ke-website-tham-my-vien">Chi tiết</a> · <a href="${SITE}/banggia">Bảng giá</a>.</p>
 
 <p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/tham-my">Hub thẩm mỹ</a> · <a href="${SITE}/blog/thiet-ke-website-tham-my-vien">Money page</a> · <a href="${SITE}/du-an/tham-my-thien-hoang-kim">Case study</a></p>
-${internalLinks()}
+${internalLinks({ cluster: "tham-my", caseStudyPath: "/du-an/tham-my-thien-hoang-kim" })}
 `,
   }),
 };

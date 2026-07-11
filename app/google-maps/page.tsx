@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { AuditModal } from "@/components/shared/AuditModal";
+import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
 import { Check, Search, Target, Zap, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
@@ -238,6 +239,10 @@ export default function GoogleMapsPage() {
             Kiểm tra ngay
           </button>
         </section>
+
+        <div className="mt-10">
+          <ServiceConversionFooter title="Tư vấn Google Maps & tài liệu liên quan" />
+        </div>
 
       </div>
 

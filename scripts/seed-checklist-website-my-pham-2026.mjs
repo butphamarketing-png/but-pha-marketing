@@ -74,7 +74,7 @@ ${img(0, "Checklist thiết kế website mỹ phẩm chuẩn SEO", "my-pham")}
 <p>9–18 triệu tùy TMĐT và số SKU. <a href="${SITE}/blog/thiet-ke-website-my-pham-lam-dep">Chi tiết</a>.</p>
 
 <p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/my-pham">Hub mỹ phẩm</a> · <a href="${SITE}/blog/thiet-ke-website-my-pham-lam-dep">Money page</a> · <a href="${SITE}/du-an/halee-tram">Case study</a></p>
-${internalLinks()}
+${internalLinks({ cluster: "my-pham", caseStudyPath: "/du-an/halee-tram" })}
 `,
   }),
 };

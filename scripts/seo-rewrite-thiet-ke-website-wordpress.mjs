@@ -7,6 +7,7 @@ import {
   wpKeyTakeaways,
   wpFaq,
   wpRelatedLinks,
+  wpWebsiteClusterLinks,
   wpConclusion,
   wpExternalCta,
   wpImg,
@@ -369,7 +370,14 @@ ${wpRelatedLinks([
     label: "Đăng ký thiết kế website",
     desc: "Tư vấn WordPress hoặc stack hiện đại.",
   },
+  {
+    href: `${SITE}/du-an/nha-khoa-dang-khoa`,
+    label: "Case study website + SEO",
+    desc: "471 click GSC — proof triển khai thực tế.",
+  },
 ])}
+
+${wpWebsiteClusterLinks()}
 
 ${wpFaq({
   keyword: KEYWORD,

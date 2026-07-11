@@ -8,6 +8,7 @@ import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { AuditModal } from "@/components/shared/AuditModal";
+import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
 import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES } from "@/lib/service-pricing";
 
 const BUILD_ICONS = [Settings, UserCheck, Rocket] as const;
@@ -220,6 +221,10 @@ export default function FacebookPage() {
             ))}
           </PackageCarousel>
         </section>
+
+        <div className="mt-10">
+          <ServiceConversionFooter title="Tư vấn Facebook & tài liệu liên quan" />
+        </div>
 
       </div>
 

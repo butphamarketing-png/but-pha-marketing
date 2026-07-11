@@ -17,6 +17,7 @@ const SERVICE_PAGE_SOURCE_MAP = {
     "app/website/page.tsx",
     "app/website/layout.tsx",
     "app/website/WebsiteSchema.tsx",
+    "components/website/WebsiteProofSection.tsx",
   ],
   "/facebook": ["app/facebook/page.tsx", "components/shared/PlatformPage.tsx"],
   "/google-maps": ["app/google-maps/page.tsx", "components/shared/PlatformPage.tsx"],

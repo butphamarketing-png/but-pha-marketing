@@ -132,11 +132,9 @@ export function ProgrammaticLandingPage({
             {galleryImages.map((img) => (
               <div
                 key={img.src}
-                className="overflow-hidden rounded-2xl border border-indigo-50 bg-indigo-50/30"
+                className="overflow-hidden rounded-2xl border border-indigo-50 bg-white"
               >
-                <div className="flex items-start justify-center p-3">
-                  <IndustryMockupImage src={img.src} alt={img.alt} sizes="(max-width: 640px) 45vw, 240px" />
-                </div>
+                <IndustryMockupImage variant="card" src={img.src} alt={img.alt} sizes="(max-width: 640px) 45vw, 240px" />
                 <p className="px-3 py-2 text-xs font-medium leading-snug text-slate-600">{img.alt}</p>
               </div>
             ))}

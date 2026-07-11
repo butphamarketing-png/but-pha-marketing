@@ -76,7 +76,7 @@ ${img(0, "Checklist thiết kế website nha khoa chuẩn SEO", "nha-khoa")}
 <p>Bứt Phá từ 4–14 triệu tùy booking và SEO local. <a href="${SITE}/banggia">Bảng giá</a> · <a href="${SITE}/blog/thiet-ke-website-nha-khoa">Thiết kế website nha khoa</a>.</p>
 
 <p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/nha-khoa">Hub nha khoa</a> · <a href="${SITE}/blog/thiet-ke-website-nha-khoa">Money page</a> · <a href="${SITE}/du-an/nha-khoa-dang-khoa">Case study</a></p>
-${internalLinks()}
+${internalLinks({ cluster: "nha-khoa", caseStudyPath: "/du-an/nha-khoa-dang-khoa" })}
 `,
   }),
 };

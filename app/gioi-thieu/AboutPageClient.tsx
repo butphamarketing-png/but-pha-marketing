@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { ZaloConsultCta } from "@/components/blog/ZaloConsultCta";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import {
   ArrowRight,
@@ -450,6 +451,9 @@ export default function AboutPageClient() {
               </li>
               <li>{resolveAddress(settings?.address)}</li>
             </ul>
+            <div className="mt-4 text-slate-800">
+              <ZaloConsultCta className="border-slate-700/20 bg-slate-900/40 text-slate-100" />
+            </div>
           </div>
 
           <div>

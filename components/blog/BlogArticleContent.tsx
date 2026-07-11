@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
+import { ensureZaloConsultBlock } from "@/lib/blog-zalo-cta";
 
 const IMG_TAG_RE = /<img\s+([^>]*?)\/?>/gi;
 
@@ -51,7 +52,7 @@ function segmentArticleHtml(html: string): Segment[] {
 }
 
 export function BlogArticleContent({ html }: { html: string }) {
-  const segments = useMemo(() => segmentArticleHtml(html), [html]);
+  const segments = useMemo(() => segmentArticleHtml(ensureZaloConsultBlock(html)), [html]);
 
   return (
     <>

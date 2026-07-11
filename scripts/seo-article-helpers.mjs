@@ -1,3 +1,5 @@
+import { ensureZaloConsultBlock, zaloConsultBlock } from "./blog-zalo-cta.mjs";
+
 const SITE = "https://www.butphamarketing.com";
 const FB = "https://www.facebook.com/butphamarketing";
 const ZALO = "https://zalo.me/0937417982";
@@ -811,7 +813,8 @@ export function validateSeoKeywordPlacement({
 }
 
 export function wrapArticle({ metaTitle, html }) {
-  return `<!-- BUTPHA_META ${JSON.stringify({ metaTitle })} -->\n${html}`;
+  const body = ensureZaloConsultBlock(html);
+  return `<!-- BUTPHA_META ${JSON.stringify({ metaTitle })} -->\n${body}`;
 }
 
 export function img(index, alt, topic = "website") {
@@ -828,12 +831,22 @@ export function toc(items) {
   return `<nav aria-label="Mục lục" class="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5"><h2 id="muc-luc" class="text-lg font-bold text-indigo-950">Mục lục</h2><ol class="mt-3 list-decimal space-y-1 pl-5 text-indigo-900">${lis}</ol></nav>`;
 }
 
-export function internalLinks() {
-  return `<p>Bạn có thể tìm hiểu thêm dịch vụ tại <a href="${SITE}/">trang chủ Bứt Phá Marketing</a>, đọc <a href="${SITE}/gioi-thieu">giới thiệu về đội ngũ</a> hoặc xem chi tiết <a href="${SITE}/website">gói thiết kế website</a> phù hợp mô hình kinh doanh.</p>`;
+export function internalLinks(opts = {}) {
+  const { cluster, caseStudyPath } = opts;
+  const parts = [
+    `<a href="${SITE}/website">gói thiết kế website</a>`,
+    `<a href="${SITE}/seo-website">dịch vụ SEO Website</a>`,
+    `<a href="${SITE}/blog/chu-de/website">hub chủ đề website</a>`,
+    `<a href="${SITE}/du-an">case study</a>`,
+    `<a href="${SITE}/lien-he">liên hệ tư vấn</a>`,
+  ];
+  if (cluster) parts.push(`<a href="${SITE}/blog/nganh/${cluster}">hub ngành ${cluster}</a>`);
+  if (caseStudyPath) parts.push(`<a href="${SITE}${caseStudyPath}">case study ngành</a>`);
+  return `<p>Bạn có thể tìm hiểu thêm: ${parts.join(" · ")}.</p>`;
 }
 
 export function externalLinks() {
-  return `<p>Liên hệ nhanh qua <a href="${ZALO}" rel="noopener">Zalo tư vấn 0937417982</a> hoặc theo dõi cập nhật tại <a href="${FB}" rel="noopener">Fanpage Bứt Phá Marketing</a> để nhận case study và ưu đãi mới.</p>`;
+  return `${zaloConsultBlock()}<p>Theo dõi cập nhật tại <a href="${FB}" rel="noopener">Fanpage Bứt Phá Marketing</a> để nhận case study và ưu đãi mới.</p>`;
 }
 
 export { SITE, FB, ZALO };

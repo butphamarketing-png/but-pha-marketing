@@ -18,6 +18,7 @@ const SERVICE_PAGE_SOURCE_MAP = {
     "app/website/page.tsx",
     "app/website/layout.tsx",
     "app/website/WebsiteSchema.tsx",
+    "components/website/WebsiteProofSection.tsx",
   ],
   "/seo-website": "app/seo-website/page.tsx",
   "/seo-website/dia-phuong/ho-chi-minh": "app/seo-website/dia-phuong/[location]/page.tsx",

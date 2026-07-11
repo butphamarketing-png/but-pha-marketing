@@ -7,6 +7,7 @@ import {
   wpKeyTakeaways,
   wpFaq,
   wpRelatedLinks,
+  wpIndustrySiloLinks,
   wpConclusion,
   wpExternalCta,
   wpMyPhamImg,
@@ -245,28 +246,20 @@ ${wpMyPhamImg(4, "SEO thiết kế website cửa hàng mỹ phẩm local và pro
   <li>Bỏ qua tốc độ mobile — 80%+ traffic shop mỹ phẩm từ điện thoại.</li>
 </ul>
 
-${wpRelatedLinks([
-  {
-    href: `${SITE}/blog/thiet-ke-website-my-pham-lam-dep`,
-    label: "Website mỹ phẩm D2C",
-    desc: "Skincare brand riêng.",
-  },
-  {
-    href: `${SITE}/blog/thiet-ke-website-spa`,
-    label: "Website spa",
-    desc: "Dịch vụ + bán SP.",
-  },
-  {
-    href: `${SITE}/blog/thiet-ke-website-ban-hang`,
-    label: "Website bán hàng",
-    desc: "TMĐT tổng quát.",
-  },
-  {
-    href: `${SITE}/website`,
-    label: "Tư vấn shop mỹ phẩm",
-    desc: "Bứt Phá Marketing.",
-  },
-])}
+${wpIndustrySiloLinks({
+  cluster: "my-pham",
+  moneySlug: "thiet-ke-website-my-pham-lam-dep",
+  checklistSlug: "checklist-website-my-pham-2026",
+  templateSlug: "template-website-my-pham-2026",
+  caseStudyPath: "/du-an/halee-tram",
+  extra: [
+    {
+      href: `${SITE}/blog/thiet-ke-website-spa`,
+      label: "Website spa",
+      desc: "Dịch vụ + bán sản phẩm làm đẹp.",
+    },
+  ],
+})}
 
 ${wpFaq({
   keyword: KEYWORD,

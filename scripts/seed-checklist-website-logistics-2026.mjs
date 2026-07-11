@@ -69,8 +69,8 @@ ${img(0, "Checklist thiết kế website logistics chuẩn SEO B2B", "logistics"
 <h3>Giá website logistics?</h3>
 <p>6–14 triệu tùy form báo giá và tích hợp. <a href="${SITE}/blog/thiet-ke-website-logistics-van-tai">Chi tiết</a> · <a href="${SITE}/banggia">Bảng giá</a>.</p>
 
-<p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/logistics">Hub logistics</a> · <a href="${SITE}/blog/thiet-ke-website-logistics-van-tai">Money page</a></p>
-${internalLinks()}
+<p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/logistics">Hub logistics</a> · <a href="${SITE}/blog/thiet-ke-website-logistics-van-tai">Money page</a> · <a href="${SITE}/website">Dịch vụ website</a> · <a href="${SITE}/du-an">Case study</a></p>
+${internalLinks({ cluster: "logistics", caseStudyPath: "/du-an/nha-khoa-dang-khoa" })}
 `,
   }),
 };

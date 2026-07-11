@@ -1,3 +1,4 @@
+import { zaloConsultBlock } from "./blog-zalo-cta.mjs";
 import {
   wrapArticle,
   img,
@@ -86,13 +87,75 @@ export function wpRelatedLinks(links) {
   return `<section class="article-related-links my-8 rounded-2xl border border-indigo-100 p-6"><h2>Bài viết &amp; dịch vụ liên quan</h2><ul class="mt-3 list-disc space-y-2 pl-5">${lis}</ul></section>`;
 }
 
+/** Link bắt buộc silo cluster website (audit priority internal links). */
+export function wpWebsiteClusterLinks(extra = []) {
+  return wpRelatedLinks([
+    { href: `${SITE}/seo-website`, label: "Dịch vụ SEO Website", desc: "Service intent — audit & triển khai SEO." },
+    { href: `${SITE}/blog/chu-de/website`, label: "Hub chủ đề Website", desc: "Topic cluster thiết kế web." },
+    { href: `${SITE}/lien-he`, label: "Liên hệ tư vấn", desc: "Conversion — báo giá miễn phí." },
+    ...extra,
+  ]);
+}
+
+/** Link silo ngành: hub + money + checklist + template + case + dịch vụ. */
+export function wpIndustrySiloLinks({
+  cluster,
+  moneySlug,
+  checklistSlug,
+  templateSlug,
+  caseStudyPath,
+  extra = [],
+}) {
+  const links = [];
+  if (checklistSlug) {
+    links.push({
+      href: `${SITE}/blog/${checklistSlug}`,
+      label: "Checklist website 2026",
+      desc: "20 mục triển khai chuẩn SEO.",
+    });
+  }
+  if (templateSlug) {
+    links.push({
+      href: `${SITE}/blog/${templateSlug}`,
+      label: "Template website 2026",
+      desc: "Cấu trúc trang mẫu theo ngành.",
+    });
+  }
+  links.push({
+    href: `${SITE}/blog/nganh/${cluster}`,
+    label: "Hub silo ngành",
+    desc: "Tất cả bài viết trong cluster.",
+  });
+  if (caseStudyPath) {
+    links.push({
+      href: `${SITE}${caseStudyPath}`,
+      label: "Case study có số liệu",
+      desc: "Proof GSC / chuyển đổi thực tế.",
+    });
+  }
+  if (moneySlug) {
+    links.push({
+      href: `${SITE}/blog/${moneySlug}`,
+      label: "Bài hướng dẫn chi tiết",
+      desc: "Money page ngành.",
+    });
+  }
+  links.push(
+    { href: `${SITE}/website`, label: "Dịch vụ thiết kế website", desc: "Tư vấn triển khai." },
+    { href: `${SITE}/du-an`, label: "Dự án tiêu biểu", desc: "Portfolio case study." },
+    { href: `${SITE}/lien-he`, label: "Liên hệ tư vấn", desc: "Conversion." },
+  );
+  links.push(...extra);
+  return wpRelatedLinks(links);
+}
+
 export function wpConclusion({ keyword, paragraphs, ctaLabel, ctaHref }) {
   const body = paragraphs.map((p) => `<p>${p.replace(keyword, `<strong>${keyword}</strong>`)}</p>`).join("\n");
   return `<section id="ket-luan" class="article-implementation my-10 rounded-2xl border border-indigo-100 p-6 md:p-8"><h2>Kết luận</h2>${body}<p class="mt-4"><a href="${ctaHref}" class="font-semibold">${ctaLabel}</a></p></section>`;
 }
 
 export function wpExternalCta() {
-  return `<p class="article-internal-links rounded-2xl border border-indigo-100 bg-indigo-50/40 p-5 text-sm">Liên hệ nhanh: <a href="${ZALO}" rel="noopener">Zalo 0937417982</a> · <a href="${FB}" rel="noopener">Fanpage Bứt Phá Marketing</a> · <a href="${SITE}/website">Xem bảng giá thiết kế website</a></p>`;
+  return `${zaloConsultBlock()}<p class="article-internal-links rounded-2xl border border-indigo-100 bg-indigo-50/40 p-5 text-sm"><a href="${FB}" rel="noopener">Fanpage Bứt Phá Marketing</a> · <a href="${SITE}/website">Xem bảng giá thiết kế website</a></p>`;
 }
 
 export function wpImg(index, alt) {

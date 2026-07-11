@@ -12,6 +12,7 @@ import { AuditModal } from "@/components/shared/AuditModal";
 import { Settings, ChevronRight, Globe, FileText, LayoutTemplate, Target, Zap } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { WebsiteIndustryGrid } from "@/components/website/WebsiteIndustryGrid";
+import { WebsiteProofSection } from "@/components/website/WebsiteProofSection";
 import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
@@ -81,31 +82,19 @@ export default function WebsitePage() {
             <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
               Báo giá thiết kế website
             </Link>
+            <Link href="/seo-website" className="brand-btn-secondary">
+              Dịch vụ SEO Website
+            </Link>
+            <Link href="/blog/chu-de/website" className="brand-btn-secondary">
+              Hub chủ đề Website
+            </Link>
             <Link href="/du-an" className="brand-btn-secondary">
               Case study có số liệu
             </Link>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Proof thực chiến</p>
-          <h2 className="mt-2 text-2xl font-bold text-emerald-900">Thiết kế website có số liệu SEO</h2>
-          <ul className="mt-4 space-y-2 text-emerald-950">
-            <li>Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search sau triển khai website + SEO.</li>
-            <li>Mô hình: website chuẩn kỹ thuật → content cluster → internal link theo silo ngành.</li>
-            <li>
-              So sánh gói và quy trình tại{" "}
-              <Link href="/blog/thiet-ke-website" className="font-semibold underline">
-                pillar thiết kế website
-              </Link>{" "}
-              hoặc xem{" "}
-              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold underline">
-                case study nha khoa
-              </Link>
-              .
-            </li>
-          </ul>
-        </section>
+        <WebsiteProofSection />
 
         <PlatformAuditSection
           accentColor={config.color}

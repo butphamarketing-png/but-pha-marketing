@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
@@ -256,6 +257,10 @@ export function BanggiaPageClient() {
             .
           </p>
         </section>
+
+        <div className="mt-10">
+          <ServiceConversionFooter title="Cần báo giá chi tiết?" />
+        </div>
       </main>
 
       {unlocked && !showGate ? <PricingStickyBar /> : null}

@@ -6,6 +6,7 @@ import {
   wpKeyTakeaways,
   wpFaq,
   wpRelatedLinks,
+  wpWebsiteClusterLinks,
   wpConclusion,
   wpExternalCta,
   wpImg,
@@ -332,7 +333,14 @@ ${wpRelatedLinks([
     label: "Dịch vụ website Bứt Phá Marketing",
     desc: "Gói thiết kế tích hợp SEO on-page từ đầu.",
   },
+  {
+    href: `${SITE}/du-an/nha-khoa-dang-khoa`,
+    label: "Case study Nha Khoa Đăng Khoa",
+    desc: "471 click GSC sau triển khai website + SEO.",
+  },
 ])}
+
+${wpWebsiteClusterLinks()}
 
 ${wpFaq({
   keyword: KEYWORD,

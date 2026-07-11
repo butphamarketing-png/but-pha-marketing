@@ -28,14 +28,12 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
               href={`/website/nganh/${item.slug}`}
               className="group overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-sm transition hover:border-violet-200 hover:shadow-md"
             >
-              <div className="flex items-start justify-center bg-indigo-50 p-2">
-                <IndustryMockupImage
-                  src={hero.src}
-                  alt={hero.alt}
-                  sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
-                  className="max-h-56"
-                />
-              </div>
+              <IndustryMockupImage
+                variant="card"
+                src={hero.src}
+                alt={hero.alt}
+                sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
+              />
               <div className="px-4 py-3">
                 <p className="text-sm font-bold text-indigo-950 group-hover:text-violet-800">{item.label}</p>
                 <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">{item.primaryKeyword}</p>

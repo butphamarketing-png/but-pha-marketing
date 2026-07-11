@@ -74,7 +74,7 @@ ${img(0, "Checklist thiết kế website phòng khám đa khoa chuẩn SEO", "ph
 <p>6–12 triệu tùy đặt lịch và số bác sĩ. <a href="${SITE}/blog/thiet-ke-website-phong-kham-da-khoa">Chi tiết</a> · <a href="${SITE}/banggia">Bảng giá</a>.</p>
 
 <p><strong>Liên kết silo:</strong> <a href="${SITE}/blog/nganh/phong-kham">Hub phòng khám</a> · <a href="${SITE}/blog/thiet-ke-website-phong-kham-da-khoa">Money page</a> · <a href="${SITE}/du-an/nha-khoa-dang-khoa">Case study</a></p>
-${internalLinks()}
+${internalLinks({ cluster: "phong-kham", caseStudyPath: "/du-an/nha-khoa-dang-khoa" })}
 `,
   }),
 };

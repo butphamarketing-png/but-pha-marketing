@@ -1,5 +1,6 @@
 import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
 import { resolveIndustryBlogSlug } from "@/lib/blog-industry-resolve";
+import { VERTICAL_PROOF_CONFIG } from "@/lib/vertical-proof-engine";
 import { SITE_URL } from "@/lib/seo";
 import type { ServerBlogItem } from "@/lib/server-blog";
 
@@ -16,7 +17,17 @@ const PILLAR_SLUGS = new Set([
   "tu-van-marketing-mien-phi",
 ]);
 
-const INDUSTRY_BLOG_SLUGS = new Set(WEBSITE_INDUSTRY_CATALOG.map((item) => item.blogMoneySlug));
+/** Money page chính + bài ngành phụ (shop đa brand, công ty xây dựng…). */
+const SECONDARY_INDUSTRY_MONEY_SLUGS = [
+  "thiet-ke-website-my-pham",
+  "thiet-ke-website-cong-ty-xay-dung",
+];
+
+const INDUSTRY_BLOG_SLUGS = new Set([
+  ...WEBSITE_INDUSTRY_CATALOG.map((item) => item.blogMoneySlug),
+  ...Object.values(VERTICAL_PROOF_CONFIG).map((item) => item.moneySlug),
+  ...SECONDARY_INDUSTRY_MONEY_SLUGS,
+]);
 
 /** Generic long-tail dưới ngưỡng này → noindex + canonical pillar. */
 export const THIN_WEBSITE_MIN_CHARS = 12_000;
