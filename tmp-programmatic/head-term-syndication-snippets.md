@@ -1,6 +1,6 @@
 # Head-Term Syndication Snippets — «thiết kế website»
 
-- Generated at: 2026-07-11T17:18:22.085Z
+- Generated at: 2026-07-12T06:37:33.380Z
 - Mục tiêu: 3–5 placement/tuần về `/website`, 2 placement/tuần về pillar
 
 ## Snippets sẵn dùng

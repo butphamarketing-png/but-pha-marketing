@@ -153,14 +153,6 @@ ${caseStudyLi}  <li><a href="${SITE}/du-an"><strong>Tất cả dự án</strong>
 export function injectSiloLinks(content, cfg) {
   if (content.includes('id="silo-nganh"')) return content;
 
-  const needsHub = !content.includes(cfg.hub);
-  const needsMoney = !content.includes(cfg.money);
-  const needsDuAn =
-    !content.includes('href="/du-an') &&
-    !content.includes(`href="${SITE}/du-an`) &&
-    !(cfg.caseStudy && content.includes(cfg.caseStudy));
-  if (!needsHub && !needsMoney && !needsDuAn) return content;
-
   const block = siloBlock(cfg);
   if (content.includes("</article>")) {
     return content.replace("</article>", `${block}\n</article>`);

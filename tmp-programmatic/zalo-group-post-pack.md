@@ -1,6 +1,6 @@
 # Zalo Group Post Pack — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:42:54.940Z
+- Generated at: 2026-07-12T06:40:15.213Z
 - Mục tiêu tuần 1: **3 group post** (2 vertical + 1 SME) · **reply comment same day**
 
 ## Quy tắc nhóm (đọc trước khi post)

@@ -130,13 +130,6 @@ export function applyPillarClusterLinks(article) {
     return { slug, updated: false, reason: "no-pillars" };
   }
 
-  const missingLinks = getPillarHubForArticle({ slug, keywordsMain, title })
-    .links.filter((p) => p.slug !== slug && !contentLinksToPillar(content, p.slug));
-
-  if (!missingLinks.length) {
-    return { slug, updated: false, reason: "all-pillar-links-present" };
-  }
-
   const { content: newContent, injected, reason: injectReason } = injectPillarClusterBlock(
     content,
     block,
@@ -151,6 +144,6 @@ export function applyPillarClusterLinks(article) {
     updated: true,
     reason: injectReason,
     content: newContent,
-    pillarCount: Math.min(missingLinks.length, MAX_PILLAR_LINKS),
+    pillarCount: block ? MAX_PILLAR_LINKS : 0,
   };
 }

@@ -1,6 +1,6 @@
 # SEO Weekly Apply Runner Report
 
-- Generated at: 2026-07-11T17:10:34.167Z
+- Generated at: 2026-07-12T06:37:40.657Z
 - Total steps: 24
 - Passed: 24
 - Failed: 0
@@ -35,8 +35,8 @@ Failed: 0
 > but-pha-marketing@0.1.0 audit:priority-proof
 > node scripts/audit-priority-proof.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ override existing { override: true }
-◇ injected env (1) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
 === Priority proof audit ===
 Total: 20
 Need proof push (<70): 0
@@ -51,7 +51,7 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-intent-coverage
 > node scripts/audit-priority-intent-coverage.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
 ◇ injected env (1) from .env // tip: ⌁ auth for agents [www.vestauth.com]
 === Priority intent coverage audit ===
 Total: 20
@@ -67,8 +67,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-i
 > but-pha-marketing@0.1.0 audit:priority-content-freshness
 > node scripts/audit-priority-content-freshness.mjs
 
-◇ injected env (13) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]
-◇ injected env (1) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
 === Priority content freshness audit ===
 Total: 20
 Stale: 0
@@ -96,8 +96,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-internal-links
 > node scripts/audit-priority-internal-links.mjs
 
-◇ injected env (13) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]
-◇ injected env (1) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (13) from .env.local // tip: ⌘ override existing { override: true }
+◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
 === Priority internal-links audit ===
 Total: 20
 Fail: 0
@@ -157,9 +157,9 @@ Changelog: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\program
 > but-pha-marketing@0.1.0 seed:fix-checklist-silo
 > node scripts/seed-fix-checklist-silo-links.mjs
 
-◇ injected env (13) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]
-◇ injected env (1) from .env // tip: ⌁ auth for agents [www.vestauth.com]
-◇ injected env (0) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (13) from .env.local // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env.local // tip: ⌘ custom filepath { path: '/custom/path/.env' }
   · checklist-website-nha-khoa-2026: already OK
   · checklist-website-tham-my-vien-2026: already OK
   · checklist-website-phong-kham-2026: already OK
@@ -187,7 +187,7 @@ Done: 14/14
 > but-pha-marketing@0.1.0 audit:silo-coverage
 > node scripts/audit-silo-coverage.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (13) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
 === Silo coverage audit ===
 Pass: 14/14
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\silo-coverage-audit.md
@@ -289,7 +289,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\vertical-s
 > node scripts/build-mockup-hd-gap-report.mjs
 
 === Mockup HD gap report ===
-Needs HD: 13/13
+Needs HD: 0/13
+HD ready: 13/13
 JSON: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-report.json
 MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-report.md
 ```

@@ -1,19 +1,26 @@
 /**
  * Smoke test 30 URL GSC — kiểm tra HTTP 200 trên production.
  * Chạy: npm run smoke:gsc-urls
+ *       npm run smoke:gsc-hot-blog
+ *       node scripts/smoke-test-gsc-urls.mjs --urls=tmp-programmatic/gsc-hot-blog-urls.txt
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const urlsPath = path.join(root, "tmp-programmatic", "gsc-indexing-urls.txt");
 const outDir = path.join(root, "tmp-programmatic");
-const outPath = path.join(outDir, "gsc-smoke-test-report.md");
+const urlsArg = process.argv.find((a) => a.startsWith("--urls="));
+const urlsPath = urlsArg
+  ? path.resolve(urlsArg.split("=")[1])
+  : path.join(outDir, "gsc-indexing-urls.txt");
+const outPath = urlsArg
+  ? path.join(outDir, "gsc-smoke-test-hot-blog-report.md")
+  : path.join(outDir, "gsc-smoke-test-report.md");
 
 function loadUrls() {
   if (!fs.existsSync(urlsPath)) {
-    throw new Error(`Missing ${urlsPath}. Run: npm run export:gsc-urls`);
+    throw new Error(`Missing ${urlsPath}. Run: npm run build:gsc-copy-paste or build:gsc-hot-blog-batch`);
   }
   return fs
     .readFileSync(urlsPath, "utf8")

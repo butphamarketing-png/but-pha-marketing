@@ -1,6 +1,6 @@
 # LinkedIn Outreach Pack — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:42:52.161Z
+- Generated at: 2026-07-12T06:40:14.208Z
 - Mục tiêu tuần 1: **10 connect** · **2 post** · **5 InMail/DM**
 - Giới hạn connection note: ~300 ký tự (LinkedIn cắt nếu dài)
 

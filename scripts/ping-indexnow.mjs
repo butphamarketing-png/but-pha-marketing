@@ -2,13 +2,17 @@
  * Ping IndexNow (Bing/Yandex) cho URL ưu tiên GSC.
  * Chạy: npm run ping:indexnow
  * Dry-run: npm run ping:indexnow -- --dry-run
+ * Custom list: npm run ping:indexnow -- --urls=tmp-programmatic/indexnow-blog-hot-urls.txt
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const urlsPath = path.join(root, "tmp-programmatic", "gsc-indexing-urls.txt");
+const urlsArg = process.argv.find((a) => a.startsWith("--urls="));
+const urlsPath = urlsArg
+  ? path.resolve(urlsArg.split("=")[1])
+  : path.join(root, "tmp-programmatic", "gsc-indexing-urls.txt");
 const outDir = path.join(root, "tmp-programmatic");
 const outPath = path.join(outDir, "indexnow-ping-report.md");
 
@@ -92,6 +96,13 @@ async function main() {
   const allOk = results.every((r) => r.ok || r.status === 202);
   lines.push("");
   lines.push(allOk ? "✅ IndexNow accepted all batches." : "⚠️ Một số batch thất bại — kiểm tra key file đã deploy chưa.");
+  if (!allOk && results.some((r) => r.status === 403)) {
+    lines.push("");
+    lines.push("### 403 UserForbiddedToAccessSite");
+    lines.push("- Key file phải live tại `KEY_LOCATION` (nội dung = key, không có BOM/space thừa)");
+    lines.push("- Thêm site vào [Bing Webmaster Tools](https://www.bing.com/webmasters) và verify (DNS/HTML/key file)");
+    lines.push("- Sau verify, chạy lại: `npm run ping:indexnow`");
+  }
 
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(outPath, lines.join("\n"), "utf8");

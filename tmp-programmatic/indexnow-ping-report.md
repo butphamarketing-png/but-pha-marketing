@@ -1,12 +1,18 @@
 # IndexNow Ping Report
 
-- Generated at: 2026-07-11T17:28:01.309Z
+- Generated at: 2026-07-12T06:34:53.394Z
 - Host: `www.butphamarketing.com`
 - Key location: `https://www.butphamarketing.com/butpha-indexnow-202607.txt`
 - Total URLs: **30**
 - Mode: **live**
 
 ## Results
-- **OK** batch 1: HTTP 202 — 30 URLs
+- **FAIL** batch 1: HTTP 403 — 30 URLs
+  - Response: `{"errorCode":"UserForbiddedToAccessSite","message":"User is unauthorized to access the site. Please verify the site using the key and try again","details":null}`
 
-✅ IndexNow accepted all batches.
+⚠️ Một số batch thất bại — kiểm tra key file đã deploy chưa.
+
+### 403 UserForbiddedToAccessSite
+- Key file phải live tại `KEY_LOCATION` (nội dung = key, không có BOM/space thừa)
+- Thêm site vào [Bing Webmaster Tools](https://www.bing.com/webmasters) và verify (DNS/HTML/key file)
+- Sau verify, chạy lại: `npm run ping:indexnow`

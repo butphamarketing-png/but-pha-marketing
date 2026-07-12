@@ -1,8 +1,8 @@
 # SEO Weekly Runner Report
 
-- Generated at: 2026-07-11T17:18:34.415Z
-- Total steps: 22
-- Passed: 22
+- Generated at: 2026-07-12T06:27:10.440Z
+- Total steps: 29
+- Passed: 29
 - Failed: 0
 
 ## PASS - Schema coverage audit
@@ -35,8 +35,8 @@ Failed: 0
 > but-pha-marketing@0.1.0 audit:priority-proof
 > node scripts/audit-priority-proof.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ enable debugging { debug: true }
-◇ injected env (1) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
 === Priority proof audit ===
 Total: 20
 Need proof push (<70): 0
@@ -51,8 +51,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-intent-coverage
 > node scripts/audit-priority-intent-coverage.mjs
 
-◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
-◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (13) from .env.local // tip: ⌘ enable debugging { debug: true }
+◇ injected env (1) from .env // tip: ⌘ suppress logs { quiet: true }
 === Priority intent coverage audit ===
 Total: 20
 Fail: 0
@@ -67,8 +67,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-i
 > but-pha-marketing@0.1.0 audit:priority-content-freshness
 > node scripts/audit-priority-content-freshness.mjs
 
-◇ injected env (13) from .env.local // tip: ⌘ suppress logs { quiet: true }
-◇ injected env (1) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (13) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
 === Priority content freshness audit ===
 Total: 20
 Stale: 0
@@ -96,8 +96,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\priority-p
 > but-pha-marketing@0.1.0 audit:priority-internal-links
 > node scripts/audit-priority-internal-links.mjs
 
-◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
-◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (13) from .env.local // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (1) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
 === Priority internal-links audit ===
 Total: 20
 Fail: 0
@@ -229,7 +229,8 @@ Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\vertical-s
 > node scripts/build-mockup-hd-gap-report.mjs
 
 === Mockup HD gap report ===
-Needs HD: 13/13
+Needs HD: 0/13
+HD ready: 13/13
 JSON: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-report.json
 MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-report.md
 ```
@@ -245,6 +246,95 @@ MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\mockup-hd-gap-
 === GSC indexing checklist ===
 URLs: 30 (23 landings)
 Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\gsc-indexing-checklist.md
+```
+
+## PASS - GSC copy-paste checklist
+- Command: `npm run build:gsc-copy-paste`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:gsc-copy-paste
+> node scripts/build-gsc-copy-paste.mjs
+
+=== GSC copy-paste ===
+MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\gsc-copy-paste.md
+TXT: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\gsc-indexing-urls.txt (30 URLs)
+```
+
+## PASS - Outreach week 1 playbook
+- Command: `npm run build:outreach-week-playbook`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:outreach-week-playbook
+> node scripts/build-outreach-week-playbook.mjs
+
+=== Outreach week 1 playbook ===
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\outreach-week-1-playbook.md
+```
+
+## PASS - Guest post pitch pack
+- Command: `npm run build:guest-post-pitch-pack`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:guest-post-pitch-pack
+> node scripts/build-guest-post-pitch-pack.mjs
+
+=== Guest post pitch pack ===
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\guest-post-pitch-pack.md
+```
+
+## PASS - Directory citation pack VN
+- Command: `npm run build:directory-citation-pack`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:directory-citation-pack
+> node scripts/build-directory-citation-pack.mjs
+
+=== Directory citation pack VN ===
+Week 1 targets: 5
+MD: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\directory-citation-pack-vn.md
+JSON: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\directory-citation-pack-vn.json
+```
+
+## PASS - LinkedIn outreach pack
+- Command: `npm run build:linkedin-outreach-pack`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:linkedin-outreach-pack
+> node scripts/build-linkedin-outreach-pack.mjs
+
+=== LinkedIn outreach pack ===
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\linkedin-outreach-pack.md
+```
+
+## PASS - Zalo group post pack
+- Command: `npm run build:zalo-group-post-pack`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:zalo-group-post-pack
+> node scripts/build-zalo-group-post-pack.mjs
+
+=== Zalo group post pack ===
+Verticals: 7
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\zalo-group-post-pack.md
+```
+
+## PASS - Backlink weekly tracker
+- Command: `npm run build:backlink-weekly-tracker`
+- Exit code: 0
+- Stdout snippet:
+```text
+> but-pha-marketing@0.1.0 build:backlink-weekly-tracker
+> node scripts/build-backlink-weekly-tracker.mjs
+
+=== Backlink weekly tracker ===
+Week: 2026-W29
+Report: C:\Users\Admin\Downloads\ButPhaMarketing (1)\tmp-programmatic\backlink-weekly-tracker.md
 ```
 
 ## PASS - SEO ops runbook

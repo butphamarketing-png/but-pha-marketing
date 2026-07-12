@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { contentHasPillarClusterBlock } from "./pillar-cluster-links.mjs";
 import { resolveIndustrySilo, isWebsiteTopic } from "./seo-industry-silo-resolver.mjs";
+import { PILLAR_SLUG_SET } from "./seo-pillar-hub.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: path.join(root, ".env.local") });
@@ -39,7 +40,7 @@ const stats = {
   missingPillar: 0,
   shortUnder12k: 0,
   industryResolvable: 0,
-  samples: { missingProof: [], missingSilo: [] },
+  samples: { missingProof: [], missingSilo: [], missingPillar: [] },
 };
 
 let from = 0;
@@ -76,8 +77,13 @@ while (true) {
       stats.missingSilo++;
       if (stats.samples.missingSilo.length < 15) stats.samples.missingSilo.push(row.slug);
     }
-    if (!contentHasPillarClusterBlock(content) && row.slug !== "thiet-ke-website") {
+    if (
+      !contentHasPillarClusterBlock(content) &&
+      !PILLAR_SLUG_SET.has(row.slug) &&
+      row.slug !== "thiet-ke-website"
+    ) {
       stats.missingPillar++;
+      if (stats.samples.missingPillar.length < 15) stats.samples.missingPillar.push(row.slug);
     }
   }
 
@@ -118,6 +124,9 @@ stats.samples.missingProof.forEach((s) => lines.push(`- \`${s}\``));
 lines.push("");
 lines.push("## Sample missing silo");
 stats.samples.missingSilo.forEach((s) => lines.push(`- \`${s}\``));
+lines.push("");
+lines.push("## Sample missing pillar");
+stats.samples.missingPillar.forEach((s) => lines.push(`- \`${s}\``));
 lines.push("");
 lines.push("## Next");
 lines.push("```bash");

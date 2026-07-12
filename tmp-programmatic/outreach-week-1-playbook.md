@@ -1,12 +1,14 @@
 # Outreach Week 1 Playbook — ButPhaMarketing
 
-- Generated at: 2026-07-11T17:42:56.855Z
+- Generated at: 2026-07-12T06:40:10.474Z
 - Mục tiêu tuần: **6 placements** (1 guest · 1 case · 2 social · 1 vertical · 1 directory)
-- IndexNow: đã ping 30 URL · GSC request indexing vẫn cần làm thủ công
+- On-page P4: **11.086 bài** proof/silo/meta **0 gap** · pillar cluster injected
+- IndexNow: key live · ping cần verify Bing WMT (403) · GSC indexing vẫn làm thủ công
 
 ## KPI tuần
 - [ ] 6/6 placement logged
-- [ ] 30/30 URL request indexing GSC
+- [ ] 80/80 URL request indexing GSC (dashboard)
+- [ ] Bing WMT verified + IndexNow ping OK
 - [ ] Brand query impressions tăng (GSC → Performance → Search type: Web)
 - [ ] ≥1 referring domain mới (GSC Links hoặc Ahrefs free)
 
@@ -23,6 +25,20 @@
   - https://www.butphamarketing.com/du-an/nha-khoa-dang-khoa
   - https://www.butphamarketing.com/du-an/van-toc-express-logistics
   - https://www.butphamarketing.com/du-an/glow-dew-cosmetics
+
+### Thứ 2 — Bing WMT verify + IndexNow
+- Channel: **Bing**
+- Target: `IndexNow ping`
+- Note: Làm theo `bing-wmt-checklist.md` → `npm run ping:indexnow`
+
+### Thứ 3 — GSC indexing — batch 2 landings (12 URL đầu)
+- Channel: **GSC**
+- Target: `Landings part 1`
+- Note: Xem `gsc-indexing-dashboard.md` Thứ 3
+- Sau khi gửi, log:
+```bash
+npm run build:backlink-weekly-tracker -- --log="GSC batch 2 part 1 — 12 landings indexed"
+```
 
 ### Thứ 3 — LinkedIn / Facebook — head term
 - Channel: **Social**
@@ -120,35 +136,9 @@ Chào anh/chị! Bảng giá thiết kế website Bứt Phá: 3 / 6 / 9 / 12 tri
 npm run build:backlink-weekly-tracker -- --log="Zalo inbox template → /blog/bao-gia-thiet-ke-website"
 ```
 
-## Thứ 7 — GSC batch landings (23 URL)
+## GSC landings + hot blog
 
-Paste từng URL vào GSC → **URL Inspection** → **Request indexing**:
-
-https://www.butphamarketing.com/website/nganh/nha-khoa
-https://www.butphamarketing.com/website/nganh/spa
-https://www.butphamarketing.com/website/nganh/tham-my
-https://www.butphamarketing.com/website/nganh/phong-kham
-https://www.butphamarketing.com/website/nganh/xay-dung
-https://www.butphamarketing.com/website/nganh/my-pham
-https://www.butphamarketing.com/website/nganh/pccc
-https://www.butphamarketing.com/website/nganh/logistics
-https://www.butphamarketing.com/website/nganh/co-khi
-https://www.butphamarketing.com/website/nganh/bao-bi
-https://www.butphamarketing.com/website/nganh/luat
-https://www.butphamarketing.com/website/nganh/thang-may
-https://www.butphamarketing.com/website/nganh/tu-dong-hoa
-https://www.butphamarketing.com/website/nganh/nha-hang
-https://www.butphamarketing.com/website/nganh/bat-dong-san
-https://www.butphamarketing.com/website/nganh/anh-ngu
-https://www.butphamarketing.com/website/nganh/mam-non
-https://www.butphamarketing.com/website/nganh/khach-san
-https://www.butphamarketing.com/website/nganh/noi-that
-https://www.butphamarketing.com/website/nganh/o-to
-https://www.butphamarketing.com/website/nganh/thiet-bi-ve-sinh
-https://www.butphamarketing.com/website/nganh/in-an
-https://www.butphamarketing.com/website/nganh/landing-page
-
-Hoặc copy cả block từ `tmp-programmatic/gsc-indexing-urls.txt`.
+Xem lịch đầy đủ: **`tmp-programmatic/gsc-indexing-dashboard.md`**
 
 ## NAP block (directory / citation)
 ```

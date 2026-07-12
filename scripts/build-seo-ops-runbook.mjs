@@ -20,6 +20,7 @@ function readJson(p) {
 }
 
 const health = readJson(path.join(outDir, "seo-health-scorecard.json"));
+const p4Gap = readJson(path.join(outDir, "blog-p4-gap-report.json"));
 const autopilot = fs.existsSync(path.join(outDir, "seo-autopilot-summary.md"))
   ? fs.readFileSync(path.join(outDir, "seo-autopilot-summary.md"), "utf8")
   : "";
@@ -35,16 +36,28 @@ lines.push(`- Autopilot: **${status}**`);
 lines.push("");
 lines.push("## On-page (automated — done)");
 lines.push("- P0 intent/proof/silo · P1 templates/case studies/hubs · P2 local redirects + thin content");
+lines.push("- **P4 scale blog:** proof **0%** · silo **0** · meta **0 fail** trên 11.086 bài");
+if (p4Gap) {
+  lines.push(
+    `- P4 gap (${p4Gap.scope}): scanned **${p4Gap.scanned}** · pillar thiếu **${p4Gap.missingPillar}**`,
+  );
+}
 lines.push("- 35/35 programmatic landings **index** · silo inject **14 slugs**");
 lines.push("- Weekly: `npm run run:seo-weekly` · apply: `npm run run:seo-weekly:apply`");
 lines.push("");
+lines.push("## IndexNow (semi-auto)");
+lines.push("1. **Core 30 URL** — `npm run ping:indexnow`");
+lines.push("2. **Blog hot ~6k** — `npm run export:indexnow-blog-hot` → `npm run ping:indexnow:blog-hot`");
+lines.push("3. Báo cáo: `tmp-programmatic/indexnow-ping-report.md`");
+lines.push("");
 lines.push("## Tuần này (manual + semi-auto)");
-lines.push("1. **GSC indexing** — `tmp-programmatic/gsc-copy-paste.md` (30 URL copy-paste)");
-lines.push("2. **Outreach tuần 1** — `tmp-programmatic/outreach-week-1-playbook.md`");
-lines.push("3. **Guest post pitch** — `tmp-programmatic/guest-post-pitch-pack.md`");
-lines.push("4. **Directory VN** — `tmp-programmatic/directory-citation-pack-vn.md` (5 citation tuần 1)");
-lines.push("5. **LinkedIn + Zalo group** — `linkedin-outreach-pack.md` · `zalo-group-post-pack.md`");
-lines.push("6. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log=\"...\"`");
+lines.push("1. **GSC indexing** — `tmp-programmatic/gsc-copy-paste.md` (30 URL) + `gsc-hot-blog-batch.md` (50 URL)");
+lines.push("2. **Bing WMT verify** — `tmp-programmatic/bing-wmt-checklist.md`");
+lines.push("3. **Outreach tuần 1** — `tmp-programmatic/outreach-week-1-playbook.md`");
+lines.push("4. **Guest post pitch** — `tmp-programmatic/guest-post-pitch-pack.md`");
+lines.push("5. **Directory VN** — `tmp-programmatic/directory-citation-pack-vn.md` (5 citation tuần 1)");
+lines.push("6. **LinkedIn + Zalo group** — `linkedin-outreach-pack.md` · `zalo-group-post-pack.md`");
+lines.push("7. **Backlink log** — `npm run build:backlink-weekly-tracker -- --log=\"...\"`");
 lines.push("");
 lines.push("## Scripts hữu ích");
 lines.push("| Lệnh | Mục đích |");
@@ -63,6 +76,11 @@ lines.push("| `npm run build:linkedin-outreach-pack` | LinkedIn connect + post |
 lines.push("| `npm run build:zalo-group-post-pack` | Zalo group post 7 vertical |");
 lines.push("| `npm run build:backlink-weekly-tracker` | Log placement backlink |");
 lines.push("| `npm run build:vertical-syndication` | Snippet outreach 7 ngành |");
+lines.push("| `npm run audit:blog-p4-gap` | Gap proof/silo/pillar blog (hot hoặc `--all`) |");
+lines.push("| `npm run seed:blog-p4-proof-silo` | Batch inject proof+silo (`--all-hot` / `--all`) |");
+lines.push("| `npm run export:indexnow-blog-hot` | Export URL blog hot cho IndexNow |");
+lines.push("| `npm run ping:indexnow:blog-hot` | Ping IndexNow ~6k bài hot |");
+lines.push("| `npm run ping:indexnow` | Ping IndexNow 30 URL GSC core |");
 lines.push("| `npm run sync:industry-landings` | Sync catalog → programmatic |");
 lines.push("");
 lines.push("## Artifacts");

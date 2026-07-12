@@ -1,6 +1,6 @@
 # GSC Indexing & Outreach Checklist
 
-- Generated at: 2026-07-11T17:18:26.602Z
+- Generated at: 2026-07-12T06:37:36.087Z
 - Total URLs: **30** (core + programmatic landings)
 
 ## 1. Request indexing (Google Search Console)

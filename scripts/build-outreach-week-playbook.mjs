@@ -38,6 +38,26 @@ const WEEK_TASKS = [
     ],
   },
   {
+    day: "Thứ 2",
+    title: "Bing WMT verify + IndexNow",
+    channel: "Bing",
+    target: "IndexNow ping",
+    copy: null,
+    log: null,
+    urls: [],
+    note: "Làm theo `bing-wmt-checklist.md` → `npm run ping:indexnow`",
+  },
+  {
+    day: "Thứ 3",
+    title: "GSC indexing — batch 2 landings (12 URL đầu)",
+    channel: "GSC",
+    target: "Landings part 1",
+    copy: null,
+    log: 'GSC batch 2 part 1 — 12 landings indexed',
+    urls: [],
+    note: "Xem `gsc-indexing-dashboard.md` Thứ 3",
+  },
+  {
     day: "Thứ 3",
     title: "LinkedIn / Facebook — head term",
     channel: "Social",
@@ -138,11 +158,13 @@ lines.push("# Outreach Week 1 Playbook — ButPhaMarketing");
 lines.push("");
 lines.push(`- Generated at: ${new Date().toISOString()}`);
 lines.push(`- Mục tiêu tuần: **6 placements** (1 guest · 1 case · 2 social · 1 vertical · 1 directory)`);
-lines.push(`- IndexNow: đã ping 30 URL · GSC request indexing vẫn cần làm thủ công`);
+lines.push(`- On-page P4: **11.086 bài** proof/silo/meta **0 gap** · pillar cluster injected`);
+lines.push(`- IndexNow: key live · ping cần verify Bing WMT (403) · GSC indexing vẫn làm thủ công`);
 lines.push("");
 lines.push("## KPI tuần");
 lines.push("- [ ] 6/6 placement logged");
-lines.push("- [ ] 30/30 URL request indexing GSC");
+lines.push("- [ ] 80/80 URL request indexing GSC (dashboard)");
+lines.push("- [ ] Bing WMT verified + IndexNow ping OK");
 lines.push("- [ ] Brand query impressions tăng (GSC → Performance → Search type: Web)");
 lines.push("- [ ] ≥1 referring domain mới (GSC Links hoặc Ahrefs free)");
 lines.push("");
@@ -163,6 +185,9 @@ for (const task of WEEK_TASKS) {
     lines.push(task.copy);
     lines.push("```");
   }
+  if (task.note) {
+    lines.push(`- Note: ${task.note}`);
+  }
   if (task.log) {
     lines.push("- Sau khi gửi, log:");
     lines.push("```bash");
@@ -172,15 +197,9 @@ for (const task of WEEK_TASKS) {
   lines.push("");
 }
 
-lines.push("## Thứ 7 — GSC batch landings (23 URL)");
+lines.push("## GSC landings + hot blog");
 lines.push("");
-lines.push("Paste từng URL vào GSC → **URL Inspection** → **Request indexing**:");
-lines.push("");
-for (const u of GSC_LANDING_BATCH) {
-  lines.push(`${SITE}${u}`);
-}
-lines.push("");
-lines.push("Hoặc copy cả block từ `tmp-programmatic/gsc-indexing-urls.txt`.");
+lines.push("Xem lịch đầy đủ: **`tmp-programmatic/gsc-indexing-dashboard.md`**");
 lines.push("");
 lines.push("## NAP block (directory / citation)");
 lines.push("```");

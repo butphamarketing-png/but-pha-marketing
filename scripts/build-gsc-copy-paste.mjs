@@ -69,7 +69,10 @@ lines.push(urls.join("\n"));
 lines.push("```");
 lines.push("");
 lines.push("## Sau khi xong");
-lines.push("- IndexNow đã ping: `npm run ping:indexnow`");
+lines.push("- Batch 3 hot blog (50 URL): `tmp-programmatic/gsc-hot-blog-batch.md`");
+lines.push("- Lịch đầy đủ 80 URL: `tmp-programmatic/gsc-indexing-dashboard.md`");
+lines.push("- Bing WMT + IndexNow: `tmp-programmatic/bing-wmt-checklist.md`");
+lines.push("- IndexNow ping: `npm run ping:indexnow` (sau Bing verify)");
 lines.push("- Smoke test: `npm run smoke:gsc-urls`");
 lines.push("- Theo dõi 7–14 ngày trong GSC → Pages → Not indexed");
 

@@ -1,6 +1,6 @@
 # GSC Copy-Paste — Request Indexing
 
-- Generated: 2026-07-11T17:36:13.016Z
+- Generated: 2026-07-12T06:40:09.394Z
 - Total: **30 URL**
 
 ## Cách làm (2 phút/URL)
@@ -111,6 +111,9 @@ https://www.butphamarketing.com/website/nganh/landing-page
 ```
 
 ## Sau khi xong
-- IndexNow đã ping: `npm run ping:indexnow`
+- Batch 3 hot blog (50 URL): `tmp-programmatic/gsc-hot-blog-batch.md`
+- Lịch đầy đủ 80 URL: `tmp-programmatic/gsc-indexing-dashboard.md`
+- Bing WMT + IndexNow: `tmp-programmatic/bing-wmt-checklist.md`
+- IndexNow ping: `npm run ping:indexnow` (sau Bing verify)
 - Smoke test: `npm run smoke:gsc-urls`
 - Theo dõi 7–14 ngày trong GSC → Pages → Not indexed

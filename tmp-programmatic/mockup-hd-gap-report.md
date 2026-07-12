@@ -1,6 +1,6 @@
 # Mockup HD Gap Report
 
-- Generated at: 2026-07-11T17:30:17.032Z
+- Generated at: 2026-07-12T06:37:35.196Z
 - HD target: **1920px** wide (WebP khuyên dùng)
 - Ngành cần nâng: **0/13**
 - HD ready: **13/13**

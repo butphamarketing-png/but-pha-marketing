@@ -1,6 +1,6 @@
 # Directory Citation Pack — Việt Nam
 
-- Generated at: 2026-07-11T17:39:56.985Z
+- Generated at: 2026-07-12T06:40:12.258Z
 - Mục tiêu tuần 1: **5 citation** (P0 trước)
 - Quy tắc: **NAP giống hệt** trên mọi directory (tên, SĐT, email, địa chỉ)
 

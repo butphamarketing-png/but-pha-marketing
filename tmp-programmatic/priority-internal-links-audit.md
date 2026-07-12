@@ -1,6 +1,6 @@
 # Priority Internal Links Audit
 
-- Generated at: 2026-07-11T17:18:02.493Z
+- Generated at: 2026-07-12T06:37:16.268Z
 - URLs audited: 20
 
 | Slug | URL | Score | Status | Missing Links |
