@@ -3,6 +3,7 @@
  * Chạy: node scripts/audit-blog-full.mjs
  */
 import dotenv from "dotenv";
+import fs from "fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
@@ -159,4 +160,29 @@ const totalIssues = new Set([
 ]).size;
 
 console.log(`\nTổng bài có ít nhất 1 vấn đề: ${totalIssues}`);
+
+const report = {
+  generatedAt: new Date().toISOString(),
+  total,
+  issues: {
+    fetchFail: issues.fetchFail.length,
+    seoFail: issues.seoFail.length,
+    short: issues.short.length,
+    noMeta: issues.noMeta.length,
+    lowerTitle: issues.lowerTitle.length,
+    lowerMeta: issues.lowerMeta.length,
+    genericKw: issues.genericKw.length,
+    noPillar: issues.noPillar.length,
+  },
+  seoFailSlugs: issues.seoFail.map((x) => x.slug).slice(0, 500),
+  noPillarSlugs: issues.noPillar,
+  genericKwSlugs: issues.genericKw,
+  totalWithIssues: totalIssues,
+};
+
+const outDir = path.join(root, "tmp-programmatic");
+fs.mkdirSync(outDir, { recursive: true });
+fs.writeFileSync(path.join(outDir, "blog-full-audit.json"), JSON.stringify(report, null, 2), "utf8");
+console.log(`Report: ${path.join(outDir, "blog-full-audit.json")}`);
+
 process.exit(totalIssues > 0 ? 1 : 0);
