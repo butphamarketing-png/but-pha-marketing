@@ -94,7 +94,7 @@ lines.push("  return Math.min(d.width, INDUSTRY_MOCKUP_HD_TARGET);");
 lines.push("}");
 lines.push("");
 lines.push("export function hdMockupVariantSrc(src: string): string | null {");
-lines.push("  const m = src.match(/^(\/tin-tuc\\/.*\\/)([^/]+)\\.(png|jpe?g)$/i);");
+lines.push('  const m = src.match(new RegExp("^(/tin-tuc/.*/)([^/]+)\\.(png|jpe?g)$", "i"));');
 lines.push("  if (!m) return null;");
 lines.push("  const base = m[2].replace(/\\.(png|jpe?g)$/i, \"\");");
 lines.push("  return `${m[1]}hd/${base}-1920.webp`;");

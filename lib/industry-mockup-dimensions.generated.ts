@@ -158,7 +158,7 @@ export function mockupDisplayWidth(src: string, fallback = 485): number {
 }
 
 export function hdMockupVariantSrc(src: string): string | null {
-  const m = src.match(/^(/tin-tuc\/.*\/)([^/]+)\.(png|jpe?g)$/i);
+  const m = src.match(new RegExp("^(/tin-tuc/.*/)([^/]+)\\.(png|jpe?g)$", "i"));
   if (!m) return null;
   const base = m[2].replace(/\.(png|jpe?g)$/i, "");
   return `${m[1]}hd/${base}-1920.webp`;
