@@ -1,0 +1,6016 @@
+{
+  "generatedAt": "2026-07-14T16:34:48.340Z",
+  "total": 1000,
+  "groups": {
+    "Money website": 200,
+    "Báo giá website": 150,
+    "Local (tỉnh/thành)": 200,
+    "SEO Google Maps": 120,
+    "Facebook Ads": 120,
+    "Làm website": 80,
+    "Chi phí website": 70,
+    "Fanpage": 60
+  },
+  "keywords": [
+    {
+      "kw": "thiết kế website giặt sấy",
+      "slug": "thiet-ke-website-giat-say",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vựa sầu riêng",
+      "slug": "thiet-ke-website-vua-sau-rieng",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vựa trái cây",
+      "slug": "thiet-ke-website-vua-trai-cay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cung cấp rau sạch",
+      "slug": "thiet-ke-website-rau-sach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cửa hàng gạo",
+      "slug": "thiet-ke-website-cua-hang-gao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đại lý phân bón",
+      "slug": "thiet-ke-website-dai-ly-phan-bon",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vựa cá biển",
+      "slug": "thiet-ke-website-vua-ca-bien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hải sản sống",
+      "slug": "thiet-ke-website-hai-san-song",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xưởng bánh mì",
+      "slug": "thiet-ke-website-xuong-banh-mi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh kem",
+      "slug": "thiet-ke-website-tiem-banh-kem",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán cơm tấm",
+      "slug": "thiet-ke-website-com-tam",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán bún bò",
+      "slug": "thiet-ke-website-bun-bo",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán phở",
+      "slug": "thiet-ke-website-pho",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán ốc nhậu",
+      "slug": "thiet-ke-website-quan-oc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website ship đồ ăn",
+      "slug": "thiet-ke-website-ship-do-an",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website mật ong nguyên chất",
+      "slug": "thiet-ke-website-mat-ong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cà phê rang xay",
+      "slug": "thiet-ke-website-ca-phe-rang-xay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nước mắm truyền thống",
+      "slug": "thiet-ke-website-nuoc-mam",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vựa hành tỏi",
+      "slug": "thiet-ke-website-vua-hanh-toi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thịt heo sạch",
+      "slug": "thiet-ke-website-thit-heo-sach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán lẩu nướng",
+      "slug": "thiet-ke-website-lau-nuong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán trà sữa",
+      "slug": "thiet-ke-website-tra-sua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán cà phê takeaway",
+      "slug": "thiet-ke-website-cafe-takeaway",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh bao",
+      "slug": "thiet-ke-website-banh-bao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm nem chua",
+      "slug": "thiet-ke-website-nem-chua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xưởng mì tươi",
+      "slug": "thiet-ke-website-mi-tuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở đậu hũ",
+      "slug": "thiet-ke-website-dau-hu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website chè thái / quán chè",
+      "slug": "thiet-ke-website-quan-che",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sinh tố nước ép",
+      "slug": "thiet-ke-website-sinh-to-nuoc-ep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở muối ớt",
+      "slug": "thiet-ke-website-muoi-ot",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website gia vị khô",
+      "slug": "thiet-ke-website-gia-vi-kho",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đặc sản khô mực",
+      "slug": "thiet-ke-website-kho-muc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đặc sản bánh pía",
+      "slug": "thiet-ke-website-banh-pia",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website yến sào",
+      "slug": "thiet-ke-website-yen-sao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đông trùng hạ thảo",
+      "slug": "thiet-ke-website-dong-trung-ha-thao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website trà thảo mộc",
+      "slug": "thiet-ke-website-tra-thao-moc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website rượu cần / rượu quê",
+      "slug": "thiet-ke-website-ruou-que",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bia craft",
+      "slug": "thiet-ke-website-bia-craft",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán buffet",
+      "slug": "thiet-ke-website-buffet",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quán chay",
+      "slug": "thiet-ke-website-quan-chay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh trung thu",
+      "slug": "thiet-ke-website-banh-trung-thu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xưởng bánh cookies",
+      "slug": "thiet-ke-website-banh-cookies",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở sữa chua",
+      "slug": "thiet-ke-website-sua-chua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sữa tươi trang trại",
+      "slug": "thiet-ke-website-sua-tuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website trứng gà ta",
+      "slug": "thiet-ke-website-trung-ga-ta",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thịt bò úc",
+      "slug": "thiet-ke-website-thit-bo",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thịt dê",
+      "slug": "thiet-ke-website-thit-de",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website gà ta thả vườn",
+      "slug": "thiet-ke-website-ga-ta",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vịt quay / heo quay",
+      "slug": "thiet-ke-website-heo-quay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm chả lụa",
+      "slug": "thiet-ke-website-cha-lua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xúc xích / lạp xưởng",
+      "slug": "thiet-ke-website-lap-xuong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm đậu phộng rang",
+      "slug": "thiet-ke-website-dau-phong-rang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hạt điều rang muối",
+      "slug": "thiet-ke-website-hat-dieu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở bóc tôm",
+      "slug": "thiet-ke-website-boc-tom",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nuôi ốc hương",
+      "slug": "thiet-ke-website-oc-huong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nuôi tôm sú",
+      "slug": "thiet-ke-website-tom-su",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ sở nấm sạch",
+      "slug": "thiet-ke-website-nam-sach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website rau hydroponic",
+      "slug": "thiet-ke-website-rau-thuy-canh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cửa hàng thực phẩm đông lạnh",
+      "slug": "thiet-ke-website-thuc-pham-dong-lanh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đại lý nước suối",
+      "slug": "thiet-ke-website-dai-ly-nuoc-suoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website giặt thảm sofa",
+      "slug": "thiet-ke-website-giat-tham-sofa",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vệ sinh công nghiệp",
+      "slug": "thiet-ke-website-ve-sinh-cong-nghiep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thông cống",
+      "slug": "thiet-ke-website-thong-cong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa điện nước",
+      "slug": "thiet-ke-website-sua-dien-nuoc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp máy nước nóng",
+      "slug": "thiet-ke-website-may-nuoc-nong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp camera an ninh",
+      "slug": "thiet-ke-website-camera-an-ninh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa khóa",
+      "slug": "thiet-ke-website-sua-khoa",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website chuyển nhà trọn gói",
+      "slug": "thiet-ke-website-chuyen-nha",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy photocopy",
+      "slug": "thiet-ke-website-thue-may-photocopy",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê loa đài",
+      "slug": "thiet-ke-website-thue-loa-dai",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website in ấn nhanh",
+      "slug": "thiet-ke-website-in-an-nhanh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thám tử tư",
+      "slug": "thiet-ke-website-tham-tu-tu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website mai táng",
+      "slug": "thiet-ke-website-mai-tang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website vệ sinh máy lạnh",
+      "slug": "thiet-ke-website-ve-sinh-may-lanh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thu mua phế liệu",
+      "slug": "thiet-ke-website-phe-lieu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa máy giặt tủ lạnh",
+      "slug": "thiet-ke-website-sua-may-giat",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp cửa cuốn",
+      "slug": "thiet-ke-website-cua-cuon",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dịch vụ bảo vệ",
+      "slug": "thiet-ke-website-bao-ve",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê kho bãi",
+      "slug": "thiet-ke-website-thue-kho-bai",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website trông giữ xe",
+      "slug": "thiet-ke-website-trong-giu-xe",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website giặt ủi công nghiệp",
+      "slug": "thiet-ke-website-giat-ui-cong-nghiep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dọn nhà theo giờ",
+      "slug": "thiet-ke-website-don-nha",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website phun khử khuẩn",
+      "slug": "thiet-ke-website-khu-khuan",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website diệt mối mọt",
+      "slug": "thiet-ke-website-diet-moi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website diệt côn trùng",
+      "slug": "thiet-ke-website-diet-con-trung",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa tv led",
+      "slug": "thiet-ke-website-sua-tv",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa điện thoại",
+      "slug": "thiet-ke-website-sua-dien-thoai",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thay màn hình điện thoại",
+      "slug": "thiet-ke-website-thay-man-hinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp đặt mạng wifi",
+      "slug": "thiet-ke-website-lap-wifi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa máy tính",
+      "slug": "thiet-ke-website-sua-may-tinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nạp mực máy in",
+      "slug": "thiet-ke-website-nap-muc-may-in",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê bàn ghế sự kiện",
+      "slug": "thiet-ke-website-thue-ban-ghe",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê nhà bạt",
+      "slug": "thiet-ke-website-thue-nha-bat",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website tổ chức sự kiện nhỏ",
+      "slug": "thiet-ke-website-to-chuc-su-kien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website mc / thuê mc",
+      "slug": "thiet-ke-website-thue-mc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quay phim tiệc cưới",
+      "slug": "thiet-ke-website-quay-phim-cuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website chụp ảnh cưới",
+      "slug": "thiet-ke-website-chup-anh-cuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website makeup cô dâu",
+      "slug": "thiet-ke-website-makeup-co-dau",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thuê áo cưới",
+      "slug": "thiet-ke-website-thue-ao-cuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thuê xe hoa",
+      "slug": "thiet-ke-website-thue-xe-hoa",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hoa tang / vòng hoa",
+      "slug": "thiet-ke-website-hoa-tang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cửa hàng hoa tươi",
+      "slug": "thiet-ke-website-hoa-tuoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website làm bánh sinh nhật tại nhà",
+      "slug": "thiet-ke-website-banh-sinh-nhat-tai-nha",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website gói quà",
+      "slug": "thiet-ke-website-goi-qua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website ship nội thành xe máy",
+      "slug": "thiet-ke-website-shipper",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dịch vụ trợ lý ảo",
+      "slug": "thiet-ke-website-tro-ly-ao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dịch vụ kế toán thuế hộ",
+      "slug": "thiet-ke-website-ke-toan-ho",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website công chứng / dịch vụ hành chính",
+      "slug": "thiet-ke-website-dich-vu-hanh-chinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xin visa",
+      "slug": "thiet-ke-website-xin-visa",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dịch thuật",
+      "slug": "thiet-ke-website-dich-thuat",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website in namecard",
+      "slug": "thiet-ke-website-in-namecard",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website làm biển hiệu mica",
+      "slug": "thiet-ke-website-bien-hieu-mica",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website làm biển led",
+      "slug": "thiet-ke-website-bien-led",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dec tem decal",
+      "slug": "thiet-ke-website-in-decal",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đóng gói hàng online",
+      "slug": "thiet-ke-website-dong-goi-hang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website fulfillment nhỏ",
+      "slug": "thiet-ke-website-fulfillment",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê phòng họp",
+      "slug": "thiet-ke-website-thue-phong-hop",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website coworking nhỏ",
+      "slug": "thiet-ke-website-coworking",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê mặt bằng",
+      "slug": "thiet-ke-website-thue-mat-bang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quản lý căn hộ dịch vụ",
+      "slug": "thiet-ke-website-can-ho-dich-vu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website homestay",
+      "slug": "thiet-ke-website-homestay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nhà nghỉ bình dân",
+      "slug": "thiet-ke-website-nha-nghi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hostel",
+      "slug": "thiet-ke-website-hostel",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website motel ven đường",
+      "slug": "thiet-ke-website-motel",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website camping / glamping",
+      "slug": "thiet-ke-website-camping",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thuê villa cuối tuần",
+      "slug": "thiet-ke-website-thue-villa",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website dịch vụ dọn phòng khách sạn",
+      "slug": "thiet-ke-website-don-phong-khach-san",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website giặt hấp đồ vest",
+      "slug": "thiet-ke-website-giat-hap",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa giày dép",
+      "slug": "thiet-ke-website-sua-giay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa túi xách",
+      "slug": "thiet-ke-website-sua-tui-xach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bán gạch ốp lát",
+      "slug": "thiet-ke-website-gach-op-lat",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bán sắt thép",
+      "slug": "thiet-ke-website-sat-thep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nhôm kính",
+      "slug": "thiet-ke-website-nhom-kinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website làm mái tôn",
+      "slug": "thiet-ke-website-mai-ton",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sơn nhà",
+      "slug": "thiet-ke-website-son-nha",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cửa gỗ cửa nhựa",
+      "slug": "thiet-ke-website-cua-go",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website chống thấm",
+      "slug": "thiet-ke-website-chong-tham",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đóng giường tủ",
+      "slug": "thiet-ke-website-dong-tu",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cơ khí hàn xì",
+      "slug": "thiet-ke-website-co-khi-han",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cát đá xây dựng",
+      "slug": "thiet-ke-website-cat-da",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sàn gỗ",
+      "slug": "thiet-ke-website-san-go",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hàng rào lưới",
+      "slug": "thiet-ke-website-hang-rao-luoi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hồ cá koi",
+      "slug": "thiet-ke-website-ho-ca-koi",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cây cảnh sân vườn",
+      "slug": "thiet-ke-website-cay-canh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê giàn giáo",
+      "slug": "thiet-ke-website-gian-giao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nhà thầu xây dựng nhà phố",
+      "slug": "thiet-ke-website-xay-nha-pho",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website sửa chữa nhà cải tạo",
+      "slug": "thiet-ke-website-cai-tao-nha",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website trần thạch cao",
+      "slug": "thiet-ke-website-tran-thach-cao",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website trần nhựa pvc",
+      "slug": "thiet-ke-website-tran-nhua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website ốp đá granite",
+      "slug": "thiet-ke-website-op-da-granite",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đá marble",
+      "slug": "thiet-ke-website-da-marble",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website gạch bêtông nhẹ",
+      "slug": "thiet-ke-website-gach-be-tong-nhe",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xi măng xây dựng",
+      "slug": "thiet-ke-website-xi-mang",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website ống nước pvc",
+      "slug": "thiet-ke-website-ong-nuoc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thiết bị điện dân dụng",
+      "slug": "thiet-ke-website-thiet-bi-dien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đèn led chiếu sáng",
+      "slug": "thiet-ke-website-den-led",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website quạt trần công nghiệp",
+      "slug": "thiet-ke-website-quat-tran",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website máy bơm nước",
+      "slug": "thiet-ke-website-may-bom-nuoc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bồn nước",
+      "slug": "thiet-ke-website-bon-nuoc",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bể phốt",
+      "slug": "thiet-ke-website-be-phot",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xây dựng nhà xưởng",
+      "slug": "thiet-ke-website-xay-nha-xuong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xây dựng nhà tiền chế",
+      "slug": "thiet-ke-website-nha-tien-che",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp dựng khung thép",
+      "slug": "thiet-ke-website-khung-thep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website mái polycarbonate",
+      "slug": "thiet-ke-website-mai-poly",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cách nhiệt mái",
+      "slug": "thiet-ke-website-cach-nhiet-mai",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thi công sàn epoxy",
+      "slug": "thiet-ke-website-san-epoxy",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thi công giấy dán tường",
+      "slug": "thiet-ke-website-giay-dan-tuong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website rèm cửa",
+      "slug": "thiet-ke-website-rem-cua",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nệm / chăn ga",
+      "slug": "thiet-ke-website-nem-chan-ga",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nội thất văn phòng",
+      "slug": "thiet-ke-website-noi-that-van-phong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nội thất quán cafe",
+      "slug": "thiet-ke-website-noi-that-cafe",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website showroom gạch men",
+      "slug": "thiet-ke-website-showroom-gach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đại lý sơn",
+      "slug": "thiet-ke-website-dai-ly-son",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website keo dán gạch",
+      "slug": "thiet-ke-website-keo-dan-gach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website keo silicone",
+      "slug": "thiet-ke-website-keo-silicone",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thước đo / dụng cụ xây",
+      "slug": "thiet-ke-website-dung-cu-xay-dung",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy đầm",
+      "slug": "thiet-ke-website-thue-may-dam",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy cắt gạch",
+      "slug": "thiet-ke-website-thue-may-cat-gach",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xe ben thuê",
+      "slug": "thiet-ke-website-thue-xe-ben",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website xe trộn bê tông",
+      "slug": "thiet-ke-website-xe-tron-be-tong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cáp điện",
+      "slug": "thiet-ke-website-cap-dien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website tủ điện",
+      "slug": "thiet-ke-website-tu-dien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website lắp đặt điện công nghiệp",
+      "slug": "thiet-ke-website-dien-cong-nghiep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website chống sét",
+      "slug": "thiet-ke-website-chong-set",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hệ thống họng chữa cháy",
+      "slug": "thiet-ke-website-hong-chua-chay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bình chữa cháy",
+      "slug": "thiet-ke-website-binh-chua-chay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website pccc công trình",
+      "slug": "thiet-ke-website-pccc-cong-trinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website thang máy gia đình",
+      "slug": "thiet-ke-website-thang-may-gia-dinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website bảo trì thang máy",
+      "slug": "thiet-ke-website-bao-tri-thang-may",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cửa tự động",
+      "slug": "thiet-ke-website-cua-tu-dong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website khóa vân tay",
+      "slug": "thiet-ke-website-khoa-van-tay",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website intercom",
+      "slug": "thiet-ke-website-intercom",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cổng xếp",
+      "slug": "thiet-ke-website-cong-xep",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website cổng tự động",
+      "slug": "thiet-ke-website-cong-tu-dong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hàng rào điện",
+      "slug": "thiet-ke-website-hang-rao-dien",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website nhà kính nông nghiệp",
+      "slug": "thiet-ke-website-nha-kinh",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website hệ thống tưới nhỏ giọt",
+      "slug": "thiet-ke-website-tuoi-nho-giot",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website giàn trồng rau",
+      "slug": "thiet-ke-website-gian-trong-rau",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website phân compost",
+      "slug": "thiet-ke-website-phan-compost",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "thiết kế website đất trồng sạch",
+      "slug": "thiet-ke-website-dat-trong",
+      "intent": "money",
+      "group": "Money website"
+    },
+    {
+      "kw": "báo giá thiết kế website giặt sấy",
+      "slug": "bao-gia-thiet-ke-website-giat-say",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vựa sầu riêng",
+      "slug": "bao-gia-thiet-ke-website-vua-sau-rieng",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vựa trái cây",
+      "slug": "bao-gia-thiet-ke-website-vua-trai-cay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cung cấp rau sạch",
+      "slug": "bao-gia-thiet-ke-website-rau-sach",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cửa hàng gạo",
+      "slug": "bao-gia-thiet-ke-website-cua-hang-gao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đại lý phân bón",
+      "slug": "bao-gia-thiet-ke-website-dai-ly-phan-bon",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vựa cá biển",
+      "slug": "bao-gia-thiet-ke-website-vua-ca-bien",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hải sản sống",
+      "slug": "bao-gia-thiet-ke-website-hai-san-song",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website xưởng bánh mì",
+      "slug": "bao-gia-thiet-ke-website-xuong-banh-mi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website tiệm bánh kem",
+      "slug": "bao-gia-thiet-ke-website-tiem-banh-kem",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán cơm tấm",
+      "slug": "bao-gia-thiet-ke-website-com-tam",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán bún bò",
+      "slug": "bao-gia-thiet-ke-website-bun-bo",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán phở",
+      "slug": "bao-gia-thiet-ke-website-pho",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán ốc nhậu",
+      "slug": "bao-gia-thiet-ke-website-quan-oc",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website ship đồ ăn",
+      "slug": "bao-gia-thiet-ke-website-ship-do-an",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website mật ong nguyên chất",
+      "slug": "bao-gia-thiet-ke-website-mat-ong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cà phê rang xay",
+      "slug": "bao-gia-thiet-ke-website-ca-phe-rang-xay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nước mắm truyền thống",
+      "slug": "bao-gia-thiet-ke-website-nuoc-mam",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vựa hành tỏi",
+      "slug": "bao-gia-thiet-ke-website-vua-hanh-toi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thịt heo sạch",
+      "slug": "bao-gia-thiet-ke-website-thit-heo-sach",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán lẩu nướng",
+      "slug": "bao-gia-thiet-ke-website-lau-nuong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán trà sữa",
+      "slug": "bao-gia-thiet-ke-website-tra-sua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán cà phê takeaway",
+      "slug": "bao-gia-thiet-ke-website-cafe-takeaway",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website tiệm bánh bao",
+      "slug": "bao-gia-thiet-ke-website-banh-bao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở làm nem chua",
+      "slug": "bao-gia-thiet-ke-website-nem-chua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website xưởng mì tươi",
+      "slug": "bao-gia-thiet-ke-website-mi-tuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở đậu hũ",
+      "slug": "bao-gia-thiet-ke-website-dau-hu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website chè thái / quán chè",
+      "slug": "bao-gia-thiet-ke-website-quan-che",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sinh tố nước ép",
+      "slug": "bao-gia-thiet-ke-website-sinh-to-nuoc-ep",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở muối ớt",
+      "slug": "bao-gia-thiet-ke-website-muoi-ot",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website gia vị khô",
+      "slug": "bao-gia-thiet-ke-website-gia-vi-kho",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đặc sản khô mực",
+      "slug": "bao-gia-thiet-ke-website-kho-muc",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đặc sản bánh pía",
+      "slug": "bao-gia-thiet-ke-website-banh-pia",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website yến sào",
+      "slug": "bao-gia-thiet-ke-website-yen-sao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đông trùng hạ thảo",
+      "slug": "bao-gia-thiet-ke-website-dong-trung-ha-thao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website trà thảo mộc",
+      "slug": "bao-gia-thiet-ke-website-tra-thao-moc",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website rượu cần / rượu quê",
+      "slug": "bao-gia-thiet-ke-website-ruou-que",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website bia craft",
+      "slug": "bao-gia-thiet-ke-website-bia-craft",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán buffet",
+      "slug": "bao-gia-thiet-ke-website-buffet",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quán chay",
+      "slug": "bao-gia-thiet-ke-website-quan-chay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website tiệm bánh trung thu",
+      "slug": "bao-gia-thiet-ke-website-banh-trung-thu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website xưởng bánh cookies",
+      "slug": "bao-gia-thiet-ke-website-banh-cookies",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở sữa chua",
+      "slug": "bao-gia-thiet-ke-website-sua-chua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sữa tươi trang trại",
+      "slug": "bao-gia-thiet-ke-website-sua-tuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website trứng gà ta",
+      "slug": "bao-gia-thiet-ke-website-trung-ga-ta",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thịt bò úc",
+      "slug": "bao-gia-thiet-ke-website-thit-bo",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thịt dê",
+      "slug": "bao-gia-thiet-ke-website-thit-de",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website gà ta thả vườn",
+      "slug": "bao-gia-thiet-ke-website-ga-ta",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vịt quay / heo quay",
+      "slug": "bao-gia-thiet-ke-website-heo-quay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở làm chả lụa",
+      "slug": "bao-gia-thiet-ke-website-cha-lua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website xúc xích / lạp xưởng",
+      "slug": "bao-gia-thiet-ke-website-lap-xuong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở làm đậu phộng rang",
+      "slug": "bao-gia-thiet-ke-website-dau-phong-rang",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hạt điều rang muối",
+      "slug": "bao-gia-thiet-ke-website-hat-dieu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở bóc tôm",
+      "slug": "bao-gia-thiet-ke-website-boc-tom",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nuôi ốc hương",
+      "slug": "bao-gia-thiet-ke-website-oc-huong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nuôi tôm sú",
+      "slug": "bao-gia-thiet-ke-website-tom-su",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ sở nấm sạch",
+      "slug": "bao-gia-thiet-ke-website-nam-sach",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website rau hydroponic",
+      "slug": "bao-gia-thiet-ke-website-rau-thuy-canh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cửa hàng thực phẩm đông lạnh",
+      "slug": "bao-gia-thiet-ke-website-thuc-pham-dong-lanh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đại lý nước suối",
+      "slug": "bao-gia-thiet-ke-website-dai-ly-nuoc-suoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website giặt thảm sofa",
+      "slug": "bao-gia-thiet-ke-website-giat-tham-sofa",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vệ sinh công nghiệp",
+      "slug": "bao-gia-thiet-ke-website-ve-sinh-cong-nghiep",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thông cống",
+      "slug": "bao-gia-thiet-ke-website-thong-cong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa điện nước",
+      "slug": "bao-gia-thiet-ke-website-sua-dien-nuoc",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website lắp máy nước nóng",
+      "slug": "bao-gia-thiet-ke-website-may-nuoc-nong",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website lắp camera an ninh",
+      "slug": "bao-gia-thiet-ke-website-camera-an-ninh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa khóa",
+      "slug": "bao-gia-thiet-ke-website-sua-khoa",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website chuyển nhà trọn gói",
+      "slug": "bao-gia-thiet-ke-website-chuyen-nha",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê máy photocopy",
+      "slug": "bao-gia-thiet-ke-website-thue-may-photocopy",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê loa đài",
+      "slug": "bao-gia-thiet-ke-website-thue-loa-dai",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website in ấn nhanh",
+      "slug": "bao-gia-thiet-ke-website-in-an-nhanh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thám tử tư",
+      "slug": "bao-gia-thiet-ke-website-tham-tu-tu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website mai táng",
+      "slug": "bao-gia-thiet-ke-website-mai-tang",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website vệ sinh máy lạnh",
+      "slug": "bao-gia-thiet-ke-website-ve-sinh-may-lanh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thu mua phế liệu",
+      "slug": "bao-gia-thiet-ke-website-phe-lieu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa máy giặt tủ lạnh",
+      "slug": "bao-gia-thiet-ke-website-sua-may-giat",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website lắp cửa cuốn",
+      "slug": "bao-gia-thiet-ke-website-cua-cuon",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dịch vụ bảo vệ",
+      "slug": "bao-gia-thiet-ke-website-bao-ve",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê kho bãi",
+      "slug": "bao-gia-thiet-ke-website-thue-kho-bai",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website trông giữ xe",
+      "slug": "bao-gia-thiet-ke-website-trong-giu-xe",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website giặt ủi công nghiệp",
+      "slug": "bao-gia-thiet-ke-website-giat-ui-cong-nghiep",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dọn nhà theo giờ",
+      "slug": "bao-gia-thiet-ke-website-don-nha",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website phun khử khuẩn",
+      "slug": "bao-gia-thiet-ke-website-khu-khuan",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website diệt mối mọt",
+      "slug": "bao-gia-thiet-ke-website-diet-moi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website diệt côn trùng",
+      "slug": "bao-gia-thiet-ke-website-diet-con-trung",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa tv led",
+      "slug": "bao-gia-thiet-ke-website-sua-tv",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa điện thoại",
+      "slug": "bao-gia-thiet-ke-website-sua-dien-thoai",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thay màn hình điện thoại",
+      "slug": "bao-gia-thiet-ke-website-thay-man-hinh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website lắp đặt mạng wifi",
+      "slug": "bao-gia-thiet-ke-website-lap-wifi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa máy tính",
+      "slug": "bao-gia-thiet-ke-website-sua-may-tinh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nạp mực máy in",
+      "slug": "bao-gia-thiet-ke-website-nap-muc-may-in",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê bàn ghế sự kiện",
+      "slug": "bao-gia-thiet-ke-website-thue-ban-ghe",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê nhà bạt",
+      "slug": "bao-gia-thiet-ke-website-thue-nha-bat",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website tổ chức sự kiện nhỏ",
+      "slug": "bao-gia-thiet-ke-website-to-chuc-su-kien",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website mc / thuê mc",
+      "slug": "bao-gia-thiet-ke-website-thue-mc",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quay phim tiệc cưới",
+      "slug": "bao-gia-thiet-ke-website-quay-phim-cuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website chụp ảnh cưới",
+      "slug": "bao-gia-thiet-ke-website-chup-anh-cuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website makeup cô dâu",
+      "slug": "bao-gia-thiet-ke-website-makeup-co-dau",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thuê áo cưới",
+      "slug": "bao-gia-thiet-ke-website-thue-ao-cuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thuê xe hoa",
+      "slug": "bao-gia-thiet-ke-website-thue-xe-hoa",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hoa tang / vòng hoa",
+      "slug": "bao-gia-thiet-ke-website-hoa-tang",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cửa hàng hoa tươi",
+      "slug": "bao-gia-thiet-ke-website-hoa-tuoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website làm bánh sinh nhật tại nhà",
+      "slug": "bao-gia-thiet-ke-website-banh-sinh-nhat-tai-nha",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website gói quà",
+      "slug": "bao-gia-thiet-ke-website-goi-qua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website ship nội thành xe máy",
+      "slug": "bao-gia-thiet-ke-website-shipper",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dịch vụ trợ lý ảo",
+      "slug": "bao-gia-thiet-ke-website-tro-ly-ao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dịch vụ kế toán thuế hộ",
+      "slug": "bao-gia-thiet-ke-website-ke-toan-ho",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website công chứng / dịch vụ hành chính",
+      "slug": "bao-gia-thiet-ke-website-dich-vu-hanh-chinh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website xin visa",
+      "slug": "bao-gia-thiet-ke-website-xin-visa",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dịch thuật",
+      "slug": "bao-gia-thiet-ke-website-dich-thuat",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website in namecard",
+      "slug": "bao-gia-thiet-ke-website-in-namecard",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website làm biển hiệu mica",
+      "slug": "bao-gia-thiet-ke-website-bien-hieu-mica",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website làm biển led",
+      "slug": "bao-gia-thiet-ke-website-bien-led",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dec tem decal",
+      "slug": "bao-gia-thiet-ke-website-in-decal",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đóng gói hàng online",
+      "slug": "bao-gia-thiet-ke-website-dong-goi-hang",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website fulfillment nhỏ",
+      "slug": "bao-gia-thiet-ke-website-fulfillment",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê phòng họp",
+      "slug": "bao-gia-thiet-ke-website-thue-phong-hop",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website coworking nhỏ",
+      "slug": "bao-gia-thiet-ke-website-coworking",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê mặt bằng",
+      "slug": "bao-gia-thiet-ke-website-thue-mat-bang",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website quản lý căn hộ dịch vụ",
+      "slug": "bao-gia-thiet-ke-website-can-ho-dich-vu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website homestay",
+      "slug": "bao-gia-thiet-ke-website-homestay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nhà nghỉ bình dân",
+      "slug": "bao-gia-thiet-ke-website-nha-nghi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hostel",
+      "slug": "bao-gia-thiet-ke-website-hostel",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website motel ven đường",
+      "slug": "bao-gia-thiet-ke-website-motel",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website camping / glamping",
+      "slug": "bao-gia-thiet-ke-website-camping",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website thuê villa cuối tuần",
+      "slug": "bao-gia-thiet-ke-website-thue-villa",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website dịch vụ dọn phòng khách sạn",
+      "slug": "bao-gia-thiet-ke-website-don-phong-khach-san",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website giặt hấp đồ vest",
+      "slug": "bao-gia-thiet-ke-website-giat-hap",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa giày dép",
+      "slug": "bao-gia-thiet-ke-website-sua-giay",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa túi xách",
+      "slug": "bao-gia-thiet-ke-website-sua-tui-xach",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website bán gạch ốp lát",
+      "slug": "bao-gia-thiet-ke-website-gach-op-lat",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website bán sắt thép",
+      "slug": "bao-gia-thiet-ke-website-sat-thep",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nhôm kính",
+      "slug": "bao-gia-thiet-ke-website-nhom-kinh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website làm mái tôn",
+      "slug": "bao-gia-thiet-ke-website-mai-ton",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sơn nhà",
+      "slug": "bao-gia-thiet-ke-website-son-nha",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cửa gỗ cửa nhựa",
+      "slug": "bao-gia-thiet-ke-website-cua-go",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website chống thấm",
+      "slug": "bao-gia-thiet-ke-website-chong-tham",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website đóng giường tủ",
+      "slug": "bao-gia-thiet-ke-website-dong-tu",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cơ khí hàn xì",
+      "slug": "bao-gia-thiet-ke-website-co-khi-han",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cát đá xây dựng",
+      "slug": "bao-gia-thiet-ke-website-cat-da",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sàn gỗ",
+      "slug": "bao-gia-thiet-ke-website-san-go",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hàng rào lưới",
+      "slug": "bao-gia-thiet-ke-website-hang-rao-luoi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website hồ cá koi",
+      "slug": "bao-gia-thiet-ke-website-ho-ca-koi",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cây cảnh sân vườn",
+      "slug": "bao-gia-thiet-ke-website-cay-canh",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website cho thuê giàn giáo",
+      "slug": "bao-gia-thiet-ke-website-gian-giao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website nhà thầu xây dựng nhà phố",
+      "slug": "bao-gia-thiet-ke-website-xay-nha-pho",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website sửa chữa nhà cải tạo",
+      "slug": "bao-gia-thiet-ke-website-cai-tao-nha",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website trần thạch cao",
+      "slug": "bao-gia-thiet-ke-website-tran-thach-cao",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website trần nhựa pvc",
+      "slug": "bao-gia-thiet-ke-website-tran-nhua",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "báo giá thiết kế website ốp đá granite",
+      "slug": "bao-gia-thiet-ke-website-op-da-granite",
+      "intent": "pricing",
+      "group": "Báo giá website"
+    },
+    {
+      "kw": "thiết kế website giặt sấy TP.HCM",
+      "slug": "thiet-ke-website-giat-say-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vựa sầu riêng Hà Nội",
+      "slug": "thiet-ke-website-vua-sau-rieng-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vựa trái cây Đà Nẵng",
+      "slug": "thiet-ke-website-vua-trai-cay-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cung cấp rau sạch Cần Thơ",
+      "slug": "thiet-ke-website-rau-sach-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cửa hàng gạo Bình Dương",
+      "slug": "thiet-ke-website-cua-hang-gao-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đại lý phân bón Đồng Nai",
+      "slug": "thiet-ke-website-dai-ly-phan-bon-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vựa cá biển Hải Phòng",
+      "slug": "thiet-ke-website-vua-ca-bien-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hải sản sống Nha Trang",
+      "slug": "thiet-ke-website-hai-san-song-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xưởng bánh mì Huế",
+      "slug": "thiet-ke-website-xuong-banh-mi-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh kem Đà Lạt",
+      "slug": "thiet-ke-website-tiem-banh-kem-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán cơm tấm TP.HCM",
+      "slug": "thiet-ke-website-com-tam-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán bún bò Hà Nội",
+      "slug": "thiet-ke-website-bun-bo-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán phở Đà Nẵng",
+      "slug": "thiet-ke-website-pho-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán ốc nhậu Cần Thơ",
+      "slug": "thiet-ke-website-quan-oc-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website ship đồ ăn Bình Dương",
+      "slug": "thiet-ke-website-ship-do-an-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website mật ong nguyên chất Đồng Nai",
+      "slug": "thiet-ke-website-mat-ong-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cà phê rang xay Hải Phòng",
+      "slug": "thiet-ke-website-ca-phe-rang-xay-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nước mắm truyền thống Nha Trang",
+      "slug": "thiet-ke-website-nuoc-mam-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vựa hành tỏi Huế",
+      "slug": "thiet-ke-website-vua-hanh-toi-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thịt heo sạch Đà Lạt",
+      "slug": "thiet-ke-website-thit-heo-sach-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán lẩu nướng TP.HCM",
+      "slug": "thiet-ke-website-lau-nuong-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán trà sữa Hà Nội",
+      "slug": "thiet-ke-website-tra-sua-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán cà phê takeaway Đà Nẵng",
+      "slug": "thiet-ke-website-cafe-takeaway-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh bao Cần Thơ",
+      "slug": "thiet-ke-website-banh-bao-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm nem chua Bình Dương",
+      "slug": "thiet-ke-website-nem-chua-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xưởng mì tươi Đồng Nai",
+      "slug": "thiet-ke-website-mi-tuoi-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở đậu hũ Hải Phòng",
+      "slug": "thiet-ke-website-dau-hu-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website chè thái / quán chè Nha Trang",
+      "slug": "thiet-ke-website-quan-che-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sinh tố nước ép Huế",
+      "slug": "thiet-ke-website-sinh-to-nuoc-ep-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở muối ớt Đà Lạt",
+      "slug": "thiet-ke-website-muoi-ot-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website gia vị khô TP.HCM",
+      "slug": "thiet-ke-website-gia-vi-kho-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đặc sản khô mực Hà Nội",
+      "slug": "thiet-ke-website-kho-muc-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đặc sản bánh pía Đà Nẵng",
+      "slug": "thiet-ke-website-banh-pia-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website yến sào Cần Thơ",
+      "slug": "thiet-ke-website-yen-sao-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đông trùng hạ thảo Bình Dương",
+      "slug": "thiet-ke-website-dong-trung-ha-thao-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website trà thảo mộc Đồng Nai",
+      "slug": "thiet-ke-website-tra-thao-moc-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website rượu cần / rượu quê Hải Phòng",
+      "slug": "thiet-ke-website-ruou-que-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bia craft Nha Trang",
+      "slug": "thiet-ke-website-bia-craft-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán buffet Huế",
+      "slug": "thiet-ke-website-buffet-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quán chay Đà Lạt",
+      "slug": "thiet-ke-website-quan-chay-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website tiệm bánh trung thu TP.HCM",
+      "slug": "thiet-ke-website-banh-trung-thu-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xưởng bánh cookies Hà Nội",
+      "slug": "thiet-ke-website-banh-cookies-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở sữa chua Đà Nẵng",
+      "slug": "thiet-ke-website-sua-chua-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sữa tươi trang trại Cần Thơ",
+      "slug": "thiet-ke-website-sua-tuoi-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website trứng gà ta Bình Dương",
+      "slug": "thiet-ke-website-trung-ga-ta-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thịt bò úc Đồng Nai",
+      "slug": "thiet-ke-website-thit-bo-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thịt dê Hải Phòng",
+      "slug": "thiet-ke-website-thit-de-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website gà ta thả vườn Nha Trang",
+      "slug": "thiet-ke-website-ga-ta-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vịt quay / heo quay Huế",
+      "slug": "thiet-ke-website-heo-quay-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm chả lụa Đà Lạt",
+      "slug": "thiet-ke-website-cha-lua-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xúc xích / lạp xưởng TP.HCM",
+      "slug": "thiet-ke-website-lap-xuong-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở làm đậu phộng rang Hà Nội",
+      "slug": "thiet-ke-website-dau-phong-rang-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hạt điều rang muối Đà Nẵng",
+      "slug": "thiet-ke-website-hat-dieu-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở bóc tôm Cần Thơ",
+      "slug": "thiet-ke-website-boc-tom-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nuôi ốc hương Bình Dương",
+      "slug": "thiet-ke-website-oc-huong-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nuôi tôm sú Đồng Nai",
+      "slug": "thiet-ke-website-tom-su-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ sở nấm sạch Hải Phòng",
+      "slug": "thiet-ke-website-nam-sach-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website rau hydroponic Nha Trang",
+      "slug": "thiet-ke-website-rau-thuy-canh-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cửa hàng thực phẩm đông lạnh Huế",
+      "slug": "thiet-ke-website-thuc-pham-dong-lanh-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đại lý nước suối Đà Lạt",
+      "slug": "thiet-ke-website-dai-ly-nuoc-suoi-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website giặt thảm sofa TP.HCM",
+      "slug": "thiet-ke-website-giat-tham-sofa-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vệ sinh công nghiệp Hà Nội",
+      "slug": "thiet-ke-website-ve-sinh-cong-nghiep-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thông cống Đà Nẵng",
+      "slug": "thiet-ke-website-thong-cong-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa điện nước Cần Thơ",
+      "slug": "thiet-ke-website-sua-dien-nuoc-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp máy nước nóng Bình Dương",
+      "slug": "thiet-ke-website-may-nuoc-nong-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp camera an ninh Đồng Nai",
+      "slug": "thiet-ke-website-camera-an-ninh-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa khóa Hải Phòng",
+      "slug": "thiet-ke-website-sua-khoa-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website chuyển nhà trọn gói Nha Trang",
+      "slug": "thiet-ke-website-chuyen-nha-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy photocopy Huế",
+      "slug": "thiet-ke-website-thue-may-photocopy-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê loa đài Đà Lạt",
+      "slug": "thiet-ke-website-thue-loa-dai-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website in ấn nhanh TP.HCM",
+      "slug": "thiet-ke-website-in-an-nhanh-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thám tử tư Hà Nội",
+      "slug": "thiet-ke-website-tham-tu-tu-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website mai táng Đà Nẵng",
+      "slug": "thiet-ke-website-mai-tang-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website vệ sinh máy lạnh Cần Thơ",
+      "slug": "thiet-ke-website-ve-sinh-may-lanh-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thu mua phế liệu Bình Dương",
+      "slug": "thiet-ke-website-phe-lieu-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa máy giặt tủ lạnh Đồng Nai",
+      "slug": "thiet-ke-website-sua-may-giat-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp cửa cuốn Hải Phòng",
+      "slug": "thiet-ke-website-cua-cuon-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dịch vụ bảo vệ Nha Trang",
+      "slug": "thiet-ke-website-bao-ve-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê kho bãi Huế",
+      "slug": "thiet-ke-website-thue-kho-bai-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website trông giữ xe Đà Lạt",
+      "slug": "thiet-ke-website-trong-giu-xe-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website giặt ủi công nghiệp TP.HCM",
+      "slug": "thiet-ke-website-giat-ui-cong-nghiep-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dọn nhà theo giờ Hà Nội",
+      "slug": "thiet-ke-website-don-nha-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website phun khử khuẩn Đà Nẵng",
+      "slug": "thiet-ke-website-khu-khuan-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website diệt mối mọt Cần Thơ",
+      "slug": "thiet-ke-website-diet-moi-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website diệt côn trùng Bình Dương",
+      "slug": "thiet-ke-website-diet-con-trung-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa tv led Đồng Nai",
+      "slug": "thiet-ke-website-sua-tv-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa điện thoại Hải Phòng",
+      "slug": "thiet-ke-website-sua-dien-thoai-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thay màn hình điện thoại Nha Trang",
+      "slug": "thiet-ke-website-thay-man-hinh-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp đặt mạng wifi Huế",
+      "slug": "thiet-ke-website-lap-wifi-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa máy tính Đà Lạt",
+      "slug": "thiet-ke-website-sua-may-tinh-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nạp mực máy in TP.HCM",
+      "slug": "thiet-ke-website-nap-muc-may-in-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê bàn ghế sự kiện Hà Nội",
+      "slug": "thiet-ke-website-thue-ban-ghe-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê nhà bạt Đà Nẵng",
+      "slug": "thiet-ke-website-thue-nha-bat-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website tổ chức sự kiện nhỏ Cần Thơ",
+      "slug": "thiet-ke-website-to-chuc-su-kien-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website mc / thuê mc Bình Dương",
+      "slug": "thiet-ke-website-thue-mc-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quay phim tiệc cưới Đồng Nai",
+      "slug": "thiet-ke-website-quay-phim-cuoi-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website chụp ảnh cưới Hải Phòng",
+      "slug": "thiet-ke-website-chup-anh-cuoi-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website makeup cô dâu Nha Trang",
+      "slug": "thiet-ke-website-makeup-co-dau-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thuê áo cưới Huế",
+      "slug": "thiet-ke-website-thue-ao-cuoi-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thuê xe hoa Đà Lạt",
+      "slug": "thiet-ke-website-thue-xe-hoa-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hoa tang / vòng hoa TP.HCM",
+      "slug": "thiet-ke-website-hoa-tang-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cửa hàng hoa tươi Hà Nội",
+      "slug": "thiet-ke-website-hoa-tuoi-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website làm bánh sinh nhật tại nhà Đà Nẵng",
+      "slug": "thiet-ke-website-banh-sinh-nhat-tai-nha-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website gói quà Cần Thơ",
+      "slug": "thiet-ke-website-goi-qua-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website ship nội thành xe máy Bình Dương",
+      "slug": "thiet-ke-website-shipper-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dịch vụ trợ lý ảo Đồng Nai",
+      "slug": "thiet-ke-website-tro-ly-ao-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dịch vụ kế toán thuế hộ Hải Phòng",
+      "slug": "thiet-ke-website-ke-toan-ho-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website công chứng / dịch vụ hành chính Nha Trang",
+      "slug": "thiet-ke-website-dich-vu-hanh-chinh-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xin visa Huế",
+      "slug": "thiet-ke-website-xin-visa-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dịch thuật Đà Lạt",
+      "slug": "thiet-ke-website-dich-thuat-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website in namecard TP.HCM",
+      "slug": "thiet-ke-website-in-namecard-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website làm biển hiệu mica Hà Nội",
+      "slug": "thiet-ke-website-bien-hieu-mica-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website làm biển led Đà Nẵng",
+      "slug": "thiet-ke-website-bien-led-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dec tem decal Cần Thơ",
+      "slug": "thiet-ke-website-in-decal-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đóng gói hàng online Bình Dương",
+      "slug": "thiet-ke-website-dong-goi-hang-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website fulfillment nhỏ Đồng Nai",
+      "slug": "thiet-ke-website-fulfillment-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê phòng họp Hải Phòng",
+      "slug": "thiet-ke-website-thue-phong-hop-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website coworking nhỏ Nha Trang",
+      "slug": "thiet-ke-website-coworking-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê mặt bằng Huế",
+      "slug": "thiet-ke-website-thue-mat-bang-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quản lý căn hộ dịch vụ Đà Lạt",
+      "slug": "thiet-ke-website-can-ho-dich-vu-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website homestay TP.HCM",
+      "slug": "thiet-ke-website-homestay-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nhà nghỉ bình dân Hà Nội",
+      "slug": "thiet-ke-website-nha-nghi-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hostel Đà Nẵng",
+      "slug": "thiet-ke-website-hostel-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website motel ven đường Cần Thơ",
+      "slug": "thiet-ke-website-motel-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website camping / glamping Bình Dương",
+      "slug": "thiet-ke-website-camping-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thuê villa cuối tuần Đồng Nai",
+      "slug": "thiet-ke-website-thue-villa-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website dịch vụ dọn phòng khách sạn Hải Phòng",
+      "slug": "thiet-ke-website-don-phong-khach-san-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website giặt hấp đồ vest Nha Trang",
+      "slug": "thiet-ke-website-giat-hap-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa giày dép Huế",
+      "slug": "thiet-ke-website-sua-giay-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa túi xách Đà Lạt",
+      "slug": "thiet-ke-website-sua-tui-xach-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bán gạch ốp lát TP.HCM",
+      "slug": "thiet-ke-website-gach-op-lat-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bán sắt thép Hà Nội",
+      "slug": "thiet-ke-website-sat-thep-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nhôm kính Đà Nẵng",
+      "slug": "thiet-ke-website-nhom-kinh-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website làm mái tôn Cần Thơ",
+      "slug": "thiet-ke-website-mai-ton-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sơn nhà Bình Dương",
+      "slug": "thiet-ke-website-son-nha-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cửa gỗ cửa nhựa Đồng Nai",
+      "slug": "thiet-ke-website-cua-go-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website chống thấm Hải Phòng",
+      "slug": "thiet-ke-website-chong-tham-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đóng giường tủ Nha Trang",
+      "slug": "thiet-ke-website-dong-tu-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cơ khí hàn xì Huế",
+      "slug": "thiet-ke-website-co-khi-han-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cát đá xây dựng Đà Lạt",
+      "slug": "thiet-ke-website-cat-da-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sàn gỗ TP.HCM",
+      "slug": "thiet-ke-website-san-go-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hàng rào lưới Hà Nội",
+      "slug": "thiet-ke-website-hang-rao-luoi-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hồ cá koi Đà Nẵng",
+      "slug": "thiet-ke-website-ho-ca-koi-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cây cảnh sân vườn Cần Thơ",
+      "slug": "thiet-ke-website-cay-canh-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê giàn giáo Bình Dương",
+      "slug": "thiet-ke-website-gian-giao-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nhà thầu xây dựng nhà phố Đồng Nai",
+      "slug": "thiet-ke-website-xay-nha-pho-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website sửa chữa nhà cải tạo Hải Phòng",
+      "slug": "thiet-ke-website-cai-tao-nha-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website trần thạch cao Nha Trang",
+      "slug": "thiet-ke-website-tran-thach-cao-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website trần nhựa pvc Huế",
+      "slug": "thiet-ke-website-tran-nhua-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website ốp đá granite Đà Lạt",
+      "slug": "thiet-ke-website-op-da-granite-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đá marble TP.HCM",
+      "slug": "thiet-ke-website-da-marble-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website gạch bêtông nhẹ Hà Nội",
+      "slug": "thiet-ke-website-gach-be-tong-nhe-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xi măng xây dựng Đà Nẵng",
+      "slug": "thiet-ke-website-xi-mang-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website ống nước pvc Cần Thơ",
+      "slug": "thiet-ke-website-ong-nuoc-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thiết bị điện dân dụng Bình Dương",
+      "slug": "thiet-ke-website-thiet-bi-dien-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đèn led chiếu sáng Đồng Nai",
+      "slug": "thiet-ke-website-den-led-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website quạt trần công nghiệp Hải Phòng",
+      "slug": "thiet-ke-website-quat-tran-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website máy bơm nước Nha Trang",
+      "slug": "thiet-ke-website-may-bom-nuoc-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bồn nước Huế",
+      "slug": "thiet-ke-website-bon-nuoc-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bể phốt Đà Lạt",
+      "slug": "thiet-ke-website-be-phot-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xây dựng nhà xưởng TP.HCM",
+      "slug": "thiet-ke-website-xay-nha-xuong-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xây dựng nhà tiền chế Hà Nội",
+      "slug": "thiet-ke-website-nha-tien-che-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp dựng khung thép Đà Nẵng",
+      "slug": "thiet-ke-website-khung-thep-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website mái polycarbonate Cần Thơ",
+      "slug": "thiet-ke-website-mai-poly-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cách nhiệt mái Bình Dương",
+      "slug": "thiet-ke-website-cach-nhiet-mai-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thi công sàn epoxy Đồng Nai",
+      "slug": "thiet-ke-website-san-epoxy-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thi công giấy dán tường Hải Phòng",
+      "slug": "thiet-ke-website-giay-dan-tuong-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website rèm cửa Nha Trang",
+      "slug": "thiet-ke-website-rem-cua-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nệm / chăn ga Huế",
+      "slug": "thiet-ke-website-nem-chan-ga-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nội thất văn phòng Đà Lạt",
+      "slug": "thiet-ke-website-noi-that-van-phong-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nội thất quán cafe TP.HCM",
+      "slug": "thiet-ke-website-noi-that-cafe-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website showroom gạch men Hà Nội",
+      "slug": "thiet-ke-website-showroom-gach-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đại lý sơn Đà Nẵng",
+      "slug": "thiet-ke-website-dai-ly-son-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website keo dán gạch Cần Thơ",
+      "slug": "thiet-ke-website-keo-dan-gach-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website keo silicone Bình Dương",
+      "slug": "thiet-ke-website-keo-silicone-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thước đo / dụng cụ xây Đồng Nai",
+      "slug": "thiet-ke-website-dung-cu-xay-dung-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy đầm Hải Phòng",
+      "slug": "thiet-ke-website-thue-may-dam-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cho thuê máy cắt gạch Nha Trang",
+      "slug": "thiet-ke-website-thue-may-cat-gach-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xe ben thuê Huế",
+      "slug": "thiet-ke-website-thue-xe-ben-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website xe trộn bê tông Đà Lạt",
+      "slug": "thiet-ke-website-xe-tron-be-tong-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cáp điện TP.HCM",
+      "slug": "thiet-ke-website-cap-dien-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website tủ điện Hà Nội",
+      "slug": "thiet-ke-website-tu-dien-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website lắp đặt điện công nghiệp Đà Nẵng",
+      "slug": "thiet-ke-website-dien-cong-nghiep-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website chống sét Cần Thơ",
+      "slug": "thiet-ke-website-chong-set-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hệ thống họng chữa cháy Bình Dương",
+      "slug": "thiet-ke-website-hong-chua-chay-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bình chữa cháy Đồng Nai",
+      "slug": "thiet-ke-website-binh-chua-chay-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website pccc công trình Hải Phòng",
+      "slug": "thiet-ke-website-pccc-cong-trinh-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website thang máy gia đình Nha Trang",
+      "slug": "thiet-ke-website-thang-may-gia-dinh-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website bảo trì thang máy Huế",
+      "slug": "thiet-ke-website-bao-tri-thang-may-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cửa tự động Đà Lạt",
+      "slug": "thiet-ke-website-cua-tu-dong-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website khóa vân tay TP.HCM",
+      "slug": "thiet-ke-website-khoa-van-tay-tphcm",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website intercom Hà Nội",
+      "slug": "thiet-ke-website-intercom-ha-noi",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cổng xếp Đà Nẵng",
+      "slug": "thiet-ke-website-cong-xep-da-nang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website cổng tự động Cần Thơ",
+      "slug": "thiet-ke-website-cong-tu-dong-can-tho",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hàng rào điện Bình Dương",
+      "slug": "thiet-ke-website-hang-rao-dien-binh-duong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website nhà kính nông nghiệp Đồng Nai",
+      "slug": "thiet-ke-website-nha-kinh-dong-nai",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website hệ thống tưới nhỏ giọt Hải Phòng",
+      "slug": "thiet-ke-website-tuoi-nho-giot-hai-phong",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website giàn trồng rau Nha Trang",
+      "slug": "thiet-ke-website-gian-trong-rau-nha-trang",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website phân compost Huế",
+      "slug": "thiet-ke-website-phan-compost-hue",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "thiết kế website đất trồng sạch Đà Lạt",
+      "slug": "thiet-ke-website-dat-trong-da-lat",
+      "intent": "local",
+      "group": "Local (tỉnh/thành)"
+    },
+    {
+      "kw": "seo google maps giặt sấy",
+      "slug": "seo-google-maps-giat-say",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vựa sầu riêng",
+      "slug": "seo-google-maps-vua-sau-rieng",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vựa trái cây",
+      "slug": "seo-google-maps-vua-trai-cay",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cung cấp rau sạch",
+      "slug": "seo-google-maps-rau-sach",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cửa hàng gạo",
+      "slug": "seo-google-maps-cua-hang-gao",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đại lý phân bón",
+      "slug": "seo-google-maps-dai-ly-phan-bon",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vựa cá biển",
+      "slug": "seo-google-maps-vua-ca-bien",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps hải sản sống",
+      "slug": "seo-google-maps-hai-san-song",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps xưởng bánh mì",
+      "slug": "seo-google-maps-xuong-banh-mi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps tiệm bánh kem",
+      "slug": "seo-google-maps-tiem-banh-kem",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán cơm tấm",
+      "slug": "seo-google-maps-com-tam",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán bún bò",
+      "slug": "seo-google-maps-bun-bo",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán phở",
+      "slug": "seo-google-maps-pho",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán ốc nhậu",
+      "slug": "seo-google-maps-quan-oc",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps ship đồ ăn",
+      "slug": "seo-google-maps-ship-do-an",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps mật ong nguyên chất",
+      "slug": "seo-google-maps-mat-ong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cà phê rang xay",
+      "slug": "seo-google-maps-ca-phe-rang-xay",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps nước mắm truyền thống",
+      "slug": "seo-google-maps-nuoc-mam",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vựa hành tỏi",
+      "slug": "seo-google-maps-vua-hanh-toi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thịt heo sạch",
+      "slug": "seo-google-maps-thit-heo-sach",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán lẩu nướng",
+      "slug": "seo-google-maps-lau-nuong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán trà sữa",
+      "slug": "seo-google-maps-tra-sua",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán cà phê takeaway",
+      "slug": "seo-google-maps-cafe-takeaway",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps tiệm bánh bao",
+      "slug": "seo-google-maps-banh-bao",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở làm nem chua",
+      "slug": "seo-google-maps-nem-chua",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps xưởng mì tươi",
+      "slug": "seo-google-maps-mi-tuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở đậu hũ",
+      "slug": "seo-google-maps-dau-hu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps chè thái / quán chè",
+      "slug": "seo-google-maps-quan-che",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sinh tố nước ép",
+      "slug": "seo-google-maps-sinh-to-nuoc-ep",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở muối ớt",
+      "slug": "seo-google-maps-muoi-ot",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps gia vị khô",
+      "slug": "seo-google-maps-gia-vi-kho",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đặc sản khô mực",
+      "slug": "seo-google-maps-kho-muc",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đặc sản bánh pía",
+      "slug": "seo-google-maps-banh-pia",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps yến sào",
+      "slug": "seo-google-maps-yen-sao",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đông trùng hạ thảo",
+      "slug": "seo-google-maps-dong-trung-ha-thao",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps trà thảo mộc",
+      "slug": "seo-google-maps-tra-thao-moc",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps rượu cần / rượu quê",
+      "slug": "seo-google-maps-ruou-que",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps bia craft",
+      "slug": "seo-google-maps-bia-craft",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán buffet",
+      "slug": "seo-google-maps-buffet",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quán chay",
+      "slug": "seo-google-maps-quan-chay",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps tiệm bánh trung thu",
+      "slug": "seo-google-maps-banh-trung-thu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps xưởng bánh cookies",
+      "slug": "seo-google-maps-banh-cookies",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở sữa chua",
+      "slug": "seo-google-maps-sua-chua",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sữa tươi trang trại",
+      "slug": "seo-google-maps-sua-tuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps trứng gà ta",
+      "slug": "seo-google-maps-trung-ga-ta",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thịt bò úc",
+      "slug": "seo-google-maps-thit-bo",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thịt dê",
+      "slug": "seo-google-maps-thit-de",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps gà ta thả vườn",
+      "slug": "seo-google-maps-ga-ta",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vịt quay / heo quay",
+      "slug": "seo-google-maps-heo-quay",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở làm chả lụa",
+      "slug": "seo-google-maps-cha-lua",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps xúc xích / lạp xưởng",
+      "slug": "seo-google-maps-lap-xuong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở làm đậu phộng rang",
+      "slug": "seo-google-maps-dau-phong-rang",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps hạt điều rang muối",
+      "slug": "seo-google-maps-hat-dieu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở bóc tôm",
+      "slug": "seo-google-maps-boc-tom",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps nuôi ốc hương",
+      "slug": "seo-google-maps-oc-huong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps nuôi tôm sú",
+      "slug": "seo-google-maps-tom-su",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cơ sở nấm sạch",
+      "slug": "seo-google-maps-nam-sach",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps rau hydroponic",
+      "slug": "seo-google-maps-rau-thuy-canh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cửa hàng thực phẩm đông lạnh",
+      "slug": "seo-google-maps-thuc-pham-dong-lanh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đại lý nước suối",
+      "slug": "seo-google-maps-dai-ly-nuoc-suoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps giặt thảm sofa",
+      "slug": "seo-google-maps-giat-tham-sofa",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vệ sinh công nghiệp",
+      "slug": "seo-google-maps-ve-sinh-cong-nghiep",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thông cống",
+      "slug": "seo-google-maps-thong-cong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa điện nước",
+      "slug": "seo-google-maps-sua-dien-nuoc",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps lắp máy nước nóng",
+      "slug": "seo-google-maps-may-nuoc-nong",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps lắp camera an ninh",
+      "slug": "seo-google-maps-camera-an-ninh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa khóa",
+      "slug": "seo-google-maps-sua-khoa",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps chuyển nhà trọn gói",
+      "slug": "seo-google-maps-chuyen-nha",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê máy photocopy",
+      "slug": "seo-google-maps-thue-may-photocopy",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê loa đài",
+      "slug": "seo-google-maps-thue-loa-dai",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps in ấn nhanh",
+      "slug": "seo-google-maps-in-an-nhanh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thám tử tư",
+      "slug": "seo-google-maps-tham-tu-tu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps mai táng",
+      "slug": "seo-google-maps-mai-tang",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps vệ sinh máy lạnh",
+      "slug": "seo-google-maps-ve-sinh-may-lanh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thu mua phế liệu",
+      "slug": "seo-google-maps-phe-lieu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa máy giặt tủ lạnh",
+      "slug": "seo-google-maps-sua-may-giat",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps lắp cửa cuốn",
+      "slug": "seo-google-maps-cua-cuon",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dịch vụ bảo vệ",
+      "slug": "seo-google-maps-bao-ve",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê kho bãi",
+      "slug": "seo-google-maps-thue-kho-bai",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps trông giữ xe",
+      "slug": "seo-google-maps-trong-giu-xe",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps giặt ủi công nghiệp",
+      "slug": "seo-google-maps-giat-ui-cong-nghiep",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dọn nhà theo giờ",
+      "slug": "seo-google-maps-don-nha",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps phun khử khuẩn",
+      "slug": "seo-google-maps-khu-khuan",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps diệt mối mọt",
+      "slug": "seo-google-maps-diet-moi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps diệt côn trùng",
+      "slug": "seo-google-maps-diet-con-trung",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa tv led",
+      "slug": "seo-google-maps-sua-tv",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa điện thoại",
+      "slug": "seo-google-maps-sua-dien-thoai",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thay màn hình điện thoại",
+      "slug": "seo-google-maps-thay-man-hinh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps lắp đặt mạng wifi",
+      "slug": "seo-google-maps-lap-wifi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps sửa máy tính",
+      "slug": "seo-google-maps-sua-may-tinh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps nạp mực máy in",
+      "slug": "seo-google-maps-nap-muc-may-in",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê bàn ghế sự kiện",
+      "slug": "seo-google-maps-thue-ban-ghe",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê nhà bạt",
+      "slug": "seo-google-maps-thue-nha-bat",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps tổ chức sự kiện nhỏ",
+      "slug": "seo-google-maps-to-chuc-su-kien",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps mc / thuê mc",
+      "slug": "seo-google-maps-thue-mc",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quay phim tiệc cưới",
+      "slug": "seo-google-maps-quay-phim-cuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps chụp ảnh cưới",
+      "slug": "seo-google-maps-chup-anh-cuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps makeup cô dâu",
+      "slug": "seo-google-maps-makeup-co-dau",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thuê áo cưới",
+      "slug": "seo-google-maps-thue-ao-cuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps thuê xe hoa",
+      "slug": "seo-google-maps-thue-xe-hoa",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps hoa tang / vòng hoa",
+      "slug": "seo-google-maps-hoa-tang",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cửa hàng hoa tươi",
+      "slug": "seo-google-maps-hoa-tuoi",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps làm bánh sinh nhật tại nhà",
+      "slug": "seo-google-maps-banh-sinh-nhat-tai-nha",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps gói quà",
+      "slug": "seo-google-maps-goi-qua",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps ship nội thành xe máy",
+      "slug": "seo-google-maps-shipper",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dịch vụ trợ lý ảo",
+      "slug": "seo-google-maps-tro-ly-ao",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dịch vụ kế toán thuế hộ",
+      "slug": "seo-google-maps-ke-toan-ho",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps công chứng / dịch vụ hành chính",
+      "slug": "seo-google-maps-dich-vu-hanh-chinh",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps xin visa",
+      "slug": "seo-google-maps-xin-visa",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dịch thuật",
+      "slug": "seo-google-maps-dich-thuat",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps in namecard",
+      "slug": "seo-google-maps-in-namecard",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps làm biển hiệu mica",
+      "slug": "seo-google-maps-bien-hieu-mica",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps làm biển led",
+      "slug": "seo-google-maps-bien-led",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps dec tem decal",
+      "slug": "seo-google-maps-in-decal",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps đóng gói hàng online",
+      "slug": "seo-google-maps-dong-goi-hang",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps fulfillment nhỏ",
+      "slug": "seo-google-maps-fulfillment",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê phòng họp",
+      "slug": "seo-google-maps-thue-phong-hop",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps coworking nhỏ",
+      "slug": "seo-google-maps-coworking",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps cho thuê mặt bằng",
+      "slug": "seo-google-maps-thue-mat-bang",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "seo google maps quản lý căn hộ dịch vụ",
+      "slug": "seo-google-maps-can-ho-dich-vu",
+      "intent": "maps",
+      "group": "SEO Google Maps"
+    },
+    {
+      "kw": "quảng cáo facebook giặt sấy",
+      "slug": "quang-cao-facebook-giat-say",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vựa sầu riêng",
+      "slug": "quang-cao-facebook-vua-sau-rieng",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vựa trái cây",
+      "slug": "quang-cao-facebook-vua-trai-cay",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cung cấp rau sạch",
+      "slug": "quang-cao-facebook-rau-sach",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cửa hàng gạo",
+      "slug": "quang-cao-facebook-cua-hang-gao",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đại lý phân bón",
+      "slug": "quang-cao-facebook-dai-ly-phan-bon",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vựa cá biển",
+      "slug": "quang-cao-facebook-vua-ca-bien",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook hải sản sống",
+      "slug": "quang-cao-facebook-hai-san-song",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook xưởng bánh mì",
+      "slug": "quang-cao-facebook-xuong-banh-mi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook tiệm bánh kem",
+      "slug": "quang-cao-facebook-tiem-banh-kem",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán cơm tấm",
+      "slug": "quang-cao-facebook-com-tam",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán bún bò",
+      "slug": "quang-cao-facebook-bun-bo",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán phở",
+      "slug": "quang-cao-facebook-pho",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán ốc nhậu",
+      "slug": "quang-cao-facebook-quan-oc",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook ship đồ ăn",
+      "slug": "quang-cao-facebook-ship-do-an",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook mật ong nguyên chất",
+      "slug": "quang-cao-facebook-mat-ong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cà phê rang xay",
+      "slug": "quang-cao-facebook-ca-phe-rang-xay",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook nước mắm truyền thống",
+      "slug": "quang-cao-facebook-nuoc-mam",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vựa hành tỏi",
+      "slug": "quang-cao-facebook-vua-hanh-toi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thịt heo sạch",
+      "slug": "quang-cao-facebook-thit-heo-sach",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán lẩu nướng",
+      "slug": "quang-cao-facebook-lau-nuong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán trà sữa",
+      "slug": "quang-cao-facebook-tra-sua",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán cà phê takeaway",
+      "slug": "quang-cao-facebook-cafe-takeaway",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook tiệm bánh bao",
+      "slug": "quang-cao-facebook-banh-bao",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở làm nem chua",
+      "slug": "quang-cao-facebook-nem-chua",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook xưởng mì tươi",
+      "slug": "quang-cao-facebook-mi-tuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở đậu hũ",
+      "slug": "quang-cao-facebook-dau-hu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook chè thái / quán chè",
+      "slug": "quang-cao-facebook-quan-che",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sinh tố nước ép",
+      "slug": "quang-cao-facebook-sinh-to-nuoc-ep",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở muối ớt",
+      "slug": "quang-cao-facebook-muoi-ot",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook gia vị khô",
+      "slug": "quang-cao-facebook-gia-vi-kho",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đặc sản khô mực",
+      "slug": "quang-cao-facebook-kho-muc",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đặc sản bánh pía",
+      "slug": "quang-cao-facebook-banh-pia",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook yến sào",
+      "slug": "quang-cao-facebook-yen-sao",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đông trùng hạ thảo",
+      "slug": "quang-cao-facebook-dong-trung-ha-thao",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook trà thảo mộc",
+      "slug": "quang-cao-facebook-tra-thao-moc",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook rượu cần / rượu quê",
+      "slug": "quang-cao-facebook-ruou-que",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook bia craft",
+      "slug": "quang-cao-facebook-bia-craft",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán buffet",
+      "slug": "quang-cao-facebook-buffet",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quán chay",
+      "slug": "quang-cao-facebook-quan-chay",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook tiệm bánh trung thu",
+      "slug": "quang-cao-facebook-banh-trung-thu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook xưởng bánh cookies",
+      "slug": "quang-cao-facebook-banh-cookies",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở sữa chua",
+      "slug": "quang-cao-facebook-sua-chua",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sữa tươi trang trại",
+      "slug": "quang-cao-facebook-sua-tuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook trứng gà ta",
+      "slug": "quang-cao-facebook-trung-ga-ta",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thịt bò úc",
+      "slug": "quang-cao-facebook-thit-bo",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thịt dê",
+      "slug": "quang-cao-facebook-thit-de",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook gà ta thả vườn",
+      "slug": "quang-cao-facebook-ga-ta",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vịt quay / heo quay",
+      "slug": "quang-cao-facebook-heo-quay",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở làm chả lụa",
+      "slug": "quang-cao-facebook-cha-lua",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook xúc xích / lạp xưởng",
+      "slug": "quang-cao-facebook-lap-xuong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở làm đậu phộng rang",
+      "slug": "quang-cao-facebook-dau-phong-rang",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook hạt điều rang muối",
+      "slug": "quang-cao-facebook-hat-dieu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở bóc tôm",
+      "slug": "quang-cao-facebook-boc-tom",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook nuôi ốc hương",
+      "slug": "quang-cao-facebook-oc-huong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook nuôi tôm sú",
+      "slug": "quang-cao-facebook-tom-su",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cơ sở nấm sạch",
+      "slug": "quang-cao-facebook-nam-sach",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook rau hydroponic",
+      "slug": "quang-cao-facebook-rau-thuy-canh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cửa hàng thực phẩm đông lạnh",
+      "slug": "quang-cao-facebook-thuc-pham-dong-lanh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đại lý nước suối",
+      "slug": "quang-cao-facebook-dai-ly-nuoc-suoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook giặt thảm sofa",
+      "slug": "quang-cao-facebook-giat-tham-sofa",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vệ sinh công nghiệp",
+      "slug": "quang-cao-facebook-ve-sinh-cong-nghiep",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thông cống",
+      "slug": "quang-cao-facebook-thong-cong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa điện nước",
+      "slug": "quang-cao-facebook-sua-dien-nuoc",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook lắp máy nước nóng",
+      "slug": "quang-cao-facebook-may-nuoc-nong",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook lắp camera an ninh",
+      "slug": "quang-cao-facebook-camera-an-ninh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa khóa",
+      "slug": "quang-cao-facebook-sua-khoa",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook chuyển nhà trọn gói",
+      "slug": "quang-cao-facebook-chuyen-nha",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê máy photocopy",
+      "slug": "quang-cao-facebook-thue-may-photocopy",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê loa đài",
+      "slug": "quang-cao-facebook-thue-loa-dai",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook in ấn nhanh",
+      "slug": "quang-cao-facebook-in-an-nhanh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thám tử tư",
+      "slug": "quang-cao-facebook-tham-tu-tu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook mai táng",
+      "slug": "quang-cao-facebook-mai-tang",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook vệ sinh máy lạnh",
+      "slug": "quang-cao-facebook-ve-sinh-may-lanh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thu mua phế liệu",
+      "slug": "quang-cao-facebook-phe-lieu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa máy giặt tủ lạnh",
+      "slug": "quang-cao-facebook-sua-may-giat",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook lắp cửa cuốn",
+      "slug": "quang-cao-facebook-cua-cuon",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dịch vụ bảo vệ",
+      "slug": "quang-cao-facebook-bao-ve",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê kho bãi",
+      "slug": "quang-cao-facebook-thue-kho-bai",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook trông giữ xe",
+      "slug": "quang-cao-facebook-trong-giu-xe",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook giặt ủi công nghiệp",
+      "slug": "quang-cao-facebook-giat-ui-cong-nghiep",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dọn nhà theo giờ",
+      "slug": "quang-cao-facebook-don-nha",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook phun khử khuẩn",
+      "slug": "quang-cao-facebook-khu-khuan",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook diệt mối mọt",
+      "slug": "quang-cao-facebook-diet-moi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook diệt côn trùng",
+      "slug": "quang-cao-facebook-diet-con-trung",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa tv led",
+      "slug": "quang-cao-facebook-sua-tv",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa điện thoại",
+      "slug": "quang-cao-facebook-sua-dien-thoai",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thay màn hình điện thoại",
+      "slug": "quang-cao-facebook-thay-man-hinh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook lắp đặt mạng wifi",
+      "slug": "quang-cao-facebook-lap-wifi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook sửa máy tính",
+      "slug": "quang-cao-facebook-sua-may-tinh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook nạp mực máy in",
+      "slug": "quang-cao-facebook-nap-muc-may-in",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê bàn ghế sự kiện",
+      "slug": "quang-cao-facebook-thue-ban-ghe",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê nhà bạt",
+      "slug": "quang-cao-facebook-thue-nha-bat",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook tổ chức sự kiện nhỏ",
+      "slug": "quang-cao-facebook-to-chuc-su-kien",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook mc / thuê mc",
+      "slug": "quang-cao-facebook-thue-mc",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quay phim tiệc cưới",
+      "slug": "quang-cao-facebook-quay-phim-cuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook chụp ảnh cưới",
+      "slug": "quang-cao-facebook-chup-anh-cuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook makeup cô dâu",
+      "slug": "quang-cao-facebook-makeup-co-dau",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thuê áo cưới",
+      "slug": "quang-cao-facebook-thue-ao-cuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook thuê xe hoa",
+      "slug": "quang-cao-facebook-thue-xe-hoa",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook hoa tang / vòng hoa",
+      "slug": "quang-cao-facebook-hoa-tang",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cửa hàng hoa tươi",
+      "slug": "quang-cao-facebook-hoa-tuoi",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook làm bánh sinh nhật tại nhà",
+      "slug": "quang-cao-facebook-banh-sinh-nhat-tai-nha",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook gói quà",
+      "slug": "quang-cao-facebook-goi-qua",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook ship nội thành xe máy",
+      "slug": "quang-cao-facebook-shipper",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dịch vụ trợ lý ảo",
+      "slug": "quang-cao-facebook-tro-ly-ao",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dịch vụ kế toán thuế hộ",
+      "slug": "quang-cao-facebook-ke-toan-ho",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook công chứng / dịch vụ hành chính",
+      "slug": "quang-cao-facebook-dich-vu-hanh-chinh",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook xin visa",
+      "slug": "quang-cao-facebook-xin-visa",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dịch thuật",
+      "slug": "quang-cao-facebook-dich-thuat",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook in namecard",
+      "slug": "quang-cao-facebook-in-namecard",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook làm biển hiệu mica",
+      "slug": "quang-cao-facebook-bien-hieu-mica",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook làm biển led",
+      "slug": "quang-cao-facebook-bien-led",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook dec tem decal",
+      "slug": "quang-cao-facebook-in-decal",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook đóng gói hàng online",
+      "slug": "quang-cao-facebook-dong-goi-hang",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook fulfillment nhỏ",
+      "slug": "quang-cao-facebook-fulfillment",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê phòng họp",
+      "slug": "quang-cao-facebook-thue-phong-hop",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook coworking nhỏ",
+      "slug": "quang-cao-facebook-coworking",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook cho thuê mặt bằng",
+      "slug": "quang-cao-facebook-thue-mat-bang",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "quảng cáo facebook quản lý căn hộ dịch vụ",
+      "slug": "quang-cao-facebook-can-ho-dich-vu",
+      "intent": "facebook-ads",
+      "group": "Facebook Ads"
+    },
+    {
+      "kw": "làm website giặt sấy",
+      "slug": "lam-website-giat-say",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vựa sầu riêng",
+      "slug": "lam-website-vua-sau-rieng",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vựa trái cây",
+      "slug": "lam-website-vua-trai-cay",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cung cấp rau sạch",
+      "slug": "lam-website-rau-sach",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cửa hàng gạo",
+      "slug": "lam-website-cua-hang-gao",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website đại lý phân bón",
+      "slug": "lam-website-dai-ly-phan-bon",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vựa cá biển",
+      "slug": "lam-website-vua-ca-bien",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website hải sản sống",
+      "slug": "lam-website-hai-san-song",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website xưởng bánh mì",
+      "slug": "lam-website-xuong-banh-mi",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website tiệm bánh kem",
+      "slug": "lam-website-tiem-banh-kem",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán cơm tấm",
+      "slug": "lam-website-com-tam",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán bún bò",
+      "slug": "lam-website-bun-bo",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán phở",
+      "slug": "lam-website-pho",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán ốc nhậu",
+      "slug": "lam-website-quan-oc",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website ship đồ ăn",
+      "slug": "lam-website-ship-do-an",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website mật ong nguyên chất",
+      "slug": "lam-website-mat-ong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cà phê rang xay",
+      "slug": "lam-website-ca-phe-rang-xay",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website nước mắm truyền thống",
+      "slug": "lam-website-nuoc-mam",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vựa hành tỏi",
+      "slug": "lam-website-vua-hanh-toi",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thịt heo sạch",
+      "slug": "lam-website-thit-heo-sach",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán lẩu nướng",
+      "slug": "lam-website-lau-nuong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán trà sữa",
+      "slug": "lam-website-tra-sua",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán cà phê takeaway",
+      "slug": "lam-website-cafe-takeaway",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website tiệm bánh bao",
+      "slug": "lam-website-banh-bao",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở làm nem chua",
+      "slug": "lam-website-nem-chua",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website xưởng mì tươi",
+      "slug": "lam-website-mi-tuoi",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở đậu hũ",
+      "slug": "lam-website-dau-hu",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website chè thái / quán chè",
+      "slug": "lam-website-quan-che",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website sinh tố nước ép",
+      "slug": "lam-website-sinh-to-nuoc-ep",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở muối ớt",
+      "slug": "lam-website-muoi-ot",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website gia vị khô",
+      "slug": "lam-website-gia-vi-kho",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website đặc sản khô mực",
+      "slug": "lam-website-kho-muc",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website đặc sản bánh pía",
+      "slug": "lam-website-banh-pia",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website yến sào",
+      "slug": "lam-website-yen-sao",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website đông trùng hạ thảo",
+      "slug": "lam-website-dong-trung-ha-thao",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website trà thảo mộc",
+      "slug": "lam-website-tra-thao-moc",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website rượu cần / rượu quê",
+      "slug": "lam-website-ruou-que",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website bia craft",
+      "slug": "lam-website-bia-craft",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán buffet",
+      "slug": "lam-website-buffet",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website quán chay",
+      "slug": "lam-website-quan-chay",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website tiệm bánh trung thu",
+      "slug": "lam-website-banh-trung-thu",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website xưởng bánh cookies",
+      "slug": "lam-website-banh-cookies",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở sữa chua",
+      "slug": "lam-website-sua-chua",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website sữa tươi trang trại",
+      "slug": "lam-website-sua-tuoi",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website trứng gà ta",
+      "slug": "lam-website-trung-ga-ta",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thịt bò úc",
+      "slug": "lam-website-thit-bo",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thịt dê",
+      "slug": "lam-website-thit-de",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website gà ta thả vườn",
+      "slug": "lam-website-ga-ta",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vịt quay / heo quay",
+      "slug": "lam-website-heo-quay",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở làm chả lụa",
+      "slug": "lam-website-cha-lua",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website xúc xích / lạp xưởng",
+      "slug": "lam-website-lap-xuong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở làm đậu phộng rang",
+      "slug": "lam-website-dau-phong-rang",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website hạt điều rang muối",
+      "slug": "lam-website-hat-dieu",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở bóc tôm",
+      "slug": "lam-website-boc-tom",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website nuôi ốc hương",
+      "slug": "lam-website-oc-huong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website nuôi tôm sú",
+      "slug": "lam-website-tom-su",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cơ sở nấm sạch",
+      "slug": "lam-website-nam-sach",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website rau hydroponic",
+      "slug": "lam-website-rau-thuy-canh",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cửa hàng thực phẩm đông lạnh",
+      "slug": "lam-website-thuc-pham-dong-lanh",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website đại lý nước suối",
+      "slug": "lam-website-dai-ly-nuoc-suoi",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website giặt thảm sofa",
+      "slug": "lam-website-giat-tham-sofa",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vệ sinh công nghiệp",
+      "slug": "lam-website-ve-sinh-cong-nghiep",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thông cống",
+      "slug": "lam-website-thong-cong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website sửa điện nước",
+      "slug": "lam-website-sua-dien-nuoc",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website lắp máy nước nóng",
+      "slug": "lam-website-may-nuoc-nong",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website lắp camera an ninh",
+      "slug": "lam-website-camera-an-ninh",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website sửa khóa",
+      "slug": "lam-website-sua-khoa",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website chuyển nhà trọn gói",
+      "slug": "lam-website-chuyen-nha",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cho thuê máy photocopy",
+      "slug": "lam-website-thue-may-photocopy",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cho thuê loa đài",
+      "slug": "lam-website-thue-loa-dai",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website in ấn nhanh",
+      "slug": "lam-website-in-an-nhanh",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thám tử tư",
+      "slug": "lam-website-tham-tu-tu",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website mai táng",
+      "slug": "lam-website-mai-tang",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website vệ sinh máy lạnh",
+      "slug": "lam-website-ve-sinh-may-lanh",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website thu mua phế liệu",
+      "slug": "lam-website-phe-lieu",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website sửa máy giặt tủ lạnh",
+      "slug": "lam-website-sua-may-giat",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website lắp cửa cuốn",
+      "slug": "lam-website-cua-cuon",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website dịch vụ bảo vệ",
+      "slug": "lam-website-bao-ve",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website cho thuê kho bãi",
+      "slug": "lam-website-thue-kho-bai",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "làm website trông giữ xe",
+      "slug": "lam-website-trong-giu-xe",
+      "intent": "money-alt",
+      "group": "Làm website"
+    },
+    {
+      "kw": "chi phí làm website giặt sấy",
+      "slug": "chi-phi-lam-website-giat-say",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vựa sầu riêng",
+      "slug": "chi-phi-lam-website-vua-sau-rieng",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vựa trái cây",
+      "slug": "chi-phi-lam-website-vua-trai-cay",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cung cấp rau sạch",
+      "slug": "chi-phi-lam-website-rau-sach",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cửa hàng gạo",
+      "slug": "chi-phi-lam-website-cua-hang-gao",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website đại lý phân bón",
+      "slug": "chi-phi-lam-website-dai-ly-phan-bon",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vựa cá biển",
+      "slug": "chi-phi-lam-website-vua-ca-bien",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website hải sản sống",
+      "slug": "chi-phi-lam-website-hai-san-song",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website xưởng bánh mì",
+      "slug": "chi-phi-lam-website-xuong-banh-mi",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website tiệm bánh kem",
+      "slug": "chi-phi-lam-website-tiem-banh-kem",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán cơm tấm",
+      "slug": "chi-phi-lam-website-com-tam",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán bún bò",
+      "slug": "chi-phi-lam-website-bun-bo",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán phở",
+      "slug": "chi-phi-lam-website-pho",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán ốc nhậu",
+      "slug": "chi-phi-lam-website-quan-oc",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website ship đồ ăn",
+      "slug": "chi-phi-lam-website-ship-do-an",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website mật ong nguyên chất",
+      "slug": "chi-phi-lam-website-mat-ong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cà phê rang xay",
+      "slug": "chi-phi-lam-website-ca-phe-rang-xay",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website nước mắm truyền thống",
+      "slug": "chi-phi-lam-website-nuoc-mam",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vựa hành tỏi",
+      "slug": "chi-phi-lam-website-vua-hanh-toi",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website thịt heo sạch",
+      "slug": "chi-phi-lam-website-thit-heo-sach",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán lẩu nướng",
+      "slug": "chi-phi-lam-website-lau-nuong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán trà sữa",
+      "slug": "chi-phi-lam-website-tra-sua",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán cà phê takeaway",
+      "slug": "chi-phi-lam-website-cafe-takeaway",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website tiệm bánh bao",
+      "slug": "chi-phi-lam-website-banh-bao",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở làm nem chua",
+      "slug": "chi-phi-lam-website-nem-chua",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website xưởng mì tươi",
+      "slug": "chi-phi-lam-website-mi-tuoi",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở đậu hũ",
+      "slug": "chi-phi-lam-website-dau-hu",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website chè thái / quán chè",
+      "slug": "chi-phi-lam-website-quan-che",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website sinh tố nước ép",
+      "slug": "chi-phi-lam-website-sinh-to-nuoc-ep",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở muối ớt",
+      "slug": "chi-phi-lam-website-muoi-ot",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website gia vị khô",
+      "slug": "chi-phi-lam-website-gia-vi-kho",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website đặc sản khô mực",
+      "slug": "chi-phi-lam-website-kho-muc",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website đặc sản bánh pía",
+      "slug": "chi-phi-lam-website-banh-pia",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website yến sào",
+      "slug": "chi-phi-lam-website-yen-sao",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website đông trùng hạ thảo",
+      "slug": "chi-phi-lam-website-dong-trung-ha-thao",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website trà thảo mộc",
+      "slug": "chi-phi-lam-website-tra-thao-moc",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website rượu cần / rượu quê",
+      "slug": "chi-phi-lam-website-ruou-que",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website bia craft",
+      "slug": "chi-phi-lam-website-bia-craft",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán buffet",
+      "slug": "chi-phi-lam-website-buffet",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website quán chay",
+      "slug": "chi-phi-lam-website-quan-chay",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website tiệm bánh trung thu",
+      "slug": "chi-phi-lam-website-banh-trung-thu",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website xưởng bánh cookies",
+      "slug": "chi-phi-lam-website-banh-cookies",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở sữa chua",
+      "slug": "chi-phi-lam-website-sua-chua",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website sữa tươi trang trại",
+      "slug": "chi-phi-lam-website-sua-tuoi",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website trứng gà ta",
+      "slug": "chi-phi-lam-website-trung-ga-ta",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website thịt bò úc",
+      "slug": "chi-phi-lam-website-thit-bo",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website thịt dê",
+      "slug": "chi-phi-lam-website-thit-de",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website gà ta thả vườn",
+      "slug": "chi-phi-lam-website-ga-ta",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vịt quay / heo quay",
+      "slug": "chi-phi-lam-website-heo-quay",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở làm chả lụa",
+      "slug": "chi-phi-lam-website-cha-lua",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website xúc xích / lạp xưởng",
+      "slug": "chi-phi-lam-website-lap-xuong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở làm đậu phộng rang",
+      "slug": "chi-phi-lam-website-dau-phong-rang",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website hạt điều rang muối",
+      "slug": "chi-phi-lam-website-hat-dieu",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở bóc tôm",
+      "slug": "chi-phi-lam-website-boc-tom",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website nuôi ốc hương",
+      "slug": "chi-phi-lam-website-oc-huong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website nuôi tôm sú",
+      "slug": "chi-phi-lam-website-tom-su",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cơ sở nấm sạch",
+      "slug": "chi-phi-lam-website-nam-sach",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website rau hydroponic",
+      "slug": "chi-phi-lam-website-rau-thuy-canh",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cửa hàng thực phẩm đông lạnh",
+      "slug": "chi-phi-lam-website-thuc-pham-dong-lanh",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website đại lý nước suối",
+      "slug": "chi-phi-lam-website-dai-ly-nuoc-suoi",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website giặt thảm sofa",
+      "slug": "chi-phi-lam-website-giat-tham-sofa",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website vệ sinh công nghiệp",
+      "slug": "chi-phi-lam-website-ve-sinh-cong-nghiep",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website thông cống",
+      "slug": "chi-phi-lam-website-thong-cong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website sửa điện nước",
+      "slug": "chi-phi-lam-website-sua-dien-nuoc",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website lắp máy nước nóng",
+      "slug": "chi-phi-lam-website-may-nuoc-nong",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website lắp camera an ninh",
+      "slug": "chi-phi-lam-website-camera-an-ninh",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website sửa khóa",
+      "slug": "chi-phi-lam-website-sua-khoa",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website chuyển nhà trọn gói",
+      "slug": "chi-phi-lam-website-chuyen-nha",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cho thuê máy photocopy",
+      "slug": "chi-phi-lam-website-thue-may-photocopy",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "chi phí làm website cho thuê loa đài",
+      "slug": "chi-phi-lam-website-thue-loa-dai",
+      "intent": "pricing",
+      "group": "Chi phí website"
+    },
+    {
+      "kw": "thiết kế fanpage giặt sấy",
+      "slug": "thiet-ke-fanpage-giat-say",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage vựa sầu riêng",
+      "slug": "thiet-ke-fanpage-vua-sau-rieng",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage vựa trái cây",
+      "slug": "thiet-ke-fanpage-vua-trai-cay",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cung cấp rau sạch",
+      "slug": "thiet-ke-fanpage-rau-sach",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cửa hàng gạo",
+      "slug": "thiet-ke-fanpage-cua-hang-gao",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage đại lý phân bón",
+      "slug": "thiet-ke-fanpage-dai-ly-phan-bon",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage vựa cá biển",
+      "slug": "thiet-ke-fanpage-vua-ca-bien",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage hải sản sống",
+      "slug": "thiet-ke-fanpage-hai-san-song",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage xưởng bánh mì",
+      "slug": "thiet-ke-fanpage-xuong-banh-mi",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage tiệm bánh kem",
+      "slug": "thiet-ke-fanpage-tiem-banh-kem",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán cơm tấm",
+      "slug": "thiet-ke-fanpage-com-tam",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán bún bò",
+      "slug": "thiet-ke-fanpage-bun-bo",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán phở",
+      "slug": "thiet-ke-fanpage-pho",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán ốc nhậu",
+      "slug": "thiet-ke-fanpage-quan-oc",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage ship đồ ăn",
+      "slug": "thiet-ke-fanpage-ship-do-an",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage mật ong nguyên chất",
+      "slug": "thiet-ke-fanpage-mat-ong",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cà phê rang xay",
+      "slug": "thiet-ke-fanpage-ca-phe-rang-xay",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage nước mắm truyền thống",
+      "slug": "thiet-ke-fanpage-nuoc-mam",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage vựa hành tỏi",
+      "slug": "thiet-ke-fanpage-vua-hanh-toi",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage thịt heo sạch",
+      "slug": "thiet-ke-fanpage-thit-heo-sach",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán lẩu nướng",
+      "slug": "thiet-ke-fanpage-lau-nuong",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán trà sữa",
+      "slug": "thiet-ke-fanpage-tra-sua",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán cà phê takeaway",
+      "slug": "thiet-ke-fanpage-cafe-takeaway",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage tiệm bánh bao",
+      "slug": "thiet-ke-fanpage-banh-bao",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở làm nem chua",
+      "slug": "thiet-ke-fanpage-nem-chua",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage xưởng mì tươi",
+      "slug": "thiet-ke-fanpage-mi-tuoi",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở đậu hũ",
+      "slug": "thiet-ke-fanpage-dau-hu",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage chè thái / quán chè",
+      "slug": "thiet-ke-fanpage-quan-che",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage sinh tố nước ép",
+      "slug": "thiet-ke-fanpage-sinh-to-nuoc-ep",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở muối ớt",
+      "slug": "thiet-ke-fanpage-muoi-ot",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage gia vị khô",
+      "slug": "thiet-ke-fanpage-gia-vi-kho",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage đặc sản khô mực",
+      "slug": "thiet-ke-fanpage-kho-muc",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage đặc sản bánh pía",
+      "slug": "thiet-ke-fanpage-banh-pia",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage yến sào",
+      "slug": "thiet-ke-fanpage-yen-sao",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage đông trùng hạ thảo",
+      "slug": "thiet-ke-fanpage-dong-trung-ha-thao",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage trà thảo mộc",
+      "slug": "thiet-ke-fanpage-tra-thao-moc",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage rượu cần / rượu quê",
+      "slug": "thiet-ke-fanpage-ruou-que",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage bia craft",
+      "slug": "thiet-ke-fanpage-bia-craft",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán buffet",
+      "slug": "thiet-ke-fanpage-buffet",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage quán chay",
+      "slug": "thiet-ke-fanpage-quan-chay",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage tiệm bánh trung thu",
+      "slug": "thiet-ke-fanpage-banh-trung-thu",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage xưởng bánh cookies",
+      "slug": "thiet-ke-fanpage-banh-cookies",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở sữa chua",
+      "slug": "thiet-ke-fanpage-sua-chua",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage sữa tươi trang trại",
+      "slug": "thiet-ke-fanpage-sua-tuoi",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage trứng gà ta",
+      "slug": "thiet-ke-fanpage-trung-ga-ta",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage thịt bò úc",
+      "slug": "thiet-ke-fanpage-thit-bo",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage thịt dê",
+      "slug": "thiet-ke-fanpage-thit-de",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage gà ta thả vườn",
+      "slug": "thiet-ke-fanpage-ga-ta",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage vịt quay / heo quay",
+      "slug": "thiet-ke-fanpage-heo-quay",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở làm chả lụa",
+      "slug": "thiet-ke-fanpage-cha-lua",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage xúc xích / lạp xưởng",
+      "slug": "thiet-ke-fanpage-lap-xuong",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở làm đậu phộng rang",
+      "slug": "thiet-ke-fanpage-dau-phong-rang",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage hạt điều rang muối",
+      "slug": "thiet-ke-fanpage-hat-dieu",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở bóc tôm",
+      "slug": "thiet-ke-fanpage-boc-tom",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage nuôi ốc hương",
+      "slug": "thiet-ke-fanpage-oc-huong",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage nuôi tôm sú",
+      "slug": "thiet-ke-fanpage-tom-su",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cơ sở nấm sạch",
+      "slug": "thiet-ke-fanpage-nam-sach",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage rau hydroponic",
+      "slug": "thiet-ke-fanpage-rau-thuy-canh",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage cửa hàng thực phẩm đông lạnh",
+      "slug": "thiet-ke-fanpage-thuc-pham-dong-lanh",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    },
+    {
+      "kw": "thiết kế fanpage đại lý nước suối",
+      "slug": "thiet-ke-fanpage-dai-ly-nuoc-suoi",
+      "intent": "fanpage",
+      "group": "Fanpage"
+    }
+  ]
+}

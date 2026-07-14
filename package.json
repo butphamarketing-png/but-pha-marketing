@@ -12,6 +12,7 @@
     "seed:seo-articles": "node scripts/seed-seo-articles.mjs",
     "seed:customer-keywords-100": "node scripts/seed-customer-keywords-100.mjs",
     "seed:high-volume-100": "node scripts/seed-high-volume-keywords-100.mjs",
+    "seed:niche-500": "node scripts/seed-niche-500.mjs",
     "seed:pillar-short-keywords": "node scripts/seed-pillar-short-keywords.mjs",
     "seed:pillar-fortify": "node scripts/seed-pillar-fortify.mjs",
     "seed:phase7": "node scripts/seed-phase7.mjs",

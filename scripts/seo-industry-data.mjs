@@ -1,7 +1,9 @@
 /** @typedef {{ title: string, slug: string, h1: string, keywordsMain: string, keywordsSecondary: string, industry: string, niche: string, features: string[], faq: { q: string, a: string }[] }} IndustryEntry */
 
+import { NICHE_500_INDUSTRY_ENTRIES } from "./seo-niche-500-industry.mjs";
+
 /** @type {IndustryEntry[]} */
-export const INDUSTRY_ENTRIES = [
+const INDUSTRY_ENTRIES_CORE = [
   {
     title: "Thiết Kế Website Spa Chuyên Nghiệp Chuẩn SEO",
     slug: "thiet-ke-website-spa",
@@ -1893,3 +1895,6 @@ export const INDUSTRY_ENTRIES = [
     ],
   },
 ];
+
+/** Gộp 90 ngành gốc + batch ngách SME (giặt sấy, vựa sầu riêng…). */
+export const INDUSTRY_ENTRIES = [...INDUSTRY_ENTRIES_CORE, ...NICHE_500_INDUSTRY_ENTRIES];
