@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {
   getMockupDimensions,
+  hdMockupVariantSrc,
   INDUSTRY_MOCKUP_HD_TARGET,
   mockupDisplayWidth,
 } from "@/lib/industry-mockup-dimensions.generated";
@@ -8,6 +9,12 @@ import {
 /** Fallback khi chưa có entry trong dimension map. */
 export const INDUSTRY_MOCKUP_WIDTH = 485;
 export const INDUSTRY_MOCKUP_HEIGHT = 1024;
+
+function resolveMockupSrc(src: string): string {
+  const hd = hdMockupVariantSrc(src);
+  if (hd && getMockupDimensions(hd)) return hd;
+  return src;
+}
 
 type IndustryMockupImageProps = {
   src: string;
@@ -27,8 +34,9 @@ export function IndustryMockupImage({
   sizes,
   variant = "hero",
 }: IndustryMockupImageProps) {
-  const dims = getMockupDimensions(src);
-  const displayWidth = mockupDisplayWidth(src, INDUSTRY_MOCKUP_WIDTH);
+  const resolved = resolveMockupSrc(src);
+  const dims = getMockupDimensions(resolved);
+  const displayWidth = mockupDisplayWidth(resolved, INDUSTRY_MOCKUP_WIDTH);
   const displayHeight = dims
     ? Math.round((displayWidth / dims.width) * dims.height)
     : INDUSTRY_MOCKUP_HEIGHT;
@@ -39,7 +47,7 @@ export function IndustryMockupImage({
         className={`relative h-52 w-full overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-56 ${className}`}
       >
         <Image
-          src={src}
+          src={resolved}
           alt={alt}
           fill
           unoptimized
@@ -53,7 +61,7 @@ export function IndustryMockupImage({
 
   return (
     <Image
-      src={src}
+      src={resolved}
       alt={alt}
       width={displayWidth}
       height={displayHeight}

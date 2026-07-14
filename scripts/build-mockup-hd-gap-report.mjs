@@ -15,22 +15,33 @@ const outMd = path.join(outDir, "mockup-hd-gap-report.md");
 const HD_TARGET = 1920;
 const MIN_OK_WIDTH = 800;
 
-/** Slug catalog → thư mục pool (mirror website-industry-images) */
-const INDUSTRY_POOLS = {
-  "nha-khoa": ["/tin-tuc/nha-khoa/nha-khoa-1.png"],
-  "tham-my": ["/tin-tuc/tham-my/tham-my-1.png"],
-  "phong-kham": ["/tin-tuc/phong-kham/phong-kham-1.png"],
-  "my-pham": ["/tin-tuc/my-pham/my-pham-1.png"],
-  pccc: ["/tin-tuc/pccc/pccc-1.png"],
-  logistics: ["/tin-tuc/logistics/logistics-1.png"],
-  "co-khi": ["/tin-tuc/co-khi/co-khi-1.png"],
-  "nha-hang": ["/tin-tuc/nha-hang/thiet-ke-website-nha-hang.png"],
-  "khach-san": ["/tin-tuc/khach-san/khach-san-1.png"],
-  "bat-dong-san": ["/tin-tuc/bat-dong-san/thiet-ke-website-bat-dong-san.png"],
-  "mam-non": ["/tin-tuc/mam-non/thiet-ke-website-truong-mam-non.png"],
-  "kien-truc": ["/tin-tuc/kien-truc/kien-truc-1.png"],
-  "thiet-bi-ve-sinh": ["/tin-tuc/thiet-bi-ve-sinh/thiet-ke-website-thiet-bi-ve-sinh.png"],
-};
+/** Slug catalog → thư mục pool (mirror website-industry-images) — quét mọi PNG trong thư mục */
+const INDUSTRY_DIRS = [
+  "nha-khoa",
+  "tham-my",
+  "phong-kham",
+  "my-pham",
+  "pccc",
+  "logistics",
+  "co-khi",
+  "nha-hang",
+  "khach-san",
+  "bat-dong-san",
+  "mam-non",
+  "kien-truc",
+  "thiet-bi-ve-sinh",
+  "bao-bi",
+  "luat",
+  "thang-may",
+  "tu-dong-hoa",
+];
+
+function poolFilesForSlug(slug, dims) {
+  const prefix = `/tin-tuc/${slug}/`;
+  return Object.keys(dims)
+    .filter((src) => src.startsWith(prefix) && !src.includes("/hd/") && /\.(png|jpe?g)$/i.test(src))
+    .sort();
+}
 
 function loadDimensions() {
   if (!fs.existsSync(dimsPath)) {
@@ -54,7 +65,8 @@ function hdPath(src) {
 const dims = loadDimensions();
 const gaps = [];
 
-for (const [slug, files] of Object.entries(INDUSTRY_POOLS)) {
+for (const slug of INDUSTRY_DIRS) {
+  const files = poolFilesForSlug(slug, dims);
   for (const src of files) {
     const d = dims[src];
     const suggestedHd = hdPath(src);
@@ -99,7 +111,8 @@ const report = {
   generatedAt: new Date().toISOString(),
   hdTarget: HD_TARGET,
   minOkWidth: MIN_OK_WIDTH,
-  industryPoolsChecked: Object.keys(INDUSTRY_POOLS).length,
+  industryPoolsChecked: INDUSTRY_DIRS.length,
+  filesChecked: gaps.length,
   needsHd: gaps.filter((g) => g.status === "needs-hd").length,
   hdReady: gaps.filter((g) => g.status === "hd-ready").length,
   gaps,
@@ -113,8 +126,9 @@ lines.push("# Mockup HD Gap Report");
 lines.push("");
 lines.push(`- Generated at: ${report.generatedAt}`);
 lines.push(`- HD target: **${HD_TARGET}px** wide (WebP khuyên dùng)`);
-lines.push(`- Ngành cần nâng: **${report.needsHd}/${report.industryPoolsChecked}**`);
-lines.push(`- HD ready: **${report.hdReady}/${report.industryPoolsChecked}**`);
+lines.push(`- File cần nâng HD: **${report.needsHd}/${report.filesChecked}**`);
+lines.push(`- HD ready: **${report.hdReady}/${report.filesChecked}**`);
+lines.push(`- Ngành quét: **${report.industryPoolsChecked}**`);
 lines.push("");
 lines.push("## Hướng dẫn");
 lines.push("1. Export mockup mới **1920px** rộng — hoặc chạy `npm run generate:mockup-hd` (sharp upscale)");

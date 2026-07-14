@@ -3,7 +3,7 @@ import {
   BLOG_CARD_IMAGE_SIZES,
   BLOG_HERO_IMAGE_SIZES,
   BLOG_INLINE_IMAGE_SIZES,
-  normalizeBlogImageSrc,
+  resolveSharpBlogImage,
 } from "@/lib/blog-image";
 
 type BlogOptimizedImageProps = {
@@ -32,17 +32,23 @@ export function BlogOptimizedImage({
   className = "",
   sizes = "inline",
 }: BlogOptimizedImageProps) {
-  const normalized = normalizeBlogImageSrc(src);
+  const sharp = resolveSharpBlogImage(src, width, height);
+  /** PNG thấp không stretch full cột — giữ độ nét; HD thì full-width OK */
+  const constrained = !sharp.isHd && sharp.width < 900;
+  const imgClass = constrained
+    ? `${className} mx-auto h-auto max-w-full`.replace(/\bw-full\b/g, "").trim()
+    : className;
 
   return (
     <Image
-      src={normalized}
+      src={sharp.src}
       alt={alt}
-      width={width}
-      height={height}
+      width={sharp.width}
+      height={sharp.height}
       priority={priority}
       sizes={resolveSizes(sizes)}
-      className={className}
+      className={imgClass}
+      style={constrained ? { maxWidth: `${sharp.width}px` } : undefined}
     />
   );
 }

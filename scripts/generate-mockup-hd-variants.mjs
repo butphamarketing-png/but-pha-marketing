@@ -21,7 +21,7 @@ async function main() {
   }
 
   const report = JSON.parse(fs.readFileSync(gapPath, "utf8"));
-  const gaps = report.gaps || [];
+  const gaps = (report.gaps || []).filter((g) => g.status === "needs-hd" || g.status === "missing-dim");
   let created = 0;
   let skipped = 0;
 

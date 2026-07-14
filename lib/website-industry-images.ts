@@ -235,10 +235,16 @@ export function getWebsiteIndustryGallery(
   primaryKeyword: string,
 ): WebsiteIndustryImage[] {
   const pool = resolvePool(catalogSlug);
-  return pool.files.map((file, index) => ({
+  const images = pool.files.map((file, index) => ({
     src: `${pool.dir}/${file}`,
     alt: poolAlt(pool, index, primaryKeyword),
   }));
+  /** Ưu tiên WebP 1920 trong /hd/ — tránh PNG ~480px bị mờ trên grid/landing */
+  return images.map((img) => {
+    const hdSrc = hdMockupVariantSrc(img.src);
+    if (hdSrc && getMockupDimensions(hdSrc)) return { ...img, src: hdSrc };
+    return img;
+  });
 }
 
 export function getWebsiteIndustryHero(input: {

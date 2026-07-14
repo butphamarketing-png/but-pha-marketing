@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { CaseStudyItem } from "@/lib/case-studies";
 import { getRelatedBlogsForCaseStudy } from "@/lib/case-study-industry-map";
+import { resolveSharpBlogImage } from "@/lib/blog-image";
 
 export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
   const publishedLabel = new Date(study.publishedAt).toLocaleDateString("vi-VN", {
@@ -78,7 +79,7 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
           <div className="px-6 pt-6 md:px-10 md:pt-8">
             <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem] border border-indigo-100 shadow-brand">
               <Image
-                src={study.heroImage}
+                src={resolveSharpBlogImage(study.heroImage).src}
                 alt={`Kết quả SEO ${study.clientName}`}
                 fill
                 className="object-cover object-top"
@@ -187,7 +188,13 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
             {study.gallery.map((item) => (
               <figure key={item.src} className="brand-card overflow-hidden">
                 <div className="relative aspect-[16/9] w-full bg-slate-100">
-                  <Image src={item.src} alt={item.alt} fill className="object-cover object-top" sizes="100vw" />
+                  <Image
+                    src={resolveSharpBlogImage(item.src).src}
+                    alt={item.alt}
+                    fill
+                    className="object-cover object-top"
+                    sizes="100vw"
+                  />
                 </div>
                 {item.caption && (
                   <figcaption className="border-t border-indigo-100 px-6 py-4 text-sm text-slate-600">

@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-07-12T06:37:35.196Z",
+  "generatedAt": "2026-07-14T16:02:11.260Z",
   "hdTarget": 1920,
   "minOkWidth": 800,
-  "industryPoolsChecked": 13,
+  "industryPoolsChecked": 17,
+  "filesChecked": 98,
   "needsHd": 0,
-  "hdReady": 13,
+  "hdReady": 98,
   "gaps": [
     {
       "slug": "nha-khoa",
@@ -17,6 +18,46 @@
       "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-1-1920.webp"
     },
     {
+      "slug": "nha-khoa",
+      "src": "/tin-tuc/nha-khoa/nha-khoa-2.png",
+      "width": 560,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 3511,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-2-1920.webp"
+    },
+    {
+      "slug": "nha-khoa",
+      "src": "/tin-tuc/nha-khoa/nha-khoa-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-3-1920.webp"
+    },
+    {
+      "slug": "nha-khoa",
+      "src": "/tin-tuc/nha-khoa/nha-khoa-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-4-1920.webp"
+    },
+    {
+      "slug": "nha-khoa",
+      "src": "/tin-tuc/nha-khoa/nha-khoa-5.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-khoa/hd/nha-khoa-5-1920.webp"
+    },
+    {
       "slug": "tham-my",
       "src": "/tin-tuc/tham-my/tham-my-1.png",
       "width": 484,
@@ -25,6 +66,46 @@
       "hdHeight": 4062,
       "status": "hd-ready",
       "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-1-1920.webp"
+    },
+    {
+      "slug": "tham-my",
+      "src": "/tin-tuc/tham-my/tham-my-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-2-1920.webp"
+    },
+    {
+      "slug": "tham-my",
+      "src": "/tin-tuc/tham-my/tham-my-3.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-3-1920.webp"
+    },
+    {
+      "slug": "tham-my",
+      "src": "/tin-tuc/tham-my/tham-my-4.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-4-1920.webp"
+    },
+    {
+      "slug": "tham-my",
+      "src": "/tin-tuc/tham-my/tham-my-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tham-my/hd/tham-my-5-1920.webp"
     },
     {
       "slug": "phong-kham",
@@ -37,6 +118,46 @@
       "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-1-1920.webp"
     },
     {
+      "slug": "phong-kham",
+      "src": "/tin-tuc/phong-kham/phong-kham-2.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-2-1920.webp"
+    },
+    {
+      "slug": "phong-kham",
+      "src": "/tin-tuc/phong-kham/phong-kham-3.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-3-1920.webp"
+    },
+    {
+      "slug": "phong-kham",
+      "src": "/tin-tuc/phong-kham/phong-kham-4.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-4-1920.webp"
+    },
+    {
+      "slug": "phong-kham",
+      "src": "/tin-tuc/phong-kham/phong-kham-5.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/phong-kham/hd/phong-kham-5-1920.webp"
+    },
+    {
       "slug": "my-pham",
       "src": "/tin-tuc/my-pham/my-pham-1.png",
       "width": 341,
@@ -45,6 +166,46 @@
       "hdHeight": 5766,
       "status": "hd-ready",
       "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-1-1920.webp"
+    },
+    {
+      "slug": "my-pham",
+      "src": "/tin-tuc/my-pham/my-pham-2.png",
+      "width": 409,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4807,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-2-1920.webp"
+    },
+    {
+      "slug": "my-pham",
+      "src": "/tin-tuc/my-pham/my-pham-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-3-1920.webp"
+    },
+    {
+      "slug": "my-pham",
+      "src": "/tin-tuc/my-pham/my-pham-4.png",
+      "width": 336,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 5851,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-4-1920.webp"
+    },
+    {
+      "slug": "my-pham",
+      "src": "/tin-tuc/my-pham/my-pham-5.png",
+      "width": 409,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4807,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/my-pham/hd/my-pham-5-1920.webp"
     },
     {
       "slug": "pccc",
@@ -57,6 +218,46 @@
       "suggestedHd": "/tin-tuc/pccc/hd/pccc-1-1920.webp"
     },
     {
+      "slug": "pccc",
+      "src": "/tin-tuc/pccc/pccc-2.png",
+      "width": 379,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 5188,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/pccc/hd/pccc-2-1920.webp"
+    },
+    {
+      "slug": "pccc",
+      "src": "/tin-tuc/pccc/pccc-3.png",
+      "width": 448,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4389,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/pccc/hd/pccc-3-1920.webp"
+    },
+    {
+      "slug": "pccc",
+      "src": "/tin-tuc/pccc/pccc-4.png",
+      "width": 403,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4879,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/pccc/hd/pccc-4-1920.webp"
+    },
+    {
+      "slug": "pccc",
+      "src": "/tin-tuc/pccc/pccc-5.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/pccc/hd/pccc-5-1920.webp"
+    },
+    {
       "slug": "logistics",
       "src": "/tin-tuc/logistics/logistics-1.png",
       "width": 472,
@@ -67,6 +268,46 @@
       "suggestedHd": "/tin-tuc/logistics/hd/logistics-1-1920.webp"
     },
     {
+      "slug": "logistics",
+      "src": "/tin-tuc/logistics/logistics-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/logistics/hd/logistics-2-1920.webp"
+    },
+    {
+      "slug": "logistics",
+      "src": "/tin-tuc/logistics/logistics-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/logistics/hd/logistics-3-1920.webp"
+    },
+    {
+      "slug": "logistics",
+      "src": "/tin-tuc/logistics/logistics-4.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/logistics/hd/logistics-4-1920.webp"
+    },
+    {
+      "slug": "logistics",
+      "src": "/tin-tuc/logistics/logistics-5.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/logistics/hd/logistics-5-1920.webp"
+    },
+    {
       "slug": "co-khi",
       "src": "/tin-tuc/co-khi/co-khi-1.png",
       "width": 485,
@@ -75,6 +316,106 @@
       "hdHeight": 4054,
       "status": "hd-ready",
       "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-1-1920.webp"
+    },
+    {
+      "slug": "co-khi",
+      "src": "/tin-tuc/co-khi/co-khi-2.png",
+      "width": 481,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4087,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-2-1920.webp"
+    },
+    {
+      "slug": "co-khi",
+      "src": "/tin-tuc/co-khi/co-khi-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-3-1920.webp"
+    },
+    {
+      "slug": "co-khi",
+      "src": "/tin-tuc/co-khi/co-khi-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-4-1920.webp"
+    },
+    {
+      "slug": "co-khi",
+      "src": "/tin-tuc/co-khi/co-khi-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/co-khi/hd/co-khi-5-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-1.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-1-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-2-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-3-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-4-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-5-1920.webp"
+    },
+    {
+      "slug": "nha-hang",
+      "src": "/tin-tuc/nha-hang/nha-hang-6.png",
+      "width": 682,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/nha-hang/hd/nha-hang-6-1920.webp"
     },
     {
       "slug": "nha-hang",
@@ -97,6 +438,136 @@
       "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-1-1920.webp"
     },
     {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-2-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-3-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-4-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-5.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-5-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-6.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-6-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/khach-san-7.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/khach-san-7-1920.webp"
+    },
+    {
+      "slug": "khach-san",
+      "src": "/tin-tuc/khach-san/thiet-ke-website-khach-san.png",
+      "width": 471,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4174,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/khach-san/hd/thiet-ke-website-khach-san-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-1.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-1-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-2-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-3.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-3-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-4-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-5-1920.webp"
+    },
+    {
+      "slug": "bat-dong-san",
+      "src": "/tin-tuc/bat-dong-san/bat-dong-san-6.png",
+      "width": 682,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bat-dong-san/hd/bat-dong-san-6-1920.webp"
+    },
+    {
       "slug": "bat-dong-san",
       "src": "/tin-tuc/bat-dong-san/thiet-ke-website-bat-dong-san.png",
       "width": 485,
@@ -105,6 +576,56 @@
       "hdHeight": 4054,
       "status": "hd-ready",
       "suggestedHd": "/tin-tuc/bat-dong-san/hd/thiet-ke-website-bat-dong-san-1920.webp"
+    },
+    {
+      "slug": "mam-non",
+      "src": "/tin-tuc/mam-non/mam-non-1.png",
+      "width": 682,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/mam-non/hd/mam-non-1-1920.webp"
+    },
+    {
+      "slug": "mam-non",
+      "src": "/tin-tuc/mam-non/mam-non-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/mam-non/hd/mam-non-2-1920.webp"
+    },
+    {
+      "slug": "mam-non",
+      "src": "/tin-tuc/mam-non/mam-non-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/mam-non/hd/mam-non-3-1920.webp"
+    },
+    {
+      "slug": "mam-non",
+      "src": "/tin-tuc/mam-non/mam-non-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/mam-non/hd/mam-non-4-1920.webp"
+    },
+    {
+      "slug": "mam-non",
+      "src": "/tin-tuc/mam-non/mam-non-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/mam-non/hd/mam-non-5-1920.webp"
     },
     {
       "slug": "mam-non",
@@ -127,6 +648,136 @@
       "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-1-1920.webp"
     },
     {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-2-1920.webp"
+    },
+    {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-3-1920.webp"
+    },
+    {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-4.png",
+      "width": 484,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4062,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-4-1920.webp"
+    },
+    {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-5-1920.webp"
+    },
+    {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-6.png",
+      "width": 682,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-6-1920.webp"
+    },
+    {
+      "slug": "kien-truc",
+      "src": "/tin-tuc/kien-truc/kien-truc-7.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/kien-truc/hd/kien-truc-7-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-1.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-1-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-2-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-3-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-4-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-5.png",
+      "width": 469,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4192,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-5-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-6.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-6-1920.webp"
+    },
+    {
+      "slug": "thiet-bi-ve-sinh",
+      "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-bi-ve-sinh-7.png",
+      "width": 682,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 2883,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-bi-ve-sinh-7-1920.webp"
+    },
+    {
       "slug": "thiet-bi-ve-sinh",
       "src": "/tin-tuc/thiet-bi-ve-sinh/thiet-ke-website-thiet-bi-ve-sinh.png",
       "width": 485,
@@ -135,6 +786,206 @@
       "hdHeight": 4054,
       "status": "hd-ready",
       "suggestedHd": "/tin-tuc/thiet-bi-ve-sinh/hd/thiet-ke-website-thiet-bi-ve-sinh-1920.webp"
+    },
+    {
+      "slug": "bao-bi",
+      "src": "/tin-tuc/bao-bi/bao-bi-1.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bao-bi/hd/bao-bi-1-1920.webp"
+    },
+    {
+      "slug": "bao-bi",
+      "src": "/tin-tuc/bao-bi/bao-bi-2.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bao-bi/hd/bao-bi-2-1920.webp"
+    },
+    {
+      "slug": "bao-bi",
+      "src": "/tin-tuc/bao-bi/bao-bi-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bao-bi/hd/bao-bi-3-1920.webp"
+    },
+    {
+      "slug": "bao-bi",
+      "src": "/tin-tuc/bao-bi/bao-bi-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bao-bi/hd/bao-bi-4-1920.webp"
+    },
+    {
+      "slug": "bao-bi",
+      "src": "/tin-tuc/bao-bi/bao-bi-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/bao-bi/hd/bao-bi-5-1920.webp"
+    },
+    {
+      "slug": "luat",
+      "src": "/tin-tuc/luat/luat-1.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/luat/hd/luat-1-1920.webp"
+    },
+    {
+      "slug": "luat",
+      "src": "/tin-tuc/luat/luat-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/luat/hd/luat-2-1920.webp"
+    },
+    {
+      "slug": "luat",
+      "src": "/tin-tuc/luat/luat-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/luat/hd/luat-3-1920.webp"
+    },
+    {
+      "slug": "luat",
+      "src": "/tin-tuc/luat/luat-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/luat/hd/luat-4-1920.webp"
+    },
+    {
+      "slug": "luat",
+      "src": "/tin-tuc/luat/luat-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/luat/hd/luat-5-1920.webp"
+    },
+    {
+      "slug": "thang-may",
+      "src": "/tin-tuc/thang-may/thang-may-1.png",
+      "width": 440,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4468,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thang-may/hd/thang-may-1-1920.webp"
+    },
+    {
+      "slug": "thang-may",
+      "src": "/tin-tuc/thang-may/thang-may-2.png",
+      "width": 409,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4807,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thang-may/hd/thang-may-2-1920.webp"
+    },
+    {
+      "slug": "thang-may",
+      "src": "/tin-tuc/thang-may/thang-may-3.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thang-may/hd/thang-may-3-1920.webp"
+    },
+    {
+      "slug": "thang-may",
+      "src": "/tin-tuc/thang-may/thang-may-4.png",
+      "width": 409,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4807,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thang-may/hd/thang-may-4-1920.webp"
+    },
+    {
+      "slug": "thang-may",
+      "src": "/tin-tuc/thang-may/thang-may-5.png",
+      "width": 409,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4807,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/thang-may/hd/thang-may-5-1920.webp"
+    },
+    {
+      "slug": "tu-dong-hoa",
+      "src": "/tin-tuc/tu-dong-hoa/tu-dong-hoa-1.png",
+      "width": 483,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4071,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tu-dong-hoa/hd/tu-dong-hoa-1-1920.webp"
+    },
+    {
+      "slug": "tu-dong-hoa",
+      "src": "/tin-tuc/tu-dong-hoa/tu-dong-hoa-2.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tu-dong-hoa/hd/tu-dong-hoa-2-1920.webp"
+    },
+    {
+      "slug": "tu-dong-hoa",
+      "src": "/tin-tuc/tu-dong-hoa/tu-dong-hoa-3.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tu-dong-hoa/hd/tu-dong-hoa-3-1920.webp"
+    },
+    {
+      "slug": "tu-dong-hoa",
+      "src": "/tin-tuc/tu-dong-hoa/tu-dong-hoa-4.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tu-dong-hoa/hd/tu-dong-hoa-4-1920.webp"
+    },
+    {
+      "slug": "tu-dong-hoa",
+      "src": "/tin-tuc/tu-dong-hoa/tu-dong-hoa-5.png",
+      "width": 485,
+      "height": 1024,
+      "hdWidth": 1920,
+      "hdHeight": 4054,
+      "status": "hd-ready",
+      "suggestedHd": "/tin-tuc/tu-dong-hoa/hd/tu-dong-hoa-5-1920.webp"
     }
   ]
 }
