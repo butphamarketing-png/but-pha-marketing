@@ -2,13 +2,13 @@ import Image from "next/image";
 import {
   getMockupDimensions,
   hdMockupVariantSrc,
-  INDUSTRY_MOCKUP_HD_TARGET,
+  INDUSTRY_MOCKUP_DISPLAY_MAX,
   mockupDisplayWidth,
 } from "@/lib/industry-mockup-dimensions.generated";
 
 /** Fallback khi chưa có entry trong dimension map. */
-export const INDUSTRY_MOCKUP_WIDTH = 485;
-export const INDUSTRY_MOCKUP_HEIGHT = 1024;
+export const INDUSTRY_MOCKUP_WIDTH = 420;
+export const INDUSTRY_MOCKUP_HEIGHT = 900;
 
 function resolveMockupSrc(src: string): string {
   const hd = hdMockupVariantSrc(src);
@@ -44,7 +44,7 @@ export function IndustryMockupImage({
   if (variant === "card") {
     return (
       <div
-        className={`relative h-52 w-full overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-56 ${className}`}
+        className={`relative mx-auto h-64 w-full max-w-[220px] overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-72 ${className}`}
       >
         <Image
           src={resolved}
@@ -52,7 +52,7 @@ export function IndustryMockupImage({
           fill
           unoptimized
           priority={priority}
-          sizes={sizes ?? "(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"}
+          sizes={sizes ?? "(max-width: 640px) 45vw, 220px"}
           className="object-contain object-top p-2"
         />
       </div>
@@ -67,9 +67,9 @@ export function IndustryMockupImage({
       height={displayHeight}
       unoptimized
       priority={priority}
-      sizes={sizes ?? `(max-width: 768px) 100vw, min(100vw, ${displayWidth}px)`}
+      sizes={sizes ?? `(max-width: 768px) 90vw, ${displayWidth}px`}
       className={`mx-auto h-auto w-full ${className}`}
-      style={{ maxWidth: `${Math.min(displayWidth, INDUSTRY_MOCKUP_HD_TARGET)}px` }}
+      style={{ maxWidth: `${Math.min(displayWidth, INDUSTRY_MOCKUP_DISPLAY_MAX)}px` }}
     />
   );
 }

@@ -231,6 +231,8 @@ export const INDUSTRY_MOCKUP_DIMENSIONS: Record<string, MockupDimensions> = {
 };
 
 export const INDUSTRY_MOCKUP_HD_TARGET = 1920;
+/** Max CSS width khi render mockup — nhỏ như màn điện thoại, tránh phóng to bị mờ */
+export const INDUSTRY_MOCKUP_DISPLAY_MAX = 420;
 
 export function getMockupDimensions(src: string): MockupDimensions | null {
   return INDUSTRY_MOCKUP_DIMENSIONS[src] ?? null;
@@ -238,8 +240,8 @@ export function getMockupDimensions(src: string): MockupDimensions | null {
 
 export function mockupDisplayWidth(src: string, fallback = 485): number {
   const d = getMockupDimensions(src);
-  if (!d) return fallback;
-  return Math.min(d.width, INDUSTRY_MOCKUP_HD_TARGET);
+  if (!d) return Math.min(fallback, INDUSTRY_MOCKUP_DISPLAY_MAX);
+  return Math.min(d.width, INDUSTRY_MOCKUP_DISPLAY_MAX);
 }
 
 export function hdMockupVariantSrc(src: string): string | null {

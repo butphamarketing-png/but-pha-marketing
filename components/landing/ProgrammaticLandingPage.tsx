@@ -121,8 +121,14 @@ export function ProgrammaticLandingPage({
             className="mx-auto w-full"
             style={{ maxWidth: `${mockupDisplayWidth(heroImage.src)}px` }}
           >
-            <IndustryMockupImage src={heroImage.src} alt={heroImage.alt} priority className="mx-auto rounded-xl shadow-md" />
+            <IndustryMockupImage
+              src={heroImage.src}
+              alt={heroImage.alt}
+              priority
+              className="mx-auto rounded-xl shadow-lg ring-1 ring-indigo-100"
+            />
           </div>
+          <p className="mt-3 text-center text-xs text-slate-500">Xem trước giao diện trên mobile</p>
         </section>
       )}
 
@@ -130,15 +136,15 @@ export function ProgrammaticLandingPage({
         <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
           <h2 className="text-2xl font-bold text-indigo-950">Mẫu giao diện theo ngành</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Bộ mockup website chuyên ngành — dùng cho thumbnail blog, nội dung bài viết và landing chuyển đổi.
+            Mockup hiển thị kích thước mobile — rõ nét hơn khi xem trên desktop.
           </p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid place-items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {galleryImages.map((img) => (
               <div
                 key={img.src}
-                className="overflow-hidden rounded-2xl border border-indigo-50 bg-white"
+                className="w-full max-w-[240px] overflow-hidden rounded-2xl border border-indigo-50 bg-white"
               >
-                <IndustryMockupImage variant="card" src={img.src} alt={img.alt} sizes="(max-width: 640px) 45vw, 240px" />
+                <IndustryMockupImage variant="card" src={img.src} alt={img.alt} sizes="220px" />
                 <p className="px-3 py-2 text-xs font-medium leading-snug text-slate-600">{img.alt}</p>
               </div>
             ))}
