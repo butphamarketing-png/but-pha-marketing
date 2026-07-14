@@ -13,6 +13,7 @@ import { Settings, ChevronRight, Globe, FileText, LayoutTemplate, Target, Zap } 
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { WebsiteIndustryGrid } from "@/components/website/WebsiteIndustryGrid";
 import { WebsiteProofSection } from "@/components/website/WebsiteProofSection";
+import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 import { PLATFORM_COLORS } from "@/lib/brand-colors";
 
@@ -79,8 +80,11 @@ export default function WebsitePage() {
             <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
               Hướng dẫn thiết kế website A-Z
             </Link>
-            <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
+            <Link href="/banggia" className="brand-btn-secondary">
               Báo giá thiết kế website
+            </Link>
+            <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
+              Hướng dẫn đọc báo giá
             </Link>
             <Link href="/seo-website" className="brand-btn-secondary">
               Dịch vụ SEO Website
@@ -316,6 +320,12 @@ export default function WebsitePage() {
               ))}
             </PackageCarousel>
           </section>
+
+          <MoneyKwSiloLinks
+            excludePath="/website"
+            title="Cụm money SEO — không tranh từ khóa"
+            subtitle="Từ /website liên kết sang báo giá, địa phương HCM, spa và nha khoa — mỗi intent một URL đích."
+          />
         </div>
       </div>
 

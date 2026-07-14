@@ -259,4 +259,88 @@ export const LOCAL_SEO_GENERATED: ProgrammaticGeneratedLanding[] = [
     primaryKeyword: "seo website binh thuan",
     qualityScore: 74
   },
+  {
+    slug: "quan-1",
+    title: "SEO Website Quận 1 TP.HCM",
+    description: "SEO + website cho SME Quận 1: văn phòng trung tâm, F&B, thẩm mỹ — đồng bộ NAP/GBP và từ khóa «gần tôi».",
+    primaryKeyword: "seo website quan 1",
+    qualityScore: 88
+  },
+  {
+    slug: "quan-3",
+    title: "SEO Website Quận 3 TP.HCM",
+    description: "Local SEO Quận 3 cho phòng khám, spa, studio — landing message-match Maps và cluster nội dung quận.",
+    primaryKeyword: "seo website quan 3",
+    qualityScore: 88
+  },
+  {
+    slug: "quan-7",
+    title: "SEO Website Quận 7 TP.HCM",
+    description: "SEO Website Quận 7 / Phú Mỹ Hưng: chuỗi cửa hàng, giáo dục, F&B — tối ưu Google Maps khu Nam Sài Gòn.",
+    primaryKeyword: "seo website quan 7",
+    qualityScore: 88
+  },
+  {
+    slug: "binh-thanh",
+    title: "SEO Website Bình Thạnh",
+    description: "Local SEO Bình Thạnh: nha khoa, thẩm mỹ, coworking — citation NAP và landing theo intent đặt lịch.",
+    primaryKeyword: "seo website binh thanh",
+    qualityScore: 88
+  },
+  {
+    slug: "thu-duc",
+    title: "SEO Website TP. Thủ Đức",
+    description: "SEO Website Thủ Đức (Q.2/9/Thủ Đức cũ): tech, giáo dục, y tế — phủ Maps và từ khóa khu Đông.",
+    primaryKeyword: "seo website thu duc",
+    qualityScore: 88
+  },
+  {
+    slug: "go-vap",
+    title: "SEO Website Gò Vấp",
+    description: "Local SEO Gò Vấp cho spa, phòng khám, bán lẻ — tối ưu Maps, review và landing theo tuyến đường đông dân.",
+    primaryKeyword: "seo website go vap",
+    qualityScore: 88
+  },
+  {
+    slug: "cau-giay",
+    title: "SEO Website Cầu Giấy Hà Nội",
+    description: "SEO Website Cầu Giấy: trung tâm đào tạo, IT, phòng khám — GBP + website đồng bộ NAP Hà Nội phía Tây.",
+    primaryKeyword: "seo website cau giay",
+    qualityScore: 88
+  },
+  {
+    slug: "dong-da",
+    title: "SEO Website Đống Đa Hà Nội",
+    description: "Local SEO Đống Đa cho y tế, giáo dục, F&B phố cổ mở rộng — schema LocalBusiness và cụm từ khóa quận.",
+    primaryKeyword: "seo website dong da",
+    qualityScore: 88
+  },
+  {
+    slug: "hai-ba-trung",
+    title: "SEO Website Hai Bà Trưng",
+    description: "SEO Website Hai Bà Trưng: văn phòng, nha khoa, spa — tối ưu Maps khu trung tâm Đông Hà Nội.",
+    primaryKeyword: "seo website hai ba trung",
+    qualityScore: 88
+  },
+  {
+    slug: "nam-tu-liem",
+    title: "SEO Website Nam Từ Liêm",
+    description: "Local SEO Nam Từ Liêm / Mỹ Đình: BĐS, giáo dục, gym — landing geo + Google Business Profile.",
+    primaryKeyword: "seo website nam tu liem",
+    qualityScore: 88
+  },
+  {
+    slug: "hai-chau",
+    title: "SEO Website Hải Châu Đà Nẵng",
+    description: "SEO Website Hải Châu: du lịch, F&B, thẩm mỹ trung tâm Đà Nẵng — Maps + website chuyển đổi đặt lịch.",
+    primaryKeyword: "seo website hai chau",
+    qualityScore: 88
+  },
+  {
+    slug: "thanh-khe",
+    title: "SEO Website Thanh Khê Đà Nẵng",
+    description: "Local SEO Thanh Khê: phòng khám, spa, dịch vụ hộ gia đình — citation NAP và landing theo quận.",
+    primaryKeyword: "seo website thanh khe",
+    qualityScore: 88
+  },
 ];

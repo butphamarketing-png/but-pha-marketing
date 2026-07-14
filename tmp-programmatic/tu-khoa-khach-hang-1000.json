@@ -1,0 +1,7025 @@
+{
+  "generatedAt": "2026-07-14T17:39:56.519Z",
+  "total": 1000,
+  "byGroup": {
+    "money-head": 50,
+    "bao-gia": 39,
+    "local": 88,
+    "local-hcm": 22,
+    "local-hn": 16,
+    "nganh-hot": 159,
+    "seo-ads": 49,
+    "cau-hoi": 42,
+    "social": 16,
+    "pain": 16,
+    "goi-mkt": 15,
+    "longtail-local": 100,
+    "bien-the": 20,
+    "modifier": 72,
+    "dich-vu-mo-rong": 65,
+    "extra": 60,
+    "pad-intent": 171
+  },
+  "keywords": [
+    {
+      "n": 1,
+      "kw": "thiết kế website",
+      "slug": "thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 2,
+      "kw": "làm website",
+      "slug": "lam-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 3,
+      "kw": "làm web",
+      "slug": "lam-web",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 4,
+      "kw": "tạo website",
+      "slug": "tao-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 5,
+      "kw": "thiết kế web",
+      "slug": "thiet-ke-web",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 6,
+      "kw": "thiết kế trang web",
+      "slug": "thiet-ke-trang-web",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 7,
+      "kw": "dịch vụ thiết kế website",
+      "slug": "dich-vu-thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 8,
+      "kw": "công ty thiết kế website",
+      "slug": "cong-ty-thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 9,
+      "kw": "đơn vị thiết kế website",
+      "slug": "don-vi-thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 10,
+      "kw": "agency thiết kế website",
+      "slug": "agency-thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 11,
+      "kw": "thuê thiết kế website",
+      "slug": "thue-thiet-ke-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 12,
+      "kw": "đặt làm website",
+      "slug": "dat-lam-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 13,
+      "kw": "làm website trọn gói",
+      "slug": "lam-website-tron-goi",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 14,
+      "kw": "thiết kế website trọn gói",
+      "slug": "thiet-ke-website-tron-goi",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 15,
+      "kw": "làm website chuyên nghiệp",
+      "slug": "lam-website-chuyen-nghiep",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 16,
+      "kw": "thiết kế website chuyên nghiệp",
+      "slug": "thiet-ke-website-chuyen-nghiep",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 17,
+      "kw": "thiết kế website uy tín",
+      "slug": "thiet-ke-website-uy-tin",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 18,
+      "kw": "làm website uy tín",
+      "slug": "lam-website-uy-tin",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 19,
+      "kw": "thiết kế website chuẩn seo",
+      "slug": "thiet-ke-website-chuan-seo",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 20,
+      "kw": "làm website chuẩn seo",
+      "slug": "lam-website-chuan-seo",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 21,
+      "kw": "thiết kế website doanh nghiệp",
+      "slug": "thiet-ke-website-doanh-nghiep",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 22,
+      "kw": "làm website công ty",
+      "slug": "lam-website-cong-ty",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 23,
+      "kw": "website giới thiệu công ty",
+      "slug": "website-gioi-thieu-cong-ty",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 24,
+      "kw": "website corporate",
+      "slug": "website-corporate",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 25,
+      "kw": "thiết kế website bán hàng",
+      "slug": "thiet-ke-website-ban-hang",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 26,
+      "kw": "làm website bán hàng online",
+      "slug": "lam-website-ban-hang-online",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 27,
+      "kw": "thiết kế web bán hàng",
+      "slug": "thiet-ke-web-ban-hang",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 28,
+      "kw": "website thương mại điện tử",
+      "slug": "website-thuong-mai-dien-tu",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 29,
+      "kw": "làm web bán hàng",
+      "slug": "lam-web-ban-hang",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 30,
+      "kw": "thiết kế landing page",
+      "slug": "thiet-ke-landing-page",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 31,
+      "kw": "làm landing page",
+      "slug": "lam-landing-page",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 32,
+      "kw": "thiết kế trang đích",
+      "slug": "thiet-ke-trang-dich",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 33,
+      "kw": "làm trang landing quảng cáo",
+      "slug": "lam-trang-landing-quang-cao",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 34,
+      "kw": "thiết kế website wordpress",
+      "slug": "thiet-ke-website-wordpress",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 35,
+      "kw": "làm website wordpress",
+      "slug": "lam-website-wordpress",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 36,
+      "kw": "thiết kế website theo yêu cầu",
+      "slug": "thiet-ke-website-theo-yeu-cau",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 37,
+      "kw": "làm web theo mẫu",
+      "slug": "lam-web-theo-mau",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 38,
+      "kw": "thiết kế giao diện website",
+      "slug": "thiet-ke-giao-dien-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 39,
+      "kw": "redesign website",
+      "slug": "redesign-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 40,
+      "kw": "làm lại website",
+      "slug": "lam-lai-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 41,
+      "kw": "nâng cấp website cũ",
+      "slug": "nang-cap-website-cu",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 42,
+      "kw": "sửa website",
+      "slug": "sua-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 43,
+      "kw": "bảo trì website",
+      "slug": "bao-tri-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 44,
+      "kw": "quản trị website",
+      "slug": "quan-tri-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 45,
+      "kw": "hosting website",
+      "slug": "hosting-website",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 46,
+      "kw": "mua hosting",
+      "slug": "mua-hosting",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 47,
+      "kw": "đăng ký tên miền",
+      "slug": "dang-ky-ten-mien",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 48,
+      "kw": "mua domain .vn",
+      "slug": "mua-domain-vn",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 49,
+      "kw": "thiết kế app",
+      "slug": "thiet-ke-app",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 50,
+      "kw": "làm app đặt lịch",
+      "slug": "lam-app-dat-lich",
+      "group": "money-head",
+      "intent": "commercial"
+    },
+    {
+      "n": 51,
+      "kw": "báo giá thiết kế website",
+      "slug": "bao-gia-thiet-ke-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 52,
+      "kw": "báo giá làm website",
+      "slug": "bao-gia-lam-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 53,
+      "kw": "báo giá làm web",
+      "slug": "bao-gia-lam-web",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 54,
+      "kw": "giá thiết kế website",
+      "slug": "gia-thiet-ke-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 55,
+      "kw": "giá làm website",
+      "slug": "gia-lam-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 56,
+      "kw": "giá làm web",
+      "slug": "gia-lam-web",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 57,
+      "kw": "thiết kế website giá bao nhiêu",
+      "slug": "thiet-ke-website-gia-bao-nhieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 58,
+      "kw": "làm website giá bao nhiêu",
+      "slug": "lam-website-gia-bao-nhieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 59,
+      "kw": "chi phí thiết kế website",
+      "slug": "chi-phi-thiet-ke-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 60,
+      "kw": "chi phí làm website",
+      "slug": "chi-phi-lam-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 61,
+      "kw": "chi phí làm web 2026",
+      "slug": "chi-phi-lam-web-2026",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 62,
+      "kw": "thiết kế website bao nhiêu tiền",
+      "slug": "thiet-ke-website-bao-nhieu-tien",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 63,
+      "kw": "làm website hết bao nhiêu",
+      "slug": "lam-website-het-bao-nhieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 64,
+      "kw": "bảng giá thiết kế website",
+      "slug": "bang-gia-thiet-ke-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 65,
+      "kw": "bảng giá làm web",
+      "slug": "bang-gia-lam-web",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 66,
+      "kw": "thiết kế website giá rẻ",
+      "slug": "thiet-ke-website-gia-re",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 67,
+      "kw": "làm website giá rẻ",
+      "slug": "lam-website-gia-re",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 68,
+      "kw": "thiết kế website giá tốt",
+      "slug": "thiet-ke-website-gia-tot",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 69,
+      "kw": "làm web giá mềm",
+      "slug": "lam-web-gia-mem",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 70,
+      "kw": "thiết kế website bình dân",
+      "slug": "thiet-ke-website-binh-dan",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 71,
+      "kw": "gói thiết kế website",
+      "slug": "goi-thiet-ke-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 72,
+      "kw": "gói làm website cơ bản",
+      "slug": "goi-lam-website-co-ban",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 73,
+      "kw": "gói website doanh nghiệp",
+      "slug": "goi-website-doanh-nghiep",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 74,
+      "kw": "gói website bán hàng",
+      "slug": "goi-website-ban-hang",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 75,
+      "kw": "website 3 triệu",
+      "slug": "website-3-trieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 76,
+      "kw": "website 5 triệu",
+      "slug": "website-5-trieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 77,
+      "kw": "website 10 triệu",
+      "slug": "website-10-trieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 78,
+      "kw": "thiết kế website dưới 5 triệu",
+      "slug": "thiet-ke-website-duoi-5-trieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 79,
+      "kw": "làm landing page giá bao nhiêu",
+      "slug": "lam-landing-page-gia-bao-nhieu",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 80,
+      "kw": "báo giá landing page",
+      "slug": "bao-gia-landing-page",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 81,
+      "kw": "báo giá redesign website",
+      "slug": "bao-gia-redesign-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 82,
+      "kw": "chi phí bảo trì website hàng tháng",
+      "slug": "chi-phi-bao-tri-website-hang-thang",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 83,
+      "kw": "giá quản trị website",
+      "slug": "gia-quan-tri-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 84,
+      "kw": "thuê viết content website giá",
+      "slug": "thue-viet-content-website-gia",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 85,
+      "kw": "báo giá seo website",
+      "slug": "bao-gia-seo-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 86,
+      "kw": "giá chạy google ads",
+      "slug": "gia-chay-google-ads",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 87,
+      "kw": "giá chạy facebook ads",
+      "slug": "gia-chay-facebook-ads",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 88,
+      "kw": "ngân sách marketing website",
+      "slug": "ngan-sach-marketing-website",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 89,
+      "kw": "chi phí làm fanpage",
+      "slug": "chi-phi-lam-fanpage",
+      "group": "bao-gia",
+      "intent": "transactional"
+    },
+    {
+      "n": 90,
+      "kw": "thiết kế website tp hcm",
+      "slug": "thiet-ke-website-tp-hcm",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 91,
+      "kw": "làm website tp hcm",
+      "slug": "lam-website-tp-hcm",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 92,
+      "kw": "công ty thiết kế website tp hcm",
+      "slug": "cong-ty-thiet-ke-website-tp-hcm",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 93,
+      "kw": "báo giá thiết kế website tp hcm",
+      "slug": "bao-gia-thiet-ke-website-tp-hcm",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 94,
+      "kw": "thiết kế website hồ chí minh",
+      "slug": "thiet-ke-website-ho-chi-minh",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 95,
+      "kw": "làm website hồ chí minh",
+      "slug": "lam-website-ho-chi-minh",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 96,
+      "kw": "công ty thiết kế website hồ chí minh",
+      "slug": "cong-ty-thiet-ke-website-ho-chi-minh",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 97,
+      "kw": "báo giá thiết kế website hồ chí minh",
+      "slug": "bao-gia-thiet-ke-website-ho-chi-minh",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 98,
+      "kw": "thiết kế website sài gòn",
+      "slug": "thiet-ke-website-sai-gon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 99,
+      "kw": "làm website sài gòn",
+      "slug": "lam-website-sai-gon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 100,
+      "kw": "công ty thiết kế website sài gòn",
+      "slug": "cong-ty-thiet-ke-website-sai-gon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 101,
+      "kw": "báo giá thiết kế website sài gòn",
+      "slug": "bao-gia-thiet-ke-website-sai-gon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 102,
+      "kw": "thiết kế website hà nội",
+      "slug": "thiet-ke-website-ha-noi",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 103,
+      "kw": "làm website hà nội",
+      "slug": "lam-website-ha-noi",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 104,
+      "kw": "công ty thiết kế website hà nội",
+      "slug": "cong-ty-thiet-ke-website-ha-noi",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 105,
+      "kw": "báo giá thiết kế website hà nội",
+      "slug": "bao-gia-thiet-ke-website-ha-noi",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 106,
+      "kw": "thiết kế website đà nẵng",
+      "slug": "thiet-ke-website-da-nang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 107,
+      "kw": "làm website đà nẵng",
+      "slug": "lam-website-da-nang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 108,
+      "kw": "công ty thiết kế website đà nẵng",
+      "slug": "cong-ty-thiet-ke-website-da-nang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 109,
+      "kw": "báo giá thiết kế website đà nẵng",
+      "slug": "bao-gia-thiet-ke-website-da-nang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 110,
+      "kw": "thiết kế website hải phòng",
+      "slug": "thiet-ke-website-hai-phong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 111,
+      "kw": "làm website hải phòng",
+      "slug": "lam-website-hai-phong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 112,
+      "kw": "công ty thiết kế website hải phòng",
+      "slug": "cong-ty-thiet-ke-website-hai-phong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 113,
+      "kw": "báo giá thiết kế website hải phòng",
+      "slug": "bao-gia-thiet-ke-website-hai-phong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 114,
+      "kw": "thiết kế website cần thơ",
+      "slug": "thiet-ke-website-can-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 115,
+      "kw": "làm website cần thơ",
+      "slug": "lam-website-can-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 116,
+      "kw": "công ty thiết kế website cần thơ",
+      "slug": "cong-ty-thiet-ke-website-can-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 117,
+      "kw": "báo giá thiết kế website cần thơ",
+      "slug": "bao-gia-thiet-ke-website-can-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 118,
+      "kw": "thiết kế website biên hòa",
+      "slug": "thiet-ke-website-bien-hoa",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 119,
+      "kw": "làm website biên hòa",
+      "slug": "lam-website-bien-hoa",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 120,
+      "kw": "công ty thiết kế website biên hòa",
+      "slug": "cong-ty-thiet-ke-website-bien-hoa",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 121,
+      "kw": "báo giá thiết kế website biên hòa",
+      "slug": "bao-gia-thiet-ke-website-bien-hoa",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 122,
+      "kw": "thiết kế website bình dương",
+      "slug": "thiet-ke-website-binh-duong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 123,
+      "kw": "làm website bình dương",
+      "slug": "lam-website-binh-duong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 124,
+      "kw": "công ty thiết kế website bình dương",
+      "slug": "cong-ty-thiet-ke-website-binh-duong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 125,
+      "kw": "báo giá thiết kế website bình dương",
+      "slug": "bao-gia-thiet-ke-website-binh-duong",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 126,
+      "kw": "thiết kế website đồng nai",
+      "slug": "thiet-ke-website-dong-nai",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 127,
+      "kw": "làm website đồng nai",
+      "slug": "lam-website-dong-nai",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 128,
+      "kw": "công ty thiết kế website đồng nai",
+      "slug": "cong-ty-thiet-ke-website-dong-nai",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 129,
+      "kw": "báo giá thiết kế website đồng nai",
+      "slug": "bao-gia-thiet-ke-website-dong-nai",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 130,
+      "kw": "thiết kế website nha trang",
+      "slug": "thiet-ke-website-nha-trang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 131,
+      "kw": "làm website nha trang",
+      "slug": "lam-website-nha-trang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 132,
+      "kw": "công ty thiết kế website nha trang",
+      "slug": "cong-ty-thiet-ke-website-nha-trang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 133,
+      "kw": "báo giá thiết kế website nha trang",
+      "slug": "bao-gia-thiet-ke-website-nha-trang",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 134,
+      "kw": "thiết kế website huế",
+      "slug": "thiet-ke-website-hue",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 135,
+      "kw": "làm website huế",
+      "slug": "lam-website-hue",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 136,
+      "kw": "công ty thiết kế website huế",
+      "slug": "cong-ty-thiet-ke-website-hue",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 137,
+      "kw": "báo giá thiết kế website huế",
+      "slug": "bao-gia-thiet-ke-website-hue",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 138,
+      "kw": "thiết kế website vũng tàu",
+      "slug": "thiet-ke-website-vung-tau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 139,
+      "kw": "làm website vũng tàu",
+      "slug": "lam-website-vung-tau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 140,
+      "kw": "công ty thiết kế website vũng tàu",
+      "slug": "cong-ty-thiet-ke-website-vung-tau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 141,
+      "kw": "báo giá thiết kế website vũng tàu",
+      "slug": "bao-gia-thiet-ke-website-vung-tau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 142,
+      "kw": "thiết kế website đà lạt",
+      "slug": "thiet-ke-website-da-lat",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 143,
+      "kw": "làm website đà lạt",
+      "slug": "lam-website-da-lat",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 144,
+      "kw": "công ty thiết kế website đà lạt",
+      "slug": "cong-ty-thiet-ke-website-da-lat",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 145,
+      "kw": "báo giá thiết kế website đà lạt",
+      "slug": "bao-gia-thiet-ke-website-da-lat",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 146,
+      "kw": "thiết kế website quy nhơn",
+      "slug": "thiet-ke-website-quy-nhon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 147,
+      "kw": "làm website quy nhơn",
+      "slug": "lam-website-quy-nhon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 148,
+      "kw": "công ty thiết kế website quy nhơn",
+      "slug": "cong-ty-thiet-ke-website-quy-nhon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 149,
+      "kw": "báo giá thiết kế website quy nhơn",
+      "slug": "bao-gia-thiet-ke-website-quy-nhon",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 150,
+      "kw": "thiết kế website buôn ma thuột",
+      "slug": "thiet-ke-website-buon-ma-thuot",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 151,
+      "kw": "làm website buôn ma thuột",
+      "slug": "lam-website-buon-ma-thuot",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 152,
+      "kw": "công ty thiết kế website buôn ma thuột",
+      "slug": "cong-ty-thiet-ke-website-buon-ma-thuot",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 153,
+      "kw": "báo giá thiết kế website buôn ma thuột",
+      "slug": "bao-gia-thiet-ke-website-buon-ma-thuot",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 154,
+      "kw": "thiết kế website long xuyên",
+      "slug": "thiet-ke-website-long-xuyen",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 155,
+      "kw": "làm website long xuyên",
+      "slug": "lam-website-long-xuyen",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 156,
+      "kw": "công ty thiết kế website long xuyên",
+      "slug": "cong-ty-thiet-ke-website-long-xuyen",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 157,
+      "kw": "báo giá thiết kế website long xuyên",
+      "slug": "bao-gia-thiet-ke-website-long-xuyen",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 158,
+      "kw": "thiết kế website mỹ tho",
+      "slug": "thiet-ke-website-my-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 159,
+      "kw": "làm website mỹ tho",
+      "slug": "lam-website-my-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 160,
+      "kw": "công ty thiết kế website mỹ tho",
+      "slug": "cong-ty-thiet-ke-website-my-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 161,
+      "kw": "báo giá thiết kế website mỹ tho",
+      "slug": "bao-gia-thiet-ke-website-my-tho",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 162,
+      "kw": "thiết kế website rạch giá",
+      "slug": "thiet-ke-website-rach-gia",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 163,
+      "kw": "làm website rạch giá",
+      "slug": "lam-website-rach-gia",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 164,
+      "kw": "công ty thiết kế website rạch giá",
+      "slug": "cong-ty-thiet-ke-website-rach-gia",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 165,
+      "kw": "báo giá thiết kế website rạch giá",
+      "slug": "bao-gia-thiet-ke-website-rach-gia",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 166,
+      "kw": "thiết kế website cà mau",
+      "slug": "thiet-ke-website-ca-mau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 167,
+      "kw": "làm website cà mau",
+      "slug": "lam-website-ca-mau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 168,
+      "kw": "công ty thiết kế website cà mau",
+      "slug": "cong-ty-thiet-ke-website-ca-mau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 169,
+      "kw": "báo giá thiết kế website cà mau",
+      "slug": "bao-gia-thiet-ke-website-ca-mau",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 170,
+      "kw": "thiết kế website quận 1",
+      "slug": "thiet-ke-website-quan-1",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 171,
+      "kw": "làm web quận 1 hcm",
+      "slug": "lam-web-quan-1-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 172,
+      "kw": "thiết kế website quận 3",
+      "slug": "thiet-ke-website-quan-3",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 173,
+      "kw": "làm web quận 3 hcm",
+      "slug": "lam-web-quan-3-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 174,
+      "kw": "thiết kế website quận 7",
+      "slug": "thiet-ke-website-quan-7",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 175,
+      "kw": "làm web quận 7 hcm",
+      "slug": "lam-web-quan-7-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 176,
+      "kw": "thiết kế website quận 10",
+      "slug": "thiet-ke-website-quan-10",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 177,
+      "kw": "làm web quận 10 hcm",
+      "slug": "lam-web-quan-10-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 178,
+      "kw": "thiết kế website quận bình thạnh",
+      "slug": "thiet-ke-website-quan-binh-thanh",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 179,
+      "kw": "làm web quận bình thạnh hcm",
+      "slug": "lam-web-quan-binh-thanh-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 180,
+      "kw": "thiết kế website quận tân bình",
+      "slug": "thiet-ke-website-quan-tan-binh",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 181,
+      "kw": "làm web quận tân bình hcm",
+      "slug": "lam-web-quan-tan-binh-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 182,
+      "kw": "thiết kế website quận phú nhuận",
+      "slug": "thiet-ke-website-quan-phu-nhuan",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 183,
+      "kw": "làm web quận phú nhuận hcm",
+      "slug": "lam-web-quan-phu-nhuan-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 184,
+      "kw": "thiết kế website quận gò vấp",
+      "slug": "thiet-ke-website-quan-go-vap",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 185,
+      "kw": "làm web quận gò vấp hcm",
+      "slug": "lam-web-quan-go-vap-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 186,
+      "kw": "thiết kế website quận thủ đức",
+      "slug": "thiet-ke-website-quan-thu-duc",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 187,
+      "kw": "làm web quận thủ đức hcm",
+      "slug": "lam-web-quan-thu-duc-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 188,
+      "kw": "thiết kế website huyện bình chánh",
+      "slug": "thiet-ke-website-huyen-binh-chanh",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 189,
+      "kw": "làm web huyện bình chánh hcm",
+      "slug": "lam-web-huyen-binh-chanh-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 190,
+      "kw": "thiết kế website quận tân phú",
+      "slug": "thiet-ke-website-quan-tan-phu",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 191,
+      "kw": "làm web quận tân phú hcm",
+      "slug": "lam-web-quan-tan-phu-hcm",
+      "group": "local-hcm",
+      "intent": "local"
+    },
+    {
+      "n": 192,
+      "kw": "thiết kế website cầu giấy",
+      "slug": "thiet-ke-website-cau-giay",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 193,
+      "kw": "làm website cầu giấy hà nội",
+      "slug": "lam-website-cau-giay-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 194,
+      "kw": "thiết kế website đống đa",
+      "slug": "thiet-ke-website-dong-da",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 195,
+      "kw": "làm website đống đa hà nội",
+      "slug": "lam-website-dong-da-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 196,
+      "kw": "thiết kế website hoàn kiếm",
+      "slug": "thiet-ke-website-hoan-kiem",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 197,
+      "kw": "làm website hoàn kiếm hà nội",
+      "slug": "lam-website-hoan-kiem-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 198,
+      "kw": "thiết kế website thanh xuân",
+      "slug": "thiet-ke-website-thanh-xuan",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 199,
+      "kw": "làm website thanh xuân hà nội",
+      "slug": "lam-website-thanh-xuan-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 200,
+      "kw": "thiết kế website hai bà trưng",
+      "slug": "thiet-ke-website-hai-ba-trung",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 201,
+      "kw": "làm website hai bà trưng hà nội",
+      "slug": "lam-website-hai-ba-trung-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 202,
+      "kw": "thiết kế website nam từ liêm",
+      "slug": "thiet-ke-website-nam-tu-liem",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 203,
+      "kw": "làm website nam từ liêm hà nội",
+      "slug": "lam-website-nam-tu-liem-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 204,
+      "kw": "thiết kế website bắc từ liêm",
+      "slug": "thiet-ke-website-bac-tu-liem",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 205,
+      "kw": "làm website bắc từ liêm hà nội",
+      "slug": "lam-website-bac-tu-liem-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 206,
+      "kw": "thiết kế website hà đông",
+      "slug": "thiet-ke-website-ha-dong",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 207,
+      "kw": "làm website hà đông hà nội",
+      "slug": "lam-website-ha-dong-ha-noi",
+      "group": "local-hn",
+      "intent": "local"
+    },
+    {
+      "n": 208,
+      "kw": "thiết kế website gần đây",
+      "slug": "thiet-ke-website-gan-day",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 209,
+      "kw": "công ty làm web gần đây",
+      "slug": "cong-ty-lam-web-gan-day",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 210,
+      "kw": "làm website tại nhà",
+      "slug": "lam-website-tai-nha",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 211,
+      "kw": "thiết kế website online",
+      "slug": "thiet-ke-website-online",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 212,
+      "kw": "đơn vị thiết kế web miền nam",
+      "slug": "don-vi-thiet-ke-web-mien-nam",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 213,
+      "kw": "đơn vị thiết kế web miền bắc",
+      "slug": "don-vi-thiet-ke-web-mien-bac",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 214,
+      "kw": "agency digital marketing hcm",
+      "slug": "agency-digital-marketing-hcm",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 215,
+      "kw": "agency digital marketing hà nội",
+      "slug": "agency-digital-marketing-ha-noi",
+      "group": "local",
+      "intent": "local"
+    },
+    {
+      "n": 216,
+      "kw": "thiết kế website spa",
+      "slug": "thiet-ke-website-spa",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 217,
+      "kw": "làm website spa",
+      "slug": "lam-website-spa",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 218,
+      "kw": "báo giá website spa",
+      "slug": "bao-gia-website-spa",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 219,
+      "kw": "thiết kế website nha khoa",
+      "slug": "thiet-ke-website-nha-khoa",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 220,
+      "kw": "làm website nha khoa",
+      "slug": "lam-website-nha-khoa",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 221,
+      "kw": "báo giá website nha khoa",
+      "slug": "bao-gia-website-nha-khoa",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 222,
+      "kw": "thiết kế website phòng khám",
+      "slug": "thiet-ke-website-phong-kham",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 223,
+      "kw": "làm website phòng khám",
+      "slug": "lam-website-phong-kham",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 224,
+      "kw": "báo giá website phòng khám",
+      "slug": "bao-gia-website-phong-kham",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 225,
+      "kw": "thiết kế website thẩm mỹ viện",
+      "slug": "thiet-ke-website-tham-my-vien",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 226,
+      "kw": "làm website thẩm mỹ viện",
+      "slug": "lam-website-tham-my-vien",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 227,
+      "kw": "báo giá website thẩm mỹ viện",
+      "slug": "bao-gia-website-tham-my-vien",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 228,
+      "kw": "thiết kế website nhà hàng",
+      "slug": "thiet-ke-website-nha-hang",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 229,
+      "kw": "làm website nhà hàng",
+      "slug": "lam-website-nha-hang",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 230,
+      "kw": "báo giá website nhà hàng",
+      "slug": "bao-gia-website-nha-hang",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 231,
+      "kw": "thiết kế website quán cafe",
+      "slug": "thiet-ke-website-quan-cafe",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 232,
+      "kw": "làm website quán cafe",
+      "slug": "lam-website-quan-cafe",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 233,
+      "kw": "báo giá website quán cafe",
+      "slug": "bao-gia-website-quan-cafe",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 234,
+      "kw": "thiết kế website khách sạn",
+      "slug": "thiet-ke-website-khach-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 235,
+      "kw": "làm website khách sạn",
+      "slug": "lam-website-khach-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 236,
+      "kw": "báo giá website khách sạn",
+      "slug": "bao-gia-website-khach-san",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 237,
+      "kw": "thiết kế website homestay",
+      "slug": "thiet-ke-website-homestay",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 238,
+      "kw": "làm website homestay",
+      "slug": "lam-website-homestay",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 239,
+      "kw": "báo giá website homestay",
+      "slug": "bao-gia-website-homestay",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 240,
+      "kw": "thiết kế website bất động sản",
+      "slug": "thiet-ke-website-bat-dong-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 241,
+      "kw": "làm website bất động sản",
+      "slug": "lam-website-bat-dong-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 242,
+      "kw": "báo giá website bất động sản",
+      "slug": "bao-gia-website-bat-dong-san",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 243,
+      "kw": "thiết kế website môi giới nhà đất",
+      "slug": "thiet-ke-website-moi-gioi-nha-dat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 244,
+      "kw": "làm website môi giới nhà đất",
+      "slug": "lam-website-moi-gioi-nha-dat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 245,
+      "kw": "báo giá website môi giới nhà đất",
+      "slug": "bao-gia-website-moi-gioi-nha-dat",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 246,
+      "kw": "thiết kế website luật sư",
+      "slug": "thiet-ke-website-luat-su",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 247,
+      "kw": "làm website luật sư",
+      "slug": "lam-website-luat-su",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 248,
+      "kw": "báo giá website luật sư",
+      "slug": "bao-gia-website-luat-su",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 249,
+      "kw": "thiết kế website văn phòng luật",
+      "slug": "thiet-ke-website-van-phong-luat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 250,
+      "kw": "làm website văn phòng luật",
+      "slug": "lam-website-van-phong-luat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 251,
+      "kw": "báo giá website văn phòng luật",
+      "slug": "bao-gia-website-van-phong-luat",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 252,
+      "kw": "thiết kế website kế toán",
+      "slug": "thiet-ke-website-ke-toan",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 253,
+      "kw": "làm website kế toán",
+      "slug": "lam-website-ke-toan",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 254,
+      "kw": "báo giá website kế toán",
+      "slug": "bao-gia-website-ke-toan",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 255,
+      "kw": "thiết kế website bảo hiểm",
+      "slug": "thiet-ke-website-bao-hiem",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 256,
+      "kw": "làm website bảo hiểm",
+      "slug": "lam-website-bao-hiem",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 257,
+      "kw": "báo giá website bảo hiểm",
+      "slug": "bao-gia-website-bao-hiem",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 258,
+      "kw": "thiết kế website gym",
+      "slug": "thiet-ke-website-gym",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 259,
+      "kw": "làm website gym",
+      "slug": "lam-website-gym",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 260,
+      "kw": "báo giá website gym",
+      "slug": "bao-gia-website-gym",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 261,
+      "kw": "thiết kế website yoga",
+      "slug": "thiet-ke-website-yoga",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 262,
+      "kw": "làm website yoga",
+      "slug": "lam-website-yoga",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 263,
+      "kw": "báo giá website yoga",
+      "slug": "bao-gia-website-yoga",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 264,
+      "kw": "thiết kế website trung tâm anh ngữ",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 265,
+      "kw": "làm website trung tâm anh ngữ",
+      "slug": "lam-website-trung-tam-anh-ngu",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 266,
+      "kw": "báo giá website trung tâm anh ngữ",
+      "slug": "bao-gia-website-trung-tam-anh-ngu",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 267,
+      "kw": "thiết kế website trường mầm non",
+      "slug": "thiet-ke-website-truong-mam-non",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 268,
+      "kw": "làm website trường mầm non",
+      "slug": "lam-website-truong-mam-non",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 269,
+      "kw": "báo giá website trường mầm non",
+      "slug": "bao-gia-website-truong-mam-non",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 270,
+      "kw": "thiết kế website salon tóc",
+      "slug": "thiet-ke-website-salon-toc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 271,
+      "kw": "làm website salon tóc",
+      "slug": "lam-website-salon-toc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 272,
+      "kw": "báo giá website salon tóc",
+      "slug": "bao-gia-website-salon-toc",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 273,
+      "kw": "thiết kế website nail",
+      "slug": "thiet-ke-website-nail",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 274,
+      "kw": "làm website nail",
+      "slug": "lam-website-nail",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 275,
+      "kw": "báo giá website nail",
+      "slug": "bao-gia-website-nail",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 276,
+      "kw": "thiết kế website ô tô",
+      "slug": "thiet-ke-website-o-to",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 277,
+      "kw": "làm website ô tô",
+      "slug": "lam-website-o-to",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 278,
+      "kw": "báo giá website ô tô",
+      "slug": "bao-gia-website-o-to",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 279,
+      "kw": "thiết kế website gara",
+      "slug": "thiet-ke-website-gara",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 280,
+      "kw": "làm website gara",
+      "slug": "lam-website-gara",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 281,
+      "kw": "báo giá website gara",
+      "slug": "bao-gia-website-gara",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 282,
+      "kw": "thiết kế website xe máy",
+      "slug": "thiet-ke-website-xe-may",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 283,
+      "kw": "làm website xe máy",
+      "slug": "lam-website-xe-may",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 284,
+      "kw": "báo giá website xe máy",
+      "slug": "bao-gia-website-xe-may",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 285,
+      "kw": "thiết kế website xây dựng",
+      "slug": "thiet-ke-website-xay-dung",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 286,
+      "kw": "làm website xây dựng",
+      "slug": "lam-website-xay-dung",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 287,
+      "kw": "báo giá website xây dựng",
+      "slug": "bao-gia-website-xay-dung",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 288,
+      "kw": "thiết kế website nội thất",
+      "slug": "thiet-ke-website-noi-that",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 289,
+      "kw": "làm website nội thất",
+      "slug": "lam-website-noi-that",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 290,
+      "kw": "báo giá website nội thất",
+      "slug": "bao-gia-website-noi-that",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 291,
+      "kw": "thiết kế website kiến trúc",
+      "slug": "thiet-ke-website-kien-truc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 292,
+      "kw": "làm website kiến trúc",
+      "slug": "lam-website-kien-truc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 293,
+      "kw": "báo giá website kiến trúc",
+      "slug": "bao-gia-website-kien-truc",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 294,
+      "kw": "thiết kế website điện lạnh",
+      "slug": "thiet-ke-website-dien-lanh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 295,
+      "kw": "làm website điện lạnh",
+      "slug": "lam-website-dien-lanh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 296,
+      "kw": "báo giá website điện lạnh",
+      "slug": "bao-gia-website-dien-lanh",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 297,
+      "kw": "thiết kế website máy lạnh",
+      "slug": "thiet-ke-website-may-lanh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 298,
+      "kw": "làm website máy lạnh",
+      "slug": "lam-website-may-lanh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 299,
+      "kw": "báo giá website máy lạnh",
+      "slug": "bao-gia-website-may-lanh",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 300,
+      "kw": "thiết kế website nông sản",
+      "slug": "thiet-ke-website-nong-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 301,
+      "kw": "làm website nông sản",
+      "slug": "lam-website-nong-san",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 302,
+      "kw": "báo giá website nông sản",
+      "slug": "bao-gia-website-nong-san",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 303,
+      "kw": "thiết kế website thực phẩm sạch",
+      "slug": "thiet-ke-website-thuc-pham-sach",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 304,
+      "kw": "làm website thực phẩm sạch",
+      "slug": "lam-website-thuc-pham-sach",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 305,
+      "kw": "báo giá website thực phẩm sạch",
+      "slug": "bao-gia-website-thuc-pham-sach",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 306,
+      "kw": "thiết kế website shop thời trang",
+      "slug": "thiet-ke-website-shop-thoi-trang",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 307,
+      "kw": "làm website shop thời trang",
+      "slug": "lam-website-shop-thoi-trang",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 308,
+      "kw": "báo giá website shop thời trang",
+      "slug": "bao-gia-website-shop-thoi-trang",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 309,
+      "kw": "thiết kế website mỹ phẩm",
+      "slug": "thiet-ke-website-my-pham",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 310,
+      "kw": "làm website mỹ phẩm",
+      "slug": "lam-website-my-pham",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 311,
+      "kw": "báo giá website mỹ phẩm",
+      "slug": "bao-gia-website-my-pham",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 312,
+      "kw": "thiết kế website nhà thuốc",
+      "slug": "thiet-ke-website-nha-thuoc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 313,
+      "kw": "làm website nhà thuốc",
+      "slug": "lam-website-nha-thuoc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 314,
+      "kw": "báo giá website nhà thuốc",
+      "slug": "bao-gia-website-nha-thuoc",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 315,
+      "kw": "thiết kế website pet shop",
+      "slug": "thiet-ke-website-pet-shop",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 316,
+      "kw": "làm website pet shop",
+      "slug": "lam-website-pet-shop",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 317,
+      "kw": "báo giá website pet shop",
+      "slug": "bao-gia-website-pet-shop",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 318,
+      "kw": "thiết kế website thú y",
+      "slug": "thiet-ke-website-thu-y",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 319,
+      "kw": "làm website thú y",
+      "slug": "lam-website-thu-y",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 320,
+      "kw": "báo giá website thú y",
+      "slug": "bao-gia-website-thu-y",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 321,
+      "kw": "thiết kế website du học",
+      "slug": "thiet-ke-website-du-hoc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 322,
+      "kw": "làm website du học",
+      "slug": "lam-website-du-hoc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 323,
+      "kw": "báo giá website du học",
+      "slug": "bao-gia-website-du-hoc",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 324,
+      "kw": "thiết kế website tour",
+      "slug": "thiet-ke-website-tour",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 325,
+      "kw": "làm website tour",
+      "slug": "lam-website-tour",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 326,
+      "kw": "báo giá website tour",
+      "slug": "bao-gia-website-tour",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 327,
+      "kw": "thiết kế website resort",
+      "slug": "thiet-ke-website-resort",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 328,
+      "kw": "làm website resort",
+      "slug": "lam-website-resort",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 329,
+      "kw": "báo giá website resort",
+      "slug": "bao-gia-website-resort",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 330,
+      "kw": "thiết kế website in ấn",
+      "slug": "thiet-ke-website-in-an",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 331,
+      "kw": "làm website in ấn",
+      "slug": "lam-website-in-an",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 332,
+      "kw": "báo giá website in ấn",
+      "slug": "bao-gia-website-in-an",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 333,
+      "kw": "thiết kế website quảng cáo",
+      "slug": "thiet-ke-website-quang-cao",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 334,
+      "kw": "làm website quảng cáo",
+      "slug": "lam-website-quang-cao",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 335,
+      "kw": "báo giá website quảng cáo",
+      "slug": "bao-gia-website-quang-cao",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 336,
+      "kw": "thiết kế website event",
+      "slug": "thiet-ke-website-event",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 337,
+      "kw": "làm website event",
+      "slug": "lam-website-event",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 338,
+      "kw": "báo giá website event",
+      "slug": "bao-gia-website-event",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 339,
+      "kw": "thiết kế website cưới hỏi",
+      "slug": "thiet-ke-website-cuoi-hoi",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 340,
+      "kw": "làm website cưới hỏi",
+      "slug": "lam-website-cuoi-hoi",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 341,
+      "kw": "báo giá website cưới hỏi",
+      "slug": "bao-gia-website-cuoi-hoi",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 342,
+      "kw": "thiết kế website studio ảnh",
+      "slug": "thiet-ke-website-studio-anh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 343,
+      "kw": "làm website studio ảnh",
+      "slug": "lam-website-studio-anh",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 344,
+      "kw": "báo giá website studio ảnh",
+      "slug": "bao-gia-website-studio-anh",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 345,
+      "kw": "thiết kế website logistic",
+      "slug": "thiet-ke-website-logistic",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 346,
+      "kw": "làm website logistic",
+      "slug": "lam-website-logistic",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 347,
+      "kw": "báo giá website logistic",
+      "slug": "bao-gia-website-logistic",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 348,
+      "kw": "thiết kế website vận tải",
+      "slug": "thiet-ke-website-van-tai",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 349,
+      "kw": "làm website vận tải",
+      "slug": "lam-website-van-tai",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 350,
+      "kw": "báo giá website vận tải",
+      "slug": "bao-gia-website-van-tai",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 351,
+      "kw": "thiết kế website xuất nhập khẩu",
+      "slug": "thiet-ke-website-xuat-nhap-khau",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 352,
+      "kw": "làm website xuất nhập khẩu",
+      "slug": "lam-website-xuat-nhap-khau",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 353,
+      "kw": "báo giá website xuất nhập khẩu",
+      "slug": "bao-gia-website-xuat-nhap-khau",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 354,
+      "kw": "thiết kế website công ty xây dựng",
+      "slug": "thiet-ke-website-cong-ty-xay-dung",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 355,
+      "kw": "làm website công ty xây dựng",
+      "slug": "lam-website-cong-ty-xay-dung",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 356,
+      "kw": "báo giá website công ty xây dựng",
+      "slug": "bao-gia-website-cong-ty-xay-dung",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 357,
+      "kw": "thiết kế website sàn gỗ",
+      "slug": "thiet-ke-website-san-go",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 358,
+      "kw": "làm website sàn gỗ",
+      "slug": "lam-website-san-go",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 359,
+      "kw": "báo giá website sàn gỗ",
+      "slug": "bao-gia-website-san-go",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 360,
+      "kw": "thiết kế website nội thất văn phòng",
+      "slug": "thiet-ke-website-noi-that-van-phong",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 361,
+      "kw": "làm website nội thất văn phòng",
+      "slug": "lam-website-noi-that-van-phong",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 362,
+      "kw": "báo giá website nội thất văn phòng",
+      "slug": "bao-gia-website-noi-that-van-phong",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 363,
+      "kw": "thiết kế website smart home",
+      "slug": "thiet-ke-website-smart-home",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 364,
+      "kw": "làm website smart home",
+      "slug": "lam-website-smart-home",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 365,
+      "kw": "báo giá website smart home",
+      "slug": "bao-gia-website-smart-home",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 366,
+      "kw": "thiết kế website năng lượng mặt trời",
+      "slug": "thiet-ke-website-nang-luong-mat-troi",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 367,
+      "kw": "làm website năng lượng mặt trời",
+      "slug": "lam-website-nang-luong-mat-troi",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 368,
+      "kw": "báo giá website năng lượng mặt trời",
+      "slug": "bao-gia-website-nang-luong-mat-troi",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 369,
+      "kw": "thiết kế website pccc",
+      "slug": "thiet-ke-website-pccc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 370,
+      "kw": "làm website pccc",
+      "slug": "lam-website-pccc",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 371,
+      "kw": "báo giá website pccc",
+      "slug": "bao-gia-website-pccc",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 372,
+      "kw": "thiết kế website camera giám sát",
+      "slug": "thiet-ke-website-camera-giam-sat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 373,
+      "kw": "làm website camera giám sát",
+      "slug": "lam-website-camera-giam-sat",
+      "group": "nganh-hot",
+      "intent": "commercial"
+    },
+    {
+      "n": 374,
+      "kw": "báo giá website camera giám sát",
+      "slug": "bao-gia-website-camera-giam-sat",
+      "group": "nganh-hot",
+      "intent": "transactional"
+    },
+    {
+      "n": 375,
+      "kw": "seo website",
+      "slug": "seo-website",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 376,
+      "kw": "dịch vụ seo",
+      "slug": "dich-vu-seo",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 377,
+      "kw": "seo tổng thể",
+      "slug": "seo-tong-the",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 378,
+      "kw": "seo từ khóa",
+      "slug": "seo-tu-khoa",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 379,
+      "kw": "seo giá rẻ",
+      "slug": "seo-gia-re",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 380,
+      "kw": "báo giá seo",
+      "slug": "bao-gia-seo",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 381,
+      "kw": "seo lên top google",
+      "slug": "seo-len-top-google",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 382,
+      "kw": "đẩy top google",
+      "slug": "day-top-google",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 383,
+      "kw": "đưa website lên google",
+      "slug": "dua-website-len-google",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 384,
+      "kw": "website không lên google",
+      "slug": "website-khong-len-google",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 385,
+      "kw": "index google",
+      "slug": "index-google",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 386,
+      "kw": "google search console",
+      "slug": "google-search-console",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 387,
+      "kw": "seo local",
+      "slug": "seo-local",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 388,
+      "kw": "seo maps",
+      "slug": "seo-maps",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 389,
+      "kw": "google maps doanh nghiệp",
+      "slug": "google-maps-doanh-nghiep",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 390,
+      "kw": "tạo google business profile",
+      "slug": "tao-google-business-profile",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 391,
+      "kw": "tối ưu google maps",
+      "slug": "toi-uu-google-maps",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 392,
+      "kw": "đưa cửa hàng lên maps",
+      "slug": "dua-cua-hang-len-maps",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 393,
+      "kw": "review google maps",
+      "slug": "review-google-maps",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 394,
+      "kw": "sửa google business",
+      "slug": "sua-google-business",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 395,
+      "kw": "seo onpage",
+      "slug": "seo-onpage",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 396,
+      "kw": "seo kỹ thuật",
+      "slug": "seo-ky-thuat",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 397,
+      "kw": "tốc độ website",
+      "slug": "toc-do-website",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 398,
+      "kw": "website load chậm",
+      "slug": "website-load-cham",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 399,
+      "kw": "tối ưu tốc độ website",
+      "slug": "toi-uu-toc-do-website",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 400,
+      "kw": "core web vitals",
+      "slug": "core-web-vitals",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 401,
+      "kw": "chạy google ads",
+      "slug": "chay-google-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 402,
+      "kw": "dịch vụ google ads",
+      "slug": "dich-vu-google-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 403,
+      "kw": "thuê chạy google ads",
+      "slug": "thue-chay-google-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 404,
+      "kw": "báo giá google ads",
+      "slug": "bao-gia-google-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 405,
+      "kw": "google ads giá bao nhiêu",
+      "slug": "google-ads-gia-bao-nhieu",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 406,
+      "kw": "chạy quảng cáo tìm kiếm",
+      "slug": "chay-quang-cao-tim-kiem",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 407,
+      "kw": "chạy facebook ads",
+      "slug": "chay-facebook-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 408,
+      "kw": "dịch vụ facebook ads",
+      "slug": "dich-vu-facebook-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 409,
+      "kw": "thuê chạy ads facebook",
+      "slug": "thue-chay-ads-facebook",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 410,
+      "kw": "báo giá facebook ads",
+      "slug": "bao-gia-facebook-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 411,
+      "kw": "quảng cáo facebook hiệu quả",
+      "slug": "quang-cao-facebook-hieu-qua",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 412,
+      "kw": "chạy tiktok ads",
+      "slug": "chay-tiktok-ads",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 413,
+      "kw": "quảng cáo tiktok shop",
+      "slug": "quang-cao-tiktok-shop",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 414,
+      "kw": "seo youtube",
+      "slug": "seo-youtube",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 415,
+      "kw": "content marketing",
+      "slug": "content-marketing",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 416,
+      "kw": "viết bài seo",
+      "slug": "viet-bai-seo",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 417,
+      "kw": "thuê viết content",
+      "slug": "thue-viet-content",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 418,
+      "kw": "lập kế hoạch marketing",
+      "slug": "lap-ke-hoach-marketing",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 419,
+      "kw": "digital marketing cho sme",
+      "slug": "digital-marketing-cho-sme",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 420,
+      "kw": "marketing online cho cửa hàng",
+      "slug": "marketing-online-cho-cua-hang",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 421,
+      "kw": "marketing cho spa",
+      "slug": "marketing-cho-spa",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 422,
+      "kw": "marketing cho nha khoa",
+      "slug": "marketing-cho-nha-khoa",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 423,
+      "kw": "marketing bất động sản",
+      "slug": "marketing-bat-dong-san",
+      "group": "seo-ads",
+      "intent": "commercial"
+    },
+    {
+      "n": 424,
+      "kw": "thiết kế website ở đâu tốt",
+      "slug": "thiet-ke-website-o-dau-tot",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 425,
+      "kw": "nên thuê công ty nào làm website",
+      "slug": "nen-thue-cong-ty-nao-lam-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 426,
+      "kw": "công ty thiết kế website uy tín",
+      "slug": "cong-ty-thiet-ke-website-uy-tin",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 427,
+      "kw": "top công ty thiết kế website",
+      "slug": "top-cong-ty-thiet-ke-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 428,
+      "kw": "đơn vị làm web tốt nhất",
+      "slug": "don-vi-lam-web-tot-nhat",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 429,
+      "kw": "làm website nên chọn wordpress hay code",
+      "slug": "lam-website-nen-chon-wordpress-hay-code",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 430,
+      "kw": "website tĩnh hay động",
+      "slug": "website-tinh-hay-dong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 431,
+      "kw": "có nên làm website không",
+      "slug": "co-nen-lam-website-khong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 432,
+      "kw": "doanh nghiệp nhỏ có cần website không",
+      "slug": "doanh-nghiep-nho-co-can-website-khong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 433,
+      "kw": "website hay fanpage cái nào tốt hơn",
+      "slug": "website-hay-fanpage-cai-nao-tot-hon",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 434,
+      "kw": "khác nhau giữa website và landing page",
+      "slug": "khac-nhau-giua-website-va-landing-page",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 435,
+      "kw": "làm website mất bao lâu",
+      "slug": "lam-website-mat-bao-lau",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 436,
+      "kw": "thiết kế website bao lâu xong",
+      "slug": "thiet-ke-website-bao-lau-xong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 437,
+      "kw": "website cần những trang gì",
+      "slug": "website-can-nhung-trang-gi",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 438,
+      "kw": "checklist làm website",
+      "slug": "checklist-lam-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 439,
+      "kw": "quy trình thiết kế website",
+      "slug": "quy-trinh-thiet-ke-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 440,
+      "kw": "cách chọn công ty thiết kế website",
+      "slug": "cach-chon-cong-ty-thiet-ke-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 441,
+      "kw": "dấu hiệu agency làm web kém",
+      "slug": "dau-hieu-agency-lam-web-kem",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 442,
+      "kw": "thiết kế website có bảo hành không",
+      "slug": "thiet-ke-website-co-bao-hanh-khong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 443,
+      "kw": "sau khi làm web còn phí gì không",
+      "slug": "sau-khi-lam-web-con-phi-gi-khong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 444,
+      "kw": "website có kèm hosting không",
+      "slug": "website-co-kem-hosting-khong",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 445,
+      "kw": "tự làm website hay thuê",
+      "slug": "tu-lam-website-hay-thue",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 446,
+      "kw": "học làm website",
+      "slug": "hoc-lam-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 447,
+      "kw": "cách làm website miễn phí",
+      "slug": "cach-lam-website-mien-phi",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 448,
+      "kw": "wix hay wordpress",
+      "slug": "wix-hay-wordpress",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 449,
+      "kw": "shopify việt nam",
+      "slug": "shopify-viet-nam",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 450,
+      "kw": "haravan hay sapo",
+      "slug": "haravan-hay-sapo",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 451,
+      "kw": "nên dùng domain gì",
+      "slug": "nen-dung-domain-gi",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 452,
+      "kw": "website doanh nghiệp cần gì",
+      "slug": "website-doanh-nghiep-can-gi",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 453,
+      "kw": "ui ux website bán hàng",
+      "slug": "ui-ux-website-ban-hang",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 454,
+      "kw": "tỷ lệ chuyển đổi website",
+      "slug": "ty-le-chuyen-doi-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 455,
+      "kw": "form liên hệ website",
+      "slug": "form-lien-he-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 456,
+      "kw": "nút zalo trên website",
+      "slug": "nut-zalo-tren-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 457,
+      "kw": "chatbot website",
+      "slug": "chatbot-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 458,
+      "kw": "tích hợp thanh toán website",
+      "slug": "tich-hop-thanh-toan-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 459,
+      "kw": "website đa ngôn ngữ",
+      "slug": "website-da-ngon-ngu",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 460,
+      "kw": "website mobile friendly",
+      "slug": "website-mobile-friendly",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 461,
+      "kw": "thiết kế web responsive",
+      "slug": "thiet-ke-web-responsive",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 462,
+      "kw": "website bị hack xử lý sao",
+      "slug": "website-bi-hack-xu-ly-sao",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 463,
+      "kw": "backup website",
+      "slug": "backup-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 464,
+      "kw": "chứng chỉ ssl",
+      "slug": "chung-chi-ssl",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 465,
+      "kw": "bảo mật website",
+      "slug": "bao-mat-website",
+      "group": "cau-hoi",
+      "intent": "informational"
+    },
+    {
+      "n": 466,
+      "kw": "làm fanpage",
+      "slug": "lam-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 467,
+      "kw": "thiết kế fanpage",
+      "slug": "thiet-ke-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 468,
+      "kw": "setup fanpage bán hàng",
+      "slug": "setup-fanpage-ban-hang",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 469,
+      "kw": "chạy ads fanpage",
+      "slug": "chay-ads-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 470,
+      "kw": "tăng like fanpage",
+      "slug": "tang-like-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 471,
+      "kw": "quản trị fanpage",
+      "slug": "quan-tri-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 472,
+      "kw": "viết content fanpage",
+      "slug": "viet-content-fanpage",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 473,
+      "kw": "làm zalo oa",
+      "slug": "lam-zalo-oa",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 474,
+      "kw": "setup zalo oa",
+      "slug": "setup-zalo-oa",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 475,
+      "kw": "chăm sóc zalo oa",
+      "slug": "cham-soc-zalo-oa",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 476,
+      "kw": "làm tiktok doanh nghiệp",
+      "slug": "lam-tiktok-doanh-nghiep",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 477,
+      "kw": "làm youtube doanh nghiệp",
+      "slug": "lam-youtube-doanh-nghiep",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 478,
+      "kw": "quản lý mạng xã hội",
+      "slug": "quan-ly-mang-xa-hoi",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 479,
+      "kw": "social media marketing",
+      "slug": "social-media-marketing",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 480,
+      "kw": "booking kol",
+      "slug": "booking-kol",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 481,
+      "kw": "review sản phẩm",
+      "slug": "review-san-pham",
+      "group": "social",
+      "intent": "commercial"
+    },
+    {
+      "n": 482,
+      "kw": "website không có khách",
+      "slug": "website-khong-co-khach",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 483,
+      "kw": "website ít người vào",
+      "slug": "website-it-nguoi-vao",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 484,
+      "kw": "website không ra đơn",
+      "slug": "website-khong-ra-don",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 485,
+      "kw": "quảng cáo tốn tiền không có lead",
+      "slug": "quang-cao-ton-tien-khong-co-lead",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 486,
+      "kw": "lead ảo facebook",
+      "slug": "lead-ao-facebook",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 487,
+      "kw": "form website không ai gửi",
+      "slug": "form-website-khong-ai-gui",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 488,
+      "kw": "đối thủ lên top mình không",
+      "slug": "doi-thu-len-top-minh-khong",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 489,
+      "kw": "website đẹp nhưng không bán được",
+      "slug": "website-dep-nhung-khong-ban-duoc",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 490,
+      "kw": "đổi giao diện website mới",
+      "slug": "doi-giao-dien-website-moi",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 491,
+      "kw": "website lỗi mobile",
+      "slug": "website-loi-mobile",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 492,
+      "kw": "website không hiện trên điện thoại",
+      "slug": "website-khong-hien-tren-dien-thoai",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 493,
+      "kw": "tên miền hết hạn",
+      "slug": "ten-mien-het-han",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 494,
+      "kw": "hosting bị khóa",
+      "slug": "hosting-bi-khoa",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 495,
+      "kw": "email doanh nghiệp",
+      "slug": "email-doanh-nghiep",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 496,
+      "kw": "tạo email theo domain",
+      "slug": "tao-email-theo-domain",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 497,
+      "kw": "google workspace cho công ty",
+      "slug": "google-workspace-cho-cong-ty",
+      "group": "pain",
+      "intent": "problem"
+    },
+    {
+      "n": 498,
+      "kw": "marketing trọn gói",
+      "slug": "marketing-tron-goi",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 499,
+      "kw": "dịch vụ marketing online",
+      "slug": "dich-vu-marketing-online",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 500,
+      "kw": "agency marketing",
+      "slug": "agency-marketing",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 501,
+      "kw": "công ty digital marketing",
+      "slug": "cong-ty-digital-marketing",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 502,
+      "kw": "thuê marketing",
+      "slug": "thue-marketing",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 503,
+      "kw": "outsourcing marketing",
+      "slug": "outsourcing-marketing",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 504,
+      "kw": "gói marketing tháng",
+      "slug": "goi-marketing-thang",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 505,
+      "kw": "báo giá digital marketing",
+      "slug": "bao-gia-digital-marketing",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 506,
+      "kw": "website + seo + ads",
+      "slug": "website-seo-ads",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 507,
+      "kw": "gói tăng lead",
+      "slug": "goi-tang-lead",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 508,
+      "kw": "gói tăng doanh số",
+      "slug": "goi-tang-doanh-so",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 509,
+      "kw": "tư vấn marketing miễn phí",
+      "slug": "tu-van-marketing-mien-phi",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 510,
+      "kw": "audit website miễn phí",
+      "slug": "audit-website-mien-phi",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 511,
+      "kw": "kiểm tra seo website",
+      "slug": "kiem-tra-seo-website",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 512,
+      "kw": "chấm điểm website",
+      "slug": "cham-diem-website",
+      "group": "goi-mkt",
+      "intent": "commercial"
+    },
+    {
+      "n": 513,
+      "kw": "thiết kế website spa hcm",
+      "slug": "thiet-ke-website-spa-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 514,
+      "kw": "báo giá website spa hcm",
+      "slug": "bao-gia-website-spa-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 515,
+      "kw": "thiết kế website spa hà nội",
+      "slug": "thiet-ke-website-spa-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 516,
+      "kw": "báo giá website spa hà nội",
+      "slug": "bao-gia-website-spa-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 517,
+      "kw": "thiết kế website spa đà nẵng",
+      "slug": "thiet-ke-website-spa-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 518,
+      "kw": "báo giá website spa đà nẵng",
+      "slug": "bao-gia-website-spa-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 519,
+      "kw": "thiết kế website spa bình dương",
+      "slug": "thiet-ke-website-spa-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 520,
+      "kw": "báo giá website spa bình dương",
+      "slug": "bao-gia-website-spa-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 521,
+      "kw": "thiết kế website spa cần thơ",
+      "slug": "thiet-ke-website-spa-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 522,
+      "kw": "báo giá website spa cần thơ",
+      "slug": "bao-gia-website-spa-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 523,
+      "kw": "thiết kế website nha khoa hcm",
+      "slug": "thiet-ke-website-nha-khoa-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 524,
+      "kw": "báo giá website nha khoa hcm",
+      "slug": "bao-gia-website-nha-khoa-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 525,
+      "kw": "thiết kế website nha khoa hà nội",
+      "slug": "thiet-ke-website-nha-khoa-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 526,
+      "kw": "báo giá website nha khoa hà nội",
+      "slug": "bao-gia-website-nha-khoa-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 527,
+      "kw": "thiết kế website nha khoa đà nẵng",
+      "slug": "thiet-ke-website-nha-khoa-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 528,
+      "kw": "báo giá website nha khoa đà nẵng",
+      "slug": "bao-gia-website-nha-khoa-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 529,
+      "kw": "thiết kế website nha khoa bình dương",
+      "slug": "thiet-ke-website-nha-khoa-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 530,
+      "kw": "báo giá website nha khoa bình dương",
+      "slug": "bao-gia-website-nha-khoa-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 531,
+      "kw": "thiết kế website nha khoa cần thơ",
+      "slug": "thiet-ke-website-nha-khoa-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 532,
+      "kw": "báo giá website nha khoa cần thơ",
+      "slug": "bao-gia-website-nha-khoa-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 533,
+      "kw": "thiết kế website nhà hàng hcm",
+      "slug": "thiet-ke-website-nha-hang-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 534,
+      "kw": "báo giá website nhà hàng hcm",
+      "slug": "bao-gia-website-nha-hang-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 535,
+      "kw": "thiết kế website nhà hàng hà nội",
+      "slug": "thiet-ke-website-nha-hang-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 536,
+      "kw": "báo giá website nhà hàng hà nội",
+      "slug": "bao-gia-website-nha-hang-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 537,
+      "kw": "thiết kế website nhà hàng đà nẵng",
+      "slug": "thiet-ke-website-nha-hang-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 538,
+      "kw": "báo giá website nhà hàng đà nẵng",
+      "slug": "bao-gia-website-nha-hang-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 539,
+      "kw": "thiết kế website nhà hàng bình dương",
+      "slug": "thiet-ke-website-nha-hang-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 540,
+      "kw": "báo giá website nhà hàng bình dương",
+      "slug": "bao-gia-website-nha-hang-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 541,
+      "kw": "thiết kế website nhà hàng cần thơ",
+      "slug": "thiet-ke-website-nha-hang-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 542,
+      "kw": "báo giá website nhà hàng cần thơ",
+      "slug": "bao-gia-website-nha-hang-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 543,
+      "kw": "thiết kế website bất động sản hcm",
+      "slug": "thiet-ke-website-bat-dong-san-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 544,
+      "kw": "báo giá website bất động sản hcm",
+      "slug": "bao-gia-website-bat-dong-san-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 545,
+      "kw": "thiết kế website bất động sản hà nội",
+      "slug": "thiet-ke-website-bat-dong-san-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 546,
+      "kw": "báo giá website bất động sản hà nội",
+      "slug": "bao-gia-website-bat-dong-san-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 547,
+      "kw": "thiết kế website bất động sản đà nẵng",
+      "slug": "thiet-ke-website-bat-dong-san-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 548,
+      "kw": "báo giá website bất động sản đà nẵng",
+      "slug": "bao-gia-website-bat-dong-san-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 549,
+      "kw": "thiết kế website bất động sản bình dương",
+      "slug": "thiet-ke-website-bat-dong-san-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 550,
+      "kw": "báo giá website bất động sản bình dương",
+      "slug": "bao-gia-website-bat-dong-san-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 551,
+      "kw": "thiết kế website bất động sản cần thơ",
+      "slug": "thiet-ke-website-bat-dong-san-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 552,
+      "kw": "báo giá website bất động sản cần thơ",
+      "slug": "bao-gia-website-bat-dong-san-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 553,
+      "kw": "thiết kế website gym hcm",
+      "slug": "thiet-ke-website-gym-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 554,
+      "kw": "báo giá website gym hcm",
+      "slug": "bao-gia-website-gym-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 555,
+      "kw": "thiết kế website gym hà nội",
+      "slug": "thiet-ke-website-gym-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 556,
+      "kw": "báo giá website gym hà nội",
+      "slug": "bao-gia-website-gym-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 557,
+      "kw": "thiết kế website gym đà nẵng",
+      "slug": "thiet-ke-website-gym-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 558,
+      "kw": "báo giá website gym đà nẵng",
+      "slug": "bao-gia-website-gym-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 559,
+      "kw": "thiết kế website gym bình dương",
+      "slug": "thiet-ke-website-gym-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 560,
+      "kw": "báo giá website gym bình dương",
+      "slug": "bao-gia-website-gym-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 561,
+      "kw": "thiết kế website gym cần thơ",
+      "slug": "thiet-ke-website-gym-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 562,
+      "kw": "báo giá website gym cần thơ",
+      "slug": "bao-gia-website-gym-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 563,
+      "kw": "thiết kế website luật sư hcm",
+      "slug": "thiet-ke-website-luat-su-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 564,
+      "kw": "báo giá website luật sư hcm",
+      "slug": "bao-gia-website-luat-su-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 565,
+      "kw": "thiết kế website luật sư hà nội",
+      "slug": "thiet-ke-website-luat-su-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 566,
+      "kw": "báo giá website luật sư hà nội",
+      "slug": "bao-gia-website-luat-su-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 567,
+      "kw": "thiết kế website luật sư đà nẵng",
+      "slug": "thiet-ke-website-luat-su-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 568,
+      "kw": "báo giá website luật sư đà nẵng",
+      "slug": "bao-gia-website-luat-su-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 569,
+      "kw": "thiết kế website luật sư bình dương",
+      "slug": "thiet-ke-website-luat-su-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 570,
+      "kw": "báo giá website luật sư bình dương",
+      "slug": "bao-gia-website-luat-su-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 571,
+      "kw": "thiết kế website luật sư cần thơ",
+      "slug": "thiet-ke-website-luat-su-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 572,
+      "kw": "báo giá website luật sư cần thơ",
+      "slug": "bao-gia-website-luat-su-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 573,
+      "kw": "thiết kế website xây dựng hcm",
+      "slug": "thiet-ke-website-xay-dung-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 574,
+      "kw": "báo giá website xây dựng hcm",
+      "slug": "bao-gia-website-xay-dung-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 575,
+      "kw": "thiết kế website xây dựng hà nội",
+      "slug": "thiet-ke-website-xay-dung-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 576,
+      "kw": "báo giá website xây dựng hà nội",
+      "slug": "bao-gia-website-xay-dung-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 577,
+      "kw": "thiết kế website xây dựng đà nẵng",
+      "slug": "thiet-ke-website-xay-dung-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 578,
+      "kw": "báo giá website xây dựng đà nẵng",
+      "slug": "bao-gia-website-xay-dung-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 579,
+      "kw": "thiết kế website xây dựng bình dương",
+      "slug": "thiet-ke-website-xay-dung-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 580,
+      "kw": "báo giá website xây dựng bình dương",
+      "slug": "bao-gia-website-xay-dung-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 581,
+      "kw": "thiết kế website xây dựng cần thơ",
+      "slug": "thiet-ke-website-xay-dung-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 582,
+      "kw": "báo giá website xây dựng cần thơ",
+      "slug": "bao-gia-website-xay-dung-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 583,
+      "kw": "thiết kế website nội thất hcm",
+      "slug": "thiet-ke-website-noi-that-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 584,
+      "kw": "báo giá website nội thất hcm",
+      "slug": "bao-gia-website-noi-that-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 585,
+      "kw": "thiết kế website nội thất hà nội",
+      "slug": "thiet-ke-website-noi-that-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 586,
+      "kw": "báo giá website nội thất hà nội",
+      "slug": "bao-gia-website-noi-that-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 587,
+      "kw": "thiết kế website nội thất đà nẵng",
+      "slug": "thiet-ke-website-noi-that-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 588,
+      "kw": "báo giá website nội thất đà nẵng",
+      "slug": "bao-gia-website-noi-that-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 589,
+      "kw": "thiết kế website nội thất bình dương",
+      "slug": "thiet-ke-website-noi-that-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 590,
+      "kw": "báo giá website nội thất bình dương",
+      "slug": "bao-gia-website-noi-that-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 591,
+      "kw": "thiết kế website nội thất cần thơ",
+      "slug": "thiet-ke-website-noi-that-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 592,
+      "kw": "báo giá website nội thất cần thơ",
+      "slug": "bao-gia-website-noi-that-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 593,
+      "kw": "thiết kế website khách sạn hcm",
+      "slug": "thiet-ke-website-khach-san-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 594,
+      "kw": "báo giá website khách sạn hcm",
+      "slug": "bao-gia-website-khach-san-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 595,
+      "kw": "thiết kế website khách sạn hà nội",
+      "slug": "thiet-ke-website-khach-san-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 596,
+      "kw": "báo giá website khách sạn hà nội",
+      "slug": "bao-gia-website-khach-san-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 597,
+      "kw": "thiết kế website khách sạn đà nẵng",
+      "slug": "thiet-ke-website-khach-san-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 598,
+      "kw": "báo giá website khách sạn đà nẵng",
+      "slug": "bao-gia-website-khach-san-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 599,
+      "kw": "thiết kế website khách sạn bình dương",
+      "slug": "thiet-ke-website-khach-san-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 600,
+      "kw": "báo giá website khách sạn bình dương",
+      "slug": "bao-gia-website-khach-san-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 601,
+      "kw": "thiết kế website khách sạn cần thơ",
+      "slug": "thiet-ke-website-khach-san-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 602,
+      "kw": "báo giá website khách sạn cần thơ",
+      "slug": "bao-gia-website-khach-san-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 603,
+      "kw": "thiết kế website trung tâm anh ngữ hcm",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu-hcm",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 604,
+      "kw": "báo giá website trung tâm anh ngữ hcm",
+      "slug": "bao-gia-website-trung-tam-anh-ngu-hcm",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 605,
+      "kw": "thiết kế website trung tâm anh ngữ hà nội",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu-ha-noi",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 606,
+      "kw": "báo giá website trung tâm anh ngữ hà nội",
+      "slug": "bao-gia-website-trung-tam-anh-ngu-ha-noi",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 607,
+      "kw": "thiết kế website trung tâm anh ngữ đà nẵng",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu-da-nang",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 608,
+      "kw": "báo giá website trung tâm anh ngữ đà nẵng",
+      "slug": "bao-gia-website-trung-tam-anh-ngu-da-nang",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 609,
+      "kw": "thiết kế website trung tâm anh ngữ bình dương",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu-binh-duong",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 610,
+      "kw": "báo giá website trung tâm anh ngữ bình dương",
+      "slug": "bao-gia-website-trung-tam-anh-ngu-binh-duong",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 611,
+      "kw": "thiết kế website trung tâm anh ngữ cần thơ",
+      "slug": "thiet-ke-website-trung-tam-anh-ngu-can-tho",
+      "group": "longtail-local",
+      "intent": "local"
+    },
+    {
+      "n": 612,
+      "kw": "báo giá website trung tâm anh ngữ cần thơ",
+      "slug": "bao-gia-website-trung-tam-anh-ngu-can-tho",
+      "group": "longtail-local",
+      "intent": "transactional"
+    },
+    {
+      "n": 613,
+      "kw": "thiet ke website",
+      "slug": "thiet-ke-website",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 614,
+      "kw": "lam website",
+      "slug": "lam-website",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 615,
+      "kw": "lam web gia re",
+      "slug": "lam-web-gia-re",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 616,
+      "kw": "thiet ke web chuan seo",
+      "slug": "thiet-ke-web-chuan-seo",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 617,
+      "kw": "cong ty thiet ke web",
+      "slug": "cong-ty-thiet-ke-web",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 618,
+      "kw": "bao gia web",
+      "slug": "bao-gia-web",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 619,
+      "kw": "gia thiet ke web",
+      "slug": "gia-thiet-ke-web",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 620,
+      "kw": "web doanh nghiep",
+      "slug": "web-doanh-nghiep",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 621,
+      "kw": "web ban hang",
+      "slug": "web-ban-hang",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 622,
+      "kw": "seo web",
+      "slug": "seo-web",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 623,
+      "kw": "chay quang cao facebook",
+      "slug": "chay-quang-cao-facebook",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 624,
+      "kw": "chay google adwords",
+      "slug": "chay-google-adwords",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 625,
+      "kw": "toi uu google map",
+      "slug": "toi-uu-google-map",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 626,
+      "kw": "lam web spa",
+      "slug": "lam-web-spa",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 627,
+      "kw": "lam web nha khoa",
+      "slug": "lam-web-nha-khoa",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 628,
+      "kw": "website spa dep",
+      "slug": "website-spa-dep",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 629,
+      "kw": "website nha khoa dep",
+      "slug": "website-nha-khoa-dep",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 630,
+      "kw": "mau website doanh nghiep",
+      "slug": "mau-website-doanh-nghiep",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 631,
+      "kw": "mau landing page",
+      "slug": "mau-landing-page",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 632,
+      "kw": "thiet ke logo va website",
+      "slug": "thiet-ke-logo-va-website",
+      "group": "bien-the",
+      "intent": "commercial"
+    },
+    {
+      "n": 633,
+      "kw": "thiết kế website nhanh",
+      "slug": "thiet-ke-website-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 634,
+      "kw": "thiết kế website chuẩn seo 2026",
+      "slug": "thiet-ke-website-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 635,
+      "kw": "thiết kế website cho startups",
+      "slug": "thiet-ke-website-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 636,
+      "kw": "thiết kế website cho sme",
+      "slug": "thiet-ke-website-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 637,
+      "kw": "thiết kế website cho shop nhỏ",
+      "slug": "thiet-ke-website-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 638,
+      "kw": "thiết kế website cho phòng khám",
+      "slug": "thiet-ke-website-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 639,
+      "kw": "làm website nhanh",
+      "slug": "lam-website-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 640,
+      "kw": "làm website chuẩn seo 2026",
+      "slug": "lam-website-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 641,
+      "kw": "làm website cho startups",
+      "slug": "lam-website-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 642,
+      "kw": "làm website cho sme",
+      "slug": "lam-website-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 643,
+      "kw": "làm website cho shop nhỏ",
+      "slug": "lam-website-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 644,
+      "kw": "làm website cho phòng khám",
+      "slug": "lam-website-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 645,
+      "kw": "làm landing page uy tín",
+      "slug": "lam-landing-page-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 646,
+      "kw": "làm landing page chuyên nghiệp",
+      "slug": "lam-landing-page-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 647,
+      "kw": "làm landing page giá rẻ",
+      "slug": "lam-landing-page-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 648,
+      "kw": "làm landing page trọn gói",
+      "slug": "lam-landing-page-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 649,
+      "kw": "làm landing page nhanh",
+      "slug": "lam-landing-page-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 650,
+      "kw": "làm landing page chuẩn seo 2026",
+      "slug": "lam-landing-page-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 651,
+      "kw": "làm landing page cho startups",
+      "slug": "lam-landing-page-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 652,
+      "kw": "làm landing page cho sme",
+      "slug": "lam-landing-page-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 653,
+      "kw": "làm landing page cho shop nhỏ",
+      "slug": "lam-landing-page-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 654,
+      "kw": "làm landing page cho phòng khám",
+      "slug": "lam-landing-page-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 655,
+      "kw": "dịch vụ seo uy tín",
+      "slug": "dich-vu-seo-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 656,
+      "kw": "dịch vụ seo chuyên nghiệp",
+      "slug": "dich-vu-seo-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 657,
+      "kw": "dịch vụ seo giá rẻ",
+      "slug": "dich-vu-seo-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 658,
+      "kw": "dịch vụ seo trọn gói",
+      "slug": "dich-vu-seo-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 659,
+      "kw": "dịch vụ seo nhanh",
+      "slug": "dich-vu-seo-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 660,
+      "kw": "dịch vụ seo chuẩn seo 2026",
+      "slug": "dich-vu-seo-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 661,
+      "kw": "dịch vụ seo cho startups",
+      "slug": "dich-vu-seo-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 662,
+      "kw": "dịch vụ seo cho sme",
+      "slug": "dich-vu-seo-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 663,
+      "kw": "dịch vụ seo cho shop nhỏ",
+      "slug": "dich-vu-seo-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 664,
+      "kw": "dịch vụ seo cho phòng khám",
+      "slug": "dich-vu-seo-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 665,
+      "kw": "chạy facebook ads uy tín",
+      "slug": "chay-facebook-ads-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 666,
+      "kw": "chạy facebook ads chuyên nghiệp",
+      "slug": "chay-facebook-ads-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 667,
+      "kw": "chạy facebook ads giá rẻ",
+      "slug": "chay-facebook-ads-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 668,
+      "kw": "chạy facebook ads trọn gói",
+      "slug": "chay-facebook-ads-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 669,
+      "kw": "chạy facebook ads nhanh",
+      "slug": "chay-facebook-ads-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 670,
+      "kw": "chạy facebook ads chuẩn seo 2026",
+      "slug": "chay-facebook-ads-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 671,
+      "kw": "chạy facebook ads cho startups",
+      "slug": "chay-facebook-ads-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 672,
+      "kw": "chạy facebook ads cho sme",
+      "slug": "chay-facebook-ads-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 673,
+      "kw": "chạy facebook ads cho shop nhỏ",
+      "slug": "chay-facebook-ads-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 674,
+      "kw": "chạy facebook ads cho phòng khám",
+      "slug": "chay-facebook-ads-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 675,
+      "kw": "chạy google ads uy tín",
+      "slug": "chay-google-ads-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 676,
+      "kw": "chạy google ads chuyên nghiệp",
+      "slug": "chay-google-ads-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 677,
+      "kw": "chạy google ads giá rẻ",
+      "slug": "chay-google-ads-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 678,
+      "kw": "chạy google ads trọn gói",
+      "slug": "chay-google-ads-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 679,
+      "kw": "chạy google ads nhanh",
+      "slug": "chay-google-ads-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 680,
+      "kw": "chạy google ads chuẩn seo 2026",
+      "slug": "chay-google-ads-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 681,
+      "kw": "chạy google ads cho startups",
+      "slug": "chay-google-ads-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 682,
+      "kw": "chạy google ads cho sme",
+      "slug": "chay-google-ads-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 683,
+      "kw": "chạy google ads cho shop nhỏ",
+      "slug": "chay-google-ads-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 684,
+      "kw": "chạy google ads cho phòng khám",
+      "slug": "chay-google-ads-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 685,
+      "kw": "làm fanpage uy tín",
+      "slug": "lam-fanpage-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 686,
+      "kw": "làm fanpage chuyên nghiệp",
+      "slug": "lam-fanpage-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 687,
+      "kw": "làm fanpage giá rẻ",
+      "slug": "lam-fanpage-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 688,
+      "kw": "làm fanpage trọn gói",
+      "slug": "lam-fanpage-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 689,
+      "kw": "làm fanpage nhanh",
+      "slug": "lam-fanpage-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 690,
+      "kw": "làm fanpage chuẩn seo 2026",
+      "slug": "lam-fanpage-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 691,
+      "kw": "làm fanpage cho startups",
+      "slug": "lam-fanpage-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 692,
+      "kw": "làm fanpage cho sme",
+      "slug": "lam-fanpage-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 693,
+      "kw": "làm fanpage cho shop nhỏ",
+      "slug": "lam-fanpage-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 694,
+      "kw": "làm fanpage cho phòng khám",
+      "slug": "lam-fanpage-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 695,
+      "kw": "thiết kế giao diện web uy tín",
+      "slug": "thiet-ke-giao-dien-web-uy-tin",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 696,
+      "kw": "thiết kế giao diện web chuyên nghiệp",
+      "slug": "thiet-ke-giao-dien-web-chuyen-nghiep",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 697,
+      "kw": "thiết kế giao diện web giá rẻ",
+      "slug": "thiet-ke-giao-dien-web-gia-re",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 698,
+      "kw": "thiết kế giao diện web trọn gói",
+      "slug": "thiet-ke-giao-dien-web-tron-goi",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 699,
+      "kw": "thiết kế giao diện web nhanh",
+      "slug": "thiet-ke-giao-dien-web-nhanh",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 700,
+      "kw": "thiết kế giao diện web chuẩn seo 2026",
+      "slug": "thiet-ke-giao-dien-web-chuan-seo-2026",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 701,
+      "kw": "thiết kế giao diện web cho startups",
+      "slug": "thiet-ke-giao-dien-web-cho-startups",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 702,
+      "kw": "thiết kế giao diện web cho sme",
+      "slug": "thiet-ke-giao-dien-web-cho-sme",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 703,
+      "kw": "thiết kế giao diện web cho shop nhỏ",
+      "slug": "thiet-ke-giao-dien-web-cho-shop-nho",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 704,
+      "kw": "thiết kế giao diện web cho phòng khám",
+      "slug": "thiet-ke-giao-dien-web-cho-phong-kham",
+      "group": "modifier",
+      "intent": "commercial"
+    },
+    {
+      "n": 705,
+      "kw": "thiết kế website đặt lịch online",
+      "slug": "thiet-ke-website-dat-lich-online",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 706,
+      "kw": "website có form báo giá",
+      "slug": "website-co-form-bao-gia",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 707,
+      "kw": "website tích hợp zalo",
+      "slug": "website-tich-hop-zalo",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 708,
+      "kw": "website tích hợp messenger",
+      "slug": "website-tich-hop-messenger",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 709,
+      "kw": "website đặt bàn nhà hàng",
+      "slug": "website-dat-ban-nha-hang",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 710,
+      "kw": "website đặt lịch spa",
+      "slug": "website-dat-lich-spa",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 711,
+      "kw": "website đặt lịch nha khoa",
+      "slug": "website-dat-lich-nha-khoa",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 712,
+      "kw": "website bán course online",
+      "slug": "website-ban-course-online",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 713,
+      "kw": "website khóa học",
+      "slug": "website-khoa-hoc",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 714,
+      "kw": "website thành viên",
+      "slug": "website-thanh-vien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 715,
+      "kw": "website tuyển dụng",
+      "slug": "website-tuyen-dung",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 716,
+      "kw": "website hồ sơ năng lực",
+      "slug": "website-ho-so-nang-luc",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 717,
+      "kw": "website portfolio",
+      "slug": "website-portfolio",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 718,
+      "kw": "website kiến trúc sư",
+      "slug": "website-kien-truc-su",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 719,
+      "kw": "website nhiếp ảnh gia",
+      "slug": "website-nhiep-anh-gia",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 720,
+      "kw": "website freelancer",
+      "slug": "website-freelancer",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 721,
+      "kw": "mini website",
+      "slug": "mini-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 722,
+      "kw": "one page website",
+      "slug": "one-page-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 723,
+      "kw": "microsite sự kiện",
+      "slug": "microsite-su-kien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 724,
+      "kw": "website sự kiện",
+      "slug": "website-su-kien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 725,
+      "kw": "website hội thảo",
+      "slug": "website-hoi-thao",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 726,
+      "kw": "website từ thiện",
+      "slug": "website-tu-thien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 727,
+      "kw": "website trường học",
+      "slug": "website-truong-hoc",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 728,
+      "kw": "website bệnh viện",
+      "slug": "website-benh-vien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 729,
+      "kw": "website phòng khám đa khoa",
+      "slug": "website-phong-kham-da-khoa",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 730,
+      "kw": "website catalogue sản phẩm",
+      "slug": "website-catalogue-san-pham",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 731,
+      "kw": "website bảng giá",
+      "slug": "website-bang-gia",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 732,
+      "kw": "website menu nhà hàng",
+      "slug": "website-menu-nha-hang",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 733,
+      "kw": "digital menu",
+      "slug": "digital-menu",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 734,
+      "kw": "website qr order",
+      "slug": "website-qr-order",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 735,
+      "kw": "thiết kế website ai",
+      "slug": "thiet-ke-website-ai",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 736,
+      "kw": "làm website bằng ai",
+      "slug": "lam-website-bang-ai",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 737,
+      "kw": "website tạo bằng chatgpt",
+      "slug": "website-tao-bang-chatgpt",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 738,
+      "kw": "có nên dùng ai làm website",
+      "slug": "co-nen-dung-ai-lam-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 739,
+      "kw": "thiết kế website figma",
+      "slug": "thiet-ke-website-figma",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 740,
+      "kw": "cut html từ figma",
+      "slug": "cut-html-tu-figma",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 741,
+      "kw": "website nextjs",
+      "slug": "website-nextjs",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 742,
+      "kw": "website react",
+      "slug": "website-react",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 743,
+      "kw": "website laravel",
+      "slug": "website-laravel",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 744,
+      "kw": "gia công website",
+      "slug": "gia-cong-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 745,
+      "kw": "outsource thiết kế web",
+      "slug": "outsource-thiet-ke-web",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 746,
+      "kw": "white label website",
+      "slug": "white-label-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 747,
+      "kw": "partner thiết kế website",
+      "slug": "partner-thiet-ke-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 748,
+      "kw": "cộng tác viên marketing",
+      "slug": "cong-tac-vien-marketing",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 749,
+      "kw": "tuyển chuyên viên seo",
+      "slug": "tuyen-chuyen-vien-seo",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 750,
+      "kw": "học seo thực chiến",
+      "slug": "hoc-seo-thuc-chien",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 751,
+      "kw": "khóa học thiết kế website",
+      "slug": "khoa-hoc-thiet-ke-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 752,
+      "kw": "freelance thiết kế web",
+      "slug": "freelance-thiet-ke-web",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 753,
+      "kw": "thuê freelancer làm web",
+      "slug": "thue-freelancer-lam-web",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 754,
+      "kw": "upwork thiết kế website việt nam",
+      "slug": "upwork-thiet-ke-website-viet-nam",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 755,
+      "kw": "ngân sách website startup",
+      "slug": "ngan-sach-website-startup",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 756,
+      "kw": "mvp website",
+      "slug": "mvp-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 757,
+      "kw": "prototype website",
+      "slug": "prototype-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 758,
+      "kw": "wireframe website",
+      "slug": "wireframe-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 759,
+      "kw": "user research website",
+      "slug": "user-research-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 760,
+      "kw": "a/b testing landing page",
+      "slug": "a-b-testing-landing-page",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 761,
+      "kw": "cro website",
+      "slug": "cro-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 762,
+      "kw": "tối ưu chuyển đổi website",
+      "slug": "toi-uu-chuyen-doi-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 763,
+      "kw": "heatmap website",
+      "slug": "heatmap-website",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 764,
+      "kw": "google analytics 4",
+      "slug": "google-analytics-4",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 765,
+      "kw": "cài đặt ga4",
+      "slug": "cai-dat-ga4",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 766,
+      "kw": "facebook pixel",
+      "slug": "facebook-pixel",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 767,
+      "kw": "tiktok pixel",
+      "slug": "tiktok-pixel",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 768,
+      "kw": "conversion tracking",
+      "slug": "conversion-tracking",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 769,
+      "kw": "utm tracking",
+      "slug": "utm-tracking",
+      "group": "dich-vu-mo-rong",
+      "intent": "commercial"
+    },
+    {
+      "n": 770,
+      "kw": "thiết kế website nhà thuốc giá rẻ",
+      "slug": "thiet-ke-website-nha-thuoc-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 771,
+      "kw": "làm website nhà thuốc chuẩn seo",
+      "slug": "lam-website-nha-thuoc-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 772,
+      "kw": "công ty làm website nhà thuốc",
+      "slug": "cong-ty-lam-website-nha-thuoc",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 773,
+      "kw": "thiết kế website phòng gym giá rẻ",
+      "slug": "thiet-ke-website-phong-gym-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 774,
+      "kw": "làm website phòng gym chuẩn seo",
+      "slug": "lam-website-phong-gym-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 775,
+      "kw": "công ty làm website phòng gym",
+      "slug": "cong-ty-lam-website-phong-gym",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 776,
+      "kw": "thiết kế website salon tóc nữ giá rẻ",
+      "slug": "thiet-ke-website-salon-toc-nu-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 777,
+      "kw": "làm website salon tóc nữ chuẩn seo",
+      "slug": "lam-website-salon-toc-nu-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 778,
+      "kw": "công ty làm website salon tóc nữ",
+      "slug": "cong-ty-lam-website-salon-toc-nu",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 779,
+      "kw": "thiết kế website tiệm nail giá rẻ",
+      "slug": "thiet-ke-website-tiem-nail-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 780,
+      "kw": "làm website tiệm nail chuẩn seo",
+      "slug": "lam-website-tiem-nail-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 781,
+      "kw": "công ty làm website tiệm nail",
+      "slug": "cong-ty-lam-website-tiem-nail",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 782,
+      "kw": "thiết kế website cửa hàng mẹ bé giá rẻ",
+      "slug": "thiet-ke-website-cua-hang-me-be-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 783,
+      "kw": "làm website cửa hàng mẹ bé chuẩn seo",
+      "slug": "lam-website-cua-hang-me-be-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 784,
+      "kw": "công ty làm website cửa hàng mẹ bé",
+      "slug": "cong-ty-lam-website-cua-hang-me-be",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 785,
+      "kw": "thiết kế website shop giày giá rẻ",
+      "slug": "thiet-ke-website-shop-giay-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 786,
+      "kw": "làm website shop giày chuẩn seo",
+      "slug": "lam-website-shop-giay-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 787,
+      "kw": "công ty làm website shop giày",
+      "slug": "cong-ty-lam-website-shop-giay",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 788,
+      "kw": "thiết kế website cửa hàng điện thoại giá rẻ",
+      "slug": "thiet-ke-website-cua-hang-dien-thoai-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 789,
+      "kw": "làm website cửa hàng điện thoại chuẩn seo",
+      "slug": "lam-website-cua-hang-dien-thoai-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 790,
+      "kw": "công ty làm website cửa hàng điện thoại",
+      "slug": "cong-ty-lam-website-cua-hang-dien-thoai",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 791,
+      "kw": "thiết kế website cửa hàng nội thất giá rẻ",
+      "slug": "thiet-ke-website-cua-hang-noi-that-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 792,
+      "kw": "làm website cửa hàng nội thất chuẩn seo",
+      "slug": "lam-website-cua-hang-noi-that-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 793,
+      "kw": "công ty làm website cửa hàng nội thất",
+      "slug": "cong-ty-lam-website-cua-hang-noi-that",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 794,
+      "kw": "thiết kế website công ty du lịch giá rẻ",
+      "slug": "thiet-ke-website-cong-ty-du-lich-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 795,
+      "kw": "làm website công ty du lịch chuẩn seo",
+      "slug": "lam-website-cong-ty-du-lich-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 796,
+      "kw": "công ty làm website công ty du lịch",
+      "slug": "cong-ty-lam-website-cong-ty-du-lich",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 797,
+      "kw": "thiết kế website đại lý xe giá rẻ",
+      "slug": "thiet-ke-website-dai-ly-xe-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 798,
+      "kw": "làm website đại lý xe chuẩn seo",
+      "slug": "lam-website-dai-ly-xe-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 799,
+      "kw": "công ty làm website đại lý xe",
+      "slug": "cong-ty-lam-website-dai-ly-xe",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 800,
+      "kw": "thiết kế website trung tâm ngoại ngữ giá rẻ",
+      "slug": "thiet-ke-website-trung-tam-ngoai-ngu-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 801,
+      "kw": "làm website trung tâm ngoại ngữ chuẩn seo",
+      "slug": "lam-website-trung-tam-ngoai-ngu-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 802,
+      "kw": "công ty làm website trung tâm ngoại ngữ",
+      "slug": "cong-ty-lam-website-trung-tam-ngoai-ngu",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 803,
+      "kw": "thiết kế website trường quốc tế giá rẻ",
+      "slug": "thiet-ke-website-truong-quoc-te-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 804,
+      "kw": "làm website trường quốc tế chuẩn seo",
+      "slug": "lam-website-truong-quoc-te-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 805,
+      "kw": "công ty làm website trường quốc tế",
+      "slug": "cong-ty-lam-website-truong-quoc-te",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 806,
+      "kw": "thiết kế website công ty logistics giá rẻ",
+      "slug": "thiet-ke-website-cong-ty-logistics-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 807,
+      "kw": "làm website công ty logistics chuẩn seo",
+      "slug": "lam-website-cong-ty-logistics-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 808,
+      "kw": "công ty làm website công ty logistics",
+      "slug": "cong-ty-lam-website-cong-ty-logistics",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 809,
+      "kw": "thiết kế website kho vận giá rẻ",
+      "slug": "thiet-ke-website-kho-van-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 810,
+      "kw": "làm website kho vận chuẩn seo",
+      "slug": "lam-website-kho-van-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 811,
+      "kw": "công ty làm website kho vận",
+      "slug": "cong-ty-lam-website-kho-van",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 812,
+      "kw": "thiết kế website công ty phần mềm giá rẻ",
+      "slug": "thiet-ke-website-cong-ty-phan-mem-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 813,
+      "kw": "làm website công ty phần mềm chuẩn seo",
+      "slug": "lam-website-cong-ty-phan-mem-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 814,
+      "kw": "công ty làm website công ty phần mềm",
+      "slug": "cong-ty-lam-website-cong-ty-phan-mem",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 815,
+      "kw": "thiết kế website startup công nghệ giá rẻ",
+      "slug": "thiet-ke-website-startup-cong-nghe-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 816,
+      "kw": "làm website startup công nghệ chuẩn seo",
+      "slug": "lam-website-startup-cong-nghe-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 817,
+      "kw": "công ty làm website startup công nghệ",
+      "slug": "cong-ty-lam-website-startup-cong-nghe",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 818,
+      "kw": "thiết kế website công ty bảo hiểm giá rẻ",
+      "slug": "thiet-ke-website-cong-ty-bao-hiem-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 819,
+      "kw": "làm website công ty bảo hiểm chuẩn seo",
+      "slug": "lam-website-cong-ty-bao-hiem-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 820,
+      "kw": "công ty làm website công ty bảo hiểm",
+      "slug": "cong-ty-lam-website-cong-ty-bao-hiem",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 821,
+      "kw": "thiết kế website phòng khám nhi giá rẻ",
+      "slug": "thiet-ke-website-phong-kham-nhi-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 822,
+      "kw": "làm website phòng khám nhi chuẩn seo",
+      "slug": "lam-website-phong-kham-nhi-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 823,
+      "kw": "công ty làm website phòng khám nhi",
+      "slug": "cong-ty-lam-website-phong-kham-nhi",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 824,
+      "kw": "thiết kế website phòng khám sản giá rẻ",
+      "slug": "thiet-ke-website-phong-kham-san-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 825,
+      "kw": "làm website phòng khám sản chuẩn seo",
+      "slug": "lam-website-phong-kham-san-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 826,
+      "kw": "công ty làm website phòng khám sản",
+      "slug": "cong-ty-lam-website-phong-kham-san",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 827,
+      "kw": "thiết kế website thẩm mỹ răng sứ giá rẻ",
+      "slug": "thiet-ke-website-tham-my-rang-su-gia-re",
+      "group": "extra",
+      "intent": "transactional"
+    },
+    {
+      "n": 828,
+      "kw": "làm website thẩm mỹ răng sứ chuẩn seo",
+      "slug": "lam-website-tham-my-rang-su-chuan-seo",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 829,
+      "kw": "công ty làm website thẩm mỹ răng sứ",
+      "slug": "cong-ty-lam-website-tham-my-rang-su",
+      "group": "extra",
+      "intent": "commercial"
+    },
+    {
+      "n": 830,
+      "kw": "thiết kế website trả góp",
+      "slug": "thiet-ke-website-tra-gop",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 831,
+      "kw": "làm website nhận ủy thác",
+      "slug": "lam-website-nhan-uy-thac",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 832,
+      "kw": "đặt cọc làm website",
+      "slug": "dat-coc-lam-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 833,
+      "kw": "hợp đồng thiết kế website mẫu",
+      "slug": "hop-dong-thiet-ke-website-mau",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 834,
+      "kw": "cam kết tiến độ làm web",
+      "slug": "cam-ket-tien-do-lam-web",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 835,
+      "kw": "bảo hành website bao lâu",
+      "slug": "bao-hanh-website-bao-lau",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 836,
+      "kw": "sửa lỗi website miễn phí",
+      "slug": "sua-loi-website-mien-phi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 837,
+      "kw": "hướng dẫn quản trị website sau bàn giao",
+      "slug": "huong-dan-quan-tri-website-sau-ban-giao",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 838,
+      "kw": "training sử dụng website",
+      "slug": "training-su-dung-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 839,
+      "kw": "bàn giao source code website",
+      "slug": "ban-giao-source-code-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 840,
+      "kw": "website có sở hữu source không",
+      "slug": "website-co-so-huu-source-khong",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 841,
+      "kw": "hosting dùng chung hay riêng",
+      "slug": "hosting-dung-chung-hay-rieng",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 842,
+      "kw": "vps hay shared hosting",
+      "slug": "vps-hay-shared-hosting",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 843,
+      "kw": "cloudflare cho website",
+      "slug": "cloudflare-cho-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 844,
+      "kw": "cdn việt nam",
+      "slug": "cdn-viet-nam",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 845,
+      "kw": "email theo tên miền giá",
+      "slug": "email-theo-ten-mien-gia",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 846,
+      "kw": "google workspace giá",
+      "slug": "google-workspace-gia",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 847,
+      "kw": "microsoft 365 cho sme",
+      "slug": "microsoft-365-cho-sme",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 848,
+      "kw": "chữ ký số cho website",
+      "slug": "chu-ky-so-cho-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 849,
+      "kw": "hóa đơn điện tử gắn website",
+      "slug": "hoa-don-dien-tu-gan-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 850,
+      "kw": "tích hợp crm vào website",
+      "slug": "tich-hop-crm-vao-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 851,
+      "kw": "hubspot việt nam",
+      "slug": "hubspot-viet-nam",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 852,
+      "kw": "website sync shopee",
+      "slug": "website-sync-shopee",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 853,
+      "kw": "website bán trên lazada",
+      "slug": "website-ban-tren-lazada",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 854,
+      "kw": "omnichannel website",
+      "slug": "omnichannel-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 855,
+      "kw": "website đa chi nhánh",
+      "slug": "website-da-chi-nhanh",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 856,
+      "kw": "website chuỗi spa",
+      "slug": "website-chuoi-spa",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 857,
+      "kw": "website chuỗi nha khoa",
+      "slug": "website-chuoi-nha-khoa",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 858,
+      "kw": "website nhượng quyền",
+      "slug": "website-nhuong-quyen",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 859,
+      "kw": "website franchise",
+      "slug": "website-franchise",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 860,
+      "kw": "landing page tuyển dụng",
+      "slug": "landing-page-tuyen-dung",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 861,
+      "kw": "landing page pre-order",
+      "slug": "landing-page-pre-order",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 862,
+      "kw": "landing page webinar",
+      "slug": "landing-page-webinar",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 863,
+      "kw": "landing page khóa học",
+      "slug": "landing-page-khoa-hoc",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 864,
+      "kw": "landing page app download",
+      "slug": "landing-page-app-download",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 865,
+      "kw": "trang cảm ơn sau form",
+      "slug": "trang-cam-on-sau-form",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 866,
+      "kw": "thank you page tối ưu",
+      "slug": "thank-you-page-toi-uu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 867,
+      "kw": "popup thu lead",
+      "slug": "popup-thu-lead",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 868,
+      "kw": "exit intent popup",
+      "slug": "exit-intent-popup",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 869,
+      "kw": "chat live website",
+      "slug": "chat-live-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 870,
+      "kw": "tawk.to website",
+      "slug": "tawk-to-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 871,
+      "kw": "crmis zalo",
+      "slug": "crmis-zalo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 872,
+      "kw": "website gọi ngay click to call",
+      "slug": "website-goi-ngay-click-to-call",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 873,
+      "kw": "nút gọi điện trên web mobile",
+      "slug": "nut-goi-dien-tren-web-mobile",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 874,
+      "kw": "schema localbusiness",
+      "slug": "schema-localbusiness",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 875,
+      "kw": "schema faqpage",
+      "slug": "schema-faqpage",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 876,
+      "kw": "rich snippet website",
+      "slug": "rich-snippet-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 877,
+      "kw": "sitemap xml",
+      "slug": "sitemap-xml",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 878,
+      "kw": "robots txt",
+      "slug": "robots-txt",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 879,
+      "kw": "canonical url",
+      "slug": "canonical-url",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 880,
+      "kw": "redirect 301 website cũ",
+      "slug": "redirect-301-website-cu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 881,
+      "kw": "chuyển domain website",
+      "slug": "chuyen-domain-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 882,
+      "kw": "đổi host giữ seo",
+      "slug": "doi-host-giu-seo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 883,
+      "kw": "migrate wordpress",
+      "slug": "migrate-wordpress",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 884,
+      "kw": "chuyển từ wix sang wordpress",
+      "slug": "chuyen-tu-wix-sang-wordpress",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 885,
+      "kw": "website bị spam index",
+      "slug": "website-bi-spam-index",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 886,
+      "kw": "disavow backlink",
+      "slug": "disavow-backlink",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 887,
+      "kw": "penalty google",
+      "slug": "penalty-google",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 888,
+      "kw": "traffic website giảm đột ngột",
+      "slug": "traffic-website-giam-dot-ngot",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 889,
+      "kw": "tăng traffic website organic",
+      "slug": "tang-traffic-website-organic",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 890,
+      "kw": "tăng lead từ website",
+      "slug": "tang-lead-tu-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 891,
+      "kw": "cải thiện bounce rate",
+      "slug": "cai-thien-bounce-rate",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 892,
+      "kw": "giảm tỷ lệ thoát trang",
+      "slug": "giam-ty-le-thoat-trang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 893,
+      "kw": "tối ưu trang chủ website",
+      "slug": "toi-uu-trang-chu-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 894,
+      "kw": "viết slogan website",
+      "slug": "viet-slogan-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 895,
+      "kw": "viết giới thiệu công ty",
+      "slug": "viet-gioi-thieu-cong-ty",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 896,
+      "kw": "chụp ảnh cho website",
+      "slug": "chup-anh-cho-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 897,
+      "kw": "video giới thiệu công ty",
+      "slug": "video-gioi-thieu-cong-ty",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 898,
+      "kw": "drone quay nhà xưởng",
+      "slug": "drone-quay-nha-xuong",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 899,
+      "kw": "360 virtual tour website",
+      "slug": "360-virtual-tour-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 900,
+      "kw": "3d tour bất động sản website",
+      "slug": "3d-tour-bat-dong-san-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 901,
+      "kw": "website bilingual anh việt",
+      "slug": "website-bilingual-anh-viet",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 902,
+      "kw": "website tiếng anh doanh nghiệp",
+      "slug": "website-tieng-anh-doanh-nghiep",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 903,
+      "kw": "dịch website sang tiếng anh",
+      "slug": "dich-website-sang-tieng-anh",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 904,
+      "kw": "làm hồ sơ năng lực pdf",
+      "slug": "lam-ho-so-nang-luc-pdf",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 905,
+      "kw": "company profile online",
+      "slug": "company-profile-online",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 906,
+      "kw": "one pager doanh nghiệp",
+      "slug": "one-pager-doanh-nghiep",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 907,
+      "kw": "pitch deck kèm website",
+      "slug": "pitch-deck-kem-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 908,
+      "kw": "website gọi vốn startup",
+      "slug": "website-goi-von-startup",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 909,
+      "kw": "website trình bày sản phẩm saas",
+      "slug": "website-trinh-bay-san-pham-saas",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 910,
+      "kw": "pricing page saas",
+      "slug": "pricing-page-saas",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 911,
+      "kw": "docs sản phẩm trên web",
+      "slug": "docs-san-pham-tren-web",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 912,
+      "kw": "blog chuẩn seo cho doanh nghiệp",
+      "slug": "blog-chuan-seo-cho-doanh-nghiep",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 913,
+      "kw": "lịch đăng bài blog",
+      "slug": "lich-dang-bai-blog",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 914,
+      "kw": "chiến lược content silo",
+      "slug": "chien-luoc-content-silo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 915,
+      "kw": "từ khóa seed website",
+      "slug": "tu-khoa-seed-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 916,
+      "kw": "nghiên cứu từ khóa đối thủ",
+      "slug": "nghien-cuu-tu-khoa-doi-thu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 917,
+      "kw": "phân tích đối thủ seo",
+      "slug": "phan-tich-doi-thu-seo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 918,
+      "kw": "spy facebook ads đối thủ",
+      "slug": "spy-facebook-ads-doi-thu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 919,
+      "kw": "thư viện quảng cáo meta",
+      "slug": "thu-vien-quang-cao-meta",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 920,
+      "kw": "creative ads bán được",
+      "slug": "creative-ads-ban-duoc",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 921,
+      "kw": "landing page tỷ lệ chuyển đổi cao",
+      "slug": "landing-page-ty-le-chuyen-doi-cao",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 922,
+      "kw": "a b test nút cta",
+      "slug": "a-b-test-nut-cta",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 923,
+      "kw": "cta website hiệu quả",
+      "slug": "cta-website-hieu-qua",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 924,
+      "kw": "màu nút mua hàng",
+      "slug": "mau-nut-mua-hang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 925,
+      "kw": "form ngắn hay dài",
+      "slug": "form-ngan-hay-dai",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 926,
+      "kw": "lead magnet",
+      "slug": "lead-magnet",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 927,
+      "kw": "tặng ebook đổi số điện thoại",
+      "slug": "tang-ebook-doi-so-dien-thoai",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 928,
+      "kw": "checklist seo onpage 2026",
+      "slug": "checklist-seo-onpage-2026",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 929,
+      "kw": "kiểm tra backlink miễn phí",
+      "slug": "kiem-tra-backlink-mien-phi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 930,
+      "kw": "công cụ seo miễn phí",
+      "slug": "cong-cu-seo-mien-phi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 931,
+      "kw": "ahrefs thay thế miễn phí",
+      "slug": "ahrefs-thay-the-mien-phi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 932,
+      "kw": "google keyword planner",
+      "slug": "google-keyword-planner",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 933,
+      "kw": "tìm từ khóa không cạnh tranh",
+      "slug": "tim-tu-khoa-khong-canh-tranh",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 934,
+      "kw": "từ khóa dài đuôi",
+      "slug": "tu-khoa-dai-duoi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 935,
+      "kw": "từ khóa địa phương",
+      "slug": "tu-khoa-dia-phuong",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 936,
+      "kw": "gói seo 3 tháng",
+      "slug": "goi-seo-3-thang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 937,
+      "kw": "gói seo 6 tháng",
+      "slug": "goi-seo-6-thang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 938,
+      "kw": "cam kết top google có nên tin",
+      "slug": "cam-ket-top-google-co-nen-tin",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 939,
+      "kw": "seo mũ đen rủi ro",
+      "slug": "seo-mu-den-rui-ro",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 940,
+      "kw": "content spamming",
+      "slug": "content-spamming",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 941,
+      "kw": "mua backlink có nên",
+      "slug": "mua-backlink-co-nen",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 942,
+      "kw": "guest post việt nam",
+      "slug": "guest-post-viet-nam",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 943,
+      "kw": "báo chí trả phí pr",
+      "slug": "bao-chi-tra-phi-pr",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 944,
+      "kw": "pr doanh nghiệp startup",
+      "slug": "pr-doanh-nghiep-startup",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 945,
+      "kw": "branding website",
+      "slug": "branding-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 946,
+      "kw": "thiết kế nhận diện thương hiệu",
+      "slug": "thiet-ke-nhan-dien-thuong-hieu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 947,
+      "kw": "logo banner website",
+      "slug": "logo-banner-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 948,
+      "kw": "favicon website",
+      "slug": "favicon-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 949,
+      "kw": "open graph facebook",
+      "slug": "open-graph-facebook",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 950,
+      "kw": "thumbnail youtube đồng bộ brand",
+      "slug": "thumbnail-youtube-dong-bo-brand",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 951,
+      "kw": "thiết kế website dark mode",
+      "slug": "thiet-ke-website-dark-mode",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 952,
+      "kw": "website tối giản minimal",
+      "slug": "website-toi-gian-minimal",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 953,
+      "kw": "website sang trọng luxury",
+      "slug": "website-sang-trong-luxury",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 954,
+      "kw": "website dễ thương pastel",
+      "slug": "website-de-thuong-pastel",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 955,
+      "kw": "website công nghệ xanh",
+      "slug": "website-cong-nghe-xanh",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 956,
+      "kw": "website nhà máy sản xuất",
+      "slug": "website-nha-may-san-xuat",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 957,
+      "kw": "website khu công nghiệp",
+      "slug": "website-khu-cong-nghiep",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 958,
+      "kw": "website xuất khẩu",
+      "slug": "website-xuat-khau",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 959,
+      "kw": "website b2b lead gen",
+      "slug": "website-b2b-lead-gen",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 960,
+      "kw": "website thu mua nguyên liệu",
+      "slug": "website-thu-mua-nguyen-lieu",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 961,
+      "kw": "website đại lý phân phối",
+      "slug": "website-dai-ly-phan-phoi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 962,
+      "kw": "portal đại lý",
+      "slug": "portal-dai-ly",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 963,
+      "kw": "website đặt hàng nội bộ",
+      "slug": "website-dat-hang-noi-bo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 964,
+      "kw": "website thành viên hội",
+      "slug": "website-thanh-vien-hoi",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 965,
+      "kw": "website câu lạc bộ",
+      "slug": "website-cau-lac-bo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 966,
+      "kw": "website tổ chức phi lợi nhuận",
+      "slug": "website-to-chuc-phi-loi-nhuan",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 967,
+      "kw": "website quỹ từ thiện",
+      "slug": "website-quy-tu-thien",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 968,
+      "kw": "website sự kiện chạy bộ",
+      "slug": "website-su-kien-chay-bo",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 969,
+      "kw": "website giải chạy",
+      "slug": "website-giai-chay",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 970,
+      "kw": "website festival âm nhạc",
+      "slug": "website-festival-am-nhac",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 971,
+      "kw": "microsite ra mắt sản phẩm",
+      "slug": "microsite-ra-mat-san-pham",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 972,
+      "kw": "prelanding teaser",
+      "slug": "prelanding-teaser",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 973,
+      "kw": "coming soon page",
+      "slug": "coming-soon-page",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 974,
+      "kw": "bảo trì website theo tháng",
+      "slug": "bao-tri-website-theo-thang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 975,
+      "kw": "gói chăm sóc website",
+      "slug": "goi-cham-soc-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 976,
+      "kw": "update plugin wordpress định kỳ",
+      "slug": "update-plugin-wordpress-dinh-ky",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 977,
+      "kw": "vá lỗ hổng bảo mật website",
+      "slug": "va-lo-hong-bao-mat-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 978,
+      "kw": "quét malware website",
+      "slug": "quet-malware-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 979,
+      "kw": "cloudflare turnstile",
+      "slug": "cloudflare-turnstile",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 980,
+      "kw": "chống bot spam form",
+      "slug": "chong-bot-spam-form",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 981,
+      "kw": "recaptcha website",
+      "slug": "recaptcha-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 982,
+      "kw": "rate limit api website",
+      "slug": "rate-limit-api-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 983,
+      "kw": "uptime monitoring",
+      "slug": "uptime-monitoring",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 984,
+      "kw": "cảnh báo website die",
+      "slug": "canh-bao-website-die",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 985,
+      "kw": "backup hàng ngày website",
+      "slug": "backup-hang-ngay-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 986,
+      "kw": "disaster recovery website",
+      "slug": "disaster-recovery-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 987,
+      "kw": "thiết kế website thương hiệu cá nhân",
+      "slug": "thiet-ke-website-thuong-hieu-ca-nhan",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 988,
+      "kw": "website personal branding",
+      "slug": "website-personal-branding",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 989,
+      "kw": "làm website giáo viên",
+      "slug": "lam-website-giao-vien",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 990,
+      "kw": "website coach online",
+      "slug": "website-coach-online",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 991,
+      "kw": "website tư vấn tài chính",
+      "slug": "website-tu-van-tai-chinh",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 992,
+      "kw": "website môi giới bảo hiểm",
+      "slug": "website-moi-gioi-bao-hiem",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 993,
+      "kw": "đặt lịch tư vấn trên website",
+      "slug": "dat-lich-tu-van-tren-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 994,
+      "kw": "calendar booking website",
+      "slug": "calendar-booking-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 995,
+      "kw": "tích hợp calendly",
+      "slug": "tich-hop-calendly",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 996,
+      "kw": "website đa tiền tệ",
+      "slug": "website-da-tien-te",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 997,
+      "kw": "website xuất hóa đơn tự động",
+      "slug": "website-xuat-hoa-don-tu-dong",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 998,
+      "kw": "website loyalty thành viên",
+      "slug": "website-loyalty-thanh-vien",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 999,
+      "kw": "website tích điểm khách hàng",
+      "slug": "website-tich-diem-khach-hang",
+      "group": "pad-intent",
+      "intent": "commercial"
+    },
+    {
+      "n": 1000,
+      "kw": "app member gắn website",
+      "slug": "app-member-gan-website",
+      "group": "pad-intent",
+      "intent": "commercial"
+    }
+  ]
+}

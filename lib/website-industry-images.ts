@@ -31,6 +31,27 @@ const DEFAULT_POOL: ImagePoolDef = {
   ],
 };
 
+/** Ảnh marketing sắc (~1536px) — dùng thumbnail grid ngành, không dùng mockup UI mềm */
+const SHARP_THUMB_FILES = [
+  "thiet-ke-website.png",
+  "thiet-ke-website-1.png",
+  "thiet-ke-website-2.png",
+  "thiet-ke-website-3.png",
+  "thiet-ke-website-4.png",
+  "thiet-ke-website-5.png",
+  "thiet-ke-website-6.png",
+  "thiet-ke-website-7.png",
+  "thiet-ke-website-8.png",
+  "thiet-ke-website-9.png",
+  "thiet-ke-website-10.png",
+] as const;
+
+function hashSlug(slug: string): number {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return h;
+}
+
 const IMAGE_POOLS = {
   "nha-khoa": {
     dir: "/tin-tuc/nha-khoa",
@@ -245,6 +266,22 @@ export function getWebsiteIndustryGallery(
     if (hdSrc && getMockupDimensions(hdSrc)) return { ...img, src: hdSrc };
     return img;
   });
+}
+
+/**
+ * Thumbnail danh sách ngành (/website#theo-nganh) — luôn dùng ảnh marketing sắc
+ * kiểu anh-ngu (1536px), không dùng mockup UI soft ~400px.
+ */
+export function getWebsiteIndustryCardThumbnail(
+  catalogSlug: string,
+  primaryKeyword: string,
+): WebsiteIndustryImage {
+  const idx = hashSlug(catalogSlug) % SHARP_THUMB_FILES.length;
+  const file = SHARP_THUMB_FILES[idx]!;
+  return {
+    src: `/tin-tuc/${file}`,
+    alt: `${primaryKeyword} — thiết kế website chuyên nghiệp`,
+  };
 }
 
 export function getWebsiteIndustryHero(input: {

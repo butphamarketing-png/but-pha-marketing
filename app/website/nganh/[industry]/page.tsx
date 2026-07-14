@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProgrammaticLandingPage } from "@/components/landing/ProgrammaticLandingPage";
+import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { buildServiceSchema, generateLandingMetadata } from "@/lib/landing-seo";
 import { SITE_URL } from "@/lib/seo";
 import { isIndustryHubSlug } from "@/lib/industry-hub";
@@ -40,6 +41,7 @@ function buildClusterLinks(slug: string) {
     { href: "/website", name: "Dịch vụ thiết kế website" },
     { href: "/blog/thiet-ke-website", name: "Pillar thiết kế website" },
     { href: "/blog/bao-gia-thiet-ke-website", name: "Báo giá thiết kế website" },
+    { href: "/banggia", name: "Bảng giá dịch vụ" },
     { href: "/lien-he", name: "Tư vấn miễn phí" },
   ];
   if (catalog?.hubSlug && isIndustryHubSlug(catalog.hubSlug)) {
@@ -106,6 +108,11 @@ export default async function WebsiteIndustryProgrammaticPage({ params }: { para
         ]}
         clusterLinks={clusterLinks}
       />
+      {(landing.slug === "spa" || landing.slug === "nha-khoa") && (
+        <div className="mx-auto mt-8 max-w-5xl">
+          <MoneyKwSiloLinks excludePath={`/website/nganh/${landing.slug}`} />
+        </div>
+      )}
     </main>
   );
 }

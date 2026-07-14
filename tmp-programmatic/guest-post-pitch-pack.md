@@ -1,6 +1,6 @@
 # Guest Post Pitch Pack — ButPhaMarketing
 
-- Generated at: 2026-07-12T06:40:13.216Z
+- Generated at: 2026-07-14T18:15:44.631Z
 - Gửi từ: butphamarketing@gmail.com
 - Mục tiêu tuần 1: **3 pitch gửi** · **1 follow-up** · **1 bài được duyệt outline**
 

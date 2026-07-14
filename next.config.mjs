@@ -33,6 +33,20 @@ const nextConfig = {
         destination: '/website/van-hanh-website',
         permanent: true,
       },
+      // Phase 1 SEO — intent báo giá / case study hay gõ sai
+      { source: '/bao-gia', destination: '/banggia', permanent: true },
+      { source: '/bao-gia/:path*', destination: '/banggia', permanent: true },
+      { source: '/website/bao-gia', destination: '/banggia', permanent: true },
+      { source: '/bang-gia', destination: '/banggia', permanent: true },
+      { source: '/case-study', destination: '/du-an', permanent: true },
+      { source: '/case-study/:path*', destination: '/du-an/:path*', permanent: true },
+      { source: '/casestudy', destination: '/du-an', permanent: true },
+      // Phase 3 — gom intent TPHCM / giá địa phương (tránh cannibalize money)
+      {
+        source: '/blog/bao-gia-thiet-ke-website-tp-hcm',
+        destination: '/banggia',
+        permanent: true,
+      },
       // GSC 404 — bài cũ đã gỡ; 301 về bài sống cùng intent
       {
         source: '/blog/chien-luoc-quang-cao-google-ads-hieu-qua-nhat-cho-nam-2023',

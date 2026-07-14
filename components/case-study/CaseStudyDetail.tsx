@@ -72,7 +72,15 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
             )}
           </div>
 
-          <p className="mt-4 text-sm text-slate-500">Cập nhật: {publishedLabel}</p>
+          <p className="mt-4 text-sm text-slate-500">
+            {study.updatedAt
+              ? `Cập nhật: ${new Date(study.updatedAt).toLocaleDateString("vi-VN", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}`
+              : `Xuất bản: ${publishedLabel}`}
+          </p>
         </div>
 
         {study.heroImage && (
@@ -277,6 +285,12 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
+            href="/banggia"
+            className="inline-flex items-center gap-2 rounded-xl bg-white/95 px-5 py-3 text-sm font-bold text-violet-700 transition hover:bg-white"
+          >
+            Báo giá thiết kế website
+          </Link>
+          <Link
             href="/lien-he"
             className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
           >
@@ -287,6 +301,12 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
             className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
           >
             Hướng dẫn thiết kế website A-Z
+          </Link>
+          <Link
+            href="/du-an"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+          >
+            Xem thêm dự án
           </Link>
         </div>
       </section>

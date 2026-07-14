@@ -1,5 +1,5 @@
 import type { IndustryHubSlug } from "@/lib/industry-hub";
-import { getWebsiteIndustryHero } from "@/lib/website-industry-images";
+import { getWebsiteIndustryCardThumbnail } from "@/lib/website-industry-images";
 
 export type WebsiteIndustryCatalogItem = {
   slug: string;
@@ -694,17 +694,12 @@ export type WebsiteIndustryNavLink = {
 
 export function getWebsiteIndustryNavLinks(): WebsiteIndustryNavLink[] {
   return WEBSITE_INDUSTRY_CATALOG.map((item) => {
-    const hero = getWebsiteIndustryHero({
-      catalogSlug: item.slug,
-      primaryKeyword: item.primaryKeyword,
-      blogMoneySlug: item.blogMoneySlug,
-      title: item.title,
-    });
+    const thumb = getWebsiteIndustryCardThumbnail(item.slug, item.primaryKeyword);
     return {
       label: item.label,
       href: `/website/nganh/${item.slug}`,
-      imageSrc: hero.src,
-      imageAlt: hero.alt,
+      imageSrc: thumb.src,
+      imageAlt: thumb.alt,
     };
   });
 }

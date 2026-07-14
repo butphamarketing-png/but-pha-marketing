@@ -143,17 +143,24 @@ function siloBlock(cfg) {
   <li><a href="${SITE}${cfg.hub}"><strong>Hub ngành</strong></a> — cluster SEO</li>
   <li><a href="${SITE}${cfg.money}"><strong>Money page</strong></a> — hướng dẫn thiết kế website</li>
   <li><a href="${SITE}${cfg.landing}"><strong>Landing dịch vụ</strong></a> — trang chuyển đổi</li>
-${caseStudyLi}  <li><a href="${SITE}/du-an"><strong>Tất cả dự án</strong></a> — portfolio</li>
-  <li><a href="${SITE}/website"><strong>Dịch vụ website</strong></a> — báo giá &amp; tư vấn</li>
+${caseStudyLi}  <li><a href="${SITE}/blog/thiet-ke-website"><strong>Pillar thiết kế website</strong></a> — kiến thức A–Z</li>
+  <li><a href="${SITE}/banggia"><strong>Báo giá thiết kế website</strong></a> — bảng giá tham khảo</li>
+  <li><a href="${SITE}/du-an"><strong>Tất cả dự án</strong></a> — portfolio</li>
+  <li><a href="${SITE}/website"><strong>Dịch vụ website</strong></a> — tư vấn &amp; triển khai</li>
+  <li><a href="${SITE}/lien-he"><strong>Liên hệ</strong></a> — nhận tư vấn miễn phí</li>
 </ul>
 </section>`;
 }
 
 /** @param {string} content @param {SiloConfig} cfg */
 export function injectSiloLinks(content, cfg) {
-  if (content.includes('id="silo-nganh"')) return content;
-
   const block = siloBlock(cfg);
+  if (content.includes('id="silo-nganh"')) {
+    return content.replace(
+      /<section id="silo-nganh"[\s\S]*?<\/section>/,
+      block.trim(),
+    );
+  }
   if (content.includes("</article>")) {
     return content.replace("</article>", `${block}\n</article>`);
   }

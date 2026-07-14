@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import type { ProgrammaticLanding } from "@/lib/programmatic-seo";
+import type { LocalSeoContent } from "@/lib/local-seo-content";
 import type { WebsiteIndustryCatalogItem } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryGallery, getWebsiteIndustryHero } from "@/lib/website-industry-images";
 import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
@@ -15,6 +16,7 @@ type ProgrammaticLandingPageProps = {
   clusterLinks: ClusterLink[];
   variant: "industry" | "local";
   industryContent?: WebsiteIndustryCatalogItem;
+  localContent?: LocalSeoContent | null;
 };
 
 function industryFeatures(keyword: string) {
@@ -46,15 +48,25 @@ export function ProgrammaticLandingPage({
   clusterLinks,
   variant,
   industryContent,
+  localContent,
 }: ProgrammaticLandingPageProps) {
   const features =
     variant === "industry" && industryContent
       ? industryContent.features
       : variant === "industry"
         ? industryFeatures(landing.primaryKeyword)
-        : localFeatures(landing.primaryKeyword);
-  const faqs = industryContent?.faqs ?? [];
-  const processSteps = industryContent?.processSteps ?? [];
+        : localContent?.highlights?.length
+          ? localContent.highlights
+          : localFeatures(landing.primaryKeyword);
+  const faqs =
+    variant === "local" && localContent?.faqs?.length
+      ? localContent.faqs
+      : (industryContent?.faqs ?? []);
+  const processSteps =
+    variant === "local" && localContent?.processSteps?.length
+      ? localContent.processSteps
+      : (industryContent?.processSteps ?? []);
+  const featureHeading = variant === "local" ? "Điểm khác biệt địa phương" : "Tính năng theo ngành";
   const eyebrow = variant === "industry" ? "Website theo ngành" : "SEO địa phương";
   const heroImage =
     variant === "industry" && industryContent
@@ -109,9 +121,19 @@ export function ProgrammaticLandingPage({
               Hướng dẫn chi tiết
             </Link>
           )}
-          <Link href="/website" className="brand-btn-secondary">
-            Dịch vụ thiết kế website
+          {variant === "local" && (
+            <Link href="/banggia" className="brand-btn-secondary">
+              Báo giá / bảng giá
+            </Link>
+          )}
+          <Link href={variant === "local" ? "/google-maps" : "/website"} className="brand-btn-secondary">
+            {variant === "local" ? "Google Maps / GBP" : "Dịch vụ thiết kế website"}
           </Link>
+          {variant === "local" && (
+            <Link href="/website" className="brand-btn-secondary">
+              Thiết kế website
+            </Link>
+          )}
         </div>
       </section>
 
@@ -153,7 +175,12 @@ export function ProgrammaticLandingPage({
       )}
 
       <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-indigo-950">Tính năng theo ngành</h2>
+        <h2 className="text-2xl font-bold text-indigo-950">{featureHeading}</h2>
+        {variant === "local" && localContent?.industryHints?.length ? (
+          <p className="mt-2 text-sm text-slate-600">
+            Ngành trọng tâm khu vực: {localContent.industryHints.join(" · ")}
+          </p>
+        ) : null}
         <ul className="mt-5 space-y-3">
           {features.map((item) => (
             <li
@@ -166,6 +193,26 @@ export function ProgrammaticLandingPage({
           ))}
         </ul>
       </section>
+
+      {variant === "local" && localContent?.napTips?.length ? (
+        <section className="rounded-3xl border border-amber-100 bg-amber-50/50 p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-amber-950">Checklist NAP &amp; GBP</h2>
+          <p className="mt-2 text-sm text-amber-900/80">
+            Name – Address – Phone phải khớp trên website, Google Business Profile và citation.
+          </p>
+          <ul className="mt-5 space-y-3">
+            {localContent.napTips.map((tip) => (
+              <li
+                key={tip}
+                className="flex items-start gap-3 rounded-2xl border border-amber-100 bg-white/70 px-4 py-3 text-slate-700"
+              >
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {processSteps.length > 0 && (
         <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
@@ -254,8 +301,8 @@ export function ProgrammaticLandingPage({
                   </summary>
                   <p className="mt-3 text-sm leading-relaxed text-slate-600">
                     Tham khảo{" "}
-                    <Link href="/blog/bao-gia-thiet-ke-website" className="font-semibold text-indigo-700 underline">
-                      báo giá thiết kế website
+                    <Link href="/banggia" className="font-semibold text-indigo-700 underline">
+                      bảng giá dịch vụ
                     </Link>{" "}
                     — gói Bứt Phá 3–12 triệu tùy scope.
                   </p>

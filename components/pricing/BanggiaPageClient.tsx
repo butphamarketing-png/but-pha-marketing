@@ -19,6 +19,7 @@ import type { PricingPlatformId } from "@/lib/pricing-catalog";
 import { PricingGateForm } from "./PricingGateForm";
 import { PricingStickyBar } from "./PricingStickyBar";
 import { PricingTabs } from "./PricingTabs";
+import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 
 const TAB_ORDER: PricingPlatformId[] = ["website", "facebook", "googlemaps"];
 
@@ -28,6 +29,8 @@ const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links
     body: "Gói từ Landing Page đến E-commerce — bao gồm UI/UX, lập trình chuẩn SEO, form/Zalo và bàn giao admin. Giá tham khảo, báo giá chính xác sau khảo sát nhu cầu.",
     links: [
       { href: "/website", label: "Dịch vụ thiết kế website" },
+      { href: "/website/nganh/spa", label: "Website spa" },
+      { href: "/website/nganh/nha-khoa", label: "Website nha khoa" },
       { href: "/blog/bao-gia-thiet-ke-website", label: "Hướng dẫn báo giá" },
       { href: "/du-an", label: "Case study" },
     ],
@@ -46,7 +49,8 @@ const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links
     body: "Gói tối ưu Google Business Profile, Local SEO và phí quản lý Local Ads. Phù hợp doanh nghiệp có địa điểm vật lý cần tăng lượt gọi và chỉ đường.",
     links: [
       { href: "/google-maps", label: "Dịch vụ Google Maps" },
-      { href: "/seo-website/dia-phuong/ho-chi-minh", label: "SEO địa phương" },
+      { href: "/seo-website/dia-phuong/ho-chi-minh", label: "SEO TP.HCM" },
+      { href: "/seo-website/dia-phuong/quan-1", label: "SEO Quận 1" },
       { href: "/blog/chu-de/google-maps", label: "Kiến thức Local SEO" },
     ],
   },
@@ -276,6 +280,10 @@ export function BanggiaPageClient() {
             .
           </p>
         </section>
+
+        <div className="mt-12">
+          <MoneyKwSiloLinks excludePath="/banggia" />
+        </div>
 
         <div className="mt-10">
           <ServiceConversionFooter title="Cần báo giá chi tiết?" />

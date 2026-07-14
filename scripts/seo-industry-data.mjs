@@ -1,6 +1,8 @@
 /** @typedef {{ title: string, slug: string, h1: string, keywordsMain: string, keywordsSecondary: string, industry: string, niche: string, features: string[], faq: { q: string, a: string }[] }} IndustryEntry */
 
 import { NICHE_500_INDUSTRY_ENTRIES } from "./seo-niche-500-industry.mjs";
+import { NICHE_1000_INDUSTRY_ENTRIES } from "./seo-niche-1000-industry.mjs";
+import { NICHE_BATCH23_INDUSTRY_ENTRIES } from "./seo-niche-batch23-industry.mjs";
 
 /** @type {IndustryEntry[]} */
 const INDUSTRY_ENTRIES_CORE = [
@@ -1896,5 +1898,10 @@ const INDUSTRY_ENTRIES_CORE = [
   },
 ];
 
-/** Gộp 90 ngành gốc + batch ngách SME (giặt sấy, vựa sầu riêng…). */
-export const INDUSTRY_ENTRIES = [...INDUSTRY_ENTRIES_CORE, ...NICHE_500_INDUSTRY_ENTRIES];
+/** Gộp 90 ngành gốc + batch ngách SME + batch 1000 + batch 2+3. */
+export const INDUSTRY_ENTRIES = [
+  ...INDUSTRY_ENTRIES_CORE,
+  ...NICHE_500_INDUSTRY_ENTRIES,
+  ...NICHE_1000_INDUSTRY_ENTRIES,
+  ...NICHE_BATCH23_INDUSTRY_ENTRIES,
+];

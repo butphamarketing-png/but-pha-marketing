@@ -35,7 +35,7 @@ const faqLd = {
 const webPageLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Bảng giá dịch vụ Marketing",
+  name: "Báo giá thiết kế website & bảng giá Marketing",
   url: `${SITE_URL}/banggia`,
   inLanguage: "vi-VN",
   isPartOf: {
@@ -47,12 +47,14 @@ const webPageLd = {
 
 export async function generateMetadata() {
   return getDynamicMetadata("/banggia", {
-    title: "Bảng giá dịch vụ | Website, Facebook, Google Maps",
+    title: "Báo giá thiết kế website & bảng giá Marketing 2026",
     description:
-      "Tra cứu bảng giá dịch vụ Website, Facebook Fanpage và Google Maps tại Bứt Phá Marketing. Minh bạch, dễ so sánh theo từng nhóm dịch vụ.",
+      "Báo giá thiết kế website trọn gói, bảng giá Fanpage và Google Maps tại Bứt Phá Marketing. Minh bạch theo gói — nhận tư vấn miễn phí sau khảo sát.",
     keywords: [
-      "bảng giá marketing",
       "báo giá thiết kế website",
+      "bảng giá thiết kế website",
+      "giá làm website",
+      "bảng giá marketing",
       "bảng giá fanpage",
       "bảng giá google maps",
       "bứt phá marketing",

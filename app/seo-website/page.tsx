@@ -39,7 +39,17 @@ const childPages = [
   {
     href: "/seo-website/dia-phuong/ho-chi-minh",
     title: "SEO theo địa phương",
-    desc: "Cụm landing local SEO với quality gate index/noindex.",
+    desc: "Hub TP.HCM + quận: Q.1, Q.3, Q.7, Bình Thạnh, Thủ Đức, Gò Vấp.",
+  },
+  {
+    href: "/seo-website/dia-phuong/ha-noi",
+    title: "SEO Hà Nội & quận",
+    desc: "Cầu Giấy, Đống Đa, Hai Bà Trưng, Nam Từ Liêm — local pack miền Bắc.",
+  },
+  {
+    href: "/seo-website/dia-phuong/da-nang",
+    title: "SEO Đà Nẵng & quận",
+    desc: "Hải Châu, Thanh Khê — Maps + website du lịch / dịch vụ.",
   },
 ];
 

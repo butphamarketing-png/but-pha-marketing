@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
-import { getWebsiteIndustryHero } from "@/lib/website-industry-images";
+import { getWebsiteIndustryCardThumbnail } from "@/lib/website-industry-images";
 import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
 
 export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
@@ -16,12 +16,7 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {WEBSITE_INDUSTRY_CATALOG.map((item) => {
-          const hero = getWebsiteIndustryHero({
-            catalogSlug: item.slug,
-            primaryKeyword: item.primaryKeyword,
-            blogMoneySlug: item.blogMoneySlug,
-            title: item.title,
-          });
+          const thumb = getWebsiteIndustryCardThumbnail(item.slug, item.primaryKeyword);
           return (
             <Link
               key={item.slug}
@@ -30,9 +25,9 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
             >
               <IndustryMockupImage
                 variant="card"
-                src={hero.src}
-                alt={hero.alt}
-                sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
+                src={thumb.src}
+                alt={thumb.alt}
+                sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 280px"
               />
               <div className="px-4 py-3">
                 <p className="text-sm font-bold text-indigo-950 group-hover:text-violet-800">{item.label}</p>

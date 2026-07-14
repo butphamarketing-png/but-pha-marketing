@@ -29,6 +29,7 @@ const WEEK_TASKS = [
     log: null,
     urls: [
       "/website",
+      "/banggia",
       "/blog/thiet-ke-website",
       "/blog/bao-gia-thiet-ke-website",
       "/seo-website",

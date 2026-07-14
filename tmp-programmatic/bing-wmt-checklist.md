@@ -1,6 +1,6 @@
 # Bing Webmaster Tools + IndexNow Checklist
 
-- Generated: 2026-07-12T06:36:31.319Z
+- Generated: 2026-07-14T18:15:45.770Z
 - Site: `https://www.butphamarketing.com`
 - IndexNow key file: `https://www.butphamarketing.com/butpha-indexnow-202607.txt`
 

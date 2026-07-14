@@ -22,7 +22,7 @@ type IndustryMockupImageProps = {
   priority?: boolean;
   className?: string;
   sizes?: string;
-  /** card = thumbnail grid; hero = full mockup landing */
+  /** card = thumbnail ngành (landscape sắc); hero = mockup landing */
   variant?: "hero" | "card";
 };
 
@@ -42,9 +42,14 @@ export function IndustryMockupImage({
     : INDUSTRY_MOCKUP_HEIGHT;
 
   if (variant === "card") {
+    const isLandscape = (dims?.width ?? 0) >= (dims?.height ?? 1);
     return (
       <div
-        className={`relative mx-auto h-64 w-full max-w-[220px] overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-72 ${className}`}
+        className={
+          isLandscape
+            ? `relative aspect-[3/2] w-full overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white ${className}`
+            : `relative mx-auto h-64 w-full max-w-[220px] overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-72 ${className}`
+        }
       >
         <Image
           src={resolved}
@@ -52,8 +57,8 @@ export function IndustryMockupImage({
           fill
           unoptimized
           priority={priority}
-          sizes={sizes ?? "(max-width: 640px) 45vw, 220px"}
-          className="object-contain object-top p-2"
+          sizes={sizes ?? "(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 280px"}
+          className={isLandscape ? "object-cover object-center" : "object-contain object-top p-2"}
         />
       </div>
     );

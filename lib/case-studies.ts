@@ -74,7 +74,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/case-studies/sao-khue/gsc-performance.png",
     heroImage: "/case-studies/sao-khue/gsc-performance.png",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-07",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -218,7 +218,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/case-studies/thien-hoang-kim/website-homepage.png",
     heroImage: "/case-studies/thien-hoang-kim/website-homepage.png",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-07",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -354,7 +354,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/case-studies/phuoc-lai-luxury/website-homepage.png",
     heroImage: "/case-studies/phuoc-lai-luxury/website-homepage.png",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-07",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -485,7 +485,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/case-studies/nha-khoa-dang-khoa/gsc-performance.png",
     heroImage: "/case-studies/nha-khoa-dang-khoa/gsc-performance.png",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-07",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -627,7 +627,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/case-studies/halee-tram/hero.png",
     heroImage: "/case-studies/halee-tram/hero.png",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-07",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -761,7 +761,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/tin-tuc/pccc/pccc-1.png",
     heroImage: "/tin-tuc/pccc/pccc-1.png",
     publishedAt: "2026-07-08",
-    updatedAt: "2026-07-08",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -879,7 +879,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/tin-tuc/logistics/logistics-1.png",
     heroImage: "/tin-tuc/logistics/logistics-1.png",
     publishedAt: "2026-07-11",
-    updatedAt: "2026-07-11",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {
@@ -1008,7 +1008,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     thumbnail: "/tin-tuc/my-pham/my-pham-1.png",
     heroImage: "/tin-tuc/my-pham/my-pham-1.png",
     publishedAt: "2026-07-11",
-    updatedAt: "2026-07-11",
+    updatedAt: "2026-07-15",
     status: "in-progress",
     faq: [
       {

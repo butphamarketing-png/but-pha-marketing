@@ -33,3 +33,15 @@
 /seo-website/dia-phuong/vinh
 /seo-website/dia-phuong/thanh-hoa
 /seo-website/dia-phuong/binh-thuan
+/seo-website/dia-phuong/quan-1
+/seo-website/dia-phuong/quan-3
+/seo-website/dia-phuong/quan-7
+/seo-website/dia-phuong/binh-thanh
+/seo-website/dia-phuong/thu-duc
+/seo-website/dia-phuong/go-vap
+/seo-website/dia-phuong/cau-giay
+/seo-website/dia-phuong/dong-da
+/seo-website/dia-phuong/hai-ba-trung
+/seo-website/dia-phuong/nam-tu-liem
+/seo-website/dia-phuong/hai-chau
+/seo-website/dia-phuong/thanh-khe

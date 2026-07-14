@@ -71,6 +71,12 @@ export default function GoogleMapsPage() {
             <Link href="/lien-he" className="brand-btn-primary">
               Tư vấn Google Maps
             </Link>
+            <Link href="/banggia" className="brand-btn-secondary">
+              Báo giá Maps &amp; Marketing
+            </Link>
+            <Link href="/website" className="brand-btn-secondary">
+              Website + Local SEO
+            </Link>
             <Link href="/google-maps/thiet-ke-google-maps" className="brand-btn-secondary">
               Thiết kế Google Maps
             </Link>
@@ -81,6 +87,47 @@ export default function GoogleMapsPage() {
               SEO địa phương HCM
             </Link>
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-orange-100 bg-orange-50/50 p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-orange-700">NAP đồng nhất</p>
+          <h2 className="mt-2 text-2xl font-bold text-indigo-950">Checklist Local SEO — tên · địa chỉ · SĐT</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 md:text-base">
+            Google đối chiếu NAP trên website, Google Business Profile và directory. Sai một trường là mất điểm Local Pack.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-slate-700 md:text-base">
+            <li>
+              <strong>NAP chuẩn BPM:</strong> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM · 0937 417 982
+            </li>
+            <li>Đồng bộ footer website, schema LocalBusiness, GBP và trang /lien-he.</li>
+            <li>
+              Gắn website money page (<Link href="/website" className="font-semibold text-violet-700 underline">/website</Link>) và bảng giá (
+              <Link href="/banggia" className="font-semibold text-violet-700 underline">/banggia</Link>) vào mô tả GBP khi phù hợp dịch vụ.
+            </li>
+            <li>
+              Landing local theo quận (Phase 3):{" "}
+              <Link href="/seo-website/dia-phuong/quan-1" className="font-semibold text-violet-700 underline">
+                Quận 1
+              </Link>
+              {", "}
+              <Link href="/seo-website/dia-phuong/quan-7" className="font-semibold text-violet-700 underline">
+                Quận 7
+              </Link>
+              {", "}
+              <Link href="/seo-website/dia-phuong/cau-giay" className="font-semibold text-violet-700 underline">
+                Cầu Giấy
+              </Link>
+              {", "}
+              <Link href="/seo-website/dia-phuong/hai-chau" className="font-semibold text-violet-700 underline">
+                Hải Châu
+              </Link>
+              {" · "}
+              <Link href="/seo-website/dia-phuong/ho-chi-minh" className="font-semibold text-violet-700 underline">
+                hub TP.HCM
+              </Link>
+              .
+            </li>
+          </ul>
         </section>
 
         <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">

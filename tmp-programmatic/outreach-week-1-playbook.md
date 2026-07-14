@@ -1,6 +1,6 @@
 # Outreach Week 1 Playbook — ButPhaMarketing
 
-- Generated at: 2026-07-12T06:40:10.474Z
+- Generated at: 2026-07-14T18:15:44.079Z
 - Mục tiêu tuần: **6 placements** (1 guest · 1 case · 2 social · 1 vertical · 1 directory)
 - On-page P4: **11.086 bài** proof/silo/meta **0 gap** · pillar cluster injected
 - IndexNow: key live · ping cần verify Bing WMT (403) · GSC indexing vẫn làm thủ công
@@ -19,6 +19,7 @@
 - Target: `7 URL money + case study`
 - URLs (paste vào GSC → URL Inspection → Request indexing):
   - https://www.butphamarketing.com/website
+  - https://www.butphamarketing.com/banggia
   - https://www.butphamarketing.com/blog/thiet-ke-website
   - https://www.butphamarketing.com/blog/bao-gia-thiet-ke-website
   - https://www.butphamarketing.com/seo-website
