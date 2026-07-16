@@ -112,8 +112,8 @@ export function ProgrammaticLandingPage({
           {indexable ? " · Đã tối ưu index" : " · Pilot — noindex"}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/lien-he" className="brand-btn-primary">
-            Tư vấn miễn phí
+          <Link href="/website" className="brand-btn-primary">
+            Thiết kế website
             <ArrowRight size={18} />
           </Link>
           {industryContent?.blogMoneySlug && (
@@ -312,9 +312,9 @@ export function ProgrammaticLandingPage({
                     Có cần làm thêm SEO sau khi lên website?
                   </summary>
                   <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                    Nên có. Xem{" "}
-                    <Link href="/seo-website" className="font-semibold text-indigo-700 underline">
-                      dịch vụ SEO Website
+                    Nên có. Website chuẩn SEO từ đầu giúp giảm chi phí — xem{" "}
+                    <Link href="/website" className="font-semibold text-indigo-700 underline">
+                      dịch vụ thiết kế website
                     </Link>
                     .
                   </p>
@@ -327,15 +327,21 @@ export function ProgrammaticLandingPage({
       <section className="rounded-3xl border border-violet-200 bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-800 p-8 text-white md:p-10">
         <h2 className="text-2xl font-black md:text-3xl">Sẵn sàng triển khai {landing.primaryKeyword}?</h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-violet-100 md:text-base">
-          Bứt Phá Marketing tư vấn miễn phí — đề xuất scope, timeline và báo giá minh bạch.
+          Xem dịch vụ và báo giá minh bạch — chọn gói phù hợp quy mô dự án.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/lien-he"
+            href={variant === "local" ? "/google-maps" : "/website"}
             className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-violet-700 transition hover:bg-violet-50"
           >
-            Liên hệ ngay
+            {variant === "local" ? "Dịch vụ Google Maps" : "Thiết kế website"}
             <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="/banggia"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+          >
+            Báo giá
           </Link>
         </div>
       </section>

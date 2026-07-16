@@ -15,8 +15,8 @@ export function ServiceConversionFooter({ title = "Tư vấn & tài liệu liên
           dự án tiêu biểu
         </Link>{" "}
         hoặc{" "}
-        <Link href="/lien-he" className="font-semibold text-violet-700 underline">
-          liên hệ tư vấn
+        <Link href="/website" className="font-semibold text-violet-700 underline">
+          xem dịch vụ thiết kế website
         </Link>
         .
       </p>

@@ -7,26 +7,26 @@ const faqLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Giá trên bảng giá có phải giá cuối cùng không?",
+      name: "Báo giá thiết kế website trên bảng giá có phải giá cuối cùng không?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Đây là giá tham khảo. Báo giá chính xác sau khi khảo sát quy mô, tính năng và timeline dự án.",
+        text: "Đây là giá tham khảo. Báo giá thiết kế website chính xác sau khi khảo sát quy mô, tính năng và timeline dự án.",
       },
     },
     {
       "@type": "Question",
-      name: "Phí quảng cáo Facebook/Google Maps có nằm trong bảng giá không?",
+      name: "Chi phí thiết kế website phụ thuộc yếu tố nào?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Không. Ngân sách ads trả trực tiếp cho Meta/Google. Bảng giá chỉ gồm phí setup và quản lý chiến dịch.",
+        text: "Số trang, tính năng (form, đặt lịch, bán hàng), thiết kế độc quyền hay theo mẫu, và tiến độ bàn giao.",
       },
     },
     {
       "@type": "Question",
-      name: "Làm sao chọn gói phù hợp?",
+      name: "Làm sao chọn gói thiết kế website phù hợp?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Website mới: bắt đầu gói cơ bản hoặc doanh nghiệp. Đã có traffic: nâng cấp SEO + care. Có cửa hàng: thêm Google Maps.",
+        text: "Website mới: bắt đầu gói cơ bản hoặc doanh nghiệp. Xem phạm vi dịch vụ đầy đủ tại trang thiết kế website.",
       },
     },
   ],

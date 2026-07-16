@@ -34,19 +34,19 @@ export function getBlogCtaConfig(topic: PillarTopic): BlogCtaConfig {
         topic,
         topicLabel,
         headline: "Cần dịch vụ thiết kế website chuẩn SEO?",
-        subline: "Bứt Phá Marketing triển khai thiết kế website chuyên nghiệp — tốc độ nhanh, form thu lead và báo giá minh bạch 3–12 triệu.",
+        subline: "Bứt Phá Marketing triển khai thiết kế website chuyên nghiệp — chuẩn SEO, bàn giao admin và báo giá minh bạch.",
         primary: { href: "/website", label: "Thiết kế website" },
-        secondary: { href: "/blog/thiet-ke-website", label: "Hướng dẫn A-Z" },
+        secondary: { href: "/banggia", label: "Báo giá thiết kế website" },
         zalo,
       };
     case "facebook":
       return {
         topic,
         topicLabel,
-        headline: "Muốn chạy Facebook Ads hiệu quả hơn?",
-        subline: "Tư vấn chiến dịch, creative và landing page message-match — giảm CPA, tăng inbox và chốt đơn.",
-        primary: { href: "/facebook/quang-cao-fanpage", label: "Dịch vụ quảng cáo Facebook" },
-        secondary: { href: "/lien-he", label: "Nhận tư vấn miễn phí" },
+        headline: "Muốn Facebook Marketing hiệu quả hơn?",
+        subline: "Thiết kế Fanpage, chăm sóc content và Meta Ads — đồng bộ thương hiệu và tăng inbox.",
+        primary: { href: "/facebook", label: "Dịch vụ Facebook Marketing" },
+        secondary: { href: "/blog/chu-de/facebook", label: "Hub Facebook" },
         zalo,
       };
     case "google-maps":
@@ -55,8 +55,8 @@ export function getBlogCtaConfig(topic: PillarTopic): BlogCtaConfig {
         topicLabel,
         headline: "Cần tối ưu Google Maps / Local SEO?",
         subline: "Setup GBP, review, citation và đồng bộ website — tăng hiển thị Local Pack và cuộc gọi.",
-        primary: { href: "/google-maps/thiet-ke-google-maps", label: "Dịch vụ Google Maps" },
-        secondary: { href: "/lien-he", label: "Tư vấn miễn phí" },
+        primary: { href: "/google-maps", label: "Dịch vụ Google Maps" },
+        secondary: { href: "/blog/chu-de/google-maps", label: "Hub Google Maps" },
         zalo,
       };
     default:
@@ -64,9 +64,9 @@ export function getBlogCtaConfig(topic: PillarTopic): BlogCtaConfig {
         topic,
         topicLabel,
         headline: "Cần lộ trình marketing phù hợp?",
-        subline: "Tư vấn miễn phí chiến lược đa kênh: website, SEO, ads và đo KPI rõ ràng.",
-        primary: { href: "/lien-he", label: "Tư vấn marketing" },
-        secondary: { href: "/website", label: "Thiết kế website" },
+        subline: "Bắt đầu từ thiết kế website chuẩn SEO, rồi mở rộng Facebook và Google Maps theo mục tiêu.",
+        primary: { href: "/website", label: "Thiết kế website" },
+        secondary: { href: "/banggia", label: "Xem báo giá" },
         zalo,
       };
   }

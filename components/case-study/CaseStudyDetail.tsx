@@ -291,22 +291,16 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
             Báo giá thiết kế website
           </Link>
           <Link
-            href="/lien-he"
+            href="/du-an"
             className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
           >
-            Nhận tư vấn miễn phí
+            Xem thêm dự án
           </Link>
           <Link
             href="/blog/thiet-ke-website"
             className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
           >
             Hướng dẫn thiết kế website A-Z
-          </Link>
-          <Link
-            href="/du-an"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
-          >
-            Xem thêm dự án
           </Link>
         </div>
       </section>

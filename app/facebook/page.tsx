@@ -17,12 +17,12 @@ const config: PlatformConfig = {
   name: "Facebook",
   color: "#1877F2",
   auditPlatform: "facebook",
-  heroTitle: "Fanpage không chỉ để đăng bài",
-  heroSubtitle: "Mà để tạo ra khách hàng",
-  heroDescription: "Tối ưu nội dung – Tăng tương tác – Chuyển đổi tin nhắn",
-  vision: "Chúng tôi hướng đến trở thành đối tác chiến lược số 1 về Marketing Facebook tại Việt Nam, giúp hàng nghìn doanh nghiệp xây dựng sự hiện diện mạnh mẽ và bền vững trên nền tảng mạng xã hội lớn nhất thế giới.",
-  mission: "Sứ mệnh của chúng tôi là mang lại giải pháp Facebook Marketing toàn diện, từ xây dựng Fanpage chuyên nghiệp đến triển khai chiến dịch quảng cáo hiệu quả, giúp doanh nghiệp tăng trưởng doanh thu bền vững.",
-  responsibility: "Chúng tôi cam kết minh bạch trong từng đồng ngân sách, báo cáo kết quả thực tế hàng tuần, và chịu trách nhiệm hoàn toàn với hiệu quả mang lại cho khách hàng.",
+  heroTitle: "Facebook Marketing cho doanh nghiệp",
+  heroSubtitle: "Thiết kế Fanpage · Chăm sóc content · Meta Ads — một Money Page",
+  heroDescription: "Tăng tương tác và chuyển đổi tin nhắn trên Fanpage",
+  vision: "Facebook Marketing là kênh thu hút và nuôi dưỡng khách hàng. Bứt Phá xây Fanpage chuẩn thương hiệu, content đều và Meta Ads đo được inbox/lead.",
+  mission: "Triển khai đầy đủ funnel: thiết kế Fanpage → chăm sóc → quảng cáo, đồng bộ website khi cần — không chạy ads khi nền tảng còn yếu.",
+  responsibility: "Cam kết: minh bạch ngân sách ads, báo cáo định kỳ, không dùng tương tác ảo; KPI và phạm vi ghi rõ trong báo giá/hợp đồng.",
   tabs: [],
   hidePricingHeader: true,
   hideStats: true,
@@ -68,17 +68,14 @@ export default function FacebookPage() {
             đồng bộ với website và Google Maps để không mất lead giữa các kênh.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/lien-he" className="brand-btn-primary">
-              Tư vấn Facebook Marketing
-            </Link>
-            <Link href="/facebook/thiet-ke-fanpage" className="brand-btn-secondary">
-              Thiết kế Fanpage
+            <Link href="/du-an/sao-khue" className="brand-btn-primary">
+              Case study Fanpage
             </Link>
             <Link href="/blog/chu-de/facebook" className="brand-btn-secondary">
-              Kiến thức Facebook
+              Hub Facebook
             </Link>
-            <Link href="/du-an/sao-khue" className="brand-btn-secondary">
-              Case study Fanpage
+            <Link href="/website" className="brand-btn-secondary">
+              Đồng bộ thiết kế website
             </Link>
           </div>
         </section>

@@ -104,18 +104,18 @@ export function BlogPillarHub({
           <ArrowRight size={16} />
         </BlogTrackedLink>
         <BlogTrackedLink
-          href="/lien-he"
+          href={hub.topic === "website" ? "/banggia" : hub.service.serviceHref}
           eventName="blog_cta_click"
           eventParams={{
             blog_slug: slug,
             blog_topic: hub.topic,
             placement: "pillar_hub",
-            cta_label: "Tư vấn miễn phí",
-            cta_type: "contact",
+            cta_label: hub.topic === "website" ? "Báo giá thiết kế website" : hub.service.serviceLabel,
+            cta_type: hub.topic === "website" ? "pricing" : "service",
           }}
           className="text-sm font-semibold text-violet-700 hover:text-violet-900"
         >
-          Tư vấn miễn phí →
+          {hub.topic === "website" ? "Báo giá thiết kế website →" : `${hub.service.serviceLabel} →`}
         </BlogTrackedLink>
       </div>
     </section>

@@ -68,23 +68,14 @@ export default function GoogleMapsPage() {
             Ads — kết hợp website chuẩn SEO để tăng lượt gọi và khách đến cửa hàng.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/lien-he" className="brand-btn-primary">
-              Tư vấn Google Maps
-            </Link>
-            <Link href="/banggia" className="brand-btn-secondary">
-              Báo giá Maps &amp; Marketing
+            <Link href="/blog/chu-de/google-maps" className="brand-btn-primary">
+              Hub Google Maps
             </Link>
             <Link href="/website" className="brand-btn-secondary">
               Website + Local SEO
             </Link>
-            <Link href="/google-maps/thiet-ke-google-maps" className="brand-btn-secondary">
-              Thiết kế Google Maps
-            </Link>
-            <Link href="/blog/chu-de/google-maps" className="brand-btn-secondary">
-              Kiến thức Local SEO
-            </Link>
-            <Link href="/seo-website/dia-phuong/ho-chi-minh" className="brand-btn-secondary">
-              SEO địa phương HCM
+            <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
+              Case study
             </Link>
           </div>
         </section>
@@ -144,9 +135,9 @@ export default function GoogleMapsPage() {
               <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold underline">
                 case study nha khoa
               </Link>{" "}
-              hoặc hub{" "}
-              <Link href="/seo-website" className="font-semibold underline">
-                SEO Website
+              hoặc{" "}
+              <Link href="/website" className="font-semibold underline">
+                thiết kế website
               </Link>
               .
             </li>

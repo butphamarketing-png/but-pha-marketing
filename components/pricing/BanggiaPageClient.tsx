@@ -4,19 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { captureBanggiaAttribution } from "@/lib/banggia-attribution";
-import {
-  getBanggiaLastTab,
-  markBanggiaWelcomeShown,
-  setBanggiaLastTab,
-  shouldShowBanggiaWelcomeBack,
-} from "@/lib/banggia-prefs";
-import { isBanggiaUnlocked } from "@/lib/marketing-popup-gate";
+import { getBanggiaLastTab, setBanggiaLastTab } from "@/lib/banggia-prefs";
 import { PRICING_PLATFORMS } from "@/lib/pricing-catalog";
 import type { PricingPlatformId } from "@/lib/pricing-catalog";
-import { PricingGateForm } from "./PricingGateForm";
 import { PricingStickyBar } from "./PricingStickyBar";
 import { PricingTabs } from "./PricingTabs";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
@@ -25,13 +18,11 @@ const TAB_ORDER: PricingPlatformId[] = ["website", "facebook", "googlemaps"];
 
 const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links: { href: string; label: string }[] }> = {
   website: {
-    title: "Bảng giá thiết kế website",
-    body: "Gói từ Landing Page đến E-commerce — bao gồm UI/UX, lập trình chuẩn SEO, form/Zalo và bàn giao admin. Giá tham khảo, báo giá chính xác sau khảo sát nhu cầu.",
+    title: "Báo giá thiết kế website",
+    body: "Bảng giá thiết kế website từ Landing Page đến E-commerce — UI/UX, lập trình chuẩn SEO, form/Zalo và bàn giao admin. Giá tham khảo; báo giá chính xác sau khảo sát.",
     links: [
       { href: "/website", label: "Dịch vụ thiết kế website" },
-      { href: "/website/nganh/spa", label: "Website spa" },
-      { href: "/website/nganh/nha-khoa", label: "Website nha khoa" },
-      { href: "/blog/bao-gia-thiet-ke-website", label: "Hướng dẫn báo giá" },
+      { href: "/blog/bao-gia-thiet-ke-website", label: "Hướng dẫn đọc báo giá" },
       { href: "/du-an", label: "Case study" },
     ],
   },
@@ -49,8 +40,6 @@ const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links
     body: "Gói tối ưu Google Business Profile, Local SEO và phí quản lý Local Ads. Phù hợp doanh nghiệp có địa điểm vật lý cần tăng lượt gọi và chỉ đường.",
     links: [
       { href: "/google-maps", label: "Dịch vụ Google Maps" },
-      { href: "/seo-website/dia-phuong/ho-chi-minh", label: "SEO TP.HCM" },
-      { href: "/seo-website/dia-phuong/quan-1", label: "SEO Quận 1" },
       { href: "/blog/chu-de/google-maps", label: "Kiến thức Local SEO" },
     ],
   },
@@ -58,8 +47,12 @@ const TAB_INTROS: Record<PricingPlatformId, { title: string; body: string; links
 
 const PRICING_FAQS = [
   {
-    q: "Giá trên bảng giá có phải giá cuối cùng không?",
-    a: "Đây là giá tham khảo. Báo giá chính xác sau khi khảo sát quy mô, tính năng và timeline dự án.",
+    q: "Báo giá thiết kế website trên bảng giá có phải giá cuối cùng không?",
+    a: "Đây là giá tham khảo. Báo giá thiết kế website chính xác sau khi khảo sát quy mô, tính năng và timeline dự án.",
+  },
+  {
+    q: "Chi phí thiết kế website phụ thuộc yếu tố nào?",
+    a: "Số trang, tính năng (form, đặt lịch, bán hàng), thiết kế độc quyền hay theo mẫu, và tiến độ bàn giao.",
   },
   {
     q: "Có hỗ trợ trả góp hoặc chia đợt thanh toán không?",
@@ -70,8 +63,8 @@ const PRICING_FAQS = [
     a: "Không. Ngân sách ads trả trực tiếp cho Meta/Google. Bảng giá chỉ gồm phí setup và quản lý chiến dịch.",
   },
   {
-    q: "Làm sao chọn gói phù hợp?",
-    a: "Website mới: bắt đầu gói cơ bản hoặc doanh nghiệp. Đã có traffic: nâng cấp SEO + care. Có cửa hàng: thêm Google Maps.",
+    q: "Làm sao chọn gói thiết kế website phù hợp?",
+    a: "Website mới: bắt đầu gói cơ bản hoặc doanh nghiệp. Cần xem phạm vi dịch vụ đầy đủ tại trang thiết kế website.",
   },
 ];
 
@@ -81,47 +74,25 @@ function getTabDirection(from: PricingPlatformId, to: PricingPlatformId) {
 
 export function BanggiaPageClient() {
   const reduceMotion = useReducedMotion();
-  const [hydrated, setHydrated] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const [justUnlocked, setJustUnlocked] = useState(false);
   const [activeTab, setActiveTab] = useState<PricingPlatformId>("website");
   const [tabDirection, setTabDirection] = useState(1);
-  const [welcomeBack, setWelcomeBack] = useState(false);
-  const [gateDissolving, setGateDissolving] = useState(false);
   const prevTabRef = useRef<PricingPlatformId>("website");
 
   const activeColor = PRICING_PLATFORMS.find((p) => p.id === activeTab)?.color ?? "#7C3AED";
   const tabIntro = TAB_INTROS[activeTab];
 
   useEffect(() => {
-    setHydrated(true);
-    const alreadyUnlocked = isBanggiaUnlocked();
-    setUnlocked(alreadyUnlocked);
-    if (alreadyUnlocked) {
-      setActiveTab(getBanggiaLastTab());
-      prevTabRef.current = getBanggiaLastTab();
-      if (shouldShowBanggiaWelcomeBack()) {
-        setWelcomeBack(true);
-        markBanggiaWelcomeShown();
-        const timer = window.setTimeout(() => setWelcomeBack(false), 3200);
-        return () => window.clearTimeout(timer);
-      }
-    }
+    const lastTab = getBanggiaLastTab();
+    setActiveTab(lastTab);
+    prevTabRef.current = lastTab;
     captureBanggiaAttribution();
   }, []);
-
-  const showGate = hydrated && !unlocked;
 
   const handleTabChange = (tab: PricingPlatformId) => {
     setTabDirection(getTabDirection(prevTabRef.current, tab));
     prevTabRef.current = tab;
     setActiveTab(tab);
     setBanggiaLastTab(tab);
-  };
-
-  const handleUnlocked = () => {
-    setJustUnlocked(true);
-    setUnlocked(true);
   };
 
   return (
@@ -144,19 +115,6 @@ export function BanggiaPageClient() {
         </div>
       </header>
 
-      <AnimatePresence>
-        {welcomeBack && unlocked ? (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-full border border-violet-200 bg-white px-4 py-2 text-sm font-medium text-violet-800 shadow-lg"
-          >
-            Chào bạn — bảng giá đã sẵn sàng
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
       <main className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 10 }}
@@ -164,13 +122,16 @@ export function BanggiaPageClient() {
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="mb-8 text-center sm:mb-10"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">Tra cứu dịch vụ</p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight text-indigo-950 sm:text-3xl">Bảng giá dịch vụ</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">Báo giá thiết kế website</p>
+          <h1 className="mt-2 text-2xl font-bold tracking-tight text-indigo-950 sm:text-3xl">
+            Báo giá thiết kế website & bảng giá dịch vụ
+          </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Tham khảo nhanh các gói Website, Facebook và Google Maps. Giá có thể điều chỉnh theo quy mô dự án.
+            Xem ngay chi phí thiết kế website, Facebook Marketing và Google Maps — không cần nhập số điện thoại để xem bảng giá.
+            Giá tham khảo; báo giá chính xác theo quy mô dự án.
           </p>
           <p className="mx-auto mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 text-xs font-medium text-slate-600 shadow-sm">
-            <span>Tư vấn miễn phí</span>
+            <span>Xem giá miễn phí</span>
             <span className="text-slate-300" aria-hidden>
               ·
             </span>
@@ -178,7 +139,9 @@ export function BanggiaPageClient() {
             <span className="text-slate-300" aria-hidden>
               ·
             </span>
-            <span>Phản hồi trong 24h</span>
+            <Link href="/website" className="font-semibold text-violet-700 hover:underline">
+              Dịch vụ thiết kế website
+            </Link>
           </p>
         </motion.div>
 
@@ -204,43 +167,15 @@ export function BanggiaPageClient() {
           </div>
         </motion.section>
 
-        <div className="relative">
-          <AnimatePresence mode="wait">
-            {showGate ? (
-              <motion.div
-                key="gate-preview"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35 }}
-              >
-                <div
-                  className={`pointer-events-none select-none transition-all duration-500 ${
-                    gateDissolving ? "blur-0 opacity-100 saturate-100" : "blur-[2px] opacity-60 saturate-[0.85]"
-                  }`}
-                >
-                  <PricingTabs activeId={activeTab} onChange={handleTabChange} direction={tabDirection} />
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="pricing-content"
-                initial={justUnlocked && !reduceMotion ? { opacity: 0, y: 14 } : false}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <PricingTabs activeId={activeTab} onChange={handleTabChange} direction={tabDirection} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        <PricingTabs activeId={activeTab} onChange={handleTabChange} direction={tabDirection} />
 
         <section className="mt-12 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-xl font-bold text-indigo-950">Quy trình chọn gói và nhận báo giá</h2>
+          <h2 className="text-xl font-bold text-indigo-950">Quy trình chọn gói và nhận báo giá thiết kế website</h2>
           <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              "Chọn nhóm dịch vụ cần triển khai",
+              "Xem bảng giá thiết kế website (tab Website)",
               "Đối chiếu phạm vi và ngân sách tham khảo",
-              "Gửi yêu cầu để được khảo sát chi tiết",
+              "Xem chi tiết dịch vụ tại trang thiết kế website",
               "Nhận báo giá, timeline và checklist bàn giao",
             ].map((step, index) => (
               <li key={step} className="rounded-xl border border-indigo-100 bg-indigo-50/30 p-4 text-sm text-slate-700">
@@ -254,7 +189,7 @@ export function BanggiaPageClient() {
         </section>
 
         <section className="mt-12 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-xl font-bold text-indigo-950">Câu hỏi thường gặp về bảng giá</h2>
+          <h2 className="text-xl font-bold text-indigo-950">Câu hỏi thường gặp về báo giá thiết kế website</h2>
           <div className="mt-5 space-y-3">
             {PRICING_FAQS.map((item) => (
               <details
@@ -269,9 +204,9 @@ export function BanggiaPageClient() {
             ))}
           </div>
           <p className="mt-6 text-sm text-slate-600">
-            Cần báo giá chi tiết?{" "}
-            <Link href="/lien-he" className="font-semibold text-violet-700 underline">
-              Liên hệ tư vấn miễn phí
+            Cần tư vấn gói phù hợp? Xem{" "}
+            <Link href="/website" className="font-semibold text-violet-700 underline">
+              dịch vụ thiết kế website
             </Link>{" "}
             hoặc đọc{" "}
             <Link href="/blog/bao-gia-thiet-ke-website" className="font-semibold text-violet-700 underline">
@@ -286,16 +221,12 @@ export function BanggiaPageClient() {
         </div>
 
         <div className="mt-10">
-          <ServiceConversionFooter title="Cần báo giá chi tiết?" />
+          <ServiceConversionFooter title="Cần báo giá thiết kế website chi tiết?" />
         </div>
       </main>
 
-      {unlocked && !showGate ? <PricingStickyBar /> : null}
-      {showGate ? (
-        <PricingGateForm onUnlockStart={() => setGateDissolving(true)} onUnlocked={handleUnlocked} />
-      ) : null}
-
-      {unlocked && !showGate ? <div className="h-20 md:hidden" aria-hidden /> : null}
+      <PricingStickyBar />
+      <div className="h-20 md:hidden" aria-hidden />
     </div>
   );
 }

@@ -36,19 +36,19 @@ export default async function BlogPage() {
   const blogs = await getPublishedBlogs();
   const growthPillars = [
     {
-      href: "/seo-website",
-      title: "SEO Website",
-      desc: "Trụ cột SEO tổng thể: kỹ thuật, nội dung và chuyển đổi.",
+      href: "/website",
+      title: "Thiết kế website",
+      desc: "Money Page — dịch vụ thiết kế website chuẩn SEO.",
     },
     {
-      href: "/marketing-automation",
-      title: "Marketing Automation",
-      desc: "Tự động hóa lead và tối ưu pipeline marketing-sales.",
+      href: "/facebook",
+      title: "Facebook Marketing",
+      desc: "Money Page — Fanpage, content và Meta Ads.",
     },
     {
-      href: "/ai-marketing",
-      title: "AI Marketing",
-      desc: "Ứng dụng AI để tăng tốc sản xuất và tối ưu hiệu suất.",
+      href: "/google-maps",
+      title: "Google Maps",
+      desc: "Money Page — GBP, Local SEO và review thật.",
     },
   ];
   const jsonLd = {
@@ -97,8 +97,8 @@ export default async function BlogPage() {
             </p>
           </div>
 
-          <Link href="/lien-he" className="brand-btn-primary self-start">
-            Nhận tư vấn miễn phí
+          <Link href="/website" className="brand-btn-primary self-start">
+            Thiết kế website
             <ArrowRight size={18} />
           </Link>
         </div>

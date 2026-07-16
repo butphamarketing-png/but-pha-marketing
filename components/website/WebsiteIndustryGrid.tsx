@@ -39,8 +39,8 @@ export function WebsiteIndustryGrid({ id = "theo-nganh" }: { id?: string }) {
       </div>
       <p className="mt-6 text-sm text-slate-500">
         Không thấy ngành của bạn?{" "}
-        <Link href="/lien-he" className="font-semibold text-violet-700 underline">
-          Tư vấn website theo yêu cầu
+        <Link href="/banggia" className="font-semibold text-violet-700 underline">
+          Xem báo giá thiết kế website
         </Link>
       </p>
     </section>

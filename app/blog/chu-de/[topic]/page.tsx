@@ -53,19 +53,19 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
   const canonical = `${BASE_URL}/blog/chu-de/${topic}`;
   const strategicPillars = [
     {
-      href: "/seo-website",
-      title: "SEO Website",
-      desc: "Audit kỹ thuật, content cluster và lộ trình tăng trưởng organic.",
+      href: "/website",
+      title: "Thiết kế website",
+      desc: "Money Page Website — chuẩn SEO và chuyển đổi.",
     },
     {
-      href: "/marketing-automation",
-      title: "Marketing Automation",
-      desc: "Hệ thống thu lead, nuôi dưỡng và đồng bộ marketing-sales.",
+      href: "/facebook",
+      title: "Facebook Marketing",
+      desc: "Money Page Facebook — Fanpage, care và Meta Ads.",
     },
     {
-      href: "/ai-marketing",
-      title: "AI Marketing",
-      desc: "Ứng dụng AI cho content ops và AI search optimization.",
+      href: "/google-maps",
+      title: "Google Maps",
+      desc: "Money Page Maps — GBP, Local SEO và review thật.",
     },
   ];
 
@@ -143,16 +143,13 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link href="/website" className="brand-btn-primary">
-                Thiết kế website (dịch vụ)
+                Thiết kế website (Money Page)
+              </Link>
+              <Link href="/banggia" className="brand-btn-secondary">
+                Báo giá thiết kế website
               </Link>
               <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
                 Pillar thiết kế website
-              </Link>
-              <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
-                Báo giá thiết kế website
-              </Link>
-              <Link href="/seo-website" className="brand-btn-secondary">
-                SEO Website
               </Link>
             </div>
           </section>
@@ -167,16 +164,10 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link href="/facebook" className="brand-btn-primary">
-                Dịch vụ Facebook
-              </Link>
-              <Link href="/facebook/thiet-ke-fanpage" className="brand-btn-secondary">
-                Thiết kế Fanpage
+                Dịch vụ Facebook (Money Page)
               </Link>
               <Link href="/du-an/sao-khue" className="brand-btn-secondary">
                 Case study Fanpage
-              </Link>
-              <Link href="/banggia" className="brand-btn-secondary">
-                Bảng giá
               </Link>
             </div>
           </section>
@@ -191,16 +182,10 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link href="/google-maps" className="brand-btn-primary">
-                Dịch vụ Google Maps
-              </Link>
-              <Link href="/google-maps/thiet-ke-google-maps" className="brand-btn-secondary">
-                Thiết kế GBP
-              </Link>
-              <Link href="/seo-website/dia-phuong/ho-chi-minh" className="brand-btn-secondary">
-                SEO địa phương HCM
+                Dịch vụ Google Maps (Money Page)
               </Link>
               <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
-                Case study SEO
+                Case study
               </Link>
             </div>
           </section>
@@ -223,8 +208,8 @@ export default async function BlogTopicHubPage({ params }: { params: Promise<Par
               <Link href="/marketing-automation" className="brand-btn-secondary">
                 Marketing Automation
               </Link>
-              <Link href="/lien-he" className="brand-btn-secondary">
-                Tư vấn chiến lược
+              <Link href="/website" className="brand-btn-secondary">
+                Thiết kế website
               </Link>
             </div>
           </section>

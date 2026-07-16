@@ -42,18 +42,15 @@ export function WebsiteProofSection() {
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Link href="/du-an" className="brand-btn-primary">
-          Xem tất cả case study
+        <Link href="/banggia" className="brand-btn-primary">
+          Báo giá thiết kế website
           <ArrowRight size={16} />
         </Link>
-        <Link href="/seo-website" className="brand-btn-secondary">
-          Dịch vụ SEO Website
+        <Link href="/du-an" className="brand-btn-secondary">
+          Xem tất cả case study
         </Link>
         <Link href="/blog/chu-de/website" className="brand-btn-secondary">
           Hub chủ đề Website
-        </Link>
-        <Link href="/lien-he" className="brand-btn-secondary">
-          Tư vấn miễn phí
         </Link>
       </div>
     </section>

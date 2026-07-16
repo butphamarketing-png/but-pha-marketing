@@ -21,11 +21,11 @@ const config: PlatformConfig = {
   name: "Website",
   color: PLATFORM_COLORS.website,
   auditPlatform: "website",
-  heroTitle: "Thiết kế website chuẩn SEO",
-  heroSubtitle: "Dịch vụ thiết kế website chuyên nghiệp — tối ưu chuyển đổi và bảo trì bền vững",
-  vision: "Website là nền tảng trung tâm của mọi chiến lược marketing số. Chúng tôi xây dựng website chuyên nghiệp, tối ưu SEO và bảo trì để doanh nghiệp của bạn có mặt mọi lúc mọi nơi trên internet.",
-  mission: "Thiết kế website đẹp, nhanh và chuyển đổi cao — từ Landing Page đơn giản đến E-commerce phức tạp, tất cả đều được tối ưu SEO từ đầu để tiết kiệm chi phí marketing về lâu dài.",
-  responsibility: "Cam kết bàn giao website đúng deadline, hỗ trợ kỹ thuật và bảo trì 24/7, không phát sinh chi phí ẩn và đảm bảo website hoạt động ổn định 99.9% uptime.",
+  heroTitle: "Thiết kế website chuyên nghiệp",
+  heroSubtitle: "Thiết kế website chuẩn SEO cho doanh nghiệp — UI/UX, lập trình, bàn giao admin và báo giá minh bạch",
+  vision: "Thiết kế website là nền tảng marketing số của doanh nghiệp. Bứt Phá Marketing xây website chuẩn SEO, tối ưu chuyển đổi và bàn giao quy trình vận hành rõ ràng.",
+  mission: "Thiết kế website đẹp, nhanh, chuẩn SEO — từ Landing Page đến website doanh nghiệp và E-commerce, tối ưu từ đầu để giảm chi phí marketing lâu dài.",
+  responsibility: "Cam kết: bàn giao đúng deadline đã thống nhất, không phát sinh phí ẩn ngoài báo giá, hỗ trợ kỹ thuật sau bàn giao, website ổn định và có tài khoản admin + hướng dẫn sử dụng.",
   hidePricingHeader: true,
   hideAutoPricing: true,
   customSections: [
@@ -46,11 +46,12 @@ const config: PlatformConfig = {
     { step: 4, title: "Kiểm thử & Bàn giao", desc: "Test kỹ lưỡng trên nhiều thiết bị và trình duyệt, bàn giao tài khoản và hướng dẫn sử dụng." },
   ],
   faqs: [
-    { q: "Thời gian làm website mất bao lâu?", a: "Landing Page: 3-5 ngày. Website doanh nghiệp: 1-2 tuần. E-commerce: 3-4 tuần. Thời gian có thể thay đổi tùy yêu cầu." },
-    { q: "Có cần cung cấp nội dung không?", a: "Tùy gói. Chúng tôi có thể viết nội dung mẫu cho bạn, nhưng thông tin về sản phẩm/dịch vụ vẫn cần bạn cung cấp." },
-    { q: "Website có thể tự chỉnh sửa sau khi bàn giao không?", a: "Có. Chúng tôi bàn giao đầy đủ tài khoản admin và hướng dẫn sử dụng. Có thể tự cập nhật tin tức, sản phẩm." },
-    { q: "Hosting và domain tính riêng không?", a: "Hosting và domain được tính riêng hoặc package cùng tùy gói. Chúng tôi tư vấn giải pháp phù hợp nhất." },
-    { q: "SEO bao lâu thì lên trang 1 Google?", a: "Từ khóa ít cạnh tranh: 1-3 tháng. Từ khóa cạnh tranh trung bình: 3-6 tháng. Từ khóa cạnh tranh cao: 6-12 tháng." },
+    { q: "Thiết kế website mất bao lâu?", a: "Landing Page: 3–5 ngày. Website doanh nghiệp: 1–2 tuần. E-commerce: 3–4 tuần. Timeline chốt trong báo giá sau khảo sát." },
+    { q: "Thiết kế website gồm những gì?", a: "Khảo sát nhu cầu, UI/UX, lập trình chuẩn SEO, tích hợp form/Zalo (theo gói), kiểm thử, bàn giao admin và hướng dẫn vận hành." },
+    { q: "Có cần tự cung cấp nội dung không?", a: "Thông tin sản phẩm/dịch vụ do bạn cung cấp. Có thể hỗ trợ nội dung mẫu theo gói — chi tiết trong báo giá thiết kế website." },
+    { q: "Website bàn giao xong tự sửa được không?", a: "Có. Bạn nhận tài khoản admin và hướng dẫn; tự cập nhật tin tức, sản phẩm, trang cơ bản." },
+    { q: "Hosting / domain có gói kèm không?", a: "Có thể tính riêng hoặc đóng gói theo nhu cầu. Xem mức giá tham khảo tại trang báo giá thiết kế website." },
+    { q: "SEO bao lâu lên trang 1?", a: "Từ khóa ít cạnh tranh: 1–3 tháng. Trung bình: 3–6 tháng. Cạnh tranh cao: 6–12 tháng. Không cam kết thứ hạng cứng — có case study số liệu GSC thật." },
   ],
 };
 
@@ -74,26 +75,14 @@ export default function WebsitePage() {
             đọc hướng dẫn chi tiết tại pillar hoặc nhận báo giá ngay.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/lien-he" className="brand-btn-primary">
-              Tư vấn thiết kế website
-            </Link>
-            <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
-              Hướng dẫn thiết kế website A-Z
-            </Link>
-            <Link href="/banggia" className="brand-btn-secondary">
+            <Link href="/banggia" className="brand-btn-primary">
               Báo giá thiết kế website
-            </Link>
-            <Link href="/blog/bao-gia-thiet-ke-website" className="brand-btn-secondary">
-              Hướng dẫn đọc báo giá
-            </Link>
-            <Link href="/seo-website" className="brand-btn-secondary">
-              Dịch vụ SEO Website
-            </Link>
-            <Link href="/blog/chu-de/website" className="brand-btn-secondary">
-              Hub chủ đề Website
             </Link>
             <Link href="/du-an" className="brand-btn-secondary">
               Case study có số liệu
+            </Link>
+            <Link href="/blog/chu-de/website" className="brand-btn-secondary">
+              Hub chủ đề Website
             </Link>
           </div>
         </section>
@@ -118,11 +107,11 @@ export default function WebsitePage() {
             ))}
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/banggia" className="brand-btn-secondary">
-              So sánh bảng giá
+            <Link href="/banggia" className="brand-btn-primary">
+              Xem báo giá thiết kế website
             </Link>
-            <Link href="/lien-he" className="brand-btn-primary">
-              Chọn giải pháp phù hợp
+            <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
+              Hướng dẫn thiết kế website A-Z
             </Link>
           </div>
         </section>
