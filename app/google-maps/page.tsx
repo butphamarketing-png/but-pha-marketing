@@ -90,31 +90,28 @@ export default function GoogleMapsPage() {
             <li>
               <strong>NAP chuẩn BPM:</strong> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM · 0937 417 982
             </li>
-            <li>Đồng bộ footer website, schema LocalBusiness, GBP và trang /lien-he.</li>
             <li>
-              Gắn website money page (<Link href="/website" className="font-semibold text-violet-700 underline">/website</Link>) và bảng giá (
-              <Link href="/banggia" className="font-semibold text-violet-700 underline">/banggia</Link>) vào mô tả GBP khi phù hợp dịch vụ.
+              Đồng bộ footer website, schema LocalBusiness, GBP và Money Page{" "}
+              <Link href="/google-maps" className="font-semibold text-violet-700 underline">
+                /google-maps
+              </Link>
+              .
             </li>
             <li>
-              Landing local theo quận (Phase 3):{" "}
-              <Link href="/seo-website/dia-phuong/quan-1" className="font-semibold text-violet-700 underline">
-                Quận 1
+              Gắn website money page (
+              <Link href="/website" className="font-semibold text-violet-700 underline">
+                /website
               </Link>
-              {", "}
-              <Link href="/seo-website/dia-phuong/quan-7" className="font-semibold text-violet-700 underline">
-                Quận 7
+              ) và bảng giá (
+              <Link href="/banggia" className="font-semibold text-violet-700 underline">
+                /banggia
               </Link>
-              {", "}
-              <Link href="/seo-website/dia-phuong/cau-giay" className="font-semibold text-violet-700 underline">
-                Cầu Giấy
-              </Link>
-              {", "}
-              <Link href="/seo-website/dia-phuong/hai-chau" className="font-semibold text-violet-700 underline">
-                Hải Châu
-              </Link>
-              {" · "}
-              <Link href="/seo-website/dia-phuong/ho-chi-minh" className="font-semibold text-violet-700 underline">
-                hub TP.HCM
+              ) vào mô tả GBP khi phù hợp dịch vụ.
+            </li>
+            <li>
+              Kiến thức Local SEO:{" "}
+              <Link href="/blog/chu-de/google-maps" className="font-semibold text-violet-700 underline">
+                hub Google Maps
               </Link>
               .
             </li>
