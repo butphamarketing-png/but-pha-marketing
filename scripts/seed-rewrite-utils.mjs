@@ -78,15 +78,21 @@ export async function seedRewriteArticle(article, { log = true, revalidate = tru
     );
   }
 
-  const { data: existing } = await supabase.from("news").select("id").eq("slug", article.slug).maybeSingle();
-  const { error } = existing
-    ? await supabase.from("news").update(payload).eq("id", existing.id)
-    : await supabase.from("news").insert({ id: article.slug, ...payload });
+  // Fast path: update theo slug (tránh SELECT trước khi UPDATE)
+  const { data: updated, error: updateError } = await supabase
+    .from("news")
+    .update(payload)
+    .eq("slug", article.slug)
+    .select("id");
 
-  if (error) throw new Error(error.message);
+  if (updateError) throw new Error(updateError.message);
 
-  if (log) {
-    console.log(`${existing ? "Updated" : "Created"}: ${article.slug} (${article.content.length} chars)`);
+  if (!updated?.length) {
+    const { error: insertError } = await supabase.from("news").insert({ id: article.slug, ...payload });
+    if (insertError) throw new Error(insertError.message);
+    if (log) console.log(`Created: ${article.slug} (${article.content.length} chars)`);
+  } else if (log) {
+    console.log(`Updated: ${article.slug} (${article.content.length} chars)`);
   }
 
   if (revalidate) await revalidateBlogAfterSeed(article.slug);

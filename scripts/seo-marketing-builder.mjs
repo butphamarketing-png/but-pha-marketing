@@ -158,66 +158,432 @@ ${faq(faqItems)}
 `;
 }
 
-function defaultLongFaq(keyword, h1) {
+function hasVietnamese(text) {
+  return /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(
+    String(text || ""),
+  );
+}
+
+/** Làm sạch angle/description cũ: bỏ "kw:", "Hướng dẫn triển khai…", dấu ".." */
+function sanitizeAngleHint(angle, kw) {
+  let a = String(angle || "").trim();
+  if (!a) return "";
+  const kwEsc = String(kw || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (kwEsc) {
+    a = a.replace(new RegExp(`^${kwEsc}\\s*[—:\\-]\\s*`, "i"), "");
+  }
+  a = a.replace(/\s*Hướng dẫn triển khai và đo lường hiệu quả\.?/gi, "");
+  a = a.replace(/\s*Tư vấn Bứt Phá Marketing\.?/gi, "");
+  a = a.replace(/\.{2,}/g, ".");
+  a = a.replace(/\s+/g, " ").trim();
+  a = a.replace(/[.\s]+$/g, "").trim();
+  // Bỏ hint bị “nhiễm” lặp (meta cũ seed lại nhiều lần)
+  if ((a.match(/—/g) || []).length >= 2) return "";
+  // Bỏ nếu còn là chuỗi tiếng Anh thuần / quá ngắn vô nghĩa
+  if (!a || a.length < 4) return "";
+  if (!hasVietnamese(a) && /^[A-Za-z0-9 +/,&\-().]+$/.test(a) && a.split(/\s+/).length <= 6) {
+    return "";
+  }
+  // Cắt gọn hint cho meta
+  if (a.length > 90) a = a.slice(0, 87).replace(/\s+\S*$/, "").trim();
+  return a;
+}
+
+/** Không dump angle tiếng Anh thô vào câu tiếng Việt. */
+function humanizeAngle(angle, kw, intent = "guide") {
+  const cleaned = sanitizeAngleHint(angle, kw);
+  const term = extractTerm(kw);
+  if (cleaned && hasVietnamese(cleaned)) return cleaned;
+  if (intent === "lagi") return `định nghĩa ${term} và cách áp dụng thực tế`;
+  if (intent === "compare") return `tiêu chí chọn đúng theo mục tiêu và KPI`;
+  if (intent === "problem") return `nguyên nhân thường gặp và cách khắc phục`;
+  return `hướng dẫn triển khai ${kw} đúng trọng tâm tiêu đề`;
+}
+
+function detectMarketingIntent(kw, h1 = "") {
+  const text = `${kw} ${h1}`.toLowerCase();
+  if (/là gì/.test(text)) return "lagi";
+  if (/\bhay\b/.test(text) || /\bvs\b/.test(text) || /khác gì|so sánh/.test(text)) return "compare";
+  if (
+    /(cao|thấp|sai|không|lỗi|bị|quá|loãng|hết nhanh|ít lead|từ chối|hạn chế|không track|không đồng bộ|duplicate|fatigue)/.test(
+      text,
+    )
+  ) {
+    return "problem";
+  }
+  return "guide";
+}
+
+function extractTerm(kw) {
+  return String(kw || "")
+    .replace(/\s*là gì\s*/gi, " ")
+    .replace(/\?+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function parseCompareSides(kw) {
+  const m = String(kw || "").match(/^(.+?)\s+hay\s+(.+)$/i);
+  if (!m) return { a: extractTerm(kw), b: "lựa chọn thay thế" };
+  return { a: m[1].trim(), b: m[2].trim() };
+}
+
+function nicheChecklist(entry) {
+  return entry.checklist || CHECKLISTS[entry.niche] || CHECKLISTS.strategy;
+}
+
+function defaultLongFaq(keyword, h1, intent = "guide") {
   const short = h1.replace(/\?.*$/, "").trim().slice(0, 55);
+  const term = extractTerm(keyword);
+  if (intent === "lagi") {
+    return [
+      { q: `${keyword} — giải thích ngắn?`, a: `${term} là khái niệm/công cụ cần hiểu đúng trước khi triển khai ngân sách marketing liên quan.` },
+      { q: `Khi nào doanh nghiệp cần quan tâm ${keyword}?`, a: `Khi bạn đang dùng hoặc sắp dùng ${term} trong chiến dịch và cần định nghĩa vận hành được, không chỉ thuật ngữ.` },
+      { q: `${term} khác các khái niệm gần nghĩa thế nào?`, a: `Đọc kỹ phần định nghĩa và thành phần trong bài — tránh nhầm sang công cụ cùng hệ sinh thái nhưng mục đích khác.` },
+      { q: `Tự tìm hiểu ${keyword} rồi tự làm được không?`, a: "Được ở mức nền tảng; phần tracking/tối ưu nâng cao nên có người có kinh nghiệm để tránh đốt ngân sách." },
+      { q: "Bứt Phá Marketing hỗ trợ gì?", a: "Tư vấn miễn phí, triển khai website/SEO/ads và báo cáo KPI minh bạch theo mục tiêu thực tế." },
+    ];
+  }
+  if (intent === "compare") {
+    const { a, b } = parseCompareSides(keyword);
+    return [
+      { q: `${keyword}?`, a: `Không có đáp án tuyệt đối — chọn ${a} hoặc ${b} theo mục tiêu KPI, ngân sách và nơi khách đang quyết định.` },
+      { q: "Có dùng kết hợp được không?", a: "Thường được nếu tách ngân sách và mục tiêu rõ; tránh để hai lựa chọn tranh cùng một tệp." },
+      { q: "Nên test bao lâu?", a: "Ít nhất hết giai đoạn học + đủ chuyển đổi để so; thường 5–14 ngày tùy budget." },
+      { q: "KPI nào để quyết?", a: "CPA/CPL/ROAS hoặc inbox chất lượng — không chỉ CTR hay reach." },
+      { q: "Bứt Phá Marketing hỗ trợ gì?", a: "Tư vấn chọn hướng và triển khai đo lường đúng trước khi scale." },
+    ];
+  }
+  if (intent === "problem") {
+    return [
+      { q: `${keyword} do đâu?`, a: "Thường đến từ tracking sai, audience/creative/landing lệch, hoặc cấu hình mục tiêu không khớp KPI." },
+      { q: "Sửa mất bao lâu?", a: "Lỗi tracking có thể 1–2 ngày; audience/creative thường cần 3–7 ngày data sau khi chỉnh." },
+      { q: "Có nên dừng hết ads?", a: "Ưu tiên giảm budget hoặc pause ad set lỗi — không nhất thiết tắt cả tài khoản nếu vẫn đo được." },
+      { q: `Làm sao biết đã hết ${short}?`, a: "KPI chính (CPA/ROAS/CTR/EMQ…) ổn định lại trong vài ngày và triệu chứng ban đầu giảm." },
+      { q: "Bứt Phá Marketing hỗ trợ gì?", a: "Audit tài khoản, sửa tracking/landing/creative và đưa checklist tối ưu theo tuần." },
+    ];
+  }
   return [
     {
       q: `${short} có hiệu quả không?`,
-      a: "Có — khi triển khai đúng quy trình, đo KPI và tối ưu liên tục theo dữ liệu thực tế.",
+      a: "Có — khi bám đúng mục tiêu của tiêu đề, đo KPI và tối ưu theo dữ liệu thực tế.",
     },
     {
-      q: `Chi phí ${keyword} khoảng bao nhiêu?`,
-      a: "Tùy quy mô và kênh: từ vài triệu/tháng (SME) đến hàng chục triệu cho chiến dịch đa kênh; báo giá sau khảo sát mục tiêu.",
-    },
-    {
-      q: "Bao lâu thấy kết quả marketing?",
-      a: "Ads có thể có lead trong vài ngày; SEO và content thường 3–6 tháng; branding cần 6–12 tháng kiên trì.",
+      q: `Chi phí liên quan ${keyword} khoảng bao nhiêu?`,
+      a: "Tùy quy mô: SME thường test từ vài triệu/tháng rồi scale khi CPA/ROAS ổn.",
     },
     {
       q: `Nên tự làm ${keyword} hay thuê agency?`,
-      a: "SME nên thuê triển khai ban đầu + đào tạo nội bộ; doanh nghiệp lớn có thể hybrid team in-house và agency chuyên sâu.",
+      a: "SME nên thuê giai đoạn đầu + đào tạo nội bộ; đội có kinh nghiệm có thể hybrid.",
     },
     {
-      q: "Kênh nào nên ưu tiên trước?",
-      a: "Website + Google (SEO/Maps) làm nền; thêm Facebook Ads hoặc Google Ads tùy ngành và hành vi khách mục tiêu.",
+      q: "Đo bằng KPI nào?",
+      a: "Gắn KPI với mục tiêu bài viết: lead, CPA, ROAS, inbox hoặc traffic chất lượng — không chỉ vanity metrics.",
     },
     {
       q: "Bứt Phá Marketing hỗ trợ gì?",
-      a: "Tư vấn miễn phí, triển khai website, SEO, quảng cáo Facebook/Google và báo cáo KPI minh bạch.",
+      a: "Tư vấn miễn phí, triển khai website, SEO, quảng cáo và báo cáo KPI minh bạch.",
     },
   ];
 }
 
-function buildMarketingDepthSection(keyword, entry, imgIdx) {
+function buildLaGiLongForm(entry, imgIdx, angleVi, checklistItems, faqItems) {
+  const kw = entry.keywordsMain;
+  const term = extractTerm(kw);
+  const h1 = entry.h1.replace(/\?.*$/, "").trim();
   return `
-<h2 id="boi-canh">Bối cảnh và xu hướng ${keyword} 2026</h2>
-<p>Thị trường digital Việt Nam tiếp tục tăng trưởng mạnh: người dùng tìm kiếm trên Google trước khi mua, so sánh 3–5 đối thủ và đọc review. Với <strong>${keyword}</strong>, doanh nghiệp cần ${entry.angle} — không chỉ “có mặt” trên mạng mà phải chuyển đổi được khách hàng thực.</p>
-<p>Xu hướng nổi bật: AI hỗ trợ viết content và tối ưu ads; video ngắn (Reels, TikTok) kéo awareness; SEO local và Google Maps quan trọng với dịch vụ địa phương; đo lường first-party data khi cookie third-party suy yếu. Kế hoạch <strong>${keyword}</strong> nên linh hoạt theo quý, không khóa cứng 12 tháng.</p>
+${wpToc([
+  { id: "dinh-nghia", label: `${term} là gì?` },
+  { id: "thanh-phan", label: "Thành phần / cách hoạt động" },
+  { id: "vi-sao", label: "Vì sao cần hiểu rõ" },
+  { id: "cach-lam", label: "Cách bắt đầu" },
+  { id: "sai-lam", label: "Sai lầm thường gặp" },
+  { id: "faq", label: "FAQ" },
+  { id: "ket-luan", label: "Kết luận" },
+])}
+
+${wpIntro({
+  keyword: kw,
+  paragraphs: [
+    `<strong>${kw}</strong> — bài viết trả lời đúng tiêu đề <em>${h1}</em>: định nghĩa <strong>${term}</strong>, cách hoạt động và checklist áp dụng. Trọng tâm: ${angleVi}.`,
+    `Nếu bạn đang tìm <strong>${kw}</strong>, cần định nghĩa vận hành được cho đúng cụm từ khóa này — không phải checklist marketing chung cho mọi kênh.`,
+  ],
+})}
+
+${wpKeyTakeaways([
+  `${kw}: hiểu đúng ${term} trước khi bỏ ngân sách.`,
+  `Bám ${angleVi} — đúng phạm vi tiêu đề từ khóa.`,
+  "Đo bằng KPI gắn với mục tiêu chuyển đổi liên quan.",
+  "Tránh nhầm với khái niệm gần nghĩa trong cùng hệ sinh thái.",
+  "Bứt Phá Marketing hỗ trợ triển khai và đo lường.",
+])}
+
+${wpImg(imgIdx, `${kw} — định nghĩa ${term}`)}
+
+<h2 id="dinh-nghia">${/là gì/i.test(kw) ? kw.replace(/\?+$/, "") + "?" : `${term} là gì?`}</h2>
+<p><strong>${kw}</strong> xoay quanh khái niệm <strong>${term}</strong>. Nói ngắn: đây là thành phần bạn cần hiểu để cấu hình, đo lường hoặc tối ưu đúng — với góc nhìn ${angleVi}.</p>
+<p>Phần còn lại của bài đi sâu thành phần, lý do dùng và bước bắt đầu thực tế cho SME Việt Nam, luôn bám <strong>${kw}</strong>.</p>
+
+<h2 id="thanh-phan">Thành phần và cách ${term} hoạt động</h2>
+<p>Khi triển khai liên quan <strong>${kw}</strong>, thường gặp các lớp sau (điều chỉnh theo niche ${entry.niche || "marketing"}):</p>
+${checklist(checklistItems)}
+
+${wpImg(imgIdx + 1, `${kw} — thành phần ${term}`)}
+
+<h2 id="vi-sao">Vì sao cần hiểu ${kw}?</h2>
 <ul>
-  <li><strong>Mobile-first:</strong> Hơn 75% traffic từ điện thoại — mọi landing và form phải tối ưu mobile.</li>
-  <li><strong>Trust signal:</strong> Review Google, case study, chứng chỉ — tăng tỷ lệ chốt đặc biệt ngành dịch vụ.</li>
-  <li><strong>Omnichannel:</strong> Đồng bộ thông điệp website, fanpage, Zalo OA và email nurture.</li>
-  <li><strong>Automation:</strong> CRM, chatbot, email drip — không bỏ sót lead sau chiến dịch.</li>
+  <li>Tránh setup sai vì hiểu nhầm thuật ngữ.</li>
+  <li>Chọn đúng công cụ/mục tiêu thay vì copy chiến lược lệch ngữ cảnh.</li>
+  <li>Đo được kết quả gắn với ${term}, không chỉ vanity metrics.</li>
+  <li>Brief agency/freelancer rõ ràng hơn.</li>
 </ul>
 
-<h2 id="tu-lam-agency">Tự làm hay thuê agency cho ${keyword}?</h2>
-<p>Doanh nghiệp nhỏ thường cân nhắc tự triển khai để tiết kiệm. Tuy nhiên <strong>${keyword}</strong> đòi hỏi kỹ năng đa dạng: chiến lược, creative, kỹ thuật tracking và phân tích số liệu. Bảng so sánh gợi ý:</p>
+<h2 id="cach-lam">Cách bắt đầu với ${term}</h2>
+<ol class="list-decimal space-y-2 pl-5">
+  <li>Chốt mục tiêu kinh doanh gắn với ${term} (lead, traffic, đơn…).</li>
+  <li>Audit hiện trạng: đang dùng ${term} thế nào, thiếu gì.</li>
+  <li>Cấu hình đúng checklist phía trên — ưu tiên đo lường sạch.</li>
+  <li>Chạy thử nhỏ 3–7 ngày, đọc KPI liên quan.</li>
+  <li>Tối ưu theo dữ liệu rồi mới scale ngân sách.</li>
+</ol>
+
+${wpImg(imgIdx + 2, `${kw} — checklist triển khai`)}
+
+<h2 id="sai-lam">Sai lầm thường gặp về ${term}</h2>
+<ul>
+  <li>Nhồi nội dung marketing chung, không trả lời đúng ${kw}.</li>
+  <li>Setup xong nhưng không đo / không test sự kiện.</li>
+  <li>Copy cấu hình ngành khác không khớp funnel của bạn.</li>
+  <li>Tối ưu quá sớm khi chưa đủ dữ liệu học.</li>
+</ul>
+`;
+}
+
+function buildCompareLongForm(entry, imgIdx, angleVi, checklistItems, faqItems) {
+  const kw = entry.keywordsMain;
+  const { a, b } = parseCompareSides(kw);
+  const h1 = entry.h1.replace(/\?.*$/, "").trim();
+  return `
+${wpToc([
+  { id: "tra-loi", label: "Trả lời ngắn" },
+  { id: "so-sanh", label: "So sánh chi tiết" },
+  { id: "chon-a", label: `Khi chọn ${a}` },
+  { id: "chon-b", label: `Khi chọn ${b}` },
+  { id: "cach-lam", label: "Cách quyết định" },
+  { id: "sai-lam", label: "Sai lầm thường gặp" },
+  { id: "faq", label: "FAQ" },
+  { id: "ket-luan", label: "Kết luận" },
+])}
+
+${wpIntro({
+  keyword: kw,
+  paragraphs: [
+    `Câu hỏi <strong>${kw}</strong> không có đáp án một chiều: <strong>${a}</strong> và <strong>${b}</strong> phục vụ ngữ cảnh khác nhau. Bài viết bám tiêu đề <em>${h1}</em> — so sánh rõ và gợi ý khi nào chọn bên nào. Trọng tâm: ${angleVi}.`,
+    `Đọc để quyết theo KPI, không theo thói quen hay “mọi người đang làm gì”.`,
+  ],
+})}
+
+${wpKeyTakeaways([
+  `${kw}: chọn theo mục tiêu, không theo trend.`,
+  `${a} phù hợp một nhóm tình huống; ${b} phù hợp nhóm khác.`,
+  `Trọng tâm so sánh: ${angleVi}.`,
+  "Test nhỏ rồi scale bên thắng theo CPA/ROAS.",
+  "Có thể kết hợp nếu tách ngân sách rõ.",
+])}
+
+${wpImg(imgIdx, `${kw} — so sánh nhanh`)}
+
+<h2 id="tra-loi">${kw} — trả lời ngắn</h2>
+<p><strong>${a}</strong> và <strong>${b}</strong> đều có chỗ đứng. Hướng xử lý thực tế xoay quanh ${angleVi}: chọn cái khớp hành trình khách và KPI bạn đang tối ưu.</p>
+
+<h2 id="so-sanh">Bảng so sánh ${a} và ${b}</h2>
 <table class="w-full border-collapse text-sm my-6">
   <thead><tr class="bg-indigo-50">
     <th class="border border-indigo-100 px-3 py-2 text-left">Tiêu chí</th>
-    <th class="border border-indigo-100 px-3 py-2 text-left">Tự làm in-house</th>
-    <th class="border border-indigo-100 px-3 py-2 text-left">Thuê agency</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">${a}</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">${b}</th>
   </tr></thead>
   <tbody>
-    <tr><td class="border border-indigo-100 px-3 py-2">Chi phí ban đầu</td><td class="border border-indigo-100 px-3 py-2">Thấp (thời gian nội bộ)</td><td class="border border-indigo-100 px-3 py-2">Phí dịch vụ rõ ràng</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Tốc độ triển khai</td><td class="border border-indigo-100 px-3 py-2">Chậm nếu thiếu kinh nghiệm</td><td class="border border-indigo-100 px-3 py-2">Nhanh — đã có quy trình</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Chất lượng &amp; KPI</td><td class="border border-indigo-100 px-3 py-2">Dao động, khó benchmark</td><td class="border border-indigo-100 px-3 py-2">Cam kết báo cáo định kỳ</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Phù hợp</td><td class="border border-indigo-100 px-3 py-2">Founder có nền marketing</td><td class="border border-indigo-100 px-3 py-2">SME muốn kết quả nhanh</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2"><strong>Điểm mạnh</strong></td><td class="border border-indigo-100 px-3 py-2">Phù hợp khi ưu tiên kiểm soát / đặc thù của ${a}</td><td class="border border-indigo-100 px-3 py-2">Phù hợp khi ưu tiên linh hoạt / đặc thù của ${b}</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2"><strong>Rủi ro</strong></td><td class="border border-indigo-100 px-3 py-2">Dùng sai ngữ cảnh sẽ đốt ngân sách học</td><td class="border border-indigo-100 px-3 py-2">Dùng sai ngữ cảnh sẽ lệch KPI</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2"><strong>Góc nhìn</strong></td><td class="border border-indigo-100 px-3 py-2" colspan="2">${angleVi}</td></tr>
   </tbody>
 </table>
-<p>Nhiều khách hàng Bứt Phá chọn mô hình hybrid: agency triển khai ${keyword} 3–6 tháng đầu, đồng thời đào tạo team nội bộ vận hành sau đó.</p>
 
-${wpImg(imgIdx + 3, `Triển khai ${keyword} — chiến lược dài hạn`)}
+${wpImg(imgIdx + 1, `${kw} — bảng so sánh`)}
+
+<h2 id="chon-a">Khi nào nên chọn ${a}?</h2>
+<p>Chọn <strong>${a}</strong> khi mục tiêu và ràng buộc của bạn khớp hơn với đặc thù bên này — đặc biệt trong ngữ cảnh ${angleVi}.</p>
+
+<h2 id="chon-b">Khi nào nên chọn ${b}?</h2>
+<p>Chọn <strong>${b}</strong> khi bạn cần ưu điểm đối lập hoặc bổ sung cho ${a}, vẫn bám KPI đã chốt.</p>
+
+<h2 id="cach-lam">Cách quyết định ${kw}</h2>
+${checklist(checklistItems)}
+<ol class="list-decimal space-y-2 pl-5">
+  <li>Chốt 1 KPI chính (CPA, ROAS, CPL, inbox…).</li>
+  <li>Test ${a} và ${b} với creative/landing tương đương nếu budget cho phép.</li>
+  <li>Đọc kết quả sau learning + đủ chuyển đổi.</li>
+  <li>Scale bên thắng; giữ test nhỏ bên còn lại khi cần.</li>
+</ol>
+
+${wpImg(imgIdx + 2, `${kw} — quy trình chọn`)}
+
+<h2 id="sai-lam">Sai lầm khi trả lời ${kw}</h2>
+<ul>
+  <li>Chọn theo thói quen, bỏ qua KPI.</li>
+  <li>Đổi quá nhiều biến cùng lúc — không biết yếu tố nào thắng.</li>
+  <li>Kết luận sau 1 ngày chạy.</li>
+  <li>Để hai lựa chọn tranh cùng tệp không exclusion.</li>
+</ul>
+`;
+}
+
+function buildProblemLongForm(entry, imgIdx, angleVi, checklistItems, faqItems) {
+  const kw = entry.keywordsMain;
+  const h1 = entry.h1.replace(/\?.*$/, "").trim();
+  return `
+${wpToc([
+  { id: "van-de", label: "Vấn đề là gì?" },
+  { id: "trieu-chung", label: "Triệu chứng" },
+  { id: "nguyen-nhan", label: "Nguyên nhân" },
+  { id: "cach-sua", label: "Cách xử lý" },
+  { id: "sai-lam", label: "Sai lầm khi xử lý" },
+  { id: "faq", label: "FAQ" },
+  { id: "ket-luan", label: "Kết luận" },
+])}
+
+${wpIntro({
+  keyword: kw,
+  paragraphs: [
+    `<strong>${kw}</strong> là tình huống cần xử lý đúng trọng tâm tiêu đề <em>${h1}</em> — không lan man sang chiến lược marketing chung. Hướng xử lý xoay quanh ${angleVi}.`,
+    `Bài viết đi theo triệu chứng → nguyên nhân → checklist sửa để bạn hành động ngay trên tài khoản/chiến dịch đang chạy.`,
+  ],
+})}
+
+${wpKeyTakeaways([
+  `Nhận đúng ${kw} trước khi tăng budget.`,
+  `Ưu tiên sửa theo ${angleVi}.`,
+  "Sửa tracking/message trước khi đổ lỗi thuật toán.",
+  "Đổi từng lớp, ghi log thay đổi.",
+  "Scale lại khi KPI ổn vài ngày.",
+])}
+
+${wpImg(imgIdx, `${kw} — nhận diện vấn đề`)}
+
+<h2 id="van-de">${kw} — vấn đề là gì?</h2>
+<p><strong>${kw}</strong> nghĩa là kết quả chiến dịch đang lệch kỳ vọng gắn với tiêu đề bài. Nếu bỏ qua, bạn sẽ tiếp tục đốt ngân sách trên giả định sai.</p>
+
+<h2 id="trieu-chung">Triệu chứng nhận biết</h2>
+<ul>
+  <li>KPI chính xấu đi đúng lúc xuất hiện ${kw}.</li>
+  <li>Số liệu Ads / analytics / CRM không khớp.</li>
+  <li>Creative hoặc audience bão hòa (CTR giảm, frequency tăng).</li>
+  <li>Landing/form không chuyển dù traffic vẫn vào.</li>
+</ul>
+
+${wpImg(imgIdx + 1, `${kw} — triệu chứng`)}
+
+<h2 id="nguyen-nhan">Nguyên nhân thường gặp</h2>
+<p>Trong ngữ cảnh ${angleVi}, các nguyên nhân phổ biến gồm:</p>
+${checklist(checklistItems)}
+
+<h2 id="cach-sua">Cách xử lý ${kw} từng bước</h2>
+<ol class="list-decimal space-y-2 pl-5">
+  <li>Xác nhận số liệu nguồn nào đúng (Ads Manager, GA4, CRM, Events).</li>
+  <li>Kiểm tra tracking và message-match quảng cáo → điểm đến.</li>
+  <li>Rà audience overlap, frequency, exclusion.</li>
+  <li>Đổi creative/offer theo một giả thuyết rõ.</li>
+  <li>Chạy lại test nhỏ 3–7 ngày rồi mới tăng ngân sách.</li>
+</ol>
+
+${wpImg(imgIdx + 2, `${kw} — checklist sửa`)}
+
+<h2 id="sai-lam">Sai lầm khi xử lý ${kw}</h2>
+<ul>
+  <li>Tăng budget ngay khi chưa rõ nguyên nhân.</li>
+  <li>Sửa quá nhiều biến cùng lúc.</li>
+  <li>Bỏ qua tracking — tối ưu trên số ảo.</li>
+  <li>Tắt hết chiến dịch chỉ vì một ngày xấu.</li>
+</ul>
+`;
+}
+
+function buildGuideLongForm(entry, imgIdx, angleVi, checklistItems, faqItems) {
+  const kw = entry.keywordsMain;
+  const h1 = entry.h1.replace(/\?.*$/, "").trim();
+  return `
+${wpToc([
+  { id: "tra-loi", label: "Trọng tâm tiêu đề" },
+  { id: "tai-sao", label: "Vì sao quan trọng" },
+  { id: "cach-lam", label: "Cách triển khai" },
+  { id: "do-luong", label: "Đo lường" },
+  { id: "sai-lam", label: "Sai lầm cần tránh" },
+  { id: "faq", label: "FAQ" },
+  { id: "ket-luan", label: "Kết luận" },
+])}
+
+${wpIntro({
+  keyword: kw,
+  paragraphs: [
+    `Bài viết bám đúng tiêu đề <em>${h1}</em> và từ khóa <strong>${kw}</strong>: giải thích phạm vi, cách làm và KPI — trọng tâm ${angleVi}.`,
+    `Không dùng khuôn mẫu “marketing tổng quát” lan sang kênh không liên quan tiêu đề.`,
+  ],
+})}
+
+${wpKeyTakeaways([
+  `${kw} phải gắn mục tiêu kinh doanh cụ thể.`,
+  `Ưu tiên ${angleVi}.`,
+  "Đo KPI hàng tuần; scale cái hiệu quả.",
+  "Landing/message-match quyết định chuyển đổi.",
+  "Bứt Phá Marketing hỗ trợ triển khai theo module.",
+])}
+
+${wpImg(imgIdx, `${kw} — tổng quan`)}
+
+<h2 id="tra-loi">${kw} — trọng tâm cần nắm</h2>
+<p>Tiêu đề <em>${h1}</em> và từ khóa <strong>${kw}</strong> tập trung vào ${angleVi}. Mọi checklist bên dưới phục vụ đúng phạm vi này — không thay bằng chiến lược đa kênh chung chung.</p>
+
+<h2 id="tai-sao">Vì sao ${kw} quan trọng?</h2>
+<ul>
+  <li>Giúp phân bổ ngân sách đúng chỗ thay vì cảm tính.</li>
+  <li>Giảm CPA dài hạn khi cấu hình và đo lường sạch.</li>
+  <li>Tạo quy trình có thể lặp lại khi scale.</li>
+</ul>
+
+${wpImg(imgIdx + 1, `${kw} — triển khai`)}
+
+<h2 id="cach-lam">Cách triển khai ${kw}</h2>
+${checklist(checklistItems)}
+<ol class="list-decimal space-y-2 pl-5">
+  <li>Audit hiện trạng liên quan trực tiếp ${kw}.</li>
+  <li>Đặt mục tiêu SMART (lead/CPA/ROAS) trong 30/60/90 ngày.</li>
+  <li>Triển khai test nhỏ trước khi scale.</li>
+  <li>Review KPI hàng tuần và cắt phần lỗ.</li>
+</ol>
+
+<h2 id="do-luong">Đo lường KPI cho ${kw}</h2>
+<table class="w-full border-collapse text-sm my-6">
+  <thead><tr class="bg-indigo-50">
+    <th class="border border-indigo-100 px-3 py-2 text-left">Nhóm</th>
+    <th class="border border-indigo-100 px-3 py-2 text-left">KPI gợi ý</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="border border-indigo-100 px-3 py-2">Nhận diện</td><td class="border border-indigo-100 px-3 py-2">Reach, impression, CTR</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Chuyển đổi</td><td class="border border-indigo-100 px-3 py-2">Lead, CPA, conversion rate, ROAS</td></tr>
+    <tr><td class="border border-indigo-100 px-3 py-2">Chất lượng</td><td class="border border-indigo-100 px-3 py-2">Lead nghe máy, LTV, tỷ lệ chốt</td></tr>
+  </tbody>
+</table>
+
+${wpImg(imgIdx + 2, `${kw} — đo lường`)}
+
+<h2 id="sai-lam">Sai lầm thường gặp với ${kw}</h2>
+<ul>
+  <li>Làm lệch tiêu đề — viết bài chung chung không trả lời ${kw}.</li>
+  <li>Không đo conversion, chỉ nhìn like/traffic.</li>
+  <li>Landing không khớp thông điệp.</li>
+  <li>Scale khi chưa có data ổn định.</li>
+</ul>
 `;
 }
 
@@ -242,100 +608,29 @@ function pillarRelatedLinks(entry) {
 
 function buildMarketingLongFormContent(entry, imgOffset, topic) {
   const kw = entry.keywordsMain;
-  const h1 = entry.h1.replace(/\?.*$/, "").trim();
-  const checklistItems = entry.checklist || CHECKLISTS[entry.niche] || CHECKLISTS.strategy;
-  const faqItems = entry.faq || defaultLongFaq(kw, entry.h1);
+  const intent = detectMarketingIntent(kw, entry.h1);
+  const angleVi = humanizeAngle(entry.angle, kw, intent);
+  const checklistItems = nicheChecklist(entry);
+  const faqItems = entry.faq || defaultLongFaq(kw, entry.h1, intent);
   const imgIdx = imgOffset % 8;
 
+  let body;
+  if (intent === "lagi") body = buildLaGiLongForm(entry, imgIdx, angleVi, checklistItems, faqItems);
+  else if (intent === "compare") body = buildCompareLongForm(entry, imgIdx, angleVi, checklistItems, faqItems);
+  else if (intent === "problem") body = buildProblemLongForm(entry, imgIdx, angleVi, checklistItems, faqItems);
+  else body = buildGuideLongForm(entry, imgIdx, angleVi, checklistItems, faqItems);
+
+  const conclusionLead =
+    intent === "lagi"
+      ? `Tóm lại, <strong>${kw}</strong> cần được hiểu đúng định nghĩa trước khi tối ưu ngân sách — trọng tâm ${angleVi}.`
+      : intent === "compare"
+        ? `Với câu hỏi <strong>${kw}</strong>: chọn theo KPI và ngữ cảnh (${angleVi}), không theo cảm tính.`
+        : intent === "problem"
+          ? `Khi gặp <strong>${kw}</strong>: sửa đúng nguyên nhân (${angleVi}) rồi mới scale.`
+          : `Triển khai <strong>${kw}</strong> đúng phạm vi tiêu đề — trọng tâm ${angleVi} — giúp đo được kết quả thay vì chạy cảm tính.`;
+
   return `
-${wpToc([
-  { id: "tong-quan", label: "Tổng quan" },
-  { id: "tai-sao", label: "Vì sao cần đầu tư" },
-  { id: "chien-luoc", label: "Chiến lược triển khai" },
-  { id: "quy-trinh", label: "Quy trình 5 bước" },
-  { id: "do-luong", label: "Đo lường KPI" },
-  { id: "boi-canh", label: "Xu hướng 2026" },
-  { id: "tu-lam-agency", label: "Tự làm vs agency" },
-  { id: "sai-lam", label: "Sai lầm cần tránh" },
-  { id: "faq", label: "FAQ" },
-  { id: "ket-luan", label: "Kết luận" },
-])}
-
-${wpIntro({
-  keyword: kw,
-  paragraphs: [
-    `${kw} là chủ đề nhiều doanh nghiệp Việt quan tâm — đặc biệt khi ${entry.angle}. Khác với làm marketing theo cảm tính, cách tiếp cận có hệ thống giúp bạn biết đầu tư vào đâu, kỳ vọng gì và khi nào scale.`,
-    `Bài viết dành cho chủ SME, marketer và quản lý đang tìm hiểu ${kw}: checklist thực chiến, quy trình triển khai, KPI cần theo dõi và FAQ — áp dụng ngay tại Việt Nam.`,
-  ],
-})}
-
-${wpKeyTakeaways([
-  `${kw} cần gắn với mục tiêu kinh doanh cụ thể — lead, doanh số hoặc nhận diện.`,
-  `Ưu tiên ${entry.angle} — không copy chiến lược ngành khác.`,
-  "Website + đo lường (GA4, pixel) là nền mọi kênh marketing.",
-  "Review KPI hàng tuần; scale kênh hiệu quả, cắt kênh lỗ.",
-  "Bứt Phá Marketing: tư vấn miễn phí và triển khai trọn gói.",
-])}
-
-${wpImg(imgIdx, `${kw} — ${entry.angle}`)}
-
-<h2 id="tong-quan">${h1} — Tổng quan</h2>
-<p><strong>${kw}</strong> xoay quanh ${entry.angle}. Trong hệ sinh thái digital, mọi touchpoint — Google, Facebook, email, Maps — cần thống nhất thông điệp và dẫn về điểm chuyển đổi (website, form, Zalo).</p>
-<p>Doanh nghiệp thành công với <strong>${kw}</strong> thường có: persona khách rõ, nội dung trả lời đúng câu hỏi search intent, landing page message-match và quy trình chăm sóc lead sau khi thu về.</p>
-
-<h2 id="tai-sao">Vì sao doanh nghiệp cần ${kw}?</h2>
-<ul>
-  <li><strong>Cạnh tranh:</strong> Đối thủ đã đầu tư digital — bạn chậm = mất thị phần.</li>
-  <li><strong>Chi phí:</strong> Làm đúng giảm CPA dài hạn so với chạy ads mù quáng.</li>
-  <li><strong>Dữ liệu:</strong> Biết kênh nào hiệu quả — không phụ thuộc cảm giác.</li>
-  <li><strong>Scale:</strong> Quy trình chuẩn giúp nhân rộng khi tăng ngân sách.</li>
-  <li><strong>Thương hiệu:</strong> Nhất quán trên mọi kênh tăng trust và tỷ lệ chốt.</li>
-</ul>
-
-${wpImg(imgIdx + 1, `Chiến lược ${kw}`)}
-
-<h2 id="chien-luc">Chiến lược triển khai ${kw}</h2>
-<p>Checklist thực hành khi bắt đầu với <strong>${kw}</strong>:</p>
-${checklist(checklistItems)}
-<p>Kết hợp organic (SEO, content) và paid (Facebook Ads, Google Ads) theo ngân sách: SME thường 60% nền tảng + 40% test ads; khi có data ổn định thì đảo ngược tỷ lệ scale paid.</p>
-
-<h2 id="quy-trinh">Quy trình 5 bước triển khai ${kw}</h2>
-<ol class="list-decimal space-y-2 pl-5">
-  <li><strong>Audit hiện trạng:</strong> Website, fanpage, ads, đối thủ và từ khóa khách đang tìm.</li>
-  <li><strong>Đặt mục tiêu SMART:</strong> Số lead, CPA, ROAS hoặc doanh thu — có deadline 30/60/90 ngày.</li>
-  <li><strong>Lập kế hoạch kênh:</strong> Chọn 2–3 kênh ưu tiên; không dàn trải mọi nơi cùng lúc.</li>
-  <li><strong>Triển khai &amp; test:</strong> Creative, landing, audience — A/B test nhỏ trước khi scale.</li>
-  <li><strong>Đo lường &amp; tối ưu:</strong> Dashboard KPI, họp review hàng tuần, cập nhật chiến lược.</li>
-</ol>
-
-<h2 id="do-luong">Đo lường KPI và tối ưu liên tục</h2>
-<p>Theo dõi bộ KPI phù hợp <strong>${kw}</strong>:</p>
-<table class="w-full border-collapse text-sm my-6">
-  <thead><tr class="bg-indigo-50">
-    <th class="border border-indigo-100 px-3 py-2 text-left">Giai đoạn</th>
-    <th class="border border-indigo-100 px-3 py-2 text-left">KPI gợi ý</th>
-  </tr></thead>
-  <tbody>
-    <tr><td class="border border-indigo-100 px-3 py-2">Awareness</td><td class="border border-indigo-100 px-3 py-2">Reach, impression, branded search</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Consideration</td><td class="border border-indigo-100 px-3 py-2">CTR, time on site, form start</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Conversion</td><td class="border border-indigo-100 px-3 py-2">Lead, CPA, conversion rate, ROAS</td></tr>
-    <tr><td class="border border-indigo-100 px-3 py-2">Retention</td><td class="border border-indigo-100 px-3 py-2">LTV, repeat rate, NPS</td></tr>
-  </tbody>
-</table>
-<p>Dùng GA4, Meta Pixel, Google Ads conversion và CRM để có một nguồn sự thật. Đồng bộ marketing — sales về định nghĩa “lead chất lượng”.</p>
-
-${wpImg(imgIdx + 2, `Đo lường ${kw}`)}
-
-${buildMarketingDepthSection(kw, entry, imgIdx)}
-
-<h2 id="sai-lam">Sai lầm thường gặp khi làm ${kw}</h2>
-<ul>
-  <li>Không đo conversion — chỉ nhìn like/share hoặc traffic ảo.</li>
-  <li>Landing page không message-match với quảng cáo — tỷ lệ thoát cao.</li>
-  <li>Dàn trải quá nhiều kênh với ngân sách mỏng.</li>
-  <li>Bỏ qua website — dẫn ads về fanpage lộn xộn không chuyển đổi.</li>
-  <li>Không có quy trình chăm sóc lead — đốt ngân sách thu lead rồi bỏ quên.</li>
-</ul>
+${body}
 
 ${wpRelatedLinks(pillarRelatedLinks(entry))}
 
@@ -344,8 +639,8 @@ ${wpFaq({ keyword: kw, items: faqItems })}
 ${wpConclusion({
   keyword: kw,
   paragraphs: [
-    `Đầu tư đúng hướng vào ${kw} giúp doanh nghiệp ${entry.angle} — bền vững hơn chạy theo trend ngắn hạn.`,
-    `Liên hệ Bứt Phá Marketing để nhận tư vấn ${kw} miễn phí — roadmap và báo giá minh bạch theo mục tiêu thực tế.`,
+    conclusionLead,
+    `Liên hệ Bứt Phá Marketing để nhận tư vấn ${kw} — roadmap và báo giá theo mục tiêu thực tế.`,
   ],
   ctaLabel: "→ Đặt lịch tư vấn miễn phí",
   ctaHref: `${SITE}/lien-he`,
@@ -355,7 +650,7 @@ ${wpExternalCta()}
 `;
 }
 
-/** Bản dài chuẩn WP SEO (~12k+ ký tự) — dùng khi upgrade bài template mỏng. */
+/** Bản dài chuẩn WP SEO — intent-aware (là gì / so sánh / lỗi / hướng dẫn). */
 export function buildMarketingLongFormFromEntry(entry, index = 0) {
   const title = ensureTitleHasKeyword(entry.h1, entry.keywordsMain);
   const entryWithTitle = { ...entry, h1: title };
@@ -367,8 +662,10 @@ export function buildMarketingLongFormFromEntry(entry, index = 0) {
   });
   const imgOffset = (index + 3) % newsContentImageCountForTopic(topic);
   const metaTitle = buildSeoMetaTitle(entry.keywordsMain);
-  const metaDescription = buildSeoMetaDescription(entry.keywordsMain, entry.angle);
-  const description = `${entry.keywordsMain}: ${entry.angle}. Hướng dẫn triển khai và đo lường hiệu quả.`;
+  const intent = detectMarketingIntent(entry.keywordsMain, entry.h1);
+  const angleVi = humanizeAngle(entry.angle, entry.keywordsMain, intent);
+  const metaDescription = buildSeoMetaDescription(entry.keywordsMain, angleVi, intent);
+  const description = metaDescription;
 
   const html = buildMarketingLongFormContent(entryWithTitle, imgOffset, topic);
 
@@ -399,8 +696,10 @@ export function buildMarketingArticleFromEntry(entry, index = 0) {
     niche: entry.niche,
   });
   const imgOffset = (index + 3) % newsContentImageCountForTopic(topic);
-  const metaDescription = buildSeoMetaDescription(entry.keywordsMain, entry.angle);
-  const description = `${entry.keywordsMain}: ${entry.angle}. Hướng dẫn triển khai và đo lường hiệu quả.`;
+  const intent = detectMarketingIntent(entry.keywordsMain, entry.h1);
+  const angleVi = humanizeAngle(entry.angle, entry.keywordsMain, intent);
+  const metaDescription = buildSeoMetaDescription(entry.keywordsMain, angleVi, intent);
+  const description = metaDescription;
   const metaTitle = buildSeoMetaTitle(entry.keywordsMain);
 
   return {

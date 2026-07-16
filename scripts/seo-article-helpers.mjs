@@ -655,14 +655,26 @@ export function normalizeKeyword(keyword) {
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/\p{M}/gu, "");
+    .replace(/\p{M}/gu, "")
+    // Advantage+ ↔ Advantage Plus, Meta+ ↔ Meta Plus, …
+    .replace(/\+/g, " plus ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /** Từ khóa chính phải có trong title, meta, description, alt (so khớp không dấu, không phân biệt hoa thường). */
 export function keywordInText(text, keyword) {
   const hay = normalizeKeyword(text);
   const needle = normalizeKeyword(keyword);
-  return Boolean(needle && hay.includes(needle));
+  if (needle && hay.includes(needle)) return true;
+  // Fallback: đủ token quan trọng (≥3 ký tự) của từ khóa
+  const tokens = needle.split(" ").filter((t) => t.length > 2);
+  if (tokens.length >= 2) {
+    const need = Math.min(3, tokens.length);
+    return tokens.slice(0, need).every((t) => hay.includes(t));
+  }
+  return false;
 }
 
 export function altFromKeyword(keywordsMain) {
@@ -719,7 +731,11 @@ export function toTitleCaseVi(text) {
     .map((word) => {
       if (!word) return word;
       const bare = word.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
-      if (acronyms.has(bare)) return bare.toUpperCase();
+      const hasDiacritics = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(word);
+      // Chỉ viết hoa acronym khi từ gốc không dấu (tránh "rơi" → "ROI")
+      if (acronyms.has(bare) && !hasDiacritics && /^[a-z0-9+.\-]+$/i.test(word)) {
+        return bare.toUpperCase();
+      }
       if (/^[A-Z0-9]{2,}$/.test(word)) return word;
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
@@ -737,16 +753,85 @@ export function buildSeoMetaTitle(primary, brand = "Bứt Phá") {
   return `${head}${suffix}`;
 }
 
-/** Meta description ≤160 ký tự, luôn chứa từ khóa chính. */
-export function buildSeoMetaDescription(keywordsMain, hint = "") {
+function detectMetaIntent(kw, hint = "") {
+  const text = `${kw} ${hint}`.toLowerCase();
+  if (/là gì/.test(text)) return "lagi";
+  if (/\bhay\b/.test(text) || /\bvs\b/.test(text) || /khác gì|so sánh/.test(text)) return "compare";
+  if (/(cao|thấp|sai|không|lỗi|bị|quá|loãng|hết nhanh|ít lead|từ chối|hạn chế|fatigue)/.test(text)) {
+    return "problem";
+  }
+  return "guide";
+}
+
+function cleanMetaHint(hint, kw) {
+  let extra = String(hint || "")
+    .trim()
+    .replace(/^[^:]+:\s*/, "")
+    .replace(/\s*Hướng dẫn triển khai và đo lường hiệu quả\.?/gi, "")
+    .replace(/\.{2,}/g, ".")
+    .trim();
+  if (!extra) return "";
+  // Bỏ hint chỉ tiếng Anh / angle stub
+  if (!/[àáạảãâăèéêìíòóôơùúýđ]/i.test(extra) && /^[A-Za-z0-9 +/,&\-().]{0,80}$/.test(extra)) {
+    return "";
+  }
+  // Bỏ hint quá ngắn kiểu "Google Maps." không đủ nghĩa tiếng Việt
+  if (!/[àáạảãâăèéêìíòóôơùúýđ]/i.test(extra) && extra.split(/\s+/).length <= 4) {
+    return "";
+  }
+  // Tránh lặp lại đúng cụm từ khóa trong hint
+  const kwRe = new RegExp(String(kw || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+  extra = extra.replace(kwRe, "").replace(/\s+/g, " ").replace(/^[\s—–:,.-]+|[\s—–:,.-]+$/g, "").trim();
+  if (extra.length < 8) return "";
+  return extra.slice(0, 85);
+}
+
+/** Meta description ≤160 ký tự, luôn chứa từ khóa chính, bám intent tiêu đề. */
+export function buildSeoMetaDescription(keywordsMain, hint = "", intent = "") {
   const kw = String(keywordsMain || "").trim();
   const kwCap = kw ? toTitleCaseVi(kw) : "";
-  const extra = String(hint || "").trim();
-  let desc = extra
-    ? `${kwCap} — ${extra.replace(/^[^:]+:\s*/, "").slice(0, 90)}. Tư vấn Bứt Phá Marketing.`
-    : `${kwCap} — hướng dẫn, checklist và FAQ. Tư vấn Bứt Phá Marketing.`;
-  if (!keywordInText(desc, kw)) desc = `${kwCap}. ${desc}`;
-  if (desc.length > 158) desc = desc.slice(0, 155).replace(/\s+\S*$/, "").trim() + "…";
+  const kind = intent || detectMetaIntent(kw, hint);
+  let extra = cleanMetaHint(hint, kw);
+  // Bỏ cụm filler không mang thông tin
+  if (/giải pháp thực chiến|hướng dẫn và giải pháp từ|bứt phá marketing/i.test(extra)) {
+    extra = "";
+  }
+
+  const tails = {
+    lagi: "định nghĩa rõ, cách hoạt động và checklist cho SME",
+    compare: "chọn theo KPI, ngân sách và ngữ cảnh thực tế",
+    problem: "nguyên nhân thường gặp và cách khắc phục từng bước",
+    guide: "hướng dẫn triển khai, checklist KPI và FAQ",
+  };
+  const tail = tails[kind] || tails.guide;
+
+  const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+  const extraLooksLikeTail =
+    extra &&
+    /(định nghĩa|checklist|nguyên nhân|khắc phục|tiêu chí chọn|hướng dẫn triển khai|kpi)/i.test(extra);
+
+  let core;
+  if (extra && extraLooksLikeTail) {
+    // Hint đã đủ ý — không nối thêm tail trùng
+    core = kind === "lagi" ? `${kwCap}? ${cap(extra)}` : `${kwCap}: ${cap(extra)}`;
+  } else if (extra) {
+    core =
+      kind === "lagi"
+        ? `${kwCap}? ${cap(extra)}. ${cap(tail)}`
+        : `${kwCap}: ${cap(extra)}. ${cap(tail)}`;
+  } else {
+    core = kind === "lagi" ? `${kwCap}? ${cap(tail)}` : `${kwCap}: ${cap(tail)}`;
+  }
+
+  let desc = `${core}.`.replace(/\.\s*\./g, ".").replace(/\s+/g, " ").trim();
+  if (!keywordInText(desc, kw) && kwCap) desc = `${kwCap}. ${desc}`;
+
+  const cta = " Tư vấn Bứt Phá Marketing.";
+  if (desc.length + cta.length <= 158) desc += cta;
+  else if (desc.length > 158) desc = `${desc.slice(0, 155).replace(/\s+\S*$/, "").trim()}…`;
+  else desc = `${desc.slice(0, Math.max(0, 158 - cta.length)).replace(/\s+\S*$/, "").trim()}.${cta}`;
+
+  if (desc.length > 158) desc = `${desc.slice(0, 155).replace(/\s+\S*$/, "").trim()}…`;
   return desc.slice(0, 158);
 }
 

@@ -1,4 +1,10 @@
-import { NEWS_THUMBNAIL, buildSeoMetaTitle, ensureTitleHasKeyword, newsThumbnailForArticle } from "./seo-article-helpers.mjs";
+import {
+  NEWS_THUMBNAIL,
+  buildSeoMetaDescription,
+  buildSeoMetaTitle,
+  ensureTitleHasKeyword,
+  newsThumbnailForArticle,
+} from "./seo-article-helpers.mjs";
 import { INDUSTRY_ENTRIES } from "./seo-industry-data.mjs";
 import { KEYWORD_ENTRIES } from "./seo-keyword-data.mjs";
 import { LA_GI_ENTRIES } from "./seo-la-gi-data.mjs";
@@ -534,10 +540,14 @@ function buildGuideRewrite(base) {
 function finalizeArticle({ base, keyword, title, html }) {
   const safeTitle = ensureTitleHasKeyword(title, keyword);
   const metaTitle = buildSeoMetaTitle(keyword);
-  const metaDescBase =
-    base.metaDescription ||
-    `${keyword} — hướng dẫn chi tiết, quy trình, bảng giá và FAQ. Tư vấn miễn phí Bứt Phá Marketing.`;
-  const metaDescription = metaDescBase.slice(0, 160);
+  const angleHint =
+    base.description?.replace(/^[^:]+:\s*/, "").trim() ||
+    "quy trình, hạng mục và FAQ thực tế cho doanh nghiệp Việt";
+  const metaDescription = buildSeoMetaDescription(
+    keyword,
+    base.metaDescription || angleHint,
+    /là gì/i.test(keyword) ? "lagi" : /hay |vs /i.test(keyword) ? "compare" : "guide",
+  );
 
   return {
     title: safeTitle,
@@ -546,7 +556,7 @@ function finalizeArticle({ base, keyword, title, html }) {
     keywordsSecondary: base.keywordsSecondary || `${keyword}, website chuẩn seo, bứt phá marketing`,
     metaTitle,
     metaDescription,
-    description: base.description || `${keyword}: hướng dẫn triển khai và FAQ.`,
+    description: metaDescription,
     imageUrl: newsThumbnailForArticle({
       slug: base.slug,
       keywordsMain: keyword,

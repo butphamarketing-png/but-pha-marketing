@@ -12,6 +12,10 @@ import { KEYWORDS_500, KEYWORDS_500_MARKETING_ONLY } from "./seo-keywords-500.mj
 import { buildRewriteArticle } from "./seo-rewrite-builder.mjs";
 import { buildMarketingLongFormFromEntry } from "./seo-marketing-builder.mjs";
 import { applyPillarClusterLinks } from "./pillar-cluster-links.mjs";
+import {
+  buildMetaB21IntentArticleBySlug,
+  hasMetaB21Intent,
+} from "./seo-meta-b21-intent-builder.mjs";
 
 const localEntryBySlug = Object.fromEntries(LOCAL_SEO_ENTRIES.map((e) => [e.slug, e]));
 
@@ -118,9 +122,19 @@ function inferNiche(slug, keywordsMain) {
 function syntheticEntry(row) {
   const keywordsMain = row.keywords_main || row.title;
   const description = row.description || "";
-  const angle =
-    description.replace(/^[^:]+:\s*/, "").trim().slice(0, 120) ||
-    "triển khai hiệu quả, đo KPI và tối ưu liên tục cho doanh nghiệp Việt";
+  // Strip legacy boilerplate; để trống nếu chỉ còn English stub — humanizeAngle sẽ gắn angle theo intent
+  let angle = description.replace(/^[^:]+:\s*/, "").trim();
+  angle = angle.replace(/\s*Hướng dẫn triển khai và đo lường hiệu quả\.?/gi, "").trim();
+  angle = angle.replace(/\.{2,}/g, ".").trim().slice(0, 120);
+  // Bỏ angle meta cũ dạng "Kw — hint. Tư vấn…"
+  angle = angle.replace(/\s*Tư vấn Bứt Phá Marketing\.?/gi, "").trim();
+  if (
+    !angle ||
+    /^[A-Za-z0-9 +/,&\-().]{0,60}$/.test(angle) ||
+    /giải pháp thực chiến|hướng dẫn và giải pháp từ/i.test(angle)
+  ) {
+    angle = "";
+  }
   return {
     slug: row.slug,
     keywordsMain,
@@ -147,6 +161,11 @@ const MIN_LONGFORM_CHARS = 12000;
 
 /** @param {{ slug: string, title: string, keywords_main?: string, description?: string }} row */
 export function upgradeArticle(row, index = 0) {
+  if (hasMetaB21Intent(row.slug)) {
+    const intentArticle = buildMetaB21IntentArticleBySlug(row.slug, index);
+    if (intentArticle) return withPillarCluster(intentArticle);
+  }
+
   const base = {
     slug: row.slug,
     title: row.title,
@@ -177,6 +196,7 @@ export function upgradeArticle(row, index = 0) {
     }
   } else {
     const localEntry = localEntryBySlug[row.slug];
+    const keywordsMain = row.keywords_main || row.keywordsMain || row.title;
     const entry =
       entryBySlug.get(row.slug) ||
       (localEntry
@@ -189,7 +209,12 @@ export function upgradeArticle(row, index = 0) {
             faq: localEntry.faq,
           }
         : null) ||
-      syntheticEntry({ ...row, title: row.title, keywords_main: row.keywordsMain });
+      syntheticEntry({
+        slug: row.slug,
+        title: row.title,
+        keywords_main: keywordsMain,
+        description: row.description || "",
+      });
     article = buildMarketingLongFormFromEntry(entry, index);
   }
 

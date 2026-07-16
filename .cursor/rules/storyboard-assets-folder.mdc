@@ -1,0 +1,16 @@
+---
+description: Storyboard / Reel images — luôn lưu vào 1 thư mục theo tiêu đề
+alwaysApply: true
+---
+
+# Storyboard assets: 1 thư mục theo tiêu đề
+
+Khi tạo bộ ảnh storyboard / Reel (mỗi dòng script = 1 ảnh):
+
+1. **Tạo 1 thư mục** trong `tmp-programmatic/` đặt tên theo **tiêu đề bài** (ví dụ: `Marketing không bỏ nhiều tiền`).
+2. **Lưu toàn bộ** vào thư mục đó:
+   - ảnh (`*-line-01.png` …)
+   - file storyboard `.md`
+   - file zip cùng tên tiêu đề (nếu user yêu cầu gom 1 file)
+3. **Không** để ảnh rải rác chỉ trong `assets/` chung mà không có thư mục theo tiêu đề.
+4. Format mặc định: 9:16, không chữ trên ảnh, caption dán CapCut — trừ khi user nói khác.

@@ -3413,8 +3413,8 @@ const K_LAGI = [
     "slug": "meta-ads-la-gi-b21",
     "keywordsMain": "Meta Ads là gì",
     "h1": "Meta Ads Là Gì?",
-    "angle": "Meta advertising definition",
-    "niche": "seo"
+    "angle": "định nghĩa hệ thống quảng cáo Meta trên Facebook Instagram",
+    "niche": "facebook-ads"
   },
   {
     "slug": "facebook-ads-la-gi-b21",
