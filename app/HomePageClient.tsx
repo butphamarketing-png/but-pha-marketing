@@ -31,59 +31,47 @@ const SECTIONS = [
   { id: "lien-he", label: "LIÊN HỆ", tone: "dark" },
 ] as const;
 
-/** Section tiếng nói — logo wall + 1 feedback nổi */
+/** Section tiếng nói — 6 logo + 1 feedback nổi */
 const VOICE_ENTRIES = [
   {
     slug: "nha-khoa-dang-khoa",
     mark: "ĐK",
+    wordmark: "Đăng Khoa",
     quote:
       "Trước đó khách biết mình qua giới thiệu. Giờ máy đổ vì họ tìm đúng lúc cần implant — và thấy mình đứng đầu kết quả.",
   },
   {
     slug: "kien-truc-sao-khue",
     mark: "SK",
+    wordmark: "Sao Khuê",
     quote:
       "Ads chạy đều nhưng lịch vẫn trống. Khi hiện diện đúng chỗ khách đang search, view mới thành cuộc gọi.",
   },
   {
     slug: "tham-my-thien-hoang-kim",
     mark: "THK",
+    wordmark: "Thiên Hoàng Kim",
     quote:
       "Website và fanpage là điểm chạm đầu tiên — khách tin uy tín y khoa trước khi gọi đặt lịch.",
   },
   {
-    slug: "phuoc-lai-luxury",
-    mark: "PL",
-    quote:
-      "Website trở thành showroom của Master team. Khách đặt lịch trước khi đặt chân vào spa.",
-  },
-  {
-    slug: "halee-tram",
-    mark: "HT",
-    quote:
-      "Một điểm chạm đủ cho khách xem portfolio nail/lash — và học viên tìm đúng khóa academy.",
-  },
-  {
-    slug: "pccc-bao-an-fire",
-    mark: "BA",
-    quote:
-      "PCCC không bán bằng catalog. Phải chứng minh năng lực thi công trước khi được giao dự án.",
-  },
-  {
     slug: "van-toc-express-logistics",
     mark: "VT",
+    wordmark: "Vận Tốc",
     quote:
       "Khách B2B không tin brochure. Họ tin form báo giá nhanh — và tra được vận đơn trước khi giao.",
   },
   {
     slug: "glow-dew-cosmetics",
     mark: "GD",
+    wordmark: "Glow Dew",
     quote:
       "Khách không mua vì banner đẹp. Họ mua khi đọc được thành phần và review rõ — hết đoán mò.",
   },
   {
     slug: "an-gia-home",
     mark: "AG",
+    wordmark: "An Gia Home",
     quote:
       "Thấy phòng mẫu và báo giá nhanh trên web — không phải lang thang Facebook nửa ngày.",
   },
@@ -685,7 +673,9 @@ export default function HomePageClient() {
               </Link>
               <a
                 href={getTelHref(hotline)}
-                className={`corp-hotline ${headerLight ? "corp-hotline--light" : "corp-hotline--dark"}`}
+                className={`corp-hotline ${headerLight ? "corp-hotline--light" : "corp-hotline--dark"} ${
+                  siteReady ? "corp-hotline--blink-after" : ""
+                }`}
                 aria-label={`Gọi hotline ${hotlineDisplay}`}
               >
                 <span className="corp-hotline-icon" aria-hidden>
@@ -760,27 +750,26 @@ export default function HomePageClient() {
                 as="h1"
                 text="Bứt Phá Marketing"
                 className="corp-display-hero drop-shadow-sm"
-                startDelayMs={60}
-                stepMs={38}
+                charClassName="home-hero-char home-hero-char--letter"
+                startDelayMs={80}
+                stepMs={42}
               />
-              <HeroRevealText
-                as="p"
-                text="Kết nối thương hiệu — Tăng trưởng bền vững"
-                className="mt-3 max-w-sm text-[12px] font-light leading-relaxed tracking-[0.14em] text-white/80 sm:mt-4 sm:max-w-xl sm:text-sm sm:tracking-[0.22em]"
-                startDelayMs={720}
-                stepMs={22}
-              />
-              <div className="home-hero-enter-item home-hero-enter-cta mt-7 flex w-full max-w-sm flex-col gap-2.5 sm:mt-9 sm:max-w-none sm:flex-row sm:justify-center sm:gap-3">
+              <p
+                className="home-hero-enter-tagline mt-3 max-w-sm text-[12px] font-light leading-relaxed tracking-[0.14em] text-white/80 sm:mt-4 sm:max-w-xl sm:text-sm sm:tracking-[0.22em]"
+              >
+                Kết nối thương hiệu — Tăng trưởng bền vững
+              </p>
+              <div className="mt-7 flex w-full max-w-sm flex-col gap-2.5 sm:mt-9 sm:max-w-none sm:flex-row sm:justify-center sm:gap-3">
                 <Link
                   href="/banggia"
-                  className="corp-cta corp-cta-hero-primary inline-flex items-center justify-center rounded-md bg-violet-600 px-6 py-3.5 text-white shadow-lg shadow-violet-900/35 sm:px-7"
+                  className="corp-cta corp-cta-hero-primary home-hero-cta-left inline-flex items-center justify-center rounded-md bg-violet-600 px-6 py-3.5 text-white shadow-lg shadow-violet-900/35 sm:px-7"
                 >
                   Bảng giá dịch vụ
                 </Link>
                 <button
                   type="button"
                   onClick={() => goToSection(consultSectionIndex)}
-                  className="corp-cta corp-cta-hero-secondary inline-flex items-center justify-center rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-white sm:px-7"
+                  className="corp-cta corp-cta-hero-secondary home-hero-cta-right inline-flex items-center justify-center rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-white sm:px-7"
                 >
                   Đặt lịch tư vấn
                 </button>
@@ -805,7 +794,7 @@ export default function HomePageClient() {
               <button
                 type="button"
                 onClick={() => goToSection(1)}
-                className="corp-scroll-hint"
+                className={`corp-scroll-hint ${siteReady ? "corp-scroll-hint--blink" : ""}`}
                 aria-label="Lướt xuống phần tiếp theo"
               >
                 <span className="corp-scroll-hint-label">Lướt xuống</span>
@@ -1582,12 +1571,12 @@ export default function HomePageClient() {
                 ) : null}
               </div>
 
-              {/* Logo wall */}
-              <div className="mx-auto mt-8 w-full max-w-3xl shrink-0 border-t border-white/[0.08] pt-5 sm:mt-10 sm:pt-6">
-                <p className="mb-3 text-center text-[9px] font-medium uppercase tracking-[0.28em] text-white/30 sm:mb-4 sm:text-[10px]">
+              {/* Logo wall — 6 logo glass, sâu & chuyên nghiệp */}
+              <div className="mx-auto mt-8 w-full max-w-3xl shrink-0 border-t border-white/[0.08] pt-5 sm:mt-10 sm:pt-7">
+                <p className="mb-3.5 text-center text-[9px] font-medium uppercase tracking-[0.28em] text-white/30 sm:mb-5 sm:text-[10px]">
                   Chọn thương hiệu
                 </p>
-                <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+                <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3.5">
                   {voiceCases.map((v, i) => {
                     const on = i === voiceActive;
                     return (
@@ -1597,18 +1586,32 @@ export default function HomePageClient() {
                           onClick={() => setVoiceActive(i)}
                           aria-pressed={on}
                           aria-label={v.clientName}
-                          title={v.clientName}
-                          className={`flex h-11 min-w-[3.25rem] items-center justify-center rounded-md px-2.5 transition sm:h-12 sm:min-w-[3.6rem] sm:px-3 ${
-                            on
-                              ? "bg-violet-600/90 text-white shadow-lg shadow-violet-950/40 ring-1 ring-violet-300/40"
-                              : "bg-white/[0.04] text-white/55 ring-1 ring-white/10 hover:bg-white/[0.08] hover:text-white/85"
+                          className={`corp-voice-logo group relative flex h-[4.25rem] w-full flex-col items-center justify-center overflow-hidden rounded-xl px-2 transition duration-300 sm:h-[4.75rem] ${
+                            on ? "corp-voice-logo--on" : ""
                           }`}
                         >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={v.logo}
+                            alt=""
+                            className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-[0.18] saturate-50 transition duration-500 group-hover:opacity-[0.28] group-hover:saturate-75"
+                          />
+                          <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.1] to-[#0a0d16]/75" />
+                          <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
                           <span
-                            className="text-[12px] font-semibold tracking-[0.12em] sm:text-[13px]"
+                            className={`relative z-[1] text-center text-[12px] font-semibold leading-tight tracking-[0.04em] sm:text-[13px] ${
+                              on ? "text-white" : "text-white/80 group-hover:text-white"
+                            }`}
                             style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                           >
-                            {v.mark}
+                            {v.wordmark}
+                          </span>
+                          <span
+                            className={`relative z-[1] mt-0.5 max-w-full truncate px-1 text-[9px] tracking-wide sm:text-[10px] ${
+                              on ? "text-violet-200/90" : "text-white/35"
+                            }`}
+                          >
+                            {v.industryLabel}
                           </span>
                         </button>
                       </li>

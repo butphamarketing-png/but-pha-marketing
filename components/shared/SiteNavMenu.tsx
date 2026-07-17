@@ -48,18 +48,29 @@ function NavSimpleLink({
   onNavigate,
   activeHref,
   className = "rounded-xl px-3 py-2 text-sm font-semibold transition",
+  emphasize = false,
 }: {
   item: SiteNavLink;
   tone: NavTone;
   onNavigate?: () => void;
   activeHref?: string;
   className?: string;
+  emphasize?: boolean;
 }) {
+  const isActive = activeHref === item.href;
+  const emphasisClass = emphasize
+    ? tone === "dark"
+      ? "rounded-full bg-violet-600 px-3.5 py-1.5 text-white shadow-md shadow-violet-950/30 hover:bg-violet-500 hover:text-white"
+      : tone === "panel"
+        ? "rounded-xl bg-violet-600 px-4 py-3 text-white shadow-md shadow-violet-900/20 hover:bg-violet-500 hover:text-white"
+        : "rounded-full bg-violet-600 px-3.5 py-1.5 text-white shadow-md shadow-violet-900/15 hover:bg-violet-500 hover:text-white"
+    : linkTone(tone, isActive);
+
   return (
     <Link
       href={item.href}
       onClick={onNavigate}
-      className={`${className} ${linkTone(tone, activeHref === item.href)}`}
+      className={`${className} ${emphasisClass}`}
     >
       {item.label}
     </Link>
@@ -267,7 +278,9 @@ export function SiteNavMenu({
 }: SiteNavMenuProps) {
   const simpleLinks = showSimpleLinks ? SIMPLE_NAV_LINKS : [];
   const lead = simpleBeforeServices
-    ? simpleLinks.filter((item) => item.href === "/" || item.href === "/gioi-thieu")
+    ? simpleLinks.filter(
+        (item) => item.href === "/" || item.href === "/banggia" || item.href === "/gioi-thieu",
+      )
     : [];
   const trail = simpleBeforeServices
     ? simpleLinks.filter((item) => item.href === "/blog" || item.href === "/lien-he")
@@ -283,7 +296,12 @@ export function SiteNavMenu({
             tone={tone}
             onNavigate={onNavigate}
             activeHref={activeHref}
-            className="rounded-xl px-4 py-3 text-sm font-semibold transition"
+            emphasize={item.href === "/banggia"}
+            className={
+              item.href === "/banggia"
+                ? "mx-1 my-0.5 text-sm font-bold tracking-wide transition"
+                : "rounded-xl px-4 py-3 text-sm font-semibold transition"
+            }
           />
         ))}
         {SERVICE_NAV_GROUPS.map((group) => (
@@ -312,7 +330,12 @@ export function SiteNavMenu({
           tone={tone}
           onNavigate={onNavigate}
           activeHref={activeHref}
-          className="whitespace-nowrap px-1 py-1 text-[13px] font-semibold transition xl:text-sm"
+          emphasize={item.href === "/banggia"}
+          className={
+            item.href === "/banggia"
+              ? "whitespace-nowrap text-[12px] font-bold tracking-wide transition xl:text-[13px]"
+              : "whitespace-nowrap px-1 py-1 text-[13px] font-semibold transition xl:text-sm"
+          }
         />
       ))}
       {SERVICE_NAV_GROUPS.map((group) => (
