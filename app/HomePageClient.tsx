@@ -1940,10 +1940,10 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Links — mobile cũng 3 cột như desktop */}
-              <div {...fadeProps(1, "w-full shrink-0 border-t border-white/[0.1] pt-3 sm:pt-6")}>
+              {/* Links — 3 cột hiện lần lượt từ dưới lên */}
+              <div className="w-full shrink-0 border-t border-white/[0.1] pt-3 sm:pt-6">
                 <div className="grid grid-cols-3 gap-x-3 gap-y-1 text-left sm:gap-x-8 md:gap-x-10">
-                  <div>
+                  <div {...riseProps(2, "corp-rise--slow")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Kết nối
                     </p>
@@ -1978,7 +1978,7 @@ export default function HomePageClient() {
                     </ul>
                   </div>
 
-                  <div>
+                  <div {...riseProps(4, "corp-rise--slow")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Dịch vụ
                     </p>
@@ -2006,7 +2006,7 @@ export default function HomePageClient() {
                     </ul>
                   </div>
 
-                  <div>
+                  <div {...riseProps(6, "corp-rise--slow")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Khám phá
                     </p>
@@ -2036,10 +2036,10 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Brand bar */}
+              {/* Brand bar — từ trái sang */}
               <footer
-                {...fadeProps(
-                  2,
+                {...fromLeftProps(
+                  8,
                   "mt-1 flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-3 text-center sm:mt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
                 )}
               >
