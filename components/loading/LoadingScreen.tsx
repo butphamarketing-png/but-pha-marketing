@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LOADING_EXIT_MS,
   SCENE,
@@ -21,6 +21,7 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
   const reducedMotion = useReducedMotion() ?? false;
   const scene = reducedMotion ? SCENE_REDUCED : SCENE;
   const [active, setActive] = useState(false);
+  const doneRef = useRef(false);
 
   useEffect(() => {
     setActive(true);
@@ -30,6 +31,20 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
 
   const finished = active && elapsed >= duration;
   const showBrandStack = elapsed >= scene.logoRevealStart;
+
+  const finishOnce = () => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    onComplete();
+  };
+
+  // Không chỉ dựa onExitComplete (đôi khi không fire) — luôn hoàn tất sau exit
+  useEffect(() => {
+    if (!finished) return undefined;
+    const t = window.setTimeout(finishOnce, LOADING_EXIT_MS + 40);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- finishOnce ổn định qua doneRef
+  }, [finished]);
 
   useEffect(() => {
     if (!active) return undefined;
@@ -42,7 +57,7 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
   if (!active) return null;
 
   return (
-    <AnimatePresence mode="wait" onExitComplete={onComplete}>
+    <AnimatePresence mode="wait" onExitComplete={finishOnce}>
       {!finished && (
         <motion.div
           key="loading-screen"

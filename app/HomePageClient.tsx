@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { motion, MotionConfig } from "framer-motion";
 import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/case-studies";
@@ -19,6 +20,7 @@ import {
   resolveHotlineDigits,
 } from "@/lib/site-contact";
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
+import { HomeAtomField } from "@/components/shared/HomeAtomField";
 
 const SECTIONS = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
@@ -31,49 +33,49 @@ const SECTIONS = [
   { id: "lien-he", label: "LIÊN HỆ", tone: "dark" },
 ] as const;
 
-/** Section tiếng nói — 6 logo + 1 feedback nổi */
+/** Section tiếng nói — logo tròn + trước / sau đánh giá */
 const VOICE_ENTRIES = [
   {
     slug: "nha-khoa-dang-khoa",
     mark: "ĐK",
     wordmark: "Đăng Khoa",
-    quote:
-      "Trước đó khách biết mình qua giới thiệu. Giờ máy đổ vì họ tìm đúng lúc cần implant — và thấy mình đứng đầu kết quả.",
+    before: "Trước đó khách chỉ biết mình qua giới thiệu — lịch phụ thuộc người quen.",
+    after: "Giờ máy đổ vì họ tìm đúng lúc cần implant và thấy mình đứng đầu kết quả.",
   },
   {
     slug: "kien-truc-sao-khue",
     mark: "SK",
     wordmark: "Sao Khuê",
-    quote:
-      "Ads chạy đều nhưng lịch vẫn trống. Khi hiện diện đúng chỗ khách đang search, view mới thành cuộc gọi.",
+    before: "Ads chạy đều nhưng lịch vẫn trống — tiền đổ mà không ra khách.",
+    after: "Khi hiện diện đúng chỗ khách đang search, view mới thành cuộc gọi.",
   },
   {
     slug: "tham-my-thien-hoang-kim",
     mark: "THK",
     wordmark: "Thiên Hoàng Kim",
-    quote:
-      "Website và fanpage là điểm chạm đầu tiên — khách tin uy tín y khoa trước khi gọi đặt lịch.",
+    before: "Khách chưa tin uy tín y khoa chỉ vì nghe tên — còn ngại gọi đặt lịch.",
+    after: "Website và fanpage thành điểm chạm đầu tiên trước khi họ gọi hotline.",
   },
   {
     slug: "van-toc-express-logistics",
     mark: "VT",
     wordmark: "Vận Tốc",
-    quote:
-      "Khách B2B không tin brochure. Họ tin form báo giá nhanh — và tra được vận đơn trước khi giao.",
+    before: "Khách B2B không tin brochure — hỏi giá rồi biến mất.",
+    after: "Họ tin form báo giá nhanh và tra được vận đơn trước khi giao hàng.",
   },
   {
     slug: "glow-dew-cosmetics",
     mark: "GD",
     wordmark: "Glow Dew",
-    quote:
-      "Khách không mua vì banner đẹp. Họ mua khi đọc được thành phần và review rõ — hết đoán mò.",
+    before: "Khách không mua vì banner đẹp — còn đoán mò thành phần.",
+    after: "Họ mua khi đọc được INCI và review rõ — hết phải đoán.",
   },
   {
     slug: "an-gia-home",
     mark: "AG",
     wordmark: "An Gia Home",
-    quote:
-      "Thấy phòng mẫu và báo giá nhanh trên web — không phải lang thang Facebook nửa ngày.",
+    before: "Khách lang thang Facebook nửa ngày vẫn chưa thấy phòng mẫu.",
+    after: "Trên web họ xem phòng mẫu và báo giá nhanh trong vài phút.",
   },
 ] as const;
 
@@ -157,7 +159,7 @@ const DU_AN_BG = "/about/linh-vuc-desk-bg.png?v=du-an";
 const LINH_VUC = [
   {
     num: "01",
-    title: "WEBSITE",
+    title: "Website",
     desc: "Thiết kế website chuẩn SEO, tối ưu chuyển đổi và trải nghiệm người dùng.",
     href: "/website",
     image: "/linh-vuc-website.png",
@@ -166,7 +168,7 @@ const LINH_VUC = [
   },
   {
     num: "02",
-    title: "FACEBOOK",
+    title: "Facebook",
     desc: "Fanpage + quảng cáo Meta — nuôi lead và đo ROI rõ ràng.",
     href: "/facebook",
     image: "/linh-vuc-facebook.png",
@@ -175,7 +177,7 @@ const LINH_VUC = [
   },
   {
     num: "03",
-    title: "MAPS",
+    title: "Google Maps",
     desc: "Google Maps & Local SEO — khách gần tìm thấy và gọi bạn.",
     href: "/google-maps",
     image: "/linh-vuc-maps.png",
@@ -201,44 +203,111 @@ function HeroRevealText({
   text,
   as: Tag = "span",
   className,
-  charClassName = "home-hero-char",
+  style,
+  play,
   startDelayMs = 80,
-  stepMs = 32,
+  stepMs = 42,
 }: {
   text: string;
-  as?: "h1" | "p" | "span";
+  as?: "h1" | "h2" | "p" | "span";
   className?: string;
-  charClassName?: string;
+  style?: CSSProperties;
+  play: boolean;
   startDelayMs?: number;
   stepMs?: number;
 }) {
-  const chars = Array.from(text);
+  // Wrap theo từ — tránh xuống dòng giữa "hình" / "Facebook"
+  const tokens = text.split(/(\s+)/);
+  let charIndex = 0;
+
   return (
-    <Tag className={className} aria-label={text}>
-      {chars.map((ch, i) => (
-        <span
-          key={`${ch}-${i}`}
-          className={charClassName}
-          style={{ transitionDelay: `${startDelayMs + i * stepMs}ms` }}
-          aria-hidden="true"
-        >
-          {ch === " " ? "\u00A0" : ch}
-        </span>
-      ))}
+    <Tag className={className} style={style} aria-label={text}>
+      {tokens.map((token, ti) => {
+        if (/^\s+$/.test(token)) {
+          return <span key={`sp-${ti}`}>{" "}</span>;
+        }
+
+        const chars = Array.from(token);
+        const wordStart = charIndex;
+        charIndex += chars.length;
+
+        return (
+          <span key={`w-${ti}`} className="inline-block whitespace-nowrap">
+            {chars.map((ch, i) => (
+              <motion.span
+                key={`${ch}-${wordStart + i}`}
+                className="inline-block"
+                aria-hidden="true"
+                initial={{ opacity: 0, y: 10 }}
+                animate={play ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{
+                  duration: 0.32,
+                  delay: play ? (startDelayMs + (wordStart + i) * stepMs) / 1000 : 0,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                {ch}
+              </motion.span>
+            ))}
+          </span>
+        );
+      })}
     </Tag>
   );
+}
+
+const ABOUT_COPY_P1 =
+  "Bứt Phá Marketing giúp doanh nghiệp xây dựng hình ảnh chuyên nghiệp với Website, Fanpage Facebook, Google Maps và quảng cáo Facebook.";
+
+const ABOUT_COPY_P2 =
+  "Chúng tôi tư vấn chiến lược rõ ràng, theo dõi hiệu quả bằng KPI để mang lại kết quả thực tế, không làm marketing theo cảm tính.";
+
+/** Laptop delay + slide duration — copy starts after laptop finishes. */
+const ABOUT_LAPTOP_DONE_MS = 280 + 700 + 100;
+const ABOUT_COPY_STEP_MS = 18;
+
+function riseProps(step: number, extraClass = "", extraStyle?: CSSProperties) {
+  return {
+    className: `corp-rise${extraClass ? ` ${extraClass}` : ""}`,
+    style: { ["--rise" as string]: step, ...extraStyle } as CSSProperties,
+  };
+}
+
+/** Opacity-only — không dịch chuyển, giữ nguyên bố cục */
+function fadeProps(step: number, extraClass = "") {
+  return {
+    className: `corp-fade${extraClass ? ` ${extraClass}` : ""}`,
+    style: { ["--rise" as string]: step } as CSSProperties,
+  };
+}
+
+function fromRightProps(step: number, extraClass = "", extraStyle?: CSSProperties) {
+  return {
+    className: `corp-from-right${extraClass ? ` ${extraClass}` : ""}`,
+    style: { ["--rise" as string]: step, ...extraStyle } as CSSProperties,
+  };
+}
+
+function fromLeftProps(step: number, extraClass = "", extraStyle?: CSSProperties) {
+  return {
+    className: `corp-from-left${extraClass ? ` ${extraClass}` : ""}`,
+    style: { ["--rise" as string]: step, ...extraStyle } as CSSProperties,
+  };
 }
 
 export default function HomePageClient() {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(true);
   const [siteReady, setSiteReady] = useState(false);
+  const [heroMotionReady, setHeroMotionReady] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
   const [aboutReveal, setAboutReveal] = useState(false);
+  const [aboutCopyReady, setAboutCopyReady] = useState(false);
   const [linhActive, setLinhActive] = useState(0);
+  const [linhPaused, setLinhPaused] = useState(false);
   const [caseActive, setCaseActive] = useState(0);
   const [caseTaglineReveal, setCaseTaglineReveal] = useState(false);
   const [voiceActive, setVoiceActive] = useState(0);
@@ -324,6 +393,26 @@ export default function HomePageClient() {
     setIsClient(true);
   }, []);
 
+  // Safety: nếu loading không gọi onComplete, vẫn mở site sau 8s
+  useEffect(() => {
+    if (!isClient) return undefined;
+    const t = window.setTimeout(() => {
+      setShowLoader(false);
+      setSiteReady(true);
+    }, 8000);
+    return () => window.clearTimeout(t);
+  }, [isClient]);
+
+  // Hiệu ứng hero chỉ chạy sau khi loading xong + site đã hiện
+  useEffect(() => {
+    if (!siteReady) {
+      setHeroMotionReady(false);
+      return undefined;
+    }
+    const t = window.setTimeout(() => setHeroMotionReady(true), 280);
+    return () => window.clearTimeout(t);
+  }, [siteReady]);
+
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -357,7 +446,7 @@ export default function HomePageClient() {
     if (heroSlides.length < 2) return;
     const t = window.setInterval(() => {
       setHeroIndex((i) => (i + 1) % heroSlides.length);
-    }, 5200);
+    }, 9000);
     return () => window.clearInterval(t);
   }, [heroSlides.length]);
 
@@ -365,20 +454,35 @@ export default function HomePageClient() {
   useEffect(() => {
     if (activeSection !== 1) {
       setAboutReveal(false);
+      setAboutCopyReady(false);
       return;
     }
     const t = window.setTimeout(() => setAboutReveal(true), 80);
     return () => window.clearTimeout(t);
   }, [activeSection]);
 
-  // Lĩnh vực: xoay thẻ active khi đang ở section
+  // Chữ body hiện sau khi laptop kéo xong
   useEffect(() => {
-    if (activeSection !== 2) return;
+    if (!aboutReveal) {
+      setAboutCopyReady(false);
+      return;
+    }
+    const t = window.setTimeout(() => setAboutCopyReady(true), ABOUT_LAPTOP_DONE_MS);
+    return () => window.clearTimeout(t);
+  }, [aboutReveal]);
+
+  // Lĩnh vực: xoay thẻ active khi đang ở section (dừng khi hover)
+  useEffect(() => {
+    if (activeSection !== 2) {
+      setLinhPaused(false);
+      return;
+    }
+    if (linhPaused) return;
     const t = window.setInterval(() => {
       setLinhActive((i) => (i + 1) % LINH_VUC.length);
     }, 3400);
     return () => window.clearInterval(t);
-  }, [activeSection]);
+  }, [activeSection, linhPaused]);
 
   // Dự án: tắt auto-rotate — đổi ảnh theo cuộn/click list
   const selectCase = useCallback((index: number, scrollIntoView = false) => {
@@ -499,6 +603,10 @@ export default function HomePageClient() {
 
   useEffect(() => {
     activeSectionRef.current = activeSection;
+    document.documentElement.dataset.homeSection = SECTIONS[activeSection]?.id ?? "";
+    return () => {
+      delete document.documentElement.dataset.homeSection;
+    };
   }, [activeSection]);
 
   useEffect(() => {
@@ -517,19 +625,13 @@ export default function HomePageClient() {
     }
     setVoiceReveal(false);
     const revealT = window.setTimeout(() => setVoiceReveal(true), 80);
-    const rotT = window.setInterval(() => {
-      setVoiceActive((i) => (i + 1) % voiceCases.length);
-    }, 5200);
-    return () => {
-      window.clearTimeout(revealT);
-      window.clearInterval(rotT);
-    };
-  }, [activeSection, voiceCases.length]);
+    return () => window.clearTimeout(revealT);
+  }, [activeSection]);
 
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "tieng-noi") return;
     setVoiceReveal(false);
-    const t = window.setTimeout(() => setVoiceReveal(true), 50);
+    const t = window.setTimeout(() => setVoiceReveal(true), 40);
     return () => window.clearTimeout(t);
   }, [voiceActive, activeSection]);
 
@@ -618,6 +720,17 @@ export default function HomePageClient() {
     };
   }, [goToSection, menuOpen]);
 
+  useEffect(() => {
+    const onGoSection = (e: Event) => {
+      const id = (e as CustomEvent<{ id?: string }>).detail?.id;
+      if (!id) return;
+      const index = SECTIONS.findIndex((s) => s.id === id);
+      if (index >= 0) goToSection(index);
+    };
+    window.addEventListener("corp-go-section", onGoSection);
+    return () => window.removeEventListener("corp-go-section", onGoSection);
+  }, [goToSection]);
+
   return (
     <>
       {isClient && showLoader && (
@@ -674,7 +787,7 @@ export default function HomePageClient() {
               <a
                 href={getTelHref(hotline)}
                 className={`corp-hotline ${headerLight ? "corp-hotline--light" : "corp-hotline--dark"} ${
-                  siteReady ? "corp-hotline--blink-after" : ""
+                  heroMotionReady ? "corp-hotline--blink-after" : ""
                 }`}
                 aria-label={`Gọi hotline ${hotlineDisplay}`}
               >
@@ -732,51 +845,91 @@ export default function HomePageClient() {
           {/* 1 — Hero */}
           <section
             id="but-pha"
-            className={`corp-snap-section relative flex flex-col items-center justify-center overflow-hidden ${siteReady ? "home-hero-ready" : ""}`}
+            className="corp-snap-section relative flex flex-col items-center justify-center overflow-hidden"
           >
-            {heroSlides.map((src, i) => (
+            {heroSlides.map((src, i) => {
+              const active = i === heroIndex;
+              return (
               <div
                 key={src}
-                className={`absolute inset-0 overflow-hidden transition-opacity duration-1000 ${i === heroIndex ? "opacity-100" : "opacity-0"}`}
+                className={`absolute inset-0 overflow-hidden transition-opacity duration-1000 ${active ? "opacity-100" : "opacity-0"}`}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="home-hero-kenburns" />
+                <MotionConfig reducedMotion="never">
+                  <motion.img
+                    key={active ? `hero-zoom-${heroIndex}-${src}` : `hero-idle-${src}`}
+                    src={src}
+                    alt=""
+                    className="home-hero-kenburns"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: active ? 1.2 : 1 }}
+                    transition={
+                      active
+                        ? { duration: 9, ease: "linear" }
+                        : { duration: 0 }
+                    }
+                  />
+                </MotionConfig>
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/55 via-slate-950/45 to-slate-950/70" />
               </div>
-            ))}
+              );
+            })}
+            <HomeAtomField />
 
+            <MotionConfig reducedMotion="never">
             <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-5 pb-16 pt-20 text-center sm:px-8 sm:pb-20">
               <HeroRevealText
                 as="h1"
                 text="Bứt Phá Marketing"
                 className="corp-display-hero drop-shadow-sm"
-                charClassName="home-hero-char home-hero-char--letter"
+                play={heroMotionReady}
                 startDelayMs={80}
                 stepMs={42}
               />
-              <p
-                className="home-hero-enter-tagline mt-3 max-w-sm text-[12px] font-light leading-relaxed tracking-[0.14em] text-white/80 sm:mt-4 sm:max-w-xl sm:text-sm sm:tracking-[0.22em]"
+              <motion.p
+                className="mt-3 max-w-sm text-[12px] font-light leading-relaxed tracking-[0.14em] text-white/80 sm:mt-4 sm:max-w-xl sm:text-sm sm:tracking-[0.22em]"
+                initial={{ opacity: 0, y: 28 }}
+                animate={heroMotionReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+                transition={{ duration: 0.65, delay: heroMotionReady ? 0.95 : 0, ease: [0.22, 1, 0.36, 1] }}
               >
                 Kết nối thương hiệu — Tăng trưởng bền vững
-              </p>
+              </motion.p>
               <div className="mt-7 flex w-full max-w-sm flex-col gap-2.5 sm:mt-9 sm:max-w-none sm:flex-row sm:justify-center sm:gap-3">
-                <Link
-                  href="/banggia"
-                  className="corp-cta corp-cta-hero-primary home-hero-cta-left inline-flex items-center justify-center rounded-md bg-violet-600 px-6 py-3.5 text-white shadow-lg shadow-violet-900/35 sm:px-7"
+                <motion.div
+                  className="w-full sm:w-auto"
+                  initial={{ opacity: 0, x: -48 }}
+                  animate={heroMotionReady ? { opacity: 1, x: 0 } : { opacity: 0, x: -48 }}
+                  transition={{ duration: 0.65, delay: heroMotionReady ? 1.2 : 0, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  Bảng giá dịch vụ
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => goToSection(consultSectionIndex)}
-                  className="corp-cta corp-cta-hero-secondary home-hero-cta-right inline-flex items-center justify-center rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-white sm:px-7"
+                  <Link
+                    href="/banggia"
+                    className="corp-cta corp-cta-hero-primary inline-flex w-full items-center justify-center rounded-md bg-violet-600 px-6 py-3.5 text-white shadow-lg shadow-violet-900/35 sm:px-7"
+                  >
+                    Bảng giá dịch vụ
+                  </Link>
+                </motion.div>
+                <motion.div
+                  className="w-full sm:w-auto"
+                  initial={{ opacity: 0, x: 48 }}
+                  animate={heroMotionReady ? { opacity: 1, x: 0 } : { opacity: 0, x: 48 }}
+                  transition={{ duration: 0.65, delay: heroMotionReady ? 1.35 : 0, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  Đặt lịch tư vấn
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => goToSection(consultSectionIndex)}
+                    className="corp-cta corp-cta-hero-secondary inline-flex w-full items-center justify-center rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-white sm:px-7"
+                  >
+                    Đặt lịch tư vấn
+                  </button>
+                </motion.div>
               </div>
-              <div className="home-hero-enter-item home-hero-enter-line mt-8 flex justify-center sm:mt-10">
-                <div className="home-hero-line h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-              </div>
+              <motion.div
+                className="mt-8 flex justify-center sm:mt-10"
+                initial={{ opacity: 0 }}
+                animate={heroMotionReady ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.5, delay: heroMotionReady ? 1.55 : 0 }}
+              >
+                <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/50 to-transparent sm:w-[5.5rem]" />
+              </motion.div>
             </div>
 
             <div className="absolute bottom-5 left-1/2 z-20 flex w-full max-w-xs -translate-x-1/2 flex-col items-center gap-3 sm:bottom-7">
@@ -791,24 +944,28 @@ export default function HomePageClient() {
                   />
                 ))}
               </div>
-              <button
+              <motion.button
                 type="button"
                 onClick={() => goToSection(1)}
-                className={`corp-scroll-hint ${siteReady ? "corp-scroll-hint--blink" : ""}`}
+                className={`corp-scroll-hint ${heroMotionReady ? "corp-scroll-hint--blink" : ""}`}
                 aria-label="Lướt xuống phần tiếp theo"
+                initial={{ opacity: 0 }}
+                animate={heroMotionReady ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.45, delay: heroMotionReady ? 1.7 : 0 }}
               >
                 <span className="corp-scroll-hint-label">Lướt xuống</span>
                 <span className="corp-scroll-hint-icon" aria-hidden>
                   <ChevronDown className="h-5 w-5" strokeWidth={2} />
                 </span>
-              </button>
+              </motion.button>
             </div>
+            </MotionConfig>
           </section>
 
           {/* 2 — Giới thiệu: nền tech · 3 thiết bị trái · chữ phải */}
           <section
             id="gioi-thieu"
-            className="corp-snap-section relative flex overflow-hidden bg-[#e4e8ef] text-slate-900"
+            className={`corp-snap-section relative flex overflow-hidden bg-[#e4e8ef] text-slate-900 ${activeSection === 1 ? "corp-snap-in" : ""}`}
           >
             {/* Nền thiên công nghệ nhẹ */}
             <div className="pointer-events-none absolute inset-0">
@@ -849,7 +1006,7 @@ export default function HomePageClient() {
 
               {/* Chữ — luôn cột phải */}
               <div className="relative z-20 order-2 w-full min-w-0 self-center text-left xl:max-w-[34rem]">
-                <p className="flex items-center gap-2 sm:gap-3">
+                <p {...riseProps(0, "flex items-center gap-2 sm:gap-3")}>
                   <span
                     className="h-[1.5px] w-5 rounded-full bg-gradient-to-r from-transparent via-violet-400/90 to-violet-500 sm:w-8"
                     aria-hidden
@@ -863,47 +1020,57 @@ export default function HomePageClient() {
                 </p>
 
                 <h2
-                  className="mt-1.5 text-balance sm:mt-3"
-                  style={{
+                  {...riseProps(1, "mt-1.5 text-balance sm:mt-3", {
                     fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
                     fontWeight: 600,
                     fontSize: "clamp(0.95rem, 2.2vw, 2.05rem)",
                     lineHeight: 1.32,
                     letterSpacing: "-0.02em",
                     color: "#16131f",
-                  }}
+                  })}
                 >
                   Đồng hành doanh nghiệp phát triển khách hàng trên nền tảng số
                 </h2>
 
                 <p
-                  className="mt-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-violet-700/85 sm:mt-3 sm:text-[12px]"
-                  style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
+                  {...riseProps(
+                    2,
+                    "mt-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-violet-700/85 sm:mt-3 sm:text-[12px]",
+                    { fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }
+                  )}
                 >
                   Website · Facebook · Google Maps
                 </p>
 
                 <div
-                  className="mt-2 space-y-2 text-pretty sm:mt-4 sm:space-y-3"
-                  style={{
+                  {...riseProps(3, "mt-2 space-y-2 text-pretty sm:mt-4 sm:space-y-3", {
                     fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
                     fontSize: "clamp(0.72rem, 1.35vw, 1.02rem)",
                     fontWeight: 400,
                     lineHeight: 1.55,
                     color: "#1f1b2e",
-                  }}
+                  })}
                 >
-                  <p>
-                    Bứt Phá Marketing giúp doanh nghiệp xây dựng hình ảnh chuyên nghiệp với Website, Fanpage Facebook,
-                    Google Maps và quảng cáo Facebook.
-                  </p>
-                  <p className="hidden sm:block">
-                    Chúng tôi tư vấn chiến lược rõ ràng, theo dõi hiệu quả bằng KPI để mang lại kết quả thực tế, không
-                    làm marketing theo cảm tính.
-                  </p>
+                  <MotionConfig reducedMotion="never">
+                    <HeroRevealText
+                      as="p"
+                      text={ABOUT_COPY_P1}
+                      play={aboutCopyReady}
+                      startDelayMs={0}
+                      stepMs={ABOUT_COPY_STEP_MS}
+                    />
+                    <HeroRevealText
+                      as="p"
+                      text={ABOUT_COPY_P2}
+                      className="hidden sm:block"
+                      play={aboutCopyReady}
+                      startDelayMs={ABOUT_COPY_P1.length * ABOUT_COPY_STEP_MS + 180}
+                      stepMs={ABOUT_COPY_STEP_MS}
+                    />
+                  </MotionConfig>
                 </div>
 
-                <div className="mt-3 sm:mt-5">
+                <div {...riseProps(4, "mt-3 sm:mt-5")}>
                   <Link
                     href="/gioi-thieu"
                     className="corp-cta inline-flex items-center justify-center rounded-md bg-[#5b21b6] px-4 py-2 text-[11px] text-white shadow-md shadow-violet-900/20 transition hover:bg-[#4c1d95] sm:px-7 sm:py-3 sm:text-sm"
@@ -918,7 +1085,7 @@ export default function HomePageClient() {
           {/* 3 — Lĩnh vực: full-bleed desk · 3 thẻ xếp chồng · 1 active nổi */}
           <section
             id="linh-vuc"
-            className="corp-snap-section relative flex flex-col overflow-hidden text-white"
+            className={`corp-snap-section relative flex flex-col overflow-hidden text-white ${activeSection === 2 ? "corp-snap-in" : ""}`}
           >
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -942,7 +1109,12 @@ export default function HomePageClient() {
             </div>
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-start gap-4 px-4 pb-6 pt-[4.5rem] sm:gap-6 sm:px-8 sm:pb-10 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-center lg:justify-center lg:gap-10 lg:px-14 lg:pb-0 lg:pt-0 xl:gap-14 xl:pl-28">
-              <div className="relative z-30 mx-auto w-full max-w-lg shrink-0 text-center lg:mx-0 lg:max-w-none lg:pl-10 lg:text-left xl:pl-14">
+              <div
+                {...riseProps(
+                  0,
+                  "relative z-30 mx-auto w-full max-w-lg shrink-0 text-center lg:mx-0 lg:max-w-none lg:pl-10 lg:text-left xl:pl-14"
+                )}
+              >
                 <p className="flex items-center justify-center gap-3 lg:justify-start">
                   <span className="hidden h-px w-8 bg-gradient-to-r from-transparent to-violet-300/80 sm:block" aria-hidden />
                   <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-violet-200 sm:text-xs">
@@ -951,19 +1123,22 @@ export default function HomePageClient() {
                   <span className="hidden h-px w-8 bg-gradient-to-l from-transparent to-violet-300/80 lg:hidden sm:block" aria-hidden />
                 </p>
                 <h2
-                  className="mt-1 text-balance sm:mt-3"
+                  className="mt-1 text-balance text-white sm:mt-3"
                   style={{
-                    fontFamily: '"Cormorant Garamond", Georgia, serif',
-                    fontWeight: 600,
+                    fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
+                    fontWeight: 700,
                     fontSize: "clamp(1.35rem, 3.8vw, 3rem)",
                     lineHeight: 1.15,
-                    letterSpacing: "-0.01em",
+                    letterSpacing: "-0.02em",
+                    color: "#ffffff",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.55)",
+                    WebkitFontSmoothing: "antialiased",
                   }}
                 >
                   Lĩnh vực hoạt động
                 </h2>
-                <p className="mx-auto mt-3 hidden max-w-md text-[13px] font-light leading-relaxed text-white/70 sm:text-[15px] lg:mx-0 xl:block">
-                  Ba mũi nhọn giúp doanh nghiệp hiện diện đúng nơi khách đang quyết định — Website, Facebook và Google Maps.
+                <p className="mx-auto mt-2 max-w-md text-[12px] font-light leading-relaxed text-white/70 sm:mt-3 sm:text-[14px] lg:mx-0 lg:text-[15px]">
+                  Ba mũi nhọn giúp doanh nghiệp hiện diện đúng nơi khách đang quyết định
                 </p>
                 <div className="mx-auto mt-5 hidden flex-wrap items-center justify-center gap-2 lg:mx-0 lg:justify-start xl:flex">
                   {[
@@ -983,8 +1158,12 @@ export default function HomePageClient() {
               </div>
 
               {/* Mobile + Desktop: coverflow — thẻ cao max theo stage, không đè tiêu đề */}
-              <div className="relative z-10 mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center lg:mt-0 lg:h-[min(72vh,560px)] lg:flex-none lg:items-stretch">
-                <div className="relative mx-auto flex h-[min(48dvh,340px)] w-full max-w-2xl items-center gap-1 sm:h-[min(52dvh,380px)] sm:gap-2 lg:h-full lg:max-w-none lg:gap-3">
+              <div
+                className="relative z-10 -mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center sm:-mt-2 lg:mt-0 lg:h-[min(76vh,600px)] lg:-translate-y-3 lg:flex-none lg:items-stretch"
+                onMouseEnter={() => setLinhPaused(true)}
+                onMouseLeave={() => setLinhPaused(false)}
+              >
+                <div className="relative mx-auto flex h-[min(52dvh,380px)] w-full max-w-2xl items-center gap-1 sm:h-[min(56dvh,420px)] sm:gap-2 lg:h-full lg:max-w-none lg:gap-3">
                   <button
                     type="button"
                     onClick={() => setLinhActive((i) => (i - 1 + LINH_VUC.length) % LINH_VUC.length)}
@@ -999,74 +1178,83 @@ export default function HomePageClient() {
                       const d = linhVucCardOffset(i, linhActive);
                       const isActive = d === 0;
                       return (
-                        <button
+                        <div
                           key={item.num}
-                          type="button"
-                          onClick={() => {
-                            if (isActive) router.push(item.href);
-                            else setLinhActive(i);
-                          }}
-                          className={`group absolute left-1/2 top-1/2 overflow-hidden rounded-2xl text-center shadow-2xl transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+                          className={`absolute left-1/2 top-1/2 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
                             isActive
-                              ? "z-30 h-[98%] opacity-100 brightness-100"
-                              : "z-10 h-[90%] opacity-80 brightness-[0.8] saturate-[0.8]"
+                              ? "z-30 h-[100%] opacity-100 brightness-100"
+                              : "z-10 h-[92%] opacity-80 brightness-[0.8] saturate-[0.8]"
                           }`}
                           style={{
                             width: "auto",
                             aspectRatio: "3 / 4",
-                            maxWidth: isActive ? "min(72%, 300px)" : "min(66%, 270px)",
+                            maxWidth: isActive ? "min(78%, 320px)" : "min(70%, 285px)",
                             transform: isActive
-                              ? "translate(-50%, -50%) scale(1)"
+                              ? "translate(-50%, -56%) scale(1)"
                               : d === 1
-                                ? "translate(22%, -46%) scale(0.9)"
-                                : "translate(-122%, -46%) scale(0.9)",
+                                ? "translate(22%, -52%) scale(0.9)"
+                                : "translate(-122%, -52%) scale(0.9)",
                           }}
-                          aria-pressed={isActive}
-                          aria-label={item.title}
                         >
-                          <div
-                            className={`relative h-full w-full origin-center overflow-hidden rounded-2xl ring-1 ring-white/15 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                              isActive ? "group-hover:scale-[1.07] group-focus-visible:scale-[1.07]" : ""
-                            }`}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={item.image}
-                              alt=""
-                              className={`h-full w-full object-cover transition duration-700 ${isActive ? "scale-[1.03]" : "scale-100"}`}
-                              style={{ objectPosition: item.objectPosition }}
-                            />
-                            <div
-                              className={`absolute inset-0 transition-colors duration-500 ${
-                                isActive
-                                  ? "bg-gradient-to-t from-[#070b16]/90 via-[#070b16]/35 to-transparent group-hover:from-[#070b16] group-hover:via-[#070b16]/60"
-                                  : "bg-gradient-to-t from-[#070b16]/85 via-[#070b16]/50 to-[#070b16]/25"
-                              }`}
-                            />
-                            {isActive ? (
-                              <div className="absolute inset-x-0 bottom-0 px-4 pb-5 pt-10 text-center sm:px-5 sm:pb-6">
-                                <h3
-                                  className="inline-flex rounded-full border border-violet-300/25 bg-violet-950/55 px-3.5 py-1.5 text-[0.8rem] font-medium tracking-[0.18em] text-violet-50 backdrop-blur-md sm:px-4 sm:text-[0.85rem]"
-                                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontWeight: 500 }}
-                                >
-                                  {item.title}
-                                </h3>
+                          <div {...riseProps(2 + i * 2, "h-full w-full")}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (isActive) router.push(item.href);
+                                else setLinhActive(i);
+                              }}
+                              className="group h-full w-full overflow-hidden rounded-2xl text-center shadow-2xl"
+                              aria-pressed={isActive}
+                              aria-label={item.title}
+                            >
+                              <div
+                                className={`relative h-full w-full origin-center overflow-hidden rounded-2xl ring-1 ring-white/15 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                                  isActive ? "group-hover:scale-[1.07] group-focus-visible:scale-[1.07]" : ""
+                                }`}
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={item.image}
+                                  alt=""
+                                  className={`h-full w-full object-cover transition duration-700 ${isActive ? "scale-[1.03]" : "scale-100"}`}
+                                  style={{ objectPosition: item.objectPosition }}
+                                />
                                 <div
-                                  className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100"
-                                >
-                                  <div className="overflow-hidden">
-                                    <p
-                                      className="mx-auto mt-3 max-w-[13.5rem] text-[11.5px] font-light leading-[1.7] tracking-wide text-white/70 sm:max-w-[14.5rem] sm:text-[12.5px]"
-                                      style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
+                                  className={`absolute inset-0 transition-colors duration-500 ${
+                                    isActive
+                                      ? "bg-gradient-to-t from-[#070b16]/90 via-[#070b16]/35 to-transparent group-hover:from-[#070b16] group-hover:via-[#070b16]/60"
+                                      : "bg-gradient-to-t from-[#070b16]/85 via-[#070b16]/50 to-[#070b16]/25"
+                                  }`}
+                                />
+                                {isActive ? (
+                                  <div className="absolute inset-x-0 bottom-0 px-4 pb-5 pt-10 text-center sm:px-5 sm:pb-6">
+                                    <h3
+                                      className="inline-flex rounded-full border border-white/20 bg-[#1a1030]/92 px-3.5 py-1.5 text-[0.78rem] font-bold tracking-wide text-white sm:px-4 sm:text-[0.88rem]"
+                                      style={{
+                                        fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
+                                        fontWeight: 700,
+                                        color: "#ffffff",
+                                        textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+                                      }}
                                     >
-                                      {item.desc}
-                                    </p>
+                                      {item.title}
+                                    </h3>
+                                    <div className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100">
+                                      <div className="overflow-hidden">
+                                        <p
+                                          className="mx-auto mt-3 max-w-[14rem] text-[11.5px] font-normal leading-[1.65] tracking-wide text-white/85 sm:max-w-[15rem] sm:text-[12.5px]"
+                                          style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
+                                        >
+                                          {item.desc}
+                                        </p>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
+                                ) : null}
                               </div>
-                            ) : null}
+                            </button>
                           </div>
-                        </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -1087,7 +1275,7 @@ export default function HomePageClient() {
           {/* 4 — Dự án: tiêu đề giữa + list cuộn trái + ảnh phải */}
           <section
             id="du-an"
-            className="corp-snap-section relative flex flex-col overflow-hidden text-white"
+            className={`corp-snap-section relative flex flex-col overflow-hidden text-white ${activeSection === 3 ? "corp-snap-in" : ""}`}
           >
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1102,21 +1290,20 @@ export default function HomePageClient() {
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl -translate-y-3 flex-col justify-center px-4 pb-6 pt-[2.75rem] sm:translate-y-0 sm:justify-start sm:px-8 sm:pb-4 sm:pt-20 lg:px-12 lg:pl-20 xl:pl-28">
               <h2
-                className="mx-auto -mt-1 w-full shrink-0 text-center text-white sm:mt-0"
-                style={{
+                {...riseProps(0, "mx-auto -mt-1 w-full shrink-0 text-center text-white sm:mt-0", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
                   fontWeight: 600,
                   fontSize: "clamp(1.4rem, 3.6vw, 2.5rem)",
                   lineHeight: 1.12,
                   letterSpacing: "-0.02em",
                   textAlign: "center",
-                }}
+                })}
               >
                 Dự án tiêu biểu
               </h2>
 
-              <div className="mt-4 grid min-h-0 w-full shrink-0 grid-cols-[minmax(0,0.95fr)_minmax(0,1.2fr)] items-start gap-2.5 sm:mt-5 sm:grid-cols-[minmax(180px,0.85fr)_minmax(0,1.35fr)] sm:gap-5 md:gap-7 lg:gap-10">
-                {/* Trái — list + thanh cuộn (kéo → đổi ảnh phải) */}
+              <div className="mt-4 grid min-h-0 w-full shrink-0 grid-cols-[minmax(0,0.95fr)_minmax(0,1.2fr)] items-stretch gap-2.5 sm:mt-5 sm:grid-cols-[minmax(180px,0.85fr)_minmax(0,1.35fr)] sm:gap-5 md:gap-7 lg:gap-10">
+                {/* Trái — list hiện lần lượt */}
                 <div className="relative z-20 flex min-h-0 min-w-0 flex-col">
                   <ul
                     ref={projectListRef}
@@ -1127,7 +1314,7 @@ export default function HomePageClient() {
                     {featuredCases.map((c, i) => {
                       const on = i === caseActive;
                       return (
-                        <li key={c.slug} data-case-index={i}>
+                        <li key={c.slug} data-case-index={i} {...riseProps(1 + Math.min(i, 9), "corp-rise--slow")}>
                           <button
                             type="button"
                             onClick={() => selectCase(i, true)}
@@ -1165,9 +1352,14 @@ export default function HomePageClient() {
                   </ul>
                 </div>
 
-                {/* Phải — ảnh + Xem website */}
-                <div className="relative z-10 flex min-h-0 min-w-0 flex-col items-center">
-                  <div className="relative h-[min(30vh,180px)] w-full overflow-hidden rounded-lg bg-[#120e18] ring-1 ring-white/12 sm:h-[min(36vh,260px)] sm:rounded-xl md:h-[min(40vh,320px)] lg:h-[min(42vh,340px)]">
+                {/* Phải — ảnh + Xem website, căn giữa theo chiều cao list */}
+                <div className="relative z-10 flex h-full min-h-0 min-w-0 flex-col items-center justify-center gap-2 pt-3 sm:gap-2.5 sm:pt-4">
+                  <div
+                    {...fromRightProps(
+                      6,
+                      "relative h-[min(28vh,168px)] w-full overflow-hidden rounded-lg bg-[#120e18] ring-1 ring-white/12 sm:h-[min(34vh,240px)] sm:rounded-xl md:h-[min(38vh,300px)] lg:h-[min(40vh,320px)]"
+                    )}
+                  >
                     {featuredCases.map((c, i) => {
                       const on = i === caseActive;
                       return (
@@ -1190,10 +1382,13 @@ export default function HomePageClient() {
 
                   {activeCase ? (
                     <a
+                      {...riseProps(
+                        8,
+                        "corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                      )}
                       href={activeCase.websiteUrl || `/du-an/${activeCase.slug}`}
                       target={activeCase.websiteUrl ? "_blank" : undefined}
                       rel={activeCase.websiteUrl ? "noopener noreferrer" : undefined}
-                      className="corp-cta mt-2 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:mt-2.5 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                     >
                       Xem website
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -1205,12 +1400,10 @@ export default function HomePageClient() {
               <HeroRevealText
                 as="p"
                 text="Cùng Bứt Phá Marketing kiến tạo thương hiệu, chinh phục khách hàng và tăng trưởng bền vững."
-                charClassName="corp-type-char"
+                play={caseTaglineReveal}
                 startDelayMs={120}
                 stepMs={28}
-                className={`mx-auto mt-4 w-full max-w-2xl shrink-0 px-2 pb-2 text-center text-[12.5px] font-light leading-snug tracking-wide text-white/65 sm:mt-auto sm:pb-1 sm:pt-4 sm:text-[13px] ${
-                  caseTaglineReveal ? "corp-type-ready" : ""
-                }`}
+                className="mx-auto mt-4 w-full max-w-2xl shrink-0 px-2 pb-2 text-center text-[12.5px] font-light leading-snug tracking-wide text-white/65 sm:mt-auto sm:pb-1 sm:pt-4 sm:text-[13px]"
               />
             </div>
           </section>
@@ -1218,7 +1411,7 @@ export default function HomePageClient() {
           {/* 5 — Đặt lịch tư vấn: ngày/giờ trái · form phải */}
           <section
             id="tu-van"
-            className="corp-snap-section relative flex flex-col justify-center overflow-hidden bg-[#06080f] text-white"
+            className={`corp-snap-section relative flex flex-col justify-center overflow-hidden bg-[#06080f] text-white ${activeSection === 4 ? "corp-snap-in" : ""}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1233,7 +1426,7 @@ export default function HomePageClient() {
               data-project-scroll
               className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col justify-center overflow-y-auto px-3 py-12 sm:px-8 sm:py-16 lg:overflow-visible lg:px-12 lg:py-0"
             >
-              <div className="mx-auto w-full shrink-0 text-center">
+              <div {...riseProps(0, "mx-auto w-full shrink-0 text-center")}>
                 <p className="text-[8px] font-medium uppercase tracking-[0.24em] text-white/35 sm:text-[10px] sm:tracking-[0.32em]">
                   Tư vấn miễn phí
                 </p>
@@ -1246,7 +1439,7 @@ export default function HomePageClient() {
               </div>
 
               {consultDone ? (
-                <div className="mx-auto mt-8 flex max-w-md flex-col items-center text-center">
+                <div {...riseProps(1, "mx-auto mt-8 flex max-w-md flex-col items-center text-center")}>
                   <p className="text-[10px] font-medium tracking-[0.24em] text-violet-300/80">HOÀN TẤT</p>
                   <p
                     className="mt-2 text-2xl font-semibold text-white sm:text-3xl"
@@ -1277,23 +1470,31 @@ export default function HomePageClient() {
                   className="mt-4 grid w-full grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] items-start gap-2.5 border-t border-white/[0.08] pt-3.5 sm:mt-6 sm:gap-5 sm:pt-6 lg:gap-10 lg:pt-8"
                   onSubmit={handleConsultSubmit}
                 >
-                  {/* Trái — ngày + giờ */}
+                  {/* Trái — ngày rồi giờ hiện lần lượt */}
                   <div className="flex min-w-0 flex-col gap-3 text-left sm:gap-4">
                     <div>
-                      <p className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]">
+                      <p
+                        {...riseProps(
+                          1,
+                          "mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
+                        )}
+                      >
                         NGÀY
                       </p>
                       <div className="flex flex-col gap-0.5 sm:gap-1">
-                        {consultDays.map((day) => {
+                        {consultDays.map((day, i) => {
                           const active = consultForm.consultDate === day.iso;
                           return (
                             <button
                               key={day.iso}
                               type="button"
                               onClick={() => setConsultForm((prev) => ({ ...prev, consultDate: day.iso }))}
-                              className={`corp-consult-chip flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 sm:px-2.5 sm:py-2 ${
-                                active ? "corp-consult-chip--on" : ""
-                              }`}
+                              {...riseProps(
+                                2 + i,
+                                `corp-consult-chip flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 sm:px-2.5 sm:py-2${
+                                  active ? " corp-consult-chip--on" : ""
+                                }`
+                              )}
                               aria-pressed={active}
                             >
                               <span className="text-[8px] uppercase tracking-[0.06em] sm:text-[10px]">
@@ -1309,20 +1510,28 @@ export default function HomePageClient() {
                     </div>
 
                     <div>
-                      <p className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]">
+                      <p
+                        {...riseProps(
+                          2 + consultDays.length,
+                          "mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
+                        )}
+                      >
                         GIỜ
                       </p>
                       <div className="flex flex-col gap-0.5 sm:gap-1">
-                        {CONSULT_SLOTS.map((slot) => {
+                        {CONSULT_SLOTS.map((slot, i) => {
                           const active = consultForm.consultSlot === slot.id;
                           return (
                             <button
                               key={slot.id}
                               type="button"
                               onClick={() => setConsultForm((prev) => ({ ...prev, consultSlot: slot.id }))}
-                              className={`corp-consult-slot flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 text-left sm:px-2.5 sm:py-2 ${
-                                active ? "corp-consult-slot--on" : ""
-                              }`}
+                              {...riseProps(
+                                3 + consultDays.length + i,
+                                `corp-consult-slot flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 text-left sm:px-2.5 sm:py-2${
+                                  active ? " corp-consult-slot--on" : ""
+                                }`
+                              )}
                               aria-pressed={active}
                             >
                               <span className="text-[10px] font-medium sm:text-[12px]">{slot.label}</span>
@@ -1334,8 +1543,13 @@ export default function HomePageClient() {
                     </div>
                   </div>
 
-                  {/* Phải — form nhập */}
-                  <div className="flex min-w-0 flex-col gap-1.5 border-l border-white/[0.08] pl-2.5 text-left sm:gap-2.5 sm:pl-5 lg:pl-10">
+                  {/* Phải — form từ phải sang, nút từ dưới lên */}
+                  <div
+                    {...fromRightProps(
+                      4,
+                      "flex min-w-0 flex-col gap-1.5 border-l border-white/[0.08] pl-2.5 text-left sm:gap-2.5 sm:pl-5 lg:pl-10"
+                    )}
+                  >
                     <p className="mb-0 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]">
                       THÔNG TIN
                     </p>
@@ -1381,13 +1595,19 @@ export default function HomePageClient() {
                     <button
                       disabled={consultLoading}
                       type="submit"
-                      className="mt-1 w-full rounded-md bg-violet-600 py-2.5 text-[9px] font-semibold tracking-[0.14em] text-white shadow-lg shadow-violet-950/35 transition hover:bg-violet-500 disabled:opacity-50 sm:py-3 sm:text-[11px] sm:tracking-[0.2em]"
+                      {...riseProps(
+                        8,
+                        "mt-1 w-full rounded-md bg-violet-600 py-2.5 text-[9px] font-semibold tracking-[0.14em] text-white shadow-lg shadow-violet-950/35 transition hover:bg-violet-500 disabled:opacity-50 sm:py-3 sm:text-[11px] sm:tracking-[0.2em]"
+                      )}
                     >
                       {consultLoading ? "ĐANG GỬI..." : "ĐẶT LỊCH NGAY"}
                     </button>
                     <a
+                      {...riseProps(
+                        9,
+                        "inline-flex items-center justify-center gap-1.5 text-[10px] font-light text-white/40 transition hover:text-white sm:text-[12px]"
+                      )}
                       href={getTelHref(hotline)}
-                      className="inline-flex items-center justify-center gap-1.5 text-[10px] font-light text-white/40 transition hover:text-white sm:text-[12px]"
                     >
                       <Phone className="h-3 w-3" />
                       {hotlineDisplay}
@@ -1401,7 +1621,7 @@ export default function HomePageClient() {
           {/* 6 — Kiến thức: ảnh lớn trái + 4 bài nhỏ phải (scroll) */}
           <section
             id="kien-thuc"
-            className="corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white"
+            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 5 ? "corp-snap-in" : ""}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1415,24 +1635,33 @@ export default function HomePageClient() {
             <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-3 py-14 sm:px-8 sm:py-20 lg:px-12 lg:pl-20 xl:pl-28">
               <div className="mb-3 flex shrink-0 items-end justify-between gap-3 sm:mb-7 sm:gap-4">
                 <h2
-                  className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-[clamp(1.65rem,5vw,3.15rem)] font-semibold tracking-[-0.02em] text-transparent"
-                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                  {...riseProps(
+                    0,
+                    "bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-[clamp(1.65rem,5vw,3.15rem)] font-semibold tracking-[-0.02em] text-transparent",
+                    { fontFamily: '"Cormorant Garamond", Georgia, serif' }
+                  )}
                 >
                   Kiến thức
                 </h2>
                 <Link
+                  {...riseProps(
+                    1,
+                    "text-[11px] font-medium tracking-wide text-violet-200/80 transition hover:text-white sm:text-[12px]"
+                  )}
                   href="/blog"
-                  className="text-[11px] font-medium tracking-wide text-violet-200/80 transition hover:text-white sm:text-[12px]"
                 >
                   Xem tất cả →
                 </Link>
               </div>
 
               <div className="grid min-h-0 grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-stretch gap-2.5 sm:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-7">
-                {/* Trái — bài lớn */}
+                {/* Trái — bài lớn từ trái sang */}
                 <Link
+                  {...fromLeftProps(
+                    2,
+                    "group relative min-h-[min(52vh,280px)] overflow-hidden rounded-lg ring-1 ring-white/10 sm:min-h-[280px] lg:min-h-[min(52vh,440px)]"
+                  )}
                   href={featuredKnowledge?.slug ? `/blog/${featuredKnowledge.slug}` : "/blog"}
-                  className="group relative min-h-[min(52vh,280px)] overflow-hidden rounded-lg ring-1 ring-white/10 sm:min-h-[280px] lg:min-h-[min(52vh,440px)]"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -1463,7 +1692,7 @@ export default function HomePageClient() {
                   </div>
                 </Link>
 
-                {/* Phải — bài nhỏ, thanh cuộn */}
+                {/* Phải — bài nhỏ hiện lần lượt */}
                 <div
                   data-project-scroll
                   className="corp-project-scroll max-h-[min(52vh,280px)] space-y-1.5 overflow-y-auto overscroll-contain pr-0.5 sm:max-h-[min(48vh,380px)] sm:space-y-2.5 sm:pr-1 lg:max-h-[min(52vh,440px)]"
@@ -1478,11 +1707,14 @@ export default function HomePageClient() {
                         description: "Xem thư viện bài viết Website · Facebook · Maps.",
                         metaDescription: undefined as string | undefined,
                       }))
-                  ).map((post) => (
+                  ).map((post, i) => (
                     <Link
                       key={post.id}
+                      {...riseProps(
+                        3 + i,
+                        "corp-rise--slow group flex gap-2 rounded-md p-1 transition hover:bg-white/[0.04] sm:gap-3.5 sm:p-1.5"
+                      )}
                       href={post.slug ? `/blog/${post.slug}` : "/blog"}
-                      className="group flex gap-2 rounded-md p-1 transition hover:bg-white/[0.04] sm:gap-3.5 sm:p-1.5"
                     >
                       <div className="relative h-14 w-[4.25rem] shrink-0 overflow-hidden rounded-md bg-white/5 ring-1 ring-white/10 sm:h-[5.25rem] sm:w-[6.75rem]">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1507,10 +1739,10 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          {/* 7 — Tiếng nói: quote lớn + logo wall */}
+          {/* 7 — Tiếng nói: trước/sau từng chữ + nút trái phải */}
           <section
             id="tieng-noi"
-            className="corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white"
+            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 6 ? "corp-snap-in" : ""}`}
           >
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-[#06080f]" />
@@ -1518,65 +1750,110 @@ export default function HomePageClient() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(76,29,149,0.14),transparent_60%)]" />
             </div>
 
-            <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col justify-center px-5 py-14 sm:px-8 sm:py-16 lg:px-10">
+            <button
+              type="button"
+              onClick={() => setVoiceActive((i) => (i - 1 + voiceCases.length) % voiceCases.length)}
+              className="absolute left-1.5 top-[52%] z-40 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white shadow-lg backdrop-blur-md sm:left-3 sm:h-11 sm:w-11 md:left-5"
+              aria-label="Khách trước"
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setVoiceActive((i) => (i + 1) % voiceCases.length)}
+              className="absolute right-1.5 top-[52%] z-40 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white shadow-lg backdrop-blur-md sm:right-3 sm:h-11 sm:w-11 md:right-5"
+              aria-label="Khách sau"
+            >
+              <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
+            </button>
+
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col justify-start px-10 pb-10 pt-[5.25rem] sm:justify-center sm:px-14 sm:py-16 lg:px-16 lg:pt-0">
               <h2
-                className="mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent"
-                style={{
+                {...riseProps(0, "mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
                   fontWeight: 600,
-                  fontSize: "clamp(1.45rem, 4vw, 2.65rem)",
-                  lineHeight: 1.12,
+                  fontSize: "clamp(1.25rem, 4vw, 2.65rem)",
+                  lineHeight: 1.15,
                   letterSpacing: "-0.02em",
-                }}
+                })}
               >
-                Họ đã nói gì trước khi bứt phá
+                Khách hàng đã nói gì trước khi bứt phá
               </h2>
 
-              {/* Quote nổi */}
-              <div className="relative mx-auto mt-6 w-full max-w-3xl shrink-0 text-center sm:mt-9">
-                <span
-                  className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 select-none text-[5rem] leading-none text-violet-400/20 sm:-top-7 sm:text-[6.5rem]"
-                  aria-hidden
-                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                >
-                  “
-                </span>
-
+              {/* Feedback: trước từng chữ → logo → sau từng chữ */}
+              <div {...riseProps(1, "relative mx-auto mt-5 w-full max-w-3xl shrink-0 sm:mt-8")}>
                 {activeVoice ? (
-                  <div
-                    key={activeVoice.slug}
-                    className={voiceReveal ? "corp-case-copy" : "opacity-0"}
-                  >
-                    <p
-                      className="relative text-[clamp(1.15rem,2.8vw,1.75rem)] font-light leading-[1.45] tracking-wide text-white/92"
-                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                    >
-                      {activeVoice.quote}
-                    </p>
-                    <div className="mt-5 flex flex-col items-center gap-1 sm:mt-6">
-                      <p className="text-[13px] font-medium tracking-wide text-white sm:text-[14px]">
-                        {activeVoice.clientName}
+                  <MotionConfig reducedMotion="never">
+                    <div key={activeVoice.slug} className="flex flex-col items-center text-center">
+                      <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-white/35 sm:text-[10px]">
+                        Trước
                       </p>
-                      <p className="text-[11px] tracking-wide text-violet-200/65 sm:text-[12px]">
-                        {activeVoice.industryLabel}
+                      <HeroRevealText
+                        as="p"
+                        text={activeVoice.before}
+                        play={voiceReveal}
+                        startDelayMs={80}
+                        stepMs={22}
+                        className="mt-2 max-w-xl text-[clamp(0.95rem,2.2vw,1.25rem)] font-light leading-snug tracking-wide text-white/55"
+                        style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                      />
+
+                      <div className="relative my-5 sm:my-6">
+                        <span className="pointer-events-none absolute -inset-3 rounded-full bg-violet-500/20 blur-xl" aria-hidden />
+                        <div className="relative h-20 w-20 overflow-hidden rounded-full bg-[#12151f] ring-2 ring-violet-400/50 shadow-[0_12px_40px_rgba(76,29,149,0.45)] sm:h-24 sm:w-24">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={activeVoice.logo}
+                            alt={activeVoice.clientName}
+                            className="h-full w-full object-cover"
+                          />
+                          <span className="absolute inset-0 bg-gradient-to-t from-[#06080f]/50 to-transparent" />
+                          <span
+                            className="absolute inset-0 flex items-center justify-center bg-[#0a0d16]/35 text-[15px] font-semibold tracking-[0.12em] text-white sm:text-[17px]"
+                            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                          >
+                            {activeVoice.mark}
+                          </span>
+                        </div>
+                      </div>
+
+                      <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-violet-300/80 sm:text-[10px]">
+                        Sau
                       </p>
-                      <Link
-                        href={activeVoice.href}
-                        className="mt-2 text-[11px] font-medium tracking-wide text-white/40 transition hover:text-violet-200"
-                      >
-                        Xem case →
-                      </Link>
+                      <HeroRevealText
+                        as="p"
+                        text={activeVoice.after}
+                        play={voiceReveal}
+                        startDelayMs={80 + activeVoice.before.length * 22 + 420}
+                        stepMs={22}
+                        className="mt-2 max-w-xl text-[clamp(1.05rem,2.5vw,1.45rem)] font-light leading-snug tracking-wide text-white/95"
+                        style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                      />
+
+                      <div className="mt-4 flex flex-col items-center gap-0.5 sm:mt-5">
+                        <p className="text-[13px] font-medium tracking-wide text-white sm:text-[14px]">
+                          {activeVoice.clientName}
+                        </p>
+                        <p className="text-[11px] tracking-wide text-violet-200/65 sm:text-[12px]">
+                          {activeVoice.industryLabel}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </MotionConfig>
                 ) : null}
               </div>
 
-              {/* Logo wall — 6 logo glass, sâu & chuyên nghiệp */}
-              <div className="mx-auto mt-8 w-full max-w-3xl shrink-0 border-t border-white/[0.08] pt-5 sm:mt-10 sm:pt-7">
-                <p className="mb-3.5 text-center text-[9px] font-medium uppercase tracking-[0.28em] text-white/30 sm:mb-5 sm:text-[10px]">
+              {/* 6 logo tròn chọn thương hiệu */}
+              <div
+                {...riseProps(
+                  2,
+                  "mx-auto mt-6 w-full max-w-2xl shrink-0 border-t border-white/[0.08] pt-4 sm:mt-9 sm:pt-6"
+                )}
+              >
+                <p className="mb-3.5 text-center text-[9px] font-medium uppercase tracking-[0.28em] text-white/30 sm:mb-4 sm:text-[10px]">
                   Chọn thương hiệu
                 </p>
-                <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3.5">
+                <ul className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
                   {voiceCases.map((v, i) => {
                     const on = i === voiceActive;
                     return (
@@ -1586,32 +1863,27 @@ export default function HomePageClient() {
                           onClick={() => setVoiceActive(i)}
                           aria-pressed={on}
                           aria-label={v.clientName}
-                          className={`corp-voice-logo group relative flex h-[4.25rem] w-full flex-col items-center justify-center overflow-hidden rounded-xl px-2 transition duration-300 sm:h-[4.75rem] ${
-                            on ? "corp-voice-logo--on" : ""
+                          title={v.clientName}
+                          className={`group relative h-12 w-12 overflow-hidden rounded-full transition duration-300 sm:h-14 sm:w-14 ${
+                            on
+                              ? "scale-110 ring-2 ring-violet-400 shadow-[0_0_24px_rgba(139,92,246,0.45)]"
+                              : "ring-1 ring-white/15 opacity-70 hover:opacity-100 hover:ring-violet-300/40"
                           }`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={v.logo}
                             alt=""
-                            className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-[0.18] saturate-50 transition duration-500 group-hover:opacity-[0.28] group-hover:saturate-75"
+                            className="h-full w-full object-cover saturate-[0.75] transition group-hover:saturate-100"
                           />
-                          <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.1] to-[#0a0d16]/75" />
-                          <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                          <span className="absolute inset-0 bg-[#0a0d16]/40" />
                           <span
-                            className={`relative z-[1] text-center text-[12px] font-semibold leading-tight tracking-[0.04em] sm:text-[13px] ${
-                              on ? "text-white" : "text-white/80 group-hover:text-white"
+                            className={`absolute inset-0 flex items-center justify-center text-[10px] font-semibold tracking-wider sm:text-[11px] ${
+                              on ? "text-white" : "text-white/80"
                             }`}
                             style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                           >
-                            {v.wordmark}
-                          </span>
-                          <span
-                            className={`relative z-[1] mt-0.5 max-w-full truncate px-1 text-[9px] tracking-wide sm:text-[10px] ${
-                              on ? "text-violet-200/90" : "text-white/35"
-                            }`}
-                          >
-                            {v.industryLabel}
+                            {v.mark}
                           </span>
                         </button>
                       </li>
@@ -1625,7 +1897,7 @@ export default function HomePageClient() {
           {/* 8 — Liên hệ / Footer: CTA + 3 cột + brand bar */}
           <section
             id="lien-he"
-            className="corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white"
+            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 7 ? "corp-snap-in" : ""}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1638,20 +1910,20 @@ export default function HomePageClient() {
 
             <div
               data-project-scroll
-              className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col justify-center gap-5 overflow-y-auto px-5 py-14 sm:gap-7 sm:px-8 sm:py-16 lg:gap-8 lg:px-10"
+              className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-evenly gap-2 overflow-y-auto px-4 pb-2 pt-[4.25rem] sm:justify-center sm:gap-7 sm:px-8 sm:py-16 lg:gap-8 lg:px-10"
             >
               {/* CTA */}
-              <div className="w-full shrink-0 text-center">
+              <div {...fadeProps(0, "w-full shrink-0 text-center")}>
                 <h2
                   className="text-[clamp(1.35rem,5.5vw,2.35rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
                   style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                 >
                   Sẵn sàng bứt phá?
                 </h2>
-                <p className="mx-auto mt-2 max-w-md text-[12.5px] font-light leading-relaxed text-white/55 sm:mt-2.5 sm:text-[14px]">
+                <p className="mx-auto mt-1.5 max-w-md text-[12px] font-light leading-relaxed text-white/55 sm:mt-2.5 sm:text-[14px]">
                   Lộ trình Website · Facebook · Maps khớp ngân sách và mục tiêu của bạn.
                 </p>
-                <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-5 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
                   <button
                     type="button"
                     onClick={() => goToSection(consultSectionIndex)}
@@ -1668,32 +1940,14 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Links */}
-              <div className="w-full shrink-0 border-t border-white/[0.1] pt-5 sm:pt-6">
-                {/* Mobile: hotline row */}
-                <div className="mb-4 text-center md:hidden">
-                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[12px]">
-                    <a href={getTelHref(hotline)} className="font-medium text-violet-200">
-                      {hotlineDisplay}
-                    </a>
-                    <span className="text-white/20">·</span>
-                    <a href={zaloUrl} target="_blank" rel="noopener noreferrer" className="text-white/75">
-                      Zalo
-                    </a>
-                    <span className="text-white/20">·</span>
-                    <a href={`mailto:${email}`} className="text-white/75">
-                      Email
-                    </a>
-                  </div>
-                  <p className="mt-1.5 text-[10px] font-light leading-snug text-white/40">{address}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-left md:grid-cols-3 md:gap-x-10">
-                  <div className="hidden md:block">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/35">
+              {/* Links — mobile cũng 3 cột như desktop */}
+              <div {...fadeProps(1, "w-full shrink-0 border-t border-white/[0.1] pt-3 sm:pt-6")}>
+                <div className="grid grid-cols-3 gap-x-3 gap-y-1 text-left sm:gap-x-8 md:gap-x-10">
+                  <div>
+                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Kết nối
                     </p>
-                    <ul className="mt-2.5 space-y-2 text-[13px]">
+                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <a
                           href={getTelHref(hotline)}
@@ -1715,20 +1969,20 @@ export default function HomePageClient() {
                       <li>
                         <a
                           href={`mailto:${email}`}
-                          className="text-white/70 transition hover:text-violet-200"
+                          className="break-all text-white/70 transition hover:text-violet-200"
                         >
                           {email}
                         </a>
                       </li>
-                      <li className="max-w-[14rem] font-light leading-snug text-white/45">{address}</li>
+                      <li className="line-clamp-2 font-light leading-snug text-white/45">{address}</li>
                     </ul>
                   </div>
 
                   <div>
-                    <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
+                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Dịch vụ
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12.5px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/website" className="text-white/70 transition hover:text-violet-200">
                           Website
@@ -1753,10 +2007,10 @@ export default function HomePageClient() {
                   </div>
 
                   <div>
-                    <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
+                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Khám phá
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12.5px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/du-an" className="text-white/70 transition hover:text-violet-200">
                           Dự án
@@ -1783,7 +2037,12 @@ export default function HomePageClient() {
               </div>
 
               {/* Brand bar */}
-              <footer className="flex w-full shrink-0 flex-col items-center gap-1.5 border-t border-white/[0.1] pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left">
+              <footer
+                {...fadeProps(
+                  2,
+                  "mt-1 flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-3 text-center sm:mt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
+                )}
+              >
                 <div className="flex items-center gap-2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={logoSrc} alt="" className="h-6 w-6 rounded-full object-cover sm:h-7 sm:w-7" />
@@ -1794,7 +2053,7 @@ export default function HomePageClient() {
                     {brandName}
                   </span>
                 </div>
-                <p className="hidden text-[11px] font-light tracking-wide text-white/40 sm:block">
+                <p className="text-[10px] font-light tracking-wide text-white/40 sm:text-[11px]">
                   Kết nối thương hiệu — Tăng trưởng bền vững
                 </p>
                 <p className="text-[10px] text-white/35 sm:text-[11px]">
@@ -1802,6 +2061,20 @@ export default function HomePageClient() {
                 </p>
               </footer>
             </div>
+
+            {/* Thanh gọi hotline full màn */}
+            <a
+              href={getTelHref(hotline)}
+              className="corp-footer-callbar relative z-20 flex w-full shrink-0 items-center justify-center gap-2.5 px-4 py-3.5 sm:gap-3 sm:py-4"
+              aria-label={`Gọi ${hotlineDisplay} — tư vấn miễn phí`}
+            >
+              <span className="corp-footer-callbar-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 sm:h-9 sm:w-9">
+                <Phone className="h-4 w-4 text-white sm:h-[1.125rem] sm:w-[1.125rem]" strokeWidth={2.25} />
+              </span>
+              <span className="text-center text-[13px] font-semibold leading-snug tracking-wide text-white sm:text-[15px]">
+                Bấm vào đây để được tư vấn miễn phí
+              </span>
+            </a>
           </section>
           </div>
         </div>
