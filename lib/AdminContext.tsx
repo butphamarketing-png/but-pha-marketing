@@ -212,7 +212,7 @@ const defaultSettings: SiteSettings = {
   presentationMode: false,
   softSoundsEnabled: true,
   softSoundsVolume: 0.05,
-  mascotEnabled: true,
+  mascotEnabled: false,
   mascotImage: DEFAULT_MASCOT_IMAGE,
   mascotImages: {},
   mascotMessages: {},
@@ -351,7 +351,7 @@ function mergeWithDefaults(parsed: Partial<SiteSettings> | null | undefined): Si
     presentationMode: parsed.presentationMode ?? false,
     softSoundsEnabled: parsed.softSoundsEnabled ?? true,
     softSoundsVolume: parsed.softSoundsVolume ?? 0.05,
-    mascotEnabled: parsed.mascotEnabled ?? true,
+    mascotEnabled: parsed.mascotEnabled ?? false,
   };
 }
 

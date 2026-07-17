@@ -71,10 +71,10 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     websiteUrl: "https://www.kientrucsaokhue.com/",
     fanpageUrl: "https://www.facebook.com/dichvusuachuanha.caitaonhatrongoi",
-    thumbnail: "/case-studies/sao-khue/gsc-performance.png",
-    heroImage: "/case-studies/sao-khue/gsc-performance.png",
+    thumbnail: "/case-studies/sao-khue/devices-mockup.png?v=1",
+    heroImage: "/case-studies/sao-khue/devices-mockup.png?v=1",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-15",
+    updatedAt: "2026-07-17",
     status: "in-progress",
     faq: [
       {
@@ -178,6 +178,11 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       },
     ],
     gallery: [
+      {
+        src: "/case-studies/sao-khue/devices-mockup.png?v=1",
+        alt: "Mockup website Kiến Trúc Sao Khuê trên laptop",
+        caption: "Website Design — kientrucsaokhue.com · cải tạo sửa chữa nhà · desktop mockup.",
+      },
       {
         src: "/case-studies/sao-khue/gsc-performance.png",
         alt: "Google Search Console Kiến Trúc Sao Khuê — hiệu suất 3 tháng",
@@ -482,10 +487,10 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     websiteUrl: "https://hethongnhakhoadangkhoa.vn/",
     fanpageUrl: "https://www.facebook.com/profile.php?id=61590506472413",
-    thumbnail: "/case-studies/nha-khoa-dang-khoa/gsc-performance.png",
-    heroImage: "/case-studies/nha-khoa-dang-khoa/gsc-performance.png",
+    thumbnail: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
+    heroImage: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-15",
+    updatedAt: "2026-07-17",
     status: "in-progress",
     faq: [
       {
@@ -583,6 +588,11 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       },
     ],
     gallery: [
+      {
+        src: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
+        alt: "Mockup website Nha Khoa Đăng Khoa trên laptop, tablet và điện thoại",
+        caption: "Website Design — responsive desktop · tablet · mobile · hethongnhakhoadangkhoa.vn",
+      },
       {
         src: "/case-studies/nha-khoa-dang-khoa/gsc-performance.png",
         alt: "Google Search Console Nha Khoa Đăng Khoa — 471 click, 15,4K impression",
@@ -1112,6 +1122,52 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     testimonial:
       "Shop mỹ phẩm online thắng ở bước khách đọc thành phần và review — website phải minh bạch INCI và có landing ads message-match.",
   },
+  {
+    slug: "an-gia-home",
+    clientName: "An Gia Home",
+    industry: "noi-that",
+    industryLabel: "Nội thất & thiết kế không gian",
+    headline: "Website nội thất — catalog phòng mẫu, báo giá nhanh",
+    summary:
+      "Website showroom nội thất An Gia Home: catalog theo phòng, gallery công trình, form báo giá và SEO local khu vực TP.HCM.",
+    answerFirst:
+      "Case study An Gia Home: Bứt Phá Marketing triển khai website nội thất với catalog phòng mẫu, gallery trước–sau và CTA báo giá Zalo/hotline.",
+    metaTitle: "Case Study Website Nội Thất An Gia Home",
+    metaDescription:
+      "Case study thiết kế website nội thất An Gia Home: catalog phòng mẫu, gallery công trình và SEO local. Bứt Phá Marketing.",
+    keywordsMain: "case study thiết kế website nội thất",
+    keywordsSecondary: ["thiết kế website nội thất", "website showroom nội thất", "seo website nội thất"],
+    websiteUrl: "https://www.butphamarketing.com/website",
+    thumbnail: "/hero-slideshow/hero-slide-04-website.png",
+    heroImage: "/hero-slideshow/hero-slide-04-website.png",
+    publishedAt: "2026-07-12",
+    updatedAt: "2026-07-17",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Website nội thất cần gì?",
+        a: "Catalog theo phòng, gallery công trình, form báo giá và SEO theo khu vực/dự án.",
+      },
+    ],
+    services: [
+      { name: "Thiết kế website", description: "Catalog phòng mẫu, gallery và CTA báo giá." },
+      { name: "SEO local", description: "Tối ưu từ khóa nội thất theo quận/TP." },
+    ],
+    challenge: ["Khách cần xem phòng mẫu trước khi gọi.", "Cạnh tranh showroom online cao."],
+    solution: ["Catalog theo phòng + filter phong cách.", "CTA Zalo/hotline trên mọi trang sản phẩm."],
+    results: [
+      { label: "Website", value: "Live", trend: "up" },
+      { label: "Catalog", value: "60+ mẫu", trend: "up" },
+    ],
+    keywordClusters: [{ region: "Nội thất", keywords: ["thiết kế website nội thất", "website showroom nội thất"] }],
+    gallery: [
+      {
+        src: "/hero-slideshow/hero-slide-04-website.png",
+        alt: "Website nội thất An Gia Home",
+        caption: "Trang chủ — catalog phòng mẫu và CTA báo giá.",
+      },
+    ],
+  },
 ];
 
 export const CASE_STUDY_SLUGS = CASE_STUDIES.map((c) => c.slug);
@@ -1126,11 +1182,11 @@ export function getAllCaseStudies(): CaseStudyItem[] {
   );
 }
 
-/** Homepage & blog — 3 dự án có proof mạnh nhất */
+/** Homepage cinematic — ưu tiên case có ảnh website/mockup (không dùng GSC) */
 export const FEATURED_CASE_STUDY_SLUGS = [
   "nha-khoa-dang-khoa",
-  "kien-truc-sao-khue",
   "tham-my-thien-hoang-kim",
+  "phuoc-lai-luxury",
 ] as const;
 
 export function getFeaturedCaseStudies(): CaseStudyItem[] {

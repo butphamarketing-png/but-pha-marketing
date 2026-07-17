@@ -1,7 +1,6 @@
-/** Loading experience timeline (milliseconds) */
-export const CARDS_ENTER_MS = 780;
-/** Giữ nguyên 3 card sau khi hiện đủ, rồi mới hội tụ */
-export const CARDS_HOLD_AFTER_VISIBLE_MS = 2000;
+/** Loading experience timeline (milliseconds) — logo-first, không hiện 3 icon dịch vụ */
+export const CARDS_ENTER_MS = 0;
+export const CARDS_HOLD_AFTER_VISIBLE_MS = 0;
 
 export const COMPANY_NAME_TIMING = {
   line2Delay: 500,
@@ -48,34 +47,27 @@ function buildScene(
   };
 }
 
-const CONVERGENCE_DURATION_MS = 1100;
 const LOGO_REVEAL_DURATION_MS = 600;
 
+/** Bỏ giai đoạn card — logo hiện ngay */
 const SCENE_BEFORE_NAME = {
-  cardsEnterEnd: CARDS_ENTER_MS,
-  convergenceStart: CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS,
-  convergenceEnd: CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS + CONVERGENCE_DURATION_MS,
-  logoRevealStart: CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS + CONVERGENCE_DURATION_MS,
-  logoRevealEnd:
-    CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS + CONVERGENCE_DURATION_MS + LOGO_REVEAL_DURATION_MS,
+  cardsEnterEnd: 0,
+  convergenceStart: 0,
+  convergenceEnd: 0,
+  logoRevealStart: 80,
+  logoRevealEnd: 80 + LOGO_REVEAL_DURATION_MS,
 } as const;
 
 export const SCENE = buildScene(SCENE_BEFORE_NAME.logoRevealEnd, COMPANY_NAME_TIMING, SCENE_BEFORE_NAME);
 
-const REDUCED_CONVERGENCE_DURATION_MS = 500;
 const REDUCED_LOGO_REVEAL_DURATION_MS = 300;
-const REDUCED_CARDS_ENTER_MS = 800;
 
 const SCENE_REDUCED_BEFORE_NAME = {
-  cardsEnterEnd: REDUCED_CARDS_ENTER_MS,
-  convergenceStart: REDUCED_CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS,
-  convergenceEnd: REDUCED_CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS + REDUCED_CONVERGENCE_DURATION_MS,
-  logoRevealStart: REDUCED_CARDS_ENTER_MS + CARDS_HOLD_AFTER_VISIBLE_MS + REDUCED_CONVERGENCE_DURATION_MS,
-  logoRevealEnd:
-    REDUCED_CARDS_ENTER_MS +
-    CARDS_HOLD_AFTER_VISIBLE_MS +
-    REDUCED_CONVERGENCE_DURATION_MS +
-    REDUCED_LOGO_REVEAL_DURATION_MS,
+  cardsEnterEnd: 0,
+  convergenceStart: 0,
+  convergenceEnd: 0,
+  logoRevealStart: 40,
+  logoRevealEnd: 40 + REDUCED_LOGO_REVEAL_DURATION_MS,
 } as const;
 
 export const SCENE_REDUCED = buildScene(

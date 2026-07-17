@@ -1,6 +1,16 @@
-export const DEFAULT_HERO_SLIDE = "/slideshow-hero.png";
+export const DEFAULT_HERO_SLIDE = "/hero-slideshow/hero-slide-01-strategy.png";
 export const DEFAULT_INTRO_IMAGE = "/mascot-home.png";
 export const DEFAULT_MASCOT_IMAGE = "/mascot-home.png";
+
+/** Corp homepage hero slideshow (Section 1) */
+export const CORP_HERO_SLIDES = [
+  "/hero-slideshow/hero-slide-01-strategy.png",
+  "/hero-slideshow/hero-slide-02-creative.png",
+  "/hero-slideshow/hero-slide-03-performance.png",
+  "/hero-slideshow/hero-slide-04-website.png",
+  "/hero-slideshow/hero-slide-05-maps.png",
+  "/hero-slideshow/hero-slide-06-team.png",
+] as const;
 
 const DEPRECATED_SLIDESHOW_SUFFIXES = [
   "/mascot-home.png",

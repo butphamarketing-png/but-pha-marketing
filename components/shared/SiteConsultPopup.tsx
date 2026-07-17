@@ -19,6 +19,7 @@ function isValidVNPhone(value: string) {
 }
 
 function shouldShowOnPath(pathname: string) {
+  if (pathname === "/") return false; // trang chủ đã có section #tu-van
   if (pathname.startsWith("/blog")) return false;
   if (pathname.startsWith("/lien-he")) return false;
   return true;

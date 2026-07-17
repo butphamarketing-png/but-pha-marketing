@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LOADING_EXIT_MS,
   SCENE,
@@ -9,11 +9,8 @@ import {
 } from "@/lib/loading-experience/timeline";
 import { useLoadingTimeline } from "@/lib/loading-experience/useLoadingTimeline";
 import { CompanyName } from "./CompanyName";
-import { DigitalLines } from "./DigitalLines";
 import { LoadingBar } from "./LoadingBar";
 import { LogoAnimation } from "./LogoAnimation";
-import { Particles } from "./Particles";
-import { SERVICE_CARD_LAYOUTS, ServiceCards } from "./ServiceCards";
 
 type LoadingScreenProps = {
   logoSrc: string;
@@ -32,9 +29,7 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);
 
   const finished = active && elapsed >= duration;
-  const showBrandStack = elapsed >= scene.logoRevealStart - (reducedMotion ? 40 : 80);
-
-  const layouts = useMemo(() => SERVICE_CARD_LAYOUTS, []);
+  const showBrandStack = elapsed >= scene.logoRevealStart;
 
   useEffect(() => {
     if (!active) return undefined;
@@ -72,10 +67,6 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
                 "radial-gradient(ellipse 55% 45% at 50% 48%, rgba(124, 58, 237, 0.12) 0%, transparent 68%)",
             }}
           />
-
-          <DigitalLines elapsed={elapsed} reducedMotion={reducedMotion} layouts={layouts} scene={scene} />
-          <ServiceCards elapsed={elapsed} reducedMotion={reducedMotion} scene={scene} />
-          <Particles elapsed={elapsed} reducedMotion={reducedMotion} layouts={layouts} scene={scene} />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             {showBrandStack && (
