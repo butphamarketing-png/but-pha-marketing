@@ -2215,6 +2215,22 @@
   animation-delay: calc(var(--rise, 0) * 155ms + 120ms);
 }
 
+/* Footer: chậm hơn — cột nổi + brand trượt */
+.corp-snap-in .corp-rise.corp-rise--footer {
+  animation-duration: 1.2s;
+  animation-delay: calc(var(--rise, 0) * 240ms + 180ms);
+}
+
+.corp-snap-in .corp-from-left.corp-from-left--footer {
+  animation-duration: 1.15s;
+  animation-delay: calc(var(--rise, 0) * 160ms + 220ms);
+}
+
+.corp-snap-in .corp-fade.corp-fade--footer {
+  animation-duration: 0.95s;
+  animation-delay: calc(var(--rise, 0) * 160ms + 100ms);
+}
+
 @keyframes corp-from-right-in {
   from {
     opacity: 0;

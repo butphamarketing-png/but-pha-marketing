@@ -1913,7 +1913,7 @@ export default function HomePageClient() {
               className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-evenly gap-2 overflow-y-auto px-4 pb-2 pt-[4.25rem] sm:justify-center sm:gap-7 sm:px-8 sm:py-16 lg:gap-8 lg:px-10"
             >
               {/* CTA */}
-              <div {...fadeProps(0, "w-full shrink-0 text-center")}>
+              <div {...fadeProps(0, "corp-fade--footer w-full shrink-0 text-center")}>
                 <h2
                   className="text-[clamp(1.35rem,5.5vw,2.35rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
                   style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
@@ -1943,7 +1943,7 @@ export default function HomePageClient() {
               {/* Links — 3 cột hiện lần lượt từ dưới lên */}
               <div className="w-full shrink-0 border-t border-white/[0.1] pt-3 sm:pt-6">
                 <div className="grid grid-cols-3 gap-x-3 gap-y-1 text-left sm:gap-x-8 md:gap-x-10">
-                  <div {...riseProps(2, "corp-rise--slow")}>
+                  <div {...riseProps(2, "corp-rise--footer")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Kết nối
                     </p>
@@ -1978,7 +1978,7 @@ export default function HomePageClient() {
                     </ul>
                   </div>
 
-                  <div {...riseProps(4, "corp-rise--slow")}>
+                  <div {...riseProps(4, "corp-rise--footer")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Dịch vụ
                     </p>
@@ -2006,7 +2006,7 @@ export default function HomePageClient() {
                     </ul>
                   </div>
 
-                  <div {...riseProps(6, "corp-rise--slow")}>
+                  <div {...riseProps(6, "corp-rise--footer")}>
                     <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Khám phá
                     </p>
@@ -2040,7 +2040,7 @@ export default function HomePageClient() {
               <footer
                 {...fromLeftProps(
                   8,
-                  "mt-1 flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-3 text-center sm:mt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
+                  "corp-from-left--footer mt-1 flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-3 text-center sm:mt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
                 )}
               >
                 <div className="flex items-center gap-2">
