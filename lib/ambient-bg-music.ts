@@ -1,15 +1,16 @@
-/** Nhạc nền spa — êm, ấm; chỉ dùng cho section 1 */
+/** Nhạc nền spa — êm, ấm; auto trên loading + section 1. */
 
 type AudioCtx = AudioContext;
 
+/** Chỉ tắt khi user mute ("1"). Mặc định bật. */
 const MUTE_KEY = "bp-bg-music-muted";
-const DEFAULT_VOLUME = 0.048;
+const DEFAULT_VOLUME = 0.062;
 
 let sharedCtx: AudioCtx | null = null;
 let masterGain: GainNode | null = null;
 let started = false;
 let muted = false;
-/** Section 1 đang nghe được nhạc (không liên quan mute user) */
+/** Loading / section 1 đang nghe được nhạc */
 let sectionAudible = true;
 let nodes: AudioNode[] = [];
 let oscillators: OscillatorNode[] = [];
@@ -31,10 +32,10 @@ function getAudioContext(): AudioCtx | null {
   }
 }
 
+/** Mặc định bật — chỉ tắt khi user đã mute. */
 export function isBgMusicMuted(): boolean {
   if (typeof window === "undefined") return false;
   try {
-    // Mặc định bật — chỉ tắt khi user đã chọn mute
     return localStorage.getItem(MUTE_KEY) === "1";
   } catch {
     return muted;
@@ -60,7 +61,7 @@ function writeMutedPreference(value: boolean) {
 
 function targetGain(volume: number) {
   if (muted || !sectionAudible) return 0.0001;
-  return Math.max(0.001, Math.min(0.1, volume));
+  return Math.max(0.001, Math.min(0.12, volume));
 }
 
 function applyMasterGain(volume: number, fadeSec = 1.4) {
@@ -100,7 +101,7 @@ function stopGraph() {
   started = false;
 }
 
-/** Pad spa ấm + chuông nhẹ (không pulse tech) */
+/** Pad spa ấm + chuông nhẹ */
 function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   stopGraph();
 
@@ -110,7 +111,6 @@ function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   masterGain = master;
   nodes.push(master);
 
-  // Warm lowpass
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
   filter.frequency.setValueAtTime(680, ctx.currentTime);
@@ -118,7 +118,6 @@ function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   filter.connect(master);
   nodes.push(filter);
 
-  // Breath / filter drift rất chậm
   const lfo = ctx.createOscillator();
   lfo.type = "sine";
   lfo.frequency.value = 0.045;
@@ -130,14 +129,13 @@ function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   lfos.push(lfo);
   nodes.push(lfoGain);
 
-  // Spa pad — G major 7 ấm (êm như lounge/spa)
   const partials: { freq: number; type: OscillatorType; gain: number }[] = [
-    { freq: 98.0, type: "sine", gain: 0.42 }, // G2
-    { freq: 146.83, type: "sine", gain: 0.36 }, // D3
-    { freq: 196.0, type: "sine", gain: 0.28 }, // G3
-    { freq: 246.94, type: "triangle", gain: 0.16 }, // B3
-    { freq: 293.66, type: "sine", gain: 0.12 }, // D4
-    { freq: 392.0, type: "sine", gain: 0.07 }, // G4
+    { freq: 98.0, type: "sine", gain: 0.42 },
+    { freq: 146.83, type: "sine", gain: 0.36 },
+    { freq: 196.0, type: "sine", gain: 0.28 },
+    { freq: 246.94, type: "triangle", gain: 0.16 },
+    { freq: 293.66, type: "sine", gain: 0.12 },
+    { freq: 392.0, type: "sine", gain: 0.07 },
   ];
 
   const t = ctx.currentTime;
@@ -156,18 +154,17 @@ function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
     nodes.push(g);
   }
 
-  // Soft chime / singing bowl mỗi ~5.5s
   const playChime = () => {
     if (!masterGain || muted || !sectionAudible || ctx.state !== "running") return;
     const now = ctx.currentTime;
-    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5 — nhẹ
+    const notes = [523.25, 659.25, 783.99];
     const freq = notes[Math.floor(Math.random() * notes.length)];
     const chime = ctx.createOscillator();
     chime.type = "sine";
     chime.frequency.setValueAtTime(freq, now);
     const cg = ctx.createGain();
     cg.gain.setValueAtTime(0.0001, now);
-    cg.gain.exponentialRampToValueAtTime(0.045, now + 0.08);
+    cg.gain.exponentialRampToValueAtTime(0.055, now + 0.08);
     cg.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
     const cf = ctx.createBiquadFilter();
     cf.type = "lowpass";
@@ -200,6 +197,8 @@ export async function unlockBgMusic(): Promise<boolean> {
 /** Bắt đầu nhạc spa (idempotent). */
 export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
   readMutedPreference();
+  if (muted) return false;
+
   const ctx = getAudioContext();
   if (!ctx) return false;
 
@@ -220,7 +219,7 @@ export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
   return true;
 }
 
-/** Bật/tắt nghe theo section — section khác fade out, section 1 fade in */
+/** Loading / section 1: audible; section khác fade out */
 export function setBgMusicSectionActive(active: boolean, volume = DEFAULT_VOLUME) {
   sectionAudible = active;
   readMutedPreference();
@@ -264,12 +263,11 @@ export function stopBgMusic() {
 }
 
 /**
- * Unlock audio sớm; chỉ phát thật khi section 1 active + không mute.
- * Mặc định: auto bật (không mute).
+ * Auto phát trên loading + section 1.
+ * Nếu trình duyệt chặn autoplay → phát ngay khi có gesture (click/scroll/touch).
  */
 export function armBgMusicAutoStart(volume = DEFAULT_VOLUME) {
-  if (typeof window === "undefined" || gestureBound) return;
-  gestureBound = true;
+  if (typeof window === "undefined") return;
   readMutedPreference();
 
   const tryStart = () => {
@@ -277,9 +275,12 @@ export function armBgMusicAutoStart(volume = DEFAULT_VOLUME) {
     void startBgMusic(volume);
   };
 
-  const events: (keyof WindowEventMap)[] = ["pointerdown", "touchstart", "keydown", "wheel"];
-  for (const ev of events) {
-    window.addEventListener(ev, tryStart, { passive: true, capture: true });
+  if (!gestureBound) {
+    gestureBound = true;
+    const events: (keyof WindowEventMap)[] = ["pointerdown", "touchstart", "keydown", "wheel"];
+    for (const ev of events) {
+      window.addEventListener(ev, tryStart, { passive: true, capture: true });
+    }
   }
 
   if (sectionAudible && !muted) void startBgMusic(volume);
