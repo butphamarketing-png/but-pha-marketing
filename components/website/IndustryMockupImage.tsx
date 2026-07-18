@@ -42,13 +42,15 @@ export function IndustryMockupImage({
     : INDUSTRY_MOCKUP_HEIGHT;
 
   if (variant === "card") {
-    const isLandscape = (dims?.width ?? 0) >= (dims?.height ?? 1);
+    // Thumbnail grid ngành: luôn landscape. Ảnh mới (nganh-thumbs) có thể chưa có trong dimension map.
+    const isLandscape =
+      !dims || (dims.width ?? 0) >= (dims.height ?? 1) || resolved.includes("/nganh-thumbs/");
     return (
       <div
         className={
           isLandscape
-            ? `relative aspect-[3/2] w-full overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white ${className}`
-            : `relative mx-auto h-64 w-full max-w-[220px] overflow-hidden bg-gradient-to-b from-indigo-50/80 to-white sm:h-72 ${className}`
+            ? `relative aspect-[16/10] w-full overflow-hidden bg-[#0c0d12] ${className}`
+            : `relative mx-auto h-64 w-full max-w-[220px] overflow-hidden bg-[#0c0d12] sm:h-72 ${className}`
         }
       >
         <Image
