@@ -351,7 +351,7 @@ html.corp-home-snap-active body {
     touch-action: pan-y;
   }
 
-  /* Lĩnh vực coverflow — card nhỏ hơn trên mobile */
+  /* Lĩnh vực coverflow — card nhỏ hơn trên mobile/laptop */
   .corp-linh-card {
     width: auto;
     aspect-ratio: 3 / 4;
@@ -367,13 +367,38 @@ html.corp-home-snap-active body {
 
   @media (min-width: 640px) {
     .corp-linh-card {
-      height: 92%;
-      max-width: min(70%, 285px);
+      height: 90%;
+      max-width: min(62%, 240px);
     }
 
     .corp-linh-card--active {
-      height: 100%;
-      max-width: min(78%, 320px);
+      height: 96%;
+      max-width: min(70%, 268px);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .corp-linh-card {
+      height: 86%;
+      max-width: min(52%, 210px);
+      border-radius: 1.05rem;
+    }
+
+    .corp-linh-card--active {
+      height: 94%;
+      max-width: min(58%, 236px);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .corp-linh-card {
+      height: 88%;
+      max-width: min(54%, 236px);
+    }
+
+    .corp-linh-card--active {
+      height: 96%;
+      max-width: min(60%, 260px);
     }
   }
 
@@ -2565,11 +2590,5 @@ html.corp-home-snap-active body {
 }
 
 html[data-home-section="lien-he"] .home-fab-stack {
-  bottom: 4.75rem;
-}
-
-@media (min-width: 640px) {
-  html[data-home-section="lien-he"] .home-fab-stack {
-    bottom: 5.25rem;
-  }
+  display: none;
 }

@@ -316,12 +316,16 @@ export default function HomePageClient() {
   const [aboutCopyReady, setAboutCopyReady] = useState(false);
   const [linhActive, setLinhActive] = useState(0);
   const [linhPaused, setLinhPaused] = useState(false);
+  const [linhReveal, setLinhReveal] = useState(false);
   const [caseActive, setCaseActive] = useState(0);
+  const [caseReveal, setCaseReveal] = useState(false);
   const [caseTaglineReveal, setCaseTaglineReveal] = useState(false);
   const [voiceActive, setVoiceActive] = useState(0);
   const [voiceReveal, setVoiceReveal] = useState(false);
   const [blogs, setBlogs] = useState<NewsItem[]>([]);
   const [consultForm, setConsultForm] = useState(EMPTY_CONSULT_FORM);
+  const [consultReveal, setConsultReveal] = useState(false);
+  const [knowledgeReveal, setKnowledgeReveal] = useState(false);
   const [consultLoading, setConsultLoading] = useState(false);
   const [consultDone, setConsultDone] = useState(false);
   const [consultSummary, setConsultSummary] = useState("");
@@ -519,7 +523,17 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [aboutReveal]);
 
-  // Lĩnh vực: xoay thẻ sau khi animation vào xong (dừng khi hover)
+  // Lĩnh vực: bật reveal để 3 card nhảy lần lượt (giữa → trái → phải)
+  useEffect(() => {
+    if (activeSection !== 2) {
+      setLinhReveal(false);
+      return;
+    }
+    const t = window.setTimeout(() => setLinhReveal(true), 60);
+    return () => window.clearTimeout(t);
+  }, [activeSection]);
+
+  // Lĩnh vực: xoay thẻ sau khi 3 card hiện lần lượt xong (dừng khi hover)
   useEffect(() => {
     if (activeSection !== 2) {
       setLinhPaused(false);
@@ -531,7 +545,7 @@ export default function HomePageClient() {
       intervalId = window.setInterval(() => {
         setLinhActive((i) => (i + 1) % LINH_VUC.length);
       }, 3400);
-    }, 1400);
+    }, 1800);
     return () => {
       window.clearTimeout(startT);
       if (intervalId) window.clearInterval(intervalId);
@@ -676,12 +690,37 @@ export default function HomePageClient() {
 
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "du-an") {
+      setCaseReveal(false);
       setCaseTaglineReveal(false);
       return;
     }
-    const t = window.setTimeout(() => setCaseTaglineReveal(true), 180);
-    return () => window.clearTimeout(t);
-  }, [activeSection]);
+    setCaseActive(0);
+    const revealT = window.setTimeout(() => setCaseReveal(true), 60);
+    const tagT = window.setTimeout(
+      () => setCaseTaglineReveal(true),
+      180 + featuredCases.length * 280 + 400,
+    );
+    return () => {
+      window.clearTimeout(revealT);
+      window.clearTimeout(tagT);
+    };
+  }, [activeSection, featuredCases.length]);
+
+  // Dự án: khi list hiện lần lượt — đồng bộ ảnh bên phải theo từng mục, rồi về mục đầu
+  useEffect(() => {
+    if (!caseReveal || SECTIONS[activeSection]?.id !== "du-an") return;
+    const timers = featuredCases.map((_, i) =>
+      window.setTimeout(() => setCaseActive(i), 120 + i * 280),
+    );
+    const backT = window.setTimeout(
+      () => setCaseActive(0),
+      120 + Math.max(featuredCases.length - 1, 0) * 280 + 700,
+    );
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      window.clearTimeout(backT);
+    };
+  }, [caseReveal, activeSection, featuredCases.length]);
 
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "tieng-noi") {
@@ -699,6 +738,24 @@ export default function HomePageClient() {
     const t = window.setTimeout(() => setVoiceReveal(true), 40);
     return () => window.clearTimeout(t);
   }, [voiceActive, activeSection]);
+
+  useEffect(() => {
+    if (SECTIONS[activeSection]?.id !== "tu-van") {
+      setConsultReveal(false);
+      return;
+    }
+    const t = window.setTimeout(() => setConsultReveal(true), 60);
+    return () => window.clearTimeout(t);
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (SECTIONS[activeSection]?.id !== "kien-thuc") {
+      setKnowledgeReveal(false);
+      return;
+    }
+    const t = window.setTimeout(() => setKnowledgeReveal(true), 60);
+    return () => window.clearTimeout(t);
+  }, [activeSection]);
 
   // Mobile native: theo dõi section đang xem
   useEffect(() => {
@@ -1246,7 +1303,7 @@ export default function HomePageClient() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#070b16]/88 via-transparent to-[#070b16]/55" />
             </div>
 
-            <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-start gap-4 px-4 pb-6 pt-[4.5rem] sm:gap-6 sm:px-8 sm:pb-10 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-center lg:justify-center lg:gap-10 lg:px-14 lg:pb-0 lg:pt-0 xl:gap-14 xl:pl-28">
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-start gap-4 px-4 pb-6 pt-[4.5rem] sm:gap-6 sm:px-8 sm:pb-10 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-center lg:justify-center lg:gap-10 lg:px-14 lg:pb-8 lg:pt-20 xl:gap-14 xl:pl-28">
               <div
                 {...riseProps(
                   0,
@@ -1303,117 +1360,134 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Mobile + Desktop: coverflow — thẻ nhỏ hơn trên mobile, glow theo màu dịch vụ */}
+              {/* Mobile + Desktop: coverflow — thẻ nhỏ hơn trên mobile/laptop */}
               <div
-                className="relative z-10 mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center sm:mt-0 lg:mt-0 lg:h-[min(76vh,600px)] lg:-translate-y-3 lg:flex-none lg:items-stretch"
+                className="relative z-10 mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center sm:mt-0 lg:mt-0 lg:h-[min(52vh,400px)] lg:flex-none lg:items-stretch xl:h-[min(56vh,460px)]"
                 onMouseEnter={() => setLinhPaused(true)}
                 onMouseLeave={() => setLinhPaused(false)}
               >
-                <div className="relative mx-auto flex h-[min(38dvh,268px)] w-full max-w-xl items-center gap-0.5 px-1 sm:h-[min(48dvh,360px)] sm:max-w-2xl sm:gap-2 sm:px-0 lg:h-full lg:max-w-none lg:gap-3">
+                <div className="relative mx-auto flex h-[min(38dvh,268px)] w-full max-w-xl items-center gap-0.5 px-1 sm:h-[min(48dvh,360px)] sm:max-w-2xl sm:gap-2 sm:px-0 lg:h-full lg:max-w-[520px] lg:gap-2 xl:max-w-[560px]">
                   <button
                     type="button"
                     onClick={() => setLinhActive((i) => (i - 1 + LINH_VUC.length) % LINH_VUC.length)}
-                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
+                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-9 sm:w-9 lg:h-10 lg:w-10"
                     aria-label="Thẻ trước"
                   >
-                    <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
+                    <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
                   </button>
 
-                  <div className="relative mx-auto h-full min-w-0 flex-1 max-w-[280px] perspective-[1200px] sm:max-w-[540px] lg:max-w-[600px]">
-                    {LINH_VUC.map((item, i) => {
-                      const d = linhVucCardOffset(i, linhActive);
-                      const isActive = d === 0;
-                      // Hiện từ dưới lên: giữa → trái → phải
-                      const enterStep = d === 0 ? 1 : d === -1 ? 3 : 5;
-                      return (
-                        <div
-                          key={item.num}
-                          className={`corp-linh-card absolute left-1/2 top-1/2 transition-[transform,opacity,filter,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-                            isActive
-                              ? "corp-linh-card--active z-30 opacity-100 brightness-100"
-                              : "corp-linh-card--side z-10 opacity-80 brightness-[0.8] saturate-[0.8]"
-                          }`}
-                          style={{
-                            transform: isActive
-                              ? "translate(-50%, -54%) scale(1)"
-                              : d === 1
-                                ? "translate(18%, -50%) scale(0.86)"
-                                : "translate(-118%, -50%) scale(0.86)",
-                            boxShadow: isActive
-                              ? `0 14px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08), 0 0 32px ${item.glow}, 0 0 64px ${item.glow}`
-                              : `0 8px 24px rgba(0,0,0,0.3), 0 0 20px ${item.glowSoft}, 0 0 40px ${item.glowSoft}`,
-                          }}
-                        >
-                          <div {...riseProps(enterStep, "corp-rise--linh h-full w-full")}>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (isActive) router.push(item.href);
-                                else setLinhActive(i);
+                  <div className="relative mx-auto h-full min-w-0 flex-1 max-w-[280px] perspective-[1200px] sm:max-w-[480px] lg:max-w-[440px] xl:max-w-[500px]">
+                    <MotionConfig reducedMotion="never">
+                      {LINH_VUC.map((item, i) => {
+                        const d = linhVucCardOffset(i, linhActive);
+                        const isActive = d === 0;
+                        const enterOrder = d === 0 ? 0 : d === -1 ? 1 : 2;
+                        return (
+                          <div
+                            key={item.num}
+                            className={`corp-linh-card absolute left-1/2 top-1/2 transition-[transform,filter,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+                              isActive
+                                ? "corp-linh-card--active z-30 opacity-100 brightness-100"
+                                : "corp-linh-card--side z-10 opacity-80 brightness-[0.8] saturate-[0.8]"
+                            }`}
+                            style={{
+                              transform: isActive
+                                ? "translate(-50%, -54%) scale(1)"
+                                : d === 1
+                                  ? "translate(18%, -50%) scale(0.86)"
+                                  : "translate(-118%, -50%) scale(0.86)",
+                            }}
+                          >
+                            <motion.div
+                              className="h-full w-full"
+                              initial={false}
+                              animate={
+                                linhReveal
+                                  ? { opacity: 1, y: 0, scale: 1 }
+                                  : { opacity: 0, y: 100, scale: 0.9 }
+                              }
+                              transition={{
+                                duration: linhReveal ? 0.85 : 0.28,
+                                delay: linhReveal ? 0.15 + enterOrder * 0.32 : 0,
+                                ease: [0.22, 1, 0.36, 1],
                               }}
-                              className="group relative h-full w-full rounded-2xl text-center"
-                              aria-pressed={isActive}
-                              aria-label={item.title}
+                              style={{
+                                boxShadow: isActive
+                                  ? `0 14px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08), 0 0 32px ${item.glow}, 0 0 64px ${item.glow}`
+                                  : `0 8px 24px rgba(0,0,0,0.3), 0 0 20px ${item.glowSoft}, 0 0 40px ${item.glowSoft}`,
+                                borderRadius: "inherit",
+                              }}
                             >
-                              <div
-                                className={`relative h-full w-full origin-center overflow-hidden rounded-2xl ring-1 ring-white/15 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                                  isActive ? "group-hover:scale-[1.07] group-focus-visible:scale-[1.07]" : ""
-                                }`}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (isActive) router.push(item.href);
+                                  else setLinhActive(i);
+                                }}
+                                className="group relative h-full w-full rounded-2xl text-center"
+                                aria-pressed={isActive}
+                                aria-label={item.title}
                               >
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={item.image}
-                                  alt=""
-                                  className={`h-full w-full object-cover transition duration-700 ${isActive ? "scale-[1.03]" : "scale-100"}`}
-                                  style={{ objectPosition: item.objectPosition }}
-                                />
                                 <div
-                                  className={`absolute inset-0 transition-colors duration-500 ${
-                                    isActive
-                                      ? "bg-gradient-to-t from-[#070b16]/90 via-[#070b16]/35 to-transparent group-hover:from-[#070b16] group-hover:via-[#070b16]/60"
-                                      : "bg-gradient-to-t from-[#070b16]/85 via-[#070b16]/50 to-[#070b16]/25"
+                                  className={`relative h-full w-full origin-center overflow-hidden rounded-2xl ring-1 ring-white/15 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                                    isActive ? "group-hover:scale-[1.07] group-focus-visible:scale-[1.07]" : ""
                                   }`}
-                                />
-                                {isActive ? (
-                                  <div className="absolute inset-x-0 bottom-0 px-3 pb-4 pt-8 text-center sm:px-5 sm:pb-6 sm:pt-10">
-                                    <h3
-                                      className="inline-flex rounded-full border border-white/20 bg-[#1a1030]/92 px-3 py-1 text-[0.72rem] font-bold tracking-wide text-white sm:px-4 sm:py-1.5 sm:text-[0.88rem]"
-                                      style={{
-                                        fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
-                                        fontWeight: 700,
-                                        color: "#ffffff",
-                                        textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                                      }}
-                                    >
-                                      {item.title}
-                                    </h3>
-                                    <div className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100">
-                                      <div className="overflow-hidden">
-                                        <p
-                                          className="mx-auto mt-2 max-w-[12.5rem] text-[11px] font-normal leading-[1.6] tracking-wide text-white/85 sm:mt-3 sm:max-w-[15rem] sm:text-[12.5px]"
-                                          style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
-                                        >
-                                          {item.desc}
-                                        </p>
+                                >
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={item.image}
+                                    alt=""
+                                    className={`h-full w-full object-cover transition duration-700 ${isActive ? "scale-[1.03]" : "scale-100"}`}
+                                    style={{ objectPosition: item.objectPosition }}
+                                  />
+                                  <div
+                                    className={`absolute inset-0 transition-colors duration-500 ${
+                                      isActive
+                                        ? "bg-gradient-to-t from-[#070b16]/90 via-[#070b16]/35 to-transparent group-hover:from-[#070b16] group-hover:via-[#070b16]/60"
+                                        : "bg-gradient-to-t from-[#070b16]/85 via-[#070b16]/50 to-[#070b16]/25"
+                                    }`}
+                                  />
+                                  {isActive ? (
+                                    <div className="absolute inset-x-0 bottom-0 px-3 pb-4 pt-8 text-center sm:px-5 sm:pb-6 sm:pt-10">
+                                      <h3
+                                        className="inline-flex rounded-full border border-white/20 bg-[#1a1030]/92 px-3 py-1 text-[0.72rem] font-bold tracking-wide text-white sm:px-4 sm:py-1.5 sm:text-[0.88rem]"
+                                        style={{
+                                          fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
+                                          fontWeight: 700,
+                                          color: "#ffffff",
+                                          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+                                        }}
+                                      >
+                                        {item.title}
+                                      </h3>
+                                      <div className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100">
+                                        <div className="overflow-hidden">
+                                          <p
+                                            className="mx-auto mt-2 max-w-[12.5rem] text-[11px] font-normal leading-[1.6] tracking-wide text-white/85 sm:mt-3 sm:max-w-[15rem] sm:text-[12.5px]"
+                                            style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
+                                          >
+                                            {item.desc}
+                                          </p>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </button>
+                                  ) : null}
+                                </div>
+                              </button>
+                            </motion.div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </MotionConfig>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => setLinhActive((i) => (i + 1) % LINH_VUC.length)}
-                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
+                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-9 sm:w-9 lg:h-10 lg:w-10"
                     aria-label="Thẻ sau"
                   >
-                    <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
+                    <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
                   </button>
                 </div>
               </div>
@@ -1451,66 +1525,86 @@ export default function HomePageClient() {
               </h2>
 
               <div className="mt-4 grid min-h-0 w-full shrink-0 grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] items-center gap-3 sm:mt-5 sm:grid-cols-[minmax(200px,0.8fr)_minmax(0,1.45fr)] sm:gap-6 md:gap-8 lg:gap-10">
-                {/* Trái — list hiện lần lượt */}
+                {/* Trái — từng dự án hiện lần lượt từ trên xuống */}
                 <div className="relative z-20 flex min-h-0 min-w-0 flex-col self-stretch">
-                  <ul
-                    ref={projectListRef}
-                    data-project-scroll
-                    onScroll={onProjectListScroll}
-                    className="corp-project-scroll corp-project-scroll--left-bar h-[min(42vh,17rem)] space-y-0 overflow-y-scroll overscroll-contain pl-2 sm:h-[min(52vh,22rem)] sm:space-y-0.5 sm:pl-3 md:h-[min(56vh,24rem)]"
-                  >
-                    {featuredCases.map((c, i) => {
-                      const on = i === caseActive;
-                      return (
-                        <li
-                          key={c.slug}
-                          data-case-index={i}
-                          {...riseProps(1 + i * 2, "corp-rise--project")}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => selectCase(i, true)}
-                            className={`group flex w-full items-center gap-2 rounded-md px-1.5 py-1.5 text-left transition sm:gap-3.5 sm:rounded-lg sm:px-2 sm:py-2.5 ${
-                              on ? "bg-white/[0.07]" : "hover:bg-white/[0.04]"
-                            }`}
-                            aria-current={on ? "true" : undefined}
+                  <MotionConfig reducedMotion="never">
+                    <ul
+                      ref={projectListRef}
+                      data-project-scroll
+                      onScroll={onProjectListScroll}
+                      className="corp-project-scroll corp-project-scroll--left-bar h-[min(42vh,17rem)] space-y-0 overflow-y-scroll overscroll-contain pl-2 sm:h-[min(52vh,22rem)] sm:space-y-0.5 sm:pl-3 md:h-[min(56vh,24rem)]"
+                    >
+                      {featuredCases.map((c, i) => {
+                        const on = i === caseActive;
+                        return (
+                          <motion.li
+                            key={c.slug}
+                            data-case-index={i}
+                            initial={false}
+                            animate={
+                              caseReveal
+                                ? { opacity: 1, y: 0, x: 0 }
+                                : { opacity: 0, y: 28, x: -16 }
+                            }
+                            transition={{
+                              duration: caseReveal ? 0.58 : 0.22,
+                              delay: caseReveal ? 0.1 + i * 0.28 : 0,
+                              ease: [0.22, 1, 0.36, 1],
+                            }}
                           >
-                            <span
-                              className={`h-5 w-0.5 shrink-0 rounded-full transition sm:h-8 ${
-                                on ? "bg-violet-400" : "bg-white/15 group-hover:bg-white/30"
+                            <button
+                              type="button"
+                              onClick={() => selectCase(i, true)}
+                              className={`group flex w-full items-center gap-2 rounded-md px-1.5 py-1.5 text-left transition sm:gap-3.5 sm:rounded-lg sm:px-2 sm:py-2.5 ${
+                                on ? "bg-white/[0.07]" : "hover:bg-white/[0.04]"
                               }`}
-                              aria-hidden
-                            />
-                            <span className="min-w-0 flex-1">
+                              aria-current={on ? "true" : undefined}
+                            >
                               <span
-                                className={`block text-[11px] font-medium leading-snug tracking-wide transition sm:text-[14px] ${
-                                  on ? "text-white" : "text-white/55 group-hover:text-white/80"
+                                className={`h-5 w-0.5 shrink-0 rounded-full transition sm:h-8 ${
+                                  on ? "bg-violet-400" : "bg-white/15 group-hover:bg-white/30"
                                 }`}
-                              >
-                                {c.clientName.replace(/^Hệ Thống\s+/i, "")}
+                                aria-hidden
+                              />
+                              <span className="min-w-0 flex-1">
+                                <span
+                                  className={`block text-[11px] font-medium leading-snug tracking-wide transition sm:text-[14px] ${
+                                    on ? "text-white" : "text-white/55 group-hover:text-white/80"
+                                  }`}
+                                >
+                                  {c.clientName.replace(/^Hệ Thống\s+/i, "")}
+                                </span>
+                                <span
+                                  className={`mt-0.5 hidden text-[11px] tracking-wide transition sm:block ${
+                                    on ? "text-violet-200/85" : "text-white/30"
+                                  }`}
+                                >
+                                  {c.industryLabel}
+                                </span>
                               </span>
-                              <span
-                                className={`mt-0.5 hidden text-[11px] tracking-wide transition sm:block ${
-                                  on ? "text-violet-200/85" : "text-white/30"
-                                }`}
-                              >
-                                {c.industryLabel}
-                              </span>
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                            </button>
+                          </motion.li>
+                        );
+                      })}
+                    </ul>
+                  </MotionConfig>
                 </div>
 
                 {/* Phải — khung mockup 3:2 khớp ảnh thiết kế */}
                 <div className="relative z-10 flex min-h-0 min-w-0 flex-col items-center justify-center gap-2.5 sm:gap-3">
-                  <div
-                    {...fromRightProps(
-                      3,
-                      "corp-project-frame relative w-full overflow-hidden rounded-2xl bg-[#0b0f18] ring-1 ring-white/12 sm:rounded-[1.35rem] lg:rounded-[1.5rem]"
-                    )}
+                  <motion.div
+                    className="corp-project-frame relative w-full overflow-hidden rounded-2xl bg-[#0b0f18] ring-1 ring-white/12 sm:rounded-[1.35rem] lg:rounded-[1.5rem]"
+                    initial={false}
+                    animate={
+                      caseReveal
+                        ? { opacity: 1, x: 0, scale: 1 }
+                        : { opacity: 0, x: 36, scale: 0.96 }
+                    }
+                    transition={{
+                      duration: 0.7,
+                      delay: caseReveal ? 0.18 : 0,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {featuredCases.map((c, i) => {
                       const on = i === caseActive;
@@ -1530,21 +1624,29 @@ export default function HomePageClient() {
                         </div>
                       );
                     })}
-                  </div>
+                  </motion.div>
 
                   {activeCase ? (
-                    <a
-                      {...riseProps(
-                        4 + featuredCases.length * 2,
-                        "corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:rounded-lg sm:px-5 sm:py-2.5 sm:text-sm sm:normal-case sm:tracking-normal"
-                      )}
+                    <motion.a
+                      initial={false}
+                      animate={
+                        caseReveal
+                          ? { opacity: 1, y: 0 }
+                          : { opacity: 0, y: 16 }
+                      }
+                      transition={{
+                        duration: 0.5,
+                        delay: caseReveal ? 0.35 : 0,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:rounded-lg sm:px-5 sm:py-2.5 sm:text-sm sm:normal-case sm:tracking-normal"
                       href={activeCase.websiteUrl || `/du-an/${activeCase.slug}`}
                       target={activeCase.websiteUrl ? "_blank" : undefined}
                       rel={activeCase.websiteUrl ? "noopener noreferrer" : undefined}
                     >
                       Xem website
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    </a>
+                    </motion.a>
                   ) : null}
                 </div>
               </div>
@@ -1618,159 +1720,193 @@ export default function HomePageClient() {
                   </button>
                 </div>
               ) : (
-                <form
-                  className="mt-4 grid w-full grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] items-start gap-2.5 border-t border-white/[0.08] pt-3.5 sm:mt-6 sm:gap-5 sm:pt-6 lg:gap-10 lg:pt-8"
-                  onSubmit={handleConsultSubmit}
-                >
-                  {/* Trái — ngày rồi giờ hiện lần lượt */}
-                  <div className="flex min-w-0 flex-col gap-3 text-left sm:gap-4">
-                    <div>
-                      <p
-                        {...riseProps(
-                          1,
-                          "mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
-                        )}
-                      >
-                        NGÀY
-                      </p>
-                      <div className="flex flex-col gap-0.5 sm:gap-1">
-                        {consultDays.map((day, i) => {
-                          const active = consultForm.consultDate === day.iso;
-                          return (
-                            <button
-                              key={day.iso}
-                              type="button"
-                              onClick={() => setConsultForm((prev) => ({ ...prev, consultDate: day.iso }))}
-                              {...riseProps(
-                                2 + i,
-                                `corp-consult-chip flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 sm:px-2.5 sm:py-2${
-                                  active ? " corp-consult-chip--on" : ""
-                                }`
-                              )}
-                              aria-pressed={active}
-                            >
-                              <span className="text-[8px] uppercase tracking-[0.06em] sm:text-[10px]">
-                                {day.isToday ? "Nay" : day.weekday}
-                              </span>
-                              <span className="text-[10px] tabular-nums font-medium sm:text-[12px]">
-                                {day.dayNum}/{day.month}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div>
-                      <p
-                        {...riseProps(
-                          2 + consultDays.length,
-                          "mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
-                        )}
-                      >
-                        GIỜ
-                      </p>
-                      <div className="flex flex-col gap-0.5 sm:gap-1">
-                        {CONSULT_SLOTS.map((slot, i) => {
-                          const active = consultForm.consultSlot === slot.id;
-                          return (
-                            <button
-                              key={slot.id}
-                              type="button"
-                              onClick={() => setConsultForm((prev) => ({ ...prev, consultSlot: slot.id }))}
-                              {...riseProps(
-                                3 + consultDays.length + i,
-                                `corp-consult-slot flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 text-left sm:px-2.5 sm:py-2${
-                                  active ? " corp-consult-slot--on" : ""
-                                }`
-                              )}
-                              aria-pressed={active}
-                            >
-                              <span className="text-[10px] font-medium sm:text-[12px]">{slot.label}</span>
-                              <span className="text-[8px] font-light opacity-55 sm:text-[10px]">{slot.hint}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Phải — form từ phải sang, nút từ dưới lên */}
-                  <div
-                    {...fromRightProps(
-                      4,
-                      "flex min-w-0 flex-col gap-1.5 border-l border-white/[0.08] pl-2.5 text-left sm:gap-2.5 sm:pl-5 lg:pl-10"
-                    )}
+                <MotionConfig reducedMotion="never">
+                  <form
+                    className="mt-4 grid w-full grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] items-start gap-2.5 border-t border-white/[0.08] pt-3.5 sm:mt-6 sm:gap-5 sm:pt-6 lg:gap-10 lg:pt-8"
+                    onSubmit={handleConsultSubmit}
                   >
-                    <p className="mb-0 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]">
-                      THÔNG TIN
-                    </p>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Họ và tên *"
-                      value={consultForm.name}
-                      onChange={(e) => setConsultForm((prev) => ({ ...prev, name: e.target.value }))}
-                      className="corp-consult-input"
-                    />
-                    <input
-                      required
-                      type="tel"
-                      placeholder="Số điện thoại *"
-                      value={consultForm.phone}
-                      onChange={(e) => setConsultForm((prev) => ({ ...prev, phone: e.target.value }))}
-                      className="corp-consult-input"
-                    />
-                    <input
-                      required
-                      type="email"
-                      placeholder="Email *"
-                      value={consultForm.email}
-                      onChange={(e) => setConsultForm((prev) => ({ ...prev, email: e.target.value }))}
-                      className="corp-consult-input"
-                    />
-                    <input
-                      required
-                      type="text"
-                      placeholder="Khu vực *"
-                      value={consultForm.address}
-                      onChange={(e) => setConsultForm((prev) => ({ ...prev, address: e.target.value }))}
-                      className="corp-consult-input"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Ghi chú"
-                      value={consultForm.note}
-                      onChange={(e) => setConsultForm((prev) => ({ ...prev, note: e.target.value }))}
-                      className="corp-consult-input"
-                    />
-                    <button
-                      disabled={consultLoading}
-                      type="submit"
-                      {...riseProps(
-                        8,
-                        "mt-1 w-full rounded-md bg-violet-600 py-2.5 text-[9px] font-semibold tracking-[0.14em] text-white shadow-lg shadow-violet-950/35 transition hover:bg-violet-500 disabled:opacity-50 sm:py-3 sm:text-[11px] sm:tracking-[0.2em]"
-                      )}
-                    >
-                      {consultLoading ? "ĐANG GỬI..." : "ĐẶT LỊCH NGAY"}
-                    </button>
-                    <a
-                      {...riseProps(
-                        9,
-                        "inline-flex items-center justify-center gap-1.5 text-[10px] font-light text-white/40 transition hover:text-white sm:text-[12px]"
-                      )}
-                      href={getTelHref(hotline)}
-                    >
-                      <Phone className="h-3 w-3" />
-                      {hotlineDisplay}
-                    </a>
-                  </div>
-                </form>
+                    {/* Trái — từ trái sang, trên xuống */}
+                    <div className="flex min-w-0 flex-col gap-3 text-left sm:gap-4">
+                      <div>
+                        <motion.p
+                          initial={false}
+                          animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -28 }}
+                          transition={{
+                            duration: 0.45,
+                            delay: consultReveal ? 0.06 : 0,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
+                        >
+                          NGÀY
+                        </motion.p>
+                        <div className="flex flex-col gap-0.5 sm:gap-1">
+                          {consultDays.map((day, i) => {
+                            const active = consultForm.consultDate === day.iso;
+                            return (
+                              <motion.button
+                                key={day.iso}
+                                type="button"
+                                onClick={() =>
+                                  setConsultForm((prev) => ({ ...prev, consultDate: day.iso }))
+                                }
+                                initial={false}
+                                animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -36 }}
+                                transition={{
+                                  duration: 0.5,
+                                  delay: consultReveal ? 0.12 + i * 0.11 : 0,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className={`corp-consult-chip flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 sm:px-2.5 sm:py-2${
+                                  active ? " corp-consult-chip--on" : ""
+                                }`}
+                                aria-pressed={active}
+                              >
+                                <span className="text-[8px] uppercase tracking-[0.06em] sm:text-[10px]">
+                                  {day.isToday ? "Nay" : day.weekday}
+                                </span>
+                                <span className="text-[10px] tabular-nums font-medium sm:text-[12px]">
+                                  {day.dayNum}/{day.month}
+                                </span>
+                              </motion.button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div>
+                        <motion.p
+                          initial={false}
+                          animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -28 }}
+                          transition={{
+                            duration: 0.45,
+                            delay: consultReveal ? 0.12 + consultDays.length * 0.11 + 0.05 : 0,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
+                        >
+                          GIỜ
+                        </motion.p>
+                        <div className="flex flex-col gap-0.5 sm:gap-1">
+                          {CONSULT_SLOTS.map((slot, i) => {
+                            const active = consultForm.consultSlot === slot.id;
+                            const delayBase = 0.12 + consultDays.length * 0.11 + 0.12;
+                            return (
+                              <motion.button
+                                key={slot.id}
+                                type="button"
+                                onClick={() =>
+                                  setConsultForm((prev) => ({ ...prev, consultSlot: slot.id }))
+                                }
+                                initial={false}
+                                animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -36 }}
+                                transition={{
+                                  duration: 0.5,
+                                  delay: consultReveal ? delayBase + i * 0.11 : 0,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className={`corp-consult-slot flex w-full flex-row items-center justify-between gap-1 px-1.5 py-1.5 text-left sm:px-2.5 sm:py-2${
+                                  active ? " corp-consult-slot--on" : ""
+                                }`}
+                                aria-pressed={active}
+                              >
+                                <span className="text-[10px] font-medium sm:text-[12px]">{slot.label}</span>
+                                <span className="text-[8px] font-light opacity-55 sm:text-[10px]">
+                                  {slot.hint}
+                                </span>
+                              </motion.button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Phải — từ phải sang (song song cột trái); nút từ dưới lên sau cùng */}
+                    <div className="flex min-w-0 flex-col gap-1.5 border-l border-white/[0.08] pl-2.5 text-left sm:gap-2.5 sm:pl-5 lg:pl-10">
+                      <motion.p
+                        initial={false}
+                        animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: 36 }}
+                        transition={{
+                          duration: 0.45,
+                          delay: consultReveal ? 0.06 : 0,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="mb-0 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
+                      >
+                        THÔNG TIN
+                      </motion.p>
+                      {(
+                        [
+                          { field: "name" as const, type: "text", placeholder: "Họ và tên *", required: true },
+                          { field: "phone" as const, type: "tel", placeholder: "Số điện thoại *", required: true },
+                          { field: "email" as const, type: "email", placeholder: "Email *", required: true },
+                          { field: "address" as const, type: "text", placeholder: "Khu vực *", required: true },
+                          { field: "note" as const, type: "text", placeholder: "Ghi chú", required: false },
+                        ] as const
+                      ).map((item, i) => (
+                        <motion.input
+                          key={item.field}
+                          required={item.required}
+                          type={item.type}
+                          placeholder={item.placeholder}
+                          value={consultForm[item.field]}
+                          onChange={(e) =>
+                            setConsultForm((prev) => ({ ...prev, [item.field]: e.target.value }))
+                          }
+                          initial={false}
+                          animate={consultReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+                          transition={{
+                            duration: 0.5,
+                            delay: consultReveal ? 0.12 + i * 0.11 : 0,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="corp-consult-input"
+                        />
+                      ))}
+                      <motion.button
+                        disabled={consultLoading}
+                        type="submit"
+                        initial={false}
+                        animate={consultReveal ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                        transition={{
+                          duration: 0.65,
+                          delay: consultReveal
+                            ? 0.12 +
+                              Math.max(consultDays.length + CONSULT_SLOTS.length, 5) * 0.11 +
+                              0.35
+                            : 0,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="mt-1 w-full rounded-md bg-violet-600 py-2.5 text-[9px] font-semibold tracking-[0.14em] text-white shadow-lg shadow-violet-950/35 transition hover:bg-violet-500 disabled:opacity-50 sm:py-3 sm:text-[11px] sm:tracking-[0.2em]"
+                      >
+                        {consultLoading ? "ĐANG GỬI..." : "ĐẶT LỊCH NGAY"}
+                      </motion.button>
+                      <motion.a
+                        initial={false}
+                        animate={consultReveal ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                        transition={{
+                          duration: 0.45,
+                          delay: consultReveal
+                            ? 0.12 +
+                              Math.max(consultDays.length + CONSULT_SLOTS.length, 5) * 0.11 +
+                              0.52
+                            : 0,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="inline-flex items-center justify-center gap-1.5 text-[10px] font-light text-white/40 transition hover:text-white sm:text-[12px]"
+                        href={getTelHref(hotline)}
+                      >
+                        <Phone className="h-3 w-3" />
+                        {hotlineDisplay}
+                      </motion.a>
+                    </div>
+                  </form>
+                </MotionConfig>
               )}
             </div>
           </section>
 
-          {/* 6 — Kiến thức: ảnh lớn trái + 4 bài nhỏ phải (scroll) */}
+          {/* 6 — Kiến thức: ảnh lớn trái + bài nhỏ phải */}
           <section
             id="kien-thuc"
             className={sectionClass(5, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
@@ -1785,109 +1921,139 @@ export default function HomePageClient() {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_40%,rgba(109,40,217,0.14),transparent_65%)]" />
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-3 py-14 sm:px-8 sm:py-20 lg:px-12 lg:pl-20 xl:pl-28">
-              <div className="mb-3 flex shrink-0 items-end justify-between gap-3 sm:mb-7 sm:gap-4">
-                <h2
-                  {...riseProps(
-                    0,
-                    "bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-[clamp(1.65rem,5vw,3.15rem)] font-semibold tracking-[-0.02em] text-transparent",
-                    { fontFamily: '"Cormorant Garamond", Georgia, serif' }
-                  )}
-                >
-                  Kiến thức
-                </h2>
-                <Link
-                  {...riseProps(
-                    1,
-                    "text-[11px] font-medium tracking-wide text-violet-200/80 transition hover:text-white sm:text-[12px]"
-                  )}
-                  href="/blog"
-                >
-                  Xem tất cả →
-                </Link>
-              </div>
-
-              <div className="grid min-h-0 grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-stretch gap-2.5 sm:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-7">
-                {/* Trái — bài lớn từ trái sang */}
-                <Link
-                  {...fromLeftProps(
-                    2,
-                    "group relative min-h-[min(52vh,280px)] overflow-hidden rounded-lg ring-1 ring-white/10 sm:min-h-[280px] lg:min-h-[min(52vh,440px)]"
-                  )}
-                  href={featuredKnowledge?.slug ? `/blog/${featuredKnowledge.slug}` : "/blog"}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={featuredKnowledge?.imageUrl || CORP_HERO_SLIDES[2]}
-                    alt={featuredKnowledge?.title || "Kiến thức marketing"}
-                    className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
-                  <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-5 lg:p-6">
-                    <p className="text-[8px] font-medium uppercase tracking-[0.16em] text-violet-200/80 sm:text-[10px] sm:tracking-[0.2em]">
-                      Nổi bật
-                    </p>
-                    <h3
-                      className="mt-1 line-clamp-3 text-[clamp(0.95rem,3.2vw,1.75rem)] font-semibold leading-snug text-white sm:mt-2"
-                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                    >
-                      {featuredKnowledge?.title || "Kiến thức marketing thực chiến từ Bứt Phá"}
-                    </h3>
-                    <p className="mt-1.5 hidden line-clamp-2 max-w-lg text-[12px] font-light leading-relaxed text-white/55 sm:mt-2 sm:block sm:text-[13px]">
-                      {featuredKnowledge?.description ||
-                        featuredKnowledge?.metaDescription ||
-                        "Website · Facebook · Maps — bài viết chọn lọc cho doanh nghiệp."}
-                    </p>
-                    <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold tracking-wide text-violet-200 transition group-hover:text-white sm:mt-3 sm:gap-1.5 sm:text-[11px]">
-                      Đọc bài
-                      <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                    </span>
-                  </div>
-                </Link>
-
-                {/* Phải — bài nhỏ hiện lần lượt */}
-                <div
-                  data-project-scroll
-                  className="corp-project-scroll max-h-[min(52vh,280px)] space-y-1.5 overflow-y-auto overscroll-contain pr-0.5 sm:max-h-[min(48vh,380px)] sm:space-y-2.5 sm:pr-1 lg:max-h-[min(52vh,440px)]"
-                >
-                  {(sideKnowledge.length > 0
-                    ? sideKnowledge
-                    : Array.from({ length: 4 }, (_, i) => ({
-                        id: `placeholder-${i + 1}`,
-                        title: `Kiến thức marketing thực chiến #${i + 1}`,
-                        slug: "" as string | undefined,
-                        imageUrl: CORP_HERO_SLIDES[i % CORP_HERO_SLIDES.length],
-                        description: "Xem thư viện bài viết Website · Facebook · Maps.",
-                        metaDescription: undefined as string | undefined,
-                      }))
-                  ).map((post, i) => (
+              <MotionConfig reducedMotion="never">
+                <div className="mb-3 flex shrink-0 items-end justify-between gap-3 sm:mb-7 sm:gap-4">
+                  <motion.h2
+                    initial={false}
+                    animate={knowledgeReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -32 }}
+                    transition={{
+                      duration: 0.55,
+                      delay: knowledgeReveal ? 0.05 : 0,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-[clamp(1.65rem,5vw,3.15rem)] font-semibold tracking-[-0.02em] text-transparent"
+                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                  >
+                    Kiến thức
+                  </motion.h2>
+                  <motion.div
+                    initial={false}
+                    animate={knowledgeReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+                    transition={{
+                      duration: 0.45,
+                      delay: knowledgeReveal ? 0.12 : 0,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
                     <Link
-                      key={post.id}
-                      {...riseProps(
-                        3 + i,
-                        "corp-rise--slow group flex gap-2 rounded-md p-1 transition hover:bg-white/[0.04] sm:gap-3.5 sm:p-1.5"
-                      )}
-                      href={post.slug ? `/blog/${post.slug}` : "/blog"}
+                      className="text-[11px] font-medium tracking-wide text-violet-200/80 transition hover:text-white sm:text-[12px]"
+                      href="/blog"
                     >
-                      <div className="relative h-14 w-[4.25rem] shrink-0 overflow-hidden rounded-md bg-white/5 ring-1 ring-white/10 sm:h-[5.25rem] sm:w-[6.75rem]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={post.imageUrl || CORP_HERO_SLIDES[3]}
-                          alt={post.title}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1 py-0.5">
-                        <h4 className="line-clamp-2 text-[11px] font-medium leading-snug text-white/85 transition group-hover:text-white sm:text-[13px]">
-                          {post.title}
-                        </h4>
-                        <p className="mt-1 hidden line-clamp-2 text-[11px] font-light leading-relaxed text-white/40 sm:block">
-                          {post.description || post.metaDescription || "Đọc tiếp trên blog Bứt Phá Marketing."}
+                      Xem tất cả →
+                    </Link>
+                  </motion.div>
+                </div>
+
+                <div className="grid min-h-0 grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-stretch gap-2.5 sm:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-7">
+                  {/* Trái — bài lớn nhảy từ trái qua trước */}
+                  <motion.div
+                    className="min-h-[min(52vh,280px)] sm:min-h-[280px] lg:min-h-[min(52vh,440px)]"
+                    initial={false}
+                    animate={knowledgeReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: -56 }}
+                    transition={{
+                      duration: 0.75,
+                      delay: knowledgeReveal ? 0.18 : 0,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <Link
+                      className="group relative block h-full min-h-[inherit] overflow-hidden rounded-lg ring-1 ring-white/10"
+                      href={featuredKnowledge?.slug ? `/blog/${featuredKnowledge.slug}` : "/blog"}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={featuredKnowledge?.imageUrl || CORP_HERO_SLIDES[2]}
+                        alt={featuredKnowledge?.title || "Kiến thức marketing"}
+                        className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+                      <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-5 lg:p-6">
+                        <p className="text-[8px] font-medium uppercase tracking-[0.16em] text-violet-200/80 sm:text-[10px] sm:tracking-[0.2em]">
+                          Nổi bật
                         </p>
+                        <h3
+                          className="mt-1 line-clamp-3 text-[clamp(0.95rem,3.2vw,1.75rem)] font-semibold leading-snug text-white sm:mt-2"
+                          style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                        >
+                          {featuredKnowledge?.title || "Kiến thức marketing thực chiến từ Bứt Phá"}
+                        </h3>
+                        <p className="mt-1.5 hidden line-clamp-2 max-w-lg text-[12px] font-light leading-relaxed text-white/55 sm:mt-2 sm:block sm:text-[13px]">
+                          {featuredKnowledge?.description ||
+                            featuredKnowledge?.metaDescription ||
+                            "Website · Facebook · Maps — bài viết chọn lọc cho doanh nghiệp."}
+                        </p>
+                        <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold tracking-wide text-violet-200 transition group-hover:text-white sm:mt-3 sm:gap-1.5 sm:text-[11px]">
+                          Đọc bài
+                          <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                        </span>
                       </div>
                     </Link>
-                  ))}
+                  </motion.div>
+
+                  {/* Phải — bài nhỏ từ phải qua, lần lượt trên xuống */}
+                  <div
+                    data-project-scroll
+                    className="corp-project-scroll max-h-[min(52vh,280px)] space-y-1.5 overflow-y-auto overscroll-contain pr-0.5 sm:max-h-[min(48vh,380px)] sm:space-y-2.5 sm:pr-1 lg:max-h-[min(52vh,440px)]"
+                  >
+                    {(sideKnowledge.length > 0
+                      ? sideKnowledge
+                      : Array.from({ length: 4 }, (_, i) => ({
+                          id: `placeholder-${i + 1}`,
+                          title: `Kiến thức marketing thực chiến #${i + 1}`,
+                          slug: "" as string | undefined,
+                          imageUrl: CORP_HERO_SLIDES[i % CORP_HERO_SLIDES.length],
+                          description: "Xem thư viện bài viết Website · Facebook · Maps.",
+                          metaDescription: undefined as string | undefined,
+                        }))
+                    ).map((post, i) => (
+                      <motion.div
+                        key={post.id}
+                        initial={false}
+                        animate={knowledgeReveal ? { opacity: 1, x: 0 } : { opacity: 0, x: 48 }}
+                        transition={{
+                          duration: 0.58,
+                          delay: knowledgeReveal ? 0.72 + i * 0.16 : 0,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      >
+                        <Link
+                          className="group flex gap-2 rounded-md p-1 transition hover:bg-white/[0.04] sm:gap-3.5 sm:p-1.5"
+                          href={post.slug ? `/blog/${post.slug}` : "/blog"}
+                        >
+                          <div className="relative h-14 w-[4.25rem] shrink-0 overflow-hidden rounded-md bg-white/5 ring-1 ring-white/10 sm:h-[5.25rem] sm:w-[6.75rem]">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={post.imageUrl || CORP_HERO_SLIDES[3]}
+                              alt={post.title}
+                              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1 py-0.5">
+                            <h4 className="line-clamp-2 text-[11px] font-medium leading-snug text-white/85 transition group-hover:text-white sm:text-[13px]">
+                              {post.title}
+                            </h4>
+                            <p className="mt-1 hidden line-clamp-2 text-[11px] font-light leading-relaxed text-white/40 sm:block">
+                              {post.description ||
+                                post.metaDescription ||
+                                "Đọc tiếp trên blog Bứt Phá Marketing."}
+                            </p>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </MotionConfig>
             </div>
           </section>
 
@@ -1919,13 +2085,13 @@ export default function HomePageClient() {
               <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
             </button>
 
-            <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col justify-start px-10 pb-10 pt-[5.25rem] sm:justify-center sm:px-14 sm:py-16 lg:px-16 lg:pt-0">
+            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-10 pb-10 pt-[5.5rem] sm:px-14 sm:pb-12 sm:pt-24 lg:justify-center lg:overflow-visible lg:px-16 lg:pb-10 lg:pt-24">
               <h2
                 {...riseProps(0, "mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
                   fontWeight: 600,
-                  fontSize: "clamp(1.25rem, 4vw, 2.65rem)",
-                  lineHeight: 1.15,
+                  fontSize: "clamp(1.25rem, 3.6vw, 2.35rem)",
+                  lineHeight: 1.2,
                   letterSpacing: "-0.02em",
                 })}
               >
@@ -1933,7 +2099,7 @@ export default function HomePageClient() {
               </h2>
 
               {/* Feedback: trước từng chữ → logo → sau từng chữ */}
-              <div {...riseProps(1, "relative mx-auto mt-5 w-full max-w-3xl shrink-0 sm:mt-8")}>
+              <div {...riseProps(1, "relative mx-auto mt-4 w-full max-w-3xl shrink-0 sm:mt-6")}>
                 {activeVoice ? (
                   <MotionConfig reducedMotion="never">
                     <div key={activeVoice.slug} className="flex flex-col items-center text-center">
@@ -2094,44 +2260,54 @@ export default function HomePageClient() {
 
             <div
               data-project-scroll
-              className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-evenly gap-2 overflow-y-auto px-4 pb-2 pt-[4.25rem] sm:justify-center sm:gap-7 sm:px-8 sm:py-16 lg:gap-8 lg:px-10"
+              className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col justify-center gap-5 overflow-y-auto px-5 pb-4 pt-[5.25rem] sm:gap-8 sm:px-10 sm:pb-6 sm:pt-24 lg:gap-10 lg:px-14"
             >
               {/* CTA */}
               <div {...fadeProps(0, "corp-fade--footer w-full shrink-0 text-center")}>
+                <div className="mb-3 flex items-center justify-center gap-2 sm:mb-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={logoSrc} alt="" className="h-8 w-8 rounded-full object-cover sm:h-9 sm:w-9" />
+                  <span
+                    className="text-[13px] font-semibold tracking-wide text-white sm:text-[15px]"
+                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                  >
+                    {brandName}
+                  </span>
+                </div>
                 <h2
-                  className="text-[clamp(1.35rem,5.5vw,2.35rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
+                  className="text-[clamp(1.45rem,5vw,2.5rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-white"
                   style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                 >
                   Sẵn sàng bứt phá?
                 </h2>
-                <p className="mx-auto mt-1.5 max-w-md text-[12px] font-light leading-relaxed text-white/55 sm:mt-2.5 sm:text-[14px]">
+                <p className="mx-auto mt-2 max-w-lg text-[12px] font-light leading-relaxed text-white/55 sm:mt-3 sm:text-[14px]">
                   Lộ trình Website · Facebook · Maps khớp ngân sách và mục tiêu của bạn.
                 </p>
-                <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-5 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:mt-6 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => goToSection(consultSectionIndex)}
-                    className="corp-cta inline-flex items-center justify-center rounded-md bg-violet-600 px-3 py-2.5 text-[11px] font-semibold tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:min-w-[10.5rem] sm:px-6 sm:py-3 sm:text-sm"
+                    className="corp-cta inline-flex min-w-[9.5rem] items-center justify-center rounded-md bg-violet-600 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Đặt lịch tư vấn
                   </button>
                   <Link
                     href="/banggia"
-                    className="inline-flex items-center justify-center rounded-md border border-white/25 px-3 py-2.5 text-[11px] font-semibold tracking-wide text-white/90 transition hover:border-white/50 hover:bg-white/[0.06] sm:min-w-[10.5rem] sm:px-6 sm:py-3 sm:text-sm"
+                    className="inline-flex min-w-[9.5rem] items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white/90 transition hover:border-white/50 hover:bg-white/[0.06] sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Bảng giá
                   </Link>
                 </div>
               </div>
 
-              {/* Links — 3 cột hiện lần lượt từ dưới lên */}
-              <div className="w-full shrink-0 border-t border-white/[0.1] pt-3 sm:pt-6">
-                <div className="grid grid-cols-3 gap-x-3 gap-y-1 text-left sm:gap-x-8 md:gap-x-10">
+              {/* Links — 3 cột */}
+              <div className="w-full shrink-0 border-t border-white/[0.1] pt-4 sm:pt-7">
+                <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-3 sm:gap-x-10 sm:gap-y-0 md:gap-x-14">
                   <div {...riseProps(2, "corp-rise--footer")}>
-                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
+                    <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Kết nối
                     </p>
-                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <a
                           href={getTelHref(hotline)}
@@ -2163,10 +2339,10 @@ export default function HomePageClient() {
                   </div>
 
                   <div {...riseProps(4, "corp-rise--footer")}>
-                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
+                    <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Dịch vụ
                     </p>
-                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/website" className="text-white/70 transition hover:text-violet-200">
                           Website
@@ -2191,10 +2367,10 @@ export default function HomePageClient() {
                   </div>
 
                   <div {...riseProps(6, "corp-rise--footer")}>
-                    <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
+                    <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Khám phá
                     </p>
-                    <ul className="mt-1.5 space-y-1 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/du-an" className="text-white/70 transition hover:text-violet-200">
                           Dự án
@@ -2220,11 +2396,11 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Brand bar — từ trái sang */}
+              {/* Brand bar */}
               <footer
                 {...fromLeftProps(
                   8,
-                  "corp-from-left--footer mt-1 flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-3 text-center sm:mt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
+                  "corp-from-left--footer mt-1 flex w-full shrink-0 flex-col items-center gap-2 border-t border-white/[0.1] pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-5 sm:text-left"
                 )}
               >
                 <div className="flex items-center gap-2">
