@@ -25,8 +25,9 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
 
   useEffect(() => {
     setActive(true);
-    // Unlock audio sớm trong loading
+    // Unlock audio + arm nhạc nền sớm trong loading
     void import("@/lib/type-click-sound").then((m) => m.ensureTypeClickAudio());
+    void import("@/lib/ambient-bg-music").then((m) => m.armBgMusicAutoStart(0.055));
   }, []);
 
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);

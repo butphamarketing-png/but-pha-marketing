@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, MotionConfig } from "framer-motion";
-import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown, Volume2 } from "lucide-react";
+import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown, Volume2, VolumeX } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { getCaseStudyBySlug, getFeaturedShowcases } from "@/lib/case-studies";
 import { CORP_HERO_SLIDES, sanitizeSlideshowItems } from "@/lib/media-assets";
@@ -29,6 +29,12 @@ import {
   unlockHeroAudio,
 } from "@/lib/hero-welcome-sound";
 import { ensureUiAudio, scheduleAppearSounds } from "@/lib/ui-sounds";
+import {
+  armBgMusicAutoStart,
+  isBgMusicMuted,
+  startBgMusic,
+  toggleBgMusicMute,
+} from "@/lib/ambient-bg-music";
 
 const SECTIONS = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
@@ -354,6 +360,8 @@ export default function HomePageClient() {
   const [heroMotionReady, setHeroMotionReady] = useState(false);
   const [heroSoundPrompt, setHeroSoundPrompt] = useState(false);
   const [heroSoundPlayed, setHeroSoundPlayed] = useState(false);
+  const [bgMusicMuted, setBgMusicMuted] = useState(false);
+  const [bgMusicOn, setBgMusicOn] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const heroWelcomeTried = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -469,6 +477,8 @@ export default function HomePageClient() {
 
   useEffect(() => {
     setIsClient(true);
+    setBgMusicMuted(isBgMusicMuted());
+    armBgMusicAutoStart(0.055);
   }, []);
 
   // Safety: nếu loading không gọi onComplete, vẫn mở site sau 8s
@@ -488,11 +498,16 @@ export default function HomePageClient() {
       return undefined;
     }
     ensureTypeClickAudio();
+    armBgMusicAutoStart(0.055);
+    void startBgMusic(0.055).then((ok) => {
+      setBgMusicOn(ok && !isBgMusicMuted());
+      setBgMusicMuted(isBgMusicMuted());
+    });
     const t = window.setTimeout(() => setHeroMotionReady(true), 100);
     return () => window.clearTimeout(t);
   }, [siteReady]);
 
-  // Section 1: jingle + chào mừng (1 lần / phiên)
+  // Section 1: jingle + chào mừng (1 lần / phiên) — nhạc nền vẫn chạy
   useEffect(() => {
     if (!isClient) return;
     if (hasPlayedHeroWelcome()) {
@@ -506,6 +521,9 @@ export default function HomePageClient() {
     let cancelled = false;
     const tryAuto = window.setTimeout(async () => {
       if (cancelled || heroWelcomeTried.current) return;
+      const musicOk = await startBgMusic(0.055);
+      setBgMusicOn(musicOk && !isBgMusicMuted());
+      setBgMusicMuted(isBgMusicMuted());
       const unlocked = await unlockHeroAudio();
       if (unlocked) {
         heroWelcomeTried.current = true;
@@ -517,7 +535,7 @@ export default function HomePageClient() {
         }
       }
       if (!cancelled) setHeroSoundPrompt(true);
-    }, 700);
+    }, 500);
 
     return () => {
       cancelled = true;
@@ -525,7 +543,7 @@ export default function HomePageClient() {
     };
   }, [isClient, siteReady, heroMotionReady, activeSection, brandName]);
 
-  // Rời section 1 → dừng giọng chào
+  // Rời section 1 → dừng giọng chào (giữ nhạc nền)
   useEffect(() => {
     if (activeSection !== 0) stopHeroWelcomeSpeech();
   }, [activeSection]);
@@ -534,6 +552,11 @@ export default function HomePageClient() {
     heroWelcomeTried.current = true;
     await unlockHeroAudio();
     ensureTypeClickAudio();
+    // Bật nhạc nền ngay khi user cho phép audio
+    if (isBgMusicMuted()) toggleBgMusicMute(0.055);
+    await startBgMusic(0.055);
+    setBgMusicMuted(false);
+    setBgMusicOn(true);
     const ok = await playHeroWelcomeExperience({
       skipIfPlayed: false,
       brandName,
@@ -542,6 +565,16 @@ export default function HomePageClient() {
     setHeroSoundPrompt(false);
     return ok;
   }, [brandName]);
+
+  const onToggleBgMusic = useCallback(() => {
+    const nextMuted = toggleBgMusicMute(0.055);
+    setBgMusicMuted(nextMuted);
+    if (!nextMuted) {
+      void startBgMusic(0.055).then(() => setBgMusicOn(true));
+    } else {
+      setBgMusicOn(false);
+    }
+  }, []);
 
   useEffect(() => {
     // Full-section snap mọi thiết bị — kiểu Vinh Phát
@@ -1148,6 +1181,27 @@ export default function HomePageClient() {
         }`}
         style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
       >
+        {/* Nút nhạc nền — luôn hiện để tắt/bật */}
+        {siteReady ? (
+          <button
+            type="button"
+            onClick={onToggleBgMusic}
+            className={`pointer-events-auto fixed bottom-24 left-4 z-[96] flex h-11 w-11 items-center justify-center rounded-full border shadow-lg backdrop-blur-md transition sm:bottom-28 sm:left-5 ${
+              bgMusicMuted || !bgMusicOn
+                ? "border-white/20 bg-black/45 text-white/70 hover:bg-black/60"
+                : "border-violet-300/40 bg-violet-600/40 text-violet-100 hover:bg-violet-600/55"
+            }`}
+            aria-label={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền" : "Tắt nhạc nền"}
+            title={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền" : "Tắt nhạc nền"}
+          >
+            {bgMusicMuted || !bgMusicOn ? (
+              <VolumeX className="h-4 w-4" strokeWidth={1.75} />
+            ) : (
+              <Volume2 className="h-4 w-4" strokeWidth={1.75} />
+            )}
+          </button>
+        ) : null}
+
         {/* Fixed chrome */}
         <header
           className={`pointer-events-none inset-x-0 top-0 z-40 ${
@@ -1345,7 +1399,7 @@ export default function HomePageClient() {
             </div>
 
             <div className="absolute bottom-5 left-1/2 z-20 flex w-full max-w-xs -translate-x-1/2 flex-col items-center gap-3 sm:bottom-7">
-              {(heroSoundPrompt || (!heroSoundPlayed && heroMotionReady)) && activeSection === 0 ? (
+              {(heroSoundPrompt || (!bgMusicOn && heroMotionReady)) && activeSection === 0 ? (
                 <motion.button
                   type="button"
                   onClick={() => void enableHeroWelcomeSound()}
@@ -1353,10 +1407,10 @@ export default function HomePageClient() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.45, delay: 0.2 }}
-                  aria-label="Bật trải nghiệm âm thanh chào mừng"
+                  aria-label="Bật nhạc nền"
                 >
                   <Volume2 className="h-3.5 w-3.5 text-violet-200" strokeWidth={1.75} />
-                  Bật âm thanh chào mừng
+                  Bật nhạc nền
                 </motion.button>
               ) : null}
               <div className="flex gap-1.5">
