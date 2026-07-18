@@ -40,7 +40,7 @@ export function WebsiteProofSection({ variant = "light" }: { variant?: "light" |
         </ul>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {studies.map((study) => (
-            <CaseStudyCard key={study!.slug} study={study!} />
+            <CaseStudyCard key={study!.slug} study={study!} variant="deep" />
           ))}
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
