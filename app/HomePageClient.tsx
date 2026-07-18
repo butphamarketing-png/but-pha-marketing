@@ -2088,7 +2088,7 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          {/* 7 — Tiếng nói: trước/sau từng chữ + nút trái phải */}
+          {/* 7 — Tiếng nói: trước/sau + 3 logo + nút sát rìa */}
           <section
             id="tieng-noi"
             className={sectionClass(6, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
@@ -2099,24 +2099,7 @@ export default function HomePageClient() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(76,29,149,0.14),transparent_60%)]" />
             </div>
 
-            <button
-              type="button"
-              onClick={() => setVoiceActive((i) => (i - 1 + voiceCases.length) % voiceCases.length)}
-              className="absolute left-1.5 top-[52%] z-40 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white shadow-lg backdrop-blur-md sm:left-3 sm:h-11 sm:w-11 md:left-5"
-              aria-label="Khách trước"
-            >
-              <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setVoiceActive((i) => (i + 1) % voiceCases.length)}
-              className="absolute right-1.5 top-[52%] z-40 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white shadow-lg backdrop-blur-md sm:right-3 sm:h-11 sm:w-11 md:right-5"
-              aria-label="Khách sau"
-            >
-              <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
-            </button>
-
-            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-10 pb-8 pt-28 sm:px-14 sm:pb-10 sm:pt-32 lg:overflow-visible lg:px-16 lg:pb-8 lg:pt-36">
+            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-4 pb-8 pt-28 sm:px-10 sm:pb-10 sm:pt-32 lg:overflow-visible lg:px-14 lg:pb-8 lg:pt-36">
               <h2
                 {...riseProps(0, "mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
@@ -2129,7 +2112,6 @@ export default function HomePageClient() {
                 Khách hàng đã nói gì trước khi bứt phá
               </h2>
 
-              {/* Feedback: trước từng chữ → logo → sau từng chữ */}
               <div {...riseProps(1, "relative mx-auto mt-3 w-full max-w-3xl shrink-0 sm:mt-5")}>
                 {activeVoice ? (
                   <MotionConfig reducedMotion="never">
@@ -2147,37 +2129,92 @@ export default function HomePageClient() {
                         style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                       />
 
-                      <div className="relative my-5 sm:my-6">
-                        <span className="pointer-events-none absolute -inset-3 rounded-full bg-amber-400/15 blur-xl" aria-hidden />
-                        <div
-                          className={`relative h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24 ${
-                            activeVoice.hasBrandLogo
-                              ? activeVoice.logoFit === "contain"
-                                ? "bg-white shadow-[0_12px_40px_rgba(255,255,255,0.18)] ring-2 ring-white/70"
-                                : "bg-[#1a1510] shadow-[0_12px_40px_rgba(212,175,55,0.35)] ring-2 ring-amber-300/55"
-                              : "bg-[#12151f] shadow-[0_12px_40px_rgba(76,29,149,0.45)] ring-2 ring-violet-400/50"
-                          }`}
+                      {/* 3 logo + nút trái/phải sát rìa */}
+                      <div className="relative my-5 flex w-full items-center justify-center gap-1.5 sm:my-6 sm:gap-2.5">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setVoiceActive((i) => (i - 1 + voiceCases.length) % voiceCases.length)
+                          }
+                          className="z-20 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md transition hover:border-violet-300/50 hover:bg-violet-600/30 sm:h-9 sm:w-9"
+                          aria-label="Khách trước"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={activeVoice.logo}
-                            alt={activeVoice.clientName}
-                            className={`h-full w-full ${
-                              activeVoice.logoFit === "contain" ? "object-contain p-1.5" : "object-cover"
-                            }`}
-                          />
-                          {!activeVoice.hasBrandLogo ? (
-                            <>
-                              <span className="absolute inset-0 bg-gradient-to-t from-[#06080f]/50 to-transparent" />
-                              <span
-                                className="absolute inset-0 flex items-center justify-center bg-[#0a0d16]/35 text-[15px] font-semibold tracking-[0.12em] text-white sm:text-[17px]"
-                                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                          <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
+                        </button>
+
+                        <div className="flex items-center justify-center gap-3 sm:gap-5">
+                          {([-1, 0, 1] as const).map((slot) => {
+                            const n = voiceCases.length;
+                            const i = (voiceActive + slot + n) % n;
+                            const v = voiceCases[i];
+                            if (!v) return null;
+                            const isActive = slot === 0;
+                            return (
+                              <button
+                                key={`${v.slug}-${slot}`}
+                                type="button"
+                                onClick={() => setVoiceActive(i)}
+                                aria-pressed={isActive}
+                                aria-label={v.clientName}
+                                title={v.clientName}
+                                className={`relative overflow-hidden rounded-full transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                                  isActive
+                                    ? v.hasBrandLogo
+                                      ? v.logoFit === "contain"
+                                        ? "h-[4.75rem] w-[4.75rem] scale-105 bg-white shadow-[0_12px_40px_rgba(255,255,255,0.2)] ring-2 ring-white/75 sm:h-24 sm:w-24"
+                                        : "h-[4.75rem] w-[4.75rem] scale-105 bg-[#1a1510] shadow-[0_12px_40px_rgba(212,175,55,0.4)] ring-2 ring-amber-300/60 sm:h-24 sm:w-24"
+                                      : "h-[4.75rem] w-[4.75rem] scale-105 bg-[#12151f] shadow-[0_12px_40px_rgba(76,29,149,0.45)] ring-2 ring-violet-400/55 sm:h-24 sm:w-24"
+                                    : v.hasBrandLogo
+                                      ? v.logoFit === "contain"
+                                        ? "h-12 w-12 bg-white/95 opacity-70 ring-1 ring-white/35 hover:opacity-95 sm:h-14 sm:w-14"
+                                        : "h-12 w-12 bg-[#1a1510] opacity-70 ring-1 ring-amber-200/25 hover:opacity-95 sm:h-14 sm:w-14"
+                                      : "h-12 w-12 bg-[#12151f] opacity-55 ring-1 ring-white/15 hover:opacity-85 sm:h-14 sm:w-14"
+                                }`}
                               >
-                                {activeVoice.mark}
-                              </span>
-                            </>
-                          ) : null}
+                                {isActive ? (
+                                  <span
+                                    className="pointer-events-none absolute -inset-3 rounded-full bg-amber-400/15 blur-xl"
+                                    aria-hidden
+                                  />
+                                ) : null}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={v.logo}
+                                  alt=""
+                                  className={`relative z-10 h-full w-full ${
+                                    v.hasBrandLogo
+                                      ? v.logoFit === "contain"
+                                        ? "object-contain p-1.5"
+                                        : "object-cover"
+                                      : "object-cover"
+                                  }`}
+                                />
+                                {!v.hasBrandLogo ? (
+                                  <>
+                                    <span className="absolute inset-0 z-10 bg-[#0a0d16]/35" />
+                                    <span
+                                      className={`absolute inset-0 z-20 flex items-center justify-center font-semibold tracking-wider ${
+                                        isActive ? "text-[15px] text-white sm:text-[17px]" : "text-[10px] text-white/85"
+                                      }`}
+                                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                                    >
+                                      {v.mark}
+                                    </span>
+                                  </>
+                                ) : null}
+                              </button>
+                            );
+                          })}
                         </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setVoiceActive((i) => (i + 1) % voiceCases.length)}
+                          className="z-20 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md transition hover:border-violet-300/50 hover:bg-violet-600/30 sm:h-9 sm:w-9"
+                          aria-label="Khách sau"
+                        >
+                          <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
+                        </button>
                       </div>
 
                       <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-violet-300/80 sm:text-[10px]">
@@ -2205,73 +2242,6 @@ export default function HomePageClient() {
                   </MotionConfig>
                 ) : null}
               </div>
-
-              {/* 6 logo tròn chọn thương hiệu */}
-              <div
-                {...riseProps(
-                  2,
-                  "mx-auto mt-6 w-full max-w-2xl shrink-0 border-t border-white/[0.08] pt-4 sm:mt-9 sm:pt-6"
-                )}
-              >
-                <p className="mb-3.5 text-center text-[9px] font-medium uppercase tracking-[0.28em] text-white/30 sm:mb-4 sm:text-[10px]">
-                  Chọn thương hiệu
-                </p>
-                <ul className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-                  {voiceCases.map((v, i) => {
-                    const on = i === voiceActive;
-                    return (
-                      <li key={v.slug}>
-                        <button
-                          type="button"
-                          onClick={() => setVoiceActive(i)}
-                          aria-pressed={on}
-                          aria-label={v.clientName}
-                          title={v.clientName}
-                          className={`group relative h-12 w-12 overflow-hidden rounded-full transition duration-300 sm:h-14 sm:w-14 ${
-                            on
-                              ? v.hasBrandLogo
-                                ? v.logoFit === "contain"
-                                  ? "scale-110 bg-white ring-2 ring-white/80 shadow-[0_0_24px_rgba(255,255,255,0.25)]"
-                                  : "scale-110 bg-[#1a1510] ring-2 ring-amber-300/70 shadow-[0_0_24px_rgba(251,191,36,0.35)]"
-                                : "scale-110 ring-2 ring-violet-400 shadow-[0_0_24px_rgba(139,92,246,0.45)]"
-                              : v.hasBrandLogo
-                                ? v.logoFit === "contain"
-                                  ? "bg-white ring-1 ring-white/40 opacity-85 hover:opacity-100"
-                                  : "bg-[#1a1510] ring-1 ring-amber-200/30 opacity-85 hover:opacity-100"
-                                : "ring-1 ring-white/15 opacity-70 hover:opacity-100 hover:ring-violet-300/40"
-                          }`}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={v.logo}
-                            alt=""
-                            className={`h-full w-full transition ${
-                              v.hasBrandLogo
-                                ? v.logoFit === "contain"
-                                  ? "object-contain p-1"
-                                  : "object-cover"
-                                : "object-cover saturate-[0.75] group-hover:saturate-100"
-                            }`}
-                          />
-                          {!v.hasBrandLogo ? (
-                            <>
-                              <span className="absolute inset-0 bg-[#0a0d16]/40" />
-                              <span
-                                className={`absolute inset-0 flex items-center justify-center text-[10px] font-semibold tracking-wider sm:text-[11px] ${
-                                  on ? "text-white" : "text-white/80"
-                                }`}
-                                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                              >
-                                {v.mark}
-                              </span>
-                            </>
-                          ) : null}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
             </div>
           </section>
 
@@ -2291,7 +2261,7 @@ export default function HomePageClient() {
 
             <div
               data-project-scroll
-              className="relative z-10 mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col justify-start gap-6 overflow-y-auto px-5 pb-3 pt-28 sm:gap-8 sm:px-10 sm:pb-4 sm:pt-32 lg:justify-center lg:gap-9 lg:px-12 lg:pt-28"
+              className="relative z-10 mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col justify-start gap-6 overflow-y-auto px-5 pb-3 pt-28 [scrollbar-width:none] sm:gap-8 sm:px-10 sm:pb-4 sm:pt-32 lg:justify-center lg:gap-9 lg:px-12 lg:pt-28"
             >
               {/* CTA — không lặp logo (đã có trên header) */}
               <div {...fadeProps(0, "corp-fade--footer w-full shrink-0 text-center")}>

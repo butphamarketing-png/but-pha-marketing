@@ -117,6 +117,19 @@
     letter-spacing: 0;
   }
 
+  /* Homepage: ẩn mọi thanh cuộn (vẫn cuộn được) */
+  .corp-home,
+  .corp-home * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .corp-home *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+
   .corp-eyebrow {
     font-family: "Be Vietnam Pro", system-ui, sans-serif;
     font-size: 0.7rem;
@@ -346,9 +359,15 @@ html.corp-home-snap-active body {
   }
 
   .corp-project-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(167, 139, 250, 0.7) rgba(255, 255, 255, 0.1);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     touch-action: pan-y;
+  }
+
+  .corp-project-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
   }
 
   /* Lĩnh vực coverflow — card nhỏ hơn trên mobile/laptop */
@@ -400,21 +419,6 @@ html.corp-home-snap-active body {
       height: 96%;
       max-width: min(60%, 260px);
     }
-  }
-
-  .corp-project-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .corp-project-scroll::-webkit-scrollbar-track {
-    margin-block: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 9999px;
-  }
-
-  .corp-project-scroll::-webkit-scrollbar-thumb {
-    background: rgba(167, 139, 250, 0.75);
-    border-radius: 9999px;
   }
 
   .corp-project-scroll--left-bar {
