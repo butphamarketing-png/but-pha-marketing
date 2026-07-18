@@ -8,6 +8,8 @@ type MoneyKwSiloLinksProps = {
   subtitle?: string;
 };
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+
 export function MoneyKwSiloLinks({
   excludePath,
   title = "Cụm từ khóa money (internal silo)",
@@ -18,22 +20,26 @@ export function MoneyKwSiloLinks({
   );
 
   return (
-    <section className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-xl font-bold text-indigo-950">{title}</h2>
-      <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
+    <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+      <h2 className="text-xl font-semibold text-white" style={serif}>
+        {title}
+      </h2>
+      <p className="mt-2 text-sm text-white/45">{subtitle}</p>
       <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((t) => (
-          <li key={t.id} className="rounded-xl border border-indigo-50 bg-indigo-50/20 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-violet-700">{t.keyword}</p>
+          <li key={t.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/70">
+              {t.keyword}
+            </p>
             <Link
               href={t.primaryPath}
-              className="mt-2 block text-sm font-bold text-indigo-950 underline-offset-2 hover:underline"
+              className="mt-2 block text-sm font-medium text-white underline-offset-2 hover:text-amber-100 hover:underline"
             >
               {t.primaryLabel}
             </Link>
             <Link
               href={t.secondaryPath}
-              className="mt-1 block text-xs font-medium text-slate-600 underline-offset-2 hover:underline"
+              className="mt-1 block text-xs font-medium text-white/40 underline-offset-2 hover:text-amber-200/70 hover:underline"
             >
               {t.secondaryLabel}
             </Link>

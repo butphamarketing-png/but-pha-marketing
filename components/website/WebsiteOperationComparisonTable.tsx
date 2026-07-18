@@ -11,12 +11,12 @@ import { WEBSITE_OPERATION_TIER_META } from "@/lib/service-pricing";
 
 function CompareCell({ value }: { value: WebsiteOperationCompareCell }) {
   if (value === "yes") {
-    return <Check className="mx-auto h-4 w-4 text-emerald-600" strokeWidth={3} />;
+    return <Check className="mx-auto h-4 w-4 text-emerald-400" strokeWidth={3} />;
   }
   if (value === "no") {
-    return <X className="mx-auto h-4 w-4 text-slate-300" strokeWidth={2.5} />;
+    return <X className="mx-auto h-4 w-4 text-white/25" strokeWidth={2.5} />;
   }
-  return <span className="text-xs font-semibold leading-snug text-slate-700">{value}</span>;
+  return <span className="text-xs font-medium leading-snug text-white/70">{value}</span>;
 }
 
 const MOBILE_GROUPS = [
@@ -25,6 +25,8 @@ const MOBILE_GROUPS = [
   { key: "manh" as const, label: "Doanh nghiệp", indices: [6, 7, 8] },
 ];
 
+const panel = "overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03]";
+
 export function WebsiteOperationComparisonTable() {
   const [mobileGroup, setMobileGroup] = useState<(typeof MOBILE_GROUPS)[number]["key"]>("yeu");
   const activeGroup = MOBILE_GROUPS.find((g) => g.key === mobileGroup)!;
@@ -32,19 +34,18 @@ export function WebsiteOperationComparisonTable() {
 
   return (
     <div className="space-y-4">
-      {/* Desktop: full matrix */}
-      <div className="brand-card hidden overflow-hidden lg:block">
+      <div className={`hidden lg:block ${panel}`}>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[960px] border-collapse text-left">
             <thead>
-              <tr className="border-b border-indigo-100 bg-indigo-50/60">
-                <th className="sticky left-0 z-10 min-w-[9rem] bg-indigo-50/95 px-4 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
+              <tr className="border-b border-white/[0.08] bg-white/[0.04]">
+                <th className="sticky left-0 z-10 min-w-[9rem] bg-[#0c0e14] px-4 py-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/60">
                   Tiêu chí
                 </th>
                 {WEBSITE_OPERATION_COMPARE_PACKAGES.map((name) => (
                   <th
                     key={name}
-                    className="min-w-[5.5rem] px-2 py-4 text-center text-[11px] font-bold leading-tight text-indigo-950"
+                    className="min-w-[5.5rem] px-2 py-4 text-center text-[11px] font-medium leading-tight text-white/85"
                   >
                     {name}
                   </th>
@@ -53,10 +54,10 @@ export function WebsiteOperationComparisonTable() {
             </thead>
             <tbody>
               {WEBSITE_OPERATION_COMPARE_ROWS.map((row) => (
-                <tr key={row.label} className="border-b border-indigo-50 hover:bg-indigo-50/30">
-                  <td className="sticky left-0 z-10 bg-white px-4 py-3.5">
-                    <div className="text-sm font-semibold text-indigo-950">{row.label}</div>
-                    {row.hint && <div className="mt-0.5 text-[10px] text-slate-400">{row.hint}</div>}
+                <tr key={row.label} className="border-b border-white/[0.05] hover:bg-white/[0.03]">
+                  <td className="sticky left-0 z-10 bg-[#0c0e14] px-4 py-3.5">
+                    <div className="text-sm font-medium text-white/90">{row.label}</div>
+                    {row.hint && <div className="mt-0.5 text-[10px] text-white/35">{row.hint}</div>}
                   </td>
                   {row.values.map((value, idx) => (
                     <td key={`${row.label}-${idx}`} className="px-2 py-3.5 text-center align-middle">
@@ -70,7 +71,6 @@ export function WebsiteOperationComparisonTable() {
         </div>
       </div>
 
-      {/* Mobile: 3 gói / nhóm */}
       <div className="space-y-4 lg:hidden">
         <div className="flex gap-2">
           {MOBILE_GROUPS.map((group) => {
@@ -81,11 +81,11 @@ export function WebsiteOperationComparisonTable() {
                 key={group.key}
                 type="button"
                 onClick={() => setMobileGroup(group.key)}
-                className="flex-1 rounded-xl border px-2 py-2.5 text-xs font-bold transition"
+                className="flex-1 rounded-xl border px-2 py-2.5 text-xs font-semibold transition"
                 style={
                   active
-                    ? { borderColor: meta.color, backgroundColor: `${meta.color}12`, color: meta.color }
-                    : { borderColor: "rgba(99,102,241,0.15)", color: "#475569" }
+                    ? { borderColor: meta.color, backgroundColor: `${meta.color}18`, color: meta.color }
+                    : { borderColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.45)", backgroundColor: "transparent" }
                 }
               >
                 {group.label}
@@ -94,9 +94,9 @@ export function WebsiteOperationComparisonTable() {
           })}
         </div>
 
-        <div className="brand-card overflow-hidden">
+        <div className={panel}>
           <div
-            className="border-b border-indigo-100 px-4 py-3 text-center text-xs font-bold uppercase tracking-wide"
+            className="border-b border-white/[0.08] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide"
             style={{ color: activeMeta.color }}
           >
             {activeMeta.label}
@@ -104,12 +104,12 @@ export function WebsiteOperationComparisonTable() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[20rem]">
               <thead>
-                <tr className="border-b border-indigo-100 bg-indigo-50/50">
-                  <th className="px-4 py-3 text-left text-xs font-bold text-slate-500">Tiêu chí</th>
+                <tr className="border-b border-white/[0.08] bg-white/[0.04]">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-white/40">Tiêu chí</th>
                   {activeGroup.indices.map((idx) => (
                     <th
                       key={WEBSITE_OPERATION_COMPARE_PACKAGES[idx]}
-                      className="px-2 py-3 text-center text-[11px] font-bold text-indigo-950"
+                      className="px-2 py-3 text-center text-[11px] font-medium text-white/85"
                     >
                       {WEBSITE_OPERATION_COMPARE_PACKAGES[idx]}
                     </th>
@@ -118,8 +118,8 @@ export function WebsiteOperationComparisonTable() {
               </thead>
               <tbody>
                 {WEBSITE_OPERATION_COMPARE_ROWS.map((row) => (
-                  <tr key={row.label} className="border-b border-indigo-50">
-                    <td className="px-4 py-3 text-sm font-semibold text-indigo-950">{row.label}</td>
+                  <tr key={row.label} className="border-b border-white/[0.05]">
+                    <td className="px-4 py-3 text-sm font-medium text-white/90">{row.label}</td>
                     {activeGroup.indices.map((idx) => (
                       <td key={`${row.label}-m-${idx}`} className="px-2 py-3 text-center align-middle">
                         <CompareCell value={row.values[idx]} />
@@ -133,7 +133,7 @@ export function WebsiteOperationComparisonTable() {
         </div>
       </div>
 
-      <p className="text-center text-[11px] leading-relaxed text-slate-400">
+      <p className="text-center text-[11px] leading-relaxed text-white/35">
         Mức ⭐ thể hiện mức tối ưu theo gói, không cam kết điểm PageSpeed cố định. Thời gian xử lý sự cố là mục tiêu phản hồi ban đầu trong giờ hành chính, trừ gói VIP 24/7.
       </p>
     </div>

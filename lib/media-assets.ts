@@ -1,5 +1,5 @@
 export const DEFAULT_HERO_SLIDE = "/hero-slideshow/hero-slide-01-strategy.png";
-export const DEFAULT_INTRO_IMAGE = "/mascot-home.png";
+export const DEFAULT_INTRO_IMAGE = "/hero-slideshow/hero-slide-06-team.png";
 export const DEFAULT_MASCOT_IMAGE = "/mascot-home.png";
 
 /** Corp homepage hero slideshow (Section 1) */

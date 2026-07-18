@@ -1,0 +1,30 @@
+---
+description: Khóa trang chủ — không sửa HomePage trừ khi user yêu cầu mở khóa
+alwaysApply: true
+---
+
+# Khóa trang chủ (Homepage Lock)
+
+Trang chủ đang **KHÓA**. Không chỉnh sửa, refactor, restyle, hay “fix kèm” trang chủ trừ khi user **nói rõ** muốn mở khóa (ví dụ: “mở trang chủ”, “sửa trang chủ”, “unlock homepage”).
+
+## Không đụng các file / khu vực sau
+
+- `app/page.tsx`
+- `app/HomePageClient.tsx`
+- `components/loading/**` (LoadingScreen, logo animation…)
+- `lib/ambient-bg-music.ts`
+- `lib/hero-welcome-sound.ts`
+- `lib/loading-experience/**`
+- CSS/class riêng homepage: `corp-home`, `corp-home-snap`, section IDs homepage (`but-pha`, `gioi-thieu` trên home, v.v.) trong `HomePageClient`
+
+## Khi làm việc trang khác
+
+- Được sửa `/website`, `/facebook`, `/blog`, `/lien-he`, nav chung, v.v.
+- Nếu thay đổi shared component ảnh hưởng homepage (`MarketingChrome`, `SiteNavMenu`, `globals.css`): **tránh** đổi hành vi/style chỉ dành cho homepage; ưu tiên scoped theo route/deep theme, không đụng logic `HomePageClient`.
+- Không “顺 tay” tối ưu, redesign, hay push change homepage trong cùng PR/commit với việc khác.
+
+## Chỉ được sửa trang chủ khi
+
+User explicit: mở khóa / sửa trang chủ / chỉnh loading homepage / nhạc hero / section homepage.
+
+Khi đó mới edit các file ở trên; nếu không chắc → hỏi lại trước.

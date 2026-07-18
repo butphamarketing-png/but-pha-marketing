@@ -1,14 +1,14 @@
-/** Ma trận so sánh gói vận hành — đồng bộ thứ tự WEBSITE_OPERATION_PACKAGES */
+/** Ma trận so sánh gói Hosting — đồng bộ thứ tự WEBSITE_OPERATION_PACKAGES */
 export const WEBSITE_OPERATION_COMPARE_PACKAGES = [
-  "Siêu Nhỏ",
-  "Cơ Bản",
-  "Tiêu Chuẩn",
-  "Nâng Cao",
-  "Chuyên Nghiệp",
-  "Bứt Phá",
-  "Phát Triển",
-  "Mở Rộng",
-  "Toàn Diện",
+  "2GB",
+  "3GB",
+  "5GB",
+  "8GB",
+  "10GB",
+  "16GB",
+  "20GB",
+  "30GB",
+  "50GB",
 ] as const;
 
 export type WebsiteOperationCompareCell = "yes" | "no" | string;
@@ -68,7 +68,7 @@ export const WEBSITE_OPERATION_COMPARE_ROWS: WebsiteOperationCompareRow[] = [
       "SEO cơ bản",
       "Chạy Ads",
       "SEO + Ads",
-      "Marketing mạnh",
+      "Traffic trung bình cao",
       "Doanh nghiệp tăng trưởng",
       "Doanh nghiệp lớn",
       "Hệ thống trọng điểm",

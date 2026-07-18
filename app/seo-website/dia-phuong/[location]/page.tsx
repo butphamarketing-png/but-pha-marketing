@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProgrammaticLandingPage } from "@/components/landing/ProgrammaticLandingPage";
+import { DeepPageShell } from "@/components/shared/DeepPageShell";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import {
   buildFaqSchema,
@@ -154,7 +155,7 @@ export default async function LocalSeoProgrammaticPage({ params }: { params: Pro
   ];
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <DeepPageShell padded>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBizLd) }} />
       {faqLd ? (
@@ -175,6 +176,6 @@ export default async function LocalSeoProgrammaticPage({ params }: { params: Pro
           <MoneyKwSiloLinks excludePath={`/seo-website/dia-phuong/${landing.slug}`} />
         </div>
       )}
-    </main>
+    </DeepPageShell>
   );
 }

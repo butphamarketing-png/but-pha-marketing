@@ -56,24 +56,27 @@ export type SubLandingConfig = {
   };
 };
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+const panel = "rounded-3xl border border-white/[0.08] bg-white/[0.03] p-6 md:p-8";
+
 export function SubLandingPage({ config }: { config: SubLandingConfig }) {
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
-      <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
+    <div className="mx-auto max-w-5xl space-y-8 text-white">
+      <nav aria-label="Breadcrumb" className="text-sm text-white/40">
         <ol className="flex flex-wrap items-center gap-1.5">
           {config.breadcrumbs.map((item, index) => (
             <li key={`${item.label}-${index}`} className="flex items-center gap-1.5">
               {index > 0 && (
-                <span aria-hidden="true" className="text-slate-400">
+                <span aria-hidden="true" className="text-white/25">
                   /
                 </span>
               )}
               {item.href ? (
-                <Link href={item.href} className="font-medium text-indigo-700 hover:text-indigo-900">
+                <Link href={item.href} className="font-medium text-amber-200/70 hover:text-amber-100">
                   {item.label}
                 </Link>
               ) : (
-                <span className="font-semibold text-indigo-950" aria-current="page">
+                <span className="font-medium text-white/70" aria-current="page">
                   {item.label}
                 </span>
               )}
@@ -82,20 +85,37 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
         </ol>
       </nav>
 
-      <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 p-8 shadow-sm md:p-12">
-        {config.eyebrow && <p className="brand-eyebrow mb-3">{config.eyebrow}</p>}
-        <h1 className="text-4xl font-black tracking-tight text-indigo-950 md:text-5xl">{config.title}</h1>
-        <div className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">{config.intro}</div>
+      <section className="border-b border-white/[0.06] pb-12">
+        {config.eyebrow && (
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+            {config.eyebrow}
+          </p>
+        )}
+        <h1
+          className="text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.1] tracking-tight text-white"
+          style={serif}
+        >
+          {config.title}
+        </h1>
+        <div className="mt-5 max-w-3xl text-base leading-relaxed text-white/45 md:text-lg">{config.intro}</div>
         {config.ctas && config.ctas.length > 0 && (
           <div className="mt-8 flex flex-wrap gap-3">
             {config.ctas.map((cta) =>
               cta.primary ? (
-                <Link key={cta.href} href={cta.href} className="brand-btn-primary">
+                <Link
+                  key={cta.href}
+                  href={cta.href}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:brightness-105"
+                >
                   {cta.label}
                   <ArrowRight size={18} />
                 </Link>
               ) : (
-                <Link key={cta.href} href={cta.href} className="brand-btn-secondary">
+                <Link
+                  key={cta.href}
+                  href={cta.href}
+                  className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/75 hover:border-violet-300/50 hover:text-violet-200"
+                >
                   {cta.label}
                 </Link>
               ),
@@ -105,13 +125,15 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       </section>
 
       {config.painPoints && config.painPoints.length > 0 && (
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">{config.painTitle || "Vì sao cần giải pháp này?"}</h2>
-          {config.painIntro && <p className="mt-3 max-w-3xl text-slate-600">{config.painIntro}</p>}
+        <section className={panel}>
+          <h2 className="text-2xl font-semibold text-white" style={serif}>
+            {config.painTitle || "Vì sao cần giải pháp này?"}
+          </h2>
+          {config.painIntro && <p className="mt-3 max-w-3xl text-white/45">{config.painIntro}</p>}
           <ul className="mt-6 grid gap-3 md:grid-cols-2">
             {config.painPoints.map((item) => (
-              <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" />
+              <li key={item} className="flex items-start gap-2 text-sm text-white/70">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-200/80" />
                 {item}
               </li>
             ))}
@@ -120,15 +142,17 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.features && config.features.length > 0 && (
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">{config.featuresTitle || "Phạm vi triển khai"}</h2>
+        <section className={panel}>
+          <h2 className="text-2xl font-semibold text-white" style={serif}>
+            {config.featuresTitle || "Phạm vi triển khai"}
+          </h2>
           <ul className="mt-5 space-y-3">
             {config.features.map((item) => (
               <li
                 key={item}
-                className="flex items-start gap-3 rounded-2xl border border-indigo-50 bg-indigo-50/30 px-4 py-3 text-slate-700"
+                className="flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-white/70"
               >
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-400/80" />
                 <span>{item}</span>
               </li>
             ))}
@@ -137,14 +161,18 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.process && config.process.length > 0 && (
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">{config.processTitle || "Quy trình triển khai"}</h2>
+        <section className={panel}>
+          <h2 className="text-2xl font-semibold text-white" style={serif}>
+            {config.processTitle || "Quy trình triển khai"}
+          </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {config.process.map((item) => (
-              <article key={item.step} className="rounded-2xl border border-indigo-100 p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-violet-600">Bước {item.step}</p>
-                <h3 className="mt-2 font-bold text-indigo-950">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              <article key={item.step} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-200/70">
+                  Bước {item.step}
+                </p>
+                <h3 className="mt-2 font-medium text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/45">{item.desc}</p>
               </article>
             ))}
           </div>
@@ -152,9 +180,11 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.kpis && config.kpis.length > 0 && (
-        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-emerald-900">{config.kpiTitle || "Kết quả kỳ vọng"}</h2>
-          <ul className="mt-4 space-y-2 text-emerald-950">
+        <section className="rounded-3xl border border-emerald-400/20 bg-emerald-500/[0.06] p-6 md:p-8">
+          <h2 className="text-2xl font-semibold text-emerald-100" style={serif}>
+            {config.kpiTitle || "Kết quả kỳ vọng"}
+          </h2>
+          <ul className="mt-4 space-y-2 text-emerald-100/80">
             {config.kpis.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
@@ -163,17 +193,19 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.relatedLinks && config.relatedLinks.length > 0 && (
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">{config.relatedTitle || "Liên kết liên quan"}</h2>
+        <section className={panel}>
+          <h2 className="text-2xl font-semibold text-white" style={serif}>
+            {config.relatedTitle || "Liên kết liên quan"}
+          </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {config.relatedLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-2xl border border-indigo-100 p-4 transition hover:border-violet-300 hover:bg-violet-50/30"
+                className="rounded-2xl border border-white/[0.08] p-4 transition hover:border-amber-200/30 hover:bg-white/[0.04]"
               >
-                <p className="font-bold text-indigo-950">{item.label}</p>
-                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                <p className="font-medium text-white">{item.label}</p>
+                <p className="mt-1 text-sm text-white/40">{item.desc}</p>
               </Link>
             ))}
           </div>
@@ -181,16 +213,20 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.faqs && config.faqs.length > 0 && (
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 id="faq" className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
+        <section className={panel}>
+          <h2 id="faq" className="text-2xl font-semibold text-white" style={serif}>
+            Câu hỏi thường gặp
+          </h2>
           <div className="mt-5 space-y-3">
             {config.faqs.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200 open:bg-violet-50/30"
+                className="group rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 open:border-amber-200/25"
               >
-                <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">{item.q}</summary>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+                <summary className="cursor-pointer list-none font-medium text-white marker:hidden">
+                  {item.q}
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-white/45">{item.a}</p>
               </details>
             ))}
           </div>
@@ -198,16 +234,22 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
       )}
 
       {config.ctaBand && (
-        <section className="rounded-3xl border border-violet-200 bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-800 p-8 text-white md:p-10">
+        <section className="rounded-3xl border border-violet-400/20 bg-gradient-to-br from-[#12141c] via-[#0c0e14] to-[#1a1430] p-8 md:p-10">
           {config.ctaBand.eyebrow && (
-            <p className="text-xs font-bold uppercase tracking-wider text-violet-200">{config.ctaBand.eyebrow}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-violet-300/70">
+              {config.ctaBand.eyebrow}
+            </p>
           )}
-          <h2 className="mt-2 text-2xl font-black md:text-3xl">{config.ctaBand.title}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-violet-100 md:text-base">{config.ctaBand.subline}</p>
+          <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl" style={serif}>
+            {config.ctaBand.title}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45 md:text-base">
+            {config.ctaBand.subline}
+          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href={config.ctaBand.primary.href}
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-violet-700 transition hover:bg-violet-50"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:brightness-105"
             >
               {config.ctaBand.primary.label}
               <ArrowRight size={16} />
@@ -215,7 +257,7 @@ export function SubLandingPage({ config }: { config: SubLandingConfig }) {
             {config.ctaBand.secondary && (
               <Link
                 href={config.ctaBand.secondary.href}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/80 hover:border-violet-300/50 hover:text-violet-200"
               >
                 {config.ctaBand.secondary.label}
               </Link>

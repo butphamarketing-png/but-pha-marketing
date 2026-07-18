@@ -77,13 +77,15 @@ export function DomainCarousel({ accent }: { accent: string }) {
                   </span>
                 </div>
 
-                <h3 className="mb-1 text-3xl font-bold text-indigo-950">{domain.name}</h3>
-                <p className="mb-6 min-h-[40px] text-sm leading-relaxed text-slate-500">{domain.tagline}</p>
+                <h3 className="mb-1 text-3xl font-semibold text-white" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+                  {domain.name}
+                </h3>
+                <p className="mb-6 min-h-[40px] text-sm leading-relaxed text-white/45">{domain.tagline}</p>
 
-                <ul className="mb-8 space-y-3 border-y border-indigo-100 py-4">
+                <ul className="mb-8 space-y-3 border-y border-white/[0.08] py-4">
                   {domain.works.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-slate-600">
-                      <Check size={16} className="mt-0.5 shrink-0" style={{ color: accent }} />
+                    <li key={item} className="flex items-start gap-2 text-sm text-white/65">
+                      <Check size={16} className="mt-0.5 shrink-0 text-amber-200/80" />
                       {item}
                     </li>
                   ))}
@@ -92,8 +94,7 @@ export function DomainCarousel({ accent }: { accent: string }) {
                 <button
                   type="button"
                   onClick={() => setShowModal(true)}
-                  className="w-full rounded-2xl py-3.5 text-xs font-bold text-white shadow-lg transition hover:brightness-105"
-                  style={{ backgroundColor: accent }}
+                  className="w-full rounded-full bg-amber-200 py-3.5 text-xs font-semibold text-[#0b0d12] transition hover:bg-amber-100"
                 >
                   Tra cứu &amp; đăng ký
                 </button>
@@ -104,11 +105,11 @@ export function DomainCarousel({ accent }: { accent: string }) {
 
         <div className="mt-5 flex items-center justify-center gap-3 sm:hidden">
           <NavButton direction="left" accent={accent} onClick={() => scroll("left")} />
-          <p className="text-xs font-medium text-slate-500">Vuốt ngang hoặc bấm mũi tên</p>
+          <p className="text-xs font-medium text-white/40">Vuốt ngang hoặc bấm mũi tên</p>
           <NavButton direction="right" accent={accent} onClick={() => scroll("right")} />
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-500">
+        <p className="mt-6 text-center text-xs text-white/35">
           Báo giá chi tiết theo từng đuôi tên miền — liên hệ tư vấn miễn phí.
         </p>
       </div>

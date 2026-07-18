@@ -10,6 +10,8 @@ type PlatformSectionHeaderProps = {
   align?: "center" | "left";
 };
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+
 export function PlatformSectionHeader({
   accentColor,
   label,
@@ -22,13 +24,16 @@ export function PlatformSectionHeader({
   return (
     <div className={`flex flex-col gap-4 ${alignClass}`}>
       <div className={`flex flex-col gap-3 ${align === "center" ? "items-center" : "items-start"}`}>
-        <div className="h-1 w-12 rounded-full" style={{ backgroundColor: accentColor }} />
-        <span className="text-xs font-semibold tracking-wide text-slate-500">{label}</span>
+        <div className="h-1 w-12 rounded-full" style={{ backgroundColor: accentColor || "#C4955A" }} />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-violet-300/75">{label}</span>
       </div>
-      <h2 className="text-3xl font-bold leading-tight tracking-tight text-indigo-950 md:text-4xl lg:text-5xl">
+      <h2
+        className="text-3xl font-semibold leading-tight tracking-tight text-white md:text-4xl lg:text-5xl"
+        style={serif}
+      >
         {title}
       </h2>
-      {subtitle ? <div className="max-w-2xl text-sm text-slate-600">{subtitle}</div> : null}
+      {subtitle ? <div className="max-w-2xl text-sm text-white/45">{subtitle}</div> : null}
     </div>
   );
 }

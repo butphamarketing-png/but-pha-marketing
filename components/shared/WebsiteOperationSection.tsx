@@ -11,14 +11,14 @@ import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 
 const TIER_TABS: { key: WebsiteOperationTierKey; emoji: string; label: string }[] = [
-  { key: "yeu", emoji: "🟢", label: "Nhóm Khởi Đầu" },
-  { key: "vua", emoji: "🔵", label: "Nhóm Tăng Trưởng" },
-  { key: "manh", emoji: "🟣", label: "Nhóm Doanh Nghiệp" },
+  { key: "yeu", emoji: "🟢", label: "Gói Phổ Thông" },
+  { key: "vua", emoji: "🔵", label: "Chất Lượng Cao" },
+  { key: "manh", emoji: "🟣", label: "Hosting Cao Cấp" },
 ];
 
 export function WebsiteOperationSection({
   primaryColor,
-  sectionLabel = "Vận hành Website",
+  sectionLabel = "Hosting",
   chooseLabel,
 }: {
   primaryColor: string;
@@ -49,7 +49,11 @@ export function WebsiteOperationSection({
                       color: tabMeta.color,
                       boxShadow: `0 8px 24px ${tabMeta.color}18`,
                     }
-                  : { borderColor: "rgba(99,102,241,0.15)", color: "#475569", backgroundColor: "#fff" }
+                  : {
+                      borderColor: "rgba(255,255,255,0.12)",
+                      color: "rgba(255,255,255,0.45)",
+                      backgroundColor: "rgba(255,255,255,0.03)",
+                    }
               }
             >
               {tab.emoji} {tab.label}
@@ -58,7 +62,7 @@ export function WebsiteOperationSection({
         })}
       </div>
 
-      <p className="text-center text-sm text-slate-600">{meta.description}</p>
+      <p className="text-center text-sm text-white/45">{meta.description}</p>
 
       <PackageCarousel accent={meta.color} itemCount={packages.length} desktopCols={3}>
         {packages.map((pkg) => {

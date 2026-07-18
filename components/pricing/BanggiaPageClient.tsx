@@ -119,7 +119,7 @@ export function BanggiaPageClient() {
 
   if (!gateReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#08090c]">
+      <div className="flex min-h-screen items-center justify-center deep-theme">
         <div className="h-10 w-10 animate-pulse rounded-full bg-amber-200/20" aria-hidden />
         <span className="sr-only">Đang tải bảng giá…</span>
       </div>
@@ -128,7 +128,7 @@ export function BanggiaPageClient() {
 
   if (!unlocked) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-[#08090c]">
+      <div className="relative min-h-screen overflow-hidden deep-theme">
         <div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -154,12 +154,12 @@ export function BanggiaPageClient() {
   }
 
   return (
-    <div className="banggia-deep relative min-h-screen overflow-x-hidden bg-[#08090c] text-white">
+    <div className="banggia-deep relative min-h-screen overflow-x-hidden deep-theme text-white">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[70vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 35% at 15% 30%, rgba(99,102,241,0.08), transparent), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
         }}
         aria-hidden
       />
@@ -172,7 +172,7 @@ export function BanggiaPageClient() {
         aria-hidden
       />
 
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090c]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/[0.06]  bg-[#0e1018]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <Image src="/logo.png" alt="Bứt Phá Marketing" width={40} height={40} className="h-10 w-10 object-contain" />

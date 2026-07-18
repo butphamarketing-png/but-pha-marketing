@@ -40,6 +40,11 @@ import {
   resolveBatDongSanArticleSlug,
 } from "./bat-dong-san-images";
 
+import {
+  getGeneratedArticleThumbnailAlt,
+  getGeneratedArticleThumbnailPath,
+} from "./news-article-thumbs.generated";
+
 export type NewsImageTopic = "website" | "facebook" | "google-maps" | "marketing";
 
 export {
@@ -108,7 +113,7 @@ export const CRM_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain
     keywordsMain: "zoho crm hay pipedrive",
   },
   "hubspot-hay-zoho-crm": {
-    file: "zoho-crm-hay-pipedrive.png",
+    file: "hubspot-hay-zoho-crm.png",
     keywordsMain: "hubspot hay zoho crm",
   },
 };
@@ -159,7 +164,7 @@ export const ZALO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMai
     keywordsMain: "zns là gì",
   },
   "zalo-zns-la-gi-b17": {
-    file: "zns-la-gi.png",
+    file: "zalo-zns-la-gi-b17.png",
     keywordsMain: "zalo zns là gì",
   },
   "zns-hay-sms-marketing": {
@@ -167,7 +172,7 @@ export const ZALO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMai
     keywordsMain: "zns hay sms marketing",
   },
   "zalo-zns-hay-sms-marketing-b17": {
-    file: "zns-hay-sms.png",
+    file: "zalo-zns-hay-sms-b17.png",
     keywordsMain: "zalo zns hay sms marketing",
   },
   "zns-bi-tu-choi-template": {
@@ -175,15 +180,15 @@ export const ZALO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMai
     keywordsMain: "zns bị từ chối template",
   },
   "zalo-zns-template-bi-tu-choi": {
-    file: "zns-bi-tu-choi-template.png",
+    file: "zalo-zns-template-bi-tu-choi.png",
     keywordsMain: "zalo zns template bị từ chối",
   },
   "zalo-zns-bi-tu-choi-b17": {
-    file: "zns-bi-tu-choi-template.png",
+    file: "zalo-zns-bi-tu-choi-b17.png",
     keywordsMain: "zalo zns bị từ chối",
   },
   "zalo-zns-bi-chan": {
-    file: "zns-bi-tu-choi-template.png",
+    file: "zalo-zns-bi-chan.png",
     keywordsMain: "zalo zns bị chặn",
   },
   "zalo-rich-menu-la-gi-b17": {
@@ -283,7 +288,7 @@ export const LOGISTICS_ARTICLE_THUMBNAILS: Record<string, { file: string; keywor
     keywordsMain: "thiết kế website logistics",
   },
   "thiet-ke-website-van-tai": {
-    file: "logistics-1.png",
+    file: "logistics-2.png",
     keywordsMain: "thiết kế website vận tải",
   },
 };
@@ -477,6 +482,9 @@ export function getBlogThumbnailAlt(input: {
   const fromKienTrucAlt = getKienTrucThumbnailAlt(input.slug);
   if (fromKienTrucAlt) return fromKienTrucAlt;
 
+  const fromGeneratedAlt = getGeneratedArticleThumbnailAlt(input.slug);
+  if (fromGeneratedAlt) return fromGeneratedAlt;
+
   const fromSlug = nicheKeywordsMain(input.slug);
   const kw = (input.keywordsMain || "").trim();
   if (kw && kw.toLowerCase() !== "thiết kế website") {
@@ -632,6 +640,22 @@ export function resolveBlogImageUrl(input: {
   title?: string;
   imageUrl?: string;
 }): string {
+  const generated = getGeneratedArticleThumbnailPath(input.slug);
+  if (generated) return generated;
+
+  const currentRaw = (input.imageUrl || "").trim();
+  let normalizedEarly = currentRaw;
+  if (currentRaw.startsWith("http")) {
+    try {
+      normalizedEarly = new URL(currentRaw).pathname;
+    } catch {
+      normalizedEarly = currentRaw;
+    }
+  }
+  if (normalizedEarly.includes("/tin-tuc/articles/")) {
+    return normalizedEarly.startsWith("/") ? normalizedEarly : `/${normalizedEarly}`;
+  }
+
   const crm = getCrmThumbnailPath(input.slug);
   if (crm) return crm;
 

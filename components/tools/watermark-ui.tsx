@@ -58,21 +58,33 @@ export function ToolFooter() {
 }
 
 export function ToolShell({ children, userName }: { children: ReactNode; userName?: string }) {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   return (
-    <main className={`min-h-screen ${toolTokens.shellBg} transition-colors`}>
-      <div className={`${dark ? "dark" : ""}`}>
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-32 top-0 h-72 w-72 rounded-full bg-violet-300/20 blur-3xl dark:bg-violet-900/20" />
-          <div className="absolute -right-24 top-40 h-80 w-80 rounded-full bg-indigo-300/20 blur-3xl dark:bg-indigo-900/20" />
-        </div>
+    <main className={`relative min-h-screen overflow-hidden text-white ${toolTokens.shellBg} transition-colors`}>
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(165deg, #12141c 0%, #0e1018 28%, #08090c 58%, #0a0914 100%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.2), transparent 58%), radial-gradient(ellipse 50% 45% at 92% 12%, rgba(139,124,246,0.16), transparent 55%), radial-gradient(ellipse 40% 35% at 10% 50%, rgba(109,90,230,0.1), transparent 50%)",
+        }}
+        aria-hidden
+      />
+      <div className={`relative ${dark ? "dark" : ""}`}>
         <div className="relative mx-auto max-w-7xl px-3 py-5 sm:px-6 lg:px-8 lg:py-7">
           <div className="mb-4 flex justify-end">
             <button
               type="button"
               onClick={() => setDark((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-violet-100 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-violet-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-violet-400/25 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-white/80 shadow-sm transition hover:border-violet-300/40 hover:bg-white/[0.1]"
               title="Đổi giao diện sáng/tối"
             >
               {dark ? <Sun size={14} /> : <Moon size={14} />}
@@ -300,11 +312,23 @@ export function CanvasToolbar({
 
 export function LoginCard({ children }: { children: ReactNode }) {
   return (
-    <main className={`flex min-h-screen items-center justify-center ${toolTokens.shellBg} px-4 py-12`}>
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute left-1/4 top-20 h-64 w-64 rounded-full bg-violet-300/25 blur-3xl" />
-        <div className="absolute right-1/4 bottom-20 h-72 w-72 rounded-full bg-indigo-300/20 blur-3xl" />
-      </div>
+    <main className={`relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12 text-white ${toolTokens.shellBg}`}>
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(165deg, #12141c 0%, #0e1018 28%, #08090c 58%, #0a0914 100%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 30% 20%, rgba(196,149,90,0.18), transparent 55%), radial-gradient(ellipse 60% 45% at 80% 70%, rgba(139,124,246,0.16), transparent 50%)",
+        }}
+        aria-hidden
+      />
       <div className="relative grid w-full max-w-4xl gap-6 lg:grid-cols-[1fr_1fr] lg:items-center">
         <div className="hidden overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/90 p-6 shadow-brand-lg backdrop-blur lg:block">
           <p className="text-xs font-bold uppercase tracking-wider text-violet-600">Trước / Sau</p>

@@ -19,6 +19,7 @@ import { BlogArticleContent } from "@/components/blog/BlogArticleContent";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
 const BASE_URL = SITE_URL;
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 /** Next.js yêu cầu literal — không import biến cho segment config. */
 export const revalidate = 3600;
@@ -103,79 +104,91 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
   const linkedCaseStudy = getCaseStudySlugForBlog(blogPath);
 
   return (
-    <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
+    <main className="relative min-h-screen overflow-hidden deep-theme text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-slate-600">
-        <ol className="flex flex-wrap items-center gap-1.5">
-          <li>
-            <Link href="/" className="font-medium text-indigo-700 hover:text-indigo-900">
-              Trang chủ
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-slate-400">
-            /
-          </li>
-          <li>
-            <Link href="/blog" className="font-medium text-indigo-700 hover:text-indigo-900">
-              Tin tức
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-slate-400">
-            /
-          </li>
-          <li className="line-clamp-1 font-semibold text-indigo-950" aria-current="page">
-            {blog.title}
-          </li>
-        </ol>
-      </nav>
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%)",
+        }}
+        aria-hidden
+      />
 
-      <section className="brand-card overflow-hidden">
-        <div className="relative overflow-hidden border-b border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 px-6 py-10 md:px-10 md:py-14">
-          <div className="relative">
-            <span className="brand-eyebrow inline-flex rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5">
+      <div className="relative mx-auto max-w-5xl px-4 py-12 pb-28 sm:px-6 md:py-16 lg:px-8">
+        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li>
+              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+                Trang chủ
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-white/25">
+              /
+            </li>
+            <li>
+              <Link href="/blog" className="font-medium text-amber-200/70 hover:text-amber-100">
+                Tin tức
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-white/25">
+              /
+            </li>
+            <li className="line-clamp-1 font-medium text-white/70" aria-current="page">
+              {blog.title}
+            </li>
+          </ol>
+        </nav>
+
+        <section className="overflow-hidden border border-white/[0.08] bg-[#0c0d12]">
+          <div className="border-b border-white/[0.06] px-6 py-10 md:px-10 md:py-14">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
               Bài viết
             </span>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight text-indigo-950 md:text-5xl">
+            <h1
+              className="mt-5 max-w-4xl text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-white"
+              style={serif}
+            >
               {blog.title}
             </h1>
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-              <span className="rounded-full border border-indigo-200 bg-white px-3 py-1.5 font-semibold text-indigo-900">
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-white/45">
+              <span className="border border-white/10 bg-white/[0.03] px-3 py-1.5 font-medium text-amber-200/70">
                 Ngày đăng: {publishedLabel}
               </span>
               {blog.metaDescription && (
-                <span className="max-w-2xl text-sm text-slate-600">{blog.metaDescription}</span>
+                <span className="max-w-2xl text-sm text-white/40">{blog.metaDescription}</span>
               )}
             </div>
           </div>
-        </div>
 
-        {blog.imageUrl && (
-          <div className="px-6 pt-6 md:px-10 md:pt-8">
-            <BlogOptimizedImage
-              src={image}
-              alt={imageAlt}
-              width={1200}
-              height={675}
-              priority
-              sizes="hero"
-              className="h-72 w-full rounded-[1.75rem] border border-indigo-100 object-cover shadow-brand md:h-[24rem]"
-            />
+          {blog.imageUrl && (
+            <div className="px-6 pt-6 md:px-10 md:pt-8">
+              <BlogOptimizedImage
+                src={image}
+                alt={imageAlt}
+                width={1200}
+                height={675}
+                priority
+                sizes="hero"
+                className="h-72 w-full border border-white/[0.08] object-cover md:h-[24rem]"
+              />
+            </div>
+          )}
+
+          <div className="px-6 py-8 md:px-10 md:py-10">
+            <article className="article-prose article-prose--deep">
+              <BlogArticleContent html={blog.content} />
+            </article>
+            {linkedCaseStudy && <BlogCaseStudyBanner caseStudySlug={linkedCaseStudy} variant="deep" />}
           </div>
-        )}
+        </section>
 
-        <div className="px-6 py-8 md:px-10 md:py-10">
-          <article className="article-prose">
-            <BlogArticleContent html={blog.content} />
-          </article>
-          {linkedCaseStudy && <BlogCaseStudyBanner caseStudySlug={linkedCaseStudy} />}
-        </div>
-      </section>
-
-      <BlogInlineCTA slug={blogPath} topic={topic} />
-      <BlogPillarHub slug={blogPath} keywordsMain={blog.keywordsMain} title={blog.title} />
-      <RelatedPosts posts={related.map(toBlogCardItem)} currentSlug={blogPath} />
-      <BlogArticleExtras slug={blogPath} topic={topic} />
+        <BlogInlineCTA slug={blogPath} topic={topic} variant="deep" />
+        <BlogPillarHub slug={blogPath} keywordsMain={blog.keywordsMain} title={blog.title} variant="deep" />
+        <RelatedPosts posts={related.map(toBlogCardItem)} currentSlug={blogPath} variant="deep" />
+        <BlogArticleExtras slug={blogPath} topic={topic} variant="deep" />
+      </div>
     </main>
   );
 }

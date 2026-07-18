@@ -118,7 +118,7 @@ export default function WebsitePage() {
         className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 80% 20%, rgba(99,102,241,0.08), transparent)",
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 80% 20%, rgba(99,102,241,0.08), transparent)",
         }}
         aria-hidden
       />
@@ -138,19 +138,19 @@ export default function WebsitePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/banggia"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:brightness-105"
             >
               Báo giá thiết kế website
             </Link>
             <Link
               href="/du-an"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/75 hover:border-violet-300/40 hover:text-violet-200"
             >
               Case study có số liệu
             </Link>
             <Link
               href="/blog/chu-de/website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/75 hover:border-violet-300/40 hover:text-violet-200"
             >
               Hub chủ đề Website
             </Link>

@@ -66,7 +66,7 @@ export default function MarketingAutomationPage() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#08090c] text-white">
+    <main className="relative min-h-screen overflow-hidden deep-theme text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
@@ -74,7 +74,7 @@ export default function MarketingAutomationPage() {
         className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 15% 22%, rgba(59,130,246,0.08), transparent)",
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 15% 22%, rgba(59,130,246,0.08), transparent)",
         }}
         aria-hidden
       />

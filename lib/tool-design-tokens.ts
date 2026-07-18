@@ -7,7 +7,7 @@ export const toolTokens = {
   accentText: "text-indigo-950",
   mutedText: "text-slate-600",
   borderSoft: "border-indigo-100/90",
-  shellBg: "bg-[#f4f6fc] dark:bg-slate-950",
+  shellBg: "deep-theme",
 } as const;
 
 export const PRESET_ANCHOR_VISUAL: Record<string, { x: string; y: string }> = {

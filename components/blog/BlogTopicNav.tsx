@@ -18,8 +18,8 @@ export function BlogTopicNav({
           deep
             ? `rounded-full border px-4 py-2 text-sm font-medium transition ${
                 active === "all" || !active
-                  ? "border-amber-200/40 bg-amber-200 text-[#0b0d12]"
-                  : "border-white/12 bg-white/[0.03] text-white/65 hover:border-white/25 hover:text-white"
+                  ? "border-amber-200/40 bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12]"
+                  : "border-white/12 bg-white/[0.03] text-white/65 hover:border-violet-400/40 hover:text-violet-200"
               }`
             : `rounded-full border px-4 py-2 text-sm font-bold transition ${
                 active === "all" || !active
@@ -41,8 +41,8 @@ export function BlogTopicNav({
               deep
                 ? `rounded-full border px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "border-amber-200/40 bg-amber-200 text-[#0b0d12]"
-                      : "border-white/12 bg-white/[0.03] text-white/65 hover:border-white/25 hover:text-white"
+                      ? "border-amber-200/40 bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12]"
+                      : "border-white/12 bg-white/[0.03] text-white/65 hover:border-violet-400/40 hover:text-violet-200"
                   }`
                 : `rounded-full border px-4 py-2 text-sm font-bold transition ${
                     isActive

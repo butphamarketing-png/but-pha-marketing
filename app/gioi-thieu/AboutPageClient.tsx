@@ -120,12 +120,12 @@ export default function AboutPageClient() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#08090c] text-white">
+    <div className="relative min-h-screen overflow-x-hidden deep-theme text-white">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[75vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 40% 35% at 85% 20%, rgba(99,102,241,0.1), transparent), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
         }}
         aria-hidden
       />
@@ -138,7 +138,7 @@ export default function AboutPageClient() {
         aria-hidden
       />
 
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090c]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/[0.06]  bg-[#0e1018]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
@@ -235,12 +235,12 @@ export default function AboutPageClient() {
               </p>
             </div>
             {teamImage ? (
-              <div className="relative overflow-hidden border border-white/[0.06] bg-white/[0.02]">
+              <div className="relative aspect-[4/3] overflow-hidden border border-white/[0.06] bg-white/[0.02]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={teamImage}
-                  alt="Linh vật Bứt Phá Marketing"
-                  className="mx-auto max-h-[360px] w-full object-contain object-bottom p-6"
+                  alt="Đội ngũ Bứt Phá Marketing làm việc chiến lược marketing"
+                  className="h-full w-full object-cover object-center"
                 />
               </div>
             ) : null}

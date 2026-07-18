@@ -10,17 +10,125 @@ const TOPIC_LABEL: Record<string, string> = {
   marketing: "Marketing tổng thể",
 };
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+
 export function BlogPillarHub({
   slug,
   keywordsMain,
   title,
+  variant = "light",
 }: {
   slug: string;
   keywordsMain?: string;
   title?: string;
+  variant?: "light" | "deep";
 }) {
   const hub = getPillarHubForArticle({ slug, keywordsMain, title });
   const topicLabel = TOPIC_LABEL[hub.topic] || "Marketing";
+  const deep = variant === "deep";
+
+  if (deep) {
+    return (
+      <section className="mt-10 border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
+        <div className="mb-5 flex items-start gap-3">
+          <div className="border border-amber-200/25 bg-amber-200/[0.08] p-2.5 text-amber-200/80">
+            <BookOpen size={22} />
+          </div>
+          <div>
+            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">
+              Chủ đề {topicLabel}
+            </p>
+            <h2 className="text-xl font-semibold text-white md:text-2xl" style={serif}>
+              {hub.isPillarPage ? "Bài pillar — đọc thêm trong chủ đề" : "Đọc bài pillar trước khi đi sâu"}
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/40">
+              {hub.isPillarPage
+                ? "Các bài dưới đây bổ sung chi tiết theo ngành, địa phương hoặc từ khóa dài — tất cả liên kết về cùng hệ pillar."
+                : "Từ khóa ngắn được tổng hợp ở bài pillar. Nên đọc pillar trước để nắm quy trình, báo giá và checklist chuẩn."}
+            </p>
+          </div>
+        </div>
+
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {hub.links.map((pillar) => (
+            <li key={pillar.slug}>
+              <BlogTrackedLink
+                href={`/blog/${pillar.slug}`}
+                eventName="blog_pillar_click"
+                eventParams={{
+                  from_slug: slug,
+                  pillar_slug: pillar.slug,
+                  blog_topic: hub.topic,
+                }}
+                className={`group flex h-full flex-col border px-4 py-3.5 transition hover:border-amber-200/30 ${
+                  pillar.slug === slug
+                    ? "border-amber-200/35 bg-amber-200/[0.08]"
+                    : "border-white/[0.08] bg-white/[0.02]"
+                }`}
+              >
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/55">
+                  {pillar.keyword}
+                </span>
+                <span className="mt-1 text-sm font-medium leading-snug text-white/90 group-hover:text-amber-100">
+                  {pillar.label}
+                </span>
+                {pillar.slug !== slug && (
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-200/70">
+                    Xem pillar
+                    <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
+                  </span>
+                )}
+                {pillar.slug === slug && (
+                  <span className="mt-2 text-xs font-medium text-amber-200/80">Bạn đang đọc bài này</span>
+                )}
+              </BlogTrackedLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/[0.06] pt-5">
+          <Link
+            href={`/blog/chu-de/${hub.topic}`}
+            className="text-sm font-medium text-amber-200/75 hover:text-amber-100"
+          >
+            Xem tất cả bài {TOPIC_LABEL[hub.topic]} →
+          </Link>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <BlogTrackedLink
+            href={hub.service.serviceHref}
+            eventName="blog_cta_click"
+            eventParams={{
+              blog_slug: slug,
+              blog_topic: hub.topic,
+              placement: "pillar_hub",
+              cta_label: hub.service.serviceLabel,
+              cta_type: "service",
+            }}
+            className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+          >
+            {hub.service.serviceLabel}
+            <ArrowRight size={16} />
+          </BlogTrackedLink>
+          <BlogTrackedLink
+            href={hub.topic === "website" ? "/banggia" : hub.service.serviceHref}
+            eventName="blog_cta_click"
+            eventParams={{
+              blog_slug: slug,
+              blog_topic: hub.topic,
+              placement: "pillar_hub",
+              cta_label: hub.topic === "website" ? "Báo giá thiết kế website" : hub.service.serviceLabel,
+              cta_type: hub.topic === "website" ? "pricing" : "service",
+            }}
+            className="text-sm font-medium text-amber-200/75 hover:text-amber-100"
+          >
+            {hub.topic === "website" ? "Báo giá thiết kế website →" : `${hub.service.serviceLabel} →`}
+          </BlogTrackedLink>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="mt-10 rounded-[1.75rem] border border-violet-200 bg-gradient-to-br from-violet-50/90 via-white to-indigo-50/50 p-6 shadow-brand md:p-8">

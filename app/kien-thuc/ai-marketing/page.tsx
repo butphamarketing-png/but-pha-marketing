@@ -1,4 +1,5 @@
 import { SubLandingPage } from "@/components/landing/SubLandingPage";
+import { DeepPageShell } from "@/components/shared/DeepPageShell";
 import { buildFaqSchema, generateLandingMetadata } from "@/lib/landing-seo";
 
 export const metadata = generateLandingMetadata({
@@ -24,7 +25,7 @@ export default function KnowledgeAiMarketingPage() {
   const faqLd = buildFaqSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <DeepPageShell padded>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <SubLandingPage
         config={{
@@ -63,6 +64,6 @@ export default function KnowledgeAiMarketingPage() {
           },
         }}
       />
-    </main>
+    </DeepPageShell>
   );
 }

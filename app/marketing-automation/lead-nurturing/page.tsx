@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { SubLandingPage } from "@/components/landing/SubLandingPage";
+import { DeepPageShell } from "@/components/shared/DeepPageShell";
 import { buildFaqSchema, buildServiceSchema, generateLandingMetadata } from "@/lib/landing-seo";
 
 export const metadata = generateLandingMetadata({
@@ -39,76 +39,62 @@ export default function LeadNurturingPage() {
   const faqLd = buildFaqSchema(faqs.map((f) => ({ question: f.q, answer: f.a })));
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <DeepPageShell padded>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-
-      <div className="mx-auto max-w-5xl space-y-8">
-        <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
-          <ol className="flex flex-wrap items-center gap-1.5">
-            <li>
-              <Link href="/marketing-automation" className="font-medium text-indigo-700 hover:text-indigo-900">
-                Marketing Automation
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-slate-400">
-              /
-            </li>
-            <li className="font-semibold text-indigo-950" aria-current="page">
-              Lead Nurturing
-            </li>
-          </ol>
-        </nav>
-
-        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 p-8 shadow-sm md:p-12">
-          <p className="brand-eyebrow mb-3">Marketing Automation</p>
-          <h1 className="text-4xl font-black tracking-tight text-indigo-950 md:text-5xl">
-            Lead Nurturing Automation
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">
-            Không phải lead nào cũng sẵn sàng mua ngay. <strong>Lead Nurturing</strong> giúp bạn chăm sóc tự
-            động theo hành vi — tăng tỷ lệ phản hồi, đặt lịch và chuyển sang sales đúng thời điểm.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/lien-he" className="brand-btn-primary">
-              Tư vấn Lead Nurturing
-              <ArrowRight size={18} />
-            </Link>
-            <Link href="/marketing-automation/crm-automation" className="brand-btn-secondary">
-              CRM Automation
-            </Link>
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Kịch bản nuôi dưỡng phổ biến</h2>
-          <ul className="mt-5 space-y-3">
-            {sequences.map((item) => (
-              <li key={item} className="flex items-start gap-3 rounded-2xl border border-indigo-50 bg-indigo-50/30 px-4 py-3 text-slate-700">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
-          <div className="mt-5 space-y-3">
-            {faqs.map((item) => (
-              <details
-                key={item.q}
-                className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200"
-              >
-                <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">
-                  {item.q}
-                </summary>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      </div>
-    </main>
+      <SubLandingPage
+        config={{
+          breadcrumbs: [
+            { label: "Marketing Automation", href: "/marketing-automation" },
+            { label: "Lead Nurturing" },
+          ],
+          eyebrow: "Marketing Automation",
+          title: "Lead Nurturing Automation",
+          intro: (
+            <>
+              Không phải lead nào cũng sẵn sàng mua ngay. <strong>Lead Nurturing</strong> giúp bạn chăm sóc tự
+              động theo hành vi — tăng tỷ lệ phản hồi, đặt lịch và chuyển sang sales đúng thời điểm.
+            </>
+          ),
+          ctas: [
+            { label: "Tư vấn Lead Nurturing", href: "/lien-he", primary: true },
+            { label: "CRM Automation", href: "/marketing-automation/crm-automation" },
+          ],
+          featuresTitle: "Kịch bản nuôi dưỡng phổ biến",
+          features: sequences,
+          faqs,
+          relatedLinks: [
+            {
+              href: "/marketing-automation",
+              label: "Marketing Automation",
+              desc: "Tổng quan hệ thống automation",
+            },
+            {
+              href: "/marketing-automation/crm-automation",
+              label: "CRM Automation",
+              desc: "Đồng bộ lead với sales pipeline",
+            },
+            {
+              href: "/website",
+              label: "Thiết kế website",
+              desc: "Form thu lead chuẩn chuyển đổi",
+            },
+            {
+              href: "/kien-thuc/marketing-automation",
+              label: "Knowledge Hub Automation",
+              desc: "Tài nguyên & checklist",
+            },
+          ],
+          ctaBand: {
+            eyebrow: "Nuôi lead đúng nhịp",
+            title: "Muốn tăng tỷ lệ MQL → SQL mà không spam?",
+            subline:
+              "Bứt Phá thiết kế chuỗi nurturing theo ngành — email, Zalo, remarketing và lead scoring gắn với CRM.",
+            primary: { label: "Tư vấn miễn phí", href: "/lien-he" },
+            secondary: { label: "Xem Marketing Automation", href: "/marketing-automation" },
+          },
+        }}
+      />
+    </DeepPageShell>
   );
 }

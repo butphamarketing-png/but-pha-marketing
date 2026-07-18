@@ -178,7 +178,7 @@ export function SubPageLayout({
 
   return (
     <div
-      className={`platform-page-canvas text-foreground ${deep ? "platform-deep bg-[#08090c] text-white" : ""}`}
+      className={`platform-page-canvas text-foreground ${deep ? "platform-deep text-white" : ""}`}
       style={{ "--platform-color": accent, "--landing-accent": accent } as React.CSSProperties}
     >
       <style>{`
@@ -198,7 +198,7 @@ export function SubPageLayout({
       <header
         className={`sticky top-0 z-50 overflow-visible border-b backdrop-blur-xl ${
           deep
-            ? "border-white/[0.06] bg-[#08090c]/85"
+            ? "border-white/[0.06] bg-[#0e1018]/80"
             : "border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)]"
         }`}
       >
@@ -219,7 +219,7 @@ export function SubPageLayout({
                 <span className={`block truncate text-sm font-semibold ${deep ? "text-white/90" : "text-indigo-950"}`}>
                   {settings.title}
                 </span>
-                <span className={`block truncate text-[11px] font-medium ${deep ? "text-amber-200/55" : "text-violet-600"}`}>
+                <span className={`block truncate text-[11px] font-medium ${deep ? "text-violet-300/70" : "text-violet-600"}`}>
                   {platformName}
                 </span>
               </div>
@@ -248,7 +248,7 @@ export function SubPageLayout({
             onClick={() => setShowConsult(true)}
             className={`hidden shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition active:scale-[0.99] sm:inline-flex ${
               deep
-                ? "bg-amber-200 text-[#0b0d12] hover:bg-amber-100"
+                ? "bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12] hover:brightness-105"
                 : "text-white shadow-brand-accent hover:brightness-105"
             }`}
             style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
@@ -281,7 +281,7 @@ export function SubPageLayout({
                     setShowConsult(true);
                   }}
                   className={`mt-3 w-full rounded-xl px-4 py-3 text-sm font-bold ${
-                    deep ? "bg-amber-200 text-[#0b0d12]" : "text-white"
+                    deep ? "bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12]" : "text-white"
                   }`}
                   style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
                 >

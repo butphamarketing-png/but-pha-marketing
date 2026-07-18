@@ -2083,6 +2083,73 @@ html.corp-home-snap-active body {
     radial-gradient(circle at top right, rgba(124, 58, 237, 0.08), transparent 38%);
 }
 
+/* Deep theme article body */
+.article-prose--deep {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.article-prose--deep p,
+.article-prose--deep li {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.article-prose--deep p:first-of-type {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.article-prose--deep h1,
+.article-prose--deep h2,
+.article-prose--deep strong {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.article-prose--deep h3 {
+  color: rgba(196, 149, 90, 0.9);
+}
+
+.article-prose--deep a {
+  color: rgba(253, 230, 138, 0.85);
+  border-bottom-color: rgba(196, 149, 90, 0.35);
+}
+
+.article-prose--deep nav[aria-label="Mục lục"] p,
+.article-prose--deep nav[aria-label="Mục lục"] ol,
+.article-prose--deep nav[aria-label="M?c l?c"] p,
+.article-prose--deep nav[aria-label="M?c l?c"] ol {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.article-prose--deep nav[aria-label="Mục lục"] a,
+.article-prose--deep nav[aria-label="M?c l?c"] a {
+  color: rgba(253, 230, 138, 0.8);
+  text-decoration-color: rgba(196, 149, 90, 0.4);
+}
+
+.article-prose--deep nav[aria-label="Mục lục"] a:hover,
+.article-prose--deep nav[aria-label="M?c l?c"] a:hover {
+  color: rgba(253, 230, 138, 1);
+}
+
+.article-prose--deep blockquote {
+  border-left-color: rgba(196, 149, 90, 0.55);
+  background: rgba(196, 149, 90, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.article-prose--deep .article-image,
+.article-prose--deep .article-faq,
+.article-prose--deep .article-reference,
+.article-prose--deep .article-implementation,
+.article-prose--deep .article-related-links,
+.article-prose--deep .article-depth,
+.article-prose--deep .article-internal-links {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at top right, rgba(196, 149, 90, 0.08), transparent 38%);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+}
+
 @media print {
   @page {
     margin: 12mm;
@@ -2629,10 +2696,38 @@ html[data-home-section="lien-he"] .home-fab-stack {
   display: none;
 }
 
-/* ── Platform deep theme (/website) ── */
-.platform-deep {
-  background: #08090c;
+/* ── Platform deep theme: ink sâu + amber + violet (KHÔNG full đen) ── */
+.platform-deep,
+.banggia-deep,
+.deep-theme {
+  --deep-ink: #08090c;
+  --deep-ink-soft: #0e1018;
+  --deep-amber: #c4955a;
+  --deep-amber-soft: #e8c99a;
+  --deep-violet: #8b7cf6;
+  --deep-violet-deep: #6d5ae6;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196, 149, 90, 0.18), transparent 58%),
+    radial-gradient(ellipse 50% 45% at 92% 12%, rgba(139, 124, 246, 0.14), transparent 55%),
+    radial-gradient(ellipse 45% 40% at 8% 55%, rgba(109, 90, 230, 0.1), transparent 50%),
+    linear-gradient(165deg, #12141c 0%, #0e1018 28%, #08090c 58%, #0a0914 100%) !important;
   color: #fff;
+}
+.platform-deep {
+  position: relative;
+  isolation: isolate;
+}
+.platform-deep::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 55vh;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196, 149, 90, 0.12), transparent 58%),
+    radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139, 124, 246, 0.1), transparent 55%);
+  opacity: 0.85;
 }
 .platform-deep .platform-audit-shell,
 .platform-deep .platform-panel,
@@ -2642,28 +2737,30 @@ html[data-home-section="lien-he"] .home-fab-stack {
   box-shadow: none !important;
 }
 .platform-deep .platform-audit-shell::before {
-  opacity: 0.35;
-  background: color-mix(in srgb, var(--platform-accent, #c4955a) 18%, transparent) !important;
+  opacity: 0.4;
+  background:
+    color-mix(in srgb, var(--platform-accent, #c4955a) 14%, transparent),
+    radial-gradient(circle at 85% 20%, rgba(139, 124, 246, 0.12), transparent 50%) !important;
 }
 .platform-deep .platform-audit-shell::after {
   opacity: 0.25;
   background-image:
-    linear-gradient(rgba(196, 149, 90, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 149, 90, 0.06) 1px, transparent 1px) !important;
+    linear-gradient(rgba(196, 149, 90, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 124, 246, 0.05) 1px, transparent 1px) !important;
 }
 .platform-deep .platform-badge {
-  border-color: rgba(196, 149, 90, 0.35) !important;
-  background: rgba(196, 149, 90, 0.12) !important;
-  color: rgba(251, 231, 198, 0.9) !important;
+  border-color: rgba(139, 124, 246, 0.35) !important;
+  background: linear-gradient(135deg, rgba(196, 149, 90, 0.14), rgba(139, 124, 246, 0.14)) !important;
+  color: rgba(221, 214, 254, 0.95) !important;
   box-shadow: none !important;
 }
 .platform-deep .platform-badge span {
-  color: rgba(251, 231, 198, 0.9) !important;
+  color: rgba(251, 231, 198, 0.95) !important;
 }
 .platform-deep .platform-cta {
-  background: #e8c99a !important;
+  background: linear-gradient(135deg, #e8c99a 0%, #d4b07a 55%, #c4b5fd 160%) !important;
   color: #0b0d12 !important;
-  box-shadow: 0 10px 28px rgba(196, 149, 90, 0.22) !important;
+  box-shadow: 0 10px 28px rgba(139, 124, 246, 0.18) !important;
 }
 .platform-deep .brand-section-title,
 .platform-deep h2,
@@ -2682,6 +2779,10 @@ html[data-home-section="lien-he"] .home-fab-stack {
   background: rgba(255, 255, 255, 0.04) !important;
   color: #fff !important;
 }
+.platform-deep .brand-input:focus {
+  border-color: rgba(139, 124, 246, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(139, 124, 246, 0.12) !important;
+}
 .platform-deep .brand-input::placeholder {
   color: rgba(255, 255, 255, 0.3) !important;
 }
@@ -2691,8 +2792,15 @@ html[data-home-section="lien-he"] .home-fab-stack {
   background: rgba(255, 255, 255, 0.03) !important;
   box-shadow: none !important;
 }
+.platform-deep .brand-card,
+.platform-deep .brand-card-soft {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: none !important;
+  color: #fff;
+}
 .platform-deep .pricing-card-vns__header {
-  background: linear-gradient(135deg, #1a1510 0%, #3d2e1a 55%, #c4955a 160%) !important;
+  background: linear-gradient(135deg, #1a1228 0%, #3d2e1a 45%, #c4955a 100%, #8b7cf6 180%) !important;
 }
 .platform-deep .pricing-card-vns__body,
 .platform-deep .pricing-card-vns__features li,
@@ -2701,19 +2809,21 @@ html[data-home-section="lien-he"] .home-fab-stack {
 }
 .platform-deep .platform-cta,
 .platform-deep button[style*="background"] {
-  /* keep inline accents — no purple glow overrides */
+  /* keep inline accents */
 }
 .platform-deep .platform-side-card a[href*="zalo"] {
-  box-shadow: 0 10px 28px rgba(196, 149, 90, 0.2) !important;
+  box-shadow: 0 10px 28px rgba(139, 124, 246, 0.18) !important;
 }
 .platform-deep #contact .platform-panel {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  background:
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(139, 124, 246, 0.08), transparent 55%),
+    rgba(255, 255, 255, 0.02);
 }
 .platform-deep #contact button.border-indigo-200 {
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  background: rgba(255, 255, 255, 0.03) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(139, 124, 246, 0.28) !important;
+  background: rgba(139, 124, 246, 0.08) !important;
+  color: rgba(221, 214, 254, 0.9) !important;
 }
 
 /* Mega menu luôn panel trắng — không kế thừa chữ trắng từ deep theme */

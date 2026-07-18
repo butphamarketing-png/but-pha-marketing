@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProgrammaticLandingPage } from "@/components/landing/ProgrammaticLandingPage";
+import { DeepPageShell } from "@/components/shared/DeepPageShell";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { buildServiceSchema, generateLandingMetadata } from "@/lib/landing-seo";
 import { SITE_URL } from "@/lib/seo";
@@ -91,7 +92,7 @@ export default async function WebsiteIndustryProgrammaticPage({ params }: { para
   };
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <DeepPageShell padded tech>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(clusterItemListLd) }} />
@@ -113,6 +114,6 @@ export default async function WebsiteIndustryProgrammaticPage({ params }: { para
           <MoneyKwSiloLinks excludePath={`/website/nganh/${landing.slug}`} />
         </div>
       )}
-    </main>
+    </DeepPageShell>
   );
 }

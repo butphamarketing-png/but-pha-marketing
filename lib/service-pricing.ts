@@ -6,7 +6,7 @@ export function formatPriceVnd(amount: number) {
   return new Intl.NumberFormat("vi-VN").format(amount) + "đ";
 }
 
-/** Gói vận hành website — đồng bộ section /website (thay hosting theo GB) */
+/** Gói Hosting website — 3 nhóm giống VNS: Phổ thông / Chất lượng cao / Cao cấp */
 export type WebsiteOperationTierKey = "yeu" | "vua" | "manh";
 
 export const WEBSITE_OPERATION_TIER_META: Record<
@@ -14,88 +14,89 @@ export const WEBSITE_OPERATION_TIER_META: Record<
   { label: string; color: string; description: string }
 > = {
   yeu: {
-    label: "Bứt Phá Yếu",
+    label: "Gói Phổ Thông",
     color: "#22C55E",
-    description: "Website mới, traffic thấp — vận hành ổn định, chi phí tối ưu",
+    description: "Chi phí hợp lý — phù hợp website mới, traffic thấp đến trung bình",
   },
   vua: {
-    label: "Bứt Phá Vừa",
+    label: "Chất Lượng Cao",
     color: "#3B82F6",
-    description: "Doanh nghiệp đang tăng trưởng — tốc độ, bảo mật và hỗ trợ chủ động",
+    description: "Độ ổn định cao — doanh nghiệp đang tăng trưởng, chạy Ads/SEO",
   },
   manh: {
-    label: "Bứt Phá Mạnh",
+    label: "Hosting Cao Cấp",
     color: "#9333EA",
-    description: "Hệ thống lớn, traffic cao — SLA, scale và vận hành toàn diện",
+    description: "Lượng truy cập lớn — hệ thống trọng điểm, cần tài nguyên mạnh",
   },
 };
 
+/** Giá/năm — tham chiếu bảng giá hosting VNS (theo dung lượng SSD) */
 export const WEBSITE_OPERATION_PACKAGES = [
   {
     id: "web-ops-sieu-nho",
     tier: "yeu" as const,
-    name: "Siêu Nhỏ",
-    price: 2_500_000,
-    works: ["Hosting & SSL HTTPS", "Sao lưu dữ liệu định kỳ", "Giám sát uptime cơ bản", "Hỗ trợ kỹ thuật email"],
+    name: "2GB",
+    price: 2_388_000,
+    works: ["SSD 2GB", "Băng thông không giới hạn", "SSL HTTPS miễn phí", "Backup định kỳ", "Hỗ trợ kỹ thuật cơ bản"],
   },
   {
     id: "web-ops-co-ban",
     tier: "yeu" as const,
-    name: "Cơ Bản",
-    price: 4_000_000,
-    works: ["Mọi quyền lợi Siêu Nhỏ", "Cập nhật CMS / plugin an toàn", "Tối ưu tốc độ định kỳ", "Báo cáo vận hành hàng tháng"],
+    name: "3GB",
+    price: 3_348_000,
+    works: ["SSD 3GB", "Băng thông không giới hạn", "SSL HTTPS miễn phí", "Backup hàng tuần", "Email hosting cơ bản"],
   },
   {
     id: "web-ops-tieu-chuan",
     tier: "yeu" as const,
-    name: "Tiêu Chuẩn",
-    price: 6_000_000,
+    name: "5GB",
+    price: 4_872_000,
     popular: true,
-    works: ["Mọi quyền lợi Cơ Bản", "CDN & cache tối ưu", "Backup hàng ngày", "Ưu tiên xử lý sự cố"],
+    works: ["SSD 5GB", "Băng thông không giới hạn", "SSL HTTPS miễn phí", "Backup 3 ngày/lần", "Ưu tiên hỗ trợ"],
   },
   {
     id: "web-ops-nang-cao",
     tier: "vua" as const,
-    name: "Nâng Cao",
-    price: 9_000_000,
-    works: ["Mọi quyền lợi Tiêu Chuẩn", "Quét bảo mật định kỳ", "Môi trường staging", "Hotline hỗ trợ trong giờ hành chính"],
+    name: "8GB",
+    price: 6_504_000,
+    works: ["SSD 8GB", "CDN & cache", "SSL HTTPS miễn phí", "Backup hàng ngày", "Giám sát uptime"],
   },
   {
     id: "web-ops-chuyen-nghiep",
     tier: "vua" as const,
-    name: "Chuyên Nghiệp",
-    price: 12_000_000,
+    name: "10GB",
+    price: 7_200_000,
     popular: true,
-    works: ["Mọi quyền lợi Nâng Cao", "Tối ưu Core Web Vitals", "Giám sát lỗi realtime", "Đề xuất cải thiện hàng quý"],
+    works: ["SSD 10GB", "CDN & cache", "SSL HTTPS miễn phí", "Backup hàng ngày", "Bảo mật nâng cao"],
   },
   {
     id: "web-ops-but-pha",
     tier: "vua" as const,
-    name: "Bứt Phá",
-    price: 15_000_000,
-    works: ["Mọi quyền lợi Chuyên Nghiệp", "Tài nguyên server nâng cấp", "Hỗ trợ peak traffic", "Review kiến trúc 2 lần/năm"],
+    name: "16GB",
+    price: 10_080_000,
+    works: ["SSD 16GB", "CDN & cache", "SSL HTTPS miễn phí", "Backup hàng ngày", "Hỗ trợ peak traffic"],
   },
   {
     id: "web-ops-phat-trien",
     tier: "manh" as const,
-    name: "Phát Triển",
-    price: 20_000_000,
-    works: ["Hạ tầng scale theo traffic", "SLA uptime 99.9%", "Backup & khôi phục nhanh", "Kỹ thuật viên dedicated"],
+    name: "20GB",
+    price: 12_000_000,
+    works: ["SSD 20GB", "Tài nguyên cao", "SSL HTTPS miễn phí", "Backup 12h/lần", "SLA uptime cao"],
   },
   {
     id: "web-ops-mo-rong",
     tier: "manh" as const,
-    name: "Mở Rộng",
-    price: 28_000_000,
-    works: ["Mọi quyền lợi Phát Triển", "Multi-site / đa chi nhánh", "WAF & hardening nâng cao", "Hỗ trợ ưu tiên 24/7"],
+    name: "30GB",
+    price: 16_080_000,
+    works: ["SSD 30GB", "Tài nguyên cao", "SSL HTTPS miễn phí", "Backup 12h/lần", "Hỗ trợ ưu tiên"],
   },
   {
     id: "web-ops-toan-dien",
     tier: "manh" as const,
-    name: "Toàn Diện",
-    price: 36_000_000,
+    name: "50GB",
+    price: 24_000_000,
     popular: true,
-    works: ["Managed hosting trọn gói", "Disaster recovery plan", "Tối ưu chi phí hạ tầng", "Báo cáo executive hàng tháng"],
+    works: ["SSD 50GB", "Tài nguyên cao cấp", "SSL HTTPS miễn phí", "Backup 6h/lần", "Hỗ trợ VIP"],
   },
 ] as const;
 
@@ -115,7 +116,7 @@ export function getWebsiteOperationPriceById(id: string) {
   return getWebsiteOperationPackageById(id)?.price ?? WEBSITE_OPERATION_PACKAGES[0].price;
 }
 
-/** @deprecated Chỉ dùng cho hợp đồng hosting CMS cũ (theo GB) — không đổi giá/key */
+/** @deprecated Giữ map GB cũ — giá đồng bộ WEBSITE_OPERATION_PACKAGES / VNS */
 export const LEGACY_HOSTING_GB_PACKAGES = [
   { gb: 2, price: 2_388_000, label: "2GB" },
   { gb: 3, price: 3_348_000, label: "3GB" },
@@ -142,10 +143,10 @@ export const LEGACY_HOSTING_SERVICE_PACKAGES = LEGACY_HOSTING_GB_PACKAGES.map((p
   period: "year" as const,
 }));
 
-/** Gói vận hành mới — CRM service `van-hanh` */
+/** Gói vận hành mới — CRM service `van-hanh` (UI: Hosting) */
 export const WEBSITE_OPERATION_SERVICE_PACKAGES = WEBSITE_OPERATION_PACKAGES.map((p) => ({
   key: p.id,
-  label: p.name,
+  label: `Hosting ${p.name}`,
   price: p.price,
   period: "year" as const,
 }));

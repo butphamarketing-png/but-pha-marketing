@@ -11,6 +11,8 @@ import { buildCaseStudyJsonLd } from "@/lib/case-study-schema";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 import { CaseStudyDetail } from "@/components/case-study/CaseStudyDetail";
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -56,45 +58,58 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
   const jsonLd = buildCaseStudyJsonLd({ study, canonical, baseUrl: SITE_URL });
 
   return (
-    <main className="brand-section-muted mx-auto min-h-screen max-w-5xl px-4 py-10 pb-28">
+    <main className="relative min-h-screen overflow-hidden deep-theme text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-slate-600">
-        <ol className="flex flex-wrap items-center gap-1.5">
-          <li>
-            <Link href="/" className="font-medium text-indigo-700 hover:text-indigo-900">
-              Trang chủ
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-slate-400">
-            /
-          </li>
-          <li>
-            <Link href="/du-an" className="font-medium text-indigo-700 hover:text-indigo-900">
-              Dự án
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-slate-400">
-            /
-          </li>
-          <li className="line-clamp-1 font-semibold text-indigo-950" aria-current="page">
-            {study.clientName}
-          </li>
-        </ol>
-      </nav>
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%)",
+        }}
+        aria-hidden
+      />
 
-      <CaseStudyDetail study={study} />
+      <div className="relative mx-auto max-w-5xl px-4 py-12 pb-28 sm:px-6 md:py-16 lg:px-8">
+        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li>
+              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+                Trang chủ
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-white/25">
+              /
+            </li>
+            <li>
+              <Link href="/du-an" className="font-medium text-amber-200/70 hover:text-amber-100">
+                Dự án
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-white/25">
+              /
+            </li>
+            <li className="line-clamp-1 font-medium text-white/70" aria-current="page">
+              {study.clientName}
+            </li>
+          </ol>
+        </nav>
 
-      {others.length > 0 && (
-        <section className="mt-14">
-          <h2 className="text-2xl font-black text-indigo-950">Dự án khác</h2>
-          <div className="mt-6 grid gap-8 md:grid-cols-2">
-            {others.map((item) => (
-              <CaseStudyCard key={item.slug} study={item} />
-            ))}
-          </div>
-        </section>
-      )}
+        <CaseStudyDetail study={study} variant="deep" />
+
+        {others.length > 0 && (
+          <section className="mt-14 border-t border-white/[0.06] pt-14">
+            <h2 className="text-2xl font-semibold text-white md:text-3xl" style={serif}>
+              Dự án khác
+            </h2>
+            <div className="mt-6 grid gap-8 md:grid-cols-2">
+              {others.map((item) => (
+                <CaseStudyCard key={item.slug} study={item} variant="deep" />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </main>
   );
 }

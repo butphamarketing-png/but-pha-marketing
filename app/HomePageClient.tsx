@@ -38,16 +38,16 @@ import {
   toggleBgMusicMute,
 } from "@/lib/ambient-bg-music";
 
-const SECTIONS = [
+const SECTIONS: { id: string; label: string; tone: "dark" | "light" }[] = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
-  { id: "gioi-thieu", label: "GIỚI THIỆU", tone: "light" },
+  { id: "gioi-thieu", label: "GIỚI THIỆU", tone: "dark" },
   { id: "linh-vuc", label: "LĨNH VỰC", tone: "dark" },
   { id: "du-an", label: "DỰ ÁN", tone: "dark" },
   { id: "tu-van", label: "TƯ VẤN", tone: "dark" },
   { id: "kien-thuc", label: "KIẾN THỨC", tone: "dark" },
   { id: "tieng-noi", label: "TIẾNG NÓI", tone: "dark" },
   { id: "lien-he", label: "LIÊN HỆ", tone: "dark" },
-] as const;
+];
 
 /** Section tiếng nói — logo tròn + trước / sau đánh giá */
 const VOICE_ENTRIES = [
@@ -150,7 +150,7 @@ const EMPTY_CONSULT_FORM = {
   note: "",
 };
 
-const ABOUT_CITY_BG = "/about/about-city-bg.png?v=tech1";
+const ABOUT_CITY_BG = "/about/about-city-bg-deep.png?v=deep1";
 
 /** Reveal: phone → laptop từ trái sang. Không dùng iPad. */
 const ABOUT_DEVICES = [
@@ -178,7 +178,7 @@ const ABOUT_DEVICES = [
   },
 ] as const;
 
-const LINH_VUC_BG = "/about/about-city-bg.png?v=tech-lv";
+const LINH_VUC_BG = "/about/about-city-bg-deep.png?v=deep-lv";
 const DU_AN_BG = "/about/linh-vuc-desk-bg.png?v=du-an";
 
 const LINH_VUC = [
@@ -1471,22 +1471,29 @@ export default function HomePageClient() {
             </MotionConfig>
           </section>
 
-          {/* 2 — Giới thiệu: nền tech · 3 thiết bị trái · chữ phải */}
+          {/* 2 — Giới thiệu: so deep + ảnh nền · 3 thiết bị trái · chữ phải */}
           <section
             id="gioi-thieu"
-            className={sectionClass(1, "relative flex overflow-hidden bg-[#e4e8ef] text-slate-900")}
+            className={sectionClass(1, "relative flex overflow-hidden text-white")}
           >
-            {/* Nền thiên công nghệ nhẹ */}
+            {/* Nền ảnh so deep (amber + tím) — không full đen */}
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={ABOUT_CITY_BG}
                 alt=""
-                className="corp-parallax-bg h-full w-full object-cover object-[center_35%] opacity-95"
+                className="corp-parallax-bg h-full w-full object-cover object-[center_35%] opacity-90"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#eef1f7]/55 via-[#eef1f7]/30 to-[#eef1f7]/82" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#eef1f7]/60 via-transparent to-[#eef1f7]/40" />
-              <div className="absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#f4f6fb]/85 via-[#f4f6fb]/45 to-transparent sm:w-[48%] sm:from-[#f4f6fb]/92 sm:via-[#f4f6fb]/70" />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.18), transparent 58%), radial-gradient(ellipse 50% 45% at 92% 15%, rgba(139,124,246,0.16), transparent 55%), linear-gradient(165deg, rgba(14,16,24,0.35) 0%, rgba(8,9,12,0.55) 55%, rgba(10,9,20,0.7) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0e1018]/75 via-[#0e1018]/25 to-[#0e1018]/80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090c]/70 via-transparent to-[#0e1018]/45" />
+              <div className="absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#0a0914]/75 via-[#0a0914]/35 to-transparent sm:w-[48%]" />
             </div>
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-[1280px] flex-col justify-center gap-5 px-5 pb-10 pt-[4.75rem] sm:gap-6 sm:px-8 sm:pb-12 sm:pt-20 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-4 md:px-8 md:pb-14 md:pt-16 lg:gap-2 lg:px-10 lg:pb-16 lg:pt-20 xl:gap-4 xl:pl-16">
@@ -1517,11 +1524,11 @@ export default function HomePageClient() {
               <div className="relative z-20 order-1 w-full min-w-0 self-center text-left md:order-2 xl:max-w-[34rem]">
                 <p {...riseProps(0, "flex items-center gap-2 sm:gap-3")}>
                   <span
-                    className="h-[1.5px] w-5 rounded-full bg-gradient-to-r from-transparent via-violet-400/90 to-violet-500 sm:w-8"
+                    className="h-[1.5px] w-5 rounded-full bg-gradient-to-r from-transparent via-amber-200/80 to-violet-400 sm:w-8"
                     aria-hidden
                   />
                   <span
-                    className="bg-gradient-to-r from-violet-800 via-violet-600 to-violet-800 bg-clip-text text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-transparent sm:text-[1.05rem] sm:tracking-[0.32em]"
+                    className="bg-gradient-to-r from-amber-200 via-violet-300 to-violet-200 bg-clip-text text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-transparent sm:text-[1.05rem] sm:tracking-[0.32em]"
                     style={{ fontFamily: '"Cormorant Garamond", "Be Vietnam Pro", Georgia, serif' }}
                   >
                     Về chúng tôi
@@ -1529,13 +1536,12 @@ export default function HomePageClient() {
                 </p>
 
                 <h2
-                  {...riseProps(1, "mt-2 text-balance sm:mt-3", {
-                    fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
+                  {...riseProps(1, "mt-2 text-balance text-white sm:mt-3", {
+                    fontFamily: '"Cormorant Garamond", Georgia, serif',
                     fontWeight: 600,
-                    fontSize: "clamp(1.35rem, 5.2vw, 2.05rem)",
-                    lineHeight: 1.28,
+                    fontSize: "clamp(1.45rem, 5.2vw, 2.35rem)",
+                    lineHeight: 1.22,
                     letterSpacing: "-0.02em",
-                    color: "#16131f",
                   })}
                 >
                   Đồng hành doanh nghiệp phát triển khách hàng trên nền tảng số
@@ -1544,7 +1550,7 @@ export default function HomePageClient() {
                 <p
                   {...riseProps(
                     2,
-                    "mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-violet-700/85 sm:mt-3 sm:text-[12px]",
+                    "mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-violet-300/85 sm:mt-3 sm:text-[12px]",
                     { fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }
                   )}
                 >
@@ -1552,12 +1558,11 @@ export default function HomePageClient() {
                 </p>
 
                 <div
-                  {...riseProps(3, "mt-3 space-y-2 text-pretty sm:mt-4 sm:space-y-3", {
+                  {...riseProps(3, "mt-3 space-y-2 text-pretty text-white/70 sm:mt-4 sm:space-y-3", {
                     fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
                     fontSize: "clamp(0.9rem, 3.4vw, 1.02rem)",
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    color: "#1f1b2e",
                   })}
                 >
                   <MotionConfig reducedMotion="never">
@@ -1582,7 +1587,7 @@ export default function HomePageClient() {
                 <div {...riseProps(4, "mt-4 sm:mt-5")}>
                   <Link
                     href="/gioi-thieu"
-                    className="corp-cta inline-flex items-center justify-center rounded-md bg-[#5b21b6] px-5 py-2.5 text-[12px] text-white shadow-md shadow-violet-900/20 transition hover:bg-[#4c1d95] sm:px-7 sm:py-3 sm:text-sm"
+                    className="corp-cta inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-5 py-2.5 text-[12px] font-semibold text-[#0b0d12] shadow-lg shadow-violet-950/30 transition hover:brightness-105 sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Xem thêm
                   </Link>
