@@ -92,6 +92,7 @@ export function MarketingChrome() {
     return (
       <>
         <HomeFloatingActions />
+        <SoftUISounds />
         <SiteConsultPopup />
       </>
     );

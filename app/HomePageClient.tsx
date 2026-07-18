@@ -21,6 +21,7 @@ import {
 } from "@/lib/site-contact";
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
 import { HomeAtomField } from "@/components/shared/HomeAtomField";
+import { ensureTypeClickAudio, playTypeClickSound } from "@/lib/type-click-sound";
 
 const SECTIONS = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
@@ -215,6 +216,7 @@ function HeroRevealText({
   play,
   startDelayMs = 80,
   stepMs = 42,
+  sound = true,
 }: {
   text: string;
   as?: "h1" | "h2" | "p" | "span";
@@ -223,10 +225,38 @@ function HeroRevealText({
   play: boolean;
   startDelayMs?: number;
   stepMs?: number;
+  /** Tiếng gõ laptop theo từng chữ */
+  sound?: boolean;
 }) {
+  const { settings } = useAdmin();
   // Wrap theo từ — tránh xuống dòng giữa "hình" / "Facebook"
   const tokens = text.split(/(\s+)/);
   let charIndex = 0;
+
+  useEffect(() => {
+    ensureTypeClickAudio();
+  }, []);
+
+  useEffect(() => {
+    if (!play || !sound || settings.softSoundsEnabled === false) return;
+
+    const vol = Math.min(0.12, (settings.softSoundsVolume ?? 0.05) * 1.15);
+    const timers: number[] = [];
+    let typed = 0;
+
+    for (const ch of Array.from(text)) {
+      if (/\s/.test(ch)) continue;
+      const delay = startDelayMs + typed * stepMs;
+      timers.push(
+        window.setTimeout(() => {
+          playTypeClickSound(vol);
+        }, delay),
+      );
+      typed += 1;
+    }
+
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [play, text, startDelayMs, stepMs, sound, settings.softSoundsEnabled, settings.softSoundsVolume]);
 
   return (
     <Tag className={className} style={style} aria-label={text}>
@@ -448,6 +478,7 @@ export default function HomePageClient() {
       setHeroMotionReady(false);
       return undefined;
     }
+    ensureTypeClickAudio();
     const t = window.setTimeout(() => setHeroMotionReady(true), 280);
     return () => window.clearTimeout(t);
   }, [siteReady]);
@@ -2085,13 +2116,13 @@ export default function HomePageClient() {
               <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
             </button>
 
-            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-10 pb-10 pt-[5.5rem] sm:px-14 sm:pb-12 sm:pt-24 lg:justify-center lg:overflow-visible lg:px-16 lg:pb-10 lg:pt-24">
+            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-10 pb-8 pt-28 sm:px-14 sm:pb-10 sm:pt-32 lg:overflow-visible lg:px-16 lg:pb-8 lg:pt-36">
               <h2
                 {...riseProps(0, "mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
                   fontWeight: 600,
-                  fontSize: "clamp(1.25rem, 3.6vw, 2.35rem)",
-                  lineHeight: 1.2,
+                  fontSize: "clamp(1.2rem, 3.2vw, 2.15rem)",
+                  lineHeight: 1.25,
                   letterSpacing: "-0.02em",
                 })}
               >
@@ -2099,7 +2130,7 @@ export default function HomePageClient() {
               </h2>
 
               {/* Feedback: trước từng chữ → logo → sau từng chữ */}
-              <div {...riseProps(1, "relative mx-auto mt-4 w-full max-w-3xl shrink-0 sm:mt-6")}>
+              <div {...riseProps(1, "relative mx-auto mt-3 w-full max-w-3xl shrink-0 sm:mt-5")}>
                 {activeVoice ? (
                   <MotionConfig reducedMotion="never">
                     <div key={activeVoice.slug} className="flex flex-col items-center text-center">
@@ -2253,47 +2284,37 @@ export default function HomePageClient() {
             <img
               src={CORP_HERO_SLIDES[5]}
               alt=""
-              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12] saturate-50"
+              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.1] saturate-50"
             />
-            <div className="absolute inset-0 bg-[#06080f]/92" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_50%_15%,rgba(109,40,217,0.18),transparent_65%)]" />
+            <div className="absolute inset-0 bg-[#06080f]/93" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_50%_15%,rgba(109,40,217,0.16),transparent_65%)]" />
 
             <div
               data-project-scroll
-              className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col justify-center gap-5 overflow-y-auto px-5 pb-4 pt-[5.25rem] sm:gap-8 sm:px-10 sm:pb-6 sm:pt-24 lg:gap-10 lg:px-14"
+              className="relative z-10 mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col justify-start gap-6 overflow-y-auto px-5 pb-3 pt-28 sm:gap-8 sm:px-10 sm:pb-4 sm:pt-32 lg:justify-center lg:gap-9 lg:px-12 lg:pt-28"
             >
-              {/* CTA */}
+              {/* CTA — không lặp logo (đã có trên header) */}
               <div {...fadeProps(0, "corp-fade--footer w-full shrink-0 text-center")}>
-                <div className="mb-3 flex items-center justify-center gap-2 sm:mb-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={logoSrc} alt="" className="h-8 w-8 rounded-full object-cover sm:h-9 sm:w-9" />
-                  <span
-                    className="text-[13px] font-semibold tracking-wide text-white sm:text-[15px]"
-                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                  >
-                    {brandName}
-                  </span>
-                </div>
                 <h2
-                  className="text-[clamp(1.45rem,5vw,2.5rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-white"
+                  className="text-[clamp(1.5rem,4.5vw,2.4rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-white"
                   style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
                 >
                   Sẵn sàng bứt phá?
                 </h2>
-                <p className="mx-auto mt-2 max-w-lg text-[12px] font-light leading-relaxed text-white/55 sm:mt-3 sm:text-[14px]">
+                <p className="mx-auto mt-2.5 max-w-md text-[12px] font-light leading-relaxed text-white/55 sm:mt-3 sm:text-[14px]">
                   Lộ trình Website · Facebook · Maps khớp ngân sách và mục tiêu của bạn.
                 </p>
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:mt-6 sm:gap-3">
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 sm:mt-6 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => goToSection(consultSectionIndex)}
-                    className="corp-cta inline-flex min-w-[9.5rem] items-center justify-center rounded-md bg-violet-600 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
+                    className="corp-cta inline-flex min-w-[10rem] items-center justify-center rounded-md bg-violet-600 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Đặt lịch tư vấn
                   </button>
                   <Link
                     href="/banggia"
-                    className="inline-flex min-w-[9.5rem] items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white/90 transition hover:border-white/50 hover:bg-white/[0.06] sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
+                    className="inline-flex min-w-[10rem] items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-[11px] font-semibold tracking-wide text-white/90 transition hover:border-white/50 hover:bg-white/[0.06] sm:min-w-[11rem] sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Bảng giá
                   </Link>
@@ -2301,18 +2322,15 @@ export default function HomePageClient() {
               </div>
 
               {/* Links — 3 cột */}
-              <div className="w-full shrink-0 border-t border-white/[0.1] pt-4 sm:pt-7">
-                <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-3 sm:gap-x-10 sm:gap-y-0 md:gap-x-14">
+              <div className="w-full shrink-0 border-t border-white/[0.1] pt-5 sm:pt-7">
+                <div className="mx-auto grid max-w-3xl grid-cols-3 gap-x-4 text-left sm:gap-x-10 md:gap-x-12">
                   <div {...riseProps(2, "corp-rise--footer")}>
                     <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Kết nối
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
-                        <a
-                          href={getTelHref(hotline)}
-                          className="font-medium text-violet-200 transition hover:text-white"
-                        >
+                        <a href={getTelHref(hotline)} className="font-medium text-violet-200 transition hover:text-white">
                           {hotlineDisplay}
                         </a>
                       </li>
@@ -2327,10 +2345,7 @@ export default function HomePageClient() {
                         </a>
                       </li>
                       <li>
-                        <a
-                          href={`mailto:${email}`}
-                          className="break-all text-white/70 transition hover:text-violet-200"
-                        >
+                        <a href={`mailto:${email}`} className="break-all text-white/70 transition hover:text-violet-200">
                           {email}
                         </a>
                       </li>
@@ -2342,7 +2357,7 @@ export default function HomePageClient() {
                     <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Dịch vụ
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/website" className="text-white/70 transition hover:text-violet-200">
                           Website
@@ -2370,7 +2385,7 @@ export default function HomePageClient() {
                     <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.2em]">
                       Khám phá
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12px] sm:mt-3 sm:space-y-2 sm:text-[13px]">
+                    <ul className="mt-2 space-y-1.5 text-[11px] sm:mt-2.5 sm:space-y-2 sm:text-[13px]">
                       <li>
                         <Link href="/du-an" className="text-white/70 transition hover:text-violet-200">
                           Dự án
@@ -2396,28 +2411,24 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Brand bar */}
+              {/* Brand bar — gọn, không lặp logo lớn */}
               <footer
                 {...fromLeftProps(
                   8,
-                  "corp-from-left--footer mt-1 flex w-full shrink-0 flex-col items-center gap-2 border-t border-white/[0.1] pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-5 sm:text-left"
+                  "corp-from-left--footer flex w-full shrink-0 flex-col items-center gap-1 border-t border-white/[0.1] pt-4 text-center sm:flex-row sm:justify-between sm:gap-3 sm:pt-5 sm:text-left"
                 )}
               >
-                <div className="flex items-center gap-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={logoSrc} alt="" className="h-6 w-6 rounded-full object-cover sm:h-7 sm:w-7" />
-                  <span
-                    className="text-[12px] font-semibold tracking-wide text-white sm:text-[13px]"
-                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                  >
-                    {brandName}
-                  </span>
-                </div>
+                <p
+                  className="text-[12px] font-semibold tracking-wide text-white/80 sm:text-[13px]"
+                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                >
+                  {brandName}
+                </p>
                 <p className="text-[10px] font-light tracking-wide text-white/40 sm:text-[11px]">
                   Kết nối thương hiệu — Tăng trưởng bền vững
                 </p>
                 <p className="text-[10px] text-white/35 sm:text-[11px]">
-                  © {new Date().getFullYear()} {brandName}
+                  © {new Date().getFullYear()}
                 </p>
               </footer>
             </div>
