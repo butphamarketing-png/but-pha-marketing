@@ -148,7 +148,7 @@ export default function AboutPageClient() {
             </div>
           </Link>
 
-          <div className="hidden lg:block [&_a]:text-white/75 [&_button]:text-white/75">
+          <div className="hidden lg:block">
             <SiteNavMenu tone="dark" layout="horizontal" activeHref="/gioi-thieu" />
           </div>
 

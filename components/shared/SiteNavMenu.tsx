@@ -121,7 +121,7 @@ function NavGroupDesktop({
             : "pointer-events-none invisible opacity-0 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100"
         }`}
       >
-        <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white p-3 shadow-xl">
+        <div className="nav-mega-panel overflow-hidden rounded-2xl border border-indigo-100 bg-white p-3 text-slate-800 shadow-xl">
           {group.industryMegaMenu ? (
             <div className="flex flex-col gap-3 lg:flex-row">
               <div className="shrink-0 border-b border-indigo-50 pb-3 lg:w-44 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-3">
@@ -134,7 +134,7 @@ function NavGroupDesktop({
                       setOpen(false);
                       onNavigate?.();
                     }}
-                    className={`block rounded-xl px-3 py-2 text-sm font-medium transition ${childLinkTone("light")}`}
+                    className="block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-950"
                   >
                     {child.label}
                   </Link>
@@ -153,7 +153,7 @@ function NavGroupDesktop({
                         setOpen(false);
                         onNavigate?.();
                       }}
-                      className={`flex items-center gap-2 rounded-lg px-2 py-1.5 transition sm:px-2.5 sm:py-2 ${childLinkTone("light")}`}
+                      className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-slate-800 transition hover:bg-indigo-50 sm:px-2.5 sm:py-2"
                     >
                       <span className="relative h-8 w-12 shrink-0 overflow-hidden rounded-md border border-indigo-100 bg-indigo-50">
                         <Image
@@ -164,7 +164,7 @@ function NavGroupDesktop({
                           className="object-cover object-center"
                         />
                       </span>
-                      <span className="text-xs font-semibold sm:text-sm">{child.label}</span>
+                      <span className="text-xs font-semibold text-slate-800 sm:text-sm">{child.label}</span>
                     </Link>
                   ))}
                 </div>
@@ -179,7 +179,7 @@ function NavGroupDesktop({
                   setOpen(false);
                   onNavigate?.();
                 }}
-                className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${childLinkTone("light")}`}
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-950"
               >
                 {child.label}
               </Link>

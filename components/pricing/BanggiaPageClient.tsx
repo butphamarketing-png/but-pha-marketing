@@ -178,8 +178,8 @@ export function BanggiaPageClient() {
             <Image src="/logo.png" alt="Bứt Phá Marketing" width={40} height={40} className="h-10 w-10 object-contain" />
             <span className="hidden text-sm font-medium tracking-wide text-white/90 sm:inline">Bứt Phá Marketing</span>
           </Link>
-          <div className="[&_button]:text-white/80 [&_a]:text-white/80">
-            <SiteNavMenu />
+          <div>
+            <SiteNavMenu tone="dark" />
           </div>
         </div>
       </header>

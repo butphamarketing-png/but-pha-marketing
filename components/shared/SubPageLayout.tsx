@@ -240,7 +240,7 @@ export function SubPageLayout({
             </button>
           </div>
 
-          <div className={`hidden lg:block ${deep ? "[&_a]:text-white/75 [&_button]:text-white/75" : ""}`}>
+          <div className="hidden lg:block">
             <SiteNavMenu tone={deep ? "dark" : "light"} layout="horizontal" activeHref={pathname} />
           </div>
 

@@ -2691,3 +2691,27 @@ html[data-home-section="lien-he"] .home-fab-stack {
   background: rgba(255, 255, 255, 0.03) !important;
   color: rgba(255, 255, 255, 0.7) !important;
 }
+
+/* Mega menu luôn panel trắng — không kế thừa chữ trắng từ deep theme */
+.platform-deep .nav-mega-panel,
+.platform-deep .nav-mega-panel a,
+.platform-deep .nav-mega-panel span,
+.platform-deep .nav-mega-panel p {
+  color: inherit;
+}
+.platform-deep .nav-mega-panel a {
+  color: #334155 !important;
+}
+.platform-deep .nav-mega-panel a:hover {
+  color: #1e1b4b !important;
+}
+.platform-deep .nav-mega-panel .text-violet-600 {
+  color: #7c3aed !important;
+}
+.platform-deep .nav-mega-panel .text-slate-400 {
+  color: #94a3b8 !important;
+}
+.platform-deep .nav-mega-panel .text-slate-800,
+.platform-deep .nav-mega-panel .text-slate-700 {
+  color: #1e293b !important;
+}
