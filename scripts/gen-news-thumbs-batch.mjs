@@ -235,12 +235,24 @@ export function getGeneratedArticleThumbnailAlt(slug?: string): string | null {
   console.log(`Wrote map (${Object.keys(merged).length} entries)`);
 }
 
-function isGenericOrEmpty(imageUrl) {
+const INCLUDE_SHARED =
+  process.argv.includes("--include-shared") || process.argv.includes("--all");
+
+function needsUniqueThumb(imageUrl) {
   const img = (imageUrl || "").split("?")[0];
   if (!img) return true;
   if (img.includes("/tin-tuc/articles/")) return false;
   const file = img.split("/").pop() || "";
-  return GENERIC_FILES.has(file);
+  if (GENERIC_FILES.has(file)) return true;
+  // Pool ngành / niche chia sẻ nhiều bài → làm lại thành 1 ảnh/bài
+  if (
+    INCLUDE_SHARED &&
+    /\/tin-tuc\/[^/]+\//.test(img) &&
+    !img.includes("/nganh-thumbs/")
+  ) {
+    return true;
+  }
+  return false;
 }
 
 async function fetchCandidates(limit) {
@@ -259,7 +271,7 @@ async function fetchCandidates(limit) {
     if (!data?.length) break;
     for (const row of data) {
       if (!row.slug) continue;
-      if (!isGenericOrEmpty(row.image_url)) continue;
+      if (!needsUniqueThumb(row.image_url)) continue;
       found.push(row);
       if (found.length >= limit) break;
     }
