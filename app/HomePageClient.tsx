@@ -32,6 +32,7 @@ import { ensureUiAudio, scheduleAppearSounds } from "@/lib/ui-sounds";
 import {
   armBgMusicAutoStart,
   isBgMusicMuted,
+  setBgMusicSectionActive,
   startBgMusic,
   toggleBgMusicMute,
 } from "@/lib/ambient-bg-music";
@@ -478,7 +479,9 @@ export default function HomePageClient() {
   useEffect(() => {
     setIsClient(true);
     setBgMusicMuted(isBgMusicMuted());
-    armBgMusicAutoStart(0.055);
+    // Section 1 mặc định — arm unlock + auto bật nhạc spa
+    setBgMusicSectionActive(true);
+    armBgMusicAutoStart(0.048);
   }, []);
 
   // Safety: nếu loading không gọi onComplete, vẫn mở site sau 8s
@@ -498,16 +501,31 @@ export default function HomePageClient() {
       return undefined;
     }
     ensureTypeClickAudio();
-    armBgMusicAutoStart(0.055);
-    void startBgMusic(0.055).then((ok) => {
-      setBgMusicOn(ok && !isBgMusicMuted());
-      setBgMusicMuted(isBgMusicMuted());
-    });
+    setBgMusicSectionActive(activeSection === 0);
+    armBgMusicAutoStart(0.048);
+    if (activeSection === 0) {
+      void startBgMusic(0.048).then((ok) => {
+        setBgMusicOn(ok && !isBgMusicMuted());
+        setBgMusicMuted(isBgMusicMuted());
+      });
+    }
     const t = window.setTimeout(() => setHeroMotionReady(true), 100);
     return () => window.clearTimeout(t);
   }, [siteReady]);
 
-  // Section 1: jingle + chào mừng (1 lần / phiên) — nhạc nền vẫn chạy
+  // Chỉ section 1 có nhạc nền spa — section khác chỉ SFX
+  useEffect(() => {
+    if (!siteReady) return;
+    const onHero = activeSection === 0;
+    setBgMusicSectionActive(onHero, 0.048);
+    if (onHero && !isBgMusicMuted()) {
+      void startBgMusic(0.048).then((ok) => setBgMusicOn(ok));
+    } else if (!onHero) {
+      setBgMusicOn(false);
+    }
+  }, [activeSection, siteReady]);
+
+  // Section 1: jingle + chào mừng (1 lần / phiên) — nhạc spa vẫn chạy
   useEffect(() => {
     if (!isClient) return;
     if (hasPlayedHeroWelcome()) {
@@ -521,7 +539,8 @@ export default function HomePageClient() {
     let cancelled = false;
     const tryAuto = window.setTimeout(async () => {
       if (cancelled || heroWelcomeTried.current) return;
-      const musicOk = await startBgMusic(0.055);
+      setBgMusicSectionActive(true, 0.048);
+      const musicOk = await startBgMusic(0.048);
       setBgMusicOn(musicOk && !isBgMusicMuted());
       setBgMusicMuted(isBgMusicMuted());
       const unlocked = await unlockHeroAudio();
@@ -543,7 +562,7 @@ export default function HomePageClient() {
     };
   }, [isClient, siteReady, heroMotionReady, activeSection, brandName]);
 
-  // Rời section 1 → dừng giọng chào (giữ nhạc nền)
+  // Rời section 1 → dừng giọng chào (nhạc đã fade bởi setBgMusicSectionActive)
   useEffect(() => {
     if (activeSection !== 0) stopHeroWelcomeSpeech();
   }, [activeSection]);
@@ -552,9 +571,9 @@ export default function HomePageClient() {
     heroWelcomeTried.current = true;
     await unlockHeroAudio();
     ensureTypeClickAudio();
-    // Bật nhạc nền ngay khi user cho phép audio
-    if (isBgMusicMuted()) toggleBgMusicMute(0.055);
-    await startBgMusic(0.055);
+    setBgMusicSectionActive(true, 0.048);
+    if (isBgMusicMuted()) toggleBgMusicMute(0.048);
+    await startBgMusic(0.048);
     setBgMusicMuted(false);
     setBgMusicOn(true);
     const ok = await playHeroWelcomeExperience({
@@ -567,14 +586,15 @@ export default function HomePageClient() {
   }, [brandName]);
 
   const onToggleBgMusic = useCallback(() => {
-    const nextMuted = toggleBgMusicMute(0.055);
+    setBgMusicSectionActive(activeSection === 0, 0.048);
+    const nextMuted = toggleBgMusicMute(0.048);
     setBgMusicMuted(nextMuted);
-    if (!nextMuted) {
-      void startBgMusic(0.055).then(() => setBgMusicOn(true));
+    if (!nextMuted && activeSection === 0) {
+      void startBgMusic(0.048).then(() => setBgMusicOn(true));
     } else {
       setBgMusicOn(false);
     }
-  }, []);
+  }, [activeSection]);
 
   useEffect(() => {
     // Full-section snap mọi thiết bị — kiểu Vinh Phát
@@ -1182,7 +1202,7 @@ export default function HomePageClient() {
         style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
       >
         {/* Nút nhạc nền — luôn hiện để tắt/bật */}
-        {siteReady ? (
+        {siteReady && activeSection === 0 ? (
           <button
             type="button"
             onClick={onToggleBgMusic}
@@ -1191,8 +1211,8 @@ export default function HomePageClient() {
                 ? "border-white/20 bg-black/45 text-white/70 hover:bg-black/60"
                 : "border-violet-300/40 bg-violet-600/40 text-violet-100 hover:bg-violet-600/55"
             }`}
-            aria-label={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền" : "Tắt nhạc nền"}
-            title={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền" : "Tắt nhạc nền"}
+            aria-label={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền spa" : "Tắt nhạc nền spa"}
+            title={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền spa" : "Tắt nhạc nền spa"}
           >
             {bgMusicMuted || !bgMusicOn ? (
               <VolumeX className="h-4 w-4" strokeWidth={1.75} />

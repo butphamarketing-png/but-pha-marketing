@@ -27,7 +27,10 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
     setActive(true);
     // Unlock audio + arm nhạc nền sớm trong loading
     void import("@/lib/type-click-sound").then((m) => m.ensureTypeClickAudio());
-    void import("@/lib/ambient-bg-music").then((m) => m.armBgMusicAutoStart(0.055));
+    void import("@/lib/ambient-bg-music").then((m) => {
+      m.setBgMusicSectionActive(true);
+      m.armBgMusicAutoStart(0.048);
+    });
   }, []);
 
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);

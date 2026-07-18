@@ -96,6 +96,66 @@ const LOGISTICS_DIR = `${NEWS_DIR}/logistics`;
 const CO_KHI_DIR = `${NEWS_DIR}/co-khi`;
 const BAO_BI_DIR = `${NEWS_DIR}/bao-bi`;
 const TU_DONG_HOA_DIR = `${NEWS_DIR}/tu-dong-hoa`;
+const CRM_DIR = `${NEWS_DIR}/crm`;
+const ZALO_DIR = `${NEWS_DIR}/zalo`;
+
+/** Bài CRM / so sánh tool — thumbnail trong public/tin-tuc/crm */
+export const CRM_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
+  "zoho-crm-hay-pipedrive": {
+    file: "zoho-crm-hay-pipedrive.png",
+    keywordsMain: "zoho crm hay pipedrive",
+  },
+  "hubspot-hay-zoho-crm": {
+    file: "zoho-crm-hay-pipedrive.png",
+    keywordsMain: "hubspot hay zoho crm",
+  },
+};
+
+export function getCrmThumbnailPath(slug?: string): string | null {
+  const entry = slug ? CRM_ARTICLE_THUMBNAILS[slug] : undefined;
+  return entry ? `${CRM_DIR}/${entry.file}` : null;
+}
+
+/** Bài Zalo / ZNS — thumbnail trong public/tin-tuc/zalo */
+export const ZALO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
+  "zns-la-gi": {
+    file: "zns-la-gi.png",
+    keywordsMain: "zns là gì",
+  },
+  "zalo-zns-la-gi-b17": {
+    file: "zns-la-gi.png",
+    keywordsMain: "zalo zns là gì",
+  },
+  "zns-hay-sms-marketing": {
+    file: "zns-hay-sms.png",
+    keywordsMain: "zns hay sms marketing",
+  },
+  "zalo-zns-hay-sms-marketing-b17": {
+    file: "zns-hay-sms.png",
+    keywordsMain: "zalo zns hay sms marketing",
+  },
+  "zns-bi-tu-choi-template": {
+    file: "zns-bi-tu-choi-template.png",
+    keywordsMain: "zns bị từ chối template",
+  },
+  "zalo-zns-template-bi-tu-choi": {
+    file: "zns-bi-tu-choi-template.png",
+    keywordsMain: "zalo zns template bị từ chối",
+  },
+  "zalo-zns-bi-tu-choi-b17": {
+    file: "zns-bi-tu-choi-template.png",
+    keywordsMain: "zalo zns bị từ chối",
+  },
+  "zalo-zns-bi-chan": {
+    file: "zns-bi-tu-choi-template.png",
+    keywordsMain: "zalo zns bị chặn",
+  },
+};
+
+export function getZaloThumbnailPath(slug?: string): string | null {
+  const entry = slug ? ZALO_ARTICLE_THUMBNAILS[slug] : undefined;
+  return entry ? `${ZALO_DIR}/${entry.file}` : null;
+}
 
 /** Bài website cơ khí / gia công CNC — thumbnail trong public/tin-tuc/co-khi */
 export const CO_KHI_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
@@ -504,6 +564,12 @@ export function resolveBlogImageUrl(input: {
   title?: string;
   imageUrl?: string;
 }): string {
+  const crm = getCrmThumbnailPath(input.slug);
+  if (crm) return crm;
+
+  const zalo = getZaloThumbnailPath(input.slug);
+  if (zalo) return zalo;
+
   const tuDongHoa = getTuDongHoaThumbnailPath(input.slug);
   if (tuDongHoa) return tuDongHoa;
 

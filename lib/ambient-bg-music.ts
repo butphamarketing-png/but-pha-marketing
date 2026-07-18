@@ -1,17 +1,20 @@
-/** Nhạc nền ambient — pad tím nhẹ, loop liên tục khi vào site */
+/** Nhạc nền spa — êm, ấm; chỉ dùng cho section 1 */
 
 type AudioCtx = AudioContext;
 
 const MUTE_KEY = "bp-bg-music-muted";
+const DEFAULT_VOLUME = 0.048;
 
 let sharedCtx: AudioCtx | null = null;
 let masterGain: GainNode | null = null;
 let started = false;
 let muted = false;
+/** Section 1 đang nghe được nhạc (không liên quan mute user) */
+let sectionAudible = true;
 let nodes: AudioNode[] = [];
 let oscillators: OscillatorNode[] = [];
 let lfos: OscillatorNode[] = [];
-let pulseTimer: number | null = null;
+let chimeTimer: number | null = null;
 let gestureBound = false;
 
 function getAudioContext(): AudioCtx | null {
@@ -31,6 +34,7 @@ function getAudioContext(): AudioCtx | null {
 export function isBgMusicMuted(): boolean {
   if (typeof window === "undefined") return false;
   try {
+    // Mặc định bật — chỉ tắt khi user đã chọn mute
     return localStorage.getItem(MUTE_KEY) === "1";
   } catch {
     return muted;
@@ -38,7 +42,7 @@ export function isBgMusicMuted(): boolean {
 }
 
 export function isBgMusicPlaying(): boolean {
-  return started && !muted && sharedCtx?.state === "running";
+  return started && !muted && sectionAudible && sharedCtx?.state === "running";
 }
 
 function readMutedPreference() {
@@ -54,10 +58,25 @@ function writeMutedPreference(value: boolean) {
   }
 }
 
+function targetGain(volume: number) {
+  if (muted || !sectionAudible) return 0.0001;
+  return Math.max(0.001, Math.min(0.1, volume));
+}
+
+function applyMasterGain(volume: number, fadeSec = 1.4) {
+  const ctx = getAudioContext();
+  if (!masterGain || !ctx) return;
+  const now = ctx.currentTime;
+  const cur = Math.max(0.0001, masterGain.gain.value);
+  masterGain.gain.cancelScheduledValues(now);
+  masterGain.gain.setValueAtTime(cur, now);
+  masterGain.gain.exponentialRampToValueAtTime(targetGain(volume), now + fadeSec);
+}
+
 function stopGraph() {
-  if (pulseTimer != null) {
-    window.clearInterval(pulseTimer);
-    pulseTimer = null;
+  if (chimeTimer != null) {
+    window.clearInterval(chimeTimer);
+    chimeTimer = null;
   }
   for (const osc of [...oscillators, ...lfos]) {
     try {
@@ -81,7 +100,8 @@ function stopGraph() {
   started = false;
 }
 
-function buildAmbientGraph(ctx: AudioCtx, volume = 0.055) {
+/** Pad spa ấm + chuông nhẹ (không pulse tech) */
+function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   stopGraph();
 
   const master = ctx.createGain();
@@ -90,33 +110,34 @@ function buildAmbientGraph(ctx: AudioCtx, volume = 0.055) {
   masterGain = master;
   nodes.push(master);
 
+  // Warm lowpass
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(920, ctx.currentTime);
-  filter.Q.value = 0.6;
+  filter.frequency.setValueAtTime(680, ctx.currentTime);
+  filter.Q.value = 0.45;
   filter.connect(master);
   nodes.push(filter);
 
-  // LFO filter sweep chậm
+  // Breath / filter drift rất chậm
   const lfo = ctx.createOscillator();
   lfo.type = "sine";
-  lfo.frequency.value = 0.07;
+  lfo.frequency.value = 0.045;
   const lfoGain = ctx.createGain();
-  lfoGain.gain.value = 280;
+  lfoGain.gain.value = 160;
   lfo.connect(lfoGain);
   lfoGain.connect(filter.frequency);
   lfo.start();
   lfos.push(lfo);
   nodes.push(lfoGain);
 
-  // Pad chord cinematic nhẹ
+  // Spa pad — G major 7 ấm (êm như lounge/spa)
   const partials: { freq: number; type: OscillatorType; gain: number }[] = [
-    { freq: 110, type: "sine", gain: 0.55 },
-    { freq: 164.81, type: "sine", gain: 0.38 },
-    { freq: 220, type: "triangle", gain: 0.28 },
-    { freq: 277.18, type: "sine", gain: 0.18 },
-    { freq: 329.63, type: "sine", gain: 0.12 },
-    { freq: 440.0, type: "triangle", gain: 0.08 },
+    { freq: 98.0, type: "sine", gain: 0.42 }, // G2
+    { freq: 146.83, type: "sine", gain: 0.36 }, // D3
+    { freq: 196.0, type: "sine", gain: 0.28 }, // G3
+    { freq: 246.94, type: "triangle", gain: 0.16 }, // B3
+    { freq: 293.66, type: "sine", gain: 0.12 }, // D4
+    { freq: 392.0, type: "sine", gain: 0.07 }, // G4
   ];
 
   const t = ctx.currentTime;
@@ -124,7 +145,7 @@ function buildAmbientGraph(ctx: AudioCtx, volume = 0.055) {
     const osc = ctx.createOscillator();
     osc.type = p.type;
     osc.frequency.setValueAtTime(p.freq, t);
-    osc.detune.setValueAtTime((Math.random() - 0.5) * 8, t);
+    osc.detune.setValueAtTime((Math.random() - 0.5) * 4, t);
 
     const g = ctx.createGain();
     g.gain.setValueAtTime(p.gain, t);
@@ -135,29 +156,33 @@ function buildAmbientGraph(ctx: AudioCtx, volume = 0.055) {
     nodes.push(g);
   }
 
-  // Pulse soft mỗi ~3.2s
-  const pulseOsc = ctx.createOscillator();
-  pulseOsc.type = "sine";
-  pulseOsc.frequency.value = 55;
-  const pulseGain = ctx.createGain();
-  pulseGain.gain.setValueAtTime(0.0001, t);
-  pulseOsc.connect(pulseGain);
-  pulseGain.connect(filter);
-  pulseOsc.start();
-  oscillators.push(pulseOsc);
-  nodes.push(pulseGain);
-
-  pulseTimer = window.setInterval(() => {
-    if (!masterGain || muted || ctx.state !== "running") return;
+  // Soft chime / singing bowl mỗi ~5.5s
+  const playChime = () => {
+    if (!masterGain || muted || !sectionAudible || ctx.state !== "running") return;
     const now = ctx.currentTime;
-    pulseGain.gain.cancelScheduledValues(now);
-    pulseGain.gain.setValueAtTime(0.0001, now);
-    pulseGain.gain.exponentialRampToValueAtTime(0.12, now + 0.04);
-    pulseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
-  }, 3200);
+    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5 — nhẹ
+    const freq = notes[Math.floor(Math.random() * notes.length)];
+    const chime = ctx.createOscillator();
+    chime.type = "sine";
+    chime.frequency.setValueAtTime(freq, now);
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(0.0001, now);
+    cg.gain.exponentialRampToValueAtTime(0.045, now + 0.08);
+    cg.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+    const cf = ctx.createBiquadFilter();
+    cf.type = "lowpass";
+    cf.frequency.value = 2400;
+    chime.connect(cf);
+    cf.connect(cg);
+    cg.connect(master);
+    chime.start(now);
+    chime.stop(now + 3);
+  };
 
-  const target = muted ? 0.0001 : Math.max(0.001, Math.min(0.12, volume));
-  master.gain.exponentialRampToValueAtTime(target, t + 2.2);
+  chimeTimer = window.setInterval(playChime, 5500);
+  window.setTimeout(playChime, 1800);
+
+  applyMasterGain(volume, 2.8);
   started = true;
 }
 
@@ -172,8 +197,8 @@ export async function unlockBgMusic(): Promise<boolean> {
   }
 }
 
-/** Bắt đầu nhạc nền (idempotent). */
-export async function startBgMusic(volume = 0.055): Promise<boolean> {
+/** Bắt đầu nhạc spa (idempotent). */
+export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
   readMutedPreference();
   const ctx = getAudioContext();
   if (!ctx) return false;
@@ -187,40 +212,41 @@ export async function startBgMusic(volume = 0.055): Promise<boolean> {
   if (ctx.state !== "running") return false;
 
   if (!started || !masterGain) {
-    buildAmbientGraph(ctx, volume);
-  } else if (!muted && masterGain) {
-    const now = ctx.currentTime;
-    masterGain.gain.cancelScheduledValues(now);
-    masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
-    masterGain.gain.exponentialRampToValueAtTime(Math.max(0.001, Math.min(0.12, volume)), now + 1.2);
+    buildSpaGraph(ctx, volume);
+  } else {
+    applyMasterGain(volume, 1.2);
   }
 
   return true;
 }
 
-export function setBgMusicMuted(nextMuted: boolean, volume = 0.055) {
+/** Bật/tắt nghe theo section — section khác fade out, section 1 fade in */
+export function setBgMusicSectionActive(active: boolean, volume = DEFAULT_VOLUME) {
+  sectionAudible = active;
+  readMutedPreference();
+  if (!started) {
+    if (active && !muted) void startBgMusic(volume);
+    return;
+  }
+  applyMasterGain(volume, active ? 1.6 : 0.9);
+}
+
+export function setBgMusicMuted(nextMuted: boolean, volume = DEFAULT_VOLUME) {
   writeMutedPreference(nextMuted);
   const ctx = getAudioContext();
   if (!masterGain || !ctx) {
-    if (!nextMuted) void startBgMusic(volume);
+    if (!nextMuted && sectionAudible) void startBgMusic(volume);
     return;
   }
-  const now = ctx.currentTime;
-  masterGain.gain.cancelScheduledValues(now);
-  masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
-  if (nextMuted) {
-    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
-  } else {
-    void ctx.resume().catch(() => undefined);
-    masterGain.gain.exponentialRampToValueAtTime(Math.max(0.001, Math.min(0.12, volume)), now + 0.8);
-  }
+  void ctx.resume().catch(() => undefined);
+  applyMasterGain(volume, 0.8);
 }
 
-export function toggleBgMusicMute(volume = 0.055): boolean {
+export function toggleBgMusicMute(volume = DEFAULT_VOLUME): boolean {
   const next = !isBgMusicMuted();
   if (!started && !next) {
     writeMutedPreference(false);
-    void startBgMusic(volume);
+    if (sectionAudible) void startBgMusic(volume);
     return false;
   }
   setBgMusicMuted(next, volume);
@@ -230,26 +256,24 @@ export function toggleBgMusicMute(volume = 0.055): boolean {
 export function stopBgMusic() {
   const ctx = getAudioContext();
   if (masterGain && ctx) {
-    const now = ctx.currentTime;
-    masterGain.gain.cancelScheduledValues(now);
-    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
-    window.setTimeout(() => stopGraph(), 350);
+    applyMasterGain(0, 0.35);
+    window.setTimeout(() => stopGraph(), 400);
   } else {
     stopGraph();
   }
 }
 
 /**
- * Gắn listener: tương tác đầu tiên → bật nhạc ngay (vượt autoplay block).
- * Gọi sớm trong loading / homepage.
+ * Unlock audio sớm; chỉ phát thật khi section 1 active + không mute.
+ * Mặc định: auto bật (không mute).
  */
-export function armBgMusicAutoStart(volume = 0.055) {
+export function armBgMusicAutoStart(volume = DEFAULT_VOLUME) {
   if (typeof window === "undefined" || gestureBound) return;
   gestureBound = true;
   readMutedPreference();
 
   const tryStart = () => {
-    if (isBgMusicMuted()) return;
+    if (isBgMusicMuted() || !sectionAudible) return;
     void startBgMusic(volume);
   };
 
@@ -258,5 +282,5 @@ export function armBgMusicAutoStart(volume = 0.055) {
     window.addEventListener(ev, tryStart, { passive: true, capture: true });
   }
 
-  void startBgMusic(volume);
+  if (sectionAudible && !muted) void startBgMusic(volume);
 }
