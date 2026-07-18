@@ -526,7 +526,7 @@ export default function HomePageClient() {
       return;
     }
     if (linhPaused) return;
-    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let intervalId: number | null = null;
     const startT = window.setTimeout(() => {
       intervalId = window.setInterval(() => {
         setLinhActive((i) => (i + 1) % LINH_VUC.length);
