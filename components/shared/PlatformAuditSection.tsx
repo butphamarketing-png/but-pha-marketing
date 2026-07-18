@@ -99,7 +99,11 @@ export function PlatformAuditSection({
               href={getZaloUrl()}
               target="_blank"
               rel="noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-violet-600 px-4 py-3.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105"
+              className="flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 text-sm font-semibold transition hover:brightness-110"
+              style={{
+                backgroundColor: accentColor,
+                color: "#0b0d12",
+              }}
             >
               Nhận báo giá qua Zalo
             </a>

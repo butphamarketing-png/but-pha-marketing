@@ -2643,6 +2643,27 @@ html[data-home-section="lien-he"] .home-fab-stack {
 }
 .platform-deep .platform-audit-shell::before {
   opacity: 0.35;
+  background: color-mix(in srgb, var(--platform-accent, #c4955a) 18%, transparent) !important;
+}
+.platform-deep .platform-audit-shell::after {
+  opacity: 0.25;
+  background-image:
+    linear-gradient(rgba(196, 149, 90, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 149, 90, 0.06) 1px, transparent 1px) !important;
+}
+.platform-deep .platform-badge {
+  border-color: rgba(196, 149, 90, 0.35) !important;
+  background: rgba(196, 149, 90, 0.12) !important;
+  color: rgba(251, 231, 198, 0.9) !important;
+  box-shadow: none !important;
+}
+.platform-deep .platform-badge span {
+  color: rgba(251, 231, 198, 0.9) !important;
+}
+.platform-deep .platform-cta {
+  background: #e8c99a !important;
+  color: #0b0d12 !important;
+  box-shadow: 0 10px 28px rgba(196, 149, 90, 0.22) !important;
 }
 .platform-deep .brand-section-title,
 .platform-deep h2,
@@ -2680,7 +2701,10 @@ html[data-home-section="lien-he"] .home-fab-stack {
 }
 .platform-deep .platform-cta,
 .platform-deep button[style*="background"] {
-  /* keep inline accents */
+  /* keep inline accents — no purple glow overrides */
+}
+.platform-deep .platform-side-card a[href*="zalo"] {
+  box-shadow: 0 10px 28px rgba(196, 149, 90, 0.2) !important;
 }
 .platform-deep #contact .platform-panel {
   border: 1px solid rgba(255, 255, 255, 0.08);
