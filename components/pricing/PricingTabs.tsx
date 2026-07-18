@@ -30,7 +30,7 @@ const TAB_ITEMS = PRICING_PLATFORMS.map((platform) => ({
 
 function TabIcon({ active, Icon, tabId }: { active: boolean; Icon: typeof Monitor; tabId: string }) {
   if (!active) {
-    return <Icon className="h-4 w-4 shrink-0" aria-hidden />;
+    return <Icon className="h-4 w-4 shrink-0 opacity-60" aria-hidden />;
   }
 
   return (
@@ -58,13 +58,13 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
   };
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-6 sm:space-y-7">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div
           ref={tabListRef}
           role="tablist"
           aria-label="Nền tảng dịch vụ"
-          className="relative flex w-full rounded-2xl border border-slate-100 bg-slate-100/80 p-1 shadow-inner sm:inline-flex sm:w-auto"
+          className="relative flex w-full rounded-full border border-white/[0.08] bg-white/[0.03] p-1 sm:inline-flex sm:w-auto"
         >
           {TAB_ITEMS.map((tab) => {
             const active = tab.id === activeId;
@@ -76,15 +76,15 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
                 role="tab"
                 aria-selected={active}
                 onClick={() => handleTabChange(tab.id)}
-                className="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-5 sm:py-3"
-                style={{ color: active ? tab.color : "#64748B" }}
+                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-colors sm:flex-none sm:px-5 sm:py-2.5 ${
+                  active ? "text-[#0b0d12]" : "text-white/50 hover:text-white/80"
+                }`}
               >
                 {active ? (
                   <motion.span
                     layoutId="banggia-tab-pill"
-                    className="absolute inset-0 rounded-xl bg-white shadow-sm"
-                    style={{ boxShadow: `0 1px 3px rgba(15,23,42,0.06), inset 0 0 0 1px ${tab.color}22` }}
-                    transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-100 to-amber-200 shadow-[0_0_24px_rgba(196,149,90,0.25)]"
+                    transition={{ type: "spring", stiffness: 480, damping: 32 }}
                   />
                 ) : null}
                 <span className="relative flex items-center gap-2">
@@ -100,7 +100,7 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
           <PricingSearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            accent={activePlatform.color}
+            accent="#C4955A"
             platformId={activeId}
           />
         </div>

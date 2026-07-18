@@ -18,8 +18,8 @@ import { TierBadge } from "./TierBadge";
 function DomainCard({ item, accent }: { item: PricingItem; accent: string }) {
   return (
     <div
-      className="group relative flex flex-col rounded-2xl border border-slate-100 bg-gradient-to-br from-white to-slate-50/80 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_8px_30px_rgba(79,70,229,0.08)]"
-      style={{ boxShadow: item.badge ? `inset 3px 0 0 0 ${accent}` : undefined }}
+      className="group relative flex flex-col border border-white/[0.06] bg-white/[0.02] p-4 transition duration-200 hover:border-white/12 hover:bg-white/[0.04]"
+      style={{ boxShadow: item.badge ? `inset 2px 0 0 0 ${accent}` : undefined }}
     >
       {item.badge ? (
         <div className="absolute right-3 top-3">
@@ -28,19 +28,24 @@ function DomainCard({ item, accent }: { item: PricingItem; accent: string }) {
       ) : null}
 
       <div className="flex items-start justify-between gap-2">
-        <p className="font-mono text-lg font-bold tracking-tight text-indigo-950">{item.name}</p>
+        <p className="font-mono text-lg font-semibold tracking-tight text-white/90">{item.name}</p>
         <CopyRippleButton
           text={`${item.name}: ${formatPriceVnd(item.price)}/năm`}
-          className="p-1.5 opacity-0 group-hover:opacity-100"
+          className="p-1.5 text-white/30 opacity-0 group-hover:opacity-100"
           iconClassName="h-3.5 w-3.5"
         />
       </div>
 
-      <p className="mt-2 text-xl font-bold tabular-nums text-indigo-950">{formatPriceVnd(item.price)}</p>
-      <span className="mt-1 inline-flex w-fit rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+      <p
+        className="mt-2 text-xl font-semibold tabular-nums text-amber-50"
+        style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+      >
+        {formatPriceVnd(item.price)}
+      </p>
+      <span className="mt-1 inline-flex w-fit border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-white/40">
         / năm
       </span>
-      {item.note ? <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500">{item.note}</p> : null}
+      {item.note ? <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/35">{item.note}</p> : null}
     </div>
   );
 }
@@ -90,12 +95,11 @@ export function DomainPricingGrid({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveCategory(tab.id)}
-                className="rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all"
-                style={
+                className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-all ${
                   active
-                    ? { backgroundColor: `${accent}18`, color: accent, boxShadow: `inset 0 0 0 1px ${accent}44` }
-                    : { backgroundColor: "#F8FAFC", color: "#64748B" }
-                }
+                    ? "bg-amber-200/15 text-amber-100 ring-1 ring-amber-200/35"
+                    : "bg-white/[0.03] text-white/40 hover:text-white/60"
+                }`}
               >
                 {tab.label}
               </button>
@@ -105,9 +109,9 @@ export function DomainPricingGrid({
       ) : null}
 
       {filtered.length === 0 ? (
-        <p className="py-6 text-center text-sm text-slate-500">
+        <p className="py-6 text-center text-sm text-white/40">
           Không có tên miền phù hợp.{" "}
-          <Link href="/lien-he" className="font-semibold text-violet-600 hover:underline">
+          <Link href="/lien-he" className="font-semibold text-amber-200/80 hover:underline">
             Liên hệ tư vấn
           </Link>
         </p>

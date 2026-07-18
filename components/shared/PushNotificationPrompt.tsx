@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { Bell, X } from "lucide-react";
 import { isInternalAppPath } from "@/lib/app-paths";
 import {
+  HOME_READY_EVENT,
   PUSH_DENY_UNTIL_KEY,
   PUSH_DISMISS_SESSION_KEY,
+  isHomeReady,
   markPushPromptPending,
   markPushPromptSettled,
   markPushSubscribed,
@@ -15,6 +17,9 @@ import { canUseWebPush } from "@/lib/push-client";
 
 const DISMISS_SESSION_KEY = PUSH_DISMISS_SESSION_KEY;
 const DENY_DISMISS_KEY = PUSH_DENY_UNTIL_KEY;
+/** Delay ngắn sau loading logo để chuyển cảnh mượt rồi mới hiện prompt. */
+const AFTER_HOME_READY_MS = 700;
+const BLOG_FALLBACK_MS = 4000;
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -46,11 +51,24 @@ export function PushNotificationPrompt() {
 
     if (Notification.permission === "granted" || Notification.permission === "denied") return;
 
-    const showOnPaths = pathname === "/" || pathname.startsWith("/blog");
-    if (!showOnPaths) return;
+    const isHome = pathname === "/";
+    const isBlog = pathname.startsWith("/blog");
+    if (!isHome && !isBlog) return;
 
     let cancelled = false;
     let timer: number | undefined;
+    let homeListener: (() => void) | undefined;
+
+    const openPrompt = () => {
+      if (cancelled) return;
+      markPushPromptPending();
+      setVisible(true);
+    };
+
+    const scheduleOpen = (delayMs: number) => {
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(openPrompt, delayMs);
+    };
 
     void (async () => {
       try {
@@ -59,12 +77,20 @@ export function PushNotificationPrompt() {
         if (cancelled || !vapidData.configured || !vapidData.publicKey) return;
 
         setVapidPublicKey(vapidData.publicKey);
-        timer = window.setTimeout(() => {
-          if (!cancelled) {
-            markPushPromptPending();
-            setVisible(true);
+
+        if (isHome) {
+          // Sau loading logo trang chủ → hiện ngay
+          if (isHomeReady()) {
+            scheduleOpen(AFTER_HOME_READY_MS);
+            return;
           }
-        }, 4000);
+          homeListener = () => scheduleOpen(AFTER_HOME_READY_MS);
+          window.addEventListener(HOME_READY_EVENT, homeListener);
+          return;
+        }
+
+        // Blog / trang khác có loading: fallback delay
+        scheduleOpen(BLOG_FALLBACK_MS);
       } catch {
         // Server chưa cấu hình VAPID — không hiện popup
       }
@@ -73,6 +99,7 @@ export function PushNotificationPrompt() {
     return () => {
       cancelled = true;
       if (timer) window.clearTimeout(timer);
+      if (homeListener) window.removeEventListener(HOME_READY_EVENT, homeListener);
     };
   }, [pathname]);
 

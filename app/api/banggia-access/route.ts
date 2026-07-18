@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import {
-  BANGGIA_SPAM_WINDOW_MS,
   buildBanggiaNote,
   mergeBanggiaNote,
   parseBanggiaNote,
@@ -48,7 +47,7 @@ export async function POST(request: Request) {
     const phone = normalizeBanggiaPhone(typeof body.phone === "string" ? body.phone : "");
 
     if (!isValidBanggiaName(name)) {
-      return NextResponse.json({ error: "Họ và tên không hợp lệ." }, { status: 400 });
+      return NextResponse.json({ error: "Họ và tên không hợp lệ. Vui lòng nhập đủ họ và tên." }, { status: 400 });
     }
     if (!isValidBanggiaPhone(phone)) {
       return NextResponse.json({ error: "Số điện thoại không hợp lệ." }, { status: 400 });
@@ -74,14 +73,13 @@ export async function POST(request: Request) {
     };
 
     const supabase = createServerClient();
-    const spamSince = new Date(Date.now() - BANGGIA_SPAM_WINDOW_MS).toISOString();
 
-    const { data: recentLeads, error: lookupError } = await supabase
+    // Mỗi SĐT chỉ đăng ký 1 lần — tìm lead banggia đã có (không giới hạn cửa sổ thời gian)
+    const { data: existingLeads, error: lookupError } = await supabase
       .from("leads")
       .select("id, name, note, created_at")
       .eq("phone", phone)
       .eq("platform", "banggia")
-      .gte("created_at", spamSince)
       .order("created_at", { ascending: false })
       .limit(1);
 
@@ -90,10 +88,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Không lưu được thông tin." }, { status: 500 });
     }
 
-    const recentLead = recentLeads?.[0] ?? null;
+    const existingLead = existingLeads?.[0] ?? null;
 
-    if (recentLead) {
-      const note = mergeBanggiaNote(recentLead.note, metadata);
+    if (existingLead) {
+      const note = mergeBanggiaNote(existingLead.note, metadata);
       const { data, error } = await supabase
         .from("leads")
         .update({
@@ -102,7 +100,7 @@ export async function POST(request: Request) {
           service: "Nguồn: Banggia",
           url: "/banggia",
         })
-        .eq("id", recentLead.id)
+        .eq("id", existingLead.id)
         .select()
         .single();
 
@@ -114,9 +112,10 @@ export async function POST(request: Request) {
       const parsed = parseBanggiaNote(note);
       return NextResponse.json({
         ok: true,
-        id: data?.id ?? recentLead.id,
+        id: data?.id ?? existingLead.id,
         accessedAt: parsed?.lastAccessedAt ?? accessedAt,
         updated: true,
+        alreadyRegistered: true,
       });
     }
 
@@ -136,6 +135,15 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
+      const code = (error as { code?: string }).code;
+      if (code === "23505") {
+        return NextResponse.json({
+          ok: true,
+          alreadyRegistered: true,
+          updated: true,
+          accessedAt,
+        });
+      }
       console.error("POST /api/banggia-access Supabase error", error);
       return NextResponse.json({ error: "Không lưu được thông tin." }, { status: 500 });
     }
@@ -154,6 +162,7 @@ export async function POST(request: Request) {
       id: data?.id ?? null,
       accessedAt,
       updated: false,
+      alreadyRegistered: false,
     });
   } catch (error) {
     console.error("POST /api/banggia-access failed", error);

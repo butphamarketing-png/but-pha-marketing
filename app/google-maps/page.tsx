@@ -5,25 +5,30 @@ import Link from "next/link";
 import { PlatformPage, PlatformConfig } from "@/components/shared/PlatformPage";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
-import { Check, Search, Target, Zap, Wrench, Building2, Star, Rocket, ChevronRight } from "lucide-react";
+import { Search, Target, Zap, Wrench, Building2, Star, Rocket } from "lucide-react";
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { GOOGLE_MAPS_PACKAGES } from "@/lib/service-pricing";
 
 const GM_ICONS = [Wrench, Building2, Star] as const;
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 const config: PlatformConfig = {
   name: "Google Maps",
-  color: "#EA580C", // Màu cam theo yêu cầu
+  color: "#C4955A",
+  theme: "deep",
   auditPlatform: "googlemaps",
   heroTitle: "Không lên Google Maps",
   heroSubtitle: "Bạn đang mất khách mỗi ngày",
   heroDescription: "Đưa doanh nghiệp lên Google – Tăng lượt gọi – Tăng khách đến cửa hàng",
-  vision: "Giúp doanh nghiệp của bạn xuất hiện đầu tiên khi khách hàng tìm kiếm trên Google Maps và Google Search — kênh tìm kiếm có ý định mua hàng cao nhất hiện nay.",
-  mission: "Tối ưu hóa Google Business Profile, xây dựng đánh giá 5 sao uy tín và triển khai chiến lược Local SEO để doanh nghiệp của bạn thống trị kết quả tìm kiếm địa phương.",
-  responsibility: "Cam kết không dùng đánh giá giả mạo, chỉ áp dụng chiến lược White Hat được Google chấp nhận và đảm bảo thứ hạng bền vững lâu dài.",
-  tabs: [], // Chúng ta sẽ tự xây dựng các phần pricing trong body
+  vision:
+    "Giúp doanh nghiệp xuất hiện đầu tiên khi khách tìm kiếm trên Google Maps và Google Search — kênh intent mua hàng cao nhất.",
+  mission:
+    "Tối ưu Google Business Profile, xây dựng đánh giá 5 sao uy tín và Local SEO để thống trị kết quả tìm kiếm địa phương.",
+  responsibility:
+    "Cam kết không dùng đánh giá giả mạo, chỉ chiến lược White Hat được Google chấp nhận và thứ hạng bền vững.",
+  tabs: [],
   hidePricingHeader: true,
   hideStats: true,
   hideContact: false,
@@ -32,23 +37,64 @@ const config: PlatformConfig = {
     { id: "gm-pricing", label: "Gói Google Maps" },
     { id: "ads-pricing", label: "Gói Quảng cáo" },
     { id: "benefits", label: "Bạn nhận được gì" },
+    { id: "contact", label: "Liên hệ tư vấn" },
   ],
-  stats: [{ label: "GMB tối ưu", value: "400+" }, { label: "Đánh giá", value: "900+" }, { label: "Đạt 5 sao", value: "99%" }, { label: "Năm KN", value: "4+" }],
+  stats: [
+    { label: "GMB tối ưu", value: "400+" },
+    { label: "Đánh giá", value: "900+" },
+    { label: "Đạt 5 sao", value: "99%" },
+    { label: "Năm KN", value: "4+" },
+  ],
   process: [
-    { step: 1, title: "Audit hiện trạng", desc: "Kiểm tra Google Business Profile hiện tại, xác định điểm yếu và cơ hội cải thiện thứ hạng." },
-    { step: 2, title: "Tối ưu Profile", desc: "Cập nhật thông tin đầy đủ, chính xác và nhất quán trên toàn bộ các directory." },
-    { step: 3, title: "Xây dựng nội dung", desc: "Đăng bài viết, ảnh chuyên nghiệp và Q&A hàng tuần để tăng độ hoạt động." },
-    { step: 4, title: "Thu thập đánh giá", desc: "Triển khai chiến lược thu thập review từ khách hàng thật và xây dựng phản hồi chuyên nghiệp." },
-    { step: 5, title: "Theo dõi & Báo cáo", desc: "Theo dõi thứ hạng hàng tuần và báo cáo kết quả chi tiết hàng tháng." },
+    { step: 1, title: "Audit hiện trạng", desc: "Kiểm tra GBP, điểm yếu và cơ hội cải thiện thứ hạng." },
+    { step: 2, title: "Tối ưu Profile", desc: "Cập nhật thông tin đầy đủ, chính xác, nhất quán." },
+    { step: 3, title: "Xây dựng nội dung", desc: "Bài viết, ảnh và Q&A hàng tuần tăng độ hoạt động." },
+    { step: 4, title: "Thu thập đánh giá", desc: "Review từ khách thật và phản hồi chuyên nghiệp." },
+    { step: 5, title: "Theo dõi & Báo cáo", desc: "Thứ hạng hàng tuần, báo cáo kết quả hàng tháng." },
   ],
   faqs: [
-    { q: "Bao lâu thì xuất hiện trong Local Pack 3?", a: "Tùy mức độ cạnh tranh của ngành và địa bàn. Thường từ 1-3 tháng để vào Local Pack và 3-6 tháng để đạt top 1." },
-    { q: "Google có phạt nếu dùng review dịch vụ không?", a: "Chúng tôi chỉ dùng review từ tài khoản thật với nội dung tự nhiên, đảm bảo an toàn theo chính sách Google." },
-    { q: "Có cần website mới làm Local SEO không?", a: "Không bắt buộc nhưng có website sẽ tăng hiệu quả SEO Local đáng kể. Chúng tôi có thể làm cả hai song song." },
-    { q: "GMB có phù hợp cho kinh doanh online không?", a: "GMB chủ yếu phù hợp cho doanh nghiệp có địa điểm vật lý. Kinh doanh thuần online nên ưu tiên SEO website hoặc Ads." },
-    { q: "Kết quả có bền vững không?", a: "Kết quả GMB và Local SEO thường bền vững hơn Ads vì dựa trên độ tin cậy tích lũy. Duy trì review tốt là chìa khóa." },
+    {
+      q: "Bao lâu thì xuất hiện trong Local Pack 3?",
+      a: "Tùy cạnh tranh ngành và địa bàn. Thường 1–3 tháng vào Local Pack, 3–6 tháng đạt top 1.",
+    },
+    {
+      q: "Google có phạt nếu dùng review dịch vụ không?",
+      a: "Chúng tôi chỉ dùng review từ tài khoản thật với nội dung tự nhiên, an toàn theo chính sách Google.",
+    },
+    {
+      q: "Có cần website mới làm Local SEO không?",
+      a: "Không bắt buộc nhưng có website tăng hiệu quả SEO Local đáng kể. Có thể làm song song.",
+    },
+    {
+      q: "GMB có phù hợp cho kinh doanh online không?",
+      a: "GMB chủ yếu cho doanh nghiệp có địa điểm vật lý. Thuần online nên ưu tiên SEO website hoặc Ads.",
+    },
+    {
+      q: "Kết quả có bền vững không?",
+      a: "GMB và Local SEO thường bền vững hơn Ads vì dựa trên độ tin cậy tích lũy. Duy trì review tốt là chìa khóa.",
+    },
   ],
 };
+
+function SectionHeading({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="mb-10 text-center sm:mb-12">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">{eyebrow}</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl" style={serif}>
+        {title}
+      </h2>
+      {subtitle ? <p className="mx-auto mt-3 max-w-xl text-sm text-white/40">{subtitle}</p> : null}
+    </div>
+  );
+}
 
 export default function GoogleMapsPage() {
   const [auditUrl, setAuditUrl] = useState("");
@@ -56,134 +102,161 @@ export default function GoogleMapsPage() {
 
   return (
     <PlatformPage config={config}>
-      <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
-        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 p-6 md:p-10">
-          <p className="brand-eyebrow mb-3">Dịch vụ Google Maps Marketing</p>
-          <h2 className="text-3xl font-black tracking-tight text-indigo-950 md:text-4xl">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 20% 25%, rgba(234,88,12,0.08), transparent)",
+        }}
+        aria-hidden
+      />
+
+      <div className="platform-sections relative mx-auto max-w-6xl space-y-20 px-4 pb-24 pt-10 sm:space-y-24 sm:px-6 sm:pt-14">
+        <section className="border-b border-white/[0.06] pb-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+            Google Maps Marketing
+          </p>
+          <h2
+            className="mt-4 max-w-3xl text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.12] text-white"
+            style={serif}
+          >
             Tối ưu Google Business Profile và Local SEO
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            <strong>Google Maps Marketing</strong> giúp doanh nghiệp xuất hiện khi khách tìm kiếm địa phương — intent
-            mua hàng cao nhất. Bứt Phá triển khai audit GBP, tối ưu thông tin, thu review thật, content Maps và Local
-            Ads — kết hợp website chuẩn SEO để tăng lượt gọi và khách đến cửa hàng.
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+            <strong className="font-medium text-white/70">Google Maps Marketing</strong> giúp doanh nghiệp xuất hiện khi
+            khách tìm địa phương — intent mua hàng cao nhất. Audit GBP, tối ưu thông tin, review thật, content Maps và
+            Local Ads — kết hợp website chuẩn SEO.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/blog/chu-de/google-maps" className="brand-btn-primary">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/blog/chu-de/google-maps"
+              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            >
               Hub Google Maps
             </Link>
-            <Link href="/website" className="brand-btn-secondary">
+            <Link
+              href="/website"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
               Website + Local SEO
             </Link>
-            <Link href="/du-an/nha-khoa-dang-khoa" className="brand-btn-secondary">
+            <Link
+              href="/du-an/nha-khoa-dang-khoa"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
               Case study
             </Link>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-orange-100 bg-orange-50/50 p-6 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-orange-700">NAP đồng nhất</p>
-          <h2 className="mt-2 text-2xl font-bold text-indigo-950">Checklist Local SEO — tên · địa chỉ · SĐT</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 md:text-base">
-            Google đối chiếu NAP trên website, Google Business Profile và directory. Sai một trường là mất điểm Local Pack.
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">NAP đồng nhất</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Checklist Local SEO — tên · địa chỉ · SĐT
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/45">
+            Google đối chiếu NAP trên website, GBP và directory. Sai một trường là mất điểm Local Pack.
           </p>
-          <ul className="mt-4 space-y-2 text-sm text-slate-700 md:text-base">
+          <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              <strong>NAP chuẩn BPM:</strong> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM · 0937 417 982
+              <span className="text-amber-100">NAP chuẩn BPM:</span> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM ·
+              0937 417 982
             </li>
             <li>
-              Đồng bộ footer website, schema LocalBusiness, GBP và Money Page{" "}
-              <Link href="/google-maps" className="font-semibold text-violet-700 underline">
+              Đồng bộ footer, schema LocalBusiness, GBP và{" "}
+              <Link href="/google-maps" className="text-amber-200/80 underline-offset-2 hover:underline">
                 /google-maps
               </Link>
-              .
             </li>
             <li>
-              Gắn website money page (
-              <Link href="/website" className="font-semibold text-violet-700 underline">
+              Gắn{" "}
+              <Link href="/website" className="text-amber-200/80 underline-offset-2 hover:underline">
                 /website
-              </Link>
-              ) và bảng giá (
-              <Link href="/banggia" className="font-semibold text-violet-700 underline">
+              </Link>{" "}
+              và{" "}
+              <Link href="/banggia" className="text-amber-200/80 underline-offset-2 hover:underline">
                 /banggia
-              </Link>
-              ) vào mô tả GBP khi phù hợp dịch vụ.
+              </Link>{" "}
+              vào mô tả GBP khi phù hợp
             </li>
             <li>
-              Kiến thức Local SEO:{" "}
-              <Link href="/blog/chu-de/google-maps" className="font-semibold text-violet-700 underline">
+              Kiến thức:{" "}
+              <Link href="/blog/chu-de/google-maps" className="text-amber-200/80 underline-offset-2 hover:underline">
                 hub Google Maps
               </Link>
-              .
             </li>
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Proof thực chiến</p>
-          <h2 className="mt-2 text-2xl font-bold text-emerald-900">Local SEO gắn với website và lead</h2>
-          <ul className="mt-4 space-y-2 text-emerald-950">
+        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">Proof thực chiến</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Local SEO gắn với website và lead
+          </h2>
+          <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              Nha Khoa Đăng Khoa: <strong>15,4K impressions</strong> và <strong>471 clicks</strong> từ Google Search
-              sau triển khai website + SEO — GBP và Maps bổ sung kênh gọi điện/chỉ đường.
+              Nha Khoa Đăng Khoa: <span className="text-amber-100">15,4K impressions</span> ·{" "}
+              <span className="text-amber-100">471 clicks</span> GSC — GBP/Maps bổ sung gọi điện & chỉ đường
             </li>
-            <li>Mô hình: GBP chuẩn → review thật → content Maps → landing page message-match.</li>
+            <li>Mô hình: GBP chuẩn → review thật → content Maps → landing message-match</li>
             <li>
               Xem{" "}
-              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold underline">
+              <Link href="/du-an/nha-khoa-dang-khoa" className="text-amber-200/80 underline-offset-2 hover:underline">
                 case study nha khoa
               </Link>{" "}
               hoặc{" "}
-              <Link href="/website" className="font-semibold underline">
+              <Link href="/website" className="text-amber-200/80 underline-offset-2 hover:underline">
                 thiết kế website
               </Link>
-              .
             </li>
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-orange-700">So sánh giải pháp</p>
-          <h2 className="mt-2 text-2xl font-bold text-indigo-950">Google Maps, Local SEO hay Local Ads?</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">So sánh giải pháp</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Google Maps, Local SEO hay Local Ads?
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {[
-              ["Tối ưu Google Maps", "Dành cho hồ sơ thiếu thông tin, danh mục, hình ảnh hoặc review. Đây là nền tảng cần hoàn thiện trước."],
-              ["Local SEO", "Dành cho doanh nghiệp muốn tăng thứ hạng bền vững bằng GBP, website địa phương, citation và nội dung."],
-              ["Local Ads", "Dành cho chiến dịch cần lượt gọi nhanh. Hiệu quả tốt nhất khi hồ sơ Maps và landing page đã chuẩn chuyển đổi."],
+              ["Tối ưu Google Maps", "Hồ sơ thiếu thông tin, danh mục, hình ảnh hoặc review — nền tảng cần hoàn thiện trước."],
+              ["Local SEO", "Tăng thứ hạng bền vững bằng GBP, website địa phương, citation và nội dung."],
+              ["Local Ads", "Cần lượt gọi nhanh — hiệu quả nhất khi Maps và landing đã chuẩn chuyển đổi."],
             ].map(([title, desc]) => (
-              <article key={title} className="rounded-2xl border border-orange-100 bg-orange-50/30 p-5">
-                <h3 className="font-bold text-indigo-950">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+              <article key={title} className="border-l border-amber-200/25 pl-4">
+                <h3 className="text-lg font-medium text-white/90">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/40">{desc}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <PlatformAuditSection
-          accentColor={config.color}
-          badge="Kiểm tra doanh nghiệp trên Google Maps"
-          title="Nhập tên doanh nghiệp để kiểm tra vị trí, thứ hạng và nhận đề xuất cải thiện"
-          placeholder="Nhập tên doanh nghiệp của bạn"
-          buttonLabel="Kiểm tra ngay"
-          value={auditUrl}
-          onChange={setAuditUrl}
-          onSubmit={() => setIsAuditOpen(true)}
-          features={["Vị trí hiện tại", "Thứ hạng từ khóa", "Số lượng đánh giá", "Đề xuất cải thiện"]}
-          zaloItems={[
-            "Vị trí hiện tại của bạn",
-            "Thứ hạng từ khóa chính",
-            "Số lượng đánh giá",
-            "Đề xuất cải thiện miễn phí",
-          ]}
-        />
+        <div id="audit" className="scroll-mt-24">
+          <PlatformAuditSection
+            accentColor={config.color}
+            badge="Kiểm tra doanh nghiệp trên Google Maps"
+            title="Nhập tên doanh nghiệp để kiểm tra vị trí, thứ hạng và nhận đề xuất cải thiện"
+            placeholder="Nhập tên doanh nghiệp của bạn"
+            buttonLabel="Kiểm tra ngay"
+            value={auditUrl}
+            onChange={setAuditUrl}
+            onSubmit={() => setIsAuditOpen(true)}
+            features={["Vị trí hiện tại", "Thứ hạng từ khóa", "Số lượng đánh giá", "Đề xuất cải thiện"]}
+            zaloItems={[
+              "Vị trí hiện tại của bạn",
+              "Thứ hạng từ khóa chính",
+              "Số lượng đánh giá",
+              "Đề xuất cải thiện miễn phí",
+            ]}
+          />
+        </div>
 
-        {/* 2. GÓI GOOGLE MAPS */}
-        <section id="gm-pricing" className="space-y-16 scroll-mt-24">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">GÓI GOOGLE MAPS</h2>
-            <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Lựa chọn gói phù hợp với nhu cầu của bạn</p>
-            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
-          </div>
-
+        <section id="gm-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Google Business Profile"
+            title="Gói Google Maps"
+            subtitle="Lựa chọn gói phù hợp với nhu cầu của bạn"
+          />
           <PackageCarousel accent={config.color} itemCount={GOOGLE_MAPS_PACKAGES.length} desktopCols={3}>
             {GOOGLE_MAPS_PACKAGES.map((pkg, i) => (
               <PricingTierCard
@@ -200,14 +273,12 @@ export default function GoogleMapsPage() {
           </PackageCarousel>
         </section>
 
-        {/* 3. GÓI QUẢNG CÁO GOOGLE MAPS */}
-        <section id="ads-pricing" className="space-y-16 scroll-mt-24">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">GÓI QUẢNG CÁO GOOGLE MAPS</h2>
-            <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Lựa chọn gói phù hợp với ngân sách của bạn</p>
-            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
-          </div>
-
+        <section id="ads-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Local Ads"
+            title="Gói quảng cáo Google Maps"
+            subtitle="Lựa chọn gói phù hợp với ngân sách của bạn"
+          />
           <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
             {[
               {
@@ -252,56 +323,51 @@ export default function GoogleMapsPage() {
           </PackageCarousel>
         </section>
 
-        {/* 4. BẠN NHẬN ĐƯỢC GÌ? */}
-        <section id="benefits" className="space-y-16 scroll-mt-24">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">BẠN NHẬN ĐƯỢC GÌ?</h2>
-            <div className="h-1.5 w-24 bg-orange-600 mx-auto rounded-full" />
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <section id="benefits" className="scroll-mt-24 border-t border-white/[0.06] pt-14">
+          <SectionHeading eyebrow="Lợi ích" title="Bạn nhận được gì?" />
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: Search, title: "Xuất hiện khi khách tìm kiếm gần bạn", desc: "Tăng khả năng tiếp cận khách hàng tiềm năng" },
-              { icon: Rocket, title: "Tăng lượt gọi và chỉ đường", desc: "Khách dễ dàng liên hệ và đến cửa hàng của bạn" },
-              { icon: Building2, title: "Hiển thị chuyên nghiệp hơn đối thủ", desc: "Thông tin đầy đủ, hình ảnh đẹp, tạo sự tin tưởng" },
-              { icon: Star, title: "Dễ dàng được khách tin tưởng", desc: "Nhiều đánh giá tốt giúp nâng cao uy tín thương hiệu" }
-            ].map((item, idx) => (
-              <div key={idx} className="brand-card group space-y-4 p-8 transition-all hover:-translate-y-0.5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 transition-transform group-hover:scale-110">
-                  <item.icon size={24} />
-                </div>
-                <h3 className="text-lg font-bold leading-tight text-indigo-950">{item.title}</h3>
-                <p className="text-sm text-slate-600">{item.desc}</p>
+              { icon: Search, title: "Xuất hiện khi khách tìm gần bạn", desc: "Tiếp cận khách hàng tiềm năng đúng lúc" },
+              { icon: Rocket, title: "Tăng lượt gọi và chỉ đường", desc: "Khách dễ liên hệ và đến cửa hàng" },
+              { icon: Building2, title: "Hiển thị chuyên nghiệp hơn đối thủ", desc: "Thông tin đầy đủ, hình ảnh đẹp" },
+              { icon: Star, title: "Được khách tin tưởng hơn", desc: "Review tốt nâng uy tín thương hiệu" },
+            ].map((item) => (
+              <div key={item.title} className="border-l border-amber-200/25 pl-4">
+                <item.icon className="h-4 w-4 text-amber-200/55" />
+                <h3 className="mt-3 text-base font-medium text-white/90">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/40">{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="platform-panel relative space-y-8 overflow-hidden text-center">
-          <div className="pointer-events-none absolute inset-0 -z-10 opacity-30">
-            <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]" style={{ backgroundColor: config.color }} />
-          </div>
-          <h2 className="text-3xl font-bold text-indigo-950 md:text-5xl">Bạn đã xuất hiện trên Google Maps chưa?</h2>
-          <p className="mx-auto max-w-2xl text-slate-600">Kiểm tra ngay vị trí của bạn và đừng để mất khách hàng tiềm năng!</p>
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="rounded-2xl bg-orange-600 px-12 py-5 text-sm font-semibold text-white shadow-2xl shadow-orange-600/25 transition-all hover:scale-[1.02] active:scale-[0.99]"
+        <section className="border border-white/[0.08] bg-white/[0.02] px-6 py-12 text-center sm:px-12 sm:py-16">
+          <h2 className="text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Bạn đã xuất hiện trên Google Maps chưa?
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-sm text-white/45">
+            Kiểm tra vị trí ngay — đừng để mất khách hàng tiềm năng.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              document.getElementById("audit")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            className="mt-8 inline-flex rounded-full bg-amber-200 px-10 py-3.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
           >
             Kiểm tra ngay
           </button>
         </section>
 
-        <div className="mt-10">
+        <div className="[&_*]:border-white/10 [&_a]:text-amber-200/80 [&_h2]:text-white [&_p]:text-white/45">
           <ServiceConversionFooter title="Tư vấn Google Maps & tài liệu liên quan" />
         </div>
-
       </div>
 
-      <AuditModal 
-        isOpen={isAuditOpen} 
-        onClose={() => setIsAuditOpen(false)} 
-        initialLink={auditUrl} 
+      <AuditModal
+        isOpen={isAuditOpen}
+        onClose={() => setIsAuditOpen(false)}
+        initialLink={auditUrl}
         source="Phân tích Google Maps"
         platformColor={config.color}
       />

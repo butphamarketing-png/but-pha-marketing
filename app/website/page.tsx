@@ -15,17 +15,22 @@ import { WebsiteIndustryGrid } from "@/components/website/WebsiteIndustryGrid";
 import { WebsiteProofSection } from "@/components/website/WebsiteProofSection";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
-import { PLATFORM_COLORS } from "@/lib/brand-colors";
+
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 const config: PlatformConfig = {
   name: "Website",
-  color: PLATFORM_COLORS.website,
+  color: "#C4955A",
+  theme: "deep",
   auditPlatform: "website",
   heroTitle: "Thiết kế website chuyên nghiệp",
   heroSubtitle: "Thiết kế website chuẩn SEO cho doanh nghiệp — UI/UX, lập trình, bàn giao admin và báo giá minh bạch",
-  vision: "Thiết kế website là nền tảng marketing số của doanh nghiệp. Bứt Phá Marketing xây website chuẩn SEO, tối ưu chuyển đổi và bàn giao quy trình vận hành rõ ràng.",
-  mission: "Thiết kế website đẹp, nhanh, chuẩn SEO — từ Landing Page đến website doanh nghiệp và E-commerce, tối ưu từ đầu để giảm chi phí marketing lâu dài.",
-  responsibility: "Cam kết: bàn giao đúng deadline đã thống nhất, không phát sinh phí ẩn ngoài báo giá, hỗ trợ kỹ thuật sau bàn giao, website ổn định và có tài khoản admin + hướng dẫn sử dụng.",
+  vision:
+    "Thiết kế website là nền tảng marketing số của doanh nghiệp. Bứt Phá Marketing xây website chuẩn SEO, tối ưu chuyển đổi và bàn giao quy trình vận hành rõ ràng.",
+  mission:
+    "Thiết kế website đẹp, nhanh, chuẩn SEO — từ Landing Page đến website doanh nghiệp và E-commerce, tối ưu từ đầu để giảm chi phí marketing lâu dài.",
+  responsibility:
+    "Cam kết: bàn giao đúng deadline đã thống nhất, không phát sinh phí ẩn ngoài báo giá, hỗ trợ kỹ thuật sau bàn giao, website ổn định và có tài khoản admin + hướng dẫn sử dụng.",
   hidePricingHeader: true,
   hideAutoPricing: true,
   customSections: [
@@ -40,20 +45,66 @@ const config: PlatformConfig = {
   tabs: [],
   stats: [],
   process: [
-    { step: 1, title: "Khảo sát nhu cầu", desc: "Tư vấn chi tiết về mục đích, tính năng và design style phù hợp với thương hiệu của bạn." },
-    { step: 2, title: "Thiết kế UI/UX", desc: "Tạo wireframe, thiết kế giao diện đẹp và trải nghiệm người dùng tối ưu cho mọi thiết bị." },
-    { step: 3, title: "Lập trình", desc: "Code website theo thiết kế đã duyệt, tích hợp các tính năng và tối ưu tốc độ tải trang." },
-    { step: 4, title: "Kiểm thử & Bàn giao", desc: "Test kỹ lưỡng trên nhiều thiết bị và trình duyệt, bàn giao tài khoản và hướng dẫn sử dụng." },
+    { step: 1, title: "Khảo sát nhu cầu", desc: "Tư vấn mục đích, tính năng và design style phù hợp thương hiệu." },
+    { step: 2, title: "Thiết kế UI/UX", desc: "Wireframe và giao diện tối ưu mọi thiết bị." },
+    { step: 3, title: "Lập trình", desc: "Code theo thiết kế, tích hợp tính năng, tối ưu tốc độ." },
+    { step: 4, title: "Kiểm thử & Bàn giao", desc: "Test đa thiết bị, bàn giao admin và hướng dẫn sử dụng." },
   ],
   faqs: [
-    { q: "Thiết kế website mất bao lâu?", a: "Landing Page: 3–5 ngày. Website doanh nghiệp: 1–2 tuần. E-commerce: 3–4 tuần. Timeline chốt trong báo giá sau khảo sát." },
-    { q: "Thiết kế website gồm những gì?", a: "Khảo sát nhu cầu, UI/UX, lập trình chuẩn SEO, tích hợp form/Zalo (theo gói), kiểm thử, bàn giao admin và hướng dẫn vận hành." },
-    { q: "Có cần tự cung cấp nội dung không?", a: "Thông tin sản phẩm/dịch vụ do bạn cung cấp. Có thể hỗ trợ nội dung mẫu theo gói — chi tiết trong báo giá thiết kế website." },
-    { q: "Website bàn giao xong tự sửa được không?", a: "Có. Bạn nhận tài khoản admin và hướng dẫn; tự cập nhật tin tức, sản phẩm, trang cơ bản." },
-    { q: "Hosting / domain có gói kèm không?", a: "Có thể tính riêng hoặc đóng gói theo nhu cầu. Xem mức giá tham khảo tại trang báo giá thiết kế website." },
-    { q: "SEO bao lâu lên trang 1?", a: "Từ khóa ít cạnh tranh: 1–3 tháng. Trung bình: 3–6 tháng. Cạnh tranh cao: 6–12 tháng. Không cam kết thứ hạng cứng — có case study số liệu GSC thật." },
+    {
+      q: "Thiết kế website mất bao lâu?",
+      a: "Landing Page: 3–5 ngày. Website doanh nghiệp: 1–2 tuần. E-commerce: 3–4 tuần. Timeline chốt trong báo giá sau khảo sát.",
+    },
+    {
+      q: "Thiết kế website gồm những gì?",
+      a: "Khảo sát, UI/UX, lập trình chuẩn SEO, form/Zalo (theo gói), kiểm thử, bàn giao admin và hướng dẫn vận hành.",
+    },
+    {
+      q: "Có cần tự cung cấp nội dung không?",
+      a: "Thông tin sản phẩm/dịch vụ do bạn cung cấp. Có thể hỗ trợ nội dung mẫu theo gói.",
+    },
+    {
+      q: "Website bàn giao xong tự sửa được không?",
+      a: "Có. Bạn nhận tài khoản admin và hướng dẫn; tự cập nhật tin tức, sản phẩm, trang cơ bản.",
+    },
+    {
+      q: "Hosting / domain có gói kèm không?",
+      a: "Có thể tính riêng hoặc đóng gói theo nhu cầu. Xem mức giá tại trang báo giá thiết kế website.",
+    },
+    {
+      q: "SEO bao lâu lên trang 1?",
+      a: "Ít cạnh tranh: 1–3 tháng. Trung bình: 3–6 tháng. Cao: 6–12 tháng. Không cam kết thứ hạng cứng — có case study GSC thật.",
+    },
   ],
 };
+
+function SectionHeading({
+  eyebrow,
+  title,
+  highlight,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  highlight?: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="mb-10 text-center sm:mb-12">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">{eyebrow}</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl" style={serif}>
+        {highlight ? (
+          <>
+            <span className="text-amber-100/90">{highlight}</span> {title}
+          </>
+        ) : (
+          title
+        )}
+      </h2>
+      {subtitle ? <p className="mx-auto mt-3 max-w-xl text-sm text-white/40">{subtitle}</p> : null}
+    </div>
+  );
+}
 
 export default function WebsitePage() {
   const [showCustomModal, setShowCustomModal] = useState(false);
@@ -63,253 +114,245 @@ export default function WebsitePage() {
 
   return (
     <PlatformPage config={config}>
-      <div className="platform-sections mx-auto max-w-7xl px-4 pb-24 space-y-32">
-        <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/40 p-6 md:p-10">
-          <p className="brand-eyebrow mb-3">Dịch vụ #1 — Head term</p>
-          <h2 className="text-3xl font-black tracking-tight text-indigo-950 md:text-4xl">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 80% 20%, rgba(99,102,241,0.08), transparent)",
+        }}
+        aria-hidden
+      />
+
+      <div className="platform-sections relative mx-auto max-w-6xl space-y-20 px-4 pb-24 pt-10 sm:space-y-24 sm:px-6 sm:pt-14">
+        <section className="border-b border-white/[0.06] pb-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+            Dịch vụ #1 — Head term
+          </p>
+          <h2 className="mt-4 max-w-3xl text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.12] text-white" style={serif}>
             Thiết kế website chuyên nghiệp cho doanh nghiệp
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            <strong>Thiết kế website</strong> tại Bứt Phá Marketing gồm khảo sát, UI/UX, lập trình chuẩn SEO,
-            tích hợp form/Zalo và bàn giao quy trình vận hành. Đây là money page chính cho từ khóa volume cao —
-            đọc hướng dẫn chi tiết tại pillar hoặc nhận báo giá ngay.
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+            <strong className="font-medium text-white/70">Thiết kế website</strong> gồm khảo sát, UI/UX, lập trình chuẩn
+            SEO, form/Zalo và bàn giao vận hành — money page cho từ khóa volume cao.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/banggia" className="brand-btn-primary">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/banggia"
+              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            >
               Báo giá thiết kế website
             </Link>
-            <Link href="/du-an" className="brand-btn-secondary">
+            <Link
+              href="/du-an"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
               Case study có số liệu
             </Link>
-            <Link href="/blog/chu-de/website" className="brand-btn-secondary">
+            <Link
+              href="/blog/chu-de/website"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
               Hub chủ đề Website
             </Link>
           </div>
         </section>
 
-        <WebsiteProofSection />
+        <WebsiteProofSection variant="deep" />
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-10">
-          <p className="text-xs font-bold uppercase tracking-wider text-violet-700">So sánh giải pháp</p>
-          <h2 className="mt-2 text-2xl font-bold text-indigo-950 md:text-3xl">
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">So sánh giải pháp</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
             Template, WordPress hay website custom?
           </h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {[
-              ["Website template", "Ra mắt nhanh, chi phí thấp; phù hợp landing hoặc doanh nghiệp mới cần kiểm chứng thị trường."],
-              ["Website WordPress", "Dễ quản trị nội dung, hệ sinh thái plugin lớn; phù hợp SME, blog SEO và WooCommerce."],
-              ["Website custom", "Thiết kế và tính năng theo quy trình riêng; phù hợp hệ thống cần tích hợp, bảo mật hoặc mở rộng dài hạn."],
+              ["Website template", "Ra mắt nhanh, chi phí thấp — landing hoặc kiểm chứng thị trường."],
+              ["Website WordPress", "Dễ quản trị, plugin lớn — SME, blog SEO, WooCommerce."],
+              ["Website custom", "Theo quy trình riêng — tích hợp, bảo mật, mở rộng dài hạn."],
             ].map(([title, desc]) => (
-              <article key={title} className="rounded-2xl border border-indigo-100 bg-indigo-50/30 p-5">
-                <h3 className="font-bold text-indigo-950">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
+              <article key={title} className="border-l border-amber-200/25 pl-4">
+                <h3 className="text-lg font-medium text-white/90">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/40">{desc}</p>
               </article>
             ))}
           </div>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/banggia" className="brand-btn-primary">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/banggia"
+              className="inline-flex rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            >
               Xem báo giá thiết kế website
             </Link>
-            <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
+            <Link
+              href="/blog/thiet-ke-website"
+              className="inline-flex rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/70 hover:border-white/25"
+            >
               Hướng dẫn thiết kế website A-Z
             </Link>
           </div>
         </section>
 
-        <PlatformAuditSection
-          accentColor={config.color}
-          badge="Chuẩn đoán website miễn phí"
-          title={
-            <>
-              Phân tích <span style={{ color: config.color }}>website</span> và nhận báo cáo chi tiết
-            </>
-          }
-          description="Nhập URL website để phân tích tốc độ, SEO on-page, UX/UI và khả năng chuyển đổi."
-          placeholder="Nhập URL website (VD: yourdomain.com)"
-          buttonLabel="Phân tích ngay"
-          value={auditUrl}
-          onChange={setAuditUrl}
-          onSubmit={() => setIsAuditOpen(true)}
-          features={["Tốc độ", "SEO On-page", "UX / UI", "Khả năng chuyển đổi"]}
-        />
+        <div id="audit" className="scroll-mt-24">
+          <PlatformAuditSection
+            accentColor={config.color}
+            badge="Chuẩn đoán website miễn phí"
+            title={
+              <>
+                Phân tích website và nhận báo cáo chi tiết
+              </>
+            }
+            description="Nhập URL để phân tích tốc độ, SEO on-page, UX/UI và khả năng chuyển đổi."
+            placeholder="Nhập URL website (VD: yourdomain.com)"
+            buttonLabel="Phân tích ngay"
+            value={auditUrl}
+            onChange={setAuditUrl}
+            onSubmit={() => setIsAuditOpen(true)}
+            features={["Tốc độ", "SEO On-page", "UX / UI", "Khả năng chuyển đổi"]}
+          />
+        </div>
 
-        <div className="space-y-32">
-          <WebsiteIndustryGrid id="theo-nganh" />
+        <WebsiteIndustryGrid id="theo-nganh" variant="deep" />
 
-          {/* Custom & Domain Section */}
-          <div id="domain" className="grid gap-6 scroll-mt-24 md:grid-cols-2">
-            {/* Custom Website Button */}
-            <button
-              onClick={() => setShowCustomModal(true)}
-              className="brand-card group relative flex items-center justify-between overflow-hidden p-8 transition-all hover:-translate-y-0.5 md:p-10"
-            >
-              <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 transition-transform group-hover:scale-110">
-                  <Settings size={32} />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-indigo-950">Website Custom</h3>
-                  <p className="mt-1 text-sm text-slate-600">Hệ thống riêng biệt</p>
-                </div>
+        <div id="domain" className="grid scroll-mt-24 gap-4 md:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setShowCustomModal(true)}
+            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-6 text-left transition hover:border-amber-200/25 hover:bg-white/[0.04] md:p-8"
+          >
+            <div className="flex items-center gap-5">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-amber-200/70 transition group-hover:scale-105">
+                <Settings size={22} />
+              </span>
+              <div>
+                <h3 className="text-xl font-medium text-white/90" style={serif}>
+                  Website Custom
+                </h3>
+                <p className="mt-1 text-sm text-white/40">Hệ thống riêng biệt</p>
               </div>
-              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
-            </button>
-
-            {/* Domain Selection Button */}
-            <button
-              onClick={() => setShowDomainModal(true)}
-              className="brand-card group relative flex items-center justify-between overflow-hidden p-8 transition-all hover:-translate-y-0.5 md:p-10"
-            >
-              <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700 transition-transform group-hover:scale-110">
-                  <Globe size={32} />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-indigo-950">Đăng ký tên miền</h3>
-                  <p className="mt-1 text-sm text-slate-600">Quốc tế & Việt Nam</p>
-                </div>
-              </div>
-              <ChevronRight className="hidden h-8 w-8 text-gray-600 transition-transform group-hover:translate-x-2 md:block" />
-            </button>
-          </div>
-
-          {/* THIẾT KẾ WEBSITE */}
-          <section id="pricing" className="space-y-16 scroll-mt-24">
-            <div className="text-center space-y-6">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
-                  Website Design
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                <span style={{ color: config.color }}>Thiết kế</span> Website
-              </h2>
-              <p className="text-sm font-medium text-slate-500">Gói website chuẩn SEO — tư vấn miễn phí</p>
             </div>
+            <ChevronRight className="hidden h-6 w-6 text-white/30 transition group-hover:translate-x-1 group-hover:text-amber-200/70 md:block" />
+          </button>
 
-            <PackageCarousel accent={config.color} itemCount={WEBSITE_BUILD_PACKAGES.length} desktopCols={4}>
-              {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
-                <PricingTierCard
-                  key={pkg.id}
-                  accent={config.color}
-                  title={pkg.name}
-                  sectionLabel="Thiết kế Website"
-                  features={pkg.works}
-                  icon={LayoutTemplate}
-                  featured={i === 2}
-                />
-              ))}
-            </PackageCarousel>
-          </section>
-
-          {/* VẬN HÀNH WEBSITE */}
-          <section id="van-hanh" className="space-y-16 scroll-mt-24">
-            <div className="text-center space-y-6">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
-                  Managed Operations
-                </span>
+          <button
+            type="button"
+            onClick={() => setShowDomainModal(true)}
+            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-6 text-left transition hover:border-amber-200/25 hover:bg-white/[0.04] md:p-8"
+          >
+            <div className="flex items-center gap-5">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-amber-200/70 transition group-hover:scale-105">
+                <Globe size={22} />
+              </span>
+              <div>
+                <h3 className="text-xl font-medium text-white/90" style={serif}>
+                  Đăng ký tên miền
+                </h3>
+                <p className="mt-1 text-sm text-white/40">Quốc tế & Việt Nam</p>
               </div>
-              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                Gói <span style={{ color: config.color }}>vận hành</span> Website
-              </h2>
-              <p className="mx-auto mt-2 max-w-2xl text-slate-600">
-                Hosting, bảo mật, backup và hỗ trợ kỹ thuật — chọn mức phù hợp quy mô doanh nghiệp
-              </p>
             </div>
-            <WebsiteOperationSection primaryColor={config.color} sectionLabel="Vận hành Website" />
-          </section>
+            <ChevronRight className="hidden h-6 w-6 text-white/30 transition group-hover:translate-x-1 group-hover:text-amber-200/70 md:block" />
+          </button>
+        </div>
 
-          {/* CHĂM SÓC WEBSITE */}
-          <section id="care" className="space-y-16 scroll-mt-24">
-            <div className="text-center space-y-6">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
-                  Premium Care
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                <span style={{ color: config.color }}>Chăm sóc</span> Website
-              </h2>
-              <p className="text-sm font-medium text-slate-500">Theo số lượng bài viết mỗi tháng</p>
-            </div>
+        <section id="pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Website Design"
+            highlight="Thiết kế"
+            title="Website"
+            subtitle="Gói website chuẩn SEO — tư vấn miễn phí"
+          />
+          <PackageCarousel accent={config.color} itemCount={WEBSITE_BUILD_PACKAGES.length} desktopCols={4}>
+            {WEBSITE_BUILD_PACKAGES.map((pkg, i) => (
+              <PricingTierCard
+                key={pkg.id}
+                accent={config.color}
+                title={pkg.name}
+                sectionLabel="Thiết kế Website"
+                features={pkg.works}
+                icon={LayoutTemplate}
+                featured={i === 2}
+              />
+            ))}
+          </PackageCarousel>
+        </section>
 
-            <PackageCarousel accent={config.color} itemCount={WEBSITE_CARE_PACKAGES.length} desktopCols={3}>
-              {WEBSITE_CARE_PACKAGES.map((pkg, i) => {
-                const label = `${pkg.posts} bài viết/tháng`;
-                return (
-                  <PricingTierCard
-                    key={pkg.id}
-                    accent={config.color}
-                    title={label}
-                    sectionLabel="Chăm sóc Website"
-                    features={pkg.works}
-                    icon={FileText}
-                    featured={i === 1}
-                  />
-                );
-              })}
-            </PackageCarousel>
-          </section>
+        <section id="van-hanh" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Managed Operations"
+            title="Website"
+            highlight="Gói vận hành"
+            subtitle="Hosting, bảo mật, backup và hỗ trợ kỹ thuật"
+          />
+          <WebsiteOperationSection primaryColor={config.color} sectionLabel="Vận hành Website" />
+        </section>
 
-          {/* QUẢNG CÁO WEBSITE */}
-          <section id="quang-cao" className="space-y-16 scroll-mt-24">
-            <div className="text-center space-y-6">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-1 w-12 rounded-full" style={{ backgroundColor: config.color }} />
-                <span className="text-xs font-semibold tracking-wide text-slate-500" style={{ color: config.color }}>
-                  Advertising
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
-                <span style={{ color: config.color }}>Quảng cáo</span> Website
-              </h2>
-              <p className="text-sm font-medium text-slate-500">Google Ads &amp; Meta Ads — trỏ về website, đo chuyển đổi chính xác</p>
-            </div>
+        <section id="care" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Premium Care"
+            highlight="Chăm sóc"
+            title="Website"
+            subtitle="Theo số lượng bài viết mỗi tháng"
+          />
+          <PackageCarousel accent={config.color} itemCount={WEBSITE_CARE_PACKAGES.length} desktopCols={3}>
+            {WEBSITE_CARE_PACKAGES.map((pkg, i) => (
+              <PricingTierCard
+                key={pkg.id}
+                accent={config.color}
+                title={`${pkg.posts} bài viết/tháng`}
+                sectionLabel="Chăm sóc Website"
+                features={pkg.works}
+                icon={FileText}
+                featured={i === 1}
+              />
+            ))}
+          </PackageCarousel>
+        </section>
 
-            <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
-              {[
-                {
-                  title: "Ngân sách dưới 10 triệu",
-                  note: "/ tháng (chưa gồm ngân sách ads)",
-                  icon: Target,
-                  features: [
-                    "Thiết lập chiến dịch Google / Meta",
-                    "Landing page & pixel tracking",
-                    "Nghiên cứu từ khóa mục tiêu",
-                    "Theo dõi & tối ưu hàng tuần",
-                    "Báo cáo hiệu quả",
-                  ],
-                },
-                {
-                  title: "Ngân sách trên 10 triệu",
-                  note: "/ tháng (chưa gồm ngân sách ads)",
-                  icon: Zap,
-                  features: [
-                    "Tối ưu chiến dịch chuyên sâu",
-                    "A/B test landing & creative",
-                    "Remarketing đa kênh",
-                    "Tối ưu CPA / ROAS",
-                    "Báo cáo & đề xuất chiến lược",
-                  ],
-                },
-              ].map((ads) => (
-                <PricingTierCard
-                  key={ads.title}
-                  accent={config.color}
-                  title={ads.title}
-                  sectionLabel="Quảng cáo Website"
-                  features={ads.features}
-                  icon={ads.icon}
-                  variant="ads"
-                />
-              ))}
-            </PackageCarousel>
-          </section>
+        <section id="quang-cao" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+          <SectionHeading
+            eyebrow="Advertising"
+            highlight="Quảng cáo"
+            title="Website"
+            subtitle="Google Ads & Meta Ads — đo chuyển đổi chính xác"
+          />
+          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
+            {[
+              {
+                title: "Ngân sách dưới 10 triệu",
+                icon: Target,
+                features: [
+                  "Thiết lập chiến dịch Google / Meta",
+                  "Landing page & pixel tracking",
+                  "Nghiên cứu từ khóa mục tiêu",
+                  "Theo dõi & tối ưu hàng tuần",
+                  "Báo cáo hiệu quả",
+                ],
+              },
+              {
+                title: "Ngân sách trên 10 triệu",
+                icon: Zap,
+                features: [
+                  "Tối ưu chiến dịch chuyên sâu",
+                  "A/B test landing & creative",
+                  "Remarketing đa kênh",
+                  "Tối ưu CPA / ROAS",
+                  "Báo cáo & đề xuất chiến lược",
+                ],
+              },
+            ].map((ads) => (
+              <PricingTierCard
+                key={ads.title}
+                accent={config.color}
+                title={ads.title}
+                sectionLabel="Quảng cáo Website"
+                features={ads.features}
+                icon={ads.icon}
+                variant="ads"
+              />
+            ))}
+          </PackageCarousel>
+        </section>
 
+        <div className="border-t border-white/[0.06] pt-14 [&_a]:text-amber-200/80 [&_h2]:text-white [&_li]:text-white/45 [&_p]:text-white/40">
           <MoneyKwSiloLinks
             excludePath="/website"
             title="Cụm money SEO — không tranh từ khóa"
@@ -318,10 +361,10 @@ export default function WebsitePage() {
         </div>
       </div>
 
-      <AuditModal 
-        isOpen={isAuditOpen} 
-        onClose={() => setIsAuditOpen(false)} 
-        initialLink={auditUrl} 
+      <AuditModal
+        isOpen={isAuditOpen}
+        onClose={() => setIsAuditOpen(false)}
+        initialLink={auditUrl}
         source="Phân tích Website"
         platformColor={config.color}
       />
@@ -340,5 +383,3 @@ export default function WebsitePage() {
     </PlatformPage>
   );
 }
-
-

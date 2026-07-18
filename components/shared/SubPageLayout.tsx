@@ -13,6 +13,7 @@ interface SubPageLayoutProps {
   primaryColor: string;
   children: React.ReactNode;
   customSections?: { id: string; label: string }[];
+  theme?: "light" | "deep";
 }
 
 function useClickSound() {
@@ -34,7 +35,13 @@ function useClickSound() {
   return playClick;
 }
 
-export function SubPageLayout({ platformName, primaryColor, children, customSections }: SubPageLayoutProps) {
+export function SubPageLayout({
+  platformName,
+  primaryColor,
+  children,
+  customSections,
+  theme = "light",
+}: SubPageLayoutProps) {
   const { settings } = useAdmin();
   const logoSrc = "/logo.png";
   const pathname = usePathname();
@@ -44,6 +51,8 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const playClick = useClickSound();
+  const deep = theme === "deep";
+  const accent = deep ? "#C4955A" : primaryColor;
 
   useEffect(() => {
     let rafId = 0;
@@ -168,7 +177,10 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
   }, [pathname, sections]);
 
   return (
-    <div className="platform-page-canvas text-foreground" style={{ "--platform-color": primaryColor, "--landing-accent": primaryColor } as React.CSSProperties}>
+    <div
+      className={`platform-page-canvas text-foreground ${deep ? "platform-deep bg-[#08090c] text-white" : ""}`}
+      style={{ "--platform-color": accent, "--landing-accent": accent } as React.CSSProperties}
+    >
       <style>{`
         @keyframes ripple-anim {
           from { transform: scale(0); opacity: 1; }
@@ -176,14 +188,20 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         }
       `}</style>
 
-      <DynamicGreeting color={primaryColor} />
+      <DynamicGreeting color={accent} />
 
       <motion.div
         className="fixed left-0 right-0 top-0 z-50 h-1 origin-left"
-        style={{ scaleX: scrollYProgress, backgroundColor: primaryColor }}
+        style={{ scaleX: scrollYProgress, backgroundColor: accent }}
       />
 
-      <header className="sticky top-0 z-50 overflow-visible border-b border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)] backdrop-blur-xl">
+      <header
+        className={`sticky top-0 z-50 overflow-visible border-b backdrop-blur-xl ${
+          deep
+            ? "border-white/[0.06] bg-[#08090c]/85"
+            : "border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)]"
+        }`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <Link
@@ -193,11 +211,17 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
               <img
                 src={logoSrc}
                 alt="Logo"
-                className="h-9 w-9 shrink-0 rounded-full border border-indigo-100 object-cover shadow-sm sm:h-10 sm:w-10"
+                className={`h-9 w-9 shrink-0 rounded-full object-cover sm:h-10 sm:w-10 ${
+                  deep ? "border border-white/10" : "border border-indigo-100 shadow-sm"
+                }`}
               />
               <div className="min-w-0 hidden sm:block">
-                <span className="block truncate text-sm font-semibold text-indigo-950">{settings.title}</span>
-                <span className="block truncate text-[11px] font-medium text-violet-600">{platformName}</span>
+                <span className={`block truncate text-sm font-semibold ${deep ? "text-white/90" : "text-indigo-950"}`}>
+                  {settings.title}
+                </span>
+                <span className={`block truncate text-[11px] font-medium ${deep ? "text-amber-200/55" : "text-violet-600"}`}>
+                  {platformName}
+                </span>
               </div>
             </Link>
 
@@ -206,20 +230,28 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
               aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
               aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-200 bg-white text-indigo-950 transition hover:bg-indigo-50 lg:hidden"
+              className={`ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition lg:hidden ${
+                deep
+                  ? "border-white/15 bg-white/[0.04] text-white hover:bg-white/[0.08]"
+                  : "border-indigo-200 bg-white text-indigo-950 hover:bg-indigo-50"
+              }`}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
 
-          <div className="hidden lg:block">
-            <SiteNavMenu tone="light" layout="horizontal" activeHref={pathname} />
+          <div className={`hidden lg:block ${deep ? "[&_a]:text-white/75 [&_button]:text-white/75" : ""}`}>
+            <SiteNavMenu tone={deep ? "dark" : "light"} layout="horizontal" activeHref={pathname} />
           </div>
 
           <button
             onClick={() => setShowConsult(true)}
-            className="hidden shrink-0 rounded-2xl px-5 py-2.5 text-sm font-semibold text-white shadow-brand-accent transition hover:brightness-105 active:scale-[0.99] sm:inline-flex"
-            style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
+            className={`hidden shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition active:scale-[0.99] sm:inline-flex ${
+              deep
+                ? "bg-amber-200 text-[#0b0d12] hover:bg-amber-100"
+                : "text-white shadow-brand-accent hover:brightness-105"
+            }`}
+            style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
           >
             Tư vấn ngay
           </button>
@@ -231,11 +263,13 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden border-t border-indigo-100 bg-white/98 lg:hidden"
+              className={`overflow-hidden border-t lg:hidden ${
+                deep ? "border-white/[0.06] bg-[#0c0e14]/98" : "border-indigo-100 bg-white/98"
+              }`}
             >
               <div className="mx-auto max-w-7xl px-4 py-4">
                 <SiteNavMenu
-                  tone="light"
+                  tone={deep ? "dark" : "light"}
                   layout="stack"
                   activeHref={pathname}
                   onNavigate={() => setMobileMenuOpen(false)}
@@ -246,8 +280,10 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
                     setMobileMenuOpen(false);
                     setShowConsult(true);
                   }}
-                  className="mt-3 w-full rounded-xl px-4 py-3 text-sm font-bold text-white"
-                  style={{ background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
+                  className={`mt-3 w-full rounded-xl px-4 py-3 text-sm font-bold ${
+                    deep ? "bg-amber-200 text-[#0b0d12]" : "text-white"
+                  }`}
+                  style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
                 >
                   Tư vấn ngay
                 </button>
@@ -267,7 +303,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
             }}
             className="pointer-events-auto h-3 w-3 rounded-full transition-all"
             style={{
-              backgroundColor: activeSection === idx ? primaryColor : "rgba(49, 46, 129, 0.2)",
+              backgroundColor: activeSection === idx ? accent : deep ? "rgba(255,255,255,0.2)" : "rgba(49, 46, 129, 0.2)",
               transform: activeSection === idx ? "scale(1.5)" : "scale(1)",
               opacity: activeSection === idx ? 1 : 0.45,
             }}
@@ -277,7 +313,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         ))}
       </div>
 
-      <main>{children}</main>
+      <main className={deep ? "relative" : undefined}>{children}</main>
 
       <AnimatePresence>
         {showBackToTop && (
@@ -286,8 +322,12 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="brand-icon-btn fixed bottom-24 right-6 z-40 h-12 w-12 shadow-lg hover:scale-110 active:scale-95"
-            style={{ borderLeftColor: primaryColor, borderTopColor: primaryColor }}
+            className={`fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border transition hover:scale-110 active:scale-95 ${
+              deep
+                ? "border-white/15 bg-[#0e1016] text-amber-100 shadow-lg"
+                : "brand-icon-btn shadow-lg"
+            }`}
+            style={deep ? undefined : { borderLeftColor: primaryColor, borderTopColor: primaryColor }}
             type="button"
           >
             <ChevronUp size={24} />
@@ -295,7 +335,7 @@ export function SubPageLayout({ platformName, primaryColor, children, customSect
         )}
       </AnimatePresence>
 
-      <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={primaryColor} />
+      <ConsultModal isOpen={showConsult} onClose={() => setShowConsult(false)} platformColor={accent} />
     </div>
   );
 }

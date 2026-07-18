@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { INDUSTRY_HUBS, INDUSTRY_HUB_SLUGS } from "@/lib/industry-hub";
 
-export function BlogIndustryNav({ active }: { active?: string }) {
+export function BlogIndustryNav({
+  active,
+  variant = "light",
+}: {
+  active?: string;
+  variant?: "light" | "deep";
+}) {
+  const deep = variant === "deep";
+
   return (
     <nav aria-label="Silo theo ngành" className="flex flex-wrap gap-2">
       {INDUSTRY_HUB_SLUGS.map((slug) => {
@@ -11,11 +19,19 @@ export function BlogIndustryNav({ active }: { active?: string }) {
           <Link
             key={slug}
             href={`/blog/nganh/${slug}`}
-            className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
-              isActive
-                ? "border-emerald-300 bg-emerald-600 text-white"
-                : "border-indigo-100 bg-white text-indigo-900 hover:border-emerald-200 hover:text-emerald-700"
-            }`}
+            className={
+              deep
+                ? `rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    isActive
+                      ? "border-amber-200/40 bg-amber-200 text-[#0b0d12]"
+                      : "border-white/10 bg-transparent text-white/45 hover:border-white/20 hover:text-white/75"
+                  }`
+                : `rounded-full border px-4 py-2 text-sm font-bold transition ${
+                    isActive
+                      ? "border-emerald-300 bg-emerald-600 text-white"
+                      : "border-indigo-100 bg-white text-indigo-900 hover:border-emerald-200 hover:text-emerald-700"
+                  }`
+            }
           >
             {hub.headline.replace("Website & SEO ngành ", "")}
           </Link>

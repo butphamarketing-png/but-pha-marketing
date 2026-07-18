@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { SITE_URL } from "@/lib/seo";
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+
 const modules = [
   "Lead capture đa kênh (website, maps, fanpage)",
   "Lead scoring và routing cho sales",
@@ -64,76 +66,124 @@ export default function MarketingAutomationPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#08090c] text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <div className="mx-auto max-w-5xl space-y-8">
-        <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
+
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 15% 22%, rgba(59,130,246,0.08), transparent)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-5xl space-y-16 px-4 py-12 sm:space-y-20 sm:px-6 md:py-16 lg:px-8">
+        <nav aria-label="Breadcrumb" className="text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-indigo-700 hover:text-indigo-900">
+              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
                 Trang chủ
               </Link>
             </li>
-            <li aria-hidden="true" className="text-slate-400">
+            <li aria-hidden="true" className="text-white/25">
               /
             </li>
-            <li className="font-semibold text-indigo-950" aria-current="page">
+            <li className="font-medium text-white/70" aria-current="page">
               Marketing Automation
             </li>
           </ol>
         </nav>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-8 shadow-sm md:p-12">
-          <p className="brand-eyebrow mb-3">Pillar mới</p>
-          <h1 className="text-4xl font-black tracking-tight text-indigo-950 md:text-5xl">
+        <section className="border-b border-white/[0.06] pb-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">Pillar Automation</p>
+          <h1
+            className="mt-4 max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] text-white"
+            style={serif}
+          >
             Marketing Automation
           </h1>
-          <p className="mt-4 text-lg leading-8 text-slate-600">
-            Tự động hóa hành trình khách hàng từ lead đến chốt sale để tăng hiệu suất marketing và giảm
-            thất thoát cơ hội.
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+            Tự động hóa hành trình khách hàng từ lead đến chốt sale để tăng hiệu suất marketing và giảm thất thoát cơ
+            hội.
           </p>
-          <ul className="mt-6 space-y-2 text-slate-700">
+          <ul className="mt-8 space-y-3 text-sm text-white/65">
             {modules.map((item) => (
-              <li key={item}>- {item}</li>
+              <li key={item} className="flex gap-3">
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-amber-200/70" aria-hidden />
+                {item}
+              </li>
             ))}
           </ul>
           <div className="mt-8">
-            <Link href="/lien-he" className="brand-btn-primary">
+            <Link
+              href="/lien-he"
+              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            >
               Tư vấn hệ thống automation
             </Link>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Giải pháp triển khai</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Giải pháp</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Triển khai theo module
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             {childPages.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-2xl border border-indigo-100 p-5 transition hover:border-violet-300"
+                className="border-l border-amber-200/25 pl-5 transition hover:border-amber-200/50"
               >
-                <p className="font-bold text-indigo-950">{item.title}</p>
-                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                <p className="text-lg font-medium text-white/90">{item.title}</p>
+                <p className="mt-2 text-sm text-white/40">{item.desc}</p>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-emerald-900">Proof & outcome framework</h2>
-          <ul className="mt-4 space-y-2 text-emerald-950">
-            <li>- Chuẩn tracking lead theo nguồn: website, maps, fanpage.</li>
-            <li>- KPI tham chiếu: giảm 20-35% lead thất thoát, tăng 15-25% tỷ lệ phản hồi và đặt lịch.</li>
+        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">
+            Proof & outcome
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Framework đo hiệu quả
+          </h2>
+          <ul className="mt-6 space-y-3 text-sm text-white/65">
+            <li>Chuẩn tracking lead theo nguồn: website, maps, fanpage.</li>
             <li>
-              - Áp dụng cùng cụm SEO proof tại <Link href="/du-an" className="underline">trang case study</Link>.
+              KPI tham chiếu: giảm <span className="text-amber-100">20–35%</span> lead thất thoát, tăng{" "}
+              <span className="text-amber-100">15–25%</span> tỷ lệ phản hồi và đặt lịch.
             </li>
             <li>
-              - Case benchmark: <Link href="/du-an/nha-khoa-dang-khoa" className="underline">15,4K impressions / 471 clicks</Link>.
+              Áp dụng cùng cụm SEO proof tại{" "}
+              <Link href="/du-an" className="text-amber-200/80 underline-offset-2 hover:underline">
+                trang case study
+              </Link>
+              .
             </li>
             <li>
-              - Hub automation: <Link href="/kien-thuc/marketing-automation" className="underline">/kien-thuc/marketing-automation</Link>.
+              Case benchmark:{" "}
+              <Link
+                href="/du-an/nha-khoa-dang-khoa"
+                className="text-amber-200/80 underline-offset-2 hover:underline"
+              >
+                15,4K impressions / 471 clicks
+              </Link>
+              .
+            </li>
+            <li>
+              Hub automation:{" "}
+              <Link
+                href="/kien-thuc/marketing-automation"
+                className="text-amber-200/80 underline-offset-2 hover:underline"
+              >
+                /kien-thuc/marketing-automation
+              </Link>
+              .
             </li>
           </ul>
         </section>

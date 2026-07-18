@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE_URL } from "@/lib/seo";
 
 const BASE_URL = SITE_URL;
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 const pillars = [
   {
@@ -131,129 +132,177 @@ export default function SeoWebsitePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#08090c] text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <div className="mx-auto max-w-6xl space-y-8">
-        <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
+
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 35% 28% at 80% 18%, rgba(16,185,129,0.08), transparent)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-6xl space-y-16 px-4 py-12 sm:space-y-20 sm:px-6 md:py-16 lg:px-8">
+        <nav aria-label="Breadcrumb" className="text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-indigo-700 hover:text-indigo-900">
+              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
                 Trang chủ
               </Link>
             </li>
-            <li aria-hidden="true" className="text-slate-400">
+            <li aria-hidden="true" className="text-white/25">
               /
             </li>
-            <li className="font-semibold text-indigo-950" aria-current="page">
+            <li className="font-medium text-white/70" aria-current="page">
               SEO Website
             </li>
           </ol>
         </nav>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-8 shadow-sm md:p-12">
-          <p className="brand-eyebrow mb-3">Pillar mới</p>
-          <h1 className="text-4xl font-black tracking-tight text-indigo-950 md:text-5xl">
+        <section className="border-b border-white/[0.06] pb-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">Pillar SEO</p>
+          <h1
+            className="mt-4 max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] text-white"
+            style={serif}
+          >
             SEO Website theo hệ thống
           </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-            Đây là trụ cột SEO Website độc lập để phát triển topical authority dài hạn: từ audit kỹ thuật,
-            chiến lược nội dung đến tối ưu chuyển đổi lead.
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+            Trụ cột SEO Website độc lập để phát triển topical authority dài hạn: từ audit kỹ thuật, chiến lược nội dung
+            đến tối ưu chuyển đổi lead.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/website" className="brand-btn-primary">
+            <Link
+              href="/website"
+              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            >
               Thiết kế website
             </Link>
-            <Link href="/lien-he" className="brand-btn-secondary">
+            <Link
+              href="/lien-he"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
               Nhận audit SEO miễn phí
             </Link>
-            <Link href="/blog/chu-de/website" className="brand-btn-secondary">
-              Xem cụm bài Website
-            </Link>
-            <Link href="/blog/thiet-ke-website" className="brand-btn-secondary">
-              Pillar thiết kế website
+            <Link
+              href="/blog/chu-de/website"
+              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+            >
+              Cụm bài Website
             </Link>
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2">
+        <section className="grid gap-6 md:grid-cols-2">
           {pillars.map((item) => {
             const inner = (
               <>
-                <h2 className="text-xl font-bold text-indigo-950">{item.title}</h2>
-                <p className="mt-2 text-slate-600">{item.desc}</p>
+                <h2 className="text-xl font-medium text-white/90" style={serif}>
+                  {item.title}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-white/40">{item.desc}</p>
               </>
             );
             return "href" in item && item.href ? (
               <Link
                 key={item.title}
                 href={item.href}
-                className="rounded-2xl border border-indigo-100 bg-white p-6 transition hover:border-violet-300"
+                className="border-l border-amber-200/25 pl-5 transition hover:border-amber-200/50"
               >
                 {inner}
               </Link>
             ) : (
-              <article key={item.title} className="rounded-2xl border border-indigo-100 bg-white p-6">
+              <article key={item.title} className="border-l border-amber-200/25 pl-5">
                 {inner}
               </article>
             );
           })}
         </section>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Quy trình SEO Website (checklist)</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Quy trình</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Checklist SEO Website
+          </h2>
+          <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {processSteps.map((item) => (
-              <article key={item.step} className="rounded-2xl border border-indigo-100 p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-violet-600">Bước {item.step}</p>
-                <h3 className="mt-2 font-bold text-indigo-950">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              <article key={item.step} className="border-l border-amber-200/25 pl-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-200/50">
+                  Bước {item.step}
+                </p>
+                <h3 className="mt-2 text-lg font-medium text-white/90">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/40">{item.desc}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-emerald-900">Proof thực chiến</h2>
-          <ul className="mt-4 space-y-2 text-emerald-950">
-            <li>- Nha Khoa Đăng Khoa: 15,4K impressions và 471 clicks từ Google Search.</li>
-            <li>- Mô hình triển khai: technical SEO + content cluster + internal links theo silo.</li>
+        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">Proof thực chiến</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Số liệu GSC, không chỉ lý thuyết
+          </h2>
+          <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              - Xem chi tiết tại <Link href="/du-an/nha-khoa-dang-khoa" className="underline">case study có số liệu</Link>.
+              Nha Khoa Đăng Khoa: <span className="text-amber-100">15,4K impressions</span> và{" "}
+              <span className="text-amber-100">471 clicks</span> từ Google Search.
+            </li>
+            <li>Mô hình: technical SEO + content cluster + internal links theo silo.</li>
+            <li>
+              Xem{" "}
+              <Link href="/du-an/nha-khoa-dang-khoa" className="text-amber-200/80 underline-offset-2 hover:underline">
+                case study có số liệu
+              </Link>
+              .
             </li>
             <li>
-              - Hub kiến thức SEO: <Link href="/kien-thuc/seo-website" className="underline">/kien-thuc/seo-website</Link>.
+              Hub kiến thức:{" "}
+              <Link href="/kien-thuc/seo-website" className="text-amber-200/80 underline-offset-2 hover:underline">
+                /kien-thuc/seo-website
+              </Link>
+              .
             </li>
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Dịch vụ SEO chuyên sâu</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <section className="border-t border-white/[0.06] pt-14">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Dịch vụ</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            SEO chuyên sâu
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             {childPages.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-2xl border border-indigo-100 p-5 transition hover:border-violet-300"
+                className="border-l border-amber-200/25 pl-5 transition hover:border-amber-200/50"
               >
-                <p className="font-bold text-indigo-950">{item.title}</p>
-                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                <p className="text-lg font-medium text-white/90">{item.title}</p>
+                <p className="mt-2 text-sm text-white/40">{item.desc}</p>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <h2 className="text-2xl font-bold text-indigo-950">Câu hỏi thường gặp</h2>
-          <div className="mt-5 space-y-3">
+        <section className="border-t border-white/[0.06] pt-14 pb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">FAQ</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Câu hỏi thường gặp
+          </h2>
+          <div className="mt-8 space-y-3">
             {visibleFaqs.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-indigo-100 bg-indigo-50/20 p-5 open:border-violet-200 open:bg-violet-50/30"
+                className="group border border-white/[0.08] bg-white/[0.02] px-5 py-4 open:border-amber-200/20"
               >
-                <summary className="cursor-pointer list-none font-bold text-indigo-950 marker:hidden">{item.q}</summary>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+                <summary className="cursor-pointer list-none font-medium text-white/90 marker:hidden">
+                  {item.q}
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-white/45">{item.a}</p>
               </details>
             ))}
           </div>

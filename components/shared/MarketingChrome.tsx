@@ -1,9 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Calendar } from "lucide-react";
+import { Calendar, Tags } from "lucide-react";
 import { isInternalAppPath } from "@/lib/app-paths";
 import { getZaloUrl } from "@/lib/site-contact";
 import { useAdmin } from "@/lib/AdminContext";
@@ -24,10 +25,6 @@ const PushNotificationPrompt = dynamic(
   () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
   { ssr: false },
 );
-const SiteConsultPopup = dynamic(
-  () => import("@/components/shared/SiteConsultPopup").then((mod) => mod.SiteConsultPopup),
-  { ssr: false },
-);
 
 function HomeFloatingActions() {
   const { settings } = useAdmin();
@@ -35,8 +32,20 @@ function HomeFloatingActions() {
 
   return (
     <div className="home-fab-stack fixed bottom-4 right-4 z-[95] flex max-w-[calc(100vw-2rem)] flex-col items-stretch gap-2 sm:bottom-5 sm:right-5 sm:gap-2.5">
-      <div className="home-fab-enter home-fab-enter--book">
+      <div className="home-fab-enter home-fab-enter--price">
         <div className="home-fab-bob">
+          <Link
+            href="/banggia"
+            className="home-fab home-fab--price inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-slate-950/85 px-3.5 py-2.5 text-[12px] font-semibold text-white backdrop-blur-md sm:gap-2.5 sm:px-4 sm:text-[13px]"
+          >
+            <Tags className="h-4 w-4 shrink-0 text-violet-200 sm:h-5 sm:w-5" strokeWidth={2.25} />
+            <span className="sm:hidden">Bảng giá</span>
+            <span className="hidden sm:inline">Bảng giá dịch vụ</span>
+          </Link>
+        </div>
+      </div>
+      <div className="home-fab-enter home-fab-enter--book">
+        <div className="home-fab-bob home-fab-bob--mid">
           <button
             type="button"
             onClick={() => {
@@ -93,7 +102,7 @@ export function MarketingChrome() {
       <>
         <HomeFloatingActions />
         <SoftUISounds />
-        <SiteConsultPopup />
+        <PushNotificationPrompt />
       </>
     );
   }
@@ -103,7 +112,6 @@ export function MarketingChrome() {
       <SoftUISounds />
       <FloatingContactButtons />
       <PushNotificationPrompt />
-      <SiteConsultPopup />
       <QuickActionBar />
     </>
   );

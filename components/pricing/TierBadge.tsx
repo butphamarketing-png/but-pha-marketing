@@ -6,9 +6,9 @@ import type { PricingBadge } from "@/lib/pricing-catalog";
 import { PRICING_BADGE_LABEL } from "@/lib/pricing-catalog";
 
 const BADGE_STYLE = {
-  popular: "bg-violet-100 text-violet-700 ring-violet-200/60",
-  best: "bg-emerald-100 text-emerald-700 ring-emerald-200/60",
-  value: "bg-sky-100 text-sky-700 ring-sky-200/60",
+  popular: "bg-amber-200/15 text-amber-100 ring-amber-200/30",
+  best: "bg-emerald-400/15 text-emerald-200 ring-emerald-400/25",
+  value: "bg-sky-400/15 text-sky-200 ring-sky-400/25",
 } as const;
 
 export function TierBadge({ badge, className = "" }: { badge: PricingBadge; className?: string }) {

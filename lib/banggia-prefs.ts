@@ -2,8 +2,16 @@ import type { PricingPlatformId } from "@/lib/pricing-catalog";
 
 export const BANGGIA_LAST_TAB_KEY = "butpha_banggia_last_tab";
 export const BANGGIA_WELCOMED_SESSION_KEY = "butpha_banggia_welcomed_session";
+/** Hồ sơ đã mở bảng giá — nhớ trên thiết bị để lần sau không nhập lại */
+export const BANGGIA_PROFILE_KEY = "butpha_banggia_profile";
 
 const VALID_TABS: PricingPlatformId[] = ["website", "facebook", "googlemaps"];
+
+export type BanggiaProfile = {
+  name: string;
+  phone: string;
+  savedAt: string;
+};
 
 export function getBanggiaLastTab(): PricingPlatformId {
   if (typeof window === "undefined") return "website";
@@ -27,6 +35,42 @@ export function shouldShowBanggiaWelcomeBack(): boolean {
 export function markBanggiaWelcomeShown() {
   if (typeof window === "undefined") return;
   sessionStorage.setItem(BANGGIA_WELCOMED_SESSION_KEY, "1");
+}
+
+export function getBanggiaProfile(): BanggiaProfile | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(BANGGIA_PROFILE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as BanggiaProfile;
+    if (
+      typeof parsed?.name === "string" &&
+      parsed.name.trim() &&
+      typeof parsed?.phone === "string" &&
+      parsed.phone.trim()
+    ) {
+      return {
+        name: parsed.name.trim(),
+        phone: parsed.phone.trim(),
+        savedAt: typeof parsed.savedAt === "string" ? parsed.savedAt : new Date().toISOString(),
+      };
+    }
+  } catch {
+    // no-op
+  }
+  return null;
+}
+
+export function saveBanggiaProfile(name: string, phone: string): BanggiaProfile {
+  const profile: BanggiaProfile = {
+    name: name.trim(),
+    phone: phone.trim(),
+    savedAt: new Date().toISOString(),
+  };
+  if (typeof window !== "undefined") {
+    localStorage.setItem(BANGGIA_PROFILE_KEY, JSON.stringify(profile));
+  }
+  return profile;
 }
 
 export function formatBanggiaPhoneDisplay(phone: string): string {

@@ -9,6 +9,7 @@ import { BlogCaseStudyStrip } from "@/components/blog/BlogCaseStudyStrip";
 import { BlogIndustryNav } from "@/components/blog/BlogIndustryNav";
 
 const BASE_URL = SITE_URL;
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 /** Next.js yêu cầu literal — không import biến cho segment config. */
 export const revalidate = 3600;
@@ -81,57 +82,77 @@ export default async function BlogPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-background brand-section-muted px-4 py-12 md:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#08090c] text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[50vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.14), transparent 58%), radial-gradient(ellipse 40% 30% at 20% 30%, rgba(234,88,12,0.06), transparent)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <div className="mb-14 flex flex-col gap-8 border-b border-white/[0.06] pb-14 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="brand-eyebrow mb-4">Kiến thức thực chiến</p>
-            <h1 className="text-4xl font-bold tracking-tight text-indigo-950 md:text-5xl">
-              Tin tức &{" "}
-              <span className="brand-gradient-text">Kiến thức</span>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+              Kiến thức thực chiến
+            </p>
+            <h1
+              className="mt-4 text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[1.08] tracking-tight text-white"
+              style={serif}
+            >
+              Tin tức &amp; Kiến thức
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
               Cập nhật xu hướng, chiến lược và kiến thức marketing giúp doanh nghiệp tăng trưởng bền vững.
             </p>
           </div>
 
-          <Link href="/website" className="brand-btn-primary self-start">
+          <Link
+            href="/website"
+            className="inline-flex items-center gap-2 self-start rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+          >
             Thiết kế website
-            <ArrowRight size={18} />
+            <ArrowRight size={16} />
           </Link>
         </div>
 
-        <div className="mb-4">
-          <BlogTopicNav active="all" />
+        <div className="mb-5">
+          <BlogTopicNav active="all" variant="deep" />
         </div>
 
-        <div className="mb-8">
-          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Silo theo ngành</p>
-          <BlogIndustryNav />
+        <div className="mb-10">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/50">
+            Silo theo ngành
+          </p>
+          <BlogIndustryNav variant="deep" />
         </div>
 
-        <BlogCaseStudyStrip />
+        <BlogCaseStudyStrip variant="deep" />
 
-        <section className="mb-8 rounded-3xl border border-indigo-100 bg-white p-6 md:p-8">
-          <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">Growth Pillars</p>
-          <h2 className="text-2xl font-bold tracking-tight text-indigo-950">Nền tảng tăng trưởng mới</h2>
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <section className="mb-12 border-t border-white/[0.06] pt-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Growth Pillars</p>
+          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+            Nền tảng tăng trưởng
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {growthPillars.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-2xl border border-indigo-100 p-4 transition hover:border-violet-300"
+                className="border-l border-amber-200/25 pl-5 transition hover:border-amber-200/50"
               >
-                <p className="font-semibold text-indigo-950">{item.title}</p>
-                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                <p className="text-lg font-medium text-white/90">{item.title}</p>
+                <p className="mt-2 text-sm text-white/40">{item.desc}</p>
               </Link>
             ))}
           </div>
         </section>
 
-        <BlogSearchGrid blogs={listItems} />
+        <BlogSearchGrid blogs={listItems} variant="deep" />
       </div>
     </main>
   );

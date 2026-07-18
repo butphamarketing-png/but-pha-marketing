@@ -21,6 +21,7 @@ import {
 } from "@/lib/site-contact";
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
 import { HomeAtomField } from "@/components/shared/HomeAtomField";
+import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { ensureTypeClickAudio, playTypeClickSound } from "@/lib/type-click-sound";
 import {
   hasPlayedHeroWelcome,
@@ -493,6 +494,12 @@ export default function HomePageClient() {
     }, 8000);
     return () => window.clearTimeout(t);
   }, [isClient]);
+
+  // Báo chrome: loading logo xong → hiện prompt thông báo đẩy
+  useEffect(() => {
+    if (!siteReady) return;
+    void import("@/lib/marketing-popup-gate").then((m) => m.markHomeReady());
+  }, [siteReady]);
 
   // Hiệu ứng hero chỉ chạy sau khi loading xong + site đã hiện
   useEffect(() => {
@@ -2280,7 +2287,15 @@ export default function HomePageClient() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={featuredKnowledge?.imageUrl || CORP_HERO_SLIDES[2]}
-                        alt={featuredKnowledge?.title || "Kiến thức marketing"}
+                        alt={
+                          featuredKnowledge
+                            ? getBlogThumbnailAlt({
+                                slug: featuredKnowledge.slug,
+                                keywordsMain: featuredKnowledge.keywordsMain,
+                                title: featuredKnowledge.title,
+                              })
+                            : "Kiến thức marketing"
+                        }
                         className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
@@ -2321,6 +2336,7 @@ export default function HomePageClient() {
                           imageUrl: CORP_HERO_SLIDES[i % CORP_HERO_SLIDES.length],
                           description: "Xem thư viện bài viết Website · Facebook · Maps.",
                           metaDescription: undefined as string | undefined,
+                          keywordsMain: undefined as string | undefined,
                         }))
                     ).map((post, i) => (
                       <motion.div
@@ -2341,7 +2357,11 @@ export default function HomePageClient() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={post.imageUrl || CORP_HERO_SLIDES[3]}
-                              alt={post.title}
+                              alt={getBlogThumbnailAlt({
+                                slug: post.slug,
+                                keywordsMain: post.keywordsMain,
+                                title: post.title,
+                              })}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                             />
                           </div>

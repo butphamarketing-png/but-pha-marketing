@@ -158,11 +158,10 @@ function NavGroupDesktop({
                       <span className="relative h-8 w-12 shrink-0 overflow-hidden rounded-md border border-indigo-100 bg-indigo-50">
                         <Image
                           src={child.imageSrc}
-                          alt=""
+                          alt={child.imageAlt}
                           fill
                           sizes="48px"
-                          className="object-cover object-top"
-                          aria-hidden
+                          className="object-cover object-center"
                         />
                       </span>
                       <span className="text-xs font-semibold sm:text-sm">{child.label}</span>
@@ -250,11 +249,10 @@ function NavGroupStack({
                   <span className="relative h-7 w-10 shrink-0 overflow-hidden rounded border border-indigo-100 bg-indigo-50">
                     <Image
                       src={child.imageSrc}
-                      alt=""
+                      alt={child.imageAlt}
                       fill
                       sizes="40px"
-                      className="object-cover object-top"
-                      aria-hidden
+                      className="object-cover object-center"
                     />
                   </span>
                   {child.label}

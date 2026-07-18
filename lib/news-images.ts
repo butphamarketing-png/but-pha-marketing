@@ -98,6 +98,8 @@ const BAO_BI_DIR = `${NEWS_DIR}/bao-bi`;
 const TU_DONG_HOA_DIR = `${NEWS_DIR}/tu-dong-hoa`;
 const CRM_DIR = `${NEWS_DIR}/crm`;
 const ZALO_DIR = `${NEWS_DIR}/zalo`;
+const SEO_DIR = `${NEWS_DIR}/seo`;
+const AUTOMATION_DIR = `${NEWS_DIR}/automation`;
 
 /** Bài CRM / so sánh tool — thumbnail trong public/tin-tuc/crm */
 export const CRM_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
@@ -114,6 +116,40 @@ export const CRM_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain
 export function getCrmThumbnailPath(slug?: string): string | null {
   const entry = slug ? CRM_ARTICLE_THUMBNAILS[slug] : undefined;
   return entry ? `${CRM_DIR}/${entry.file}` : null;
+}
+
+/** Bài SEO / search — thumbnail trong public/tin-tuc/seo */
+export const SEO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
+  "zero-click-search-la-gi": {
+    file: "zero-click-search.png",
+    keywordsMain: "zero click search là gì",
+  },
+};
+
+export function getSeoThumbnailPath(slug?: string): string | null {
+  const entry = slug ? SEO_ARTICLE_THUMBNAILS[slug] : undefined;
+  return entry ? `${SEO_DIR}/${entry.file}` : null;
+}
+
+/** Bài automation Zapier/Make — thumbnail trong public/tin-tuc/automation */
+export const AUTOMATION_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMain: string }> = {
+  "zapier-zap-la-gi": {
+    file: "zapier-zap.png",
+    keywordsMain: "zapier zap là gì",
+  },
+  "zapier-marketing-workflow": {
+    file: "zapier-marketing-workflow.png",
+    keywordsMain: "zapier marketing workflow",
+  },
+  "zapier-hay-make-automation": {
+    file: "zapier-hay-make.png",
+    keywordsMain: "zapier hay make automation",
+  },
+};
+
+export function getAutomationThumbnailPath(slug?: string): string | null {
+  const entry = slug ? AUTOMATION_ARTICLE_THUMBNAILS[slug] : undefined;
+  return entry ? `${AUTOMATION_DIR}/${entry.file}` : null;
 }
 
 /** Bài Zalo / ZNS — thumbnail trong public/tin-tuc/zalo */
@@ -149,6 +185,34 @@ export const ZALO_ARTICLE_THUMBNAILS: Record<string, { file: string; keywordsMai
   "zalo-zns-bi-chan": {
     file: "zns-bi-tu-choi-template.png",
     keywordsMain: "zalo zns bị chặn",
+  },
+  "zalo-rich-menu-la-gi-b17": {
+    file: "zalo-rich-menu.png",
+    keywordsMain: "zalo rich menu là gì",
+  },
+  "zalo-pay-hay-momo-b17": {
+    file: "zalopay-hay-momo.png",
+    keywordsMain: "zalopay hay momo",
+  },
+  "zalo-official-account-la-gi": {
+    file: "zalo-official-account.png",
+    keywordsMain: "zalo official account là gì",
+  },
+  "zalo-oa-zns-template": {
+    file: "zalo-oa-zns-template.png",
+    keywordsMain: "zalo oa zns template",
+  },
+  "zalo-oa-zalo-shop": {
+    file: "zalo-oa-zalo-shop.png",
+    keywordsMain: "zalo oa zalo shop",
+  },
+  "zalo-oa-zalo-pay-tich-hop": {
+    file: "zalo-oa-zalopay.png",
+    keywordsMain: "zalo oa zalopay tích hợp",
+  },
+  "zalo-oa-zalo-nurture": {
+    file: "zalo-oa-nurture.png",
+    keywordsMain: "zalo oa nurture",
   },
 };
 
@@ -372,6 +436,10 @@ function nicheKeywordsMain(slug?: string): string | undefined {
   }
 
   return (
+    AUTOMATION_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
+    SEO_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
+    CRM_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
+    ZALO_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     TU_DONG_HOA_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     BAO_BI_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
     CO_KHI_ARTICLE_THUMBNAILS[slug || ""]?.keywordsMain ??
@@ -569,6 +637,12 @@ export function resolveBlogImageUrl(input: {
 
   const zalo = getZaloThumbnailPath(input.slug);
   if (zalo) return zalo;
+
+  const seo = getSeoThumbnailPath(input.slug);
+  if (seo) return seo;
+
+  const automation = getAutomationThumbnailPath(input.slug);
+  if (automation) return automation;
 
   const tuDongHoa = getTuDongHoaThumbnailPath(input.slug);
   if (tuDongHoa) return tuDongHoa;

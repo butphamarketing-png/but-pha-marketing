@@ -44,6 +44,8 @@ export interface PlatformConfig {
   hideAutoPricing?: boolean;
   hideStats?: boolean;
   hideContact?: boolean;
+  /** Deep/noir visual — dùng cho /website */
+  theme?: "light" | "deep";
   customSections?: { id: string; label: string }[];
 }
 
@@ -911,7 +913,12 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
       : null;
 
   return (
-    <SubPageLayout platformName={config.name} primaryColor={platformColor} customSections={config.customSections}>
+    <SubPageLayout
+      platformName={config.name}
+      primaryColor={platformColor}
+      customSections={config.customSections}
+      theme={config.theme}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       {faqLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />

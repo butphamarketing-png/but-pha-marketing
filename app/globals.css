@@ -2289,17 +2289,35 @@ html.corp-home-snap-active body {
   }
 }
 
+@keyframes home-fab-pulse-price {
+  0%,
+  100% {
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.45),
+      0 0 0 0 rgba(167, 139, 250, 0.35);
+  }
+  55% {
+    box-shadow:
+      0 14px 28px rgba(15, 23, 42, 0.55),
+      0 0 0 14px rgba(167, 139, 250, 0);
+  }
+}
+
 .home-fab-stack .home-fab-enter {
   width: 100%;
   animation: home-fab-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.home-fab-stack .home-fab-enter--price {
+  animation-delay: 0.04s;
+}
+
 .home-fab-stack .home-fab-enter--book {
-  animation-delay: 0.08s;
+  animation-delay: 0.14s;
 }
 
 .home-fab-stack .home-fab-enter--zalo {
-  animation-delay: 0.2s;
+  animation-delay: 0.26s;
 }
 
 .home-fab-stack .home-fab-bob {
@@ -2308,8 +2326,12 @@ html.corp-home-snap-active body {
   animation: home-fab-bob 1.5s ease-in-out 0.7s infinite;
 }
 
+.home-fab-stack .home-fab-bob--mid {
+  animation-delay: 0.88s;
+}
+
 .home-fab-stack .home-fab-bob--late {
-  animation-delay: 1.05s;
+  animation-delay: 1.12s;
 }
 
 .home-fab-stack .home-fab {
@@ -2323,14 +2345,19 @@ html.corp-home-snap-active body {
     background-color 0.2s ease;
 }
 
+.home-fab-stack .home-fab--price {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.45);
+  animation: home-fab-pulse-price 2.2s ease-out 0.75s infinite;
+}
+
 .home-fab-stack .home-fab--book {
   box-shadow: 0 10px 24px rgba(91, 33, 182, 0.38);
-  animation: home-fab-pulse-violet 2.2s ease-out 0.9s infinite;
+  animation: home-fab-pulse-violet 2.2s ease-out 1s infinite;
 }
 
 .home-fab-stack .home-fab--zalo {
   box-shadow: 0 10px 24px rgba(0, 104, 255, 0.32);
-  animation: home-fab-pulse-zalo 2.2s ease-out 1.25s infinite;
+  animation: home-fab-pulse-zalo 2.2s ease-out 1.3s infinite;
 }
 
 .home-fab-stack .home-fab::before {
@@ -2370,6 +2397,11 @@ html.corp-home-snap-active body {
 
 .home-fab-stack .home-fab--book:hover {
   background-color: #7c3aed;
+}
+
+.home-fab-stack .home-fab--price:hover {
+  background-color: rgba(15, 23, 42, 0.95);
+  border-color: rgba(167, 139, 250, 0.55);
 }
 
 .home-fab-stack .home-fab--zalo:hover {
@@ -2595,4 +2627,67 @@ html.corp-home-snap-active body {
 
 html[data-home-section="lien-he"] .home-fab-stack {
   display: none;
+}
+
+/* ── Platform deep theme (/website) ── */
+.platform-deep {
+  background: #08090c;
+  color: #fff;
+}
+.platform-deep .platform-audit-shell,
+.platform-deep .platform-panel,
+.platform-deep .platform-side-card {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: none !important;
+}
+.platform-deep .platform-audit-shell::before {
+  opacity: 0.35;
+}
+.platform-deep .brand-section-title,
+.platform-deep h2,
+.platform-deep h3,
+.platform-deep .text-indigo-950,
+.platform-deep .text-indigo-900 {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+.platform-deep .text-slate-600,
+.platform-deep .text-slate-500,
+.platform-deep .text-slate-400 {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+.platform-deep .brand-input {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #fff !important;
+}
+.platform-deep .brand-input::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+.platform-deep .platform-pricing-card,
+.platform-deep .pricing-card-vns {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: none !important;
+}
+.platform-deep .pricing-card-vns__header {
+  background: linear-gradient(135deg, #1a1510 0%, #3d2e1a 55%, #c4955a 160%) !important;
+}
+.platform-deep .pricing-card-vns__body,
+.platform-deep .pricing-card-vns__features li,
+.platform-deep .pricing-card-vns__compare {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.platform-deep .platform-cta,
+.platform-deep button[style*="background"] {
+  /* keep inline accents */
+}
+.platform-deep #contact .platform-panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+.platform-deep #contact button.border-indigo-200 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }

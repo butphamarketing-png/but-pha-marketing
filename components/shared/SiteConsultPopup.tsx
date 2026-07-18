@@ -22,6 +22,7 @@ function shouldShowOnPath(pathname: string) {
   if (pathname === "/") return false; // trang chủ đã có section #tu-van
   if (pathname.startsWith("/blog")) return false;
   if (pathname.startsWith("/lien-he")) return false;
+  if (pathname === "/banggia" || pathname.startsWith("/banggia/")) return false; // đã có gate họ tên + SĐT
   return true;
 }
 

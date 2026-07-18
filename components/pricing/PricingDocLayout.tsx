@@ -61,8 +61,15 @@ function BranchSection({
     >
       <div className="mb-5 flex items-end justify-between gap-3">
         <div>
-          <h3 className="text-lg font-bold tracking-tight text-indigo-950 sm:text-xl">{branch.label}</h3>
-          <p className="mt-0.5 text-xs font-medium text-slate-500">{branch.items.length} gói</p>
+          <h3
+            className="text-xl font-semibold tracking-tight text-white sm:text-2xl"
+            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+          >
+            {branch.label}
+          </h3>
+          <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/30">
+            {branch.items.length} gói
+          </p>
         </div>
       </div>
 
@@ -78,7 +85,7 @@ function BranchSection({
       )}
 
       {!isLast ? (
-        <div className="my-10 h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent" />
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       ) : null}
     </motion.section>
   );
@@ -121,12 +128,12 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
 
   if (filtered.branches.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-sm">
-        <p className="text-base font-medium text-slate-700">Không tìm thấy gói phù hợp</p>
-        <p className="mt-2 text-sm text-slate-500">Thử từ khóa khác hoặc liên hệ để được tư vấn trực tiếp.</p>
+      <div className="border border-dashed border-white/15 bg-white/[0.02] p-12 text-center">
+        <p className="text-base font-medium text-white/80">Không tìm thấy gói phù hợp</p>
+        <p className="mt-2 text-sm text-white/40">Thử từ khóa khác hoặc liên hệ để được tư vấn trực tiếp.</p>
         <Link
           href="/lien-he"
-          className="mt-5 inline-flex rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700"
+          className="mt-5 inline-flex rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
         >
           Liên hệ tư vấn
         </Link>
@@ -136,7 +143,7 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
 
   return (
     <div className="space-y-5">
-      <div className="sticky top-[57px] z-30 -mx-1 bg-[#F4F6FC]/90 px-1 py-2 backdrop-blur-md lg:hidden">
+      <div className="sticky top-[57px] z-30 -mx-1 bg-[#08090c]/90 px-1 py-2 backdrop-blur-md lg:hidden">
         <div className="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {filtered.branches.map((branch) => {
             const active = activeSection === branch.id;
@@ -145,16 +152,11 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                 key={branch.id}
                 type="button"
                 onClick={() => scrollToSection(branch.id)}
-                className="shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition-all"
-                style={
+                className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium transition-all ${
                   active
-                    ? {
-                        backgroundColor: platform.color,
-                        color: "#fff",
-                        boxShadow: `0 4px 16px ${platform.color}45`,
-                      }
-                    : { backgroundColor: "#fff", color: "#64748B", border: "1px solid #E2E8F0" }
-                }
+                    ? "bg-amber-200 text-[#0b0d12]"
+                    : "border border-white/10 bg-white/[0.03] text-white/50"
+                }`}
               >
                 {branch.label}
                 <span className="ml-1 opacity-70">({branch.items.length})</span>
@@ -164,11 +166,11 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-8">
+      <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
         <nav aria-label={`Danh mục ${platform.label}`} className="hidden lg:block">
-          <div className="sticky top-28 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)]">
-            <div className="border-b border-slate-100 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Danh mục</p>
+          <div className="sticky top-28 overflow-hidden border border-white/[0.06] bg-white/[0.02]">
+            <div className="border-b border-white/[0.06] px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Danh mục</p>
             </div>
             <div className="relative space-y-0.5 p-2">
               {filtered.branches.map((branch) => {
@@ -178,24 +180,22 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                     key={branch.id}
                     type="button"
                     onClick={() => scrollToSection(branch.id)}
-                    className="relative flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors"
-                    style={{ color: active ? platform.color : "#475569" }}
+                    className={`relative flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                      active ? "text-amber-100" : "text-white/45 hover:text-white/70"
+                    }`}
                   >
                     {active ? (
                       <motion.span
                         layoutId={`banggia-sidebar-${platform.id}`}
-                        className="absolute inset-0 rounded-xl"
-                        style={{ backgroundColor: `${platform.color}12` }}
+                        className="absolute inset-0 rounded-lg bg-amber-200/[0.08]"
                         transition={{ type: "spring", stiffness: 380, damping: 34 }}
                       />
                     ) : null}
                     <span className="relative truncate pr-2">{branch.label}</span>
                     <span
-                      className="relative shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums"
-                      style={{
-                        backgroundColor: active ? `${platform.color}18` : "#F1F5F9",
-                        color: active ? platform.color : "#94A3B8",
-                      }}
+                      className={`relative shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
+                        active ? "bg-amber-200/15 text-amber-100" : "bg-white/5 text-white/30"
+                      }`}
                     >
                       {branch.items.length}
                     </span>
@@ -212,7 +212,7 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
           initial="hidden"
           animate="visible"
           variants={staggerIntro}
-          className="min-w-0 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)] lg:col-start-2"
+          className="min-w-0 overflow-hidden border border-white/[0.06] bg-white/[0.02] lg:col-start-2"
         >
           <PlatformHero platform={platform} />
 
@@ -228,20 +228,15 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
               />
             ))}
 
-            <div
-              className="mt-8 rounded-2xl px-5 py-6 text-center sm:px-8"
-              style={{
-                background: `linear-gradient(135deg, ${platform.color}10 0%, ${platform.color}04 100%)`,
-                boxShadow: `inset 0 0 0 1px ${platform.color}18`,
-              }}
-            >
-              <p className="text-sm font-semibold text-slate-700">Không chắc chọn gói nào?</p>
-              <p className="mt-1 text-xs text-slate-500">Đội ngũ Bứt Phá Marketing tư vấn miễn phí theo ngân sách & mục tiêu</p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.06] to-transparent px-5 py-7 text-center sm:px-8">
+              <p className="text-sm font-medium text-white/85">Không chắc chọn gói nào?</p>
+              <p className="mt-1 text-xs text-white/40">
+                Đội ngũ Bứt Phá tư vấn miễn phí theo ngân sách & mục tiêu
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
                 <a
                   href={getTelHref(settings?.hotline)}
-                  className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
-                  style={{ backgroundColor: platform.color }}
+                  className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
                 >
                   <Phone className="h-4 w-4" />
                   Gọi tư vấn
@@ -250,7 +245,7 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                   href={getZaloUrl(settings?.hotline)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/80 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-violet-200"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/25"
                 >
                   <MessageCircle className="h-4 w-4" />
                   Chat Zalo
@@ -282,45 +277,22 @@ export function PricingSearchBar({
   platformId: string;
 }) {
   const [focused, setFocused] = useState(false);
-  const [pulseDone, setPulseDone] = useState(false);
-
-  const handleFocus = () => {
-    setFocused(true);
-    if (!pulseDone) setPulseDone(true);
-  };
 
   return (
     <div className="relative">
-      <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-      <motion.input
+      <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+      <input
         type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        onFocus={handleFocus}
+        onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={SEARCH_PLACEHOLDER[platformId] ?? "Tìm gói dịch vụ…"}
-        className="brand-input w-full pl-10"
-        animate={{
-          boxShadow:
-            value || focused
-              ? `0 0 0 2px ${accent}${value ? "40" : "28"}`
-              : pulseDone
-                ? "0 0 0 0px transparent"
-                : "0 0 0 0px transparent",
+        className="w-full rounded-full border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-amber-200/40"
+        style={{
+          boxShadow: value || focused ? `0 0 0 1px ${accent}55` : undefined,
         }}
-        initial={false}
-        transition={{ duration: 0.22 }}
       />
-      {!pulseDone ? (
-        <motion.span
-          className="pointer-events-none absolute inset-0 rounded-xl"
-          initial={{ boxShadow: `0 0 0 0px ${accent}00` }}
-          animate={{ boxShadow: [`0 0 0 0px ${accent}00`, `0 0 0 4px ${accent}18`, `0 0 0 0px ${accent}00`] }}
-          transition={{ duration: 1.1, delay: 0.6, times: [0, 0.45, 1] }}
-          onAnimationComplete={() => setPulseDone(true)}
-          aria-hidden
-        />
-      ) : null}
     </div>
   );
 }
