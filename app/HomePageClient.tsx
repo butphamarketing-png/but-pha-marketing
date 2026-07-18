@@ -369,7 +369,8 @@ export default function HomePageClient() {
   const nativeScrollRef = useRef(false);
   const unlockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartY = useRef<number | null>(null);
-  const touchFromHScroll = useRef(false);
+  const touchFromInnerScroll = useRef(false);
+  const touchScrollPane = useRef<HTMLElement | null>(null);
   const { settings } = useAdmin();
 
   const sectionClass = useCallback(
@@ -824,7 +825,7 @@ export default function HomePageClient() {
     return () => io.disconnect();
   }, [nativeScroll]);
 
-  // Desktop/tablet: wheel / touch → đổi full section (kiểu Vinh Phát)
+  // Desktop/tablet/mobile snap: wheel / touch → đổi full section
   useEffect(() => {
     if (nativeScroll) return;
 
@@ -834,8 +835,8 @@ export default function HomePageClient() {
       const pane = t?.closest?.("[data-project-scroll]") as HTMLElement | null;
       if (pane) {
         const { scrollTop, scrollHeight, clientHeight } = pane;
-        const canUp = scrollTop > 0;
-        const canDown = scrollTop + clientHeight < scrollHeight - 1;
+        const canUp = scrollTop > 4;
+        const canDown = scrollTop + clientHeight < scrollHeight - 4;
         if ((e.deltaY < 0 && canUp) || (e.deltaY > 0 && canDown)) {
           return;
         }
@@ -849,27 +850,42 @@ export default function HomePageClient() {
     const onTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0]?.clientY ?? null;
       const t = e.target as HTMLElement | null;
-      touchFromHScroll.current = Boolean(
-        t?.closest?.("[data-h-scroll], [data-project-scroll]"),
-      );
+      const pane = (t?.closest?.("[data-project-scroll]") as HTMLElement | null) ?? null;
+      const hScrollOnly = Boolean(t?.closest?.("[data-h-scroll]")) && !pane;
+      touchScrollPane.current = pane;
+      // true = cho native scroll (pane nội bộ hoặc hàng ngang)
+      touchFromInnerScroll.current = Boolean(pane || hScrollOnly);
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (touchFromHScroll.current) return;
+      if (touchFromInnerScroll.current) return;
       e.preventDefault();
     };
 
     const onTouchEnd = (e: TouchEvent) => {
       if (menuOpen || locking.current) return;
       const start = touchStartY.current;
-      const fromHScroll = touchFromHScroll.current;
+      const fromInner = touchFromInnerScroll.current;
+      const pane = touchScrollPane.current;
       touchStartY.current = null;
-      touchFromHScroll.current = false;
-      if (start == null || fromHScroll) return;
+      touchFromInnerScroll.current = false;
+      touchScrollPane.current = null;
+      if (start == null) return;
       const end = e.changedTouches[0]?.clientY;
       if (end == null) return;
       const dy = start - end;
       if (Math.abs(dy) < 40) return;
+
+      // Vuốt trong vùng cuộn nội bộ: chỉ đổi section khi đã chạm mép
+      if (fromInner) {
+        if (!pane) return; // data-h-scroll ngang — không đổi section
+        const { scrollTop, scrollHeight, clientHeight } = pane;
+        const atTop = scrollTop <= 4;
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 4;
+        const goingNext = dy > 0; // vuốt lên → section sau
+        if ((goingNext && !atBottom) || (!goingNext && !atTop)) return;
+      }
+
       goToSection(activeSectionRef.current + (dy > 0 ? 1 : -1));
     };
 
@@ -892,7 +908,6 @@ export default function HomePageClient() {
       }
     };
 
-    // Gắn trên window để không miss wheel khi hover chrome/header
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
