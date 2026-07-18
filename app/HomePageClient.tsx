@@ -317,16 +317,30 @@ export default function HomePageClient() {
   const [consultLoading, setConsultLoading] = useState(false);
   const [consultDone, setConsultDone] = useState(false);
   const [consultSummary, setConsultSummary] = useState("");
+  /** Section đã vào viewport — giữ nội dung hiện sau khi cuộn qua */
+  const [revealedSections, setRevealedSections] = useState<Set<number>>(() => new Set([0]));
   const consultDays = useMemo(() => getConsultDayOptions(4), []);
-  const snapRef = useRef<HTMLDivElement>(null);
   const projectListRef = useRef<HTMLUListElement>(null);
   const caseScrollLock = useRef(false);
-  const locking = useRef(false);
   const activeSectionRef = useRef(0);
-  const unlockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const touchFromHScroll = useRef(false);
   const { settings } = useAdmin();
+
+  const sectionClass = useCallback(
+    (index: number, extra = "") => {
+      const on = activeSection === index || revealedSections.has(index);
+      const revealed = revealedSections.has(index);
+      return [
+        "corp-snap-section",
+        extra,
+        on ? "corp-snap-in" : "",
+        revealed ? "corp-revealed" : "corp-await",
+        activeSection === index ? "corp-section-active" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+    },
+    [activeSection, revealedSections],
+  );
 
   const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = "/logo.png";
@@ -414,8 +428,6 @@ export default function HomePageClient() {
   }, [siteReady]);
 
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     // Ẩn widget chat bên thứ 3 (FB/AI…) trên trang chủ corp — giữ Zalo pill của site
     const style = document.createElement("style");
     style.setAttribute("data-corp-home-hide-widgets", "1");
@@ -430,9 +442,11 @@ export default function HomePageClient() {
       }
     `;
     document.head.appendChild(style);
+    const html = document.documentElement;
+    html.classList.add("corp-home-smooth");
     return () => {
-      document.body.style.overflow = prev;
       style.remove();
+      html.classList.remove("corp-home-smooth");
     };
   }, []);
 
@@ -518,21 +532,12 @@ export default function HomePageClient() {
   }, [featuredCases.length]);
 
   const goToSection = useCallback((index: number) => {
-    if (locking.current) return;
-
     const clamped = Math.max(0, Math.min(SECTIONS.length - 1, index));
-    if (clamped === activeSectionRef.current) return;
-
-    locking.current = true;
+    const id = SECTIONS[clamped]?.id;
+    const target = id ? document.getElementById(id) : null;
     activeSectionRef.current = clamped;
     setActiveSection(clamped);
-
-    if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
-    // khóa tới khi animation xong — tránh wheel/trackpad nhảy 2 section
-    unlockTimerRef.current = setTimeout(() => {
-      locking.current = false;
-      unlockTimerRef.current = null;
-    }, 780);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   const consultSectionIndex = SECTIONS.findIndex((s) => s.id === "tu-van");
@@ -604,9 +609,24 @@ export default function HomePageClient() {
   useEffect(() => {
     activeSectionRef.current = activeSection;
     document.documentElement.dataset.homeSection = SECTIONS[activeSection]?.id ?? "";
+  }, [activeSection]);
+
+  useEffect(() => {
     return () => {
       delete document.documentElement.dataset.homeSection;
     };
+  }, []);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      setRevealedSections((prev) => {
+        if (prev.has(activeSection)) return prev;
+        const next = new Set(prev);
+        next.add(activeSection);
+        return next;
+      });
+    }, 1100);
+    return () => clearTimeout(t);
   }, [activeSection]);
 
   useEffect(() => {
@@ -635,61 +655,46 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [voiceActive, activeSection]);
 
+  // Theo dõi section đang xem — cập nhật header / hiệu ứng
   useEffect(() => {
-    const el = snapRef.current;
-    if (!el) return;
+    const nodes = SECTIONS.map((s) => document.getElementById(s.id)).filter(
+      (n): n is HTMLElement => Boolean(n),
+    );
+    if (!nodes.length) return;
 
-    const onWheel = (e: WheelEvent) => {
-      if (menuOpen) return;
-      const t = e.target as HTMLElement | null;
-      const pane = t?.closest?.("[data-project-scroll]") as HTMLElement | null;
-      if (pane) {
-        const { scrollTop, scrollHeight, clientHeight } = pane;
-        const canUp = scrollTop > 0;
-        const canDown = scrollTop + clientHeight < scrollHeight - 1;
-        if ((e.deltaY < 0 && canUp) || (e.deltaY > 0 && canDown)) {
-          return; // cuộn list dự án, không đổi section
+    const ratios = new Map<string, number>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          ratios.set(entry.target.id, entry.intersectionRatio);
         }
-      }
-      e.preventDefault();
-      if (locking.current) return;
-      if (Math.abs(e.deltaY) < 8) return;
-      goToSection(activeSectionRef.current + (e.deltaY > 0 ? 1 : -1));
-    };
+        let bestId: string = SECTIONS[0].id;
+        let bestRatio = -1;
+        for (const s of SECTIONS) {
+          const r = ratios.get(s.id) ?? 0;
+          if (r > bestRatio) {
+            bestRatio = r;
+            bestId = s.id;
+          }
+        }
+        const index = SECTIONS.findIndex((s) => s.id === bestId);
+        if (index < 0 || index === activeSectionRef.current) return;
+        activeSectionRef.current = index;
+        setActiveSection(index);
+      },
+      { threshold: [0.15, 0.3, 0.45, 0.6, 0.75], rootMargin: "-8% 0px -28% 0px" },
+    );
 
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0]?.clientY ?? null;
-      const t = e.target as HTMLElement | null;
-      touchFromHScroll.current = Boolean(
-        t?.closest?.("[data-h-scroll], [data-project-scroll]"),
-      );
-    };
+    nodes.forEach((n) => io.observe(n));
+    return () => io.disconnect();
+  }, []);
 
-    const onTouchMove = (e: TouchEvent) => {
-      if (touchFromHScroll.current) return;
-      // chặn kéo native — chỉ đổi section khi thả tay
-      e.preventDefault();
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      if (menuOpen || locking.current) return;
-      const start = touchStartY.current;
-      const fromHScroll = touchFromHScroll.current;
-      touchStartY.current = null;
-      touchFromHScroll.current = false;
-      if (start == null || fromHScroll) return;
-      const end = e.changedTouches[0]?.clientY;
-      if (end == null) return;
-      const dy = start - end;
-      if (Math.abs(dy) < 48) return;
-      goToSection(activeSectionRef.current + (dy > 0 ? 1 : -1));
-    };
-
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (menuOpen || locking.current) return;
+      if (menuOpen) return;
       const tag = (e.target as HTMLElement | null)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-      if (["ArrowDown", "PageDown", " "].includes(e.key)) {
+      if (["ArrowDown", "PageDown"].includes(e.key)) {
         e.preventDefault();
         goToSection(activeSectionRef.current + 1);
       } else if (["ArrowUp", "PageUp"].includes(e.key)) {
@@ -703,21 +708,8 @@ export default function HomePageClient() {
         goToSection(SECTIONS.length - 1);
       }
     };
-
-    el.addEventListener("wheel", onWheel, { passive: false });
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      el.removeEventListener("wheel", onWheel);
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      window.removeEventListener("keydown", onKeyDown);
-      if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [goToSection, menuOpen]);
 
   useEffect(() => {
@@ -744,11 +736,11 @@ export default function HomePageClient() {
       )}
 
       <div
-        className="corp-home fixed inset-0 z-[1] bg-slate-950 text-white transition-opacity duration-500"
+        className="corp-home corp-home--native-scroll z-[1] bg-slate-950 text-white transition-opacity duration-500"
         style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
       >
         {/* Fixed chrome */}
-        <header className="pointer-events-none absolute inset-x-0 top-0 z-40">
+        <header className="pointer-events-none fixed inset-x-0 top-0 z-40">
           <div className="pointer-events-auto mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-4 sm:gap-3 sm:px-6 lg:px-8">
             <button
               type="button"
@@ -815,19 +807,19 @@ export default function HomePageClient() {
               aria-current={activeSection === i ? "true" : undefined}
             >
               <span
-                className={`h-2.5 w-2.5 rounded-full border transition ${
+                className={`h-2.5 w-2.5 rounded-full border transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   activeSection === i
                     ? "scale-125 border-violet-500 bg-violet-600 shadow-[0_0_0_4px_rgba(139,92,246,0.25)]"
                     : `${dotIdle} group-hover:opacity-80`
                 }`}
               />
               <span
-                className={`hidden text-[10px] font-semibold tracking-[0.18em] transition xl:inline ${
+                className={`hidden text-[10px] font-semibold tracking-[0.18em] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] xl:inline ${
                   activeSection === i
                     ? headerLight
-                      ? "text-violet-700 opacity-100"
-                      : "text-violet-200 opacity-100"
-                    : `${dotLabelIdle} group-hover:opacity-100`
+                      ? "translate-x-0 text-violet-700 opacity-100"
+                      : "translate-x-0 text-violet-200 opacity-100"
+                    : `${dotLabelIdle} -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100`
                 }`}
               >
                 {s.label}
@@ -836,12 +828,9 @@ export default function HomePageClient() {
           ))}
         </nav>
 
-        {/* Full-page sections — transform, không scroll tự do */}
-        <div ref={snapRef} className="corp-snap h-full overflow-hidden">
-          <div
-            className="corp-snap-track will-change-transform"
-            style={{ transform: `translate3d(0, ${-activeSection * 100}%, 0)` }}
-          >
+        {/* Sections — cuộn document tự nhiên (mọi thiết bị) */}
+        <div className="corp-snap corp-snap--native">
+          <div className="corp-snap-track">
           {/* 1 — Hero */}
           <section
             id="but-pha"
@@ -965,7 +954,7 @@ export default function HomePageClient() {
           {/* 2 — Giới thiệu: nền tech · 3 thiết bị trái · chữ phải */}
           <section
             id="gioi-thieu"
-            className={`corp-snap-section relative flex overflow-hidden bg-[#e4e8ef] text-slate-900 ${activeSection === 1 ? "corp-snap-in" : ""}`}
+            className={sectionClass(1, "relative flex overflow-hidden bg-[#e4e8ef] text-slate-900")}
           >
             {/* Nền thiên công nghệ nhẹ */}
             <div className="pointer-events-none absolute inset-0">
@@ -973,7 +962,7 @@ export default function HomePageClient() {
               <img
                 src={ABOUT_CITY_BG}
                 alt=""
-                className="h-full w-full object-cover object-[center_35%] opacity-95"
+                className="corp-parallax-bg h-full w-full object-cover object-[center_35%] opacity-95"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#eef1f7]/55 via-[#eef1f7]/30 to-[#eef1f7]/82" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#eef1f7]/60 via-transparent to-[#eef1f7]/40" />
@@ -1085,14 +1074,14 @@ export default function HomePageClient() {
           {/* 3 — Lĩnh vực: full-bleed desk · 3 thẻ xếp chồng · 1 active nổi */}
           <section
             id="linh-vuc"
-            className={`corp-snap-section relative flex flex-col overflow-hidden text-white ${activeSection === 2 ? "corp-snap-in" : ""}`}
+            className={sectionClass(2, "relative flex flex-col overflow-hidden text-white")}
           >
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={LINH_VUC_BG}
                 alt=""
-                className="h-full w-full scale-110 object-cover object-[center_30%] opacity-50 saturate-[0.65] contrast-[1.08]"
+                className="corp-parallax-bg h-full w-full scale-110 object-cover object-[center_30%] opacity-50 saturate-[0.65] contrast-[1.08]"
               />
               <div className="absolute inset-0 bg-[#070b16]/80" />
               <div
@@ -1275,14 +1264,14 @@ export default function HomePageClient() {
           {/* 4 — Dự án: tiêu đề giữa + list cuộn trái + ảnh phải */}
           <section
             id="du-an"
-            className={`corp-snap-section relative flex flex-col overflow-hidden text-white ${activeSection === 3 ? "corp-snap-in" : ""}`}
+            className={sectionClass(3, "relative flex flex-col overflow-hidden text-white")}
           >
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={DU_AN_BG}
                 alt=""
-                className="h-full w-full object-cover object-[center_40%] opacity-40 saturate-[0.65]"
+                className="corp-parallax-bg h-full w-full object-cover object-[center_40%] opacity-40 saturate-[0.65]"
               />
               <div className="absolute inset-0 bg-[#070b16]/82" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#070b16]/95 via-[#070b16]/70 to-[#070b16]/45" />
@@ -1411,13 +1400,13 @@ export default function HomePageClient() {
           {/* 5 — Đặt lịch tư vấn: ngày/giờ trái · form phải */}
           <section
             id="tu-van"
-            className={`corp-snap-section relative flex flex-col justify-center overflow-hidden bg-[#06080f] text-white ${activeSection === 4 ? "corp-snap-in" : ""}`}
+            className={sectionClass(4, "relative flex flex-col justify-center overflow-hidden bg-[#06080f] text-white")}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={CORP_HERO_SLIDES[5]}
               alt=""
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.14] saturate-50"
+              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.14] saturate-50"
             />
             <div className="absolute inset-0 bg-[#06080f]/82" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_20%,rgba(109,40,217,0.16),transparent_65%)]" />
@@ -1621,13 +1610,13 @@ export default function HomePageClient() {
           {/* 6 — Kiến thức: ảnh lớn trái + 4 bài nhỏ phải (scroll) */}
           <section
             id="kien-thuc"
-            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 5 ? "corp-snap-in" : ""}`}
+            className={sectionClass(5, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={CORP_HERO_SLIDES[1]}
               alt=""
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12] saturate-50"
+              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12] saturate-50"
             />
             <div className="absolute inset-0 bg-[#06080f]/88" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_40%,rgba(109,40,217,0.14),transparent_65%)]" />
@@ -1742,7 +1731,7 @@ export default function HomePageClient() {
           {/* 7 — Tiếng nói: trước/sau từng chữ + nút trái phải */}
           <section
             id="tieng-noi"
-            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 6 ? "corp-snap-in" : ""}`}
+            className={sectionClass(6, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
           >
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-[#06080f]" />
@@ -1897,13 +1886,13 @@ export default function HomePageClient() {
           {/* 8 — Liên hệ / Footer: CTA + 3 cột + brand bar */}
           <section
             id="lien-he"
-            className={`corp-snap-section relative flex flex-col overflow-hidden bg-[#06080f] text-white ${activeSection === 7 ? "corp-snap-in" : ""}`}
+            className={sectionClass(7, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={CORP_HERO_SLIDES[5]}
               alt=""
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12] saturate-50"
+              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12] saturate-50"
             />
             <div className="absolute inset-0 bg-[#06080f]/92" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_50%_15%,rgba(109,40,217,0.18),transparent_65%)]" />

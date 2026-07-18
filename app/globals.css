@@ -173,8 +173,10 @@
   .corp-snap {
     -ms-overflow-style: none;
     scrollbar-width: none;
-    overscroll-behavior: none;
-    touch-action: none;
+    overscroll-behavior: auto;
+    touch-action: auto;
+    height: auto;
+    overflow: visible;
   }
 
   .corp-snap::-webkit-scrollbar {
@@ -182,19 +184,106 @@
   }
 
   .corp-snap-track {
-    height: 100%;
-    transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    height: auto;
   }
 
   .corp-snap-section {
-    height: 100%;
-    min-height: 100%;
-    max-height: 100%;
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
     flex-shrink: 0;
+    scroll-margin-top: 0;
+    position: relative;
+  }
+
+  /* Cuộn mượt khi nhảy section (menu / phím / hint) */
+  html.corp-home-smooth {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.corp-home-smooth {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Parallax nền khi section đi qua viewport */
+  .corp-parallax-bg {
+    will-change: transform;
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+
+  @supports (animation-timeline: view()) {
+    .corp-parallax-bg {
+      animation: corp-parallax-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+
+  @keyframes corp-parallax-drift {
+    from {
+      transform: scale(1.14) translate3d(0, -5%, 0);
+    }
+    to {
+      transform: scale(1.08) translate3d(0, 5%, 0);
+    }
+  }
+
+  /* Soft veil + content settle khi section active */
+  .corp-snap-section::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: linear-gradient(
+      180deg,
+      rgba(6, 8, 15, 0.08) 0%,
+      transparent 32%,
+      transparent 68%,
+      rgba(6, 8, 15, 0.08) 100%
+    );
+    opacity: 0.7;
+    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .corp-snap-section.corp-section-active::after,
+  .corp-snap-section.corp-revealed::after {
+    opacity: 0;
+  }
+
+  .corp-snap-section .relative.z-10 {
+    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .corp-snap-section.corp-await .relative.z-10 {
+    opacity: 0.72;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+
+  .corp-snap-section.corp-snap-in .relative.z-10,
+  .corp-snap-section.corp-revealed .relative.z-10 {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
   .corp-snap [data-h-scroll] {
     touch-action: pan-x;
+  }
+
+  .corp-home--native-scroll,
+  .corp-home {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .corp-snap--native {
+    height: auto;
+    overflow: visible;
   }
 
   .corp-project-scroll {
@@ -2191,88 +2280,104 @@
 @keyframes corp-rise-up {
   from {
     opacity: 0;
-    transform: translate3d(0, 44px, 0);
+    transform: translate3d(0, 36px, 0);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0);
   }
 }
 
 .corp-rise {
   opacity: 0;
-  transform: translate3d(0, 44px, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 36px, 0);
+  will-change: transform, opacity, filter;
 }
 
-.corp-snap-in .corp-rise {
-  animation: corp-rise-up 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: calc(var(--rise, 0) * 95ms + 50ms);
+.corp-snap-in:not(.corp-revealed) .corp-rise {
+  animation: corp-rise-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--rise, 0) * 85ms + 60ms);
 }
 
-.corp-snap-in .corp-rise.corp-rise--slow {
-  animation-duration: 0.88s;
-  animation-delay: calc(var(--rise, 0) * 155ms + 120ms);
+.corp-revealed .corp-rise,
+.corp-revealed .corp-from-right,
+.corp-revealed .corp-from-left,
+.corp-revealed .corp-fade {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+}
+
+.corp-snap-in:not(.corp-revealed) .corp-rise.corp-rise--slow {
+  animation-duration: 1s;
+  animation-delay: calc(var(--rise, 0) * 130ms + 100ms);
 }
 
 /* Footer: chậm hơn — cột nổi + brand trượt */
-.corp-snap-in .corp-rise.corp-rise--footer {
-  animation-duration: 1.2s;
-  animation-delay: calc(var(--rise, 0) * 240ms + 180ms);
-}
-
-.corp-snap-in .corp-from-left.corp-from-left--footer {
+.corp-snap-in:not(.corp-revealed) .corp-rise.corp-rise--footer {
   animation-duration: 1.15s;
-  animation-delay: calc(var(--rise, 0) * 160ms + 220ms);
+  animation-delay: calc(var(--rise, 0) * 200ms + 160ms);
 }
 
-.corp-snap-in .corp-fade.corp-fade--footer {
-  animation-duration: 0.95s;
-  animation-delay: calc(var(--rise, 0) * 160ms + 100ms);
+.corp-snap-in:not(.corp-revealed) .corp-from-left.corp-from-left--footer {
+  animation-duration: 1.1s;
+  animation-delay: calc(var(--rise, 0) * 140ms + 180ms);
+}
+
+.corp-snap-in:not(.corp-revealed) .corp-fade.corp-fade--footer {
+  animation-duration: 0.9s;
+  animation-delay: calc(var(--rise, 0) * 140ms + 90ms);
 }
 
 @keyframes corp-from-right-in {
   from {
     opacity: 0;
-    transform: translate3d(56px, 0, 0);
+    transform: translate3d(48px, 0, 0);
+    filter: blur(3px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0);
   }
 }
 
 .corp-from-right {
   opacity: 0;
-  transform: translate3d(56px, 0, 0);
-  will-change: transform, opacity;
+  transform: translate3d(48px, 0, 0);
+  will-change: transform, opacity, filter;
 }
 
-.corp-snap-in .corp-from-right {
-  animation: corp-from-right-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: calc(var(--rise, 0) * 95ms + 50ms);
+.corp-snap-in:not(.corp-revealed) .corp-from-right {
+  animation: corp-from-right-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--rise, 0) * 85ms + 60ms);
 }
 
 @keyframes corp-from-left-in {
   from {
     opacity: 0;
-    transform: translate3d(-56px, 0, 0);
+    transform: translate3d(-48px, 0, 0);
+    filter: blur(3px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0);
   }
 }
 
 .corp-from-left {
   opacity: 0;
-  transform: translate3d(-56px, 0, 0);
-  will-change: transform, opacity;
+  transform: translate3d(-48px, 0, 0);
+  will-change: transform, opacity, filter;
 }
 
-.corp-snap-in .corp-from-left {
-  animation: corp-from-left-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: calc(var(--rise, 0) * 95ms + 50ms);
+.corp-snap-in:not(.corp-revealed) .corp-from-left {
+  animation: corp-from-left-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--rise, 0) * 85ms + 60ms);
 }
 
 /* Footer: chỉ fade — không translate, giữ bố cục mobile */
@@ -2289,9 +2394,27 @@
   opacity: 0;
 }
 
-.corp-snap-in .corp-fade {
-  animation: corp-fade-in 0.65s ease forwards;
-  animation-delay: calc(var(--rise, 0) * 120ms + 60ms);
+.corp-snap-in:not(.corp-revealed) .corp-fade {
+  animation: corp-fade-in 0.75s ease forwards;
+  animation-delay: calc(var(--rise, 0) * 100ms + 50ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corp-rise,
+  .corp-from-right,
+  .corp-from-left,
+  .corp-fade,
+  .corp-snap-section.corp-await .relative.z-10,
+  .corp-parallax-bg {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+
+  .corp-snap-section::after {
+    display: none;
+  }
 }
 
 /* Footer call bar — thu hút + pulse nhẹ */
