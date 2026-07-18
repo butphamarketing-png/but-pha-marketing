@@ -6,7 +6,6 @@ import { SITE_URL } from "@/lib/seo";
 import { isIndustryHubSlug } from "@/lib/industry-hub";
 import {
   getWebsiteIndustryLanding,
-  resolveIndexPolicy,
   WEBSITE_INDUSTRY_LANDINGS,
 } from "@/lib/programmatic-seo";
 import { getWebsiteIndustryCatalogItem } from "@/lib/website-industry-catalog";
@@ -25,12 +24,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
   const landing = getWebsiteIndustryLanding(industry);
   if (!landing) return {};
 
+  // Money page ngành — luôn index (không phụ thuộc qualityScore / pilot noindex)
   return generateLandingMetadata({
     path: `/website/nganh/${landing.slug}`,
     title: landing.title,
     description: landing.description,
     keywords: [landing.primaryKeyword, "thiết kế website", "website doanh nghiệp"],
-    indexPolicy: resolveIndexPolicy(landing.qualityScore),
+    indexPolicy: "index",
   });
 }
 
@@ -59,7 +59,7 @@ export default async function WebsiteIndustryProgrammaticPage({ params }: { para
   if (!landing) notFound();
 
   const catalog = getWebsiteIndustryCatalogItem(industry);
-  const indexable = resolveIndexPolicy(landing.qualityScore) === "index";
+  const indexable = true;
   const clusterLinks = buildClusterLinks(industry);
   const serviceLd = buildServiceSchema({
     name: landing.title,

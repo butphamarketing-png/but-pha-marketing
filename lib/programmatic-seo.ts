@@ -33,8 +33,8 @@ export function resolveIndexPolicy(qualityScore: number): "index" | "noindex" {
 }
 
 export function getIndexableProgrammaticPaths() {
-  const websiteIndustry = WEBSITE_INDUSTRY_LANDINGS.filter((item) => resolveIndexPolicy(item.qualityScore) === "index")
-    .map((item) => `/website/nganh/${item.slug}`);
+  // Tất cả landing ngành website luôn vào sitemap (money pages)
+  const websiteIndustry = WEBSITE_INDUSTRY_LANDINGS.map((item) => `/website/nganh/${item.slug}`);
   const localSeo = LOCAL_SEO_LANDINGS.filter((item) => resolveIndexPolicy(item.qualityScore) === "index").map(
     (item) => `/seo-website/dia-phuong/${item.slug}`,
   );
