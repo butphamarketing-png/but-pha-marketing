@@ -2,34 +2,30 @@
 
 import { useEffect } from "react";
 import { useAdmin } from "@/lib/AdminContext";
+import { ensureUiAudio, playUiClickSound } from "@/lib/ui-sounds";
 
+/** Click mềm toàn site — button / link / chip / tab */
 export function SoftUISounds() {
   const { settings } = useAdmin();
 
   useEffect(() => {
-    if (!settings.softSoundsEnabled) return;
+    if (settings.softSoundsEnabled === false) return;
+
+    ensureUiAudio();
+    const vol = Math.min(0.12, Math.max(0.04, (settings.softSoundsVolume ?? 0.05) * 1.15));
 
     const onPointerDown = (event: Event) => {
       const target = event.target as HTMLElement | null;
       if (!target) return;
-      if (!target.closest("button, a, [role='button']")) return;
-      try {
-        const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(740, ctx.currentTime);
-        gain.gain.setValueAtTime(settings.softSoundsVolume ?? 0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.09);
-      } catch {
-        // no-op
+      if (
+        !target.closest(
+          "button, a, [role='button'], [role='tab'], input, textarea, select, summary, label",
+        )
+      ) {
+        return;
       }
+      // Tránh double-fire từ nested button
+      playUiClickSound(vol);
     };
 
     document.addEventListener("pointerdown", onPointerDown, true);

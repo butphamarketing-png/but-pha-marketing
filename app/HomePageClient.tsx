@@ -28,6 +28,7 @@ import {
   stopHeroWelcomeSpeech,
   unlockHeroAudio,
 } from "@/lib/hero-welcome-sound";
+import { ensureUiAudio, scheduleAppearSounds } from "@/lib/ui-sounds";
 
 const SECTIONS = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
@@ -613,6 +614,24 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [aboutReveal]);
 
+  // Giới thiệu: âm khi phone → laptop xuất hiện + ô chữ
+  useEffect(() => {
+    if (!aboutReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    return scheduleAppearSounds(
+      [
+        { delayMs: 40, kind: "device" },
+        { delayMs: 40 + ABOUT_DEVICES[1].delayMs, kind: "device" },
+        { delayMs: ABOUT_LAPTOP_DONE_MS + 40, kind: "box" },
+        { delayMs: ABOUT_LAPTOP_DONE_MS + 180, kind: "box" },
+        { delayMs: ABOUT_LAPTOP_DONE_MS + 320, kind: "box" },
+        { delayMs: ABOUT_LAPTOP_DONE_MS + 480, kind: "box" },
+      ],
+      scale,
+    );
+  }, [aboutReveal, settings.softSoundsEnabled, settings.softSoundsVolume]);
+
   // Lĩnh vực: bật reveal để 3 card nhảy lần lượt (giữa → trái → phải)
   useEffect(() => {
     if (activeSection !== 2) {
@@ -622,6 +641,21 @@ export default function HomePageClient() {
     const t = window.setTimeout(() => setLinhReveal(true), 60);
     return () => window.clearTimeout(t);
   }, [activeSection]);
+
+  // Lĩnh vực: âm 3 ô card xuất hiện
+  useEffect(() => {
+    if (!linhReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    return scheduleAppearSounds(
+      [
+        { delayMs: 150, kind: "box" },
+        { delayMs: 150 + 320, kind: "box" },
+        { delayMs: 150 + 640, kind: "box" },
+      ],
+      scale,
+    );
+  }, [linhReveal, settings.softSoundsEnabled, settings.softSoundsVolume]);
 
   // Lĩnh vực: xoay thẻ sau khi 3 card hiện lần lượt xong (dừng khi hover)
   useEffect(() => {
@@ -812,6 +846,22 @@ export default function HomePageClient() {
     };
   }, [caseReveal, activeSection, featuredCases.length]);
 
+  // Dự án: âm từng ô list + khung mockup
+  useEffect(() => {
+    if (!caseReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    const n = Math.min(featuredCases.length, 8);
+    const items: { delayMs: number; kind: "device" | "box" }[] = [
+      { delayMs: 180, kind: "device" },
+      ...Array.from({ length: n }, (_, i) => ({
+        delayMs: 100 + i * 280,
+        kind: "box" as const,
+      })),
+    ];
+    return scheduleAppearSounds(items, scale);
+  }, [caseReveal, featuredCases.length, settings.softSoundsEnabled, settings.softSoundsVolume]);
+
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "tieng-noi") {
       setVoiceReveal(false);
@@ -829,6 +879,21 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [voiceActive, activeSection]);
 
+  // Tiếng nói: âm ô / logo
+  useEffect(() => {
+    if (!voiceReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    return scheduleAppearSounds(
+      [
+        { delayMs: 80, kind: "box" },
+        { delayMs: 220, kind: "box" },
+        { delayMs: 380, kind: "box" },
+      ],
+      scale,
+    );
+  }, [voiceReveal, settings.softSoundsEnabled, settings.softSoundsVolume]);
+
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "tu-van") {
       setConsultReveal(false);
@@ -838,6 +903,38 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [activeSection]);
 
+  // Tư vấn: âm ô ngày/giờ + input
+  useEffect(() => {
+    if (!consultReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    const daySounds = Array.from({ length: 4 }, (_, i) => ({
+      delayMs: 120 + i * 110,
+      kind: "box" as const,
+    }));
+    const slotSounds = Array.from({ length: 3 }, (_, i) => ({
+      delayMs: 120 + 4 * 110 + 50 + i * 110,
+      kind: "box" as const,
+    }));
+    const fieldSounds = Array.from({ length: 5 }, (_, i) => ({
+      delayMs: 140 + i * 110,
+      kind: "box" as const,
+    }));
+    // Ô trái (ngày/giờ) rồi ô phải (input) — lệch pha để không chồng
+    return scheduleAppearSounds(
+      [
+        ...daySounds,
+        ...slotSounds,
+        ...fieldSounds.map((item, i) => ({
+          ...item,
+          delayMs: 520 + i * 100,
+        })),
+        { delayMs: 1080, kind: "box" },
+      ],
+      scale,
+    );
+  }, [consultReveal, settings.softSoundsEnabled, settings.softSoundsVolume]);
+
   useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "kien-thuc") {
       setKnowledgeReveal(false);
@@ -846,6 +943,22 @@ export default function HomePageClient() {
     const t = window.setTimeout(() => setKnowledgeReveal(true), 60);
     return () => window.clearTimeout(t);
   }, [activeSection]);
+
+  // Kiến thức: âm ô lớn + ô nhỏ
+  useEffect(() => {
+    if (!knowledgeReveal || settings.softSoundsEnabled === false) return;
+    ensureUiAudio();
+    const scale = Math.min(1.2, Math.max(0.7, (settings.softSoundsVolume ?? 0.05) / 0.05));
+    return scheduleAppearSounds(
+      [
+        { delayMs: 180, kind: "box" },
+        { delayMs: 720, kind: "box" },
+        { delayMs: 720 + 160, kind: "box" },
+        { delayMs: 720 + 320, kind: "box" },
+      ],
+      scale,
+    );
+  }, [knowledgeReveal, settings.softSoundsEnabled, settings.softSoundsVolume]);
 
   // Mobile native: theo dõi section đang xem
   useEffect(() => {
