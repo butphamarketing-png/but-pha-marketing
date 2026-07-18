@@ -34,6 +34,10 @@ export type CaseStudyItem = {
   fanpageUrl?: string;
   thumbnail: string;
   heroImage?: string;
+  /** Logo tròn thương hiệu — dùng section tiếng nói / avatar */
+  logo?: string;
+  /** contain = logo ngang/full; cover = logo tròn cắt vừa khung */
+  logoFit?: "cover" | "contain";
   publishedAt: string;
   updatedAt?: string;
   services: CaseStudyService[];
@@ -71,10 +75,12 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     websiteUrl: "https://www.kientrucsaokhue.com/",
     fanpageUrl: "https://www.facebook.com/dichvusuachuanha.caitaonhatrongoi",
-    thumbnail: "/case-studies/sao-khue/devices-mockup.png?v=1",
-    heroImage: "/case-studies/sao-khue/devices-mockup.png?v=1",
+    thumbnail: "/case-studies/sao-khue/devices-mockup.png?v=2",
+    heroImage: "/case-studies/sao-khue/devices-mockup.png?v=2",
+    logo: "/case-studies/sao-khue/logo.png?v=2",
+    logoFit: "contain",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-17",
+    updatedAt: "2026-07-18",
     status: "in-progress",
     faq: [
       {
@@ -179,7 +185,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
-        src: "/case-studies/sao-khue/devices-mockup.png?v=1",
+        src: "/case-studies/sao-khue/devices-mockup.png?v=2",
         alt: "Mockup website Kiến Trúc Sao Khuê trên laptop",
         caption: "Website Design — kientrucsaokhue.com · cải tạo sửa chữa nhà · desktop mockup.",
       },
@@ -220,10 +226,12 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     websiteUrl: "https://www.thammythienhoangkim.com/",
     fanpageUrl: "https://www.facebook.com/chuyenkhoathammy.thienhoangkim",
-    thumbnail: "/case-studies/thien-hoang-kim/website-homepage.png",
-    heroImage: "/case-studies/thien-hoang-kim/website-homepage.png",
+    thumbnail: "/case-studies/thien-hoang-kim/devices-mockup.png?v=1",
+    heroImage: "/case-studies/thien-hoang-kim/devices-mockup.png?v=1",
+    logo: "/case-studies/thien-hoang-kim/logo.png?v=1",
+    logoFit: "cover",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-15",
+    updatedAt: "2026-07-18",
     status: "in-progress",
     faq: [
       {
@@ -320,9 +328,14 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
+        src: "/case-studies/thien-hoang-kim/devices-mockup.png?v=1",
+        alt: "Mockup website Thiên Hoàng Kim trên laptop, tablet và điện thoại",
+        caption: "thammythienhoangkim.com — Aesthetic Clinic xanh–vàng, CTA Đặt lịch ngay.",
+      },
+      {
         src: "/case-studies/thien-hoang-kim/website-homepage.png",
         alt: "Website Thiên Hoàng Kim Aesthetic Clinic — banner Nâng Tầm Nhan Sắc",
-        caption: "thammythienhoangkim.com — hero Phòng Khám Chuyên Khoa Thẩm Mỹ, CTA Đặt lịch ngay, 4 giá trị cốt lõi.",
+        caption: "Hero Phòng Khám Chuyên Khoa Thẩm Mỹ — 4 giá trị cốt lõi.",
       },
       {
         src: "/case-studies/thien-hoang-kim/facebook-page.png",
@@ -354,12 +367,14 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       "website academy làm đẹp",
       "marketing spa vũng tàu",
     ],
-    websiteUrl: "https://www.phunxamvungtau.com/",
+    websiteUrl: "https://phunxamvungtau.com/",
     fanpageUrl: "https://www.facebook.com/phuoclaicelinevungtau",
-    thumbnail: "/case-studies/phuoc-lai-luxury/website-homepage.png",
-    heroImage: "/case-studies/phuoc-lai-luxury/website-homepage.png",
+    thumbnail: "/case-studies/phuoc-lai-luxury/devices-mockup.png?v=1",
+    heroImage: "/case-studies/phuoc-lai-luxury/devices-mockup.png?v=1",
+    logo: "/case-studies/phuoc-lai-luxury/logo.png?v=1",
+    logoFit: "cover",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-15",
+    updatedAt: "2026-07-18",
     status: "in-progress",
     faq: [
       {
@@ -456,9 +471,14 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
+        src: "/case-studies/phuoc-lai-luxury/devices-mockup.png?v=1",
+        alt: "Mockup website Phước Lai Luxury trên laptop, tablet và điện thoại",
+        caption: "phunxamvungtau.com — hero luxury 3 Master, CTA Booking, Permanent Makeup & Spa & Academy.",
+      },
+      {
         src: "/case-studies/phuoc-lai-luxury/website-homepage.png",
         alt: "Website Phước Lai Luxury — Permanent Makeup Spa Academy Vũng Tàu",
-        caption: "phunxamvungtau.com — hero luxury 3 Master, CTA Booking, positioning Permanent Makeup & Spa & Academy.",
+        caption: "Hero fullscreen — Master team và CTA Đặt lịch ngay.",
       },
     ],
     testimonial:
@@ -487,10 +507,12 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     websiteUrl: "https://hethongnhakhoadangkhoa.vn/",
     fanpageUrl: "https://www.facebook.com/profile.php?id=61590506472413",
-    thumbnail: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
-    heroImage: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
+    thumbnail: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=3",
+    heroImage: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=3",
+    logo: "/case-studies/nha-khoa-dang-khoa/logo.png?v=1",
+    logoFit: "cover",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-17",
+    updatedAt: "2026-07-18",
     status: "in-progress",
     faq: [
       {
@@ -589,7 +611,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
-        src: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=2",
+        src: "/case-studies/nha-khoa-dang-khoa/devices-mockup.png?v=3",
         alt: "Mockup website Nha Khoa Đăng Khoa trên laptop, tablet và điện thoại",
         caption: "Website Design — responsive desktop · tablet · mobile · hethongnhakhoadangkhoa.vn",
       },
@@ -616,7 +638,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     slug: "halee-tram",
     clientName: "Halee Trâm",
     industry: "lam-dep",
-    industryLabel: "Nối mi, Nail & Academy",
+    industryLabel: "Dịch vụ làm đẹp",
     headline: "Website Eyelash · Nail · Academy cho thương hiệu Halee Trâm",
     summary:
       "Triển khai website haleetram.com — positioning Halee Trâm Eyelash / Nail / Academy, dịch vụ nails, nối mi, uốn mi và đào tạo nghề làm đẹp, tối ưu booking và SEO ngành beauty.",
@@ -633,11 +655,13 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       "thiết kế website spa",
       "marketing salon nail",
     ],
-    websiteUrl: "https://www.haleetram.com/",
-    thumbnail: "/case-studies/halee-tram/hero.png",
-    heroImage: "/case-studies/halee-tram/hero.png",
+    websiteUrl: "https://haleetram.com/",
+    thumbnail: "/case-studies/halee-tram/devices-mockup.png?v=1",
+    heroImage: "/case-studies/halee-tram/devices-mockup.png?v=1",
+    logo: "/case-studies/halee-tram/logo.png?v=1",
+    logoFit: "cover",
     publishedAt: "2026-07-07",
-    updatedAt: "2026-07-15",
+    updatedAt: "2026-07-18",
     status: "in-progress",
     faq: [
       {
@@ -733,9 +757,14 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
+        src: "/case-studies/halee-tram/devices-mockup.png?v=1",
+        alt: "Mockup website Halee Trâm trên laptop, tablet và điện thoại",
+        caption: "haleetram.com — Eyelash / Nail / Academy, CTA Đặt lịch ngay.",
+      },
+      {
         src: "/case-studies/halee-tram/hero.png",
         alt: "Thiết kế website Halee Trâm — Eyelash Nail Academy",
-        caption: "haleetram.com — Halee Trâm Eyelash / Nail / Academy, nails · nối mi · uốn mi · đào tạo.",
+        caption: "Hero Halee Trâm — nails · nối mi · uốn mi · đào tạo.",
       },
       {
         src: "/case-studies/halee-tram/gallery-2.png",
@@ -1182,15 +1211,25 @@ export function getAllCaseStudies(): CaseStudyItem[] {
   );
 }
 
-/** Homepage cinematic — ưu tiên case có ảnh website/mockup (không dùng GSC) */
+/** Có mockup thiết bị thật trong /case-studies/ — dùng homepage “Dự án tiêu biểu” */
+export function caseStudyHasShowcaseImage(c: CaseStudyItem): boolean {
+  const src = `${c.heroImage || ""}|${c.thumbnail || ""}|${(c.gallery || []).map((g) => g.src).join("|")}`;
+  return src.includes("/case-studies/") && src.includes("devices-mockup");
+}
+
+/** Homepage — chỉ case đã có hình mockup */
 export const FEATURED_CASE_STUDY_SLUGS = [
+  "halee-tram",
   "nha-khoa-dang-khoa",
+  "kien-truc-sao-khue",
   "tham-my-thien-hoang-kim",
   "phuoc-lai-luxury",
 ] as const;
 
 export function getFeaturedCaseStudies(): CaseStudyItem[] {
-  return FEATURED_CASE_STUDY_SLUGS.map((slug) => getCaseStudyBySlug(slug)).filter(
-    (c): c is CaseStudyItem => Boolean(c),
+  const preferred = FEATURED_CASE_STUDY_SLUGS.map((slug) => getCaseStudyBySlug(slug)).filter(
+    (c): c is CaseStudyItem => Boolean(c) && caseStudyHasShowcaseImage(c),
   );
+  if (preferred.length) return preferred;
+  return getAllCaseStudies().filter(caseStudyHasShowcaseImage);
 }

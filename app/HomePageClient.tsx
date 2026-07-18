@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { motion, MotionConfig } from "framer-motion";
 import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
-import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/case-studies";
+import { getCaseStudyBySlug, getFeaturedCaseStudies } from "@/lib/case-studies";
 import { CORP_HERO_SLIDES, sanitizeSlideshowItems } from "@/lib/media-assets";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type NewsItem } from "@/lib/useData";
@@ -50,6 +50,13 @@ const VOICE_ENTRIES = [
     after: "Khi hiện diện đúng chỗ khách đang search, view mới thành cuộc gọi.",
   },
   {
+    slug: "phuoc-lai-luxury",
+    mark: "PL",
+    wordmark: "Phước Lai",
+    before: "Khách thấy spa đẹp trên Facebook nhưng chưa tin Master đủ để book.",
+    after: "Họ vào web xem portfolio 3 Master rồi đặt lịch — khỏi phải hỏi lại inbox.",
+  },
+  {
     slug: "tham-my-thien-hoang-kim",
     mark: "THK",
     wordmark: "Thiên Hoàng Kim",
@@ -57,18 +64,11 @@ const VOICE_ENTRIES = [
     after: "Website và fanpage thành điểm chạm đầu tiên trước khi họ gọi hotline.",
   },
   {
-    slug: "van-toc-express-logistics",
-    mark: "VT",
-    wordmark: "Vận Tốc",
-    before: "Khách B2B không tin brochure — hỏi giá rồi biến mất.",
-    after: "Họ tin form báo giá nhanh và tra được vận đơn trước khi giao hàng.",
-  },
-  {
-    slug: "glow-dew-cosmetics",
-    mark: "GD",
-    wordmark: "Glow Dew",
-    before: "Khách không mua vì banner đẹp — còn đoán mò thành phần.",
-    after: "Họ mua khi đọc được INCI và review rõ — hết phải đoán.",
+    slug: "halee-tram",
+    mark: "HT",
+    wordmark: "Halee Trâm",
+    before: "Khách xem ảnh nail trên Facebook rồi vẫn hỏi giá inbox cả buổi.",
+    after: "Họ vào web xem bảng giá, khóa học rồi đặt lịch — khỏi chờ reply.",
   },
   {
     slug: "an-gia-home",
@@ -325,29 +325,31 @@ export default function HomePageClient() {
   const [consultLoading, setConsultLoading] = useState(false);
   const [consultDone, setConsultDone] = useState(false);
   const [consultSummary, setConsultSummary] = useState("");
-  /** Section đã vào viewport — giữ nội dung hiện sau khi cuộn qua */
-  const [revealedSections, setRevealedSections] = useState<Set<number>>(() => new Set([0]));
+  const [nativeScroll, setNativeScroll] = useState(false);
   const consultDays = useMemo(() => getConsultDayOptions(4), []);
+  const snapRef = useRef<HTMLDivElement>(null);
   const projectListRef = useRef<HTMLUListElement>(null);
   const caseScrollLock = useRef(false);
+  const locking = useRef(false);
   const activeSectionRef = useRef(0);
+  const nativeScrollRef = useRef(false);
+  const unlockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchFromHScroll = useRef(false);
   const { settings } = useAdmin();
 
   const sectionClass = useCallback(
     (index: number, extra = "") => {
-      const on = activeSection === index || revealedSections.has(index);
-      const revealed = revealedSections.has(index);
+      const isActive = activeSection === index;
       return [
         "corp-snap-section",
         extra,
-        on ? "corp-snap-in" : "",
-        revealed ? "corp-revealed" : "corp-await",
-        activeSection === index ? "corp-section-active" : "",
+        isActive ? "corp-snap-in corp-section-active" : "",
       ]
         .filter(Boolean)
         .join(" ");
     },
-    [activeSection, revealedSections],
+    [activeSection],
   );
 
   const brandName = settings?.title || "Bứt Phá Marketing";
@@ -368,20 +370,26 @@ export default function HomePageClient() {
     return fromCms.length ? fromCms : [...CORP_HERO_SLIDES];
   }, [settings?.media?.home?.slideshow]);
 
-  const featuredCases = useMemo(() => getAllCaseStudies(), []);
+  const featuredCases = useMemo(() => getFeaturedCaseStudies(), []);
   const voiceCases = useMemo(() => {
     return VOICE_ENTRIES.map((entry) => {
       const study = getCaseStudyBySlug(entry.slug);
+      const logoCandidates = [study?.logo, study?.thumbnail, study?.heroImage].filter(Boolean) as string[];
       const logo =
-        ([study?.thumbnail, study?.heroImage].filter(Boolean) as string[]).find(
-          (src) => !src.includes("gsc-performance"),
-        ) || CORP_HERO_SLIDES[0];
+        logoCandidates.find((src) => /\/logo\.(png|jpe?g|webp)/i.test(src)) ||
+        logoCandidates.find((src) => !src.includes("gsc-performance")) ||
+        CORP_HERO_SLIDES[0];
+      const hasBrandLogo = Boolean(study?.logo) || /\/logo\.(png|jpe?g|webp)/i.test(logo);
+      const logoFit = study?.logoFit ?? (hasBrandLogo ? "contain" : "cover");
       return {
         ...entry,
         clientName: (study?.clientName || entry.mark).replace(/^Hệ Thống\s+/i, ""),
         industryLabel: study?.industryLabel || "",
         logo,
+        hasBrandLogo,
+        logoFit,
         href: study ? `/du-an/${study.slug}` : "/du-an",
+        websiteUrl: study?.websiteUrl,
       };
     });
   }, []);
@@ -400,7 +408,12 @@ export default function HomePageClient() {
   const activeCase = featuredCases[caseActive] ?? featuredCases[0];
   const caseShowcaseSrc = (c: (typeof featuredCases)[number]) => {
     const candidates = [c.heroImage, c.thumbnail, ...(c.gallery?.map((g) => g.src) ?? [])].filter(Boolean) as string[];
-    return candidates.find((src) => !src.includes("gsc-performance")) || candidates[0] || CORP_HERO_SLIDES[0];
+    return (
+      candidates.find((src) => src.includes("devices-mockup")) ||
+      candidates.find((src) => !src.includes("gsc-performance")) ||
+      candidates[0] ||
+      CORP_HERO_SLIDES[0]
+    );
   };
   const headerLight = SECTIONS[activeSection]?.tone === "light";
   const headerText = headerLight ? "text-slate-900" : "text-white";
@@ -436,6 +449,18 @@ export default function HomePageClient() {
   }, [siteReady]);
 
   useEffect(() => {
+    // Full-section snap mọi thiết bị — kiểu Vinh Phát
+    nativeScrollRef.current = false;
+    setNativeScroll(false);
+    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("corp-home-snap-active");
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.classList.remove("corp-home-snap-active");
+    };
+  }, []);
+
+  useEffect(() => {
     // Ẩn widget chat bên thứ 3 (FB/AI…) trên trang chủ corp — giữ Zalo pill của site
     const style = document.createElement("style");
     style.setAttribute("data-corp-home-hide-widgets", "1");
@@ -451,12 +476,13 @@ export default function HomePageClient() {
     `;
     document.head.appendChild(style);
     const html = document.documentElement;
-    html.classList.add("corp-home-smooth");
+    if (nativeScroll) html.classList.add("corp-home-smooth");
+    else html.classList.remove("corp-home-smooth");
     return () => {
       style.remove();
       html.classList.remove("corp-home-smooth");
     };
-  }, []);
+  }, [nativeScroll]);
 
   useEffect(() => {
     void db.news.getAll().then((newsResult) => {
@@ -493,17 +519,23 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [aboutReveal]);
 
-  // Lĩnh vực: xoay thẻ active khi đang ở section (dừng khi hover)
+  // Lĩnh vực: xoay thẻ sau khi animation vào xong (dừng khi hover)
   useEffect(() => {
     if (activeSection !== 2) {
       setLinhPaused(false);
       return;
     }
     if (linhPaused) return;
-    const t = window.setInterval(() => {
-      setLinhActive((i) => (i + 1) % LINH_VUC.length);
-    }, 3400);
-    return () => window.clearInterval(t);
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    const startT = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        setLinhActive((i) => (i + 1) % LINH_VUC.length);
+      }, 3400);
+    }, 1400);
+    return () => {
+      window.clearTimeout(startT);
+      if (intervalId) window.clearInterval(intervalId);
+    };
   }, [activeSection, linhPaused]);
 
   // Dự án: tắt auto-rotate — đổi ảnh theo cuộn/click list
@@ -541,11 +573,28 @@ export default function HomePageClient() {
 
   const goToSection = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(SECTIONS.length - 1, index));
-    const id = SECTIONS[clamped]?.id;
-    const target = id ? document.getElementById(id) : null;
+
+    if (nativeScrollRef.current) {
+      const id = SECTIONS[clamped]?.id;
+      const target = id ? document.getElementById(id) : null;
+      activeSectionRef.current = clamped;
+      setActiveSection(clamped);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    if (locking.current) return;
+    if (clamped === activeSectionRef.current) return;
+
+    locking.current = true;
     activeSectionRef.current = clamped;
     setActiveSection(clamped);
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
+    unlockTimerRef.current = setTimeout(() => {
+      locking.current = false;
+      unlockTimerRef.current = null;
+    }, 720);
   }, []);
 
   const consultSectionIndex = SECTIONS.findIndex((s) => s.id === "tu-van");
@@ -626,18 +675,6 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    const t = window.setTimeout(() => {
-      setRevealedSections((prev) => {
-        if (prev.has(activeSection)) return prev;
-        const next = new Set(prev);
-        next.add(activeSection);
-        return next;
-      });
-    }, 1100);
-    return () => clearTimeout(t);
-  }, [activeSection]);
-
-  useEffect(() => {
     if (SECTIONS[activeSection]?.id !== "du-an") {
       setCaseTaglineReveal(false);
       return;
@@ -663,8 +700,10 @@ export default function HomePageClient() {
     return () => window.clearTimeout(t);
   }, [voiceActive, activeSection]);
 
-  // Theo dõi section đang xem — cập nhật header / hiệu ứng
+  // Mobile native: theo dõi section đang xem
   useEffect(() => {
+    if (!nativeScroll) return;
+
     const nodes = SECTIONS.map((s) => document.getElementById(s.id)).filter(
       (n): n is HTMLElement => Boolean(n),
     );
@@ -695,9 +734,95 @@ export default function HomePageClient() {
 
     nodes.forEach((n) => io.observe(n));
     return () => io.disconnect();
-  }, []);
+  }, [nativeScroll]);
+
+  // Desktop/tablet: wheel / touch → đổi full section (kiểu Vinh Phát)
+  useEffect(() => {
+    if (nativeScroll) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (menuOpen) return;
+      const t = e.target as HTMLElement | null;
+      const pane = t?.closest?.("[data-project-scroll]") as HTMLElement | null;
+      if (pane) {
+        const { scrollTop, scrollHeight, clientHeight } = pane;
+        const canUp = scrollTop > 0;
+        const canDown = scrollTop + clientHeight < scrollHeight - 1;
+        if ((e.deltaY < 0 && canUp) || (e.deltaY > 0 && canDown)) {
+          return;
+        }
+      }
+      e.preventDefault();
+      if (locking.current) return;
+      if (Math.abs(e.deltaY) < 10) return;
+      goToSection(activeSectionRef.current + (e.deltaY > 0 ? 1 : -1));
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0]?.clientY ?? null;
+      const t = e.target as HTMLElement | null;
+      touchFromHScroll.current = Boolean(
+        t?.closest?.("[data-h-scroll], [data-project-scroll]"),
+      );
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchFromHScroll.current) return;
+      e.preventDefault();
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (menuOpen || locking.current) return;
+      const start = touchStartY.current;
+      const fromHScroll = touchFromHScroll.current;
+      touchStartY.current = null;
+      touchFromHScroll.current = false;
+      if (start == null || fromHScroll) return;
+      const end = e.changedTouches[0]?.clientY;
+      if (end == null) return;
+      const dy = start - end;
+      if (Math.abs(dy) < 40) return;
+      goToSection(activeSectionRef.current + (dy > 0 ? 1 : -1));
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (menuOpen || locking.current) return;
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (["ArrowDown", "PageDown", " "].includes(e.key)) {
+        e.preventDefault();
+        goToSection(activeSectionRef.current + 1);
+      } else if (["ArrowUp", "PageUp"].includes(e.key)) {
+        e.preventDefault();
+        goToSection(activeSectionRef.current - 1);
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        goToSection(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        goToSection(SECTIONS.length - 1);
+      }
+    };
+
+    // Gắn trên window để không miss wheel khi hover chrome/header
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKeyDown);
+      if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
+    };
+  }, [goToSection, menuOpen, nativeScroll]);
 
   useEffect(() => {
+    if (!nativeScroll) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (menuOpen) return;
       const tag = (e.target as HTMLElement | null)?.tagName;
@@ -718,7 +843,7 @@ export default function HomePageClient() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goToSection, menuOpen]);
+  }, [goToSection, menuOpen, nativeScroll]);
 
   useEffect(() => {
     const onGoSection = (e: Event) => {
@@ -744,11 +869,17 @@ export default function HomePageClient() {
       )}
 
       <div
-        className="corp-home corp-home--native-scroll z-[1] bg-slate-950 text-white transition-opacity duration-500"
+        className={`corp-home z-[1] bg-slate-950 text-white transition-opacity duration-500 ${
+          nativeScroll ? "corp-home--native-scroll" : "corp-home--snap fixed inset-0"
+        }`}
         style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
       >
         {/* Fixed chrome */}
-        <header className="pointer-events-none fixed inset-x-0 top-0 z-40">
+        <header
+          className={`pointer-events-none inset-x-0 top-0 z-40 ${
+            nativeScroll ? "fixed" : "absolute"
+          }`}
+        >
           <div className="pointer-events-auto mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-4 sm:gap-3 sm:px-6 lg:px-8">
             <button
               type="button"
@@ -836,13 +967,23 @@ export default function HomePageClient() {
           ))}
         </nav>
 
-        {/* Sections — cuộn document tự nhiên (mọi thiết bị) */}
-        <div className="corp-snap corp-snap--native">
-          <div className="corp-snap-track">
+        {/* Desktop: snap full-section. Mobile: cuộn native */}
+        <div
+          ref={snapRef}
+          className={`corp-snap ${nativeScroll ? "corp-snap--native" : "h-full overflow-hidden"}`}
+        >
+          <div
+            className={`corp-snap-track ${nativeScroll ? "" : "will-change-transform"}`}
+            style={
+              nativeScroll
+                ? undefined
+                : { transform: `translate3d(0, ${-activeSection * 100}%, 0)` }
+            }
+          >
           {/* 1 — Hero */}
           <section
             id="but-pha"
-            className="corp-snap-section relative flex flex-col items-center justify-center overflow-hidden"
+            className={sectionClass(0, "relative flex flex-col items-center justify-center overflow-hidden")}
           >
             {heroSlides.map((src, i) => {
               const active = i === heroIndex;
@@ -1134,9 +1275,17 @@ export default function HomePageClient() {
                 >
                   Lĩnh vực hoạt động
                 </h2>
-                <p className="mx-auto mt-2 max-w-md text-[12px] font-light leading-relaxed text-white/70 sm:mt-3 sm:text-[14px] lg:mx-0 lg:text-[15px]">
-                  Ba mũi nhọn giúp doanh nghiệp hiện diện đúng nơi khách đang quyết định
-                </p>
+                <MotionConfig reducedMotion="never">
+                  <HeroRevealText
+                    as="p"
+                    text="Ba mũi nhọn giúp doanh nghiệp hiện diện đúng nơi khách đang quyết định"
+                    play={activeSection === 2}
+                    startDelayMs={280}
+                    stepMs={24}
+                    className="mx-auto mt-2 max-w-md text-[12px] font-light leading-relaxed text-white/70 sm:mt-3 sm:text-[14px] lg:mx-0 lg:text-[15px]"
+                    style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
+                  />
+                </MotionConfig>
                 <div className="mx-auto mt-5 hidden flex-wrap items-center justify-center gap-2 lg:mx-0 lg:justify-start xl:flex">
                   {[
                     { label: "Website", href: "/website" },
@@ -1174,6 +1323,8 @@ export default function HomePageClient() {
                     {LINH_VUC.map((item, i) => {
                       const d = linhVucCardOffset(i, linhActive);
                       const isActive = d === 0;
+                      // Hiện từ dưới lên: giữa → trái → phải
+                      const enterStep = d === 0 ? 1 : d === -1 ? 3 : 5;
                       return (
                         <div
                           key={item.num}
@@ -1193,7 +1344,7 @@ export default function HomePageClient() {
                               : `0 8px 24px rgba(0,0,0,0.3), 0 0 20px ${item.glowSoft}, 0 0 40px ${item.glowSoft}`,
                           }}
                         >
-                          <div {...riseProps(2 + i * 2, "h-full w-full")}>
+                          <div {...riseProps(enterStep, "corp-rise--linh h-full w-full")}>
                             <button
                               type="button"
                               onClick={() => {
@@ -1299,19 +1450,23 @@ export default function HomePageClient() {
                 Dự án tiêu biểu
               </h2>
 
-              <div className="mt-4 grid min-h-0 w-full shrink-0 grid-cols-[minmax(0,0.95fr)_minmax(0,1.2fr)] items-stretch gap-2.5 sm:mt-5 sm:grid-cols-[minmax(180px,0.85fr)_minmax(0,1.35fr)] sm:gap-5 md:gap-7 lg:gap-10">
+              <div className="mt-4 grid min-h-0 w-full shrink-0 grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] items-center gap-3 sm:mt-5 sm:grid-cols-[minmax(200px,0.8fr)_minmax(0,1.45fr)] sm:gap-6 md:gap-8 lg:gap-10">
                 {/* Trái — list hiện lần lượt */}
-                <div className="relative z-20 flex min-h-0 min-w-0 flex-col">
+                <div className="relative z-20 flex min-h-0 min-w-0 flex-col self-stretch">
                   <ul
                     ref={projectListRef}
                     data-project-scroll
                     onScroll={onProjectListScroll}
-                    className="corp-project-scroll corp-project-scroll--left-bar h-[min(42vh,17rem)] space-y-0 overflow-y-scroll overscroll-contain pl-2 sm:h-[min(52vh,21.5rem)] sm:space-y-0.5 sm:pl-3 md:h-[min(55vh,22.5rem)]"
+                    className="corp-project-scroll corp-project-scroll--left-bar h-[min(42vh,17rem)] space-y-0 overflow-y-scroll overscroll-contain pl-2 sm:h-[min(52vh,22rem)] sm:space-y-0.5 sm:pl-3 md:h-[min(56vh,24rem)]"
                   >
                     {featuredCases.map((c, i) => {
                       const on = i === caseActive;
                       return (
-                        <li key={c.slug} data-case-index={i} {...riseProps(1 + Math.min(i, 9), "corp-rise--slow")}>
+                        <li
+                          key={c.slug}
+                          data-case-index={i}
+                          {...riseProps(1 + i * 2, "corp-rise--project")}
+                        >
                           <button
                             type="button"
                             onClick={() => selectCase(i, true)}
@@ -1349,12 +1504,12 @@ export default function HomePageClient() {
                   </ul>
                 </div>
 
-                {/* Phải — ảnh + Xem website, căn giữa theo chiều cao list */}
-                <div className="relative z-10 flex h-full min-h-0 min-w-0 flex-col items-center justify-center gap-2 pt-3 sm:gap-2.5 sm:pt-4">
+                {/* Phải — khung mockup 3:2 khớp ảnh thiết kế */}
+                <div className="relative z-10 flex min-h-0 min-w-0 flex-col items-center justify-center gap-2.5 sm:gap-3">
                   <div
                     {...fromRightProps(
-                      6,
-                      "relative h-[min(28vh,168px)] w-full overflow-hidden rounded-lg bg-[#120e18] ring-1 ring-white/12 sm:h-[min(34vh,240px)] sm:rounded-xl md:h-[min(38vh,300px)] lg:h-[min(40vh,320px)]"
+                      3,
+                      "corp-project-frame relative w-full overflow-hidden rounded-2xl bg-[#0b0f18] ring-1 ring-white/12 sm:rounded-[1.35rem] lg:rounded-[1.5rem]"
                     )}
                   >
                     {featuredCases.map((c, i) => {
@@ -1370,7 +1525,7 @@ export default function HomePageClient() {
                           <img
                             src={caseShowcaseSrc(c)}
                             alt={c.clientName}
-                            className="h-full w-full object-cover object-top"
+                            className="h-full w-full object-cover object-center"
                           />
                         </div>
                       );
@@ -1380,8 +1535,8 @@ export default function HomePageClient() {
                   {activeCase ? (
                     <a
                       {...riseProps(
-                        8,
-                        "corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+                        4 + featuredCases.length * 2,
+                        "corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:rounded-lg sm:px-5 sm:py-2.5 sm:text-sm sm:normal-case sm:tracking-normal"
                       )}
                       href={activeCase.websiteUrl || `/du-an/${activeCase.slug}`}
                       target={activeCase.websiteUrl ? "_blank" : undefined}
@@ -1796,21 +1951,35 @@ export default function HomePageClient() {
                       />
 
                       <div className="relative my-5 sm:my-6">
-                        <span className="pointer-events-none absolute -inset-3 rounded-full bg-violet-500/20 blur-xl" aria-hidden />
-                        <div className="relative h-20 w-20 overflow-hidden rounded-full bg-[#12151f] ring-2 ring-violet-400/50 shadow-[0_12px_40px_rgba(76,29,149,0.45)] sm:h-24 sm:w-24">
+                        <span className="pointer-events-none absolute -inset-3 rounded-full bg-amber-400/15 blur-xl" aria-hidden />
+                        <div
+                          className={`relative h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24 ${
+                            activeVoice.hasBrandLogo
+                              ? activeVoice.logoFit === "contain"
+                                ? "bg-white shadow-[0_12px_40px_rgba(255,255,255,0.18)] ring-2 ring-white/70"
+                                : "bg-[#1a1510] shadow-[0_12px_40px_rgba(212,175,55,0.35)] ring-2 ring-amber-300/55"
+                              : "bg-[#12151f] shadow-[0_12px_40px_rgba(76,29,149,0.45)] ring-2 ring-violet-400/50"
+                          }`}
+                        >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={activeVoice.logo}
                             alt={activeVoice.clientName}
-                            className="h-full w-full object-cover"
+                            className={`h-full w-full ${
+                              activeVoice.logoFit === "contain" ? "object-contain p-1.5" : "object-cover"
+                            }`}
                           />
-                          <span className="absolute inset-0 bg-gradient-to-t from-[#06080f]/50 to-transparent" />
-                          <span
-                            className="absolute inset-0 flex items-center justify-center bg-[#0a0d16]/35 text-[15px] font-semibold tracking-[0.12em] text-white sm:text-[17px]"
-                            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                          >
-                            {activeVoice.mark}
-                          </span>
+                          {!activeVoice.hasBrandLogo ? (
+                            <>
+                              <span className="absolute inset-0 bg-gradient-to-t from-[#06080f]/50 to-transparent" />
+                              <span
+                                className="absolute inset-0 flex items-center justify-center bg-[#0a0d16]/35 text-[15px] font-semibold tracking-[0.12em] text-white sm:text-[17px]"
+                                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                              >
+                                {activeVoice.mark}
+                              </span>
+                            </>
+                          ) : null}
                         </div>
                       </div>
 
@@ -1863,25 +2032,43 @@ export default function HomePageClient() {
                           title={v.clientName}
                           className={`group relative h-12 w-12 overflow-hidden rounded-full transition duration-300 sm:h-14 sm:w-14 ${
                             on
-                              ? "scale-110 ring-2 ring-violet-400 shadow-[0_0_24px_rgba(139,92,246,0.45)]"
-                              : "ring-1 ring-white/15 opacity-70 hover:opacity-100 hover:ring-violet-300/40"
+                              ? v.hasBrandLogo
+                                ? v.logoFit === "contain"
+                                  ? "scale-110 bg-white ring-2 ring-white/80 shadow-[0_0_24px_rgba(255,255,255,0.25)]"
+                                  : "scale-110 bg-[#1a1510] ring-2 ring-amber-300/70 shadow-[0_0_24px_rgba(251,191,36,0.35)]"
+                                : "scale-110 ring-2 ring-violet-400 shadow-[0_0_24px_rgba(139,92,246,0.45)]"
+                              : v.hasBrandLogo
+                                ? v.logoFit === "contain"
+                                  ? "bg-white ring-1 ring-white/40 opacity-85 hover:opacity-100"
+                                  : "bg-[#1a1510] ring-1 ring-amber-200/30 opacity-85 hover:opacity-100"
+                                : "ring-1 ring-white/15 opacity-70 hover:opacity-100 hover:ring-violet-300/40"
                           }`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={v.logo}
                             alt=""
-                            className="h-full w-full object-cover saturate-[0.75] transition group-hover:saturate-100"
-                          />
-                          <span className="absolute inset-0 bg-[#0a0d16]/40" />
-                          <span
-                            className={`absolute inset-0 flex items-center justify-center text-[10px] font-semibold tracking-wider sm:text-[11px] ${
-                              on ? "text-white" : "text-white/80"
+                            className={`h-full w-full transition ${
+                              v.hasBrandLogo
+                                ? v.logoFit === "contain"
+                                  ? "object-contain p-1"
+                                  : "object-cover"
+                                : "object-cover saturate-[0.75] group-hover:saturate-100"
                             }`}
-                            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                          >
-                            {v.mark}
-                          </span>
+                          />
+                          {!v.hasBrandLogo ? (
+                            <>
+                              <span className="absolute inset-0 bg-[#0a0d16]/40" />
+                              <span
+                                className={`absolute inset-0 flex items-center justify-center text-[10px] font-semibold tracking-wider sm:text-[11px] ${
+                                  on ? "text-white" : "text-white/80"
+                                }`}
+                                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                              >
+                                {v.mark}
+                              </span>
+                            </>
+                          ) : null}
                         </button>
                       </li>
                     );
