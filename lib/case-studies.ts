@@ -1227,9 +1227,9 @@ export const FEATURED_CASE_STUDY_SLUGS = [
 ] as const;
 
 export function getFeaturedCaseStudies(): CaseStudyItem[] {
-  const preferred = FEATURED_CASE_STUDY_SLUGS.map((slug) => getCaseStudyBySlug(slug)).filter(
-    (c): c is CaseStudyItem => Boolean(c) && caseStudyHasShowcaseImage(c),
-  );
+  const preferred = FEATURED_CASE_STUDY_SLUGS.map((slug) => getCaseStudyBySlug(slug))
+    .filter((c): c is CaseStudyItem => Boolean(c))
+    .filter(caseStudyHasShowcaseImage);
   if (preferred.length) return preferred;
   return getAllCaseStudies().filter(caseStudyHasShowcaseImage);
 }
