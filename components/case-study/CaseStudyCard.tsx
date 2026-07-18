@@ -52,15 +52,27 @@ export function CaseStudyCard({ study }: { study: CaseStudyItem }) {
             Xem chi tiết
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <a
-            href={study.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-700 hover:text-indigo-900"
-          >
-            <Globe className="h-4 w-4" />
-            Website KH
-          </a>
+          {study.websiteUrl && (
+            <a
+              href={study.websiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-700 hover:text-indigo-900"
+            >
+              <Globe className="h-4 w-4" />
+              Website KH
+            </a>
+          )}
+          {study.fanpageUrl && !study.websiteUrl && (
+            <a
+              href={study.fanpageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              Fanpage
+            </a>
+          )}
         </div>
       </div>
     </article>

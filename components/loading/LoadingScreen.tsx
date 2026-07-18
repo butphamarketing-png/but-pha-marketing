@@ -25,6 +25,8 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
 
   useEffect(() => {
     setActive(true);
+    // Unlock audio sớm trong loading
+    void import("@/lib/type-click-sound").then((m) => m.ensureTypeClickAudio());
   }, []);
 
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);

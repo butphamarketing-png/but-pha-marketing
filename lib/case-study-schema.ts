@@ -31,7 +31,9 @@ export function buildCaseStudyJsonLd({ study, canonical, baseUrl }: BuildCaseStu
       about: {
         "@type": "Organization",
         name: study.clientName,
-        url: study.websiteUrl,
+        ...(study.websiteUrl || study.fanpageUrl
+          ? { url: study.websiteUrl || study.fanpageUrl }
+          : {}),
       },
     },
     {

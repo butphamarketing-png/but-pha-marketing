@@ -30,7 +30,7 @@ export type CaseStudyItem = {
   metaDescription: string;
   keywordsMain: string;
   keywordsSecondary: string[];
-  websiteUrl: string;
+  websiteUrl?: string;
   fanpageUrl?: string;
   thumbnail: string;
   heroImage?: string;
@@ -110,8 +110,9 @@ export const CASE_STUDIES: CaseStudyItem[] = [
         description: "Tối ưu on-page, cấu trúc silo theo quận/tỉnh, schema LocalBusiness & FAQ.",
       },
       {
-        name: "Facebook Marketing",
-        description: "Xây fanpage chuyên sửa chữa cải tạo nhà, content Reels/video, nuôi nhận diện.",
+        name: "Chăm sóc Facebook",
+        description:
+          "Setup & chăm sóc fanpage dichvusuachuanha.caitaonhatrongoi — cover, bio, content Reels/video, nuôi nhận diện cải tạo sửa chữa nhà trọn gói TP.HCM.",
       },
     ],
     challenge: [
@@ -185,6 +186,12 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     gallery: [
       {
+        src: "/case-studies/sao-khue/facebook-page.png?v=1",
+        alt: "Chăm sóc Facebook Kiến Trúc Sao Khuê — mockup laptop & điện thoại",
+        caption:
+          "Chăm sóc Fanpage Facebook — dichvusuachuanha.caitaonhatrongoi · cải tạo sửa chữa nhà trọn gói TP.HCM · desktop + mobile.",
+      },
+      {
         src: "/case-studies/sao-khue/devices-mockup.png?v=2",
         alt: "Mockup website Kiến Trúc Sao Khuê trên laptop",
         caption: "Website Design — kientrucsaokhue.com · cải tạo sửa chữa nhà · desktop mockup.",
@@ -202,6 +209,230 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     ],
     testimonial:
       "Dự án đang trong giai đoạn tăng trưởng — website đã index và bắt đầu có impression, fanpage Facebook tạo lượng view lớn. Tiếp theo tối ưu CTR và landing theo từng khu vực.",
+  },
+  {
+    slug: "thang-may-thien-an",
+    clientName: "Thang Máy Thiên Ân",
+    industry: "thang-may",
+    industryLabel: "Thang máy & thiết bị nâng",
+    headline: "Chăm sóc Fanpage Thang Máy FUJI Chính Hãng — Thiên Ân",
+    summary:
+      "Setup & chăm sóc fanpage Facebook Thang Máy FUJI Chính Hãng (#ThangMayThienAn) — avatar, cover, bio và positioning Cung cấp · Lắp đặt · Bảo trì thang máy chính hãng Nhật Bản tại TP.HCM.",
+    answerFirst:
+      "Case study Thang Máy Thiên Ân: Bứt Phá Marketing chăm sóc fanpage Facebook Thang Máy FUJI Chính Hãng — thiết kế avatar FUJI JAPAN, cover “An toàn tuyệt đối · Vận hành êm ái · Bền bỉ với thời gian”, bio dịch vụ cung cấp–lắp đặt–bảo trì và hashtag #ThangMayThienAn để nuôi nhận diện thương hiệu thang máy chính hãng.",
+    metaTitle: "Case Study Chăm Sóc Fanpage Thang Máy Thiên Ân | FUJI",
+    metaDescription:
+      "Case study chăm sóc fanpage Thang Máy Thiên Ân (FUJI Chính Hãng): setup avatar, cover, bio lắp đặt & bảo trì thang máy. Bứt Phá Marketing.",
+    keywordsMain: "chăm sóc fanpage thang máy",
+    keywordsSecondary: [
+      "fanpage thang máy",
+      "marketing thang máy",
+      "facebook thang máy fuji",
+      "thang máy chính hãng",
+      "lắp đặt thang máy",
+    ],
+    fanpageUrl: "https://www.facebook.com/profile.php?id=61589298710385",
+    thumbnail: "/case-studies/thang-may-thien-an/devices-mockup.png?v=1",
+    heroImage: "/case-studies/thang-may-thien-an/devices-mockup.png?v=1",
+    logo: "/case-studies/thang-may-thien-an/logo.png?v=1",
+    logoFit: "cover",
+    publishedAt: "2026-07-18",
+    updatedAt: "2026-07-18",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Chăm sóc fanpage Thang Máy Thiên Ân gồm những gì?",
+        a: "Setup nhận diện fanpage Thang Máy FUJI Chính Hãng: avatar logo FUJI JAPAN, cover desktop/mobile, bio Cung cấp – Lắp đặt – Bảo trì, hashtag #ThangMayThienAn và khung content nuôi nhận diện.",
+      },
+      {
+        q: "Fanpage Thang Máy Thiên Ân định vị thế nào?",
+        a: "Thang máy FUJI chính hãng — an toàn tuyệt đối, vận hành êm ái, bền bỉ với thời gian; nhấn công nghệ Nhật Bản, thiết kế tinh tế và trải nghiệm đẳng cấp.",
+      },
+      {
+        q: "Bứt Phá có làm fanpage thang máy tương tự không?",
+        a: "Có. Bứt Phá setup & chăm sóc fanpage ngành thang máy, xây dựng, thiết bị — cover, bio, content Reels/video và đồng bộ thương hiệu. Liên hệ /lien-he hoặc /facebook/cham-soc-fanpage.",
+      },
+    ],
+    services: [
+      {
+        name: "Chăm sóc Fanpage",
+        description:
+          "Setup avatar, cover, bio và khung nội dung fanpage Thang Máy FUJI Chính Hãng (#ThangMayThienAn).",
+      },
+      {
+        name: "Thiết kế nhận diện Facebook",
+        description: "Logo avatar FUJI JAPAN + cover laptop/mobile đồng bộ slogan an toàn · êm ái · bền bỉ.",
+      },
+      {
+        name: "Content nuôi trang",
+        description: "Định hướng content lắp đặt, bảo trì, thang máy gia đình và hashtag ngành để tăng reach.",
+      },
+    ],
+    challenge: [
+      "Thương hiệu thang máy cần phân biệt “chính hãng” với thị trường nhái / lắp ráp kém uy tín.",
+      "Khách tìm kiếm theo intent: lắp đặt thang máy, thang máy gia đình, bảo trì thang máy — cần fanpage rõ dịch vụ.",
+      "Fanpage mới cần avatar–cover–bio chuyên nghiệp ngay từ đầu để tăng trust trước khi chạy ads/content.",
+    ],
+    solution: [
+      "Thiết kế avatar tròn FUJI JAPAN — Thang máy chính hãng kèm hình cabin thang máy.",
+      "Cover đồng bộ: THANG MÁY FUJI CHÍNH HÃNG + slogan An toàn tuyệt đối · Vận hành êm ái · Bền bỉ với thời gian.",
+      "Bio: Cung cấp – Lắp đặt – Bảo trì Thang Máy + hashtag #ThangMayThienAn #ThangMayGiaDinh #LapDatThangMay.",
+      "Mockup desktop + mobile để kiểm soát trải nghiệm fanpage trên mọi thiết bị.",
+    ],
+    results: [
+      { label: "Fanpage", value: "Live", note: "Thang Máy FUJI Chính Hãng", trend: "up" },
+      { label: "Avatar & cover", value: "Done", note: "Đồng bộ brand FUJI JAPAN", trend: "up" },
+      { label: "Bio dịch vụ", value: "3 trụ", note: "Cung cấp · Lắp đặt · Bảo trì", trend: "up" },
+      { label: "Hashtag brand", value: "#ThangMayThienAn", note: "Neo nhận diện Thiên Ân", trend: "up" },
+    ],
+    keywordClusters: [
+      {
+        region: "Thang máy — Head",
+        keywords: [
+          "thang máy fuji chính hãng",
+          "thang máy thiên ân",
+          "lắp đặt thang máy",
+          "thang máy gia đình",
+          "bảo trì thang máy",
+        ],
+      },
+      {
+        region: "Facebook Marketing",
+        keywords: [
+          "chăm sóc fanpage thang máy",
+          "fanpage thang máy",
+          "quảng cáo thang máy facebook",
+          "content thang máy",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/case-studies/thang-may-thien-an/facebook-page.png?v=1",
+        alt: "Chăm sóc Fanpage Thang Máy Thiên Ân — mockup laptop & điện thoại",
+        caption:
+          "Fanpage Thang Máy FUJI Chính Hãng — avatar, cover, bio Cung cấp · Lắp đặt · Bảo trì · desktop + mobile.",
+      },
+      {
+        src: "/case-studies/thang-may-thien-an/logo.png?v=1",
+        alt: "Avatar fanpage FUJI JAPAN — Thang máy chính hãng",
+        caption: "Avatar tròn FUJI JAPAN — Thang máy chính hãng (#ThangMayThienAn).",
+      },
+    ],
+    testimonial:
+      "Fanpage Thang Máy Thiên Ân đã có nhận diện FUJI chính hãng rõ ràng trên desktop và mobile — sẵn sàng nuôi content và mở rộng lead lắp đặt / bảo trì.",
+  },
+  {
+    slug: "dien-may-chau-hung",
+    clientName: "Điện Máy Châu Hùng",
+    industry: "dien-may",
+    industryLabel: "Điện máy & gia dụng",
+    headline: "Chăm sóc Fanpage Điện Máy Châu Hùng — Trả góp 0% Bình Dương",
+    summary:
+      "Setup & chăm sóc fanpage Facebook Điện Máy Châu Hùng (dienmaygiarebinhduong) — avatar logo CH, cover trả góp 0%, bio chính hãng · giá tốt · giao lắp miễn phí tại Bình Dương.",
+    answerFirst:
+      "Case study Điện Máy Châu Hùng: Bứt Phá Marketing chăm sóc fanpage Facebook dienmaygiarebinhduong — thiết kế logo CH vàng–xanh, cover “Trả góp trực tiếp 0% lãi suất”, hotline 0937 729 567 và bio nhấn chính hãng, trả góp dễ, giao lắp tận nơi để nuôi lead điện máy Bình Dương.",
+    metaTitle: "Case Study Chăm Sóc Fanpage Điện Máy Châu Hùng | Bình Dương",
+    metaDescription:
+      "Case study chăm sóc fanpage Điện Máy Châu Hùng: setup avatar CH, cover trả góp 0%, bio điện máy chính hãng Bình Dương. Bứt Phá Marketing.",
+    keywordsMain: "chăm sóc fanpage điện máy",
+    keywordsSecondary: [
+      "fanpage điện máy",
+      "marketing điện máy",
+      "facebook điện máy bình dương",
+      "điện máy trả góp 0%",
+      "điện máy chính hãng",
+    ],
+    fanpageUrl: "https://www.facebook.com/dienmaygiarebinhduong/",
+    thumbnail: "/case-studies/dien-may-chau-hung/devices-mockup.png?v=1",
+    heroImage: "/case-studies/dien-may-chau-hung/devices-mockup.png?v=1",
+    logo: "/case-studies/dien-may-chau-hung/logo.png?v=1",
+    logoFit: "contain",
+    publishedAt: "2026-07-18",
+    updatedAt: "2026-07-18",
+    status: "in-progress",
+    faq: [
+      {
+        q: "Chăm sóc fanpage Điện Máy Châu Hùng gồm những gì?",
+        a: "Setup nhận diện fanpage dienmaygiarebinhduong: logo avatar CH Châu Hùng, cover trả góp 0%, bio chính hãng – giá tốt – giao lắp, hotline 0937 729 567 và khung content nuôi lead điện máy Bình Dương.",
+      },
+      {
+        q: "Fanpage Điện Máy Châu Hùng định vị thế nào?",
+        a: "Điện máy chính hãng – giá tốt mỗi ngày; USP trả góp trực tiếp 0% lãi suất, thủ tục đơn giản, giao hàng lắp đặt miễn phí.",
+      },
+      {
+        q: "Bứt Phá có làm fanpage điện máy tương tự không?",
+        a: "Có. Bứt Phá setup & chăm sóc fanpage ngành điện máy, bán lẻ — cover, bio, content sản phẩm/trả góp và đồng bộ thương hiệu. Liên hệ /lien-he hoặc /facebook/cham-soc-fanpage.",
+      },
+    ],
+    services: [
+      {
+        name: "Chăm sóc Fanpage",
+        description:
+          "Setup avatar, cover, bio và khung nội dung fanpage Điện Máy Châu Hùng — hỗ trợ trả góp 0%.",
+      },
+      {
+        name: "Thiết kế nhận diện Facebook",
+        description: "Logo CH vàng–xanh + cover desktop/mobile đồng bộ slogan chính hãng · giá tốt · trả góp 0%.",
+      },
+      {
+        name: "Content nuôi trang",
+        description: "Định hướng content sản phẩm gia dụng, trả góp, khuyến mãi và hotline để tăng inbox.",
+      },
+    ],
+    challenge: [
+      "Thị trường điện máy Bình Dương cạnh tranh giá — cần USP trả góp 0% nổi bật ngay trên cover.",
+      "Khách tìm “điện máy giá rẻ Bình Dương” trên Facebook trước khi gọi — fanpage phải rõ chính hãng và giao lắp.",
+      "Fanpage cần nhận diện CH đồng bộ (avatar, cover, mug/notebook brand) để tăng trust trước khi chạy ads.",
+    ],
+    solution: [
+      "Thiết kế logo CH hexagon vàng kim + wordmark CHÂU HÙNG — Điện máy chính hãng · Giá tốt mỗi ngày.",
+      "Cover: ĐIỆN MÁY CHÂU HÙNG + badge Trả góp trực tiếp 0% lãi suất + hotline 0937 729 567 + showcase tủ lạnh, máy giặt, TV, máy lạnh.",
+      "Bio: chính hãng, trả góp dễ, trả trước thấp, thủ tục đơn giản, giao lắp miễn phí.",
+      "Mockup desktop + mobile kiểm soát trải nghiệm fanpage trên mọi thiết bị.",
+    ],
+    results: [
+      { label: "Fanpage", value: "Live", note: "dienmaygiarebinhduong", trend: "up" },
+      { label: "Avatar & cover", value: "Done", note: "Brand CH vàng–xanh", trend: "up" },
+      { label: "USP cover", value: "Trả góp 0%", note: "Nổi bật ngay banner", trend: "up" },
+      { label: "Hotline", value: "0937 729 567", note: "Đồng bộ cover & bio", trend: "up" },
+    ],
+    keywordClusters: [
+      {
+        region: "Điện máy — Head",
+        keywords: [
+          "điện máy châu hùng",
+          "điện máy bình dương",
+          "điện máy giá rẻ bình dương",
+          "điện máy trả góp 0%",
+          "điện máy chính hãng",
+        ],
+      },
+      {
+        region: "Facebook Marketing",
+        keywords: [
+          "chăm sóc fanpage điện máy",
+          "fanpage điện máy",
+          "quảng cáo điện máy facebook",
+          "content điện máy",
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/case-studies/dien-may-chau-hung/facebook-page.png?v=1",
+        alt: "Chăm sóc Fanpage Điện Máy Châu Hùng — mockup laptop & điện thoại",
+        caption:
+          "Fanpage Điện Máy Châu Hùng — trả góp 0% · chính hãng · giao lắp · desktop + mobile.",
+      },
+      {
+        src: "/case-studies/dien-may-chau-hung/logo.png?v=1",
+        alt: "Logo Điện Máy Châu Hùng — CH vàng kim",
+        caption: "Logo CHÂU HÙNG — Điện máy chính hãng · Giá tốt mỗi ngày.",
+      },
+    ],
+    testimonial:
+      "Fanpage Điện Máy Châu Hùng đã có nhận diện CH rõ ràng và USP trả góp 0% trên cover — sẵn sàng nuôi content và mở rộng lead Bình Dương.",
   },
   {
     slug: "tham-my-thien-hoang-kim",
@@ -1151,52 +1382,6 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     testimonial:
       "Shop mỹ phẩm online thắng ở bước khách đọc thành phần và review — website phải minh bạch INCI và có landing ads message-match.",
   },
-  {
-    slug: "an-gia-home",
-    clientName: "An Gia Home",
-    industry: "noi-that",
-    industryLabel: "Nội thất & thiết kế không gian",
-    headline: "Website nội thất — catalog phòng mẫu, báo giá nhanh",
-    summary:
-      "Website showroom nội thất An Gia Home: catalog theo phòng, gallery công trình, form báo giá và SEO local khu vực TP.HCM.",
-    answerFirst:
-      "Case study An Gia Home: Bứt Phá Marketing triển khai website nội thất với catalog phòng mẫu, gallery trước–sau và CTA báo giá Zalo/hotline.",
-    metaTitle: "Case Study Website Nội Thất An Gia Home",
-    metaDescription:
-      "Case study thiết kế website nội thất An Gia Home: catalog phòng mẫu, gallery công trình và SEO local. Bứt Phá Marketing.",
-    keywordsMain: "case study thiết kế website nội thất",
-    keywordsSecondary: ["thiết kế website nội thất", "website showroom nội thất", "seo website nội thất"],
-    websiteUrl: "https://www.butphamarketing.com/website",
-    thumbnail: "/hero-slideshow/hero-slide-04-website.png",
-    heroImage: "/hero-slideshow/hero-slide-04-website.png",
-    publishedAt: "2026-07-12",
-    updatedAt: "2026-07-17",
-    status: "in-progress",
-    faq: [
-      {
-        q: "Website nội thất cần gì?",
-        a: "Catalog theo phòng, gallery công trình, form báo giá và SEO theo khu vực/dự án.",
-      },
-    ],
-    services: [
-      { name: "Thiết kế website", description: "Catalog phòng mẫu, gallery và CTA báo giá." },
-      { name: "SEO local", description: "Tối ưu từ khóa nội thất theo quận/TP." },
-    ],
-    challenge: ["Khách cần xem phòng mẫu trước khi gọi.", "Cạnh tranh showroom online cao."],
-    solution: ["Catalog theo phòng + filter phong cách.", "CTA Zalo/hotline trên mọi trang sản phẩm."],
-    results: [
-      { label: "Website", value: "Live", trend: "up" },
-      { label: "Catalog", value: "60+ mẫu", trend: "up" },
-    ],
-    keywordClusters: [{ region: "Nội thất", keywords: ["thiết kế website nội thất", "website showroom nội thất"] }],
-    gallery: [
-      {
-        src: "/hero-slideshow/hero-slide-04-website.png",
-        alt: "Website nội thất An Gia Home",
-        caption: "Trang chủ — catalog phòng mẫu và CTA báo giá.",
-      },
-    ],
-  },
 ];
 
 export const CASE_STUDY_SLUGS = CASE_STUDIES.map((c) => c.slug);
@@ -1214,11 +1399,86 @@ export function getAllCaseStudies(): CaseStudyItem[] {
 /** Có mockup thiết bị thật trong /case-studies/ — dùng homepage “Dự án tiêu biểu” */
 export function caseStudyHasShowcaseImage(c: CaseStudyItem): boolean {
   const src = `${c.heroImage || ""}|${c.thumbnail || ""}|${(c.gallery || []).map((g) => g.src).join("|")}`;
-  return src.includes("/case-studies/") && src.includes("devices-mockup");
+  return src.includes("/case-studies/") && (src.includes("devices-mockup") || src.includes("facebook-page"));
+}
+
+/** Mục hiển thị homepage — tách Website / Fanpage cho cùng 1 khách */
+export type CaseShowcaseItem = {
+  id: string;
+  slug: string;
+  clientName: string;
+  title: string;
+  kind: "website" | "fanpage";
+  imageSrc: string;
+  href: string;
+  ctaLabel: string;
+  industryLabel: string;
+};
+
+function clientDisplayName(c: CaseStudyItem) {
+  return c.clientName.replace(/^Hệ Thống\s+/i, "");
+}
+
+function pickShowcaseImage(c: CaseStudyItem, kind: "website" | "fanpage"): string {
+  const gallery = c.gallery || [];
+  if (kind === "fanpage") {
+    return (
+      gallery.find((g) => g.src.includes("facebook-page"))?.src ||
+      gallery.find((g) => g.src.includes("devices-mockup"))?.src ||
+      c.thumbnail
+    );
+  }
+  return (
+    gallery.find((g) => g.src.includes("devices-mockup"))?.src ||
+    gallery.find((g) => !g.src.includes("facebook") && !g.src.includes("gsc-performance"))?.src ||
+    c.heroImage ||
+    c.thumbnail
+  );
+}
+
+function expandCaseToShowcases(c: CaseStudyItem): CaseShowcaseItem[] {
+  const name = clientDisplayName(c);
+  const items: CaseShowcaseItem[] = [];
+  const hasWebsiteMock =
+    Boolean(c.websiteUrl) &&
+    `${c.heroImage}|${c.thumbnail}|${(c.gallery || []).map((g) => g.src).join("|")}`.includes("devices-mockup");
+  const hasFanpage = Boolean(c.fanpageUrl);
+
+  if (hasWebsiteMock && c.websiteUrl) {
+    items.push({
+      id: `${c.slug}-website`,
+      slug: c.slug,
+      clientName: name,
+      title: `Thiết Kế Website ${name}`,
+      kind: "website",
+      imageSrc: pickShowcaseImage(c, "website"),
+      href: c.websiteUrl,
+      ctaLabel: "Xem Website",
+      industryLabel: c.industryLabel,
+    });
+  }
+
+  if (hasFanpage && c.fanpageUrl) {
+    items.push({
+      id: `${c.slug}-fanpage`,
+      slug: c.slug,
+      clientName: name,
+      title: `Chăm Sóc Fanpage ${name}`,
+      kind: "fanpage",
+      imageSrc: pickShowcaseImage(c, "fanpage"),
+      href: c.fanpageUrl,
+      ctaLabel: "Xem Fanpage",
+      industryLabel: c.industryLabel,
+    });
+  }
+
+  return items;
 }
 
 /** Homepage — chỉ case đã có hình mockup */
 export const FEATURED_CASE_STUDY_SLUGS = [
+  "dien-may-chau-hung",
+  "thang-may-thien-an",
   "halee-tram",
   "nha-khoa-dang-khoa",
   "kien-truc-sao-khue",
@@ -1232,4 +1492,10 @@ export function getFeaturedCaseStudies(): CaseStudyItem[] {
     .filter(caseStudyHasShowcaseImage);
   if (preferred.length) return preferred;
   return getAllCaseStudies().filter(caseStudyHasShowcaseImage);
+}
+
+/** Homepage list — tách rõ Thiết kế Website / Chăm sóc Fanpage */
+export function getFeaturedShowcases(): CaseShowcaseItem[] {
+  const cases = getFeaturedCaseStudies();
+  return cases.flatMap(expandCaseToShowcases);
 }

@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, MotionConfig } from "framer-motion";
-import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown, Volume2 } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
-import { getCaseStudyBySlug, getFeaturedCaseStudies } from "@/lib/case-studies";
+import { getCaseStudyBySlug, getFeaturedShowcases } from "@/lib/case-studies";
 import { CORP_HERO_SLIDES, sanitizeSlideshowItems } from "@/lib/media-assets";
 import { useAdmin } from "@/lib/AdminContext";
 import { db, type NewsItem } from "@/lib/useData";
@@ -22,6 +22,12 @@ import {
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
 import { HomeAtomField } from "@/components/shared/HomeAtomField";
 import { ensureTypeClickAudio, playTypeClickSound } from "@/lib/type-click-sound";
+import {
+  hasPlayedHeroWelcome,
+  playHeroWelcomeExperience,
+  stopHeroWelcomeSpeech,
+  unlockHeroAudio,
+} from "@/lib/hero-welcome-sound";
 
 const SECTIONS = [
   { id: "but-pha", label: "BỨT PHÁ", tone: "dark" },
@@ -72,11 +78,18 @@ const VOICE_ENTRIES = [
     after: "Họ vào web xem bảng giá, khóa học rồi đặt lịch — khỏi chờ reply.",
   },
   {
-    slug: "an-gia-home",
-    mark: "AG",
-    wordmark: "An Gia Home",
-    before: "Khách lang thang Facebook nửa ngày vẫn chưa thấy phòng mẫu.",
-    after: "Trên web họ xem phòng mẫu và báo giá nhanh trong vài phút.",
+    slug: "thang-may-thien-an",
+    mark: "TA",
+    wordmark: "Thiên Ân",
+    before: "Khách tìm thang máy chính hãng trên Facebook nhưng fanpage chưa rõ nhận diện.",
+    after: "Avatar–cover–bio FUJI đồng bộ — họ tin chính hãng rồi inbox hỏi lắp đặt.",
+  },
+  {
+    slug: "dien-may-chau-hung",
+    mark: "CH",
+    wordmark: "Châu Hùng",
+    before: "Khách thấy giá điện máy trên Facebook nhưng chưa tin cửa hàng trả góp uy tín.",
+    after: "Cover trả góp 0% và logo CH rõ — họ inbox hỏi máy lạnh, tủ lạnh ngay.",
   },
 ] as const;
 
@@ -214,8 +227,8 @@ function HeroRevealText({
   className,
   style,
   play,
-  startDelayMs = 80,
-  stepMs = 42,
+  startDelayMs = 40,
+  stepMs = 28,
   sound = true,
 }: {
   text: string;
@@ -240,7 +253,7 @@ function HeroRevealText({
   useEffect(() => {
     if (!play || !sound || settings.softSoundsEnabled === false) return;
 
-    const vol = Math.min(0.12, (settings.softSoundsVolume ?? 0.05) * 1.15);
+    const vol = Math.min(0.14, Math.max(0.05, (settings.softSoundsVolume ?? 0.05) * 1.35));
     const timers: number[] = [];
     let typed = 0;
 
@@ -338,7 +351,10 @@ export default function HomePageClient() {
   const [showLoader, setShowLoader] = useState(true);
   const [siteReady, setSiteReady] = useState(false);
   const [heroMotionReady, setHeroMotionReady] = useState(false);
+  const [heroSoundPrompt, setHeroSoundPrompt] = useState(false);
+  const [heroSoundPlayed, setHeroSoundPlayed] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const heroWelcomeTried = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
@@ -405,7 +421,7 @@ export default function HomePageClient() {
     return fromCms.length ? fromCms : [...CORP_HERO_SLIDES];
   }, [settings?.media?.home?.slideshow]);
 
-  const featuredCases = useMemo(() => getFeaturedCaseStudies(), []);
+  const featuredCases = useMemo(() => getFeaturedShowcases(), []);
   const voiceCases = useMemo(() => {
     return VOICE_ENTRIES.map((entry) => {
       const study = getCaseStudyBySlug(entry.slug);
@@ -441,15 +457,6 @@ export default function HomePageClient() {
   const featuredKnowledge = knowledgePosts[0] ?? null;
   const sideKnowledge = knowledgePosts.slice(1, 9);
   const activeCase = featuredCases[caseActive] ?? featuredCases[0];
-  const caseShowcaseSrc = (c: (typeof featuredCases)[number]) => {
-    const candidates = [c.heroImage, c.thumbnail, ...(c.gallery?.map((g) => g.src) ?? [])].filter(Boolean) as string[];
-    return (
-      candidates.find((src) => src.includes("devices-mockup")) ||
-      candidates.find((src) => !src.includes("gsc-performance")) ||
-      candidates[0] ||
-      CORP_HERO_SLIDES[0]
-    );
-  };
   const headerLight = SECTIONS[activeSection]?.tone === "light";
   const headerText = headerLight ? "text-slate-900" : "text-white";
   const headerMuted = headerLight ? "text-slate-700 hover:text-violet-700" : "text-white/95 hover:text-violet-200";
@@ -480,9 +487,60 @@ export default function HomePageClient() {
       return undefined;
     }
     ensureTypeClickAudio();
-    const t = window.setTimeout(() => setHeroMotionReady(true), 280);
+    const t = window.setTimeout(() => setHeroMotionReady(true), 100);
     return () => window.clearTimeout(t);
   }, [siteReady]);
+
+  // Section 1: jingle + chào mừng (1 lần / phiên)
+  useEffect(() => {
+    if (!isClient) return;
+    if (hasPlayedHeroWelcome()) {
+      setHeroSoundPlayed(true);
+      setHeroSoundPrompt(false);
+      return;
+    }
+    if (!siteReady || !heroMotionReady || activeSection !== 0) return;
+    if (heroWelcomeTried.current) return;
+
+    let cancelled = false;
+    const tryAuto = window.setTimeout(async () => {
+      if (cancelled || heroWelcomeTried.current) return;
+      const unlocked = await unlockHeroAudio();
+      if (unlocked) {
+        heroWelcomeTried.current = true;
+        const ok = await playHeroWelcomeExperience({ brandName });
+        if (ok) {
+          setHeroSoundPlayed(true);
+          setHeroSoundPrompt(false);
+          return;
+        }
+      }
+      if (!cancelled) setHeroSoundPrompt(true);
+    }, 700);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(tryAuto);
+    };
+  }, [isClient, siteReady, heroMotionReady, activeSection, brandName]);
+
+  // Rời section 1 → dừng giọng chào
+  useEffect(() => {
+    if (activeSection !== 0) stopHeroWelcomeSpeech();
+  }, [activeSection]);
+
+  const enableHeroWelcomeSound = useCallback(async () => {
+    heroWelcomeTried.current = true;
+    await unlockHeroAudio();
+    ensureTypeClickAudio();
+    const ok = await playHeroWelcomeExperience({
+      skipIfPlayed: false,
+      brandName,
+    });
+    setHeroSoundPlayed(true);
+    setHeroSoundPrompt(false);
+    return ok;
+  }, [brandName]);
 
   useEffect(() => {
     // Full-section snap mọi thiết bị — kiểu Vinh Phát
@@ -1123,8 +1181,8 @@ export default function HomePageClient() {
                 text="Bứt Phá Marketing"
                 className="corp-display-hero drop-shadow-sm"
                 play={heroMotionReady}
-                startDelayMs={80}
-                stepMs={42}
+                startDelayMs={40}
+                stepMs={26}
               />
               <motion.p
                 className="mt-3 max-w-sm text-[12px] font-light leading-relaxed tracking-[0.14em] text-white/80 sm:mt-4 sm:max-w-xl sm:text-sm sm:tracking-[0.22em]"
@@ -1174,6 +1232,20 @@ export default function HomePageClient() {
             </div>
 
             <div className="absolute bottom-5 left-1/2 z-20 flex w-full max-w-xs -translate-x-1/2 flex-col items-center gap-3 sm:bottom-7">
+              {(heroSoundPrompt || (!heroSoundPlayed && heroMotionReady)) && activeSection === 0 ? (
+                <motion.button
+                  type="button"
+                  onClick={() => void enableHeroWelcomeSound()}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3.5 py-2 text-[11px] font-medium tracking-wide text-white/95 shadow-lg backdrop-blur-md transition hover:border-violet-300/50 hover:bg-violet-600/35 sm:text-[12px]"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.2 }}
+                  aria-label="Bật trải nghiệm âm thanh chào mừng"
+                >
+                  <Volume2 className="h-3.5 w-3.5 text-violet-200" strokeWidth={1.75} />
+                  Bật âm thanh chào mừng
+                </motion.button>
+              ) : null}
               <div className="flex gap-1.5">
                 {heroSlides.map((_, i) => (
                   <button
@@ -1584,7 +1656,7 @@ export default function HomePageClient() {
                         const on = i === caseActive;
                         return (
                           <motion.li
-                            key={c.slug}
+                            key={c.id}
                             data-case-index={i}
                             initial={false}
                             animate={
@@ -1618,14 +1690,14 @@ export default function HomePageClient() {
                                     on ? "text-white" : "text-white/55 group-hover:text-white/80"
                                   }`}
                                 >
-                                  {c.clientName.replace(/^Hệ Thống\s+/i, "")}
+                                  {c.title}
                                 </span>
                                 <span
                                   className={`mt-0.5 hidden text-[11px] tracking-wide transition sm:block ${
                                     on ? "text-violet-200/85" : "text-white/30"
                                   }`}
                                 >
-                                  {c.industryLabel}
+                                  {c.kind === "fanpage" ? "Chăm sóc Fanpage" : "Thiết kế Website"}
                                 </span>
                               </span>
                             </button>
@@ -1656,15 +1728,15 @@ export default function HomePageClient() {
                       const on = i === caseActive;
                       return (
                         <div
-                          key={c.slug}
+                          key={c.id}
                           className={`absolute inset-0 transition-opacity duration-500 ease-out ${
                             on ? "opacity-100" : "opacity-0"
                           }`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={caseShowcaseSrc(c)}
-                            alt={c.clientName}
+                            src={c.imageSrc}
+                            alt={c.title}
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
@@ -1686,11 +1758,11 @@ export default function HomePageClient() {
                         ease: [0.22, 1, 0.36, 1],
                       }}
                       className="corp-cta mt-0 inline-flex items-center justify-center gap-1.5 rounded-md bg-violet-600 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-500 sm:gap-2 sm:rounded-lg sm:px-5 sm:py-2.5 sm:text-sm sm:normal-case sm:tracking-normal"
-                      href={activeCase.websiteUrl || `/du-an/${activeCase.slug}`}
-                      target={activeCase.websiteUrl ? "_blank" : undefined}
-                      rel={activeCase.websiteUrl ? "noopener noreferrer" : undefined}
+                      href={activeCase.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      Xem website
+                      {activeCase.ctaLabel}
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </motion.a>
                   ) : null}
@@ -2114,7 +2186,7 @@ export default function HomePageClient() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(76,29,149,0.14),transparent_60%)]" />
             </div>
 
-            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-start overflow-y-auto px-4 pb-8 pt-28 sm:px-10 sm:pb-10 sm:pt-32 lg:overflow-visible lg:px-14 lg:pb-8 lg:pt-36">
+            <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col items-center justify-center overflow-y-auto px-4 py-24 sm:px-10 sm:py-28 lg:overflow-visible lg:px-14 lg:py-32">
               <h2
                 {...riseProps(0, "mx-auto w-full shrink-0 bg-gradient-to-r from-violet-200 via-fuchsia-300 to-violet-400 bg-clip-text text-center text-transparent", {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',

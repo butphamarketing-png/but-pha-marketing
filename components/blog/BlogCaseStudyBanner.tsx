@@ -41,12 +41,12 @@ export function BlogCaseStudyBanner({ caseStudySlug }: { caseStudySlug: string }
           Thiết kế website tương tự
         </Link>
         <a
-          href={study.websiteUrl}
+          href={study.websiteUrl || study.fanpageUrl || "/du-an"}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-bold text-emerald-800 transition hover:bg-emerald-50"
         >
-          Website khách hàng
+          {study.websiteUrl ? "Website khách hàng" : "Fanpage khách hàng"}
         </a>
       </div>
     </aside>

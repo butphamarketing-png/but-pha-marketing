@@ -48,16 +48,18 @@ export function CaseStudyDetail({ study }: { study: CaseStudyItem }) {
           <p className="mt-5 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">{study.summary}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={study.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-bold text-indigo-800 shadow-sm transition hover:bg-indigo-50"
-            >
-              <Globe className="h-4 w-4" />
-              {study.websiteUrl.replace(/^https?:\/\/(www\.)?/, "")}
-              <ExternalLink className="h-3.5 w-3.5 opacity-60" />
-            </a>
+            {study.websiteUrl && (
+              <a
+                href={study.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-bold text-indigo-800 shadow-sm transition hover:bg-indigo-50"
+              >
+                <Globe className="h-4 w-4" />
+                {study.websiteUrl.replace(/^https?:\/\/(www\.)?/, "")}
+                <ExternalLink className="h-3.5 w-3.5 opacity-60" />
+              </a>
+            )}
             {study.fanpageUrl && (
               <a
                 href={study.fanpageUrl}

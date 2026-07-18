@@ -3,18 +3,18 @@ export const CARDS_ENTER_MS = 0;
 export const CARDS_HOLD_AFTER_VISIBLE_MS = 0;
 
 export const COMPANY_NAME_TIMING = {
-  line2Delay: 500,
-  line1Duration: 630,
-  line2Duration: 530,
+  line2Delay: 320,
+  line1Duration: 420,
+  line2Duration: 380,
   /** Chờ sau khi hiện đủ tên rồi mới vào site */
-  holdAfterComplete: 2000,
+  holdAfterComplete: 900,
 } as const;
 
 export const COMPANY_NAME_TIMING_REDUCED = {
-  line2Delay: 200,
-  line1Duration: 333,
-  line2Duration: 300,
-  holdAfterComplete: 2000,
+  line2Delay: 140,
+  line1Duration: 240,
+  line2Duration: 220,
+  holdAfterComplete: 500,
 } as const;
 
 type NameTiming = {
