@@ -261,7 +261,7 @@ export default function AboutPageClient() {
                 Sao Khuê: Fanpage <strong>83.374 lượt xem</strong> trong 90 ngày — kênh lead song song website.
               </li>
               <li>
-                Thiên Hoàng Kim, Phước Lai Luxury: website + Fanpage đồng bộ thương hiệu, nuôi lead inbox.
+                Thiên Hoàng Kim: website + Fanpage đồng bộ thương hiệu, nuôi lead inbox.
               </li>
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">

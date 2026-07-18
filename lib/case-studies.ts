@@ -584,12 +584,12 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     industryLabel: "Spa, Phun xăm & Academy",
     headline: "Website luxury Phun xăm · Spa · Academy cho Phước Lai tại Vũng Tàu",
     summary:
-      "Triển khai website phunxamvungtau.com và fanpage Facebook Phước Lai Luxury — giao diện luxury đen–vàng, showcase Master team, CTA Booking và SEO local phun xăm & spa Vũng Tàu.",
+      "Triển khai website phunxamvungtau.com — giao diện luxury đen–vàng, showcase Master team, CTA Booking và SEO local phun xăm & spa Vũng Tàu.",
     answerFirst:
-      "Case study Phước Lai Luxury: Bứt Phá Marketing xây website phunxamvungtau.com (Permanent Makeup & Spa & Academy) và fanpage Facebook — UI luxury cao cấp với 3 Master (Nhung Lai, Phuoc Lai, Cam Lai), nút Booking nổi bật và tối ưu SEO phun xăm Vũng Tàu.",
+      "Case study Phước Lai Luxury: Bứt Phá Marketing xây website phunxamvungtau.com (Permanent Makeup & Spa & Academy) — UI luxury cao cấp với 3 Master (Nhung Lai, Phuoc Lai, Cam Lai), nút Booking nổi bật và tối ưu SEO phun xăm Vũng Tàu.",
     metaTitle: "Case Study Website Spa Phước Lai Luxury | Phun Xăm Vũng Tàu",
     metaDescription:
-      "Case study thiết kế website spa Phước Lai Luxury: phunxamvungtau.com + fanpage, phun xăm & academy Vũng Tàu, CTA Booking. Bứt Phá Marketing.",
+      "Case study thiết kế website spa Phước Lai Luxury: phunxamvungtau.com, phun xăm & academy Vũng Tàu, CTA Booking. Bứt Phá Marketing.",
     keywordsMain: "case study thiết kế website spa",
     keywordsSecondary: [
       "thiết kế website spa",
@@ -599,7 +599,6 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       "marketing spa vũng tàu",
     ],
     websiteUrl: "https://phunxamvungtau.com/",
-    fanpageUrl: "https://www.facebook.com/phuoclaicelinevungtau",
     thumbnail: "/case-studies/phuoc-lai-luxury/devices-mockup.png?v=1",
     heroImage: "/case-studies/phuoc-lai-luxury/devices-mockup.png?v=1",
     logo: "/case-studies/phuoc-lai-luxury/logo.png?v=1",
@@ -610,7 +609,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
     faq: [
       {
         q: "Case study Phước Lai Luxury triển khai những gì?",
-        a: "Website phunxamvungtau.com với thương hiệu Phước Lai Luxury — Permanent Makeup & Spa & Academy, hero 3 panel Master team, CTA Booking; fanpage Facebook phuoclaicelinevungtau đồng bộ nhận diện luxury.",
+        a: "Website phunxamvungtau.com với thương hiệu Phước Lai Luxury — Permanent Makeup & Spa & Academy, hero 3 panel Master team, CTA Booking và SEO local Vũng Tàu.",
       },
       {
         q: "Website spa & academy cần tính năng gì?",
@@ -622,7 +621,7 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       },
       {
         q: "Bứt Phá có làm website spa tương tự không?",
-        a: "Có — thiết kế website spa, phun xăm, academy với SEO local và fanpage. Xem /blog/thiet-ke-website-spa hoặc liên hệ /lien-he.",
+        a: "Có — thiết kế website spa, phun xăm, academy với SEO local. Xem /blog/thiet-ke-website-spa hoặc liên hệ /lien-he.",
       },
     ],
     services: [
@@ -633,10 +632,6 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       {
         name: "SEO phun xăm & spa local",
         description: "On-page từ khóa phun xăm Vũng Tàu, spa Vũng Tàu, học phun xăm — schema và Google Maps.",
-      },
-      {
-        name: "Facebook Marketing",
-        description: "Fanpage Phước Lai Luxury — content dịch vụ, portfolio và nuôi lead inbox/booking.",
       },
     ],
     challenge: [
@@ -650,12 +645,10 @@ export const CASE_STUDIES: CaseStudyItem[] = [
       "Positioning rõ: “Phuoc Lai Luxury — Permanent Makeup & Spa & Academy” trên banner trung tâm.",
       "CTA Booking nổi bật góc phải + floating chat/Zalo/AI assistant.",
       "Menu: Trang chủ, Về chúng tôi, Liên hệ — mở rộng silo dịch vụ & khóa học.",
-      "Fanpage Facebook đồng bộ thương hiệu luxury, liên kết website ↔ fanpage.",
       "SEO on-page: title/meta phun xăm Vũng Tàu, schema LocalBusiness.",
     ],
     results: [
       { label: "Website", value: "Live", note: "phunxamvungtau.com", trend: "up" },
-      { label: "Fanpage", value: "Active", note: "phuoclaicelinevungtau", trend: "up" },
       { label: "Positioning", value: "Luxury", note: "Phun xăm · Spa · Academy", trend: "neutral" },
       { label: "Master team", value: "3 Masters", note: "Nhung · Phuoc · Cam Lai", trend: "up" },
       { label: "SEO", value: "Đang triển khai", note: "Local Vũng Tàu + phun xăm", trend: "neutral" },

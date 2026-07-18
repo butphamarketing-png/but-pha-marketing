@@ -68,8 +68,8 @@ const VOICE_ENTRIES = [
     slug: "phuoc-lai-luxury",
     mark: "PL",
     wordmark: "Phước Lai",
-    before: "Khách thấy spa đẹp trên Facebook nhưng chưa tin Master đủ để book.",
-    after: "Họ vào web xem portfolio 3 Master rồi đặt lịch — khỏi phải hỏi lại inbox.",
+    before: "Khách thấy spa đẹp nhưng chưa tin Master đủ để book lịch.",
+    after: "Họ vào web xem portfolio 3 Master rồi đặt lịch — khỏi phải hỏi lại.",
   },
   {
     slug: "tham-my-thien-hoang-kim",
