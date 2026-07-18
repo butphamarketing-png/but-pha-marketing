@@ -292,6 +292,32 @@
     touch-action: pan-y;
   }
 
+  /* Lĩnh vực coverflow — card nhỏ hơn trên mobile */
+  .corp-linh-card {
+    width: auto;
+    aspect-ratio: 3 / 4;
+    height: 88%;
+    max-width: min(58%, 200px);
+    border-radius: 1rem;
+  }
+
+  .corp-linh-card--active {
+    height: 96%;
+    max-width: min(64%, 220px);
+  }
+
+  @media (min-width: 640px) {
+    .corp-linh-card {
+      height: 92%;
+      max-width: min(70%, 285px);
+    }
+
+    .corp-linh-card--active {
+      height: 100%;
+      max-width: min(78%, 320px);
+    }
+  }
+
   .corp-project-scroll::-webkit-scrollbar {
     width: 6px;
   }

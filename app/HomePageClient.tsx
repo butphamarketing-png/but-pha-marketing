@@ -137,7 +137,8 @@ const ABOUT_DEVICES = [
     alt: "Website Bứt Phá Marketing trên điện thoại",
     delayMs: 0,
     wrap:
-      "absolute left-[4%] bottom-[4%] z-30 w-[34%] max-w-[120px] sm:max-w-[150px] " +
+      "absolute left-[2%] bottom-[2%] z-30 w-[38%] max-w-[132px] " +
+      "sm:left-[4%] sm:bottom-[4%] sm:w-[34%] sm:max-w-[150px] " +
       "md:left-[10%] md:bottom-[16%] md:w-[22%] md:max-w-[180px] lg:left-[12%] lg:bottom-[18%] lg:max-w-[200px]",
     img: "h-auto w-full object-contain drop-shadow-[0_16px_36px_rgba(15,23,42,0.28)]",
   },
@@ -147,7 +148,8 @@ const ABOUT_DEVICES = [
     alt: "Dashboard Bứt Phá Marketing trên laptop",
     delayMs: 280,
     wrap:
-      "absolute left-[26%] z-10 w-[68%] max-w-[220px] bottom-[6%] sm:max-w-[260px] " +
+      "absolute left-[22%] bottom-[4%] z-10 w-[78%] max-w-[280px] " +
+      "sm:left-[26%] sm:bottom-[6%] sm:w-[68%] sm:max-w-[260px] " +
       "md:left-[28%] md:bottom-[12%] md:w-[70%] md:max-w-[480px] lg:max-w-[560px]",
     img: "h-auto w-full object-contain drop-shadow-[0_22px_50px_rgba(15,23,42,0.2)]",
   },
@@ -163,7 +165,9 @@ const LINH_VUC = [
     desc: "Thiết kế website chuẩn SEO, tối ưu chuyển đổi và trải nghiệm người dùng.",
     href: "/website",
     image: "/linh-vuc-website.png",
-    accent: "from-violet-600/40",
+    accent: "from-emerald-600/40",
+    glow: "rgba(16, 185, 129, 0.55)",
+    glowSoft: "rgba(16, 185, 129, 0.28)",
     objectPosition: "center center",
   },
   {
@@ -173,6 +177,8 @@ const LINH_VUC = [
     href: "/facebook",
     image: "/linh-vuc-facebook.png",
     accent: "from-blue-600/40",
+    glow: "rgba(59, 130, 246, 0.55)",
+    glowSoft: "rgba(59, 130, 246, 0.28)",
     objectPosition: "center 28%",
   },
   {
@@ -181,7 +187,9 @@ const LINH_VUC = [
     desc: "Google Maps & Local SEO — khách gần tìm thấy và gọi bạn.",
     href: "/google-maps",
     image: "/linh-vuc-maps.png",
-    accent: "from-amber-600/35",
+    accent: "from-orange-600/35",
+    glow: "rgba(249, 115, 22, 0.55)",
+    glowSoft: "rgba(249, 115, 22, 0.28)",
     objectPosition: "center 35%",
   },
 ] as const;
@@ -969,9 +977,9 @@ export default function HomePageClient() {
               <div className="absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#f4f6fb]/85 via-[#f4f6fb]/45 to-transparent sm:w-[48%] sm:from-[#f4f6fb]/92 sm:via-[#f4f6fb]/70" />
             </div>
 
-            <div className="relative z-10 mx-auto grid h-full w-full max-w-[1280px] grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-center gap-2 px-4 pb-6 pt-[4.25rem] sm:gap-3 sm:px-8 sm:pb-10 sm:pt-20 md:gap-4 md:px-8 md:pb-14 md:pt-16 lg:gap-2 lg:px-10 lg:pb-16 lg:pt-20 xl:gap-4 xl:pl-16">
-              {/* Devices — luôn cột trái */}
-              <div className="relative order-1 flex h-[min(42vh,260px)] min-h-0 w-full flex-col sm:h-[min(52vh,380px)] md:h-[min(68vh,560px)] lg:h-[min(72vh,620px)]">
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-[1280px] flex-col justify-center gap-5 px-5 pb-10 pt-[4.75rem] sm:gap-6 sm:px-8 sm:pb-12 sm:pt-20 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-4 md:px-8 md:pb-14 md:pt-16 lg:gap-2 lg:px-10 lg:pb-16 lg:pt-20 xl:gap-4 xl:pl-16">
+              {/* Devices — mobile: dưới chữ · desktop: cột trái */}
+              <div className="relative order-2 mx-auto flex h-[min(52vw,240px)] w-full max-w-[22rem] min-h-0 shrink-0 flex-col sm:h-[min(48vw,300px)] sm:max-w-md md:order-1 md:mx-0 md:h-[min(68vh,560px)] md:max-w-none lg:h-[min(72vh,620px)]">
                 <div
                   className="relative h-full w-full overflow-visible"
                   aria-label="Thiết bị marketing"
@@ -982,7 +990,7 @@ export default function HomePageClient() {
                       className={`${device.wrap} transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
                         aboutReveal
                           ? "translate-x-0 opacity-100"
-                          : "-translate-x-10 opacity-0 sm:-translate-x-20 md:-translate-x-28"
+                          : "-translate-x-8 opacity-0 sm:-translate-x-20 md:-translate-x-28"
                       }`}
                       style={{ transitionDelay: aboutReveal ? `${device.delayMs}ms` : "0ms" }}
                     >
@@ -993,15 +1001,15 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Chữ — luôn cột phải */}
-              <div className="relative z-20 order-2 w-full min-w-0 self-center text-left xl:max-w-[34rem]">
+              {/* Chữ — mobile: trên · desktop: cột phải */}
+              <div className="relative z-20 order-1 w-full min-w-0 self-center text-left md:order-2 xl:max-w-[34rem]">
                 <p {...riseProps(0, "flex items-center gap-2 sm:gap-3")}>
                   <span
                     className="h-[1.5px] w-5 rounded-full bg-gradient-to-r from-transparent via-violet-400/90 to-violet-500 sm:w-8"
                     aria-hidden
                   />
                   <span
-                    className="bg-gradient-to-r from-violet-800 via-violet-600 to-violet-800 bg-clip-text text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-transparent sm:text-[1.05rem] sm:tracking-[0.32em]"
+                    className="bg-gradient-to-r from-violet-800 via-violet-600 to-violet-800 bg-clip-text text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-transparent sm:text-[1.05rem] sm:tracking-[0.32em]"
                     style={{ fontFamily: '"Cormorant Garamond", "Be Vietnam Pro", Georgia, serif' }}
                   >
                     Về chúng tôi
@@ -1009,11 +1017,11 @@ export default function HomePageClient() {
                 </p>
 
                 <h2
-                  {...riseProps(1, "mt-1.5 text-balance sm:mt-3", {
+                  {...riseProps(1, "mt-2 text-balance sm:mt-3", {
                     fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
                     fontWeight: 600,
-                    fontSize: "clamp(0.95rem, 2.2vw, 2.05rem)",
-                    lineHeight: 1.32,
+                    fontSize: "clamp(1.35rem, 5.2vw, 2.05rem)",
+                    lineHeight: 1.28,
                     letterSpacing: "-0.02em",
                     color: "#16131f",
                   })}
@@ -1024,7 +1032,7 @@ export default function HomePageClient() {
                 <p
                   {...riseProps(
                     2,
-                    "mt-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-violet-700/85 sm:mt-3 sm:text-[12px]",
+                    "mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-violet-700/85 sm:mt-3 sm:text-[12px]",
                     { fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }
                   )}
                 >
@@ -1032,11 +1040,11 @@ export default function HomePageClient() {
                 </p>
 
                 <div
-                  {...riseProps(3, "mt-2 space-y-2 text-pretty sm:mt-4 sm:space-y-3", {
+                  {...riseProps(3, "mt-3 space-y-2 text-pretty sm:mt-4 sm:space-y-3", {
                     fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
-                    fontSize: "clamp(0.72rem, 1.35vw, 1.02rem)",
+                    fontSize: "clamp(0.9rem, 3.4vw, 1.02rem)",
                     fontWeight: 400,
-                    lineHeight: 1.55,
+                    lineHeight: 1.6,
                     color: "#1f1b2e",
                   })}
                 >
@@ -1059,10 +1067,10 @@ export default function HomePageClient() {
                   </MotionConfig>
                 </div>
 
-                <div {...riseProps(4, "mt-3 sm:mt-5")}>
+                <div {...riseProps(4, "mt-4 sm:mt-5")}>
                   <Link
                     href="/gioi-thieu"
-                    className="corp-cta inline-flex items-center justify-center rounded-md bg-[#5b21b6] px-4 py-2 text-[11px] text-white shadow-md shadow-violet-900/20 transition hover:bg-[#4c1d95] sm:px-7 sm:py-3 sm:text-sm"
+                    className="corp-cta inline-flex items-center justify-center rounded-md bg-[#5b21b6] px-5 py-2.5 text-[12px] text-white shadow-md shadow-violet-900/20 transition hover:bg-[#4c1d95] sm:px-7 sm:py-3 sm:text-sm"
                   >
                     Xem thêm
                   </Link>
@@ -1146,43 +1154,43 @@ export default function HomePageClient() {
                 </div>
               </div>
 
-              {/* Mobile + Desktop: coverflow — thẻ cao max theo stage, không đè tiêu đề */}
+              {/* Mobile + Desktop: coverflow — thẻ nhỏ hơn trên mobile, glow theo màu dịch vụ */}
               <div
-                className="relative z-10 -mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center sm:-mt-2 lg:mt-0 lg:h-[min(76vh,600px)] lg:-translate-y-3 lg:flex-none lg:items-stretch"
+                className="relative z-10 mt-1 flex w-full min-w-0 flex-1 flex-col items-center justify-center sm:mt-0 lg:mt-0 lg:h-[min(76vh,600px)] lg:-translate-y-3 lg:flex-none lg:items-stretch"
                 onMouseEnter={() => setLinhPaused(true)}
                 onMouseLeave={() => setLinhPaused(false)}
               >
-                <div className="relative mx-auto flex h-[min(52dvh,380px)] w-full max-w-2xl items-center gap-1 sm:h-[min(56dvh,420px)] sm:gap-2 lg:h-full lg:max-w-none lg:gap-3">
+                <div className="relative mx-auto flex h-[min(38dvh,268px)] w-full max-w-xl items-center gap-0.5 px-1 sm:h-[min(48dvh,360px)] sm:max-w-2xl sm:gap-2 sm:px-0 lg:h-full lg:max-w-none lg:gap-3">
                   <button
                     type="button"
                     onClick={() => setLinhActive((i) => (i - 1 + LINH_VUC.length) % LINH_VUC.length)}
-                    className="z-40 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
+                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
                     aria-label="Thẻ trước"
                   >
-                    <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
+                    <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
                   </button>
 
-                  <div className="relative mx-auto h-full min-w-0 flex-1 max-w-[540px] perspective-[1200px] lg:max-w-[600px]">
+                  <div className="relative mx-auto h-full min-w-0 flex-1 max-w-[280px] perspective-[1200px] sm:max-w-[540px] lg:max-w-[600px]">
                     {LINH_VUC.map((item, i) => {
                       const d = linhVucCardOffset(i, linhActive);
                       const isActive = d === 0;
                       return (
                         <div
                           key={item.num}
-                          className={`absolute left-1/2 top-1/2 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+                          className={`corp-linh-card absolute left-1/2 top-1/2 transition-[transform,opacity,filter,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
                             isActive
-                              ? "z-30 h-[100%] opacity-100 brightness-100"
-                              : "z-10 h-[92%] opacity-80 brightness-[0.8] saturate-[0.8]"
+                              ? "corp-linh-card--active z-30 opacity-100 brightness-100"
+                              : "corp-linh-card--side z-10 opacity-80 brightness-[0.8] saturate-[0.8]"
                           }`}
                           style={{
-                            width: "auto",
-                            aspectRatio: "3 / 4",
-                            maxWidth: isActive ? "min(78%, 320px)" : "min(70%, 285px)",
                             transform: isActive
-                              ? "translate(-50%, -56%) scale(1)"
+                              ? "translate(-50%, -54%) scale(1)"
                               : d === 1
-                                ? "translate(22%, -52%) scale(0.9)"
-                                : "translate(-122%, -52%) scale(0.9)",
+                                ? "translate(18%, -50%) scale(0.86)"
+                                : "translate(-118%, -50%) scale(0.86)",
+                            boxShadow: isActive
+                              ? `0 14px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08), 0 0 32px ${item.glow}, 0 0 64px ${item.glow}`
+                              : `0 8px 24px rgba(0,0,0,0.3), 0 0 20px ${item.glowSoft}, 0 0 40px ${item.glowSoft}`,
                           }}
                         >
                           <div {...riseProps(2 + i * 2, "h-full w-full")}>
@@ -1192,7 +1200,7 @@ export default function HomePageClient() {
                                 if (isActive) router.push(item.href);
                                 else setLinhActive(i);
                               }}
-                              className="group h-full w-full overflow-hidden rounded-2xl text-center shadow-2xl"
+                              className="group relative h-full w-full rounded-2xl text-center"
                               aria-pressed={isActive}
                               aria-label={item.title}
                             >
@@ -1216,9 +1224,9 @@ export default function HomePageClient() {
                                   }`}
                                 />
                                 {isActive ? (
-                                  <div className="absolute inset-x-0 bottom-0 px-4 pb-5 pt-10 text-center sm:px-5 sm:pb-6">
+                                  <div className="absolute inset-x-0 bottom-0 px-3 pb-4 pt-8 text-center sm:px-5 sm:pb-6 sm:pt-10">
                                     <h3
-                                      className="inline-flex rounded-full border border-white/20 bg-[#1a1030]/92 px-3.5 py-1.5 text-[0.78rem] font-bold tracking-wide text-white sm:px-4 sm:text-[0.88rem]"
+                                      className="inline-flex rounded-full border border-white/20 bg-[#1a1030]/92 px-3 py-1 text-[0.72rem] font-bold tracking-wide text-white sm:px-4 sm:py-1.5 sm:text-[0.88rem]"
                                       style={{
                                         fontFamily: '"Be Vietnam Pro", system-ui, sans-serif',
                                         fontWeight: 700,
@@ -1231,7 +1239,7 @@ export default function HomePageClient() {
                                     <div className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100">
                                       <div className="overflow-hidden">
                                         <p
-                                          className="mx-auto mt-3 max-w-[14rem] text-[11.5px] font-normal leading-[1.65] tracking-wide text-white/85 sm:max-w-[15rem] sm:text-[12.5px]"
+                                          className="mx-auto mt-2 max-w-[12.5rem] text-[11px] font-normal leading-[1.6] tracking-wide text-white/85 sm:mt-3 sm:max-w-[15rem] sm:text-[12.5px]"
                                           style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
                                         >
                                           {item.desc}
@@ -1251,10 +1259,10 @@ export default function HomePageClient() {
                   <button
                     type="button"
                     onClick={() => setLinhActive((i) => (i + 1) % LINH_VUC.length)}
-                    className="z-40 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
+                    className="z-40 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/50 text-white shadow-lg backdrop-blur-md sm:h-10 sm:w-10 lg:h-11 lg:w-11"
                     aria-label="Thẻ sau"
                   >
-                    <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
+                    <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
                   </button>
                 </div>
               </div>
