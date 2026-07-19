@@ -21,6 +21,29 @@ import { PricingTabs } from "./PricingTabs";
 
 const TAB_ORDER: PricingPlatformId[] = ["website", "facebook", "googlemaps"];
 
+const BANGGIA_BG = "/about/banggia-bg-deep.png?v=banggia1";
+
+function BanggiaAtmosphere() {
+  return (
+    <div className="pointer-events-none absolute inset-0" aria-hidden>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={BANGGIA_BG}
+        alt=""
+        className="h-full w-full object-cover object-[center_30%] opacity-100"
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 75% 50% at 20% -5%, rgba(196,149,90,0.2), transparent 55%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.22), transparent 55%), linear-gradient(180deg, rgba(14,16,24,0.35) 0%, rgba(8,9,12,0.55) 55%, rgba(8,9,12,0.88) 100%)",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0e1018]/40 via-transparent to-[#08090c]/85" />
+    </div>
+  );
+}
+
 const TAB_INTROS: Record<
   PricingPlatformId,
   { title: string; body: string; links: { href: string; label: string }[] }
@@ -136,14 +159,7 @@ export function BanggiaPageClient() {
   if (!unlocked) {
     return (
       <div className="relative min-h-screen overflow-hidden deep-theme">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 50% at 50% -10%, rgba(196,149,90,0.14), transparent 55%), radial-gradient(ellipse 45% 35% at 85% 70%, rgba(139,124,246,0.1), transparent)",
-          }}
-          aria-hidden
-        />
+        <BanggiaAtmosphere />
         <div className="pointer-events-none absolute inset-0 select-none opacity-25 blur-xl" aria-hidden>
           <div className="mx-auto max-w-5xl px-6 py-28">
             <div className="h-px w-24 bg-white/20" />
@@ -162,14 +178,7 @@ export function BanggiaPageClient() {
 
   return (
     <div className="banggia-deep relative min-h-screen overflow-x-hidden deep-theme text-white">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 20% -5%, rgba(196,149,90,0.12), transparent 55%), radial-gradient(ellipse 40% 35% at 90% 20%, rgba(139,124,246,0.1), transparent 50%), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
-        }}
-        aria-hidden
-      />
+      <BanggiaAtmosphere />
 
       <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#0a0b10]/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">

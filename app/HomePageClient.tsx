@@ -177,8 +177,9 @@ const ABOUT_DEVICES = [
 ] as const;
 
 const LINH_VUC_BG = "/about/about-city-bg-deep.png?v=deep-lv2";
-const DU_AN_BG = "/about/linh-vuc-desk-bg.png?v=du-an";
-const VOICE_BG = "/about/about-voice-bg-deep.png?v=voice1";
+const DU_AN_BG = "/about/du-an-bg-deep.png?v=duan1";
+const VOICE_BG = "/about/about-voice-bg-deep.png?v=voice2";
+const TU_VAN_BG = "/about/tu-van-bg-deep.png?v=tuvan1";
 
 const LINH_VUC = [
   {
@@ -1779,10 +1780,17 @@ export default function HomePageClient() {
               <img
                 src={DU_AN_BG}
                 alt=""
-                className="corp-parallax-bg h-full w-full object-cover object-[center_40%] opacity-40 saturate-[0.65]"
+                className="corp-parallax-bg h-full w-full object-cover object-[center_35%] opacity-100"
               />
-              <div className="absolute inset-0 bg-[#070b16]/82" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#070b16]/95 via-[#070b16]/70 to-[#070b16]/45" />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 70% 50% at 55% 8%, rgba(167,139,250,0.26), transparent 58%), radial-gradient(ellipse 40% 35% at 12% 70%, rgba(196,149,90,0.1), transparent 55%), linear-gradient(180deg, rgba(18,12,36,0.4) 0%, rgba(12,10,26,0.5) 45%, rgba(8,8,18,0.7) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#120e28]/70 via-[#120e28]/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#1a1035]/40 via-transparent to-[#0e0a1c]/75" />
             </div>
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl -translate-y-3 flex-col justify-center px-4 pb-6 pt-[2.75rem] sm:translate-y-0 sm:justify-start sm:px-8 sm:pb-4 sm:pt-20 lg:px-12 lg:pl-20 xl:pl-28">
@@ -1940,16 +1948,24 @@ export default function HomePageClient() {
           {/* 5 — Đặt lịch tư vấn: ngày/giờ trái · form phải */}
           <section
             id="tu-van"
-            className={sectionClass(4, "relative flex flex-col justify-center overflow-hidden bg-[#06080f] text-white")}
+            className={sectionClass(4, "relative flex flex-col justify-center overflow-hidden text-white")}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={CORP_HERO_SLIDES[5]}
-              alt=""
-              className="corp-parallax-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.14] saturate-50"
-            />
-            <div className="absolute inset-0 bg-[#06080f]/82" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_20%,rgba(109,40,217,0.16),transparent_65%)]" />
+            <div className="pointer-events-none absolute inset-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={TU_VAN_BG}
+                alt=""
+                className="corp-parallax-bg h-full w-full object-cover object-[center_40%] opacity-100"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 70% 48% at 50% 10%, rgba(167,139,250,0.28), transparent 58%), radial-gradient(ellipse 40% 30% at 15% 70%, rgba(196,149,90,0.12), transparent 55%), linear-gradient(180deg, rgba(18,12,36,0.42) 0%, rgba(12,10,26,0.55) 50%, rgba(8,8,18,0.72) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#1a1035]/45 via-transparent to-[#0e0a1c]/78" />
+            </div>
 
             <div
               data-project-scroll

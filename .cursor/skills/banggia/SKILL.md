@@ -1,18 +1,19 @@
 ---
 name: banggia
 description: >-
-  Design and implement deep, premium site menus and /banggia pricing navigation
-  for Bứt Phá Marketing. Use when the user mentions /banggia, bảng giá, menu
-  so deep, site nav depth, SiteNavMenu, or SIMPLE_NAV_LINKS.
+  Design and implement deep, premium /banggia pricing page, nav, and section
+  backgrounds for Bứt Phá Marketing. Use when the user mentions /banggia, bảng
+  giá, menu so deep, site nav depth, SiteNavMenu, SIMPLE_NAV_LINKS, or pricing
+  atmosphere backgrounds.
 disable-model-invocation: true
 ---
 
-# `/banggia` — menu so deep
+# `/banggia` — menu so deep + atmosphere
 
 ## What this skill does
 
-Guide menu and pricing-nav work so the site nav feels **so deep**: layered,
-premium, intentional — not a flat link dump.
+Guide menu, pricing-nav, and **deep atmosphere backgrounds** so `/banggia` and
+related homepage sections feel layered and premium — not flat black.
 
 ## Canonical paths
 
@@ -22,6 +23,25 @@ premium, intentional — not a flat link dump.
 | Nav data | `lib/site-navigation.ts` (`SIMPLE_NAV_LINKS`, `SERVICE_NAV_GROUPS`) |
 | Nav UI | `components/shared/SiteNavMenu.tsx` |
 | Attribution / gate | `lib/banggia-*.ts`, `app/api/banggia-access` |
+| Banggia BG asset | `public/about/banggia-bg-deep.png` (+ `banggia-bg-concept.png`) |
+| Tư vấn BG asset | `public/about/tu-van-bg-deep.png` (+ `tu-van-bg-concept.png`) |
+| Regen script | `scripts/gen-banggia-tuvan-bgs.mjs` |
+| Homepage tư vấn | `app/HomePageClient.tsx` section `#tu-van` |
+
+## Background rules (deep purple)
+
+1. Prefer a **themed photo/concept image** + **violet/amber CSS overlay** — never flat `#06080f` alone.
+2. `/banggia` uses `BANGGIA_BG` via `BanggiaAtmosphere` in `BanggiaPageClient.tsx` (gate + unlocked).
+3. Homepage **Đặt lịch hẹn tư vấn** uses `TU_VAN_BG` (`/about/tu-van-bg-deep.png`).
+4. Themes:
+   - **Bảng giá:** rate-card / ledger / soft price-tag atmosphere, amber top-left + violet wash.
+   - **Tư vấn:** calendar grid + clock arcs → appointment light, calm center for the form.
+5. After regenerating assets, bump cache query (`?v=…`) on constants.
+6. Keep text readable: overlays may darken bottom; leave mid/upper glow for hierarchy.
+
+```bash
+node scripts/gen-banggia-tuvan-bgs.mjs
+```
 
 ## Menu rules (so deep)
 
@@ -45,6 +65,7 @@ premium, intentional — not a flat link dump.
 - Preserve gate + attribution flow (`captureBanggiaAttribution`, access API).
 - Public prices only after gate; do not leak full pricing elsewhere.
 - CTAs elsewhere may link to `/banggia` without duplicating price tables.
+- Keep `BanggiaAtmosphere` on both locked and unlocked shells.
 
 ## Checklist
 
@@ -52,4 +73,6 @@ premium, intentional — not a flat link dump.
 - [ ] `SiteNavMenu` lead includes `/banggia` with emphasize (violet CTA)
 - [ ] Mobile stack + desktop horizontal both show the item under Trang Chủ
 - [ ] Active highlight works when `activeHref === "/banggia"`
+- [ ] `/banggia` uses `banggia-bg-deep.png` + purple overlay (not flat black)
+- [ ] Homepage `#tu-van` uses `tu-van-bg-deep.png` + purple overlay
 - [ ] No broken links; page `/banggia` still loads
