@@ -26,6 +26,11 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
   useEffect(() => {
     setActive(true);
     void import("@/lib/type-click-sound").then((m) => m.ensureTypeClickAudio());
+    // Unlock AudioContext sớm (loading) — nhạc chỉ nghe khi vào section 1
+    void import("@/lib/ambient-bg-music").then((m) => {
+      m.setBgMusicSectionActive(false);
+      m.armBgMusicAutoStart(0.11);
+    });
   }, []);
 
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);

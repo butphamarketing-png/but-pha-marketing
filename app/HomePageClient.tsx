@@ -148,7 +148,7 @@ const EMPTY_CONSULT_FORM = {
   note: "",
 };
 
-const ABOUT_CITY_BG = "/about/about-city-bg-deep.png?v=deep1";
+const ABOUT_CITY_BG = "/about/about-city-bg-deep.png?v=deep2";
 
 /** Reveal: phone → laptop từ trái sang. Không dùng iPad. */
 const ABOUT_DEVICES = [
@@ -176,8 +176,9 @@ const ABOUT_DEVICES = [
   },
 ] as const;
 
-const LINH_VUC_BG = "/about/about-city-bg-deep.png?v=deep-lv";
+const LINH_VUC_BG = "/about/about-city-bg-deep.png?v=deep-lv2";
 const DU_AN_BG = "/about/linh-vuc-desk-bg.png?v=du-an";
+const VOICE_BG = "/about/about-voice-bg-deep.png?v=voice1";
 
 const LINH_VUC = [
   {
@@ -502,11 +503,11 @@ export default function HomePageClient() {
     ensureTypeClickAudio();
     // Nhạc chỉ khi đã vào site và đang ở section 1
     if (activeSection === 0) {
-      setBgMusicSectionActive(true, 0.062);
-      armBgMusicAutoStart(0.062);
-      void startBgMusic(0.062);
+      setBgMusicSectionActive(true, 0.11);
+      armBgMusicAutoStart(0.11);
+      void startBgMusic(0.11);
     } else {
-      setBgMusicSectionActive(false, 0.062);
+      setBgMusicSectionActive(false, 0.11);
     }
     const t = window.setTimeout(() => setHeroMotionReady(true), 100);
     return () => window.clearTimeout(t);
@@ -515,14 +516,14 @@ export default function HomePageClient() {
   // Chỉ section 1 có nhạc nền spa — section khác tắt hẳn
   useEffect(() => {
     if (!siteReady) {
-      setBgMusicSectionActive(false, 0.062);
+      setBgMusicSectionActive(false, 0.11);
       return;
     }
     const onHero = activeSection === 0;
-    setBgMusicSectionActive(onHero, 0.062);
+    setBgMusicSectionActive(onHero, 0.11);
     if (onHero) {
-      armBgMusicAutoStart(0.062);
-      void startBgMusic(0.062);
+      armBgMusicAutoStart(0.11);
+      void startBgMusic(0.11);
     }
   }, [activeSection, siteReady]);
 
@@ -540,8 +541,8 @@ export default function HomePageClient() {
     let cancelled = false;
     const tryAuto = window.setTimeout(async () => {
       if (cancelled || heroWelcomeTried.current) return;
-      setBgMusicSectionActive(true, 0.062);
-      await startBgMusic(0.062);
+      setBgMusicSectionActive(true, 0.11);
+      await startBgMusic(0.11);
       const unlocked = await unlockHeroAudio();
       if (unlocked) {
         heroWelcomeTried.current = true;
@@ -570,8 +571,8 @@ export default function HomePageClient() {
     heroWelcomeTried.current = true;
     await unlockHeroAudio();
     ensureTypeClickAudio();
-    setBgMusicSectionActive(true, 0.062);
-    await startBgMusic(0.062);
+    setBgMusicSectionActive(true, 0.11);
+    await startBgMusic(0.11);
     const ok = await playHeroWelcomeExperience({
       skipIfPlayed: false,
       brandName,
@@ -1431,24 +1432,24 @@ export default function HomePageClient() {
             id="gioi-thieu"
             className={sectionClass(1, "relative flex overflow-hidden text-white")}
           >
-            {/* Nền ảnh so deep (amber + tím) — không full đen */}
+            {/* Nền tím deep + skyline — giữ rõ màu, không crush đen */}
             <div className="pointer-events-none absolute inset-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={ABOUT_CITY_BG}
                 alt=""
-                className="corp-parallax-bg h-full w-full object-cover object-[center_35%] opacity-90"
+                className="corp-parallax-bg h-full w-full object-cover object-[center_40%] opacity-100"
               />
               <div
                 className="absolute inset-0"
                 style={{
                   background:
-                    "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.18), transparent 58%), radial-gradient(ellipse 50% 45% at 92% 15%, rgba(139,124,246,0.16), transparent 55%), linear-gradient(165deg, rgba(14,16,24,0.35) 0%, rgba(8,9,12,0.55) 55%, rgba(10,9,20,0.7) 100%)",
+                    "radial-gradient(ellipse 95% 60% at 48% 0%, rgba(196,149,90,0.22), transparent 55%), radial-gradient(ellipse 55% 50% at 88% 18%, rgba(155,140,255,0.28), transparent 58%), radial-gradient(ellipse 70% 55% at 50% 45%, rgba(91,77,184,0.18), transparent 65%), linear-gradient(165deg, rgba(26,20,56,0.22) 0%, rgba(18,14,40,0.28) 50%, rgba(12,10,28,0.45) 100%)",
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0e1018]/75 via-[#0e1018]/25 to-[#0e1018]/80" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#08090c]/70 via-transparent to-[#0e1018]/45" />
-              <div className="absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#0a0914]/75 via-[#0a0914]/35 to-transparent sm:w-[48%]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1a1438]/45 via-transparent to-[#1a1438]/50" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#120e28]/55 via-transparent to-[#1a1438]/30" />
+              <div className="absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#1a1438]/40 via-[#1a1438]/15 to-transparent sm:w-[48%]" />
             </div>
 
             <div className="relative z-10 mx-auto flex h-full w-full max-w-[1280px] flex-col justify-center gap-5 px-5 pb-10 pt-[4.75rem] sm:gap-6 sm:px-8 sm:pb-12 sm:pt-20 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-4 md:px-8 md:pb-14 md:pt-16 lg:gap-2 lg:px-10 lg:pb-16 lg:pt-20 xl:gap-4 xl:pl-16">
@@ -2347,12 +2348,25 @@ export default function HomePageClient() {
           {/* 7 — Tiếng nói: trước/sau + 3 logo + nút sát rìa */}
           <section
             id="tieng-noi"
-            className={sectionClass(6, "relative flex flex-col overflow-hidden bg-[#06080f] text-white")}
+            className={sectionClass(6, "relative flex flex-col overflow-hidden text-white")}
           >
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-0 bg-[#06080f]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_20%,rgba(109,40,217,0.22),transparent_70%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(76,29,149,0.14),transparent_60%)]" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={VOICE_BG}
+                alt=""
+                className="corp-parallax-bg h-full w-full object-cover object-[center_45%] opacity-100"
+              />
+              {/* Lớp tím deep — giữ chữ rõ, skyline vẫn lộ */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 70% 50% at 50% 12%, rgba(167,139,250,0.32), transparent 58%), radial-gradient(ellipse 45% 35% at 18% 70%, rgba(109,40,217,0.18), transparent 60%), radial-gradient(ellipse 40% 30% at 88% 75%, rgba(139,124,246,0.16), transparent 55%), linear-gradient(180deg, rgba(20,12,40,0.45) 0%, rgba(14,10,28,0.55) 45%, rgba(10,8,22,0.72) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#1a1035]/50 via-transparent to-[#0e0a1c]/75" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_50%_55%,rgba(139,124,246,0.12),transparent_70%)]" />
             </div>
 
             <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col items-center justify-center overflow-y-auto px-4 py-24 sm:px-10 sm:py-28 lg:overflow-visible lg:px-14 lg:py-32">
