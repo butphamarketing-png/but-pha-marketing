@@ -42,7 +42,7 @@ const initialForm: ContactFormState = {
   note: "",
 };
 
-const budgetOptions = ["Du?i 10 tri?u", "10 - 20 tri?u", "20 - 50 tri?u", "Tr�n 50 tri?u"];
+const budgetOptions = ["Dưới 10 triệu", "10 - 20 triệu", "20 - 50 triệu", "Trên 50 triệu"];
 
 const inputClass =
   "w-full border border-white/12 bg-[#0c0d12] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-amber-200/35";
@@ -61,13 +61,13 @@ export default function ContactPageClient() {
     void db.services.getAll().then((result) => setServices(result.data || []));
   }, []);
 
-  const brandName = settings?.title || "B?t Ph� Marketing";
+  const brandName = settings?.title || "Bứt Phá Marketing";
   const logoSrc = "/logo.png";
   const serviceOptions = useMemo(() => {
     const names = services.map((service) => service.name).filter(Boolean);
     return names.length > 0
       ? names
-      : ["Thi?t K? Website", "Qu?n tr? Fanpage", "Google Maps Marketing", "AI Content / SEO"];
+      : ["Thiết Kế Website", "Quản trị Fanpage", "Google Maps Marketing", "AI Content / SEO"];
   }, [services]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -81,7 +81,7 @@ export default function ContactPageClient() {
       type: "contact",
       name: form.name,
       phone: form.phone,
-      service: form.service || "Tu v?n t?ng th?",
+      service: form.service || "Tư vấn tổng thể",
       note: [form.email, form.budget, form.note].filter(Boolean).join(" | "),
       platform: "contact_page",
     });
@@ -89,12 +89,12 @@ export default function ContactPageClient() {
     if (result.error) {
       setState({
         type: "error",
-        message: "Chua g?i du?c y�u c?u. Vui l�ng th? l?i sau.",
+        message: "Chưa gửi được yêu cầu. Vui lòng thử lại sau.",
       });
     } else {
       setState({
         type: "success",
-        message: "�� g?i y�u c?u tu v?n. �?i ngu s? li�n h? v?i b?n s?m nh?t.",
+        message: "Đã gửi yêu cầu tư vấn. Đội ngũ sẽ liên hệ với bạn sớm nhất.",
       });
       setForm(initialForm);
     }
@@ -115,28 +115,28 @@ export default function ContactPageClient() {
       value: resolveEmail(settings?.email),
       href: getMailtoHref(settings?.email),
     },
-    { icon: MapPin, title: "�?a ch?", value: resolveAddress(settings?.address) },
-    { icon: Clock3, title: "Th?i gian l�m vi?c", value: "08:30 - 17:30 (Th? 2 - Th? 7)" },
+    { icon: MapPin, title: "Địa chỉ", value: resolveAddress(settings?.address) },
+    { icon: Clock3, title: "Thời gian làm việc", value: "08:30 - 17:30 (Thứ 2 - Thứ 7)" },
   ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden deep-theme text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#08090c] text-white">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[70vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
+            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 40% 30% at 15% 25%, rgba(234,88,12,0.06), transparent), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
         }}
         aria-hidden
       />
 
-      <header className="sticky top-0 z-40 border-b border-white/[0.06]  bg-[#0e1018]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090c]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
             <div className="hidden sm:block">
               <div className="text-sm font-medium tracking-wide text-white/90">{brandName}</div>
-              <div className="text-[11px] text-amber-200/55">Marketing th?c chi?n</div>
+              <div className="text-[11px] text-amber-200/55">Marketing thực chiến</div>
             </div>
           </Link>
 
@@ -149,7 +149,7 @@ export default function ContactPageClient() {
             className="hidden items-center gap-2 rounded-full bg-amber-200 px-4 py-2.5 text-xs font-semibold text-[#0b0d12] transition hover:bg-amber-100 lg:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" />
-            G?i ngay
+            Gọi ngay
           </a>
 
           <div className="lg:hidden [&_button]:text-white/80">
@@ -161,26 +161,26 @@ export default function ContactPageClient() {
       <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
         <nav aria-label="Breadcrumb" className="mb-10 flex items-center gap-2 text-sm text-white/40">
           <Link href="/" className="transition hover:text-amber-100">
-            Trang ch?
+            Trang chủ
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-white/25" />
-          <span className="text-white/70">Li�n h?</span>
+          <span className="text-white/70">Liên hệ</span>
         </nav>
 
         <section className="border-b border-white/[0.06] pb-14">
           <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:gap-16">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
-                Li�n h? tu v?n
+                Liên hệ tư vấn
               </p>
               <h1
                 className="mt-4 max-w-xl text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1.08] tracking-tight text-white"
                 style={serif}
               >
-                Lu�n s?n s�ng h? tr? b?n
+                Luôn sẵn sàng hỗ trợ bạn
               </h1>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-white/45 sm:text-[15px]">
-                B?n c� c�u h?i ho?c mu?n tu v?n d?ch v?? �?i ngu B?t Ph� lu�n s?n s�ng d?ng h�nh c�ng b?n.
+                Bạn có câu hỏi hoặc muốn tư vấn dịch vụ? Đội ngũ Bứt Phá luôn sẵn sàng đồng hành cùng bạn.
               </p>
 
               <div className="mt-10 space-y-0">
@@ -217,12 +217,12 @@ export default function ContactPageClient() {
             </div>
 
             <div className="border border-white/[0.08] bg-white/[0.02] px-6 py-8 sm:px-8 sm:py-10">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Form tu v?n</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Form tư vấn</p>
               <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
-                G?i y�u c?u tu v?n
+                Gửi yêu cầu tư vấn
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-white/40">
-                �i?n th�ng tin, ch�ng t�i s? li�n h? l?i trong th?i gian s?m nh?t.
+                Điền thông tin, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
               </p>
 
               <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -230,14 +230,14 @@ export default function ContactPageClient() {
                   <input
                     value={form.name}
                     onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-                    placeholder="H? v� t�n *"
+                    placeholder="Họ và tên *"
                     className={inputClass}
                     required
                   />
                   <input
                     value={form.phone}
                     onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
-                    placeholder="S? di?n tho?i *"
+                    placeholder="Số điện thoại *"
                     className={inputClass}
                     required
                   />
@@ -258,7 +258,7 @@ export default function ContactPageClient() {
                     className={`${inputClass} [&>option]:bg-[#0c0d12] [&>option]:text-white`}
                     required
                   >
-                    <option value="">D?ch v? quan t�m *</option>
+                    <option value="">Dịch vụ quan tâm *</option>
                     {serviceOptions.map((item) => (
                       <option key={item} value={item}>
                         {item}
@@ -270,7 +270,7 @@ export default function ContactPageClient() {
                     onChange={(event) => setForm((prev) => ({ ...prev, budget: event.target.value }))}
                     className={`${inputClass} [&>option]:bg-[#0c0d12] [&>option]:text-white`}
                   >
-                    <option value="">Ng�n s�ch d? ki?n</option>
+                    <option value="">Ngân sách dự kiến</option>
                     {budgetOptions.map((item) => (
                       <option key={item} value={item}>
                         {item}
@@ -283,7 +283,7 @@ export default function ContactPageClient() {
                   value={form.note}
                   onChange={(event) => setForm((prev) => ({ ...prev, note: event.target.value }))}
                   rows={4}
-                  placeholder="N?i dung b?n mu?n tu v?n"
+                  placeholder="Nội dung bạn muốn tư vấn"
                   className={`${inputClass} resize-y`}
                 />
 
@@ -293,10 +293,10 @@ export default function ContactPageClient() {
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-amber-200 px-6 py-3.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Send className="h-4 w-4" />
-                  {submitting ? "�ang g?i y�u c?u..." : "G?i y�u c?u tu v?n"}
+                  {submitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu tư vấn"}
                 </button>
 
-                <p className="text-center text-xs text-white/30">Th�ng tin c?a b?n du?c b?o m?t tuy?t d?i.</p>
+                <p className="text-center text-xs text-white/30">Thông tin của bạn được bảo mật tuyệt đối.</p>
 
                 {state.type !== "idle" ? (
                   <p
@@ -313,16 +313,16 @@ export default function ContactPageClient() {
         </section>
 
         <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Cam k?t</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Cam kết</p>
           <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
-            V� sao li�n h? v?i ch�ng t�i
+            Vì sao liên hệ với chúng tôi
           </h2>
           <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { title: "Ph?n h?i nhanh ch�ng", description: "Ch�ng t�i ph?n h?i trong 15 ph�t", icon: Headphones },
-              { title: "B?o m?t th�ng tin", description: "Cam k?t b?o m?t tuy?t d?i", icon: ShieldCheck },
-              { title: "Tu v?n t?n t�m", description: "�ua ra gi?i ph�p ph� h?p nh?t", icon: Target },
-              { title: "�?ng h�nh d�i l�u", description: "H? tr? tru?c � trong � sau d? �n", icon: Users },
+              { title: "Phản hồi nhanh chóng", description: "Chúng tôi phản hồi trong 15 phút", icon: Headphones },
+              { title: "Bảo mật thông tin", description: "Cam kết bảo mật tuyệt đối", icon: ShieldCheck },
+              { title: "Tư vấn tận tâm", description: "Đưa ra giải pháp phù hợp nhất", icon: Target },
+              { title: "Đồng hành dài lâu", description: "Hỗ trợ trước — trong — sau dự án", icon: Users },
             ].map((item) => (
               <article key={item.title} className="border-l border-amber-200/25 pl-4">
                 <item.icon className="h-4 w-4 text-amber-200/55" />
@@ -341,12 +341,12 @@ export default function ContactPageClient() {
               <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
               <div>
                 <p className="text-sm font-medium tracking-wide text-white/90">{brandName}</p>
-                <p className="text-[11px] text-amber-200/50">Marketing th?c chi?n</p>
+                <p className="text-[11px] text-amber-200/50">Marketing thực chiến</p>
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/40">
-              Gi?i ph�p marketing to�n di?n gi�p doanh nghi?p tang tru?ng b?n v?ng b?ng c�ng ngh?, t? d?ng v� d? li?u
-              th�ng minh.
+              Giải pháp marketing toàn diện giúp doanh nghiệp tăng trưởng bền vững bằng công nghệ, tự động và dữ liệu
+              thông minh.
             </p>
             <div className="mt-5 flex items-center gap-3">
               <a
@@ -367,7 +367,7 @@ export default function ContactPageClient() {
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Li�n h?</h3>
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Liên hệ</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>{resolveHotline(settings?.hotline)}</li>
               <li>
@@ -383,16 +383,16 @@ export default function ContactPageClient() {
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">D?ch v?</h3>
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Dịch vụ</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>
                 <Link href="/website" className="hover:text-amber-100">
-                  Thi?t k? website
+                  Thiết kế website
                 </Link>
               </li>
               <li>
                 <Link href="/facebook" className="hover:text-amber-100">
-                  Qu?n tr? Fanpage
+                  Quản trị Fanpage
                 </Link>
               </li>
               <li>
@@ -409,26 +409,26 @@ export default function ContactPageClient() {
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Li�n k?t</h3>
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Liên kết</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>
                 <Link href="/" className="hover:text-amber-100">
-                  Trang ch?
+                  Trang chủ
                 </Link>
               </li>
               <li>
                 <Link href="/gioi-thieu" className="hover:text-amber-100">
-                  Gi?i thi?u
+                  Giới thiệu
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="hover:text-amber-100">
-                  Tin t?c
+                  Tin tức
                 </Link>
               </li>
               <li>
                 <Link href="/banggia" className="hover:text-amber-100">
-                  B?ng gi�
+                  Bảng giá
                 </Link>
               </li>
             </ul>

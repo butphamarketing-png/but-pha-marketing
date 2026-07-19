@@ -1,5 +1,4 @@
 import { getDynamicMetadata } from "@/lib/seo";
-import { WebsiteSchema } from "./WebsiteSchema";
 
 export async function generateMetadata() {
   return getDynamicMetadata("/website", {
@@ -17,11 +16,7 @@ export async function generateMetadata() {
   });
 }
 
+/** Schema Service/FAQ chỉ gắn hub /website — không leak sang /website/* children. */
 export default function WebsiteLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <WebsiteSchema />
-      {children}
-    </>
-  );
+  return children;
 }

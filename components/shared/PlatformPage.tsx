@@ -887,7 +887,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
       "@type": "LocalBusiness",
       name: "Bứt Phá Marketing",
       url: siteUrl,
-      image: `${siteUrl}/logo.jpg`,
+      image: `${siteUrl}/logo.png`,
       telephone: `+84${SITE_CONTACT.hotline.replace(/^0/, "")}`,
       email: SITE_CONTACT.email,
       address: {

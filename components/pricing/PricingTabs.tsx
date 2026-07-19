@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Facebook, MapPin, Monitor } from "lucide-react";
 import type { PricingPlatform, PricingPlatformId } from "@/lib/pricing-catalog";
 import { PRICING_PLATFORMS } from "@/lib/pricing-catalog";
-import { tabIconSpring } from "@/lib/banggia-motion";
 import { setBanggiaLastTab } from "@/lib/banggia-prefs";
 import { PricingDocLayout, PricingSearchBar } from "./PricingDocLayout";
 
@@ -24,27 +23,7 @@ const TAB_ICONS = {
 const TAB_ITEMS = PRICING_PLATFORMS.map((platform) => ({
   id: platform.id,
   label: platform.label,
-  color: platform.color,
-  branchCount: platform.branches.length,
 }));
-
-function TabIcon({ active, Icon, tabId }: { active: boolean; Icon: typeof Monitor; tabId: string }) {
-  if (!active) {
-    return <Icon className="h-4 w-4 shrink-0 opacity-60" aria-hidden />;
-  }
-
-  return (
-    <motion.span
-      key={`${tabId}-active`}
-      initial={{ scale: 0.88, rotate: -5 }}
-      animate={{ scale: 1, rotate: 0 }}
-      transition={tabIconSpring}
-      className="inline-flex"
-    >
-      <Icon className="h-4 w-4 shrink-0" aria-hidden />
-    </motion.span>
-  );
-}
 
 export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,13 +37,13 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
   };
 
   return (
-    <div className="space-y-6 sm:space-y-7">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="space-y-8">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div
           ref={tabListRef}
           role="tablist"
           aria-label="Nền tảng dịch vụ"
-          className="relative flex w-full rounded-full border border-white/[0.08] bg-white/[0.03] p-1 sm:inline-flex sm:w-auto"
+          className="flex w-full gap-0 border-b border-white/[0.08] sm:w-auto"
         >
           {TAB_ITEMS.map((tab) => {
             const active = tab.id === activeId;
@@ -76,27 +55,25 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
                 role="tab"
                 aria-selected={active}
                 onClick={() => handleTabChange(tab.id)}
-                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-colors sm:flex-none sm:px-5 sm:py-2.5 ${
-                  active ? "text-[#0b0d12]" : "text-white/50 hover:text-white/80"
+                className={`relative flex flex-1 items-center justify-center gap-2 px-4 py-3.5 text-sm font-medium transition-colors sm:flex-none sm:px-6 ${
+                  active ? "text-amber-100" : "text-white/40 hover:text-white/70"
                 }`}
               >
+                <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                {tab.label}
                 {active ? (
                   <motion.span
-                    layoutId="banggia-tab-pill"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-100 to-amber-200 shadow-[0_0_24px_rgba(196,149,90,0.25)]"
-                    transition={{ type: "spring", stiffness: 480, damping: 32 }}
+                    layoutId="banggia-tab-line"
+                    className="absolute inset-x-0 bottom-0 h-px bg-amber-200/80"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 ) : null}
-                <span className="relative flex items-center gap-2">
-                  <TabIcon active={active} Icon={Icon} tabId={tab.id} />
-                  {tab.label}
-                </span>
               </button>
             );
           })}
         </div>
 
-        <div className="w-full lg:max-w-sm">
+        <div className="w-full lg:max-w-xs">
           <PricingSearchBar
             value={searchQuery}
             onChange={setSearchQuery}
@@ -110,18 +87,14 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
         <motion.div
           key={`${activeId}-${searchQuery.trim()}`}
           custom={direction}
-          initial={{ opacity: 0, x: isFilteringTransition(direction, searchQuery) ? 0 : direction >= 0 ? 12 : -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: direction >= 0 ? -12 : 12 }}
-          transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
         >
           <PricingDocLayout platform={activePlatform} searchQuery={searchQuery} />
         </motion.div>
       </AnimatePresence>
     </div>
   );
-}
-
-function isFilteringTransition(_direction: number, query: string) {
-  return query.trim().length > 0;
 }

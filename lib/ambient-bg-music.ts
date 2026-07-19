@@ -1,19 +1,18 @@
-/** Nhạc nền spa — êm, ấm; auto trên loading + section 1. */
+/** Nhạc nền chill lo-fi — êm, ấm; chỉ section 1. */
 
 type AudioCtx = AudioContext;
 
-/** Chỉ tắt khi user mute ("1"). Mặc định bật. */
 const MUTE_KEY = "bp-bg-music-muted";
 const DEFAULT_VOLUME = 0.062;
 
 let sharedCtx: AudioCtx | null = null;
 let masterGain: GainNode | null = null;
 let started = false;
-let muted = false;
-/** Loading / section 1 đang nghe được nhạc */
-let sectionAudible = true;
+/** Chỉ true khi đang ở section 1 */
+let sectionAudible = false;
 let nodes: AudioNode[] = [];
 let oscillators: OscillatorNode[] = [];
+let bufferSources: AudioBufferSourceNode[] = [];
 let lfos: OscillatorNode[] = [];
 let chimeTimer: number | null = null;
 let gestureBound = false;
@@ -32,35 +31,22 @@ function getAudioContext(): AudioCtx | null {
   }
 }
 
-/** Mặc định bật — chỉ tắt khi user đã mute. */
-export function isBgMusicMuted(): boolean {
-  if (typeof window === "undefined") return false;
+/** Xóa preference mute cũ (nếu còn từ bản trước). */
+function clearLegacyMutePreference() {
+  if (typeof window === "undefined") return;
   try {
-    return localStorage.getItem(MUTE_KEY) === "1";
-  } catch {
-    return muted;
-  }
-}
-
-export function isBgMusicPlaying(): boolean {
-  return started && !muted && sectionAudible && sharedCtx?.state === "running";
-}
-
-function readMutedPreference() {
-  muted = isBgMusicMuted();
-}
-
-function writeMutedPreference(value: boolean) {
-  muted = value;
-  try {
-    localStorage.setItem(MUTE_KEY, value ? "1" : "0");
+    localStorage.removeItem(MUTE_KEY);
   } catch {
     // no-op
   }
 }
 
+export function isBgMusicPlaying(): boolean {
+  return started && sectionAudible && sharedCtx?.state === "running";
+}
+
 function targetGain(volume: number) {
-  if (muted || !sectionAudible) return 0.0001;
+  if (!sectionAudible) return 0.0001;
   return Math.max(0.001, Math.min(0.12, volume));
 }
 
@@ -87,6 +73,14 @@ function stopGraph() {
       // no-op
     }
   }
+  for (const src of bufferSources) {
+    try {
+      src.stop();
+      src.disconnect();
+    } catch {
+      // no-op
+    }
+  }
   for (const n of nodes) {
     try {
       n.disconnect();
@@ -95,14 +89,15 @@ function stopGraph() {
     }
   }
   oscillators = [];
+  bufferSources = [];
   lfos = [];
   nodes = [];
   masterGain = null;
   started = false;
 }
 
-/** Pad spa ấm + chuông nhẹ */
-function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
+/** Pad chill lo-fi — ấm, chậm, có hơi noise mềm + pluck pentatonic */
+function buildChillGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   stopGraph();
 
   const master = ctx.createGain();
@@ -111,75 +106,116 @@ function buildSpaGraph(ctx: AudioCtx, volume = DEFAULT_VOLUME) {
   masterGain = master;
   nodes.push(master);
 
+  // Warm bus
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(680, ctx.currentTime);
-  filter.Q.value = 0.45;
+  filter.frequency.setValueAtTime(420, ctx.currentTime);
+  filter.Q.value = 0.35;
   filter.connect(master);
   nodes.push(filter);
 
-  const lfo = ctx.createOscillator();
-  lfo.type = "sine";
-  lfo.frequency.value = 0.045;
-  const lfoGain = ctx.createGain();
-  lfoGain.gain.value = 160;
-  lfo.connect(lfoGain);
-  lfoGain.connect(filter.frequency);
-  lfo.start();
-  lfos.push(lfo);
-  nodes.push(lfoGain);
+  // Slow breath on filter
+  const breath = ctx.createOscillator();
+  breath.type = "sine";
+  breath.frequency.value = 0.028;
+  const breathGain = ctx.createGain();
+  breathGain.gain.value = 95;
+  breath.connect(breathGain);
+  breathGain.connect(filter.frequency);
+  breath.start();
+  lfos.push(breath);
+  nodes.push(breathGain);
 
-  const partials: { freq: number; type: OscillatorType; gain: number }[] = [
-    { freq: 98.0, type: "sine", gain: 0.42 },
-    { freq: 146.83, type: "sine", gain: 0.36 },
-    { freq: 196.0, type: "sine", gain: 0.28 },
-    { freq: 246.94, type: "triangle", gain: 0.16 },
-    { freq: 293.66, type: "sine", gain: 0.12 },
-    { freq: 392.0, type: "sine", gain: 0.07 },
+  // Soft vinyl / air bed
+  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+  const data = noiseBuf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.35;
+  const noise = ctx.createBufferSource();
+  noise.buffer = noiseBuf;
+  noise.loop = true;
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = "bandpass";
+  noiseFilter.frequency.value = 980;
+  noiseFilter.Q.value = 0.55;
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.value = 0.028;
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(filter);
+  noise.start();
+  bufferSources.push(noise);
+  nodes.push(noiseFilter, noiseGain);
+
+  // Fmaj9 / Am-ish floating pad (chill, not spa fifths)
+  const partials: { freq: number; type: OscillatorType; gain: number; detune: number }[] = [
+    { freq: 87.31, type: "sine", gain: 0.38, detune: -3 }, // F2
+    { freq: 110.0, type: "sine", gain: 0.32, detune: 2 }, // A2
+    { freq: 130.81, type: "triangle", gain: 0.18, detune: -5 }, // C3
+    { freq: 174.61, type: "sine", gain: 0.26, detune: 4 }, // F3
+    { freq: 220.0, type: "sine", gain: 0.2, detune: -2 }, // A3
+    { freq: 261.63, type: "sine", gain: 0.12, detune: 6 }, // C4
+    { freq: 329.63, type: "sine", gain: 0.08, detune: -4 }, // E4
+    { freq: 349.23, type: "triangle", gain: 0.05, detune: 3 }, // F4
   ];
 
   const t = ctx.currentTime;
   for (const p of partials) {
-    const osc = ctx.createOscillator();
-    osc.type = p.type;
-    osc.frequency.setValueAtTime(p.freq, t);
-    osc.detune.setValueAtTime((Math.random() - 0.5) * 4, t);
-
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(p.gain, t);
-    osc.connect(g);
-    g.connect(filter);
-    osc.start();
-    oscillators.push(osc);
-    nodes.push(g);
+    // Dual detuned voices = soft chorus
+    for (const side of [-1, 1] as const) {
+      const osc = ctx.createOscillator();
+      osc.type = p.type;
+      osc.frequency.setValueAtTime(p.freq, t);
+      osc.detune.setValueAtTime(p.detune + side * 7, t);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(p.gain * 0.52, t);
+      osc.connect(g);
+      g.connect(filter);
+      osc.start();
+      oscillators.push(osc);
+      nodes.push(g);
+    }
   }
 
-  const playChime = () => {
-    if (!masterGain || muted || !sectionAudible || ctx.state !== "running") return;
+  // Soft pulse on filter resonance
+  const swell = ctx.createOscillator();
+  swell.type = "sine";
+  swell.frequency.value = 0.07;
+  const swellDepth = ctx.createGain();
+  swellDepth.gain.value = 0.04;
+  swell.connect(swellDepth);
+  swellDepth.connect(filter.Q);
+  swell.start();
+  lfos.push(swell);
+  nodes.push(swellDepth);
+
+  // Soft pentatonic plucks — thưa, êm
+  const playPluck = () => {
+    if (!masterGain || !sectionAudible || ctx.state !== "running") return;
     const now = ctx.currentTime;
-    const notes = [523.25, 659.25, 783.99];
+    const notes = [174.61, 196.0, 220.0, 261.63, 293.66, 329.63]; // F–A–C–D–E chill
     const freq = notes[Math.floor(Math.random() * notes.length)];
-    const chime = ctx.createOscillator();
-    chime.type = "sine";
-    chime.frequency.setValueAtTime(freq, now);
+    const pluck = ctx.createOscillator();
+    pluck.type = "sine";
+    pluck.frequency.setValueAtTime(freq, now);
+    pluck.detune.setValueAtTime((Math.random() - 0.5) * 8, now);
     const cg = ctx.createGain();
     cg.gain.setValueAtTime(0.0001, now);
-    cg.gain.exponentialRampToValueAtTime(0.055, now + 0.08);
-    cg.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+    cg.gain.exponentialRampToValueAtTime(0.032, now + 0.12);
+    cg.gain.exponentialRampToValueAtTime(0.0001, now + 3.6);
     const cf = ctx.createBiquadFilter();
     cf.type = "lowpass";
-    cf.frequency.value = 2400;
-    chime.connect(cf);
+    cf.frequency.value = 1400;
+    pluck.connect(cf);
     cf.connect(cg);
     cg.connect(master);
-    chime.start(now);
-    chime.stop(now + 3);
+    pluck.start(now);
+    pluck.stop(now + 3.8);
   };
 
-  chimeTimer = window.setInterval(playChime, 5500);
-  window.setTimeout(playChime, 1800);
+  chimeTimer = window.setInterval(playPluck, 7200);
+  window.setTimeout(playPluck, 2400);
 
-  applyMasterGain(volume, 2.8);
+  applyMasterGain(volume, 3.2);
   started = true;
 }
 
@@ -194,10 +230,9 @@ export async function unlockBgMusic(): Promise<boolean> {
   }
 }
 
-/** Bắt đầu nhạc spa (idempotent). */
+/** Bắt đầu nhạc chill (idempotent). */
 export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
-  readMutedPreference();
-  if (muted) return false;
+  clearLegacyMutePreference();
 
   const ctx = getAudioContext();
   if (!ctx) return false;
@@ -211,7 +246,7 @@ export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
   if (ctx.state !== "running") return false;
 
   if (!started || !masterGain) {
-    buildSpaGraph(ctx, volume);
+    buildChillGraph(ctx, volume);
   } else {
     applyMasterGain(volume, 1.2);
   }
@@ -219,37 +254,14 @@ export async function startBgMusic(volume = DEFAULT_VOLUME): Promise<boolean> {
   return true;
 }
 
-/** Loading / section 1: audible; section khác fade out */
+/** Chỉ section 1: audible; section khác / loading: tắt */
 export function setBgMusicSectionActive(active: boolean, volume = DEFAULT_VOLUME) {
   sectionAudible = active;
-  readMutedPreference();
   if (!started) {
-    if (active && !muted) void startBgMusic(volume);
+    if (active) void startBgMusic(volume);
     return;
   }
-  applyMasterGain(volume, active ? 1.6 : 0.9);
-}
-
-export function setBgMusicMuted(nextMuted: boolean, volume = DEFAULT_VOLUME) {
-  writeMutedPreference(nextMuted);
-  const ctx = getAudioContext();
-  if (!masterGain || !ctx) {
-    if (!nextMuted && sectionAudible) void startBgMusic(volume);
-    return;
-  }
-  void ctx.resume().catch(() => undefined);
-  applyMasterGain(volume, 0.8);
-}
-
-export function toggleBgMusicMute(volume = DEFAULT_VOLUME): boolean {
-  const next = !isBgMusicMuted();
-  if (!started && !next) {
-    writeMutedPreference(false);
-    if (sectionAudible) void startBgMusic(volume);
-    return false;
-  }
-  setBgMusicMuted(next, volume);
-  return next;
+  applyMasterGain(volume, active ? 1.6 : 0.55);
 }
 
 export function stopBgMusic() {
@@ -263,15 +275,15 @@ export function stopBgMusic() {
 }
 
 /**
- * Auto phát trên loading + section 1.
+ * Auto phát khi đang ở section 1.
  * Nếu trình duyệt chặn autoplay → phát ngay khi có gesture (click/scroll/touch).
  */
 export function armBgMusicAutoStart(volume = DEFAULT_VOLUME) {
   if (typeof window === "undefined") return;
-  readMutedPreference();
+  clearLegacyMutePreference();
 
   const tryStart = () => {
-    if (isBgMusicMuted() || !sectionAudible) return;
+    if (!sectionAudible) return;
     void startBgMusic(volume);
   };
 
@@ -283,5 +295,5 @@ export function armBgMusicAutoStart(volume = DEFAULT_VOLUME) {
     }
   }
 
-  if (sectionAudible && !muted) void startBgMusic(volume);
+  if (sectionAudible) void startBgMusic(volume);
 }

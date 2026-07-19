@@ -105,9 +105,13 @@ export function buildMetadata({
 }: SeoInput): Metadata {
   const canonical = `${BASE_URL}${path}`;
   const imageUrl = image.startsWith("http") ? image : `${BASE_URL}${image}`;
+  const brand = "Bứt Phá Marketing";
+  /** Tránh nhân đôi brand qua root template `%s | Bứt Phá Marketing`. */
+  const titleAlreadyBranded =
+    title.includes(brand) || /\|\s*Bứt Phá/i.test(title) || title.trim() === brand;
 
   return {
-    title,
+    title: titleAlreadyBranded ? { absolute: title } : title,
     description,
     keywords,
     robots: {
@@ -121,10 +125,18 @@ export function buildMetadata({
       title,
       description,
       url: canonical,
-      siteName: "Bứt Phá Marketing",
+      siteName: brand,
       locale: "vi_VN",
       type,
-      images: [{ url: imageUrl, alt: title }],
+      images: [
+        {
+          url: imageUrl,
+          alt: title,
+          width: 1200,
+          height: 630,
+          type: "image/jpeg",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

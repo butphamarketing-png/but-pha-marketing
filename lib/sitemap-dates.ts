@@ -30,11 +30,16 @@ export const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
   "/ai-marketing": "2026-07-07T00:00:00.000Z",
   "/ai-marketing/ai-content": "2026-07-07T00:00:00.000Z",
   "/ai-marketing/ai-search-optimization": "2026-07-07T00:00:00.000Z",
-  "/blog": "2026-07-08T00:00:00.000Z",
+  "/blog": "2026-07-18T00:00:00.000Z",
   "/du-an": "2026-07-08T00:00:00.000Z",
   "/gioi-thieu": "2026-07-07T00:00:00.000Z",
   "/lien-he": "2026-07-07T00:00:00.000Z",
   "/banggia": "2026-07-07T00:00:00.000Z",
+  "/cong-cu": "2026-07-18T00:00:00.000Z",
+  "/cong-cu/dong-dau-logo": "2026-07-18T00:00:00.000Z",
+  "/cong-cu/xoa-nen": "2026-07-18T00:00:00.000Z",
+  "/cong-cu/nen-anh": "2026-07-18T00:00:00.000Z",
+  "/cong-cu/resize-anh": "2026-07-18T00:00:00.000Z",
 };
 
 const PROGRAMMATIC_LAST_MODIFIED = "2026-07-07T00:00:00.000Z";

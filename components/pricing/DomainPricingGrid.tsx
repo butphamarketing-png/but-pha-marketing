@@ -87,7 +87,7 @@ export function DomainPricingGrid({
   return (
     <div className="space-y-4">
       {!q ? (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-0 border-b border-white/[0.08]">
           {tabs.map((tab) => {
             const active = activeCategory === tab.id;
             return (
@@ -95,13 +95,14 @@ export function DomainPricingGrid({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveCategory(tab.id)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-all ${
-                  active
-                    ? "bg-amber-200/15 text-amber-100 ring-1 ring-amber-200/35"
-                    : "bg-white/[0.03] text-white/40 hover:text-white/60"
+                className={`relative px-3.5 py-2.5 text-xs font-medium transition-colors ${
+                  active ? "text-amber-100" : "text-white/40 hover:text-white/65"
                 }`}
               >
                 {tab.label}
+                {active ? (
+                  <span className="absolute inset-x-0 bottom-0 h-px bg-amber-200/70" aria-hidden />
+                ) : null}
               </button>
             );
           })}

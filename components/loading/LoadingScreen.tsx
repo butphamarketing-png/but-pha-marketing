@@ -26,11 +26,6 @@ export function LoadingScreen({ logoSrc, onComplete }: LoadingScreenProps) {
   useEffect(() => {
     setActive(true);
     void import("@/lib/type-click-sound").then((m) => m.ensureTypeClickAudio());
-    // Nhạc spa tự phát ngay từ loading logo
-    void import("@/lib/ambient-bg-music").then((m) => {
-      m.setBgMusicSectionActive(true);
-      m.armBgMusicAutoStart(0.062);
-    });
   }, []);
 
   const { elapsed, duration } = useLoadingTimeline(reducedMotion, active);

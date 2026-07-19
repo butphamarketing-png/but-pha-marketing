@@ -1,4 +1,11 @@
-import type { Metadata } from "next";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const file = path.join(root, "app/blog/page.tsx");
+
+const content = `import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buildMetadata, SITE_URL } from "@/lib/seo";
@@ -15,13 +22,13 @@ const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 export const revalidate = 3600;
 
 export const metadata: Metadata = buildMetadata({
-  title: "Tin tức Marketing | Bứt Phá Marketing",
+  title: "Tin t\\u1ee9c Marketing | B\\u1ee9t Ph\\u00e1 Marketing",
   description:
-    "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
+    "Th\\u01b0 vi\\u1ec7n b\\u00e0i vi\\u1ebft marketing th\\u1ef1c chi\\u1ebfn, t\\u1ed1i \\u01b0u SEO v\\u00e0 t\\u0103ng tr\\u01b0\\u1edfng doanh thu.",
   path: "/blog",
   keywords: [
-    "tin tức marketing",
-    "kiến thức marketing",
+    "tin t\\u1ee9c marketing",
+    "ki\\u1ebfn th\\u1ee9c marketing",
     "seo website",
     "facebook ads",
     "google maps",
@@ -33,33 +40,33 @@ export default async function BlogPage() {
   const growthPillars = [
     {
       href: "/website",
-      title: "Thiết kế website",
-      desc: "Money Page — dịch vụ thiết kế website chuẩn SEO.",
+      title: "Thi\\u1ebft k\\u1ebf website",
+      desc: "Money Page \\u2014 d\\u1ecbch v\\u1ee5 thi\\u1ebft k\\u1ebf website chu\\u1ea9n SEO.",
     },
     {
       href: "/facebook",
       title: "Facebook Marketing",
-      desc: "Money Page — Fanpage, content và Meta Ads.",
+      desc: "Money Page \\u2014 Fanpage, content v\\u00e0 Meta Ads.",
     },
     {
       href: "/google-maps",
       title: "Google Maps",
-      desc: "Money Page — GBP, Local SEO và review thật.",
+      desc: "Money Page \\u2014 GBP, Local SEO v\\u00e0 review th\\u1eadt.",
     },
   ];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Tin tức Marketing",
-    url: `${BASE_URL}/blog`,
+    name: "Tin t\\u1ee9c Marketing",
+    url: \`\${BASE_URL}/blog\`,
     description:
-      "Thư viện bài viết marketing thực chiến, tối ưu SEO và tăng trưởng doanh thu.",
+      "Th\\u01b0 vi\\u1ec7n b\\u00e0i vi\\u1ebft marketing th\\u1ef1c chi\\u1ebfn, t\\u1ed1i \\u01b0u SEO v\\u00e0 t\\u0103ng tr\\u01b0\\u1edfng doanh thu.",
     inLanguage: "vi-VN",
-    isPartOf: { "@type": "WebSite", name: "Bứt Phá Marketing", url: BASE_URL },
+    isPartOf: { "@type": "WebSite", name: "B\\u1ee9t Ph\\u00e1 Marketing", url: BASE_URL },
     hasPart: blogs.slice(0, 12).map((blog) => ({
       "@type": "BlogPosting",
       headline: blog.title,
-      url: `${BASE_URL}/blog/${blog.slug}`,
+      url: \`\${BASE_URL}/blog/\${blog.slug}\`,
       datePublished: blog.publishedAt || new Date(blog.timestamp).toISOString(),
     })),
   };
@@ -95,16 +102,16 @@ export default async function BlogPage() {
         <div className="mb-14 flex flex-col gap-8 border-b border-white/[0.06] pb-14 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
-              Kiến thức thực chiến
+              Ki\\u1ebfn th\\u1ee9c th\\u1ef1c chi\\u1ebfn
             </p>
             <h1
               className="mt-4 text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[1.08] tracking-tight text-white"
               style={serif}
             >
-              Tin tức &amp; Kiến thức
+              Tin t\\u1ee9c &amp; Ki\\u1ebfn th\\u1ee9c
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
-              Cập nhật xu hướng, chiến lược và kiến thức marketing giúp doanh nghiệp tăng trưởng bền vững.
+              C\\u1eadp nh\\u1eadt xu h\\u01b0\\u1edbng, chi\\u1ebfn l\\u01b0\\u1ee3c v\\u00e0 ki\\u1ebfn th\\u1ee9c marketing gi\\u00fap doanh nghi\\u1ec7p t\\u0103ng tr\\u01b0\\u1edfng b\\u1ec1n v\\u1eefng.
             </p>
           </div>
 
@@ -112,7 +119,7 @@ export default async function BlogPage() {
             href="/website"
             className="inline-flex items-center gap-2 self-start rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
           >
-            Thiết kế website
+            Thi\\u1ebft k\\u1ebf website
             <ArrowRight size={16} />
           </Link>
         </div>
@@ -123,7 +130,7 @@ export default async function BlogPage() {
 
         <div className="mb-10">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/50">
-            Silo theo ngành
+            Silo theo ng\\u00e0nh
           </p>
           <BlogIndustryNav variant="deep" />
         </div>
@@ -133,7 +140,7 @@ export default async function BlogPage() {
         <section className="mb-12 border-t border-white/[0.06] pt-12">
           <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Growth Pillars</p>
           <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
-            Nền tảng tăng trưởng
+            N\\u1ec1n t\\u1ea3ng t\\u0103ng tr\\u01b0\\u1edfng
           </h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {growthPillars.map((item) => (
@@ -154,3 +161,13 @@ export default async function BlogPage() {
     </main>
   );
 }
+`;
+
+// Decode unicode escapes in string literals by evaluating as JS template via Function
+const decoded = content.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+  String.fromCharCode(parseInt(hex, 16)),
+);
+
+fs.writeFileSync(file, decoded, "utf8");
+console.log("Wrote", file, "bytes", fs.statSync(file).size);
+console.log(fs.readFileSync(file, "utf8").split("\n")[17]);

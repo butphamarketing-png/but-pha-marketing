@@ -84,9 +84,7 @@ function BranchSection({
         />
       )}
 
-      {!isLast ? (
-        <div className="my-10 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      ) : null}
+      {!isLast ? <div className="my-2" /> : null}
     </motion.section>
   );
 }
@@ -128,12 +126,12 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
 
   if (filtered.branches.length === 0) {
     return (
-      <div className="border border-dashed border-white/15 bg-white/[0.02] p-12 text-center">
+      <div className="border border-dashed border-white/15 py-14 text-center">
         <p className="text-base font-medium text-white/80">Không tìm thấy gói phù hợp</p>
         <p className="mt-2 text-sm text-white/40">Thử từ khóa khác hoặc liên hệ để được tư vấn trực tiếp.</p>
         <Link
           href="/lien-he"
-          className="mt-5 inline-flex rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+          className="mt-5 inline-flex border border-amber-200/40 bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
         >
           Liên hệ tư vấn
         </Link>
@@ -142,9 +140,9 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
   }
 
   return (
-    <div className="space-y-5">
-      <div className="sticky top-[57px] z-30 -mx-1 bg-[#08090c]/90 px-1 py-2 backdrop-blur-md lg:hidden">
-        <div className="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="space-y-6">
+      <div className="sticky top-[57px] z-30 -mx-1 bg-[#08090c]/92 px-1 py-2 backdrop-blur-md lg:hidden">
+        <div className="flex gap-1 overflow-x-auto border-b border-white/[0.08] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {filtered.branches.map((branch) => {
             const active = activeSection === branch.id;
             return (
@@ -152,27 +150,25 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                 key={branch.id}
                 type="button"
                 onClick={() => scrollToSection(branch.id)}
-                className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium transition-all ${
-                  active
-                    ? "bg-amber-200 text-[#0b0d12]"
-                    : "border border-white/10 bg-white/[0.03] text-white/50"
+                className={`relative shrink-0 px-3.5 py-2.5 text-xs font-medium transition-colors ${
+                  active ? "text-amber-100" : "text-white/40"
                 }`}
               >
                 {branch.label}
-                <span className="ml-1 opacity-70">({branch.items.length})</span>
+                {active ? (
+                  <span className="absolute inset-x-0 bottom-0 h-px bg-amber-200/70" aria-hidden />
+                ) : null}
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
+      <div className="grid gap-10 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-12">
         <nav aria-label={`Danh mục ${platform.label}`} className="hidden lg:block">
-          <div className="sticky top-28 overflow-hidden border border-white/[0.06] bg-white/[0.02]">
-            <div className="border-b border-white/[0.06] px-4 py-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Danh mục</p>
-            </div>
-            <div className="relative space-y-0.5 p-2">
+          <div className="sticky top-28">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/30">Danh mục</p>
+            <div className="mt-4 space-y-0.5 border-l border-white/[0.08]">
               {filtered.branches.map((branch) => {
                 const active = activeSection === branch.id;
                 return (
@@ -180,24 +176,16 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                     key={branch.id}
                     type="button"
                     onClick={() => scrollToSection(branch.id)}
-                    className={`relative flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                      active ? "text-amber-100" : "text-white/45 hover:text-white/70"
+                    className={`relative block w-full py-2.5 pl-4 text-left text-sm transition-colors ${
+                      active ? "text-amber-100" : "text-white/40 hover:text-white/65"
                     }`}
                   >
                     {active ? (
-                      <motion.span
-                        layoutId={`banggia-sidebar-${platform.id}`}
-                        className="absolute inset-0 rounded-lg bg-amber-200/[0.08]"
-                        transition={{ type: "spring", stiffness: 380, damping: 34 }}
-                      />
+                      <span className="absolute inset-y-1 left-0 w-px bg-amber-200/80" aria-hidden />
                     ) : null}
-                    <span className="relative truncate pr-2">{branch.label}</span>
-                    <span
-                      className={`relative shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
-                        active ? "bg-amber-200/15 text-amber-100" : "bg-white/5 text-white/30"
-                      }`}
-                    >
-                      {branch.items.length}
+                    <span className="block truncate">{branch.label}</span>
+                    <span className="mt-0.5 block text-[10px] tabular-nums text-white/25">
+                      {branch.items.length} gói
                     </span>
                   </button>
                 );
@@ -212,11 +200,11 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
           initial="hidden"
           animate="visible"
           variants={staggerIntro}
-          className="min-w-0 overflow-hidden border border-white/[0.06] bg-white/[0.02] lg:col-start-2"
+          className="min-w-0 lg:col-start-2"
         >
           <PlatformHero platform={platform} />
 
-          <div className="space-y-2 px-5 py-6 sm:px-7 sm:py-8">
+          <div className="mt-8 space-y-12">
             {filtered.branches.map((branch, index) => (
               <BranchSection
                 key={branch.id}
@@ -228,15 +216,15 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
               />
             ))}
 
-            <div className="mt-8 border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.06] to-transparent px-5 py-7 text-center sm:px-8">
-              <p className="text-sm font-medium text-white/85">Không chắc chọn gói nào?</p>
-              <p className="mt-1 text-xs text-white/40">
-                Đội ngũ Bứt Phá tư vấn miễn phí theo ngân sách & mục tiêu
+            <div className="border-t border-white/[0.06] pt-8">
+              <p className="text-sm font-medium text-white/80">Không chắc chọn gói nào?</p>
+              <p className="mt-1 text-sm text-white/35">
+                Đội ngũ Bứt Phá tư vấn miễn phí theo ngân sách và mục tiêu.
               </p>
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <a
                   href={getTelHref(settings?.hotline)}
-                  className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+                  className="inline-flex items-center gap-2 bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
                 >
                   <Phone className="h-4 w-4" />
                   Gọi tư vấn
@@ -245,7 +233,7 @@ export function PricingDocLayout({ platform, searchQuery = "" }: PricingDocLayou
                   href={getZaloUrl(settings?.hotline)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/25"
+                  className="inline-flex items-center gap-2 border border-white/15 px-5 py-2.5 text-sm font-medium text-white/75 transition hover:border-white/25 hover:text-white"
                 >
                   <MessageCircle className="h-4 w-4" />
                   Chat Zalo
@@ -288,7 +276,7 @@ export function PricingSearchBar({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={SEARCH_PLACEHOLDER[platformId] ?? "Tìm gói dịch vụ…"}
-        className="w-full rounded-full border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-amber-200/40"
+        className="w-full border border-white/10 bg-white/[0.02] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-amber-200/35"
         style={{
           boxShadow: value || focused ? `0 0 0 1px ${accent}55` : undefined,
         }}

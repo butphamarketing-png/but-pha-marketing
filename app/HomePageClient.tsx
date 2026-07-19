@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, MotionConfig } from "framer-motion";
-import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown, Volume2, VolumeX } from "lucide-react";
+import { Menu, Phone, Search, X, ArrowRight, ChevronLeft, ChevronRight, ChevronDown, Volume2 } from "lucide-react";
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { getCaseStudyBySlug, getFeaturedShowcases } from "@/lib/case-studies";
 import { CORP_HERO_SLIDES, sanitizeSlideshowItems } from "@/lib/media-assets";
@@ -32,10 +32,8 @@ import {
 import { ensureUiAudio, scheduleAppearSounds } from "@/lib/ui-sounds";
 import {
   armBgMusicAutoStart,
-  isBgMusicMuted,
   setBgMusicSectionActive,
   startBgMusic,
-  toggleBgMusicMute,
 } from "@/lib/ambient-bg-music";
 
 const SECTIONS: { id: string; label: string; tone: "dark" | "light" }[] = [
@@ -362,8 +360,6 @@ export default function HomePageClient() {
   const [heroMotionReady, setHeroMotionReady] = useState(false);
   const [heroSoundPrompt, setHeroSoundPrompt] = useState(false);
   const [heroSoundPlayed, setHeroSoundPlayed] = useState(false);
-  const [bgMusicMuted, setBgMusicMuted] = useState(false);
-  const [bgMusicOn, setBgMusicOn] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const heroWelcomeTried = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -479,10 +475,6 @@ export default function HomePageClient() {
 
   useEffect(() => {
     setIsClient(true);
-    setBgMusicMuted(isBgMusicMuted());
-    // Loading + section 1: auto nhạc spa
-    setBgMusicSectionActive(true);
-    armBgMusicAutoStart(0.062);
   }, []);
 
   // Safety: nếu loading không gọi onComplete, vẫn mở site sau 8s
@@ -508,29 +500,29 @@ export default function HomePageClient() {
       return undefined;
     }
     ensureTypeClickAudio();
-    setBgMusicSectionActive(activeSection === 0);
-    armBgMusicAutoStart(0.062);
-    if (activeSection === 0 && !isBgMusicMuted()) {
-      void startBgMusic(0.062).then((ok) => {
-        setBgMusicOn(ok);
-        setBgMusicMuted(isBgMusicMuted());
-      });
+    // Nhạc chỉ khi đã vào site và đang ở section 1
+    if (activeSection === 0) {
+      setBgMusicSectionActive(true, 0.062);
+      armBgMusicAutoStart(0.062);
+      void startBgMusic(0.062);
     } else {
-      setBgMusicOn(false);
+      setBgMusicSectionActive(false, 0.062);
     }
     const t = window.setTimeout(() => setHeroMotionReady(true), 100);
     return () => window.clearTimeout(t);
   }, [siteReady]);
 
-  // Chỉ section 1 có nhạc nền spa — section khác fade out
+  // Chỉ section 1 có nhạc nền spa — section khác tắt hẳn
   useEffect(() => {
-    if (!siteReady) return;
+    if (!siteReady) {
+      setBgMusicSectionActive(false, 0.062);
+      return;
+    }
     const onHero = activeSection === 0;
     setBgMusicSectionActive(onHero, 0.062);
-    if (onHero && !isBgMusicMuted()) {
-      void startBgMusic(0.062).then((ok) => setBgMusicOn(ok));
-    } else {
-      setBgMusicOn(false);
+    if (onHero) {
+      armBgMusicAutoStart(0.062);
+      void startBgMusic(0.062);
     }
   }, [activeSection, siteReady]);
 
@@ -549,9 +541,7 @@ export default function HomePageClient() {
     const tryAuto = window.setTimeout(async () => {
       if (cancelled || heroWelcomeTried.current) return;
       setBgMusicSectionActive(true, 0.062);
-      const musicOk = await startBgMusic(0.062);
-      setBgMusicOn(musicOk && !isBgMusicMuted());
-      setBgMusicMuted(isBgMusicMuted());
+      await startBgMusic(0.062);
       const unlocked = await unlockHeroAudio();
       if (unlocked) {
         heroWelcomeTried.current = true;
@@ -581,10 +571,7 @@ export default function HomePageClient() {
     await unlockHeroAudio();
     ensureTypeClickAudio();
     setBgMusicSectionActive(true, 0.062);
-    if (isBgMusicMuted()) toggleBgMusicMute(0.062);
     await startBgMusic(0.062);
-    setBgMusicMuted(false);
-    setBgMusicOn(true);
     const ok = await playHeroWelcomeExperience({
       skipIfPlayed: false,
       brandName,
@@ -593,17 +580,6 @@ export default function HomePageClient() {
     setHeroSoundPrompt(false);
     return ok;
   }, [brandName]);
-
-  const onToggleBgMusic = useCallback(() => {
-    setBgMusicSectionActive(activeSection === 0, 0.062);
-    const nextMuted = toggleBgMusicMute(0.062);
-    setBgMusicMuted(nextMuted);
-    if (!nextMuted && activeSection === 0) {
-      void startBgMusic(0.062).then(() => setBgMusicOn(true));
-    } else {
-      setBgMusicOn(false);
-    }
-  }, [activeSection]);
 
   useEffect(() => {
     // Full-section snap mọi thiết bị — kiểu Vinh Phát
@@ -1210,27 +1186,6 @@ export default function HomePageClient() {
         }`}
         style={{ opacity: siteReady ? 1 : 0, pointerEvents: siteReady ? "auto" : "none" }}
       >
-        {/* Nút nhạc nền — luôn hiện để tắt/bật */}
-        {siteReady && activeSection === 0 ? (
-          <button
-            type="button"
-            onClick={onToggleBgMusic}
-            className={`pointer-events-auto fixed bottom-24 left-4 z-[96] flex h-11 w-11 items-center justify-center rounded-full border shadow-lg backdrop-blur-md transition sm:bottom-28 sm:left-5 ${
-              bgMusicMuted || !bgMusicOn
-                ? "border-white/20 bg-black/45 text-white/70 hover:bg-black/60"
-                : "border-violet-300/40 bg-violet-600/40 text-violet-100 hover:bg-violet-600/55"
-            }`}
-            aria-label={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền spa" : "Tắt nhạc nền spa"}
-            title={bgMusicMuted || !bgMusicOn ? "Bật nhạc nền spa" : "Tắt nhạc nền spa"}
-          >
-            {bgMusicMuted || !bgMusicOn ? (
-              <VolumeX className="h-4 w-4" strokeWidth={1.75} />
-            ) : (
-              <Volume2 className="h-4 w-4" strokeWidth={1.75} />
-            )}
-          </button>
-        ) : null}
-
         {/* Fixed chrome */}
         <header
           className={`pointer-events-none inset-x-0 top-0 z-40 ${

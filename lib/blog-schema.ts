@@ -107,7 +107,7 @@ export function buildBlogJsonLd({ blog, canonical, baseUrl, image }: BuildBlogJs
         url: baseUrl,
         logo: {
           "@type": "ImageObject",
-          url: `${baseUrl}/logo.jpg`,
+          url: `${baseUrl}/logo.png`,
         },
       },
     },

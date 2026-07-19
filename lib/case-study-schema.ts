@@ -25,7 +25,7 @@ export function buildCaseStudyJsonLd({ study, canonical, baseUrl }: BuildCaseStu
         "@type": "Organization",
         name: "Bứt Phá Marketing",
         url: baseUrl,
-        logo: { "@type": "ImageObject", url: `${baseUrl}/logo.jpg` },
+        logo: { "@type": "ImageObject", url: `${baseUrl}/logo.png` },
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
       about: {

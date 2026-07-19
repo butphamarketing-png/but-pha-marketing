@@ -55,6 +55,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/gioi-thieu",
     "/lien-he",
     "/banggia",
+    "/cong-cu",
+    "/cong-cu/dong-dau-logo",
+    "/cong-cu/xoa-nen",
+    "/cong-cu/nen-anh",
+    "/cong-cu/resize-anh",
   ];
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${baseUrl}${path}`,
