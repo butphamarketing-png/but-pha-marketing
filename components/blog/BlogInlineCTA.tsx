@@ -5,7 +5,6 @@ import type { PillarTopic } from "@/lib/seo-pillar-hub";
 import { getBlogCtaConfig } from "@/lib/blog-cta";
 import { BlogTrackedLink } from "@/components/blog/BlogTrackedLink";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function BlogInlineCTA({
   slug,
@@ -22,21 +21,21 @@ export function BlogInlineCTA({
 
   if (deep) {
     return (
-      <section className="mt-10 overflow-hidden border border-amber-200/20 bg-gradient-to-br from-[#12141c] via-[#0c0e14] to-[#16120e] p-6 md:p-8">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">
+      <section className="mt-8 overflow-hidden border border-white/10 bg-[#0e1018] p-5 md:p-6">
+        <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
           Tư vấn {cta.topicLabel}
         </p>
-        <h2 className="mt-2 text-2xl font-semibold leading-tight text-white md:text-3xl" style={serif}>
+        <h2 className="mt-2 text-xl font-semibold leading-snug text-white sm:text-[1.35rem]">
           {cta.headline}
         </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45 md:text-base">{cta.subline}</p>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/45">{cta.subline}</p>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <BlogTrackedLink
             href={cta.primary.href}
             eventName="blog_cta_click"
             eventParams={{ ...baseParams, cta_label: cta.primary.label, cta_type: "primary" }}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5B4BD4]"
           >
             {cta.primary.label}
             <ArrowRight size={16} />
@@ -46,7 +45,7 @@ export function BlogInlineCTA({
             href={cta.secondary.href}
             eventName="blog_cta_click"
             eventParams={{ ...baseParams, cta_label: cta.secondary.label, cta_type: "secondary" }}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition hover:border-amber-200/40 hover:text-amber-100"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-white/25 hover:text-white"
           >
             {cta.secondary.label}
           </BlogTrackedLink>

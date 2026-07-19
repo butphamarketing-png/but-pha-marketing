@@ -64,10 +64,10 @@ export function DomainCarousel({ accent }: { accent: string }) {
               >
                 <div className="mb-5 flex items-start justify-between gap-3">
                   <div
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-lg"
-                    style={{ backgroundColor: accent, boxShadow: `0 10px 30px ${accent}35` }}
+                    className="flex h-11 w-11 items-center justify-center rounded-md text-white"
+                    style={{ backgroundColor: accent }}
                   >
-                    <Globe size={28} />
+                    <Globe size={22} />
                   </div>
                   <span
                     className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide"
@@ -77,15 +77,13 @@ export function DomainCarousel({ accent }: { accent: string }) {
                   </span>
                 </div>
 
-                <h3 className="mb-1 text-3xl font-semibold text-white" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
-                  {domain.name}
-                </h3>
-                <p className="mb-6 min-h-[40px] text-sm leading-relaxed text-white/45">{domain.tagline}</p>
+                <h3 className="mb-1 text-xl font-semibold text-white">{domain.name}</h3>
+                <p className="mb-5 min-h-[40px] text-sm leading-relaxed text-white/45">{domain.tagline}</p>
 
-                <ul className="mb-8 space-y-3 border-y border-white/[0.08] py-4">
+                <ul className="mb-5 space-y-2.5 border-y border-white/[0.08] py-3">
                   {domain.works.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-white/65">
-                      <Check size={16} className="mt-0.5 shrink-0 text-amber-200/80" />
+                      <Check size={16} className="mt-0.5 shrink-0 text-violet-300/70" />
                       {item}
                     </li>
                   ))}
@@ -94,7 +92,7 @@ export function DomainCarousel({ accent }: { accent: string }) {
                 <button
                   type="button"
                   onClick={() => setShowModal(true)}
-                  className="w-full rounded-full bg-amber-200 py-3.5 text-xs font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+                  className="w-full rounded-md bg-[#6D5CE6] py-2.5 text-xs font-medium text-white transition hover:bg-[#5B4BD4]"
                 >
                   Tra cứu &amp; đăng ký
                 </button>

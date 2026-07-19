@@ -52,7 +52,7 @@ export function SubPageLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const playClick = useClickSound();
   const deep = theme === "deep";
-  const accent = deep ? "#C4955A" : primaryColor;
+  const accent = deep ? primaryColor || "#6D5CE6" : primaryColor;
 
   useEffect(() => {
     let rafId = 0;
@@ -199,7 +199,7 @@ export function SubPageLayout({
         className={`sticky top-0 z-50 overflow-visible border-b backdrop-blur-xl ${
           deep
             ? "border-white/[0.06] bg-[#0e1018]/80"
-            : "border-indigo-100/90 bg-white/85 shadow-[0_8px_24px_rgba(49,46,129,0.04)]"
+            : "border-violet-200/50 bg-[#f3f0fa]/90 shadow-[0_8px_24px_rgba(49,46,129,0.06)]"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
@@ -233,7 +233,7 @@ export function SubPageLayout({
               className={`ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition lg:hidden ${
                 deep
                   ? "border-white/15 bg-white/[0.04] text-white hover:bg-white/[0.08]"
-                  : "border-indigo-200 bg-white text-indigo-950 hover:bg-indigo-50"
+                  : "border-violet-200/70 bg-[#f3f0fa] text-indigo-950 hover:bg-violet-100/80"
               }`}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -246,10 +246,10 @@ export function SubPageLayout({
 
           <button
             onClick={() => setShowConsult(true)}
-            className={`hidden shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition active:scale-[0.99] sm:inline-flex ${
+            className={`hidden shrink-0 rounded-md px-4 py-2 text-sm font-medium transition active:scale-[0.99] sm:inline-flex ${
               deep
-                ? "bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12] hover:brightness-105"
-                : "text-white shadow-brand-accent hover:brightness-105"
+                ? "bg-[#6D5CE6] text-white hover:bg-[#5B4BD4]"
+                : "rounded-full text-white shadow-brand-accent hover:brightness-105"
             }`}
             style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
           >
@@ -264,7 +264,7 @@ export function SubPageLayout({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className={`overflow-hidden border-t lg:hidden ${
-                deep ? "border-white/[0.06] bg-[#0c0e14]/98" : "border-indigo-100 bg-white/98"
+                deep ? "border-white/[0.06] bg-[#0c0e14]/98" : "border-violet-200/50 bg-[#f3f0fa]/98"
               }`}
             >
               <div className="mx-auto max-w-7xl px-4 py-4">
@@ -281,7 +281,7 @@ export function SubPageLayout({
                     setShowConsult(true);
                   }}
                   className={`mt-3 w-full rounded-xl px-4 py-3 text-sm font-bold ${
-                    deep ? "bg-gradient-to-r from-amber-200 to-violet-300 text-[#0b0d12]" : "text-white"
+                    deep ? "bg-[#6D5CE6] text-white" : "text-white"
                   }`}
                   style={deep ? undefined : { background: `linear-gradient(135deg, #312E81, ${primaryColor})` }}
                 >
@@ -324,7 +324,7 @@ export function SubPageLayout({
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className={`fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border transition hover:scale-110 active:scale-95 ${
               deep
-                ? "border-white/15 bg-[#0e1016] text-amber-100 shadow-lg"
+                ? "border-white/15 bg-[#0e1016] text-white/80 shadow-lg"
                 : "brand-icon-btn shadow-lg"
             }`}
             style={deep ? undefined : { borderLeftColor: primaryColor, borderTopColor: primaryColor }}

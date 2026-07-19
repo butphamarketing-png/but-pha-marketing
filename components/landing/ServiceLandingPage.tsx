@@ -50,10 +50,9 @@ import { DeepTechAtmosphere } from "@/components/shared/DeepTechAtmosphere";
 import { getTelHref, resolveHotline } from "@/lib/site-contact";
 import { fadeUpChild, staggerIntro, VIEWPORT_ONCE } from "@/lib/motion-presets";
 
-const AMBER = "#C4955A";
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+const ACCENT = "#6D5CE6";
 const card =
-  "rounded-2xl border border-violet-400/15 bg-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:border-violet-300/35 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(139,124,246,0.1)]";
+  "border border-white/10 bg-[#0e1018] transition hover:border-white/20";
 
 function SectionHeading({
   label,
@@ -65,18 +64,18 @@ function SectionHeading({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-10 space-y-3 text-center md:mb-12">
+    <div className="mb-5 space-y-1.5 text-left">
       {label && (
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-violet-300/75">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-violet-300/75">
           {label}
         </span>
       )}
-      <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl lg:text-4xl" style={serif}>
+      <h2 className="text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
         {title}
       </h2>
       {subtitle && <p className="mx-auto max-w-2xl text-sm text-white/45 md:text-base">{subtitle}</p>}
       <div
-        className="mx-auto h-px w-16 bg-gradient-to-r from-transparent via-violet-400/50 to-transparent"
+        className="hidden"
         aria-hidden
       />
     </div>
@@ -86,7 +85,7 @@ function SectionHeading({
 function CheckGrid({ items, variant }: { items: string[]; variant: "check" | "cross" | "rocket" }) {
   const Icon = variant === "cross" ? XCircle : variant === "rocket" ? Rocket : CheckCircle2;
   const iconClass =
-    variant === "cross" ? "text-rose-400" : variant === "rocket" ? "text-amber-200" : "text-emerald-400";
+    variant === "cross" ? "text-rose-400" : variant === "rocket" ? "text-violet-300/80" : "text-emerald-400";
 
   return (
     <ul className="grid gap-4 sm:grid-cols-2">
@@ -112,7 +111,7 @@ function StepsGrid({ steps, columns }: { steps: string[]; columns: 3 | 5 | 6 }) 
     <ol className={`grid gap-4 ${colClass}`}>
       {steps.map((step, i) => (
         <li key={step} className={`p-5 text-center ${card}`}>
-          <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-amber-200 text-sm font-bold text-[#0b0d12]">
+          <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#6D5CE6] text-sm font-bold text-white">
             {i + 1}
           </span>
           <p className="text-sm font-medium text-white/85">{step}</p>
@@ -141,7 +140,7 @@ function HeroVisual({ visual }: { visual: ServiceLandingConfig["hero"]["visual"]
   if (visual.type === "image") {
     return (
       <motion.div variants={fadeUpChild} className="relative">
-        <div className="absolute -inset-4 rounded-[2rem] bg-amber-200/10 opacity-40 blur-2xl" />
+        <div className="hidden" />
         <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10">
           <Image
             src={visual.src}
@@ -176,7 +175,7 @@ function HeroVisual({ visual }: { visual: ServiceLandingConfig["hero"]["visual"]
             key={name}
             className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4"
           >
-            <Icon size={32} className="text-amber-200/80" />
+            <Icon size={32} className="text-white/70" />
           </div>
         );
       })}
@@ -189,7 +188,7 @@ function renderPricingSection(
   config: ServiceLandingConfig,
 ) {
   const chooseLabel = section.chooseLabel;
-  const accent = AMBER;
+  const accent = ACCENT;
   const sectionLabel = section.title;
 
   const desktopCols: 2 | 3 | 4 =
@@ -281,7 +280,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
   const hotline = resolveHotline(settings?.hotline);
   const telHref = getTelHref(settings?.hotline);
   const nav = getServiceLandingNav(config);
-  const accent = AMBER;
+  const accent = ACCENT;
   const heroVisual = config.hero.visual;
   const hasHeroSide = heroVisual.type !== "none";
   const isWebsiteChild = config.slug.startsWith("website/");
@@ -296,7 +295,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
       <div className="relative isolate">
         {isWebsiteChild ? <DeepTechAtmosphere intensity="default" /> : null}
         <div
-          className="relative z-10 mx-auto max-w-7xl px-4 pb-24"
+          className="relative z-10 mx-auto max-w-6xl px-4 pb-12"
           style={{ ["--landing-accent" as string]: accent }}
         >
         <section id="hero" className="scroll-mt-24 py-12 md:py-16">
@@ -305,13 +304,13 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
             whileInView="visible"
             viewport={VIEWPORT_ONCE}
             variants={staggerIntro}
-            className="relative overflow-hidden rounded-[1.75rem] border border-violet-400/20 bg-white/[0.04] p-6 shadow-[0_0_60px_rgba(139,124,246,0.08)] md:p-10 lg:p-12"
+            className="border border-white/10 bg-[#0e1018] p-5 md:p-6"
           >
             <div
               className="pointer-events-none absolute inset-0 opacity-40"
               style={{
                 background:
-                  "radial-gradient(ellipse 70% 60% at 0% 0%, rgba(139,124,246,0.18), transparent 55%), radial-gradient(ellipse 50% 40% at 100% 100%, rgba(196,149,90,0.12), transparent 50%)",
+                  "radial-gradient(ellipse 70% 60% at 0% 0%, rgba(139,124,246,0.18), transparent 55%), radial-gradient(ellipse 50% 40% at 100% 100%, rgba(109,90,230,0.12), transparent 50%)",
               }}
               aria-hidden
             />
@@ -319,7 +318,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
               className="pointer-events-none absolute inset-0 opacity-[0.2]"
               style={{
                 backgroundImage:
-                  "linear-gradient(rgba(139,124,246,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(196,149,90,0.15) 1px, transparent 1px)",
+                  "linear-gradient(rgba(139,124,246,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(109,90,230,0.15) 1px, transparent 1px)",
                 backgroundSize: "48px 48px",
                 maskImage: "linear-gradient(180deg, black, transparent 85%)",
               }}
@@ -330,12 +329,12 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
                 variants={fadeUpChild}
                 className={`space-y-5 ${!hasHeroSide ? "mx-auto max-w-3xl text-center" : ""}`}
               >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-violet-300/80">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-violet-300/80">
                   {config.hero.eyebrow}
                 </p>
                 <h1
-                  className="text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl"
-                  style={serif}
+                  className="text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl"
+                 
                 >
                   {config.hero.title}
                 </h1>
@@ -361,7 +360,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
                   <button
                     type="button"
                     onClick={() => setShowConsult(true)}
-                    className="rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-8 py-4 text-sm font-semibold text-[#0b0d12] shadow-lg shadow-violet-950/25 transition hover:brightness-105 active:scale-[0.99]"
+                    className="rounded-full bg-gradient-to-r from-[#6D5CE6] to-[#6D5CE6] px-8 py-4 text-sm font-semibold text-[#0b0d12] shadow-lg shadow-violet-950/25 transition hover:brightness-105 active:scale-[0.99]"
                   >
                     {config.hero.cta.toUpperCase()}
                   </button>
@@ -396,7 +395,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
               <div className="grid gap-6 md:grid-cols-3">
                 {section.cards.map((cardItem) => (
                   <div key={cardItem.title} className={`p-6 ${card}`}>
-                    <h3 className="mb-2 text-lg font-medium text-white" style={serif}>
+                    <h3 className="mb-2 text-lg font-medium text-white">
                       {cardItem.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-white/45">{cardItem.desc}</p>
@@ -441,7 +440,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
         ))}
 
         <section id="cta" className="scroll-mt-24 py-12 md:py-16">
-          <div className="relative overflow-hidden rounded-[2rem] border border-violet-400/25 bg-gradient-to-br from-[#12141c] via-[#0c0e14] to-[#1a1430] p-8 text-center md:p-12">
+          <div className="relative overflow-hidden border border-white/10 bg-[#0e1018] p-5 text-center md:p-6">
             <div
               className="pointer-events-none absolute inset-0 opacity-30"
               style={{
@@ -454,7 +453,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
             <div className="pointer-events-none absolute inset-0 bg-[#0a0914]/75" aria-hidden />
             <div className="relative">
             <Globe className="mx-auto mb-4 h-10 w-10 text-violet-300/80" />
-            <h2 className="mb-3 text-2xl font-semibold text-white md:text-3xl" style={serif}>
+            <h2 className="mb-3 text-xl font-semibold text-white sm:text-[1.35rem]">
               {config.cta.title}
             </h2>
             <p className="mx-auto mb-8 max-w-xl text-sm text-white/45 md:text-base">{config.cta.subtitle}</p>
@@ -462,7 +461,7 @@ export function ServiceLandingPage({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={() => setShowConsult(true)}
-                className="rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-8 py-4 text-sm font-semibold text-[#0b0d12] shadow-lg shadow-violet-950/30 transition hover:brightness-105"
+                className="rounded-full bg-gradient-to-r from-[#6D5CE6] to-[#6D5CE6] px-8 py-4 text-sm font-semibold text-[#0b0d12] shadow-lg shadow-violet-950/30 transition hover:brightness-105"
               >
                 Liên hệ tư vấn
               </button>

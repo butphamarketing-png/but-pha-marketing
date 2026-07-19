@@ -25,7 +25,7 @@ const MOBILE_GROUPS = [
   { key: "manh" as const, label: "Doanh nghiệp", indices: [6, 7, 8] },
 ];
 
-const panel = "overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03]";
+const panel = "overflow-hidden border border-white/10 bg-[#0e1018]";
 
 export function WebsiteOperationComparisonTable() {
   const [mobileGroup, setMobileGroup] = useState<(typeof MOBILE_GROUPS)[number]["key"]>("yeu");
@@ -39,7 +39,7 @@ export function WebsiteOperationComparisonTable() {
           <table className="w-full min-w-[960px] border-collapse text-left">
             <thead>
               <tr className="border-b border-white/[0.08] bg-white/[0.04]">
-                <th className="sticky left-0 z-10 min-w-[9rem] bg-[#0c0e14] px-4 py-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/60">
+                <th className="sticky left-0 z-10 min-w-[9rem] bg-[#0c0e14] px-4 py-3 text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
                   Tiêu chí
                 </th>
                 {WEBSITE_OPERATION_COMPARE_PACKAGES.map((name) => (

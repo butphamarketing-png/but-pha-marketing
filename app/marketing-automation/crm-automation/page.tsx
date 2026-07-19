@@ -105,7 +105,7 @@ export default function CrmAutomationPage() {
             "Biết rõ kênh nào tạo lead chất lượng — tối ưu ngân sách marketing",
             <>
               Kết hợp{" "}
-              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/du-an/nha-khoa-dang-khoa" className="font-semibold text-white/70 underline-offset-2 hover:underline">
                 case study website + SEO
               </Link>{" "}
               để lead organic vào CRM bền vững

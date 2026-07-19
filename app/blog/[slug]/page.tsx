@@ -19,7 +19,6 @@ import { BlogArticleContent } from "@/components/blog/BlogArticleContent";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 
 const BASE_URL = SITE_URL;
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 /** Next.js yêu cầu literal — không import biến cho segment config. */
 export const revalidate = 3600;
@@ -120,7 +119,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
         <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/" className="font-medium text-white/40 hover:text-white">
                 Trang chủ
               </Link>
             </li>
@@ -128,7 +127,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
               /
             </li>
             <li>
-              <Link href="/blog" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/blog" className="font-medium text-white/40 hover:text-white">
                 Tin tức
               </Link>
             </li>
@@ -143,17 +142,17 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
 
         <section className="overflow-hidden border border-white/[0.08] bg-[#0c0d12]">
           <div className="border-b border-white/[0.06] px-6 py-10 md:px-10 md:py-14">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Bài viết
             </span>
             <h1
-              className="mt-5 max-w-4xl text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-white"
-              style={serif}
+              className="mt-5 max-w-4xl text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]"
+             
             >
               {blog.title}
             </h1>
             <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-white/45">
-              <span className="border border-white/10 bg-white/[0.03] px-3 py-1.5 font-medium text-amber-200/70">
+              <span className="border border-white/10 bg-white/[0.03] px-3 py-1.5 font-medium text-white/40">
                 Ngày đăng: {publishedLabel}
               </span>
               {blog.metaDescription && (

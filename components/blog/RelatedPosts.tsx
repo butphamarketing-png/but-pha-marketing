@@ -5,7 +5,6 @@ import { getBlogThumbnailAlt } from "@/lib/news-images";
 import { BlogOptimizedImage } from "@/components/blog/BlogOptimizedImage";
 import { BlogTrackedLink } from "@/components/blog/BlogTrackedLink";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function RelatedPosts({
   posts,
@@ -25,16 +24,16 @@ export function RelatedPosts({
       <section className="mt-10 border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Đọc tiếp
             </p>
-            <h2 className="text-2xl font-semibold text-white md:text-3xl" style={serif}>
+            <h2 className="text-xl font-semibold text-white sm:text-[1.35rem]">
               Bài viết liên quan
             </h2>
           </div>
           <Link
             href="/blog"
-            className="hidden text-sm font-medium text-amber-200/75 hover:text-amber-100 md:inline-flex md:items-center md:gap-1"
+            className="hidden text-sm font-medium text-white/65 hover:text-white/80 md:inline-flex md:items-center md:gap-1"
           >
             Xem tất cả
             <ArrowRight size={16} />
@@ -51,7 +50,7 @@ export function RelatedPosts({
                 from_slug: currentSlug,
                 to_slug: blog.slug || blog.id,
               }}
-              className="group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[#0c0d12] transition hover:border-amber-200/25"
+              className="group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[#0c0d12] transition hover:border-white/15"
             >
               <div className="relative overflow-hidden border-b border-white/[0.06]">
                 <BlogOptimizedImage
@@ -66,12 +65,12 @@ export function RelatedPosts({
                   sizes="card"
                   className="h-36 w-full object-cover transition duration-500 group-hover:scale-105"
                 />
-                <span className="absolute left-3 top-3 border border-white/20 bg-[#08090c]/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200/80 backdrop-blur-sm">
+                <span className="absolute left-3 top-3 border border-white/20 bg-[#08090c]/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/70 backdrop-blur-sm">
                   {resolveBlogTag(blog.title, blog.slug || "")}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-4">
-                <p className="line-clamp-2 text-sm font-medium leading-snug text-white/90 group-hover:text-amber-100">
+                <p className="line-clamp-2 text-sm font-medium leading-snug text-white/90 group-hover:text-white/80">
                   {blog.title}
                 </p>
                 <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/40">{blog.description}</p>

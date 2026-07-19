@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import type { SeoPillar } from "@/lib/seo-pillar-hub";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function BlogTopicPillarCards({
   pillars,
@@ -19,14 +18,14 @@ export function BlogTopicPillarCards({
     return (
       <section className="mb-10 border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
         <div className="mb-5 flex items-center gap-3">
-          <div className="border border-amber-200/25 bg-amber-200/[0.08] p-2.5 text-amber-200/80">
+          <div className="border border-white/15 bg-white/[0.04] p-2.5 text-white/70">
             <BookOpen size={22} />
           </div>
           <div>
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">
+            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Bài pillar — đọc trước
             </p>
-            <h2 className="text-xl font-semibold text-white md:text-2xl" style={serif}>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
               Hướng dẫn tổng quan theo chủ đề
             </h2>
           </div>
@@ -37,15 +36,15 @@ export function BlogTopicPillarCards({
             <li key={pillar.slug}>
               <Link
                 href={`/blog/${pillar.slug}`}
-                className="group flex h-full flex-col border border-white/[0.08] bg-white/[0.02] px-4 py-3.5 transition hover:border-amber-200/30"
+                className="group flex h-full flex-col border border-white/[0.08] bg-white/[0.02] px-4 py-3.5 transition hover:border-white/20"
               >
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/55">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
                   {pillar.keyword}
                 </span>
-                <span className="mt-1 text-sm font-medium leading-snug text-white/90 group-hover:text-amber-100">
+                <span className="mt-1 text-sm font-medium leading-snug text-white/90 group-hover:text-white/80">
                   {pillar.label}
                 </span>
-                <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-200/70">
+                <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/40">
                   Đọc pillar
                   <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
                 </span>

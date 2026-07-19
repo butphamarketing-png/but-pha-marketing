@@ -10,7 +10,6 @@ const TOPIC_LABEL: Record<string, string> = {
   marketing: "Marketing tổng thể",
 };
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function BlogPillarHub({
   slug,
@@ -31,14 +30,14 @@ export function BlogPillarHub({
     return (
       <section className="mt-10 border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
         <div className="mb-5 flex items-start gap-3">
-          <div className="border border-amber-200/25 bg-amber-200/[0.08] p-2.5 text-amber-200/80">
+          <div className="border border-white/15 bg-white/[0.04] p-2.5 text-white/70">
             <BookOpen size={22} />
           </div>
           <div>
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">
+            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Chủ đề {topicLabel}
             </p>
-            <h2 className="text-xl font-semibold text-white md:text-2xl" style={serif}>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
               {hub.isPillarPage ? "Bài pillar — đọc thêm trong chủ đề" : "Đọc bài pillar trước khi đi sâu"}
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/40">
@@ -60,26 +59,26 @@ export function BlogPillarHub({
                   pillar_slug: pillar.slug,
                   blog_topic: hub.topic,
                 }}
-                className={`group flex h-full flex-col border px-4 py-3.5 transition hover:border-amber-200/30 ${
+                className={`group flex h-full flex-col border px-4 py-3.5 transition hover:border-white/20 ${
                   pillar.slug === slug
-                    ? "border-amber-200/35 bg-amber-200/[0.08]"
+                    ? "border-white/20 bg-white/[0.04]"
                     : "border-white/[0.08] bg-white/[0.02]"
                 }`}
               >
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/55">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
                   {pillar.keyword}
                 </span>
-                <span className="mt-1 text-sm font-medium leading-snug text-white/90 group-hover:text-amber-100">
+                <span className="mt-1 text-sm font-medium leading-snug text-white/90 group-hover:text-white/80">
                   {pillar.label}
                 </span>
                 {pillar.slug !== slug && (
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-200/70">
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/40">
                     Xem pillar
                     <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
                   </span>
                 )}
                 {pillar.slug === slug && (
-                  <span className="mt-2 text-xs font-medium text-amber-200/80">Bạn đang đọc bài này</span>
+                  <span className="mt-2 text-xs font-medium text-white/70">Bạn đang đọc bài này</span>
                 )}
               </BlogTrackedLink>
             </li>
@@ -89,7 +88,7 @@ export function BlogPillarHub({
         <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/[0.06] pt-5">
           <Link
             href={`/blog/chu-de/${hub.topic}`}
-            className="text-sm font-medium text-amber-200/75 hover:text-amber-100"
+            className="text-sm font-medium text-white/65 hover:text-white/80"
           >
             Xem tất cả bài {TOPIC_LABEL[hub.topic]} →
           </Link>
@@ -106,7 +105,7 @@ export function BlogPillarHub({
               cta_label: hub.service.serviceLabel,
               cta_type: "service",
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+            className="inline-flex items-center gap-2 rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5B4BD4]"
           >
             {hub.service.serviceLabel}
             <ArrowRight size={16} />
@@ -121,7 +120,7 @@ export function BlogPillarHub({
               cta_label: hub.topic === "website" ? "Báo giá thiết kế website" : hub.service.serviceLabel,
               cta_type: hub.topic === "website" ? "pricing" : "service",
             }}
-            className="text-sm font-medium text-amber-200/75 hover:text-amber-100"
+            className="text-sm font-medium text-white/65 hover:text-white/80"
           >
             {hub.topic === "website" ? "Báo giá thiết kế website →" : `${hub.service.serviceLabel} →`}
           </BlogTrackedLink>

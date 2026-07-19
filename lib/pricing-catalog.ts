@@ -92,7 +92,7 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
       },
       {
         id: "web-ops",
-        label: "Vận hành website",
+        label: "Hosting",
         items: WEBSITE_OPERATION_PACKAGES.map((pkg) => ({
           id: pkg.id,
           name: pkg.name,

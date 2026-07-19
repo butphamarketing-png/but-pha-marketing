@@ -21,9 +21,9 @@ export function BlogIndustryNav({
             href={`/blog/nganh/${slug}`}
             className={
               deep
-                ? `rounded-full border px-4 py-2 text-sm font-medium transition ${
+                ? `rounded-md border px-3.5 py-1.5 text-sm font-medium transition ${
                     isActive
-                      ? "border-amber-200/40 bg-amber-200 text-[#0b0d12]"
+                      ? "border-[#6D5CE6] bg-[#6D5CE6] text-white"
                       : "border-white/10 bg-transparent text-white/45 hover:border-white/20 hover:text-white/75"
                   }`
                 : `rounded-full border px-4 py-2 text-sm font-bold transition ${

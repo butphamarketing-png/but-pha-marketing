@@ -58,7 +58,7 @@ export function BlogStickyCTA({
           eventParams={{ ...baseParams, cta_label: cta.primary.label, cta_type: "primary" }}
           className={
             deep
-              ? "inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-amber-200 px-3 py-3 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+              ? "inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#6D5CE6] px-3 py-3 text-sm font-semibold text-[#0b0d12] transition hover:bg-[#5B4BD4]"
               : "inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-violet-600 px-3 py-3 text-sm font-bold text-white transition hover:bg-violet-700"
           }
         >

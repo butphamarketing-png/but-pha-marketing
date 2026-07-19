@@ -48,7 +48,7 @@ export function PlatformAuditSection({
             <span>{badge}</span>
           </div>
 
-          <h3 className="text-3xl font-bold leading-snug text-indigo-950 md:text-4xl">{title}</h3>
+          <h3 className="text-xl font-semibold leading-snug text-indigo-950 sm:text-[1.35rem]">{title}</h3>
 
           {description ? <p className="max-w-2xl text-base leading-relaxed text-slate-600">{description}</p> : null}
 

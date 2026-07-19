@@ -24,7 +24,7 @@ export function CarouselNavButton({
       type="button"
       aria-label={direction === "left" ? "Xem trước" : "Xem tiếp"}
       onClick={onClick}
-      className={`carousel-nav-btn flex shrink-0 items-center justify-center rounded-full border border-indigo-100/90 bg-white/95 shadow-md backdrop-blur-sm transition-all hover:scale-105 hover:shadow-lg active:scale-95 ${sizeClass} ${className}`}
+      className={`carousel-nav-btn flex shrink-0 items-center justify-center rounded-full border border-violet-400/25 bg-[#14101f]/95 text-violet-100 shadow-md backdrop-blur-sm transition-all hover:scale-105 hover:border-violet-400/40 active:scale-95 ${sizeClass} ${className}`}
       style={{ color: accent, ["--carousel-accent" as string]: accent }}
     >
       <Icon size={iconSize} />

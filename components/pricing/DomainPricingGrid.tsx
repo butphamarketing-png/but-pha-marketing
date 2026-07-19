@@ -18,34 +18,38 @@ import { TierBadge } from "./TierBadge";
 function DomainCard({ item, accent }: { item: PricingItem; accent: string }) {
   return (
     <div
-      className="group relative flex flex-col border border-white/[0.06] bg-white/[0.02] p-4 transition duration-200 hover:border-white/12 hover:bg-white/[0.04]"
+      className="group relative flex flex-col border-b border-white/[0.08] py-4 transition sm:border sm:border-white/[0.06] sm:bg-transparent sm:p-4 sm:hover:border-white/12"
       style={{ boxShadow: item.badge ? `inset 2px 0 0 0 ${accent}` : undefined }}
     >
       {item.badge ? (
-        <div className="absolute right-3 top-3">
+        <div className="absolute right-0 top-4 sm:right-3 sm:top-3">
           <TierBadge badge={item.badge} />
         </div>
       ) : null}
 
-      <div className="flex items-start justify-between gap-2">
-        <p className="font-mono text-lg font-semibold tracking-tight text-white/90">{item.name}</p>
+      <div className="flex items-start justify-between gap-2 pr-16 sm:pr-12">
+        <p className="font-mono text-base font-semibold tracking-tight text-white/90 sm:text-lg">
+          {item.name}
+        </p>
         <CopyRippleButton
           text={`${item.name}: ${formatPriceVnd(item.price)}/năm`}
-          className="p-1.5 text-white/30 opacity-0 group-hover:opacity-100"
+          className="p-2 text-white/40 transition hover:text-white/70 sm:opacity-70 sm:group-hover:opacity-100"
           iconClassName="h-3.5 w-3.5"
         />
       </div>
 
       <p
-        className="mt-2 text-xl font-semibold tabular-nums text-amber-50"
-        style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+        className="mt-2 text-lg font-semibold tabular-nums text-white"
+        style={{ fontFamily: '"Be Vietnam Pro", system-ui, sans-serif' }}
       >
         {formatPriceVnd(item.price)}
+        <span className="ml-2 text-[11px] font-medium uppercase tracking-[0.12em] text-white/30">
+          / năm
+        </span>
       </p>
-      <span className="mt-1 inline-flex w-fit border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-white/40">
-        / năm
-      </span>
-      {item.note ? <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/35">{item.note}</p> : null}
+      {item.note ? (
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/35">{item.note}</p>
+      ) : null}
     </div>
   );
 }
@@ -95,13 +99,13 @@ export function DomainPricingGrid({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveCategory(tab.id)}
-                className={`relative px-3.5 py-2.5 text-xs font-medium transition-colors ${
-                  active ? "text-amber-100" : "text-white/40 hover:text-white/65"
+                className={`relative px-3 py-2.5 text-xs font-medium transition-colors ${
+                  active ? "text-violet-200" : "text-white/40 hover:text-white/65"
                 }`}
               >
                 {tab.label}
                 {active ? (
-                  <span className="absolute inset-x-0 bottom-0 h-px bg-amber-200/70" aria-hidden />
+                  <span className="absolute inset-x-1 bottom-0 h-px bg-violet-400/60" aria-hidden />
                 ) : null}
               </button>
             );
@@ -112,7 +116,7 @@ export function DomainPricingGrid({
       {filtered.length === 0 ? (
         <p className="py-6 text-center text-sm text-white/40">
           Không có tên miền phù hợp.{" "}
-          <Link href="/lien-he" className="font-semibold text-amber-200/80 hover:underline">
+          <Link href="/lien-he" className="font-semibold text-violet-200/80 hover:underline">
             Liên hệ tư vấn
           </Link>
         </p>
@@ -122,7 +126,7 @@ export function DomainPricingGrid({
           variants={listVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+          className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-3"
         >
           <AnimatePresence mode="popLayout">
             {filtered.map((item) => (

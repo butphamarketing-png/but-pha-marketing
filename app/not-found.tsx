@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export default function NotFound() {
   return (
@@ -29,7 +28,7 @@ export default function NotFound() {
           />
         </div>
       </motion.div>
-      <h1 className="relative mb-3 text-3xl font-semibold text-white md:text-4xl" style={serif}>
+      <h1 className="relative mb-3 text-3xl font-semibold text-white md:text-4xl">
         Bạn lạc trôi rồi
       </h1>
       <p className="relative mb-8 max-w-xl text-white/45">
@@ -37,7 +36,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/"
-        className="relative rounded-full bg-amber-200 px-6 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+        className="relative rounded-full bg-[#6D5CE6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5B4BD4]"
       >
         Về trang chủ
       </Link>

@@ -10,10 +10,10 @@ import { getCompareFeaturesForPackage, getPackageCompareIndex } from "@/lib/webs
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 
-const TIER_TABS: { key: WebsiteOperationTierKey; emoji: string; label: string }[] = [
-  { key: "yeu", emoji: "🟢", label: "Gói Phổ Thông" },
-  { key: "vua", emoji: "🔵", label: "Chất Lượng Cao" },
-  { key: "manh", emoji: "🟣", label: "Hosting Cao Cấp" },
+const TIER_TABS: { key: WebsiteOperationTierKey; label: string }[] = [
+  { key: "yeu", label: "Gói Phổ Thông" },
+  { key: "vua", label: "Chất Lượng Cao" },
+  { key: "manh", label: "Hosting Cao Cấp" },
 ];
 
 export function WebsiteOperationSection({
@@ -30,33 +30,31 @@ export function WebsiteOperationSection({
   const packages = WEBSITE_OPERATION_PACKAGES.filter((p) => p.tier === activeTier);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+    <div className="space-y-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
         {TIER_TABS.map((tab) => {
-          const tabMeta = WEBSITE_OPERATION_TIER_META[tab.key];
           const isActive = activeTier === tab.key;
           return (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActiveTier(tab.key)}
-              className="rounded-2xl border px-5 py-3 text-sm font-bold transition-all"
+              className="rounded-md border px-4 py-2 text-sm font-medium transition-all"
               style={
                 isActive
                   ? {
-                      borderColor: tabMeta.color,
-                      backgroundColor: `${tabMeta.color}12`,
-                      color: tabMeta.color,
-                      boxShadow: `0 8px 24px ${tabMeta.color}18`,
+                      borderColor: "rgba(139,124,246,0.45)",
+                      backgroundColor: "rgba(109,92,230,0.15)",
+                      color: "#ddd6fe",
                     }
                   : {
-                      borderColor: "rgba(255,255,255,0.12)",
+                      borderColor: "rgba(255,255,255,0.1)",
                       color: "rgba(255,255,255,0.45)",
                       backgroundColor: "rgba(255,255,255,0.03)",
                     }
               }
             >
-              {tab.emoji} {tab.label}
+              {tab.label}
             </button>
           );
         })}
@@ -64,10 +62,10 @@ export function WebsiteOperationSection({
 
       <p className="text-center text-sm text-white/45">{meta.description}</p>
 
-      <PackageCarousel accent={meta.color} itemCount={packages.length} desktopCols={3}>
+      <PackageCarousel accent={primaryColor || meta.color} itemCount={packages.length} desktopCols={3}>
         {packages.map((pkg) => {
           const featured = "popular" in pkg && pkg.popular;
-          const accent = meta.color;
+          const accent = primaryColor || meta.color;
           const compareIndex = getPackageCompareIndex(pkg.name);
           const compareItems = compareIndex >= 0 ? getCompareFeaturesForPackage(compareIndex) : [];
 

@@ -23,15 +23,14 @@ interface ComparisonTableProps {
   onCheckout?: (pkg: { name: string; price: string; tabLabel: string }) => void;
 }
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-const AMBER = "#C4955A";
+const ACCENT = "#6D5CE6";
 
 export function ComparisonTable({ tabs, comparisonTabs, primaryColor, onCheckout }: ComparisonTableProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredCol, setHoveredCol] = useState<number | null>(null);
   const tab = tabs[activeTab];
   const customTab = comparisonTabs?.[activeTab];
-  const accent = primaryColor || AMBER;
+  const accent = primaryColor || ACCENT;
 
   const allFeatures = customTab
     ? customTab.rows.map((r) => r.label)
@@ -58,7 +57,7 @@ export function ComparisonTable({ tabs, comparisonTabs, primaryColor, onCheckout
         viewport={{ once: true }}
         className="mx-auto max-w-5xl"
       >
-        <h2 className="mb-3 text-center text-3xl font-semibold text-white md:text-4xl" style={serif}>
+        <h2 className="mb-3 text-center text-3xl font-semibold text-white md:text-4xl">
           So sánh các gói dịch vụ
         </h2>
         <p className="mb-8 text-center text-white/45">Chọn gói phù hợp nhất với nhu cầu của bạn</p>
@@ -105,12 +104,12 @@ export function ComparisonTable({ tabs, comparisonTabs, primaryColor, onCheckout
                       onMouseLeave={() => setHoveredCol(null)}
                       className={`relative p-4 text-center transition-colors duration-300 ${
                         hoveredCol === i || (!customTab && pkg.popular)
-                          ? "bg-amber-200/[0.08]"
+                          ? "bg-white/[0.04]"
                           : "bg-transparent"
                       }`}
                     >
                       <p className="text-base font-medium text-white">{customTab?.columns?.[i] || pkg.name}</p>
-                      <p className="text-xl font-semibold text-amber-200">{pkg.price}</p>
+                      <p className="text-xl font-semibold text-violet-300/80">{pkg.price}</p>
                       <p className="text-xs text-white/35">/tháng</p>
                       <button
                         onClick={() => onCheckout?.({ name: pkg.name, price: pkg.price, tabLabel: tab.label })}
@@ -146,11 +145,11 @@ export function ComparisonTable({ tabs, comparisonTabs, primaryColor, onCheckout
                           onMouseEnter={() => setHoveredCol(pi)}
                           onMouseLeave={() => setHoveredCol(null)}
                           className={`p-4 text-center transition-colors duration-300 ${
-                            hoveredCol === pi || (!customTab && pkg.popular) ? "bg-amber-200/[0.06]" : ""
+                            hoveredCol === pi || (!customTab && pkg.popular) ? "bg-white/[0.03]" : ""
                           }`}
                         >
                           {val === "check" || val === "✓" ? (
-                            <Check className="mx-auto h-5 w-5 text-amber-200" />
+                            <Check className="mx-auto h-5 w-5 text-violet-300/80" />
                           ) : val === "—" || val === "-" ? (
                             <Minus className="mx-auto h-4 w-4 text-white/25" />
                           ) : val ? (

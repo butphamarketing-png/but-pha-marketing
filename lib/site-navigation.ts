@@ -5,13 +5,24 @@ export type SiteNavLink = {
   href: string;
 };
 
+export type SiteNavChild =
+  | SiteNavLink
+  | {
+      type: "heading";
+      label: string;
+    };
+
 export type SiteNavGroup = {
   label: string;
   href: string;
-  children: SiteNavLink[];
+  children: SiteNavChild[];
   /** Mega menu 3 cột — danh sách ngành website */
   industryMegaMenu?: boolean;
 };
+
+export function isNavLink(child: SiteNavChild): child is SiteNavLink {
+  return !("type" in child);
+}
 
 /** Menu dịch vụ xổ cấp — trang landing riêng từng dịch vụ */
 export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
@@ -22,7 +33,7 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
     children: [
       { label: "Tên miền website", href: "/website/ten-mien-website" },
       { label: "Thiết kế website", href: "/website" },
-      { label: "Vận hành website", href: "/website/van-hanh-website" },
+      { label: "Hosting", href: "/website/van-hanh-website" },
       { label: "Chăm sóc Website", href: "/website/cham-soc-website" },
       { label: "Quảng cáo Website", href: "/website/quang-cao-website" },
       { label: "Xem tất cả ngành →", href: "/website#theo-nganh" },
@@ -46,30 +57,21 @@ export const SERVICE_NAV_GROUPS: SiteNavGroup[] = [
     ],
   },
   {
-    label: "SEO Website",
+    label: "Dịch vụ",
     href: "/seo-website",
     children: [
+      { type: "heading", label: "SEO Website" },
       { label: "Dịch vụ SEO Website", href: "/seo-website" },
       { label: "Technical SEO", href: "/seo-website/technical-seo" },
       { label: "SEO Content", href: "/seo-website/seo-content" },
       { label: "SEO theo địa phương", href: "/seo-website/dia-phuong/ho-chi-minh" },
       { label: "Kiến thức SEO", href: "/kien-thuc/seo-website" },
-    ],
-  },
-  {
-    label: "Automation",
-    href: "/marketing-automation",
-    children: [
+      { type: "heading", label: "Automation" },
       { label: "Marketing Automation", href: "/marketing-automation" },
       { label: "Lead Nurturing", href: "/marketing-automation/lead-nurturing" },
       { label: "CRM Automation", href: "/marketing-automation/crm-automation" },
       { label: "Kiến thức Automation", href: "/kien-thuc/marketing-automation" },
-    ],
-  },
-  {
-    label: "AI Marketing",
-    href: "/ai-marketing",
-    children: [
+      { type: "heading", label: "AI Marketing" },
       { label: "AI Marketing", href: "/ai-marketing" },
       { label: "AI Content Ops", href: "/ai-marketing/ai-content" },
       { label: "AI Search Optimization", href: "/ai-marketing/ai-search-optimization" },

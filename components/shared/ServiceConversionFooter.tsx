@@ -1,25 +1,21 @@
 import Link from "next/link";
 import { ZaloConsultCta } from "@/components/blog/ZaloConsultCta";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-
 export function ServiceConversionFooter({ title = "Tư vấn & tài liệu liên quan" }: { title?: string }) {
   return (
-    <section className="rounded-3xl border border-white/[0.08] bg-white/[0.03] p-6 md:p-8">
-      <h2 className="text-xl font-semibold text-white" style={serif}>
-        {title}
-      </h2>
+    <section className="border border-white/10 bg-[#0e1018] p-5 md:p-6">
+      <h2 className="text-lg font-semibold text-white">{title}</h2>
       <p className="mt-2 text-sm text-white/45">
         Xem thêm hướng dẫn trên{" "}
-        <Link href="/blog" className="font-medium text-violet-300/90 underline underline-offset-2 hover:text-violet-200">
+        <Link href="/blog" className="font-medium text-white/70 underline underline-offset-2 hover:text-white">
           blog
         </Link>
         , case study tại{" "}
-        <Link href="/du-an" className="font-medium text-amber-200/80 underline underline-offset-2 hover:text-amber-100">
+        <Link href="/du-an" className="font-medium text-white/70 underline underline-offset-2 hover:text-white">
           dự án tiêu biểu
         </Link>{" "}
         hoặc{" "}
-        <Link href="/website" className="font-medium text-violet-300/90 underline underline-offset-2 hover:text-violet-200">
+        <Link href="/website" className="font-medium text-white/70 underline underline-offset-2 hover:text-white">
           xem dịch vụ thiết kế website
         </Link>
         .

@@ -12,11 +12,9 @@ import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFo
 import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES } from "@/lib/service-pricing";
 
 const BUILD_ICONS = [Settings, UserCheck, Rocket] as const;
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-
 const config: PlatformConfig = {
   name: "Facebook",
-  color: "#C4955A",
+  color: "#8B7CF6",
   theme: "deep",
   auditPlatform: "facebook",
   heroTitle: "Facebook Marketing cho doanh nghiệp",
@@ -105,9 +103,9 @@ function SectionHeading({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-10 text-center sm:mb-12">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl" style={serif}>
+    <div className="mb-5 text-left sm:mb-6">
+      <p className="text-[11px] font-medium text-white/40">{eyebrow}</p>
+      <h2 className="mt-1 text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
         {title}
       </h2>
       {subtitle ? <p className="mx-auto mt-3 max-w-xl text-sm text-white/40">{subtitle}</p> : null}
@@ -121,71 +119,62 @@ export default function FacebookPage() {
 
   return (
     <PlatformPage config={config}>
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 85% 20%, rgba(24,119,242,0.08), transparent)",
-        }}
-        aria-hidden
-      />
-
-      <div className="platform-sections relative mx-auto max-w-6xl space-y-20 px-4 pb-24 pt-10 sm:space-y-24 sm:px-6 sm:pt-14">
-        <section className="border-b border-white/[0.06] pb-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+      <div className="platform-sections relative mx-auto max-w-6xl space-y-12 px-4 pb-16 pt-7 sm:space-y-14 sm:px-6 sm:pt-9">
+        <section className="border-b border-white/[0.08] pb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
             Dịch vụ Facebook Marketing
           </p>
           <h2
-            className="mt-4 max-w-3xl text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.12] text-white"
-            style={serif}
+            className="mt-2 max-w-3xl text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl"
+           
           >
             Thiết kế Fanpage, chăm sóc nội dung và quảng cáo Meta Ads
           </h2>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45">
             <strong className="font-medium text-white/70">Facebook Marketing</strong> tại Bứt Phá gồm xây dựng Fanpage
             chuẩn thương hiệu, chăm sóc content đều đặn và chạy Meta Ads tối ưu chuyển đổi tin nhắn/lead. Funnel đầy đủ:
             thiết kế → care → ads — đồng bộ với website và Google Maps để không mất lead giữa các kênh.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href="/du-an/sao-khue"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Case study Fanpage
             </Link>
             <Link
               href="/blog/chu-de/facebook"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Hub Facebook
             </Link>
             <Link
               href="/website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Đồng bộ thiết kế website
             </Link>
           </div>
         </section>
 
-        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">Proof thực chiến</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Proof thực chiến</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Fanpage có số liệu, không chỉ đẹp
           </h2>
           <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              Sao Khuê: Fanpage đạt <span className="text-amber-100">83.374 lượt xem</span> trong 90 ngày và{" "}
-              <span className="text-amber-100">4.329 lượt xem video</span> ≥3 giây — bổ sung kênh lead song song Google.
+              Sao Khuê: Fanpage đạt <span className="text-white/80">83.374 lượt xem</span> trong 90 ngày và{" "}
+              <span className="text-white/80">4.329 lượt xem video</span> ≥3 giây — bổ sung kênh lead song song Google.
             </li>
             <li>Thiên Hoàng Kim, Nha Khoa Đăng Khoa: Fanpage đồng bộ cover, bio và website — nuôi lead inbox.</li>
             <li>
               Xem chi tiết tại{" "}
-              <Link href="/du-an/sao-khue" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/du-an/sao-khue" className="text-white/70 underline-offset-2 hover:underline">
                 case study Sao Khuê
               </Link>{" "}
               hoặc{" "}
-              <Link href="/du-an/thien-hoang-kim" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/du-an/thien-hoang-kim" className="text-white/70 underline-offset-2 hover:underline">
                 Thiên Hoàng Kim
               </Link>
               .
@@ -193,9 +182,9 @@ export default function FacebookPage() {
           </ul>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">So sánh giải pháp</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">So sánh giải pháp</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Nên xây Fanpage, chăm sóc hay chạy quảng cáo?
           </h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -213,7 +202,7 @@ export default function FacebookPage() {
                 "Phù hợp khi đã có nội dung, offer và quy trình xử lý inbox. Quảng cáo giúp mở rộng lead nhanh hơn.",
               ],
             ].map(([title, desc]) => (
-              <article key={title} className="border-l border-amber-200/25 pl-4">
+              <article key={title} className="border-l border-white/15 pl-4">
                 <h3 className="text-lg font-medium text-white/90">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/40">{desc}</p>
               </article>
@@ -246,7 +235,7 @@ export default function FacebookPage() {
           />
         </div>
 
-        <section id="build" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="build" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading eyebrow="Professional Service" title="Dịch vụ Xây dựng Fanpage" />
           <PackageCarousel accent={config.color} itemCount={FANPAGE_BUILD_PACKAGES.length} desktopCols={3}>
             {FANPAGE_BUILD_PACKAGES.map((pkg, i) => (
@@ -264,7 +253,7 @@ export default function FacebookPage() {
           </PackageCarousel>
         </section>
 
-        <section id="care" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="care" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading
             eyebrow="Premium Care"
             title="Chăm sóc Fanpage"
@@ -287,7 +276,7 @@ export default function FacebookPage() {
           </PackageCarousel>
         </section>
 
-        <section id="ads" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="ads" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading eyebrow="Advertising" title="Quảng cáo Fanpage" />
           <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
             {[
@@ -329,7 +318,7 @@ export default function FacebookPage() {
           </PackageCarousel>
         </section>
 
-        <div className="[&_*]:border-white/10 [&_a]:text-amber-200/80 [&_h2]:text-white [&_p]:text-white/45">
+        <div className="[&_*]:border-white/10 [&_a]:text-white/70 [&_h2]:text-white [&_p]:text-white/45">
           <ServiceConversionFooter title="Tư vấn Facebook & tài liệu liên quan" />
         </div>
       </div>

@@ -3,7 +3,6 @@ import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryCardThumbnail } from "@/lib/website-industry-images";
 import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function WebsiteIndustryGrid({
   id = "theo-nganh",
@@ -26,7 +25,7 @@ export function WebsiteIndustryGrid({
       <p
         className={
           deep
-            ? "text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55"
+            ? "text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40"
             : "text-xs font-bold uppercase tracking-wider text-slate-500"
         }
       >
@@ -61,7 +60,7 @@ export function WebsiteIndustryGrid({
               href={`/website/nganh/${item.slug}`}
               className={`group overflow-hidden transition ${
                 deep
-                  ? "border border-white/[0.06] bg-white/[0.02] hover:border-amber-200/25 hover:bg-white/[0.04]"
+                  ? "border border-white/[0.06] bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]"
                   : "rounded-2xl border border-indigo-100 bg-white shadow-sm hover:border-violet-200 hover:shadow-md"
               }`}
             >
@@ -74,7 +73,7 @@ export function WebsiteIndustryGrid({
               <div className="px-4 py-3">
                 <p
                   className={`text-sm font-medium ${
-                    deep ? "text-white/85 group-hover:text-amber-100" : "font-bold text-indigo-950 group-hover:text-violet-800"
+                    deep ? "text-white/85 group-hover:text-white/80" : "font-bold text-indigo-950 group-hover:text-violet-800"
                   }`}
                 >
                   {item.label}
@@ -91,7 +90,7 @@ export function WebsiteIndustryGrid({
         Không thấy ngành của bạn?{" "}
         <Link
           href="/banggia"
-          className={deep ? "font-semibold text-amber-200/80 underline-offset-2 hover:underline" : "font-semibold text-violet-700 underline"}
+          className={deep ? "font-semibold text-white/70 underline-offset-2 hover:underline" : "font-semibold text-violet-700 underline"}
         >
           Xem báo giá thiết kế website
         </Link>

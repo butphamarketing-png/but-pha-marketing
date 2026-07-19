@@ -41,7 +41,7 @@ export function BlogSearchGrid({
             size={18}
             className={
               deep
-                ? "pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-amber-200/50"
+                ? "pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/35"
                 : "pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-violet-500"
             }
           />
@@ -53,7 +53,7 @@ export function BlogSearchGrid({
             placeholder="Tìm theo từ khóa: SEO, website, Facebook, thiết kế..."
             className={
               deep
-                ? "w-full border border-white/12 bg-[#0c0d12] py-3 pl-11 pr-11 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-amber-200/35"
+                ? "w-full border border-white/12 bg-[#0c0d12] py-3 pl-11 pr-11 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/20"
                 : "w-full rounded-2xl border border-indigo-100 bg-indigo-50/40 py-3 pl-11 pr-11 text-sm text-indigo-950 outline-none transition focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
             }
           />
@@ -101,7 +101,7 @@ export function BlogSearchGrid({
               href={`/blog/${blog.slug}`}
               className={
                 deep
-                  ? "group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-white/[0.02] transition duration-300 hover:border-amber-200/25"
+                  ? "group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-white/[0.02] transition duration-300 hover:border-white/15"
                   : "group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-indigo-100 bg-white shadow-brand transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-brand-lg"
               }
             >
@@ -132,14 +132,14 @@ export function BlogSearchGrid({
                       : "absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-indigo-900 shadow-sm"
                   }
                 >
-                  <CalendarDays size={14} className={deep ? "text-amber-200/70" : "text-violet-600"} />
+                  <CalendarDays size={14} className={deep ? "text-white/40" : "text-violet-600"} />
                   {new Date(blog.publishedAt || blog.timestamp).toLocaleDateString("vi-VN")}
                 </div>
                 {blog.hot && (
                   <div
                     className={
                       deep
-                        ? "absolute right-4 top-4 border border-amber-200/30 bg-amber-200/90 p-2 text-[#0b0d12]"
+                        ? "absolute right-4 top-4 border border-white/20 bg-[#6D5CE6] p-2 text-white"
                         : "absolute right-4 top-4 rounded-full bg-orange-500 p-2 text-white shadow-md"
                     }
                   >
@@ -152,7 +152,7 @@ export function BlogSearchGrid({
                 <span
                   className={
                     deep
-                      ? "mb-3 inline-flex self-start border border-amber-200/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-200/70"
+                      ? "mb-3 inline-flex self-start border border-white/15 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-white/40"
                       : "mb-3 inline-flex self-start rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-violet-700"
                   }
                 >
@@ -161,7 +161,7 @@ export function BlogSearchGrid({
                 <h2
                   className={
                     deep
-                      ? "line-clamp-2 text-lg font-medium leading-snug text-white transition group-hover:text-amber-100"
+                      ? "line-clamp-2 text-lg font-medium leading-snug text-white transition group-hover:text-white/80"
                       : "line-clamp-2 text-lg font-black leading-snug text-indigo-950 transition group-hover:text-violet-700"
                   }
                 >
@@ -174,7 +174,7 @@ export function BlogSearchGrid({
                   <span
                     className={
                       deep
-                        ? "inline-flex items-center gap-2 text-sm font-medium text-amber-200/80 transition group-hover:gap-3"
+                        ? "inline-flex items-center gap-2 text-sm font-medium text-white/70 transition group-hover:gap-3"
                         : "inline-flex items-center gap-2 text-sm font-bold text-violet-600 transition group-hover:gap-3"
                     }
                   >

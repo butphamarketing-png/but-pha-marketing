@@ -4,7 +4,6 @@ import { SITE_URL, buildMetadata } from "@/lib/seo";
 import { getAllCaseStudies } from "@/lib/case-studies";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export const metadata: Metadata = buildMetadata({
   title: "Case Study Thiết Kế Website & SEO | Dự Án Tiêu Biểu",
@@ -41,20 +40,11 @@ export default function CaseStudiesPage() {
     <main className="relative min-h-screen overflow-hidden deep-theme text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[50vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 20% 30%, rgba(234,88,12,0.06), transparent)",
-        }}
-        aria-hidden
-      />
-
-      <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
-        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
+      <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-10 lg:px-8">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/" className="font-medium text-white/40 hover:text-white/80">
                 Trang chủ
               </Link>
             </li>
@@ -67,48 +57,45 @@ export default function CaseStudiesPage() {
           </ol>
         </nav>
 
-        <header className="mb-14 max-w-3xl border-b border-white/[0.06] pb-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+        <header className="mb-8 max-w-3xl border-b border-white/[0.08] pb-6">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
             Dự án tiêu biểu
           </p>
-          <h1
-            className="mt-4 text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[1.08] tracking-tight text-white"
-            style={serif}
-          >
+          <h1 className="mt-2 text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]">
             Case study thực chiến
           </h1>
-          <p className="mt-5 text-sm leading-relaxed text-white/45 sm:text-[15px] md:text-base">
+          <p className="mt-3 text-sm leading-relaxed text-white/45">
             Website, SEO và Facebook Marketing — có số liệu GSC, từ khóa và minh chứng. Đây là{" "}
             <strong className="font-medium text-white/70">proof layer</strong> trong chiến lược topical authority —
             cách MONA dùng portfolio, nhưng Bứt Phá đi sâu theo ngành với số liệu thật.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-white/40">
             Mỗi case study liên kết với cluster blog ngành (ví dụ:{" "}
-            <Link href="/blog/thiet-ke-website-xay-dung-nha-thau" className="text-amber-200/80 underline-offset-2 hover:underline">
+            <Link href="/blog/thiet-ke-website-xay-dung-nha-thau" className="text-white/70 underline-offset-2 hover:underline">
               thiết kế website xây dựng
             </Link>
             ) và trang{" "}
-            <Link href="/website" className="text-amber-200/80 underline-offset-2 hover:underline">
+            <Link href="/website" className="text-white/70 underline-offset-2 hover:underline">
               thiết kế website
             </Link>{" "}
             — tăng internal link và E-E-A-T.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href="/website"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Dịch vụ thiết kế website
             </Link>
             <Link
               href="/blog/thiet-ke-website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Hướng dẫn thiết kế website A-Z
             </Link>
             <Link
               href="/blog/bao-gia-thiet-ke-website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Báo giá thiết kế website
             </Link>

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SITE_URL } from "@/lib/seo";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 const useCases = [
   "AI Content Ops: brief → draft → optimize → publish",
@@ -93,20 +92,11 @@ export default function AiMarketingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 38% 30% at 88% 20%, rgba(168,85,247,0.07), transparent)",
-        }}
-        aria-hidden
-      />
-
-      <div className="relative mx-auto max-w-5xl space-y-16 px-4 py-12 sm:space-y-20 sm:px-6 md:py-16 lg:px-8">
+      <div className="relative mx-auto max-w-5xl space-y-10 px-4 py-8 sm:space-y-12 sm:px-6 md:py-10 lg:px-8">
         <nav aria-label="Breadcrumb" className="text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/" className="font-medium text-white/40 hover:text-white/80">
                 Trang chủ
               </Link>
             </li>
@@ -119,57 +109,57 @@ export default function AiMarketingPage() {
           </ol>
         </nav>
 
-        <section className="border-b border-white/[0.06] pb-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">Pillar AI</p>
+        <section className="border-b border-white/[0.08] pb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Pillar AI</p>
           <h1
-            className="mt-4 max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] text-white"
-            style={serif}
+            className="mt-4 max-w-3xl text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]"
+           
           >
             AI Marketing
           </h1>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45">
             Xây hệ thống AI để tăng tốc vận hành marketing, mở rộng sản lượng nội dung chất lượng và nâng hiệu suất
             lead-to-sale.
           </p>
           <ul className="mt-8 space-y-3 text-sm text-white/65">
             {useCases.map((item) => (
               <li key={item} className="flex gap-3">
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-amber-200/70" aria-hidden />
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#6D5CE6]/70" aria-hidden />
                 {item}
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href="/lien-he"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Tư vấn triển khai AI Marketing
             </Link>
             <Link
               href="/kien-thuc/ai-marketing"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Knowledge Hub AI
             </Link>
             <Link
               href="/blog/chu-de/marketing"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Blog Marketing
             </Link>
           </div>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Quy trình</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Quy trình</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Triển khai AI Marketing
           </h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {processSteps.map((item) => (
-              <article key={item.step} className="border-l border-amber-200/25 pl-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-200/50">
+              <article key={item.step} className="border-l border-white/15 pl-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
                   Bước {item.step}
                 </p>
                 <h3 className="mt-2 text-lg font-medium text-white/90">{item.title}</h3>
@@ -179,9 +169,9 @@ export default function AiMarketingPage() {
           </div>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Năng lực</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Năng lực</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Module AI Marketing
           </h2>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -189,7 +179,7 @@ export default function AiMarketingPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="border-l border-amber-200/25 pl-5 transition hover:border-amber-200/50"
+                className="border-l border-white/15 pl-5 transition hover:border-white/20"
               >
                 <p className="text-lg font-medium text-white/90">{item.title}</p>
                 <p className="mt-2 text-sm text-white/40">{item.desc}</p>
@@ -198,11 +188,11 @@ export default function AiMarketingPage() {
           </div>
         </section>
 
-        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">
+        <section className="border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
             Proof-driven workflow
           </p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             AI có kiểm duyệt, có dẫn chứng
           </h2>
           <ul className="mt-6 space-y-3 text-sm text-white/65">
@@ -212,19 +202,19 @@ export default function AiMarketingPage() {
               Tham chiếu mẫu proof tại{" "}
               <Link
                 href="/du-an/nha-khoa-dang-khoa"
-                className="text-amber-200/80 underline-offset-2 hover:underline"
+                className="text-white/70 underline-offset-2 hover:underline"
               >
                 case GSC thực chiến
               </Link>
               .
             </li>
             <li>
-              KPI tham chiếu: tăng <span className="text-amber-100">30–50%</span> tốc độ xuất bản nhưng vẫn giữ chuẩn
+              KPI tham chiếu: tăng <span className="text-white/80">30–50%</span> tốc độ xuất bản nhưng vẫn giữ chuẩn
               nội dung hữu ích và có dẫn chứng.
             </li>
             <li>
               Hub AI:{" "}
-              <Link href="/kien-thuc/ai-marketing" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/kien-thuc/ai-marketing" className="text-white/70 underline-offset-2 hover:underline">
                 /kien-thuc/ai-marketing
               </Link>
               .
@@ -232,16 +222,16 @@ export default function AiMarketingPage() {
           </ul>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14 pb-8">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">FAQ</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8 pb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">FAQ</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Câu hỏi thường gặp
           </h2>
           <div className="mt-8 space-y-3">
             {visibleFaqs.map((item) => (
               <details
                 key={item.q}
-                className="group border border-white/[0.08] bg-white/[0.02] px-5 py-4 open:border-amber-200/20"
+                className="group border border-white/[0.08] bg-white/[0.02] px-5 py-4 open:border-white/20"
               >
                 <summary className="cursor-pointer list-none font-medium text-white/90 marker:hidden">
                   {item.q}

@@ -12,11 +12,9 @@ import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { GOOGLE_MAPS_PACKAGES } from "@/lib/service-pricing";
 
 const GM_ICONS = [Wrench, Building2, Star] as const;
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-
 const config: PlatformConfig = {
   name: "Google Maps",
-  color: "#C4955A",
+  color: "#8B7CF6",
   theme: "deep",
   auditPlatform: "googlemaps",
   heroTitle: "Không lên Google Maps",
@@ -86,9 +84,9 @@ function SectionHeading({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-10 text-center sm:mb-12">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl" style={serif}>
+    <div className="mb-5 text-left sm:mb-6">
+      <p className="text-[11px] font-medium text-white/40">{eyebrow}</p>
+      <h2 className="mt-1 text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
         {title}
       </h2>
       {subtitle ? <p className="mx-auto mt-3 max-w-xl text-sm text-white/40">{subtitle}</p> : null}
@@ -102,56 +100,47 @@ export default function GoogleMapsPage() {
 
   return (
     <PlatformPage config={config}>
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 20% 25%, rgba(234,88,12,0.08), transparent)",
-        }}
-        aria-hidden
-      />
-
-      <div className="platform-sections relative mx-auto max-w-6xl space-y-20 px-4 pb-24 pt-10 sm:space-y-24 sm:px-6 sm:pt-14">
-        <section className="border-b border-white/[0.06] pb-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+      <div className="platform-sections relative mx-auto max-w-6xl space-y-12 px-4 pb-16 pt-7 sm:space-y-14 sm:px-6 sm:pt-9">
+        <section className="border-b border-white/[0.08] pb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
             Google Maps Marketing
           </p>
           <h2
-            className="mt-4 max-w-3xl text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.12] text-white"
-            style={serif}
+            className="mt-2 max-w-3xl text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl"
+           
           >
             Tối ưu Google Business Profile và Local SEO
           </h2>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45">
             <strong className="font-medium text-white/70">Google Maps Marketing</strong> giúp doanh nghiệp xuất hiện khi
             khách tìm địa phương — intent mua hàng cao nhất. Audit GBP, tối ưu thông tin, review thật, content Maps và
             Local Ads — kết hợp website chuẩn SEO.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href="/blog/chu-de/google-maps"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Hub Google Maps
             </Link>
             <Link
               href="/website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Website + Local SEO
             </Link>
             <Link
               href="/du-an/nha-khoa-dang-khoa"
-              className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25"
             >
               Case study
             </Link>
           </div>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">NAP đồng nhất</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">NAP đồng nhất</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Checklist Local SEO — tên · địa chỉ · SĐT
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/45">
@@ -159,62 +148,62 @@ export default function GoogleMapsPage() {
           </p>
           <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              <span className="text-amber-100">NAP chuẩn BPM:</span> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM ·
+              <span className="text-white/80">NAP chuẩn BPM:</span> Bứt Phá Marketing · Tổ 8 ấp 6 Bình Mỹ, TP.HCM ·
               0937 417 982
             </li>
             <li>
               Đồng bộ footer, schema LocalBusiness, GBP và{" "}
-              <Link href="/google-maps" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/google-maps" className="text-white/70 underline-offset-2 hover:underline">
                 /google-maps
               </Link>
             </li>
             <li>
               Gắn{" "}
-              <Link href="/website" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/website" className="text-white/70 underline-offset-2 hover:underline">
                 /website
               </Link>{" "}
               và{" "}
-              <Link href="/banggia" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/banggia" className="text-white/70 underline-offset-2 hover:underline">
                 /banggia
               </Link>{" "}
               vào mô tả GBP khi phù hợp
             </li>
             <li>
               Kiến thức:{" "}
-              <Link href="/blog/chu-de/google-maps" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/blog/chu-de/google-maps" className="text-white/70 underline-offset-2 hover:underline">
                 hub Google Maps
               </Link>
             </li>
           </ul>
         </section>
 
-        <section className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:px-10 sm:py-12">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">Proof thực chiến</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent px-6 py-10 sm:px-10 sm:py-12">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Proof thực chiến</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Local SEO gắn với website và lead
           </h2>
           <ul className="mt-6 space-y-3 text-sm text-white/65">
             <li>
-              Nha Khoa Đăng Khoa: <span className="text-amber-100">15,4K impressions</span> ·{" "}
-              <span className="text-amber-100">471 clicks</span> GSC — GBP/Maps bổ sung gọi điện & chỉ đường
+              Nha Khoa Đăng Khoa: <span className="text-white/80">15,4K impressions</span> ·{" "}
+              <span className="text-white/80">471 clicks</span> GSC — GBP/Maps bổ sung gọi điện & chỉ đường
             </li>
             <li>Mô hình: GBP chuẩn → review thật → content Maps → landing message-match</li>
             <li>
               Xem{" "}
-              <Link href="/du-an/nha-khoa-dang-khoa" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/du-an/nha-khoa-dang-khoa" className="text-white/70 underline-offset-2 hover:underline">
                 case study nha khoa
               </Link>{" "}
               hoặc{" "}
-              <Link href="/website" className="text-amber-200/80 underline-offset-2 hover:underline">
+              <Link href="/website" className="text-white/70 underline-offset-2 hover:underline">
                 thiết kế website
               </Link>
             </li>
           </ul>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">So sánh giải pháp</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">So sánh giải pháp</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Google Maps, Local SEO hay Local Ads?
           </h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -223,7 +212,7 @@ export default function GoogleMapsPage() {
               ["Local SEO", "Tăng thứ hạng bền vững bằng GBP, website địa phương, citation và nội dung."],
               ["Local Ads", "Cần lượt gọi nhanh — hiệu quả nhất khi Maps và landing đã chuẩn chuyển đổi."],
             ].map(([title, desc]) => (
-              <article key={title} className="border-l border-amber-200/25 pl-4">
+              <article key={title} className="border-l border-white/15 pl-4">
                 <h3 className="text-lg font-medium text-white/90">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/40">{desc}</p>
               </article>
@@ -251,7 +240,7 @@ export default function GoogleMapsPage() {
           />
         </div>
 
-        <section id="gm-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="gm-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading
             eyebrow="Google Business Profile"
             title="Gói Google Maps"
@@ -273,7 +262,7 @@ export default function GoogleMapsPage() {
           </PackageCarousel>
         </section>
 
-        <section id="ads-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="ads-pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading
             eyebrow="Local Ads"
             title="Gói quảng cáo Google Maps"
@@ -323,7 +312,7 @@ export default function GoogleMapsPage() {
           </PackageCarousel>
         </section>
 
-        <section id="benefits" className="scroll-mt-24 border-t border-white/[0.06] pt-14">
+        <section id="benefits" className="scroll-mt-24 border-t border-white/[0.08] pt-8">
           <SectionHeading eyebrow="Lợi ích" title="Bạn nhận được gì?" />
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
@@ -332,8 +321,8 @@ export default function GoogleMapsPage() {
               { icon: Building2, title: "Hiển thị chuyên nghiệp hơn đối thủ", desc: "Thông tin đầy đủ, hình ảnh đẹp" },
               { icon: Star, title: "Được khách tin tưởng hơn", desc: "Review tốt nâng uy tín thương hiệu" },
             ].map((item) => (
-              <div key={item.title} className="border-l border-amber-200/25 pl-4">
-                <item.icon className="h-4 w-4 text-amber-200/55" />
+              <div key={item.title} className="border-l border-white/15 pl-4">
+                <item.icon className="h-4 w-4 text-white/40" />
                 <h3 className="mt-3 text-base font-medium text-white/90">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/40">{item.desc}</p>
               </div>
@@ -341,11 +330,11 @@ export default function GoogleMapsPage() {
           </div>
         </section>
 
-        <section className="border border-white/[0.08] bg-white/[0.02] px-6 py-12 text-center sm:px-12 sm:py-16">
-          <h2 className="text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border border-white/10 bg-[#0e1018] px-5 py-6 text-center sm:px-6">
+          <h2 className="text-xl font-semibold text-white sm:text-[1.35rem]">
             Bạn đã xuất hiện trên Google Maps chưa?
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm text-white/45">
+          <p className="mx-auto mt-2 max-w-md text-sm text-white/45">
             Kiểm tra vị trí ngay — đừng để mất khách hàng tiềm năng.
           </p>
           <button
@@ -353,13 +342,13 @@ export default function GoogleMapsPage() {
             onClick={() => {
               document.getElementById("audit")?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}
-            className="mt-8 inline-flex rounded-full bg-amber-200 px-10 py-3.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+            className="mt-5 inline-flex rounded-md bg-[#6D5CE6] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#5B4BD4]"
           >
             Kiểm tra ngay
           </button>
         </section>
 
-        <div className="[&_*]:border-white/10 [&_a]:text-amber-200/80 [&_h2]:text-white [&_p]:text-white/45">
+        <div className="[&_*]:border-white/10 [&_a]:text-white/70 [&_h2]:text-white [&_p]:text-white/45">
           <ServiceConversionFooter title="Tư vấn Google Maps & tài liệu liên quan" />
         </div>
       </div>

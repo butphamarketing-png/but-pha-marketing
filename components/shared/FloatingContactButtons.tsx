@@ -21,7 +21,7 @@ export function FloatingContactButtons() {
         <motion.div
           whileHover={{ scale: 1.1, x: -5 }}
           whileTap={{ scale: 0.9 }}
-          className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-indigo-200 bg-white shadow-2xl backdrop-blur-md transition-colors hover:border-violet-400 hover:bg-indigo-50"
+          className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/25 bg-[#14101f] shadow-lg shadow-black/30 backdrop-blur-md transition-colors hover:border-violet-400/45 hover:bg-[#1a1528]"
         >
           <img src={logo} alt="Home" className="h-7 w-7 rounded-full object-cover" />
           <span className="absolute right-full mr-3 whitespace-nowrap rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-all group-hover:opacity-100">

@@ -26,7 +26,11 @@ import { db, type Service } from "@/lib/useData";
 import { playClickSound } from "@/lib/utils";
 import { getMailtoHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
+/** Eyebrow · H2 · body — scale gọn, không loè */
+const eye = "text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-300/65";
+const h2 = "mt-1.5 text-[1.4rem] font-semibold leading-snug tracking-tight text-white sm:text-[1.6rem]";
+const body = "text-sm leading-relaxed text-white/48";
+const section = "mt-6 border-t border-white/[0.07] pt-5 sm:mt-7 sm:pt-6";
 
 export default function AboutPageClient() {
   const [services, setServices] = useState<Service[]>([]);
@@ -120,31 +124,23 @@ export default function AboutPageClient() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden deep-theme text-white">
+    <div className="relative min-h-screen overflow-x-hidden deep-theme bg-[#08090c] text-white">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[75vh]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[50vh]"
         style={{
           background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.3]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\")",
+            "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139,124,246,0.1), transparent 60%), linear-gradient(180deg, #0e1018 0%, #08090c 100%)",
         }}
         aria-hidden
       />
 
-      <header className="sticky top-0 z-40 border-b border-white/[0.06]  bg-[#0e1018]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#0e1018]/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
-            <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
+            <Image src={logoSrc} alt={brandName} width={40} height={40} className="h-10 w-10 object-contain" />
             <div className="hidden sm:block">
-              <div className="text-sm font-medium tracking-wide text-white/90">{brandName}</div>
-              <div className="text-[11px] text-amber-200/55">Marketing thực chiến</div>
+              <div className="text-sm font-medium text-white">{brandName}</div>
+              <div className="text-[11px] text-white/40">Marketing thực chiến</div>
             </div>
           </Link>
 
@@ -155,131 +151,114 @@ export default function AboutPageClient() {
           <button
             type="button"
             onClick={scrollToConsultation}
-            className="hidden items-center gap-2 rounded-full bg-amber-200 px-4 py-2.5 text-xs font-semibold text-[#0b0d12] transition hover:bg-amber-100 lg:inline-flex"
+            className="hidden items-center gap-2 rounded-md bg-[#6D5CE6] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#5B4BD4] lg:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" />
             Liên hệ tư vấn
           </button>
 
           <div className="lg:hidden [&_button]:text-white/80">
-            <SiteNavMenu activeHref="/gioi-thieu" />
+            <SiteNavMenu tone="dark" activeHref="/gioi-thieu" />
           </div>
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
-        {/* Hero — one composition */}
-        <section className="relative min-h-[min(72vh,640px)]">
-          {heroVisual ? (
-            <div className="absolute inset-0 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroVisual}
-                alt=""
-                className="h-full w-full object-cover opacity-40"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#08090c] via-[#08090c]/75 to-[#08090c]/40" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#08090c]/90 via-[#08090c]/45 to-transparent" />
-            </div>
-          ) : null}
-
-          <div className="relative flex min-h-[min(72vh,640px)] flex-col justify-end pb-12 pt-20 sm:pb-16">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">Về chúng tôi</p>
+      <main className="relative mx-auto max-w-6xl px-4 pb-8 pt-4 sm:px-6 sm:pt-5">
+        {/* Hero */}
+        <section className="relative grid items-center gap-5 border-b border-white/[0.07] pb-6 pt-1 sm:gap-6 sm:pb-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-8">
+          <div className="relative z-10">
+            <p className={eye}>Về chúng tôi</p>
             <h1
-              className="mt-4 max-w-3xl text-[clamp(2.1rem,6vw,3.75rem)] font-semibold leading-[1.08] tracking-tight text-white"
-              style={serif}
+              className="mt-1.5 max-w-xl text-[1.75rem] font-semibold leading-[1.15] tracking-tight text-white sm:text-[2.05rem]"
             >
               {brandName}
             </h1>
-            <p className="mt-4 max-w-lg text-base leading-relaxed text-white/50 sm:text-lg">
+            <p className={`mt-2 max-w-md ${body}`}>
               Đồng hành bứt phá cùng doanh nghiệp — tư vấn đúng, triển khai hiệu quả, đo lường minh bạch.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-3.5 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={scrollToConsultation}
-                className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+                className="inline-flex items-center gap-2 rounded-md bg-[#6D5CE6] px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-[#5B4BD4]"
               >
                 Liên hệ tư vấn
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </button>
               <Link
                 href="/banggia"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white/80 transition hover:border-white/25"
+                className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-white/75 transition hover:border-white/25 hover:text-white"
               >
                 Bảng giá dịch vụ
               </Link>
             </div>
           </div>
+
+          <div className="relative aspect-[5/3] overflow-hidden border border-white/10 bg-white/[0.03] lg:aspect-auto lg:h-[240px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={teamImage || heroVisual}
+              alt="Đội ngũ Bứt Phá Marketing"
+              className="h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08090c]/50 via-transparent to-transparent" />
+          </div>
         </section>
 
         {/* 01 Who */}
-        <section className="border-t border-white/[0.06] pt-14 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">01</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl" style={serif}>
+        <section className="pt-5 sm:pt-6">
+          <p className={eye}>01</p>
+          <h2 className={h2}>
             Bứt Phá Marketing là ai?
           </h2>
 
-          <div className={`mt-8 grid gap-10 ${teamImage ? "lg:grid-cols-[1.15fr_0.85fr] lg:items-end" : ""}`}>
-            <div className="space-y-5 text-[15px] leading-8 text-white/50">
-              <p>
-                Bứt Phá Marketing cung cấp giải pháp marketing toàn diện cho SME, doanh nghiệp địa phương và thương hiệu
-                đang phát triển.
-              </p>
-              <p>
-                Đội ngũ thực chiến trong website, fanpage, SEO, Google Maps và quảng cáo — hiểu mỗi doanh nghiệp cần một
-                chiến lược riêng.
-              </p>
-              <p className="text-white/70">
-                Chúng tôi đề cao thấu hiểu, tư vấn đúng và triển khai hiệu quả — lấy kết quả khách hàng làm thước đo.
-              </p>
-            </div>
-            {teamImage ? (
-              <div className="relative aspect-[4/3] overflow-hidden border border-white/[0.06] bg-white/[0.02]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={teamImage}
-                  alt="Đội ngũ Bứt Phá Marketing làm việc chiến lược marketing"
-                  className="h-full w-full object-cover object-center"
-                />
-              </div>
-            ) : null}
+          <div className={`mt-3 max-w-3xl space-y-2.5 ${body}`}>
+            <p>
+              Bứt Phá Marketing cung cấp giải pháp marketing toàn diện cho SME, doanh nghiệp địa phương và thương hiệu
+              đang phát triển.
+            </p>
+            <p>
+              Đội ngũ thực chiến trong website, fanpage, SEO, Google Maps và quảng cáo — hiểu mỗi doanh nghiệp cần một
+              chiến lược riêng.
+            </p>
+            <p className="text-white/70">
+              Chúng tôi đề cao thấu hiểu, tư vấn đúng và triển khai hiệu quả — lấy kết quả khách hàng làm thước đo.
+            </p>
           </div>
 
-          <div className="mt-12 grid gap-8 border-t border-white/[0.06] pt-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid gap-4 border-t border-white/[0.07] pt-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {[
               { value: "300+", label: "Khách hàng đồng hành", icon: Users },
               { value: "1000+", label: "Dự án đã triển khai", icon: BriefcaseBusiness },
               { value: "5+ năm", label: "Kinh nghiệm thực chiến", icon: Sparkles },
               { value: "95%", label: "Khách tiếp tục hợp tác", icon: Target },
             ].map((stat) => (
-              <div key={stat.value} className="relative pl-4">
-                <span className="absolute left-0 top-1 h-full w-px bg-gradient-to-b from-amber-200/45 to-transparent" aria-hidden />
-                <stat.icon className="h-4 w-4 text-amber-200/60" />
-                <p className="mt-3 text-3xl font-semibold text-amber-50" style={serif}>
+              <div key={stat.value} className="border-l border-white/10 pl-3">
+                <stat.icon className="h-3.5 w-3.5 text-violet-300/70" />
+                <p className="mt-1 text-xl font-semibold text-white">
                   {stat.value}
                 </p>
-                <p className="mt-1 text-sm text-white/40">{stat.label}</p>
+                <p className="mt-0.5 text-xs text-white/40">{stat.label}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* 02 What we do */}
-        <section className="mt-16 border-t border-white/[0.06] pt-14 sm:mt-20 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">02</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl" style={serif}>
+        <section className={section}>
+          <p className={eye}>02</p>
+          <h2 className={h2}>
             Điều chúng tôi thực sự làm
           </h2>
-          <div className="mt-10 divide-y divide-white/[0.06]">
+          <div className="mt-3 divide-y divide-white/[0.07]">
             {serviceHighlights.map((item) => (
-              <div key={item.title} className="grid gap-4 py-6 sm:grid-cols-[48px_1fr] sm:gap-6">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-amber-200/70">
-                  <item.icon className="h-5 w-5" />
+              <div key={item.title} className="grid gap-2.5 py-3 sm:grid-cols-[36px_1fr] sm:gap-3.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-violet-200/80">
+                  <item.icon className="h-3.5 w-3.5" />
                 </span>
                 <div>
-                  <h3 className="text-lg font-medium text-white/90">{item.title}</h3>
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/40">{item.description}</p>
+                  <h3 className="text-[15px] font-medium text-white/90">{item.title}</h3>
+                  <p className={`mt-0.5 max-w-2xl ${body}`}>{item.description}</p>
                 </div>
               </div>
             ))}
@@ -287,40 +266,40 @@ export default function AboutPageClient() {
         </section>
 
         {/* Proof */}
-        <section className="mt-16 border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-10 sm:mt-20 sm:px-10 sm:py-12">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">Proof</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className={`${section} border border-white/10 bg-white/[0.02] px-4 py-5 sm:px-6`}>
+          <p className={eye}>Proof</p>
+          <h2 className={h2}>
             Dự án có số liệu thật
           </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/45">
+          <p className={`mt-2 max-w-2xl ${body}`}>
             Đo bằng Google Search Console, Facebook Insights và lead thực tế — không vanity metrics.
           </p>
-          <ul className="mt-6 space-y-3 text-sm text-white/70">
+          <ul className="mt-3 space-y-1.5 text-sm text-white/65">
             <li>
-              Nha Khoa Đăng Khoa: <span className="text-amber-100">15,4K impressions</span> ·{" "}
-              <span className="text-amber-100">471 clicks</span> GSC
+              Nha Khoa Đăng Khoa: <span className="text-violet-200/90">15,4K impressions</span> ·{" "}
+              <span className="text-violet-200/90">471 clicks</span> GSC
             </li>
             <li>
-              Sao Khuê: Fanpage <span className="text-amber-100">83.374 lượt xem</span> / 90 ngày
+              Sao Khuê: Fanpage <span className="text-violet-200/90">83.374 lượt xem</span> / 90 ngày
             </li>
             <li>Thiên Hoàng Kim: website + Fanpage đồng bộ, nuôi lead inbox</li>
           </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/du-an"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-3.5 py-1.5 text-sm font-semibold text-white hover:bg-[#5B4BD4]"
             >
               Xem case study
             </Link>
             <Link
               href="/du-an/nha-khoa-dang-khoa"
-              className="inline-flex rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/70 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-3.5 py-1.5 text-sm font-medium text-white/70 hover:border-white/25 hover:text-white"
             >
               Nha khoa Đăng Khoa
             </Link>
             <Link
               href="/du-an/sao-khue"
-              className="inline-flex rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/70 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-3.5 py-1.5 text-sm font-medium text-white/70 hover:border-white/25 hover:text-white"
             >
               Sao Khuê
             </Link>
@@ -328,29 +307,29 @@ export default function AboutPageClient() {
         </section>
 
         {/* 03 Principles */}
-        <section className="mt-16 border-t border-white/[0.06] pt-14 sm:mt-20 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">03</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className={section}>
+          <p className={eye}>03</p>
+          <h2 className={h2}>
             Triết lý làm việc
           </h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2">
+          <div className="mt-3.5 grid gap-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-4">
             {workPrinciples.map((item) => (
-              <div key={item.title} className="border-l border-amber-200/25 pl-5">
-                <item.icon className="h-4 w-4 text-amber-200/55" />
-                <h3 className="mt-3 text-lg font-medium text-white/90">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">{item.description}</p>
+              <div key={item.title} className="border-l border-white/12 pl-3.5">
+                <item.icon className="h-3.5 w-3.5 text-violet-300/70" />
+                <h3 className="mt-1.5 text-[15px] font-medium text-white/90">{item.title}</h3>
+                <p className={`mt-0.5 ${body}`}>{item.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* 04 Vision */}
-        <section className="mt-16 border-t border-white/[0.06] pt-14 sm:mt-20 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">04</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className={section}>
+          <p className={eye}>04</p>
+          <h2 className={h2}>
             Tầm nhìn · Sứ mệnh · Trách nhiệm
           </h2>
-          <div className="mt-10 grid gap-10 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:gap-5">
             {[
               {
                 title: "Tầm nhìn",
@@ -369,25 +348,25 @@ export default function AboutPageClient() {
               },
             ].map((item) => (
               <div key={item.title}>
-                <h3 className="text-xl font-semibold text-amber-100/90" style={serif}>
+                <h3 className="text-base font-semibold text-white/85">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/40">{item.description}</p>
+                <p className={`mt-1.5 ${body}`}>{item.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* 05 Why us */}
-        <section className="mt-16 border-t border-white/[0.06] pt-14 sm:mt-20 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">05</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className={section}>
+          <p className={eye}>05</p>
+          <h2 className={h2}>
             Vì sao chọn chúng tôi?
           </h2>
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
+          <ul className="mt-3.5 flex flex-wrap gap-x-4 gap-y-2">
             {whyChooseUs.map((item) => (
-              <li key={item} className="inline-flex items-center gap-2 text-sm text-white/65">
-                <ShieldCheck className="h-4 w-4 shrink-0 text-amber-200/55" />
+              <li key={item} className="inline-flex items-center gap-1.5 text-sm text-white/50">
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-violet-300/65" />
                 {item}
               </li>
             ))}
@@ -395,12 +374,12 @@ export default function AboutPageClient() {
         </section>
 
         {/* FAQ */}
-        <section className="mt-16 border-t border-white/[0.06] pt-14 sm:mt-20 sm:pt-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">FAQ</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className={section}>
+          <p className={eye}>FAQ</p>
+          <h2 className={h2}>
             Câu hỏi thường gặp
           </h2>
-          <div className="mt-6 divide-y divide-white/[0.06]">
+          <div className="mt-3 divide-y divide-white/[0.07]">
             {[
               {
                 q: "Bứt Phá Marketing phù hợp doanh nghiệp nào?",
@@ -419,101 +398,103 @@ export default function AboutPageClient() {
                 a: "Tại Case Study (/du-an) — số liệu GSC, ảnh trước/sau và link website/Fanpage thực tế.",
               },
             ].map((item) => (
-              <details key={item.q} className="group py-4">
-                <summary className="cursor-pointer list-none text-sm font-medium text-white/85 marker:hidden sm:text-base">
+              <details key={item.q} className="group py-2.5">
+                <summary className="cursor-pointer list-none text-sm font-medium text-white/85 marker:hidden">
                   {item.q}
                 </summary>
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/40">{item.a}</p>
+                <p className={`mt-1.5 max-w-2xl ${body}`}>{item.a}</p>
               </details>
             ))}
           </div>
         </section>
 
         {/* CTA */}
-        <section id="consultation" className="mt-16 border border-white/[0.08] bg-white/[0.02] px-6 py-12 text-center sm:mt-20 sm:px-12 sm:py-16">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">06</p>
-          <h2 className="mx-auto mt-3 max-w-2xl text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section
+          id="consultation"
+          className="mt-6 border border-white/10 bg-white/[0.02] px-4 py-6 text-center sm:mt-7 sm:px-8 sm:py-7"
+        >
+          <p className={eye}>06</p>
+          <h2 className={`mx-auto max-w-xl ${h2}`}>
             Sẵn sàng bứt phá cùng doanh nghiệp của bạn?
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm text-white/45">
+          <p className={`mx-auto mt-2 max-w-md ${body}`}>
             Đừng để đối thủ đi trước — để Bứt Phá Marketing đồng hành ngay hôm nay.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={scrollToConsultation}
-              className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-6 py-3.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex items-center gap-2 rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5B4BD4]"
             >
               Liên hệ tư vấn ngay
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </button>
             <Link
               href="/banggia"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold text-white/80 hover:border-white/25"
+              className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25 hover:text-white"
             >
               Xem bảng giá
-              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>
       </main>
 
       <footer className="relative border-t border-white/[0.06] bg-[#06070a]">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr]">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr]">
           <div>
             <div className="flex items-center gap-3">
-              <Image src={logoSrc} alt={brandName} width={40} height={40} className="h-10 w-10 object-contain" />
+              <Image src={logoSrc} alt={brandName} width={36} height={36} className="h-9 w-9 object-contain" />
               <div>
-                <p className="text-sm font-medium text-white/90">{brandName}</p>
-                <p className="text-xs text-white/35">Marketing thực chiến</p>
+                <p className="text-sm font-medium text-white">{brandName}</p>
+                <p className="text-xs text-white/40">Marketing thực chiến</p>
               </div>
             </div>
-            <p className="mt-4 max-w-sm text-sm leading-7 text-white/35">
+            <p className={`mt-2 max-w-sm ${body}`}>
               Đồng hành xây dựng thương hiệu, tiếp cận đúng khách hàng và tạo tăng trưởng đo được.
             </p>
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Liên hệ</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/45">
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">Liên hệ</h3>
+            <ul className="mt-2 space-y-2 text-sm text-white/45">
               <li>{resolveHotline(settings?.hotline)}</li>
               <li>
-                <a href={getMailtoHref(settings?.email)} className="hover:text-amber-100">
+                <a href={getMailtoHref(settings?.email)} className="hover:text-white/70">
                   {resolveEmail(settings?.email)}
                 </a>
               </li>
               <li>{resolveAddress(settings?.address)}</li>
             </ul>
-            <div className="mt-4">
-              <ZaloConsultCta className="border-white/10 bg-white/[0.03] text-white/80" />
+            <div className="mt-2.5">
+              <ZaloConsultCta className="border-white/10 bg-white/[0.04] text-white/80" />
             </div>
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Dịch vụ</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/45">
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">Dịch vụ</h3>
+            <ul className="mt-2 space-y-2 text-sm text-white/45">
               <li>
-                <Link href="/website" className="hover:text-amber-100">
+                <Link href="/website" className="hover:text-white/70">
                   Thiết kế website
                 </Link>
               </li>
               <li>
-                <Link href="/facebook" className="hover:text-amber-100">
+                <Link href="/facebook" className="hover:text-white/70">
                   Quản trị Fanpage
                 </Link>
               </li>
               <li>
-                <Link href="/google-maps" className="hover:text-amber-100">
+                <Link href="/google-maps" className="hover:text-white/70">
                   Google Maps
                 </Link>
               </li>
               <li>
-                <Link href="/du-an" className="hover:text-amber-100">
+                <Link href="/du-an" className="hover:text-white/70">
                   Case study
                 </Link>
               </li>
               <li>
-                <Link href="/banggia" className="hover:text-amber-100">
+                <Link href="/banggia" className="hover:text-white/70">
                   Bảng giá
                 </Link>
               </li>
@@ -521,25 +502,25 @@ export default function AboutPageClient() {
           </div>
 
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Liên kết</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/45">
+            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">Liên kết</h3>
+            <ul className="mt-2 space-y-2 text-sm text-white/45">
               <li>
-                <Link href="/" className="hover:text-amber-100">
+                <Link href="/" className="hover:text-white/70">
                   Trang chủ
                 </Link>
               </li>
               <li>
-                <Link href="/gioi-thieu" className="hover:text-amber-100">
+                <Link href="/gioi-thieu" className="hover:text-white/70">
                   Giới thiệu
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-amber-100">
+                <Link href="/blog" className="hover:text-white/70">
                   Tin tức
                 </Link>
               </li>
               <li>
-                <Link href="/lien-he" className="hover:text-amber-100">
+                <Link href="/lien-he" className="hover:text-white/70">
                   Liên hệ
                 </Link>
               </li>

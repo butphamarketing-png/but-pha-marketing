@@ -16,11 +16,9 @@ import { WebsiteProofSection } from "@/components/website/WebsiteProofSection";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-
 const config: PlatformConfig = {
   name: "Website",
-  color: "#C4955A",
+  color: "#8B7CF6",
   theme: "deep",
   auditPlatform: "website",
   heroTitle: "Thiết kế website chuyên nghiệp",
@@ -90,18 +88,12 @@ function SectionHeading({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-10 text-center sm:mb-12">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl" style={serif}>
-        {highlight ? (
-          <>
-            <span className="text-amber-100/90">{highlight}</span> {title}
-          </>
-        ) : (
-          title
-        )}
+    <div className="mb-5 text-left sm:mb-6">
+      <p className="text-[11px] font-medium text-white/40">{eyebrow}</p>
+      <h2 className="mt-1 text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
+        {highlight ? `${highlight} ${title}` : title}
       </h2>
-      {subtitle ? <p className="mx-auto mt-3 max-w-xl text-sm text-white/40">{subtitle}</p> : null}
+      {subtitle ? <p className="mt-1.5 max-w-xl text-sm text-white/45">{subtitle}</p> : null}
     </div>
   );
 }
@@ -114,43 +106,34 @@ export default function WebsitePage() {
 
   return (
     <PlatformPage config={config}>
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 45% 40% at 88% 18%, rgba(139,124,246,0.14), transparent 55%), radial-gradient(ellipse 40% 35% at 12% 40%, rgba(109,90,230,0.08), transparent 50%), radial-gradient(ellipse 40% 30% at 80% 20%, rgba(99,102,241,0.08), transparent)",
-        }}
-        aria-hidden
-      />
-
-      <div className="platform-sections relative mx-auto max-w-6xl space-y-20 px-4 pb-24 pt-10 sm:space-y-24 sm:px-6 sm:pt-14">
-        <section className="border-b border-white/[0.06] pb-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
-            Dịch vụ #1 — Head term
+      <div className="platform-sections relative mx-auto max-w-6xl space-y-12 px-4 pb-16 pt-7 sm:space-y-14 sm:px-6 sm:pt-9">
+        <section className="border-b border-white/[0.08] pb-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
+            Dịch vụ website
           </p>
-          <h2 className="mt-4 max-w-3xl text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.12] text-white" style={serif}>
+          <h2 className="mt-2 max-w-3xl text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl">
             Thiết kế website chuyên nghiệp cho doanh nghiệp
           </h2>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45">
             <strong className="font-medium text-white/70">Thiết kế website</strong> gồm khảo sát, UI/UX, lập trình chuẩn
-            SEO, form/Zalo và bàn giao vận hành — money page cho từ khóa volume cao.
+            SEO, form/Zalo và bàn giao vận hành.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2.5">
             <Link
               href="/banggia"
-              className="inline-flex rounded-full bg-gradient-to-r from-amber-200 to-violet-300 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:brightness-105"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Báo giá thiết kế website
             </Link>
             <Link
               href="/du-an"
-              className="inline-flex rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/75 hover:border-violet-300/40 hover:text-violet-200"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2.5 text-sm font-medium text-white/70 hover:border-white/25 hover:text-white"
             >
               Case study có số liệu
             </Link>
             <Link
               href="/blog/chu-de/website"
-              className="inline-flex rounded-full border border-violet-400/25 px-5 py-3 text-sm font-medium text-white/75 hover:border-violet-300/40 hover:text-violet-200"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2.5 text-sm font-medium text-white/70 hover:border-white/25 hover:text-white"
             >
               Hub chủ đề Website
             </Link>
@@ -159,33 +142,33 @@ export default function WebsitePage() {
 
         <WebsiteProofSection variant="deep" />
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">So sánh giải pháp</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.06] pt-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">So sánh giải pháp</p>
+          <h2 className="mt-1.5 text-lg font-semibold text-white sm:text-xl">
             Template, WordPress hay website custom?
           </h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
             {[
               ["Website template", "Ra mắt nhanh, chi phí thấp — landing hoặc kiểm chứng thị trường."],
               ["Website WordPress", "Dễ quản trị, plugin lớn — SME, blog SEO, WooCommerce."],
               ["Website custom", "Theo quy trình riêng — tích hợp, bảo mật, mở rộng dài hạn."],
             ].map(([title, desc]) => (
-              <article key={title} className="border-l border-amber-200/25 pl-4">
-                <h3 className="text-lg font-medium text-white/90">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">{desc}</p>
+              <article key={title} className="border-l border-white/15 pl-3.5">
+                <h3 className="text-[15px] font-medium text-white/90">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/42">{desc}</p>
               </article>
             ))}
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2.5">
             <Link
               href="/banggia"
-              className="inline-flex rounded-full bg-amber-200 px-5 py-2.5 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+              className="inline-flex rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
             >
               Xem báo giá thiết kế website
             </Link>
             <Link
               href="/blog/thiet-ke-website"
-              className="inline-flex rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/70 hover:border-white/25"
+              className="inline-flex rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/70 hover:border-white/25"
             >
               Hướng dẫn thiết kế website A-Z
             </Link>
@@ -217,43 +200,43 @@ export default function WebsitePage() {
           <button
             type="button"
             onClick={() => setShowCustomModal(true)}
-            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-6 text-left transition hover:border-amber-200/25 hover:bg-white/[0.04] md:p-8"
+            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-4 text-left transition sm:p-5 hover:border-violet-400/25 hover:bg-white/[0.04] md:p-8"
           >
             <div className="flex items-center gap-5">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-amber-200/70 transition group-hover:scale-105">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-violet-300/70 transition group-hover:scale-105">
                 <Settings size={22} />
               </span>
               <div>
-                <h3 className="text-xl font-medium text-white/90" style={serif}>
+                <h3 className="text-base font-semibold text-white/90">
                   Website Custom
                 </h3>
                 <p className="mt-1 text-sm text-white/40">Hệ thống riêng biệt</p>
               </div>
             </div>
-            <ChevronRight className="hidden h-6 w-6 text-white/30 transition group-hover:translate-x-1 group-hover:text-amber-200/70 md:block" />
+            <ChevronRight className="hidden h-5 w-5 text-white/30 transition group-hover:translate-x-1 group-hover:text-violet-300/70 md:block" />
           </button>
 
           <button
             type="button"
             onClick={() => setShowDomainModal(true)}
-            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-6 text-left transition hover:border-amber-200/25 hover:bg-white/[0.04] md:p-8"
+            className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.02] p-4 text-left transition sm:p-5 hover:border-violet-400/25 hover:bg-white/[0.04] md:p-8"
           >
             <div className="flex items-center gap-5">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-amber-200/70 transition group-hover:scale-105">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-violet-300/70 transition group-hover:scale-105">
                 <Globe size={22} />
               </span>
               <div>
-                <h3 className="text-xl font-medium text-white/90" style={serif}>
+                <h3 className="text-base font-semibold text-white/90">
                   Đăng ký tên miền
                 </h3>
                 <p className="mt-1 text-sm text-white/40">Quốc tế & Việt Nam</p>
               </div>
             </div>
-            <ChevronRight className="hidden h-6 w-6 text-white/30 transition group-hover:translate-x-1 group-hover:text-amber-200/70 md:block" />
+            <ChevronRight className="hidden h-5 w-5 text-white/30 transition group-hover:translate-x-1 group-hover:text-violet-300/70 md:block" />
           </button>
         </div>
 
-        <section id="pricing" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="pricing" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">
           <SectionHeading
             eyebrow="Website Design"
             highlight="Thiết kế"
@@ -275,7 +258,7 @@ export default function WebsitePage() {
           </PackageCarousel>
         </section>
 
-        <section id="van-hanh" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="van-hanh" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">
           <SectionHeading
             eyebrow="Managed Operations"
             title="Website"
@@ -285,7 +268,7 @@ export default function WebsitePage() {
           <WebsiteOperationSection primaryColor={config.color} sectionLabel="Vận hành Website" />
         </section>
 
-        <section id="care" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="care" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">
           <SectionHeading
             eyebrow="Premium Care"
             highlight="Chăm sóc"
@@ -307,7 +290,7 @@ export default function WebsitePage() {
           </PackageCarousel>
         </section>
 
-        <section id="quang-cao" className="scroll-mt-24 space-y-12 border-t border-white/[0.06] pt-14">
+        <section id="quang-cao" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">
           <SectionHeading
             eyebrow="Advertising"
             highlight="Quảng cáo"
@@ -352,11 +335,11 @@ export default function WebsitePage() {
           </PackageCarousel>
         </section>
 
-        <div className="border-t border-white/[0.06] pt-14 [&_a]:text-amber-200/80 [&_h2]:text-white [&_li]:text-white/45 [&_p]:text-white/40">
+        <div className="border-t border-white/[0.06] pt-6 [&_a]:text-white/70 [&_h2]:text-white [&_li]:text-white/45 [&_p]:text-white/40">
           <MoneyKwSiloLinks
             excludePath="/website"
-            title="Cụm money SEO — không tranh từ khóa"
-            subtitle="Từ /website liên kết sang báo giá, địa phương HCM, spa và nha khoa — mỗi intent một URL đích."
+            title="Liên kết liên quan"
+            subtitle="Báo giá, địa phương và ngành — mỗi intent một URL đích."
           />
         </div>
       </div>

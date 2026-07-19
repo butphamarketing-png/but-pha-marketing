@@ -27,7 +27,7 @@ export function ThemeToggleButton() {
         onClick={toggleMascot}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-90 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
+        className="fixed left-3 top-[calc(50%-20px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-violet-400/25 bg-[#14101f] text-violet-100 shadow-lg shadow-black/30 backdrop-blur-sm transition-all hover:border-violet-400/45"
         title={mascotEnabled ? "Tắt linh vật" : "Bật linh vật"}
         aria-label={mascotEnabled ? "Tắt linh vật" : "Bật linh vật"}
       >
@@ -39,7 +39,7 @@ export function ThemeToggleButton() {
         onClick={() => setMenuOpen((o) => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white/95 text-indigo-90 shadow-xl backdrop-blur-sm transition-all hover:border-violet-400"
+        className="fixed left-3 top-[calc(50%+24px)] z-[55] flex h-10 w-10 items-center justify-center rounded-full border border-violet-400/25 bg-[#14101f] text-violet-100 shadow-lg shadow-black/30 backdrop-blur-sm transition-all hover:border-violet-400/45"
         aria-label="Menu"
         title="Menu"
       >
@@ -53,9 +53,9 @@ export function ThemeToggleButton() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-14 top-[calc(50%-40px)] z-[54] max-h-[min(70vh,520px)] w-[min(18rem,calc(100vw-5rem))] overflow-y-auto rounded-2xl border border-indigo-100 bg-white/95 p-2 shadow-2xl backdrop-blur-md"
+            className="fixed left-14 top-[calc(50%-40px)] z-[54] max-h-[min(70vh,520px)] w-[min(18rem,calc(100vw-5rem))] overflow-y-auto rounded-xl border border-violet-400/20 bg-[#12101c] p-2 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
-            <SiteNavMenu tone="panel" layout="stack" onNavigate={closeMenu} />
+            <SiteNavMenu tone="dark" layout="stack" onNavigate={closeMenu} />
           </motion.div>
         )}
       </AnimatePresence>

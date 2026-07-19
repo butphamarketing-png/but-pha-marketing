@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ChevronDown, X, Check, Phone } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, X, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SubPageLayout } from "./SubPageLayout";
 import { db } from "@/lib/useData";
@@ -169,34 +169,30 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="brand-modal-surface max-w-lg overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"
-        style={{ boxShadow: `0 24px 64px -16px ${pkg.color}40` }}
+        className="brand-modal-surface max-w-lg overflow-hidden rounded-xl"
+        style={{ boxShadow: `0 16px 40px -16px ${pkg.color}28` }}
       >
-        <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: pkg.color }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full blur-[100px] opacity-15 pointer-events-none" style={{ backgroundColor: pkg.color }} />
+        <div className="absolute top-0 left-0 h-0.5 w-full" style={{ backgroundColor: pkg.color }} />
         
-        <button onClick={onClose} className="absolute right-6 top-6 z-20 rounded-full p-1 text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-900 hover:rotate-90">
+        <button onClick={onClose} className="absolute right-4 top-4 z-20 rounded-md p-1 text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-900">
           <X size={20} />
         </button>
 
         {step === "success" ? (
-          <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
-            <motion.div
-              initial={{ scale: 0, rotate: -45 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", damping: 12, stiffness: 200 }}
-              className="mb-8 flex h-24 w-24 items-center justify-center rounded-full shadow-2xl"
-              style={{ background: `linear-gradient(135deg, ${pkg.color}, ${pkg.color}dd)` }}
+          <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+            <div
+              className="mb-5 flex h-14 w-14 items-center justify-center rounded-full"
+              style={{ backgroundColor: pkg.color }}
             >
-              <Check className="h-12 w-12 text-white" strokeWidth={3} />
-            </motion.div>
-            <h3 className="mb-3 text-3xl font-bold tracking-tight text-indigo-950">Tuyệt vời!</h3>
-            <p className="mb-10 mx-auto max-w-[280px] leading-relaxed text-slate-600">
+              <Check className="h-7 w-7 text-white" strokeWidth={3} />
+            </div>
+            <h3 className="mb-2 text-xl font-semibold tracking-tight text-indigo-950">Tuyệt vời!</h3>
+            <p className="mb-6 mx-auto max-w-[280px] text-sm leading-relaxed text-slate-600">
               Yêu cầu của bạn đã được tiếp nhận. Đội ngũ chuyên gia sẽ liên hệ tư vấn trong thời gian sớm nhất.
             </p>
             <button
               onClick={onClose}
-              className="w-full max-w-[200px] rounded-2xl py-4 text-sm font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/20"
+              className="w-full max-w-[200px] rounded-md py-2.5 text-sm font-medium text-white transition hover:brightness-105"
               style={{ backgroundColor: pkg.color }}
             >
               Hoàn tất
@@ -305,13 +301,8 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 function Stats({ stats, color, isWebsite }: { stats: { label: string; value: string }[]; color: string; isWebsite?: boolean }) {
   if (isWebsite) return null;
   return (
-    <section data-section="stats" id="stats" className="relative py-32 px-4 overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full opacity-10 pointer-events-none">
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px] animate-pulse" style={{ backgroundColor: color }} />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-[120px] animate-pulse" style={{ backgroundColor: color, animationDelay: "1s" }} />
-      </div>
-
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 gap-6 md:grid-cols-4">
+    <section data-section="stats" id="stats" className="relative overflow-hidden px-4 py-10 sm:py-12">
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-2 gap-4 md:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div
             key={i}
@@ -371,19 +362,14 @@ export function PricingSection({
   const visiblePackages = showPager ? tab.packages.slice(start, start + pageSize) : tab.packages;
 
   return (
-    <section data-section="pricing" id="pricing" className={`relative px-4 ${sectionTitle ? "scroll-mt-24 py-16" : "py-32"}`}>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full opacity-5 pointer-events-none">
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[150px]" style={{ backgroundColor: color }} />
-      </div>
-
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
+    <section data-section="pricing" id="pricing" className={`relative px-4 ${sectionTitle ? "scroll-mt-24 py-10" : "py-12"}`}>
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-6xl">
         {sectionTitle ? (
           <div className="mb-16 text-center space-y-6">
             <div className="flex flex-col items-center gap-3">
               <div className="h-1 w-12 rounded-full" style={{ backgroundColor: color }} />
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-indigo-950 tracking-tight leading-tight">
+            <h2 className="text-xl font-semibold tracking-tight leading-snug text-indigo-950 sm:text-[1.35rem]">
               <span style={{ color }}>{sectionTitle.split(" ")[0]}</span>
               {sectionTitle.includes(" ") ? ` ${sectionTitle.split(" ").slice(1).join(" ")}` : ""}
             </h2>
@@ -581,23 +567,14 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
   const [activeTab, setActiveTab] = useState(0);
   const tab = processTabs[activeTab];
   return (
-    <section data-section="process" id="process" className="py-32 px-4 relative">
-      <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
-        <div className="absolute top-1/2 left-0 w-[300px] h-[300px] rounded-full blur-[100px]" style={{ backgroundColor: color }} />
-      </div>
+    <section data-section="process" id="process" className="relative px-4 py-12">
+      <div className="pointer-events-none absolute inset-0 opacity-0" aria-hidden />
 
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
-        <div className="mb-20 text-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="platform-section-badge"
-          >
-            Quy trình làm việc
-          </motion.div>
-          <h2 className="brand-section-title mb-6">Quy trình <span style={{ color }}>chuyên nghiệp</span></h2>
-          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">
-            Checklist quy trình triển khai 5 bước — minh bạch, đo lường được và tối ưu liên tục cho từng dự án.
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-6xl">
+        <div className="mb-6 text-left">
+          <h2 className="brand-section-title mb-2">Quy trình chuyên nghiệp</h2>
+          <p className="max-w-2xl text-sm text-slate-600">
+            Checklist quy trình triển khai — minh bạch, đo lường được và tối ưu liên tục.
           </p>
         </div>
 
@@ -655,7 +632,7 @@ function ProcessSection({ processTabs, color }: { processTabs: { label: string; 
                     </div>
 
                     <div className="absolute left-1/2 top-1/2 z-10 hidden h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center md:flex">
-                      <div className="h-3 w-3 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] animate-pulse" style={{ backgroundColor: color }} />
+                      <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
                     </div>
 
                     <div className="hidden w-1/2 md:block" />
@@ -684,11 +661,11 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
-    <section data-section="faq" className="py-24 px-4">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-4xl">
-        <div className="mb-16 text-center">
-          <h2 id="faq" className="brand-section-title mb-4">Câu hỏi thường gặp</h2>
-          <p className="text-slate-600">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
+    <section data-section="faq" className="px-4 py-10">
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mx-auto max-w-3xl">
+        <div className="mb-5 text-left">
+          <h2 id="faq" className="brand-section-title mb-2">Câu hỏi thường gặp</h2>
+          <p className="text-sm text-slate-600">Giải đáp những thắc mắc phổ biến nhất của khách hàng</p>
         </div>
         <div className="space-y-4">
           {faqs.map((faq, i) => (
@@ -709,7 +686,7 @@ function FAQSection({ faqs }: { faqs: { q: string; a: string }[] }) {
   );
 }
 
-function ContactForm({ color }: { color: string }) {
+function ContactForm({ color, deep = false }: { color: string; deep?: boolean }) {
   const [sent, setSent] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -743,116 +720,167 @@ function ContactForm({ color }: { color: string }) {
       phone,
       service: `Tư vấn ${platform}`,
       note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}`,
-      platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website"
+      platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website",
     });
     setSent(true);
     notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
   };
 
-  return (
-    <section data-section="contact" id="contact" className="relative py-32 px-4 overflow-hidden">
-      <div className="absolute top-0 right-0 -z-10 h-full w-full opacity-10 pointer-events-none">
-        <div className="absolute top-1/4 right-0 h-[600px] w-[600px] rounded-full blur-[150px] animate-pulse" style={{ backgroundColor: `${color}40` }} />
-      </div>
+  if (deep) {
+    return (
+      <section id="contact" data-section="contact" className="border-t border-white/10 px-4 py-8 sm:px-6 sm:py-10">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-lg font-semibold text-white sm:text-xl">Đặt lịch tư vấn</h2>
+          <p className="mt-1.5 text-sm text-white/45">
+            Để lại thông tin — đội ngũ sẽ liên hệ trong giờ hành chính.
+          </p>
 
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 mx-auto max-w-7xl">
-        <div className="mb-16 text-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="platform-section-badge"
-          >
-            <Phone size={12} style={{ color }} />
-            Kết nối ngay
-          </motion.div>
-          <h2 className="brand-section-title mb-6">Đặt lịch tư vấn <span style={{ color }}>trực tiếp</span></h2>
-          <p className="mx-auto max-w-2xl text-lg font-medium text-slate-600">Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</p>
+          {sent ? (
+            <div className="mt-5 border border-white/10 bg-[#0e1018] px-5 py-6 text-center">
+              <p className="text-base font-medium text-white">Đã gửi thông tin</p>
+              <p className="mt-1.5 text-sm text-white/50">Chúng tôi sẽ liên hệ sớm qua điện thoại hoặc Zalo.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleInlineContactSubmit} className="mt-5 space-y-3 border border-white/10 bg-[#0e1018] p-4 sm:p-5">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Họ và tên"
+                  className="brand-input !rounded-md !py-2.5"
+                />
+                <input
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Số điện thoại (Zalo)"
+                  className="brand-input !rounded-md !py-2.5"
+                />
+                <input
+                  required
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Khu vực / Tỉnh thành"
+                  className="brand-input !rounded-md !py-2.5"
+                />
+                <input
+                  required
+                  type="datetime-local"
+                  value={consultTime}
+                  onChange={(e) => setConsultTime(e.target.value)}
+                  className="brand-input !rounded-md !py-2.5"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {["Website", "Facebook", "Google Maps"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPlatform(p.toLowerCase())}
+                    className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${
+                      platform === p.toLowerCase()
+                        ? "border-[#6D5CE6] bg-[#6D5CE6] text-white"
+                        : "border-white/15 text-white/60 hover:border-white/25 hover:text-white"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Nhu cầu ngắn gọn (tuỳ chọn)"
+                rows={3}
+                className="brand-input !rounded-md resize-none"
+              />
+              <button
+                type="submit"
+                className="w-full rounded-md bg-[#6D5CE6] py-2.5 text-sm font-medium text-white hover:bg-[#5B4BD4]"
+              >
+                Gửi yêu cầu tư vấn
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section data-section="contact" id="contact" className="relative overflow-hidden px-4 py-12 sm:py-14">
+      <div className="relative z-10 mx-auto max-w-3xl">
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-semibold tracking-tight text-indigo-950 sm:text-2xl">
+            Đặt lịch tư vấn
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+            Đội ngũ sẵn sàng lắng nghe và giải đáp thắc mắc của bạn.
+          </p>
         </div>
 
         {sent ? (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="brand-card rounded-[2rem] border-violet-200 bg-violet-50/80 p-20 text-center"
-          >
-            <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-full text-white shadow-lg" style={{ background: `linear-gradient(135deg, ${BRAND.main}, ${color})` }}>
-              <Check size={48} strokeWidth={3} />
-            </div>
-            <h3 className="mb-4 text-3xl font-bold tracking-tight text-indigo-950">Gửi thông tin thành công!</h3>
-            <p className="text-lg font-medium leading-relaxed text-slate-600">Chúng tôi sẽ liên hệ với bạn trong vòng 30 phút tới. <br/>Vui lòng giữ điện thoại hoặc kiểm tra Zalo nhé!</p>
-          </motion.div>
+          <div className="brand-card rounded-xl border-violet-200 bg-violet-50/80 p-8 text-center">
+            <h3 className="mb-2 text-lg font-semibold text-indigo-950">Gửi thông tin thành công!</h3>
+            <p className="text-sm text-slate-600">Chúng tôi sẽ liên hệ trong vòng 30 phút tới.</p>
+          </div>
         ) : (
-          <div className="platform-panel relative overflow-hidden rounded-[2rem] p-8 md:rounded-[2.5rem] md:p-16">
-            <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: color }} />
-            
-            <div className="mx-auto max-w-2xl">
-              <form 
-                onSubmit={handleInlineContactSubmit} 
-                className="space-y-8"
+          <div className="platform-panel relative overflow-hidden rounded-xl p-5 sm:p-6">
+            <form onSubmit={handleInlineContactSubmit} className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-slate-500">Họ và tên</label>
+                  <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Nguyễn Văn A" className="brand-input" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-slate-500">Số điện thoại (Zalo)</label>
+                  <input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0937 417 982" className="brand-input" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-slate-500">Khu vực / Tỉnh thành</label>
+                  <input required value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="brand-input" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-slate-500">Thời gian gọi tư vấn</label>
+                  <input required type="datetime-local" value={consultTime} onChange={(e) => setConsultTime(e.target.value)} className="brand-input" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-slate-500">Nền tảng bạn quan tâm</label>
+                <div className="flex flex-wrap gap-2">
+                  {["Website", "Facebook", "Google Maps"].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPlatform(p.toLowerCase())}
+                      className={`rounded-md border px-3 py-2 text-xs font-medium transition ${
+                        platform === p.toLowerCase()
+                          ? "text-white"
+                          : "border-indigo-200 bg-white text-slate-600 hover:border-violet-300"
+                      }`}
+                      style={platform === p.toLowerCase() ? { backgroundColor: color, borderColor: color } : undefined}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-slate-500">Nội dung yêu cầu</label>
+                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Mô tả ngắn nhu cầu..." rows={3} className="brand-input resize-none" />
+              </div>
+              <button
+                type="submit"
+                className="w-full rounded-md py-3 text-sm font-medium text-white transition hover:brightness-105"
+                style={{ backgroundColor: color }}
               >
-                <div className="grid gap-8 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <label className="ml-1 text-xs font-medium text-slate-500">Họ và tên</label>
-                    <input required value={name} onChange={e => setName(e.target.value)} placeholder="Nguyễn Văn A" className="brand-input" />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="ml-1 text-xs font-medium text-slate-500">Số điện thoại (Zalo)</label>
-                    <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="0937 417 982" className="brand-input" />
-                  </div>
-                </div>
-
-                <div className="grid gap-8 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <label className="ml-1 text-xs font-medium text-slate-500">Khu vực / Tỉnh thành</label>
-                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="brand-input" />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="ml-1 text-xs font-medium text-slate-500">Thời gian gọi tư vấn</label>
-                    <input required type="datetime-local" value={consultTime} onChange={e => setConsultTime(e.target.value)} className="brand-input" />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <label className="ml-1 text-xs font-medium text-slate-500">Nền tảng bạn quan tâm</label>
-                  <div className="flex flex-wrap gap-4">
-                    {["Website", "Facebook", "Google Maps"].map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        onClick={() => setPlatform(p.toLowerCase())}
-                        className={`rounded-2xl border px-8 py-4 text-xs font-semibold transition-all ${
-                          platform === p.toLowerCase() 
-                          ? "scale-[1.02] text-white shadow-md" 
-                          : "border-indigo-200 bg-white text-slate-600 hover:border-violet-300 hover:bg-indigo-50"
-                        }`}
-                        style={platform === p.toLowerCase() ? { backgroundColor: color, borderColor: color } : undefined}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="ml-1 text-xs font-medium text-slate-500">Nội dung yêu cầu</label>
-                  <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Mô tả ngắn gọn nhu cầu của bạn để chúng tôi chuẩn bị tốt hơn..." rows={4} className="brand-input resize-none" />
-                </div>
-                
-                <button 
-                  type="submit" 
-                  className="group relative mt-6 w-full overflow-hidden rounded-[2rem] py-7 text-sm font-semibold text-white transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg" 
-                  style={{ backgroundColor: color }}
-                >
-                  <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="relative flex items-center justify-center gap-3">
-                    ✨ Đặt Lịch Tư Vấn Ngay
-                  </span>
-                </button>
-              </form>
-            </div>
+                Gửi yêu cầu tư vấn
+              </button>
+            </form>
           </div>
         )}
-      </motion.div>
+      </div>
     </section>
   );
 }
@@ -934,7 +962,7 @@ export function PlatformPage({ config, children }: { config: PlatformConfig, chi
 
       {!config.hideStats && <Stats stats={config.stats} color={platformColor} isWebsite={platformKey === "website"} />}
       
-      {!config.hideContact && <ContactForm color={platformColor} />}
+      {!config.hideContact && <ContactForm color={platformColor} deep={config.theme === "deep"} />}
 
       <AnimatePresence>
       {checkoutPkg && <ConsultationModal pkg={checkoutPkg} platformKey={platformKey} onClose={() => setCheckoutPkg(null)} />}

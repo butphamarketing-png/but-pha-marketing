@@ -22,8 +22,6 @@ import { db, type Service } from "@/lib/useData";
 import { getMailtoHref, getTelHref, resolveAddress, resolveEmail, resolveHotline } from "@/lib/site-contact";
 import { ZaloConsultCta } from "@/components/blog/ZaloConsultCta";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
-
 type ContactFormState = {
   name: string;
   phone: string;
@@ -45,7 +43,7 @@ const initialForm: ContactFormState = {
 const budgetOptions = ["Dưới 10 triệu", "10 - 20 triệu", "20 - 50 triệu", "Trên 50 triệu"];
 
 const inputClass =
-  "w-full border border-white/12 bg-[#0c0d12] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-amber-200/35";
+  "w-full border border-white/12 bg-[#0c0d12] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-[#6D5CE6]/50";
 
 export default function ContactPageClient() {
   const [services, setServices] = useState<Service[]>([]);
@@ -121,22 +119,13 @@ export default function ContactPageClient() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#08090c] text-white">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[70vh]"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(196,149,90,0.16), transparent 58%), radial-gradient(ellipse 40% 30% at 15% 25%, rgba(234,88,12,0.06), transparent), linear-gradient(180deg, #0c0e14 0%, #08090c 100%)",
-        }}
-        aria-hidden
-      />
-
       <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090c]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
             <div className="hidden sm:block">
               <div className="text-sm font-medium tracking-wide text-white/90">{brandName}</div>
-              <div className="text-[11px] text-amber-200/55">Marketing thực chiến</div>
+              <div className="text-[11px] text-white/40">Marketing thực chiến</div>
             </div>
           </Link>
 
@@ -146,44 +135,41 @@ export default function ContactPageClient() {
 
           <a
             href={getTelHref(settings?.hotline)}
-            className="hidden items-center gap-2 rounded-full bg-amber-200 px-4 py-2.5 text-xs font-semibold text-[#0b0d12] transition hover:bg-amber-100 lg:inline-flex"
+            className="hidden items-center gap-2 rounded-md bg-[#6D5CE6] px-4 py-2 text-xs font-medium text-white transition hover:bg-[#5B4BD4] lg:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" />
             Gọi ngay
           </a>
 
           <div className="lg:hidden [&_button]:text-white/80">
-            <SiteNavMenu activeHref="/lien-he" />
+            <SiteNavMenu tone="dark" activeHref="/lien-he" />
           </div>
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
-        <nav aria-label="Breadcrumb" className="mb-10 flex items-center gap-2 text-sm text-white/40">
-          <Link href="/" className="transition hover:text-amber-100">
+      <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-7 sm:px-6 sm:pt-9">
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/40">
+          <Link href="/" className="transition hover:text-white/80">
             Trang chủ
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-white/25" />
           <span className="text-white/70">Liên hệ</span>
         </nav>
 
-        <section className="border-b border-white/[0.06] pb-14">
-          <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:gap-16">
+        <section className="border-b border-white/[0.08] pb-8">
+          <div className="grid gap-8 xl:grid-cols-[0.85fr_1.15fr] xl:gap-10">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
                 Liên hệ tư vấn
               </p>
-              <h1
-                className="mt-4 max-w-xl text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1.08] tracking-tight text-white"
-                style={serif}
-              >
+              <h1 className="mt-2 max-w-xl text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]">
                 Luôn sẵn sàng hỗ trợ bạn
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/45 sm:text-[15px]">
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-white/45">
                 Bạn có câu hỏi hoặc muốn tư vấn dịch vụ? Đội ngũ Bứt Phá luôn sẵn sàng đồng hành cùng bạn.
               </p>
 
-              <div className="mt-10 space-y-0">
+              <div className="mt-6 space-y-0">
                 {contactRows.map((item, index) => (
                   <div
                     key={item.title}
@@ -194,7 +180,7 @@ export default function ContactPageClient() {
                     }
                   >
                     <div className="flex items-start gap-4">
-                      <item.icon className="mt-1 h-4 w-4 shrink-0 text-amber-200/55" />
+                      <item.icon className="mt-1 h-4 w-4 shrink-0 text-white/40" />
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
                           {item.title}
@@ -202,12 +188,12 @@ export default function ContactPageClient() {
                         {item.href ? (
                           <a
                             href={item.href}
-                            className="mt-1.5 block text-lg font-medium text-white/90 transition hover:text-amber-100 sm:text-xl"
+                            className="mt-1.5 block text-base font-medium text-white/90 transition hover:text-white"
                           >
                             {item.value}
                           </a>
                         ) : (
-                          <p className="mt-1.5 text-lg font-medium text-white/90 sm:text-xl">{item.value}</p>
+                          <p className="mt-1.5 text-base font-medium text-white/90">{item.value}</p>
                         )}
                       </div>
                     </div>
@@ -217,8 +203,8 @@ export default function ContactPageClient() {
             </div>
 
             <div className="border border-white/[0.08] bg-white/[0.02] px-6 py-8 sm:px-8 sm:py-10">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Form tư vấn</p>
-              <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Form tư vấn</p>
+              <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
                 Gửi yêu cầu tư vấn
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-white/40">
@@ -290,7 +276,7 @@ export default function ContactPageClient() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-amber-200 px-6 py-3.5 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#6D5CE6] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#5B4BD4] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Send className="h-4 w-4" />
                   {submitting ? "Đang gửi yêu cầu..." : "Gửi yêu cầu tư vấn"}
@@ -301,7 +287,7 @@ export default function ContactPageClient() {
                 {state.type !== "idle" ? (
                   <p
                     className={`text-center text-sm font-medium ${
-                      state.type === "success" ? "text-amber-100" : "text-red-300"
+                      state.type === "success" ? "text-white/80" : "text-red-300"
                     }`}
                   >
                     {state.message}
@@ -312,20 +298,20 @@ export default function ContactPageClient() {
           </div>
         </section>
 
-        <section className="border-t border-white/[0.06] pt-14">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">Cam kết</p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+        <section className="border-t border-white/[0.08] pt-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">Cam kết</p>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Vì sao liên hệ với chúng tôi
           </h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { title: "Phản hồi nhanh chóng", description: "Chúng tôi phản hồi trong 15 phút", icon: Headphones },
               { title: "Bảo mật thông tin", description: "Cam kết bảo mật tuyệt đối", icon: ShieldCheck },
               { title: "Tư vấn tận tâm", description: "Đưa ra giải pháp phù hợp nhất", icon: Target },
               { title: "Đồng hành dài lâu", description: "Hỗ trợ trước — trong — sau dự án", icon: Users },
             ].map((item) => (
-              <article key={item.title} className="border-l border-amber-200/25 pl-4">
-                <item.icon className="h-4 w-4 text-amber-200/55" />
+              <article key={item.title} className="border-l border-white/15 pl-4">
+                <item.icon className="h-4 w-4 text-white/40" />
                 <h3 className="mt-3 text-base font-medium text-white/90">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/40">{item.description}</p>
               </article>
@@ -341,7 +327,7 @@ export default function ContactPageClient() {
               <Image src={logoSrc} alt={brandName} width={44} height={44} className="h-11 w-11 object-contain" />
               <div>
                 <p className="text-sm font-medium tracking-wide text-white/90">{brandName}</p>
-                <p className="text-[11px] text-amber-200/50">Marketing thực chiến</p>
+                <p className="text-[11px] text-white/35">Marketing thực chiến</p>
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/40">
@@ -351,14 +337,14 @@ export default function ContactPageClient() {
             <div className="mt-5 flex items-center gap-3">
               <a
                 href={settings?.fanpage || "#"}
-                className="border border-white/12 p-2 text-white/50 transition hover:border-amber-200/30 hover:text-amber-100"
+                className="border border-white/12 p-2 text-white/50 transition hover:border-white/25 hover:text-white/80"
                 aria-label="Facebook"
               >
                 <SiFacebook />
               </a>
               <a
                 href={settings?.fanpage || "#"}
-                className="border border-white/12 p-2 text-white/50 transition hover:border-amber-200/30 hover:text-amber-100"
+                className="border border-white/12 p-2 text-white/50 transition hover:border-white/25 hover:text-white/80"
                 aria-label="Messenger"
               >
                 <SiMessenger />
@@ -371,7 +357,7 @@ export default function ContactPageClient() {
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>{resolveHotline(settings?.hotline)}</li>
               <li>
-                <a href={getMailtoHref(settings?.email)} className="hover:text-amber-100">
+                <a href={getMailtoHref(settings?.email)} className="hover:text-white/80">
                   {resolveEmail(settings?.email)}
                 </a>
               </li>
@@ -386,22 +372,22 @@ export default function ContactPageClient() {
             <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Dịch vụ</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>
-                <Link href="/website" className="hover:text-amber-100">
+                <Link href="/website" className="hover:text-white/80">
                   Thiết kế website
                 </Link>
               </li>
               <li>
-                <Link href="/facebook" className="hover:text-amber-100">
+                <Link href="/facebook" className="hover:text-white/80">
                   Quản trị Fanpage
                 </Link>
               </li>
               <li>
-                <Link href="/google-maps" className="hover:text-amber-100">
+                <Link href="/google-maps" className="hover:text-white/80">
                   Google Maps
                 </Link>
               </li>
               <li>
-                <Link href="/seo-website" className="hover:text-amber-100">
+                <Link href="/seo-website" className="hover:text-white/80">
                   SEO Website
                 </Link>
               </li>
@@ -412,22 +398,22 @@ export default function ContactPageClient() {
             <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Liên kết</h3>
             <ul className="mt-4 space-y-3 text-sm text-white/45">
               <li>
-                <Link href="/" className="hover:text-amber-100">
+                <Link href="/" className="hover:text-white/80">
                   Trang chủ
                 </Link>
               </li>
               <li>
-                <Link href="/gioi-thieu" className="hover:text-amber-100">
+                <Link href="/gioi-thieu" className="hover:text-white/80">
                   Giới thiệu
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-amber-100">
+                <Link href="/blog" className="hover:text-white/80">
                   Tin tức
                 </Link>
               </li>
               <li>
-                <Link href="/banggia" className="hover:text-amber-100">
+                <Link href="/banggia" className="hover:text-white/80">
                   Bảng giá
                 </Link>
               </li>

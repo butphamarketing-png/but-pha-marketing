@@ -18,7 +18,6 @@ import {
 import { getVerticalProofLinks, isPriorityVertical } from "@/lib/vertical-proof-engine";
 
 const BASE_URL = SITE_URL;
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export const revalidate = 3600;
 export const dynamicParams = false;
@@ -101,7 +100,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
         <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/" className="font-medium text-white/40 hover:text-white">
                 Trang chủ
               </Link>
             </li>
@@ -109,7 +108,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
               /
             </li>
             <li>
-              <Link href="/blog" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/blog" className="font-medium text-white/40 hover:text-white">
                 Tin tức
               </Link>
             </li>
@@ -124,26 +123,26 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
 
         <div className="mb-14 flex flex-col gap-8 border-b border-white/[0.06] pb-14 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Silo ngành — Vertical Proof
             </p>
             <h1
-              className="mt-4 text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[1.08] tracking-tight text-white"
-              style={serif}
+              className="mt-4 text-[1.75rem] sm:text-[2.05rem] font-semibold leading-[1.08] tracking-tight text-white"
+             
             >
               {hub.headline}
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-[15px]">
               {hub.description}
             </p>
-            <p className="mt-3 text-sm font-medium text-amber-200/60">
+            <p className="mt-3 text-sm font-medium text-white/40">
               {industryBlogs.length} bài trong silo · Keyword chính: {hub.keywordsMain}
             </p>
           </div>
 
           <Link
             href={hub.serviceHref}
-            className="inline-flex items-center gap-2 self-start rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] hover:bg-amber-100"
+            className="inline-flex items-center gap-2 self-start rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B4BD4]"
           >
             {hub.serviceLabel}
             <ArrowRight size={16} />
@@ -151,7 +150,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
         </div>
 
         <div className="mb-10">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/50">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">
             Silo ngành khác
           </p>
           <BlogIndustryNav active={industry} variant="deep" />
@@ -160,10 +159,10 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
         {caseStudy && (
           <div className="mb-10">
             <div className="mb-4 flex items-center justify-between gap-4">
-              <h2 className="text-xl font-semibold text-white" style={serif}>
+              <h2 className="text-xl font-semibold text-white">
                 Case study có số liệu
               </h2>
-              <Link href="/du-an" className="text-sm font-medium text-amber-200/75 hover:text-amber-100">
+              <Link href="/du-an" className="text-sm font-medium text-white/65 hover:text-white">
                 Tất cả dự án →
               </Link>
             </div>
@@ -174,11 +173,11 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
         )}
 
         {proofLinks.length > 0 && (
-          <section className="mb-8 border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent px-6 py-8 sm:px-8">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">
+          <section className="mb-6 border border-white/10 bg-[#0e1018] px-5 py-5 sm:px-6">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
               Vertical Proof Engine
             </p>
-            <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl" style={serif}>
+            <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">
               Bộ URL proof đầy đủ
             </h2>
             <p className="mt-2 text-sm text-white/45">
@@ -189,7 +188,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
                 <Link
                   key={link.slot}
                   href={link.href}
-                  className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-amber-200/40 hover:text-amber-100"
+                  className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/25 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -199,10 +198,10 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
         )}
 
         <section className="mb-10 border-t border-white/[0.06] pt-12">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/55">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
             Internal Link Boost
           </p>
-          <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" style={serif}>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Liên kết chiến lược trong cụm
           </h2>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -210,7 +209,7 @@ export default async function IndustryHubPage({ params }: { params: Promise<Para
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-amber-200/40 hover:text-amber-100"
+                className="inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 hover:border-white/25 hover:text-white"
               >
                 {item.label}
               </Link>

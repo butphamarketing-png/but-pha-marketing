@@ -11,7 +11,6 @@ import { buildCaseStudyJsonLd } from "@/lib/case-study-schema";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 import { CaseStudyDetail } from "@/components/case-study/CaseStudyDetail";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export const dynamicParams = false;
 
@@ -74,7 +73,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
         <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/40">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/" className="font-medium text-white/40 hover:text-white">
                 Trang chủ
               </Link>
             </li>
@@ -82,7 +81,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
               /
             </li>
             <li>
-              <Link href="/du-an" className="font-medium text-amber-200/70 hover:text-amber-100">
+              <Link href="/du-an" className="font-medium text-white/40 hover:text-white">
                 Dự án
               </Link>
             </li>
@@ -99,7 +98,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
 
         {others.length > 0 && (
           <section className="mt-14 border-t border-white/[0.06] pt-14">
-            <h2 className="text-2xl font-semibold text-white md:text-3xl" style={serif}>
+            <h2 className="text-2xl font-semibold text-white md:text-3xl">
               Dự án khác
             </h2>
             <div className="mt-6 grid gap-8 md:grid-cols-2">

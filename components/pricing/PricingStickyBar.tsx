@@ -30,7 +30,7 @@ export function PricingStickyBar() {
           <div className="mx-auto flex max-w-lg gap-2">
             <a
               href={getTelHref(settings?.hotline)}
-              className="flex flex-1 items-center justify-center gap-2 bg-amber-200 py-3 text-sm font-semibold text-[#0b0d12]"
+              className="flex flex-1 items-center justify-center gap-2 bg-[#6D5CE6] py-3 text-sm font-semibold text-white"
             >
               <Phone className="h-4 w-4" />
               Gọi tư vấn

@@ -13,9 +13,7 @@ type DeepPageShellProps = {
   tech?: boolean;
 };
 
-/**
- * Nền so deep có chiều sâu (amber + tím glow) — không full đen phẳng.
- */
+/** Nền deep ink + tím nhẹ — không amber glow. */
 export function DeepPageShell({
   children,
   padded = false,
@@ -31,19 +29,19 @@ export function DeepPageShell({
         <>
           <div className="pointer-events-none absolute inset-0" style={{ background: DEEP_BASE }} aria-hidden />
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+            className="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
             style={{ background: DEEP_ATMOSPHERE }}
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-0 opacity-40"
+            className="pointer-events-none absolute inset-0 opacity-25"
             style={{ backgroundImage: DEEP_NOISE }}
             aria-hidden
           />
         </>
       )}
       {padded ? (
-        <div className={`relative z-10 mx-auto ${maxWidthClass} px-4 py-12 md:px-6 lg:px-8`}>{children}</div>
+        <div className={`relative z-10 mx-auto ${maxWidthClass} px-4 py-8 md:px-6 md:py-10 lg:px-8`}>{children}</div>
       ) : (
         <div className="relative z-10">{children}</div>
       )}

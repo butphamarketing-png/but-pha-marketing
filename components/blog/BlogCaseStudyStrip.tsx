@@ -3,7 +3,6 @@ import { ArrowRight, BarChart3 } from "lucide-react";
 import { getFeaturedCaseStudies } from "@/lib/case-studies";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function BlogCaseStudyStrip({ variant = "light" }: { variant?: "light" | "deep" }) {
   const featured = getFeaturedCaseStudies();
@@ -13,7 +12,7 @@ export function BlogCaseStudyStrip({ variant = "light" }: { variant?: "light" | 
     <section
       className={
         deep
-          ? "mb-12 border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent p-6 md:p-8"
+          ? "mb-8 border border-white/10 bg-[#0e1018] p-5 md:p-6"
           : "mb-10 rounded-[1.75rem] border border-violet-200 bg-gradient-to-br from-violet-50/80 to-indigo-50/60 p-6 md:p-8"
       }
     >
@@ -22,7 +21,7 @@ export function BlogCaseStudyStrip({ variant = "light" }: { variant?: "light" | 
           <p
             className={
               deep
-                ? "inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60"
+                ? "inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40"
                 : "inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-violet-700"
             }
           >
@@ -32,7 +31,7 @@ export function BlogCaseStudyStrip({ variant = "light" }: { variant?: "light" | 
           <h2
             className={
               deep
-                ? "mt-3 text-3xl font-semibold text-white md:text-4xl"
+                ? "mt-2 text-xl font-semibold text-white sm:text-[1.35rem]"
                 : "mt-2 text-2xl font-black text-indigo-950 md:text-3xl"
             }
             style={deep ? serif : undefined}

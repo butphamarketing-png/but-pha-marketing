@@ -38,12 +38,12 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-4 border-b border-white/[0.08] lg:flex-row lg:items-end lg:justify-between lg:gap-8">
         <div
           ref={tabListRef}
           role="tablist"
           aria-label="Nền tảng dịch vụ"
-          className="flex w-full gap-0 border-b border-white/[0.08] sm:w-auto"
+          className="flex w-full gap-0 sm:w-auto"
         >
           {TAB_ITEMS.map((tab) => {
             const active = tab.id === activeId;
@@ -55,16 +55,16 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
                 role="tab"
                 aria-selected={active}
                 onClick={() => handleTabChange(tab.id)}
-                className={`relative flex flex-1 items-center justify-center gap-2 px-4 py-3.5 text-sm font-medium transition-colors sm:flex-none sm:px-6 ${
-                  active ? "text-amber-100" : "text-white/40 hover:text-white/70"
+                className={`relative flex flex-1 items-center justify-center gap-2 px-3 py-3.5 text-sm font-medium transition-colors sm:flex-none sm:px-5 ${
+                  active ? "text-violet-200" : "text-white/40 hover:text-white/70"
                 }`}
               >
                 <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-                {tab.label}
+                <span className="truncate">{tab.label}</span>
                 {active ? (
                   <motion.span
                     layoutId="banggia-tab-line"
-                    className="absolute inset-x-0 bottom-0 h-px bg-amber-200/80"
+                    className="absolute inset-x-2 bottom-0 h-[2px] bg-violet-400/80 sm:inset-x-3"
                     transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 ) : null}
@@ -73,11 +73,11 @@ export function PricingTabs({ activeId, onChange, direction = 0 }: PricingTabsPr
           })}
         </div>
 
-        <div className="w-full lg:max-w-xs">
+        <div className="w-full pb-3 lg:max-w-xs lg:pb-3.5">
           <PricingSearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            accent="#C4955A"
+            accent="#8B7CF6"
             platformId={activeId}
           />
         </div>

@@ -16,7 +16,6 @@ import type { CaseStudyItem } from "@/lib/case-studies";
 import { getRelatedBlogsForCaseStudy } from "@/lib/case-study-industry-map";
 import { resolveSharpBlogImage } from "@/lib/blog-image";
 
-const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function CaseStudyDetail({
   study,
@@ -35,34 +34,34 @@ export function CaseStudyDetail({
 
   if (deep) {
     return (
-      <div className="space-y-10 text-white">
+      <div className="space-y-8 text-white">
         <section className="overflow-hidden border border-white/[0.08] bg-[#0c0d12]">
-          <div className="border-b border-white/[0.06] px-6 py-10 md:px-10 md:py-14">
+          <div className="border-b border-white/[0.06] px-5 py-6 md:px-8 md:py-8">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-200/70">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40">
                 Case study — {study.industryLabel}
               </span>
               {study.status === "in-progress" && (
-                <span className="border border-amber-200/40 bg-amber-200/90 px-3 py-1 text-xs font-semibold text-[#0b0d12]">
+                <span className="border border-white/25 bg-[#6D5CE6] px-3 py-1 text-xs font-semibold text-white">
                   Dự án đang triển khai
                 </span>
               )}
             </div>
             <h1
-              className="mt-4 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl"
-              style={serif}
+              className="mt-3 max-w-3xl text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]"
+             
             >
               {study.headline}
             </h1>
 
-            <div className="mt-6 border border-amber-200/15 bg-amber-200/[0.06] p-5 md:p-6">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-200/55">
+            <div className="mt-4 border border-white/10 bg-white/[0.03] p-4 md:p-5">
+              <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
                 Tóm tắt nhanh
               </p>
-              <p className="mt-2 text-base leading-relaxed text-white/80 md:text-lg">{study.answerFirst}</p>
+              <p className="mt-2 text-sm leading-relaxed text-white/80 sm:text-base">{study.answerFirst}</p>
             </div>
 
-            <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/45 md:text-lg">{study.summary}</p>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/45">{study.summary}</p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               {study.websiteUrl && (
@@ -70,9 +69,9 @@ export function CaseStudyDetail({
                   href={study.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white/80 transition hover:border-amber-200/40 hover:text-amber-100"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white/80 transition hover:border-white/25 hover:text-white/80"
                 >
-                  <Globe className="h-4 w-4 text-amber-200/70" />
+                  <Globe className="h-4 w-4 text-white/40" />
                   {study.websiteUrl.replace(/^https?:\/\/(www\.)?/, "")}
                   <ExternalLink className="h-3.5 w-3.5 opacity-60" />
                 </a>
@@ -82,9 +81,9 @@ export function CaseStudyDetail({
                   href={study.fanpageUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white/80 transition hover:border-amber-200/40 hover:text-amber-100"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white/80 transition hover:border-white/25 hover:text-white/80"
                 >
-                  <Facebook className="h-4 w-4 text-amber-200/70" />
+                  <Facebook className="h-4 w-4 text-white/40" />
                   Fanpage Facebook
                   <ExternalLink className="h-3.5 w-3.5 opacity-60" />
                 </a>
@@ -121,10 +120,10 @@ export function CaseStudyDetail({
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {study.results.map((metric) => (
             <div key={metric.label} className="border border-white/[0.08] bg-white/[0.02] p-5 md:p-6">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-200/55">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
                 {metric.label}
               </p>
-              <p className="mt-2 flex items-center gap-2 text-3xl font-semibold text-amber-100">
+              <p className="mt-2 flex items-center gap-2 text-xl font-semibold text-white/80 sm:text-2xl">
                 {metric.trend === "up" && <TrendingUp className="h-6 w-6 text-emerald-400" />}
                 {metric.value}
               </p>
@@ -136,15 +135,15 @@ export function CaseStudyDetail({
         <section className="grid gap-6 lg:grid-cols-2">
           <div className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-amber-200/70" />
-              <h2 className="text-xl font-semibold text-white" style={serif}>
+              <Target className="h-5 w-5 text-white/40" />
+              <h2 className="text-xl font-semibold text-white">
                 Thách thức
               </h2>
             </div>
             <ul className="mt-5 space-y-3">
               {study.challenge.map((item) => (
                 <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/45">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-amber-200/50" />
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#6D5CE6]/50" />
                   {item}
                 </li>
               ))}
@@ -154,7 +153,7 @@ export function CaseStudyDetail({
           <div className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-emerald-400/80" />
-              <h2 className="text-xl font-semibold text-white" style={serif}>
+              <h2 className="text-xl font-semibold text-white">
                 Giải pháp Bứt Phá triển khai
               </h2>
             </div>
@@ -171,8 +170,8 @@ export function CaseStudyDetail({
 
         <section className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
           <div className="flex items-center gap-2">
-            <Search className="h-5 w-5 text-amber-200/70" />
-            <h2 className="text-xl font-semibold text-white" style={serif}>
+            <Search className="h-5 w-5 text-white/40" />
+            <h2 className="text-xl font-semibold text-white">
               Bản đồ từ khóa SEO
             </h2>
           </div>
@@ -183,7 +182,7 @@ export function CaseStudyDetail({
             {study.keywordClusters.map((cluster) => (
               <div key={cluster.region} className="border border-white/[0.08] bg-white/[0.02] p-5">
                 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-                  <MapPin className="h-4 w-4 text-amber-200/70" />
+                  <MapPin className="h-4 w-4 text-white/40" />
                   {cluster.region}
                 </div>
                 <ul className="mt-3 flex flex-wrap gap-2">
@@ -202,12 +201,12 @@ export function CaseStudyDetail({
         </section>
 
         <section className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
-          <h2 className="text-xl font-semibold text-white" style={serif}>
+          <h2 className="text-xl font-semibold text-white">
             Dịch vụ triển khai
           </h2>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {study.services.map((service) => (
-              <div key={service.name} className="border-l border-amber-200/25 pl-5">
+              <div key={service.name} className="border-l border-white/15 pl-5">
                 <h3 className="font-medium text-white/90">{service.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/40">{service.description}</p>
               </div>
@@ -217,7 +216,7 @@ export function CaseStudyDetail({
 
         {study.gallery.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-white" style={serif}>
+            <h2 className="text-xl font-semibold text-white">
               Minh chứng số liệu
             </h2>
             <div className="grid gap-6">
@@ -245,14 +244,14 @@ export function CaseStudyDetail({
 
         {study.faq.length > 0 && (
           <section className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
-            <h2 className="text-xl font-semibold text-white" style={serif}>
+            <h2 className="text-xl font-semibold text-white">
               Câu hỏi thường gặp về dự án
             </h2>
             <div className="mt-5 space-y-4">
               {study.faq.map((item) => (
                 <details
                   key={item.q}
-                  className="group border border-white/[0.08] bg-white/[0.02] p-5 open:border-amber-200/20"
+                  className="group border border-white/[0.08] bg-white/[0.02] p-4 open:border-white/20"
                 >
                   <summary className="cursor-pointer list-none font-medium text-white/90 marker:hidden">
                     {item.q}
@@ -267,8 +266,8 @@ export function CaseStudyDetail({
         {relatedBlogs.length > 0 && (
           <section className="border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-amber-200/70" />
-              <h2 className="text-xl font-semibold text-white" style={serif}>
+              <BookOpen className="h-5 w-5 text-white/40" />
+              <h2 className="text-xl font-semibold text-white">
                 Kiến thức liên quan — silo {study.industryLabel.toLowerCase()}
               </h2>
             </div>
@@ -281,10 +280,10 @@ export function CaseStudyDetail({
                 <li key={blog.slug}>
                   <Link
                     href={`/blog/${blog.slug}`}
-                    className="flex flex-col border border-white/[0.08] bg-white/[0.02] p-4 transition hover:border-amber-200/30"
+                    className="flex flex-col border border-white/[0.08] bg-white/[0.02] p-4 transition hover:border-white/20"
                   >
                     <span className="font-medium text-white/90">{blog.label}</span>
-                    <span className="mt-1 text-xs text-amber-200/60">{blog.keyword}</span>
+                    <span className="mt-1 text-xs text-white/40">{blog.keyword}</span>
                   </Link>
                 </li>
               ))}
@@ -293,48 +292,48 @@ export function CaseStudyDetail({
         )}
 
         {study.testimonial && (
-          <blockquote className="border border-amber-200/15 bg-gradient-to-br from-amber-200/[0.07] to-transparent p-8 md:p-10">
-            <p className="text-lg font-medium leading-relaxed text-white/90 md:text-xl">
+          <blockquote className="border border-white/10 bg-[#0e1018] p-5 md:p-6">
+            <p className="text-base font-medium leading-relaxed text-white/90">
               &ldquo;{study.testimonial}&rdquo;
             </p>
-            <footer className="mt-4 text-sm font-medium text-amber-200/70">— {study.clientName}</footer>
+            <footer className="mt-3 text-sm font-medium text-white/40">— {study.clientName}</footer>
           </blockquote>
         )}
 
-        <section className="overflow-hidden border border-amber-200/20 bg-gradient-to-br from-[#12141c] via-[#0c0e14] to-[#16120e] p-8 md:p-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-200/60">
+        <section className="overflow-hidden border border-white/10 bg-[#0e1018] p-5 md:p-6">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/40">
             Bạn cần tương tự?
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white md:text-3xl" style={serif}>
+          <h2 className="mt-2 text-xl font-semibold text-white sm:text-[1.35rem]">
             Làm website + SEO + Facebook cho ngành của bạn
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/45 md:text-base">
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/45">
             Bứt Phá Marketing triển khai trọn gói: thiết kế website, SEO theo khu vực, fanpage và content — giống mô hình
             đã áp dụng cho {study.clientName}.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/website"
-              className="inline-flex items-center gap-2 rounded-full bg-amber-200 px-5 py-3 text-sm font-semibold text-[#0b0d12] transition hover:bg-amber-100"
+              className="inline-flex items-center gap-2 rounded-md bg-[#6D5CE6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5B4BD4]"
             >
               Thiết kế website
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/banggia"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 transition hover:border-amber-200/40 hover:text-amber-100"
+              className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 transition hover:border-white/25 hover:text-white"
             >
               Báo giá thiết kế website
             </Link>
             <Link
               href="/du-an"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 transition hover:border-amber-200/40 hover:text-amber-100"
+              className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 transition hover:border-white/25 hover:text-white"
             >
               Xem thêm dự án
             </Link>
             <Link
               href="/blog/thiet-ke-website"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/75 transition hover:border-amber-200/40 hover:text-amber-100"
+              className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/75 transition hover:border-white/25 hover:text-white"
             >
               Hướng dẫn thiết kế website A-Z
             </Link>
@@ -351,12 +350,12 @@ export function CaseStudyDetail({
           <div className="flex flex-wrap items-center gap-2">
             <span className="brand-eyebrow">Case study — {study.industryLabel}</span>
             {study.status === "in-progress" && (
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+              <span className="rounded-md bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-800">
                 Dự án đang triển khai
               </span>
             )}
           </div>
-          <h1 className="mt-4 max-w-4xl text-3xl font-black leading-tight tracking-tight text-indigo-950 md:text-5xl">
+          <h1 className="mt-3 max-w-3xl text-[1.75rem] font-semibold leading-snug tracking-tight text-indigo-950 sm:text-[2.05rem]">
             {study.headline}
           </h1>
 
