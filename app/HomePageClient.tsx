@@ -2709,21 +2709,21 @@ export default function HomePageClient() {
         {/* Mobile menu panel */}
         {menuOpen && (
           <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm">
-            <div className="absolute inset-y-0 left-0 flex w-full max-w-md flex-col bg-white text-slate-900 shadow-2xl">
-              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-4">
-                <span className="text-sm font-bold tracking-wide">MENU</span>
-                <button type="button" onClick={() => setMenuOpen(false)} aria-label="Đóng menu" className="rounded-full p-2 hover:bg-slate-100">
+            <div className="absolute inset-y-0 left-0 flex w-full max-w-md flex-col bg-[#12101c] text-violet-50 shadow-2xl shadow-black/50">
+              <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+                <span className="text-sm font-bold tracking-wide text-white/90">MENU</span>
+                <button type="button" onClick={() => setMenuOpen(false)} aria-label="Đóng menu" className="rounded-full p-2 text-white/70 hover:bg-violet-500/15 hover:text-white">
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <div className="flex-1 overflow-y-auto px-3 py-4">
-                <SiteNavMenu tone="panel" layout="stack" onNavigate={() => setMenuOpen(false)} />
-                <div className="mt-6 space-y-2 border-t border-slate-100 px-2 pt-4">
+              <div className="flex-1 overflow-y-auto px-2 py-3">
+                <SiteNavMenu tone="dark" layout="stack" onNavigate={() => setMenuOpen(false)} />
+                <div className="mt-5 space-y-1 border-t border-white/10 px-2 pt-3">
                   {SECTIONS.map((s, i) => (
                     <button
                       key={s.id}
                       type="button"
-                      className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-indigo-950 hover:bg-indigo-50"
+                      className="block w-full rounded-md px-3 py-2 text-left text-sm font-semibold text-white/75 hover:bg-violet-500/15 hover:text-white"
                       onClick={() => {
                         setMenuOpen(false);
                         goToSection(i);
