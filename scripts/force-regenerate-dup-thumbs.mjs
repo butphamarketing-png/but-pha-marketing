@@ -28,6 +28,7 @@ const TOPIC_BASES = {
   zalo: ["public/tin-tuc/zalo/zns-la-gi.png", "public/tin-tuc/zalo/zalo-oa-la-gi.png"],
   seo: ["public/tin-tuc/seo/zero-click-search.png"],
   automation: ["public/tin-tuc/automation/zapier-zap.png"],
+  // Không dùng ảnh có robot / cánh tay robot làm base
   crm: ["public/tin-tuc/crm/zoho-crm-hay-pipedrive.png"],
   facebook: ["public/tin-tuc/facebook-marketing.png"],
   maps: ["public/tin-tuc/google-maps-marketing.png"],

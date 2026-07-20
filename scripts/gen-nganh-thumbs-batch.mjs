@@ -54,7 +54,10 @@ const INDUSTRY_BASE = {
   "bao-bi": ["public/tin-tuc/nganh-thumbs/bao-bi.png", "public/tin-tuc/bao-bi/bao-bi-1.png"],
   luat: ["public/tin-tuc/nganh-thumbs/luat.png", "public/tin-tuc/luat/luat-1.png"],
   "thang-may": ["public/tin-tuc/nganh-thumbs/thang-may.png", "public/tin-tuc/thang-may/thang-may-1.png"],
-  "tu-dong-hoa": ["public/tin-tuc/nganh-thumbs/tu-dong-hoa.png", "public/tin-tuc/tu-dong-hoa/tu-dong-hoa-1.png"],
+  "tu-dong-hoa": [
+    "public/tin-tuc/tu-dong-hoa/tu-dong-hoa-1.png",
+    "public/tin-tuc/nganh-thumbs/tu-dong-hoa.png",
+  ],
   "nha-hang": ["public/tin-tuc/nganh-thumbs/nha-hang.png", "public/tin-tuc/nha-hang/thiet-ke-website-nha-hang.png"],
   "bat-dong-san": [
     "public/tin-tuc/nganh-thumbs/bat-dong-san.png",

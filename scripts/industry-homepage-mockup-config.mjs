@@ -367,10 +367,10 @@ export const INDUSTRY_HOMEPAGE_MOCKUPS = [
     cta: "Tư vấn giải pháp",
     phone: "0910 123 456",
     nav: ["Trang chủ", "Giải pháp", "Case study", "Thiết bị", "Liên hệ"],
-    bullets: ["PLC / SCADA / robot", "Tối ưu dây chuyền sản xuất", "Bảo trì & đào tạo vận hành"],
+    bullets: ["PLC / SCADA / IoT nhà máy", "Tối ưu dây chuyền sản xuất", "Bảo trì & đào tạo vận hành"],
     services: [
       { t: "PLC & SCADA", d: "Điều khiển & giám sát" },
-      { t: "Robot", d: "Hàn, gắp, đóng gói" },
+      { t: "Dây chuyền gắp hàng", d: "Hàn, gắp, đóng gói tự động" },
       { t: "IoT nhà máy", d: "Thu thập dữ liệu OEE" },
       { t: "Nâng cấp dây chuyền", d: "Retrofit máy cũ" },
     ],
