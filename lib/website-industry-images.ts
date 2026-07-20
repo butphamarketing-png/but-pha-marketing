@@ -34,7 +34,14 @@ const DEFAULT_POOL: ImagePoolDef = {
 function ownPool(slug: string, extraFiles: readonly string[] = [], alts?: readonly string[]): ImagePoolDef {
   return {
     dir: `/tin-tuc/${slug}`,
-    files: [`${slug}-1.png`, ...extraFiles],
+    files: [
+      `${slug}-1.png`,
+      `${slug}-2.png`,
+      `${slug}-3.png`,
+      `${slug}-4.png`,
+      `${slug}-5.png`,
+      ...extraFiles,
+    ],
     alts,
   };
 }
