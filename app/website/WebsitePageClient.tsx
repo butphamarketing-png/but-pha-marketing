@@ -35,7 +35,7 @@ const config: PlatformConfig = {
     { id: "audit", label: "Chuẩn đoán Website" },
     { id: "domain", label: "Tên miền" },
     { id: "pricing", label: "Thiết kế Website" },
-    { id: "van-hanh", label: "Vận hành Website" },
+    { id: "van-hanh", label: "Hosting" },
     { id: "care", label: "Chăm sóc Website" },
     { id: "quang-cao", label: "Quảng cáo Website" },
     { id: "contact", label: "Liên hệ tư vấn" },
@@ -262,12 +262,12 @@ export default function WebsitePage() {
 
         <section id="van-hanh" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">
           <SectionHeading
-            eyebrow="Managed Operations"
+            eyebrow="Managed Hosting"
             title="Website"
-            highlight="Gói vận hành"
+            highlight="Hosting"
             subtitle="Hosting, bảo mật, backup và hỗ trợ kỹ thuật"
           />
-          <WebsiteOperationSection primaryColor={config.color} sectionLabel="Vận hành Website" />
+          <WebsiteOperationSection primaryColor={config.color} sectionLabel="Hosting" />
         </section>
 
         <section id="care" className="scroll-mt-24 space-y-6 border-t border-white/[0.06] pt-8">

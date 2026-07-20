@@ -207,7 +207,7 @@ export function recommendWebsiteStack(input: {
   }
 
   reasons.push(
-    `Vận hành "${operation.name}" (${formatPriceVnd(operation.price)}/năm) — khớp bảng gói vận hành /website.`,
+    `Hosting "${operation.name}" (${formatPriceVnd(operation.price)}/năm) — khớp bảng gói Hosting /website.`,
   );
 
   reasons.push(

@@ -62,8 +62,8 @@ export const PRICING_PLATFORMS: PricingPlatform[] = [
     id: "website",
     label: "Website",
     color: "#7C3AED",
-    tagline: "Thiết kế, vận hành và phát triển website doanh nghiệp",
-    highlights: ["Thiết kế", "Vận hành", "Tên miền", "SEO & Ads"],
+    tagline: "Thiết kế, Hosting và phát triển website doanh nghiệp",
+    highlights: ["Thiết kế", "Hosting", "Tên miền", "SEO & Ads"],
     branches: [
       {
         id: "web-build",
