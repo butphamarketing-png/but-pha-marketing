@@ -31,12 +31,21 @@ const DEFAULT_POOL: ImagePoolDef = {
   ],
 };
 
+function ownPool(slug: string, extraFiles: readonly string[] = [], alts?: readonly string[]): ImagePoolDef {
+  return {
+    dir: `/tin-tuc/${slug}`,
+    files: [`${slug}-1.png`, ...extraFiles],
+    alts,
+  };
+}
+
 const IMAGE_POOLS = {
   "nha-khoa": {
     dir: "/tin-tuc/nha-khoa",
     files: ["nha-khoa-1.png", "nha-khoa-2.png", "nha-khoa-3.png", "nha-khoa-4.png", "nha-khoa-5.png"],
     alts: INDUSTRY_MOCKUP_ALTS["nha-khoa"],
   },
+  spa: ownPool("spa"),
   "tham-my": {
     dir: "/tin-tuc/tham-my",
     files: ["tham-my-1.png", "tham-my-2.png", "tham-my-3.png", "tham-my-4.png", "tham-my-5.png"],
@@ -47,6 +56,8 @@ const IMAGE_POOLS = {
     files: ["phong-kham-1.png", "phong-kham-2.png", "phong-kham-3.png", "phong-kham-4.png", "phong-kham-5.png"],
     alts: INDUSTRY_MOCKUP_ALTS["phong-kham"],
   },
+  "xay-dung": ownPool("xay-dung"),
+  "noi-that": ownPool("noi-that"),
   "kien-truc": {
     dir: "/tin-tuc/kien-truc",
     files: [
@@ -85,6 +96,7 @@ const IMAGE_POOLS = {
     files: ["bao-bi-1.png", "bao-bi-2.png", "bao-bi-3.png", "bao-bi-4.png", "bao-bi-5.png"],
     alts: INDUSTRY_MOCKUP_ALTS["bao-bi"],
   },
+  "in-an": ownPool("in-an"),
   luat: {
     dir: "/tin-tuc/luat",
     files: ["luat-1.png", "luat-2.png", "luat-3.png", "luat-4.png", "luat-5.png"],
@@ -109,6 +121,7 @@ const IMAGE_POOLS = {
   "nha-hang": {
     dir: "/tin-tuc/nha-hang",
     files: [
+      "nha-hang-1.png",
       "thiet-ke-website-nha-hang.png",
       "nha-hang-2.png",
       "nha-hang-3.png",
@@ -121,6 +134,7 @@ const IMAGE_POOLS = {
   "khach-san": {
     dir: "/tin-tuc/khach-san",
     files: [
+      "khach-san-1.png",
       "thiet-ke-website-khach-san.png",
       "khach-san-2.png",
       "khach-san-3.png",
@@ -134,6 +148,7 @@ const IMAGE_POOLS = {
   "mam-non": {
     dir: "/tin-tuc/mam-non",
     files: [
+      "mam-non-1.png",
       "thiet-ke-website-truong-mam-non.png",
       "mam-non-2.png",
       "mam-non-3.png",
@@ -145,6 +160,7 @@ const IMAGE_POOLS = {
   "thiet-bi-ve-sinh": {
     dir: "/tin-tuc/thiet-bi-ve-sinh",
     files: [
+      "thiet-bi-ve-sinh-1.png",
       "thiet-ke-website-thiet-bi-ve-sinh.png",
       "thiet-bi-ve-sinh-2.png",
       "thiet-bi-ve-sinh-3.png",
@@ -158,6 +174,7 @@ const IMAGE_POOLS = {
   "bat-dong-san": {
     dir: "/tin-tuc/bat-dong-san",
     files: [
+      "bat-dong-san-1.png",
       "thiet-ke-website-bat-dong-san.png",
       "bat-dong-san-2.png",
       "bat-dong-san-3.png",
@@ -167,6 +184,9 @@ const IMAGE_POOLS = {
     ],
     alts: BAT_DONG_SAN_IMAGE_ALTS,
   },
+  "anh-ngu": ownPool("anh-ngu"),
+  "o-to": ownPool("o-to"),
+  "landing-page": ownPool("landing-page"),
 } as const satisfies Record<string, ImagePoolDef>;
 
 type PoolKey = keyof typeof IMAGE_POOLS;
@@ -174,17 +194,17 @@ type PoolKey = keyof typeof IMAGE_POOLS;
 /** Catalog slug → pool ảnh mockup trong public/tin-tuc */
 const CATALOG_POOL_MAP: Record<string, PoolKey | "default"> = {
   "nha-khoa": "nha-khoa",
-  spa: "tham-my",
+  spa: "spa",
   "tham-my": "tham-my",
   "phong-kham": "phong-kham",
-  "xay-dung": "kien-truc",
-  "noi-that": "kien-truc",
+  "xay-dung": "xay-dung",
+  "noi-that": "noi-that",
   "my-pham": "my-pham",
   pccc: "pccc",
   logistics: "logistics",
   "co-khi": "co-khi",
   "bao-bi": "bao-bi",
-  "in-an": "bao-bi",
+  "in-an": "in-an",
   luat: "luat",
   "thang-may": "thang-may",
   "tu-dong-hoa": "tu-dong-hoa",
@@ -192,10 +212,10 @@ const CATALOG_POOL_MAP: Record<string, PoolKey | "default"> = {
   "khach-san": "khach-san",
   "mam-non": "mam-non",
   "bat-dong-san": "bat-dong-san",
-  "anh-ngu": "default",
-  "o-to": "default",
+  "anh-ngu": "anh-ngu",
+  "o-to": "o-to",
   "thiet-bi-ve-sinh": "thiet-bi-ve-sinh",
-  "landing-page": "default",
+  "landing-page": "landing-page",
 };
 
 function resolvePool(catalogSlug: string): ImagePoolDef {
