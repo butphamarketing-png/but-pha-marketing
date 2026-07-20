@@ -99,7 +99,7 @@ export function PricingTierCard({
         )}
 
         <div className="pricing-card-vns__actions mt-auto flex flex-col gap-2 pt-1">
-          {showPublicCtas ? (
+          {showPublicCtas || !onCta ? (
             <a
               href={zaloHref}
               target="_blank"
@@ -113,7 +113,7 @@ export function PricingTierCard({
                 className="h-4 w-4"
                 aria-hidden
               />
-              {ctaLabel || ZALO_CTA_LABEL}
+              {ctaLabel || (showPublicCtas ? ZALO_CTA_LABEL : "Đăng ký ngay")}
             </a>
           ) : (
             <div className="flex gap-2">
@@ -122,7 +122,7 @@ export function PricingTierCard({
                 onClick={onCta}
                 className="pricing-card-vns__cta flex-1 rounded-md bg-[#6D5CE6] py-2.5 text-[13px] font-medium text-white transition hover:bg-[#5B4BD4]"
               >
-                {ctaLabel}
+                {ctaLabel || "Đăng ký ngay"}
               </button>
               {onSecondaryCta && (
                 <button

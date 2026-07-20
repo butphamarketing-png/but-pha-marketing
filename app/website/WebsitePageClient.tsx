@@ -14,7 +14,7 @@ import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { WebsiteIndustryGrid } from "@/components/website/WebsiteIndustryGrid";
 import { WebsiteProofSection } from "@/components/website/WebsiteProofSection";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
-import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { WEBSITE_BUILD_PACKAGES, WEBSITE_CARE_PACKAGES, WEBSITE_ADS_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
 
 const config: PlatformConfig = {
   name: "Website",
@@ -249,10 +249,12 @@ export default function WebsitePage() {
                 key={pkg.id}
                 accent={config.color}
                 title={pkg.name}
+                price={formatPriceVnd(pkg.price)}
                 sectionLabel="Thiết kế Website"
                 features={pkg.works}
                 icon={LayoutTemplate}
                 featured={i === 2}
+                ctaLabel="Đăng ký ngay"
               />
             ))}
           </PackageCarousel>
@@ -281,10 +283,12 @@ export default function WebsitePage() {
                 key={pkg.id}
                 accent={config.color}
                 title={`${pkg.posts} bài viết/tháng`}
+                price={formatPriceVnd(pkg.price)}
                 sectionLabel="Chăm sóc Website"
                 features={pkg.works}
                 icon={FileText}
                 featured={i === 1}
+                ctaLabel="Đăng ký ngay"
               />
             ))}
           </PackageCarousel>
@@ -297,39 +301,19 @@ export default function WebsitePage() {
             title="Website"
             subtitle="Google Ads & Meta Ads — đo chuyển đổi chính xác"
           />
-          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
-            {[
-              {
-                title: "Ngân sách dưới 10 triệu",
-                icon: Target,
-                features: [
-                  "Thiết lập chiến dịch Google / Meta",
-                  "Landing page & pixel tracking",
-                  "Nghiên cứu từ khóa mục tiêu",
-                  "Theo dõi & tối ưu hàng tuần",
-                  "Báo cáo hiệu quả",
-                ],
-              },
-              {
-                title: "Ngân sách trên 10 triệu",
-                icon: Zap,
-                features: [
-                  "Tối ưu chiến dịch chuyên sâu",
-                  "A/B test landing & creative",
-                  "Remarketing đa kênh",
-                  "Tối ưu CPA / ROAS",
-                  "Báo cáo & đề xuất chiến lược",
-                ],
-              },
-            ].map((ads) => (
+          <PackageCarousel accent={config.color} itemCount={WEBSITE_ADS_PACKAGES.length} desktopCols={2}>
+            {WEBSITE_ADS_PACKAGES.map((ads, i) => (
               <PricingTierCard
-                key={ads.title}
+                key={ads.id}
                 accent={config.color}
-                title={ads.title}
+                title={ads.name}
+                price={formatPriceVnd(ads.price)}
+                priceNote="Phí quản lý / tháng — chưa gồm ngân sách quảng cáo"
                 sectionLabel="Quảng cáo Website"
-                features={ads.features}
-                icon={ads.icon}
+                features={ads.works}
+                icon={i === 0 ? Target : Zap}
                 variant="ads"
+                ctaLabel="Đăng ký quảng cáo"
               />
             ))}
           </PackageCarousel>

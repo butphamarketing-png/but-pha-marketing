@@ -9,7 +9,7 @@ import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
 import { AuditModal } from "@/components/shared/AuditModal";
 import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFooter";
-import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES } from "@/lib/service-pricing";
+import { FANPAGE_BUILD_PACKAGES, FANPAGE_CARE_PACKAGES, FANPAGE_ADS_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
 
 const BUILD_ICONS = [Settings, UserCheck, Rocket] as const;
 const config: PlatformConfig = {
@@ -243,11 +243,13 @@ export default function FacebookPage() {
                 key={pkg.id}
                 accent={config.color}
                 title={pkg.name}
+                price={formatPriceVnd(pkg.price)}
                 sectionLabel="Xây dựng Fanpage"
                 features={pkg.works}
                 icon={BUILD_ICONS[i]}
                 featured={i === 2}
                 featuredLabel="Bán chạy"
+                ctaLabel="Đăng ký ngay"
               />
             ))}
           </PackageCarousel>
@@ -267,9 +269,11 @@ export default function FacebookPage() {
                   key={pkg.id}
                   accent={config.color}
                   title={label}
+                  price={formatPriceVnd(pkg.price)}
                   sectionLabel="Chăm sóc Fanpage"
                   features={pkg.works}
                   featured={i === 1}
+                  ctaLabel="Đăng ký ngay"
                 />
               );
             })}
@@ -278,41 +282,19 @@ export default function FacebookPage() {
 
         <section id="ads" className="scroll-mt-24 space-y-12 border-t border-white/[0.08] pt-8">
           <SectionHeading eyebrow="Advertising" title="Quảng cáo Fanpage" />
-          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
-            {[
-              {
-                title: "Ngân sách dưới 10 triệu",
-                icon: Target,
-                features: [
-                  "Thiết lập và tối ưu chiến dịch quảng cáo",
-                  "Nghiên cứu khách hàng mục tiêu",
-                  "Lên nội dung và hình ảnh quảng cáo",
-                  "Theo dõi, tối ưu hiệu quả",
-                  "Báo cáo kết quả",
-                ],
-              },
-              {
-                title: "Ngân sách trên 10 triệu",
-                icon: Zap,
-                features: [
-                  "Thiết lập và tối ưu chiến dịch quảng cáo",
-                  "Nghiên cứu khách hàng mục tiêu",
-                  "Lên nội dung và hình ảnh quảng cáo",
-                  "Theo dõi, tối ưu hiệu quả",
-                  "Báo cáo kết quả",
-                  "A/B Testing chiến dịch",
-                  "Tối ưu hóa chuyển đổi",
-                ],
-              },
-            ].map((ads) => (
+          <PackageCarousel accent={config.color} itemCount={FANPAGE_ADS_PACKAGES.length} desktopCols={2}>
+            {FANPAGE_ADS_PACKAGES.map((ads, i) => (
               <PricingTierCard
-                key={ads.title}
+                key={ads.id}
                 accent={config.color}
-                title={ads.title}
+                title={ads.name}
+                price={formatPriceVnd(ads.price)}
+                priceNote="Phí quản lý / tháng — chưa gồm ngân sách quảng cáo Facebook"
                 sectionLabel="Quảng cáo Fanpage"
-                features={ads.features}
-                icon={ads.icon}
+                features={ads.works}
+                icon={i === 0 ? Target : Zap}
                 variant="ads"
+                ctaLabel="Đăng ký quảng cáo"
               />
             ))}
           </PackageCarousel>

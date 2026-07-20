@@ -5,6 +5,7 @@ import {
   WEBSITE_OPERATION_PACKAGES,
   WEBSITE_OPERATION_TIER_META,
   type WebsiteOperationTierKey,
+  formatPriceVnd,
 } from "@/lib/service-pricing";
 import { getCompareFeaturesForPackage, getPackageCompareIndex } from "@/lib/website-operation-comparison";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
@@ -74,11 +75,13 @@ export function WebsiteOperationSection({
               key={pkg.id}
               accent={accent}
               title={pkg.name}
+              price={formatPriceVnd(pkg.price)}
+              priceNote="/ năm"
               sectionLabel={`${sectionLabel} — ${pkg.name}`}
               compareItems={compareItems.length > 0 ? compareItems : undefined}
               features={compareItems.length === 0 ? pkg.works : undefined}
               featured={featured}
-              ctaLabel={chooseLabel}
+              ctaLabel={chooseLabel || "Đăng ký ngay"}
             />
           );
         })}

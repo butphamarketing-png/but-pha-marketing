@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Calculator, Sparkles, ShoppingCart, ShieldCheck, Megaphone, Search, Bot } from "lucide-react";
 import { db } from "@/lib/useData";
+import { PUBLIC_HIDE_PRICES } from "@/lib/public-pricing-display";
 
 interface FeatureItem {
   id: string;
@@ -97,7 +98,7 @@ export function CustomWebsiteModal({
   isOpen,
   onClose,
   primaryColor,
-  hidePrices = true,
+  hidePrices = PUBLIC_HIDE_PRICES,
 }: {
   isOpen: boolean;
   onClose: () => void;

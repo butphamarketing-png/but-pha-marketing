@@ -38,6 +38,7 @@ import {
   WEBSITE_ADS_PACKAGES,
   WEBSITE_BUILD_PACKAGES,
   WEBSITE_CARE_PACKAGES,
+  formatPriceVnd,
 } from "@/lib/service-pricing";
 import {
   getServiceLandingNav,
@@ -212,10 +213,11 @@ function renderPricingSection(
             key={pkg.id}
             accent={accent}
             title={displayName}
+            price={formatPriceVnd(pkg.price)}
             sectionLabel={sectionLabel}
             features={pkg.works}
             featured={featured}
-            ctaLabel={opts?.chooseLabel ?? chooseLabel}
+            ctaLabel={opts?.chooseLabel ?? chooseLabel ?? "Đăng ký ngay"}
           />
         );
       })}

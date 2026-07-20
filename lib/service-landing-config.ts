@@ -184,7 +184,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Các gói thiết kế website",
         subtitle: "Chọn mức phù hợp — báo giá chi tiết khi tư vấn",
         pricingKind: "website-build",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Tư vấn gói này",
       },
       {
@@ -232,7 +232,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Các gói vận hành website",
         pricingKind: "website-operation",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Chọn gói",
       },
       {
@@ -377,7 +377,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói chăm sóc website",
         subtitle: "Theo số bài viết mỗi tháng",
         pricingKind: "website-care",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Đăng ký ngay",
       },
       {
@@ -438,7 +438,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo website",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "website-ads",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Đăng ký quảng cáo",
       },
     ],
@@ -509,7 +509,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Gói thiết kế Fanpage",
         pricingKind: "fanpage-build",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Chọn gói",
       },
       {
@@ -558,7 +558,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói chăm sóc Fanpage",
         subtitle: "10 / 20 / 30 bài viết mỗi tháng",
         pricingKind: "fanpage-care",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Đăng ký ngay",
       },
       {
@@ -614,7 +614,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo Fanpage",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "fanpage-ads",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Đăng ký quảng cáo",
       },
       {
@@ -675,7 +675,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         label: "Bảng giá",
         title: "Gói Google Maps",
         pricingKind: "gm-build",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Chọn gói",
       },
       {
@@ -732,7 +732,7 @@ export const SERVICE_LANDING_PAGES: Record<string, ServiceLandingConfig> = {
         title: "Gói quảng cáo Google Maps",
         subtitle: "Chưa gồm ngân sách ads",
         pricingKind: "gm-ads",
-        hidePrices: true,
+        hidePrices: false,
         chooseLabel: "Đăng ký quảng cáo",
       },
       {

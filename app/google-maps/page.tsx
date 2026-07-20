@@ -9,7 +9,7 @@ import { Search, Target, Zap, Wrench, Building2, Star, Rocket } from "lucide-rea
 import { PlatformAuditSection } from "@/components/shared/PlatformAuditSection";
 import { PackageCarousel } from "@/components/shared/PackageCarousel";
 import { PricingTierCard } from "@/components/shared/PricingTierCard";
-import { GOOGLE_MAPS_PACKAGES } from "@/lib/service-pricing";
+import { GOOGLE_MAPS_PACKAGES, GOOGLE_MAPS_ADS_PACKAGES, formatPriceVnd } from "@/lib/service-pricing";
 
 const GM_ICONS = [Wrench, Building2, Star] as const;
 const config: PlatformConfig = {
@@ -252,11 +252,13 @@ export default function GoogleMapsPage() {
                 key={pkg.id}
                 accent={config.color}
                 title={pkg.name}
+                price={formatPriceVnd(pkg.price)}
                 sectionLabel="Gói Google Maps"
                 features={pkg.works}
                 icon={GM_ICONS[i]}
                 featured={i === 2}
                 featuredLabel="Lựa chọn tốt"
+                ctaLabel="Đăng ký ngay"
               />
             ))}
           </PackageCarousel>
@@ -268,45 +270,25 @@ export default function GoogleMapsPage() {
             title="Gói quảng cáo Google Maps"
             subtitle="Lựa chọn gói phù hợp với ngân sách của bạn"
           />
-          <PackageCarousel accent={config.color} itemCount={2} desktopCols={2}>
-            {[
-              {
-                title: "Gói cơ bản",
-                icon: Target,
-                featured: true,
-                features: [
-                  "Setup chiến dịch Google Maps",
-                  "Tối ưu hiển thị địa điểm trên Google",
-                  "Nghiên cứu từ khóa tìm kiếm khách hàng",
-                  "Target đúng khu vực (bán kính / thành phố)",
-                  "Theo dõi & tối ưu quảng cáo mỗi ngày",
-                  "Báo cáo hiệu quả định kỳ",
-                ],
-              },
-              {
-                title: "Gói nâng cao",
-                icon: Zap,
-                features: [
-                  "Setup chiến dịch chuyên sâu Google Maps",
-                  "Tối ưu từ khóa + vị trí hiển thị TOP",
-                  "Phân tích hành vi khách hàng",
-                  "Remarketing (bám đuổi khách hàng)",
-                  "Tối ưu chi phí – tăng chuyển đổi",
-                  "Theo dõi & tối ưu liên tục",
-                  "Báo cáo chi tiết + đề xuất chiến lược",
-                ],
-              },
-            ].map((ads) => (
+          <PackageCarousel accent={config.color} itemCount={GOOGLE_MAPS_ADS_PACKAGES.length} desktopCols={2}>
+            {GOOGLE_MAPS_ADS_PACKAGES.map((ads, i) => (
               <PricingTierCard
-                key={ads.title}
+                key={ads.id}
                 accent={config.color}
-                title={ads.title}
+                title={ads.name}
+                price={formatPriceVnd(ads.price)}
+                priceNote={
+                  i === 0
+                    ? "Ngân sách dưới 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)"
+                    : "Ngân sách từ 10 triệu · / tháng (chưa gồm ngân sách quảng cáo)"
+                }
                 sectionLabel="Quảng cáo Google Maps"
-                features={ads.features}
-                icon={ads.icon}
-                featured={ads.featured}
+                features={ads.works}
+                icon={i === 0 ? Target : Zap}
+                featured={i === 0}
                 featuredLabel="Bán chạy"
                 variant="ads"
+                ctaLabel="Đăng ký quảng cáo"
               />
             ))}
           </PackageCarousel>
