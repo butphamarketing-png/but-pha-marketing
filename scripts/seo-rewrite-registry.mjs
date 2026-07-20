@@ -66,6 +66,7 @@ import { REWRITE_THIET_KE_WEBSITE_GYM_YOGA_PILATES } from "./seo-rewrite-thiet-k
 import { REWRITE_THIET_KE_WEBSITE_TRE_EM_MAM_NON } from "./seo-rewrite-thiet-ke-website-tre-em-mam-non.mjs";
 import { REWRITE_THIET_KE_WEBSITE_PCCC } from "./seo-rewrite-thiet-ke-website-pccc.mjs";
 import { REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC } from "./seo-rewrite-thiet-ke-website-thiet-bi-pccc.mjs";
+import { REWRITE_CHI_PHI_QUANG_CAO_GOOGLE_MAPS } from "./seo-rewrite-chi-phi-quang-cao-google-maps.mjs";
 
 export const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
@@ -133,6 +134,7 @@ export const REWRITE_ARTICLES = [
   REWRITE_THIET_KE_WEBSITE_TRE_EM_MAM_NON,
   REWRITE_THIET_KE_WEBSITE_PCCC,
   REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC,
+  REWRITE_CHI_PHI_QUANG_CAO_GOOGLE_MAPS,
 ];
 
 export const REWRITE_BY_SLUG = Object.fromEntries(REWRITE_ARTICLES.map((a) => [a.slug, a]));
