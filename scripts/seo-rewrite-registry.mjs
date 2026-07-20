@@ -71,6 +71,7 @@ import { REWRITE_BAO_GIA_QUANG_CAO_FACEBOOK_THANG } from "./seo-rewrite-bao-gia-
 import { REWRITE_BAO_GIA_GOOGLE_ADS_THANG } from "./seo-rewrite-bao-gia-google-ads-thang.mjs";
 import { REWRITE_WEBSITE_GIA_BAO_NHIEU_2026 } from "./seo-rewrite-website-gia-bao-nhieu-2026.mjs";
 import { REWRITE_CHI_PHI_LAM_WEBSITE_CHUAN_SEO } from "./seo-rewrite-chi-phi-lam-website-chuan-seo.mjs";
+import { REWRITE_BAO_GIA_THIET_KE_FANPAGE } from "./seo-rewrite-bao-gia-thiet-ke-fanpage.mjs";
 
 export const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
@@ -143,6 +144,7 @@ export const REWRITE_ARTICLES = [
   REWRITE_BAO_GIA_GOOGLE_ADS_THANG,
   REWRITE_WEBSITE_GIA_BAO_NHIEU_2026,
   REWRITE_CHI_PHI_LAM_WEBSITE_CHUAN_SEO,
+  REWRITE_BAO_GIA_THIET_KE_FANPAGE,
 ];
 
 export const REWRITE_BY_SLUG = Object.fromEntries(REWRITE_ARTICLES.map((a) => [a.slug, a]));
