@@ -35,8 +35,9 @@ const TOPIC_BASES = {
   automation: ["public/tin-tuc/automation/zapier-zap.png"],
   // Không dùng ảnh có robot / cánh tay robot làm base thumbnail
   crm: ["public/tin-tuc/crm/zoho-crm-hay-pipedrive.png"],
-  facebook: ["public/tin-tuc/facebook-marketing.png"],
-  maps: ["public/tin-tuc/google-maps-marketing.png"],
+  facebook: ["public/tin-tuc/facebook-marketing.png", "public/tin-tuc/facebook-marketing-1.png"],
+  // Không dùng bản có robot (facebook-marketing.png cũ / google-maps-marketing.png cũ)
+  maps: ["public/tin-tuc/google-maps-marketing.png", "public/tin-tuc/google-maps-marketing-1.png"],
   website: ["public/tin-tuc/thiet-ke-website.png"],
   default: [
     "public/about/about-city-bg-deep.png",

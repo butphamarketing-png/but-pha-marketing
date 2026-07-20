@@ -509,11 +509,11 @@ const CONTENT_IMAGE_FILES: Record<NewsImageTopic, string[]> = {
   ],
   facebook: [
     "facebook-marketing.png",
-    ...Array.from({ length: 8 }, (_, i) => `facebook-marketing-${i + 1}.png`),
+    "facebook-marketing-1.png",
   ],
   "google-maps": [
     "google-maps-marketing.png",
-    ...Array.from({ length: 5 }, (_, i) => `google-maps-marketing-${i + 1}.png`),
+    "google-maps-marketing-1.png",
   ],
   marketing: ["tin-tuc-marketing.png"],
 };
