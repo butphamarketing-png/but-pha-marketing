@@ -69,6 +69,7 @@ import { REWRITE_THIET_KE_WEBSITE_THIET_BI_PCCC } from "./seo-rewrite-thiet-ke-w
 import { REWRITE_CHI_PHI_QUANG_CAO_GOOGLE_MAPS } from "./seo-rewrite-chi-phi-quang-cao-google-maps.mjs";
 import { REWRITE_BAO_GIA_QUANG_CAO_FACEBOOK_THANG } from "./seo-rewrite-bao-gia-quang-cao-facebook-thang.mjs";
 import { REWRITE_BAO_GIA_GOOGLE_ADS_THANG } from "./seo-rewrite-bao-gia-google-ads-thang.mjs";
+import { REWRITE_WEBSITE_GIA_BAO_NHIEU_2026 } from "./seo-rewrite-website-gia-bao-nhieu-2026.mjs";
 
 export const REWRITE_ARTICLES = [
   PILLAR_THIET_KE_WEBSITE,
@@ -139,6 +140,7 @@ export const REWRITE_ARTICLES = [
   REWRITE_CHI_PHI_QUANG_CAO_GOOGLE_MAPS,
   REWRITE_BAO_GIA_QUANG_CAO_FACEBOOK_THANG,
   REWRITE_BAO_GIA_GOOGLE_ADS_THANG,
+  REWRITE_WEBSITE_GIA_BAO_NHIEU_2026,
 ];
 
 export const REWRITE_BY_SLUG = Object.fromEntries(REWRITE_ARTICLES.map((a) => [a.slug, a]));
