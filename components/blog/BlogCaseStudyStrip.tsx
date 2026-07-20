@@ -3,6 +3,7 @@ import { ArrowRight, BarChart3 } from "lucide-react";
 import { getFeaturedCaseStudies } from "@/lib/case-studies";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function BlogCaseStudyStrip({ variant = "light" }: { variant?: "light" | "deep" }) {
   const featured = getFeaturedCaseStudies();

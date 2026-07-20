@@ -3,6 +3,7 @@ import { WEBSITE_INDUSTRY_CATALOG } from "@/lib/website-industry-catalog";
 import { getWebsiteIndustryCardThumbnail } from "@/lib/website-industry-images";
 import { IndustryMockupImage } from "@/components/website/IndustryMockupImage";
 
+const serif = { fontFamily: '"Cormorant Garamond", Georgia, serif' } as const;
 
 export function WebsiteIndustryGrid({
   id = "theo-nganh",
