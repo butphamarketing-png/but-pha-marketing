@@ -170,7 +170,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<Param
                 height={675}
                 priority
                 sizes="hero"
-                className="h-72 w-full border border-white/[0.08] object-cover md:h-[24rem]"
+                className="aspect-[16/9] h-auto w-full border border-white/[0.08] object-contain md:max-h-[24rem]"
               />
             </div>
           )}
