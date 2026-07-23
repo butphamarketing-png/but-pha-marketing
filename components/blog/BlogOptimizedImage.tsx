@@ -49,6 +49,8 @@ export function BlogOptimizedImage({
       sizes={resolveSizes(sizes)}
       className={imgClass}
       style={constrained ? { maxWidth: `${sharp.width}px` } : undefined}
+      /* Bypass Vercel Image Optimization — Hobby quota 402 breaks new blog thumbs */
+      unoptimized
     />
   );
 }
