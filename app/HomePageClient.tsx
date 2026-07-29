@@ -784,46 +784,35 @@ export default function HomePageClient() {
   const handleConsultSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      const isValidVNPhone = (value: string) =>
-        /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
 
-      if (!consultForm.name.trim()) {
-        notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+      if (!consultForm.phone.trim()) {
+        notifyMascot("Số điện thoại đang bị trống");
         return;
       }
-      if (!isValidVNPhone(consultForm.phone)) {
-        notifyMascot(
-          "Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ có thể gọi tư vấn nhé!",
-        );
-        return;
-      }
-      if (!consultForm.email.trim()) {
-        notifyMascot("Bạn chưa nhập email. Nhập giúp mình email để nhận thông tin tư vấn chi tiết nhé!");
-        return;
-      }
-      if (!consultForm.address.trim()) {
-        notifyMascot("Bạn chưa nhập địa chỉ tư vấn. Nhập giúp mình khu vực để đội ngũ tư vấn sát hơn nhé!");
-        return;
-      }
-      if (!consultForm.consultDate) {
-        notifyMascot("Bạn chưa chọn ngày tư vấn. Chọn giúp mình một ngày thuận tiện nhé!");
-        return;
-      }
+
       const slot = CONSULT_SLOTS.find((s) => s.id === consultForm.consultSlot);
-      if (!slot) {
-        notifyMascot("Bạn chưa chọn khung giờ. Chọn Sáng, Chiều hoặc Tối để đội ngũ liên hệ nhé!");
-        return;
-      }
+      const whenLabel =
+        consultForm.consultDate && slot
+          ? `${formatConsultDayLabel(consultForm.consultDate)} · ${slot.label} (${slot.hint})`
+          : consultForm.consultDate
+            ? formatConsultDayLabel(consultForm.consultDate)
+            : slot
+              ? `${slot.label} (${slot.hint})`
+              : "";
 
-      const whenLabel = `${formatConsultDayLabel(consultForm.consultDate)} · ${slot.label} (${slot.hint})`;
       setConsultLoading(true);
       try {
-        const combinedNote = `Email: ${consultForm.email} | Địa chỉ: ${consultForm.address} | Thời gian: ${whenLabel} | Nội dung: ${consultForm.note}`;
+        const noteParts = [
+          consultForm.email.trim() ? `Email: ${consultForm.email.trim()}` : "",
+          consultForm.address.trim() ? `Địa chỉ: ${consultForm.address.trim()}` : "",
+          whenLabel ? `Thời gian: ${whenLabel}` : "",
+          consultForm.note.trim() ? `Nội dung: ${consultForm.note.trim()}` : "",
+        ].filter(Boolean);
         await db.leads.add({
           type: "contact",
-          name: consultForm.name,
-          phone: consultForm.phone,
-          note: combinedNote,
+          name: consultForm.name.trim() || "Khách liên hệ",
+          phone: consultForm.phone.trim(),
+          note: noteParts.join(" | "),
         });
         setConsultSummary(whenLabel);
         setConsultDone(true);
@@ -1996,7 +1985,7 @@ export default function HomePageClient() {
                     <p className="mt-3 text-sm font-light text-white/70">{consultSummary}</p>
                   ) : null}
                   <p className="mt-2 text-sm font-light text-white/40">
-                    Đội ngũ sẽ gọi đúng khung giờ. Chú ý điện thoại hoặc Zalo.
+                    Đội ngũ sẽ liên hệ sớm. Chú ý điện thoại hoặc Zalo.
                   </p>
                   <button
                     type="button"
@@ -2128,16 +2117,15 @@ export default function HomePageClient() {
                       </motion.p>
                       {(
                         [
-                          { field: "name" as const, type: "text", placeholder: "Họ và tên *", required: true },
-                          { field: "phone" as const, type: "tel", placeholder: "Số điện thoại *", required: true },
-                          { field: "email" as const, type: "email", placeholder: "Email *", required: true },
-                          { field: "address" as const, type: "text", placeholder: "Khu vực *", required: true },
-                          { field: "note" as const, type: "text", placeholder: "Ghi chú", required: false },
+                          { field: "name" as const, type: "text", placeholder: "Họ và tên" },
+                          { field: "phone" as const, type: "tel", placeholder: "Số điện thoại *" },
+                          { field: "email" as const, type: "email", placeholder: "Email" },
+                          { field: "address" as const, type: "text", placeholder: "Khu vực" },
+                          { field: "note" as const, type: "text", placeholder: "Ghi chú" },
                         ] as const
                       ).map((item, i) => (
                         <motion.input
                           key={item.field}
-                          required={item.required}
                           type={item.type}
                           placeholder={item.placeholder}
                           value={consultForm[item.field]}

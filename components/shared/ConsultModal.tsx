@@ -18,12 +18,10 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
     window.dispatchEvent(new CustomEvent("mascot-alert", { detail: { message, durationMs } }));
   };
 
-  const isValidVNPhone = (value: string) => /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
-
   useEffect(() => {
     if (!isOpen) return;
     const timer = window.setTimeout(() => {
-      notifyMascot("Bạn vui lòng nhập họ tên, số điện thoại, email và thời gian tư vấn để đội ngũ Bứt Phá Marketing hỗ trợ nhanh nhất nhé!");
+      notifyMascot("Bạn chỉ cần để lại số điện thoại — đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn sớm nhất nhé!");
     }, 450);
     return () => window.clearTimeout(timer);
   }, [isOpen]);
@@ -32,34 +30,23 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim()) {
-      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
-      return;
-    }
-    if (!isValidVNPhone(form.phone)) {
-      notifyMascot("Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ có thể gọi tư vấn nhé!");
-      return;
-    }
-    if (!form.email.trim()) {
-      notifyMascot("Bạn chưa nhập email. Nhập giúp mình email để nhận thông tin tư vấn chi tiết nhé!");
-      return;
-    }
-    if (!form.address.trim()) {
-      notifyMascot("Bạn chưa nhập địa chỉ tư vấn. Nhập giúp mình khu vực để đội ngũ tư vấn sát hơn nhé!");
-      return;
-    }
-    if (!form.consultTime) {
-      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
+    if (!form.phone.trim()) {
+      notifyMascot("Số điện thoại đang bị trống");
       return;
     }
     setLoading(true);
     try {
-      const combinedNote = `Email: ${form.email} | Địa chỉ: ${form.address} | Thời gian: ${form.consultTime} | Nội dung: ${form.note}`;
-      await db.leads.add({ 
-        type: "contact", 
-        name: form.name, 
-        phone: form.phone, 
-        note: combinedNote 
+      const noteParts = [
+        form.email.trim() ? `Email: ${form.email.trim()}` : "",
+        form.address.trim() ? `Địa chỉ: ${form.address.trim()}` : "",
+        form.consultTime.trim() ? `Thời gian: ${form.consultTime.trim()}` : "",
+        form.note.trim() ? `Nội dung: ${form.note.trim()}` : "",
+      ].filter(Boolean);
+      await db.leads.add({
+        type: "contact",
+        name: form.name.trim() || "Khách liên hệ",
+        phone: form.phone.trim(),
+        note: noteParts.join(" | "),
       });
       notifyMascot("Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.");
       onClose();
@@ -89,15 +76,13 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input 
-                required 
                 type="text" 
-                placeholder="Họ và tên *" 
+                placeholder="Họ và tên" 
                 value={form.name}
                 onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
                 className="brand-input text-sm" 
               />
               <input 
-                required 
                 type="tel" 
                 placeholder="Số điện thoại *" 
                 value={form.phone}
@@ -107,27 +92,24 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
             </div>
             
             <input 
-              required 
               type="email" 
-              placeholder="Gmail (Email) *" 
+              placeholder="Gmail (Email)" 
               value={form.email}
               onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
               className="brand-input text-sm" 
             />
 
             <input 
-              required 
               type="text" 
-              placeholder="Địa chỉ tư vấn *" 
+              placeholder="Địa chỉ tư vấn" 
               value={form.address}
               onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
               className="brand-input text-sm" 
             />
 
             <div className="space-y-1">
-              <label className="ml-1 text-xs font-medium text-slate-500">Thời gian tư vấn mong muốn *</label>
+              <label className="ml-1 text-xs font-medium text-slate-500">Thời gian tư vấn mong muốn</label>
               <input 
-                required 
                 type="datetime-local" 
                 value={form.consultTime}
                 onChange={e => setForm(prev => ({ ...prev, consultTime: e.target.value }))}

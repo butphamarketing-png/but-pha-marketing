@@ -14,10 +14,6 @@ import {
 const SESSION_DISMISS_KEY = SITE_CONSULT_DISMISS_SESSION_KEY;
 const SUBMITTED_KEY = SITE_CONSULT_SUBMITTED_UNTIL_KEY;
 
-function isValidVNPhone(value: string) {
-  return /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
-}
-
 function shouldShowOnPath(pathname: string) {
   if (pathname === "/") return false; // trang chủ đã có section #tu-van
   if (pathname.startsWith("/blog")) return false;
@@ -82,29 +78,27 @@ export function SiteConsultPopup() {
     const consultTime = form.consultTime.trim();
     const note = form.note.trim();
 
-    if (!name) {
-      setMessage("Vui lòng nhập họ và tên.");
-      return;
-    }
-    if (!isValidVNPhone(phone)) {
-      setMessage("Số điện thoại chưa đúng định dạng Việt Nam.");
-      return;
-    }
-    if (!consultTime) {
-      setMessage("Vui lòng chọn thời gian tư vấn.");
+    if (!phone) {
+      setMessage("Số điện thoại đang bị trống");
       return;
     }
 
     setLoading(true);
     try {
+      const noteParts = [
+        "Nguồn: Popup hẹn tư vấn",
+        consultTime ? `Thời gian: ${consultTime}` : "",
+        note ? `Ghi chú: ${note}` : "",
+        `Trang: ${pathname}`,
+      ].filter(Boolean);
       const result = await db.leads.add({
         type: "contact",
-        name,
+        name: name || "Khách liên hệ",
         phone,
         service: "Hẹn tư vấn",
         platform: "site-popup",
         url: pathname,
-        note: `Nguồn: Popup hẹn tư vấn | Thời gian: ${consultTime}${note ? ` | Ghi chú: ${note}` : ""} | Trang: ${pathname}`,
+        note: noteParts.join(" | "),
       });
 
       if (result.error) throw new Error(result.error);
@@ -117,7 +111,7 @@ export function SiteConsultPopup() {
         new CustomEvent("mascot-alert", {
           detail: {
             message:
-              "Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn đúng khung giờ bạn chọn.",
+              "Hoàn tất rồi! Bạn chú ý điện thoại hoặc Zalo nhé, đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn cho bạn sớm nhất.",
             durationMs: 7000,
           },
         }),
@@ -138,7 +132,7 @@ export function SiteConsultPopup() {
           <div>
             <p className="text-lg font-bold text-white">Đặt lịch tư vấn miễn phí</p>
             <p className="mt-1 text-sm leading-snug text-violet-100/75">
-              Để lại thông tin, đội ngũ chuyên gia sẽ liên hệ đúng khung giờ bạn chọn.
+              Chỉ cần để lại số điện thoại — đội ngũ sẽ liên hệ tư vấn sớm nhất.
             </p>
           </div>
           <button
@@ -155,7 +149,7 @@ export function SiteConsultPopup() {
           <input
             value={form.name}
             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-            placeholder="Họ và tên *"
+            placeholder="Họ và tên"
             className="w-full rounded-xl border border-violet-400/20 bg-violet-950/35 px-4 py-3 text-sm text-white outline-none placeholder:text-violet-200/40 focus:border-violet-400/55 focus:ring-2 focus:ring-violet-500/20"
           />
           <input
@@ -168,7 +162,7 @@ export function SiteConsultPopup() {
           <div className="space-y-1">
             <label className="flex items-center gap-1.5 text-xs font-medium text-violet-200/65">
               <CalendarDays size={14} />
-              Thời gian tư vấn mong muốn *
+              Thời gian tư vấn mong muốn
             </label>
             <input
               type="datetime-local"

@@ -102,29 +102,15 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
   }, [pkg.name]);
 
   const handleSubmit = async () => {
-    if (!form.name.trim()) {
-      setError("Vui lòng nhập họ và tên.");
-      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+    const phone = form.phone.trim();
+    if (!phone) {
+      setError("Số điện thoại đang bị trống");
+      notifyMascot("Số điện thoại đang bị trống");
       return;
     }
-    if (!isValidVNPhone(form.phone)) {
+    if (!isValidVNPhone(phone)) {
       setError("Số điện thoại chưa đúng định dạng Việt Nam.");
       notifyMascot("Số điện thoại chưa đúng rồi. Bạn kiểm tra lại để đội ngũ có thể gọi hoặc nhắn Zalo tư vấn nhé!");
-      return;
-    }
-    if (!form.email.trim()) {
-      setError("Vui lòng nhập email.");
-      notifyMascot("Bạn chưa nhập email. Nhập giúp mình email để nhận thông tin tư vấn chi tiết nhé!");
-      return;
-    }
-    if (!form.address.trim()) {
-      setError("Vui lòng nhập địa chỉ tư vấn.");
-      notifyMascot("Bạn chưa nhập địa chỉ tư vấn. Nhập giúp mình khu vực để đội ngũ tư vấn sát hơn nhé!");
-      return;
-    }
-    if (!form.consultTime) {
-      setError("Vui lòng chọn thời gian tư vấn.");
-      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
       return;
     }
 
@@ -133,9 +119,9 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 
     const combinedNote = [
       `Gói: ${pkg.tabLabel} - ${pkg.name}`,
-      `Email: ${form.email}`,
-      `Địa chỉ: ${form.address}`,
-      `Thời gian tư vấn: ${form.consultTime}`,
+      form.email.trim() ? `Email: ${form.email.trim()}` : "",
+      form.address.trim() ? `Địa chỉ: ${form.address.trim()}` : "",
+      form.consultTime.trim() ? `Thời gian tư vấn: ${form.consultTime.trim()}` : "",
       form.note.trim() ? `Nội dung: ${form.note.trim()}` : "",
     ]
       .filter(Boolean)
@@ -143,8 +129,8 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 
     const result = await db.leads.add({
       type: "contact",
-      name: form.name.trim(),
-      phone: form.phone.trim(),
+      name: form.name.trim() || "Khách hàng",
+      phone,
       service: `${pkg.tabLabel} - ${pkg.name}`,
       note: combinedNote,
       platform: platformKey,
@@ -212,16 +198,14 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
                   <input
-                    required
                     value={form.name}
                     onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Họ và tên *"
+                    placeholder="Họ và tên"
                     className="brand-input text-sm"
                   />
                 </div>
                 <div className="space-y-1.5">
                   <input
-                    required
                     value={form.phone}
                     onChange={(e) => setForm(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="Số điện thoại (Zalo) *"
@@ -231,26 +215,23 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
               </div>
 
               <input
-                required
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="Địa chỉ Email *"
+                placeholder="Địa chỉ Email"
                 className="brand-input text-sm"
               />
 
               <input
-                required
                 value={form.address}
                 onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))}
-                placeholder="Khu vực / Tỉnh thành *"
+                placeholder="Khu vực / Tỉnh thành"
                 className="brand-input text-sm"
               />
 
               <div className="space-y-2">
-                <label className="ml-1 text-xs font-medium text-slate-500">Thời gian gọi tư vấn *</label>
+                <label className="ml-1 text-xs font-medium text-slate-500">Thời gian gọi tư vấn (tuỳ chọn)</label>
                 <input
-                  required
                   type="datetime-local"
                   value={form.consultTime}
                   onChange={(e) => setForm(prev => ({ ...prev, consultTime: e.target.value }))}
@@ -698,28 +679,22 @@ function ContactForm({ color, deep = false }: { color: string; deep?: boolean })
 
   const handleInlineContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) {
-      notifyMascot("Bạn chưa nhập họ tên. Nhập giúp mình họ tên để đội ngũ tư vấn xưng hô cho đúng nhé!");
+    if (!phone.trim()) {
+      notifyMascot("Số điện thoại đang bị trống");
       return;
     }
-    if (!isValidVNPhone(phone)) {
-      notifyMascot("Số điện thoại chưa đúng định dạng Việt Nam. Bạn kiểm tra lại giúp mình để đội ngũ gọi hoặc nhắn Zalo tư vấn nhé!");
-      return;
-    }
-    if (!address.trim()) {
-      notifyMascot("Bạn chưa nhập địa điểm. Nhập giúp mình khu vực để đội ngũ tư vấn sát nhu cầu hơn nhé!");
-      return;
-    }
-    if (!consultTime) {
-      notifyMascot("Bạn chưa chọn thời gian tư vấn. Chọn giúp mình khung giờ thuận tiện để đội ngũ liên hệ nhé!");
-      return;
-    }
+    const noteParts = [
+      email.trim() ? `Email: ${email.trim()}` : "",
+      address.trim() ? `Địa chỉ: ${address.trim()}` : "",
+      consultTime.trim() ? `Thời gian: ${consultTime.trim()}` : "",
+      note.trim() ? `Ghi chú: ${note.trim()}` : "",
+    ].filter(Boolean);
     await db.leads.add({
       type: "contact",
-      name,
-      phone,
+      name: name.trim() || "Khách liên hệ",
+      phone: phone.trim(),
       service: `Tư vấn ${platform}`,
-      note: `Email: ${email}\nĐịa chỉ: ${address}\nThời gian: ${consultTime}\nGhi chú: ${note}`,
+      note: noteParts.join("\n"),
       platform: platform === "facebook" ? "facebook" : platform === "google maps" ? "googlemaps" : "website",
     });
     setSent(true);
@@ -744,28 +719,24 @@ function ContactForm({ color, deep = false }: { color: string; deep?: boolean })
             <form onSubmit={handleInlineContactSubmit} className="mt-5 space-y-3 border border-white/10 bg-[#0e1018] p-4 sm:p-5">
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
-                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Họ và tên"
                   className="brand-input !rounded-md !py-2.5"
                 />
                 <input
-                  required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Số điện thoại (Zalo)"
+                  placeholder="Số điện thoại * (Zalo)"
                   className="brand-input !rounded-md !py-2.5"
                 />
                 <input
-                  required
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Khu vực / Tỉnh thành"
                   className="brand-input !rounded-md !py-2.5"
                 />
                 <input
-                  required
                   type="datetime-local"
                   value={consultTime}
                   onChange={(e) => setConsultTime(e.target.value)}
@@ -831,19 +802,19 @@ function ContactForm({ color, deep = false }: { color: string; deep?: boolean })
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-500">Họ và tên</label>
-                  <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Nguyễn Văn A" className="brand-input" />
+                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nguyễn Văn A" className="brand-input" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-slate-500">Số điện thoại (Zalo)</label>
-                  <input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0937 417 982" className="brand-input" />
+                  <label className="text-xs font-medium text-slate-500">Số điện thoại * (Zalo)</label>
+                  <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0937 417 982" className="brand-input" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-500">Khu vực / Tỉnh thành</label>
-                  <input required value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="brand-input" />
+                  <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Hà Nội, TP.HCM..." className="brand-input" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-slate-500">Thời gian gọi tư vấn</label>
-                  <input required type="datetime-local" value={consultTime} onChange={(e) => setConsultTime(e.target.value)} className="brand-input" />
+                  <label className="text-xs font-medium text-slate-500">Thời gian gọi tư vấn (tuỳ chọn)</label>
+                  <input type="datetime-local" value={consultTime} onChange={(e) => setConsultTime(e.target.value)} className="brand-input" />
                 </div>
               </div>
               <div className="space-y-2">
