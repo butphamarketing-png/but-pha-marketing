@@ -4,6 +4,10 @@ import { buildLocalSeoNextRedirects } from './lib/local-seo-redirects.mjs';
 const nextConfig = {
   serverExternalPackages: ["pg", "express"],
   images: {
+    // Vercel Image Optimization trả 402 OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED
+    // khi hết hạn mức — serve ảnh gốc trực tiếp để logo/ảnh không gãy.
+    // Bật lại (xoá unoptimized) sau khi xử lý billing/quota trên Vercel.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "www.butphamarketing.com" },
       { protocol: "https", hostname: "butphamarketing.com" },
