@@ -22,7 +22,7 @@ related homepage sections feel layered and premium — not flat black.
 | Pricing page | `app/banggia/page.tsx`, `components/pricing/*` |
 | Nav data | `lib/site-navigation.ts` (`SIMPLE_NAV_LINKS`, `SERVICE_NAV_GROUPS`) |
 | Nav UI | `components/shared/SiteNavMenu.tsx` |
-| Attribution / gate | `lib/banggia-*.ts`, `app/api/banggia-access` |
+| Attribution | `lib/banggia-*.ts` |
 | Banggia BG asset | `public/about/banggia-bg-deep.png` (+ `banggia-bg-concept.png`) |
 | Tư vấn BG asset | `public/about/tu-van-bg-deep.png` (+ `tu-van-bg-concept.png`) |
 | Regen script | `scripts/gen-banggia-tuvan-bgs.mjs` |
@@ -31,7 +31,7 @@ related homepage sections feel layered and premium — not flat black.
 ## Background rules (deep purple)
 
 1. Prefer a **themed photo/concept image** + **violet/amber CSS overlay** — never flat `#06080f` alone.
-2. `/banggia` uses `BANGGIA_BG` via `BanggiaAtmosphere` in `BanggiaPageClient.tsx` (gate + unlocked).
+2. `/banggia` uses `BANGGIA_BG` via `BanggiaAtmosphere` in `BanggiaPageClient.tsx`.
 3. Homepage **Đặt lịch hẹn tư vấn** uses `TU_VAN_BG` (`/about/tu-van-bg-deep.png`).
 4. Themes:
    - **Bảng giá:** rate-card / ledger / soft price-tag atmosphere, amber top-left + violet wash.
@@ -62,10 +62,10 @@ node scripts/gen-banggia-tuvan-bgs.mjs
 
 ## When editing `/banggia`
 
-- Preserve gate + attribution flow (`captureBanggiaAttribution`, access API).
-- Public prices only after gate; do not leak full pricing elsewhere.
+- Page is public — no lead gate before viewing prices.
+- Keep attribution capture (`captureBanggiaAttribution`).
 - CTAs elsewhere may link to `/banggia` without duplicating price tables.
-- Keep `BanggiaAtmosphere` on both locked and unlocked shells.
+- Keep `BanggiaAtmosphere` on the page shell.
 
 ## Checklist
 

@@ -8,14 +8,8 @@ import { ServiceConversionFooter } from "@/components/shared/ServiceConversionFo
 import { SiteNavMenu } from "@/components/shared/SiteNavMenu";
 import { MoneyKwSiloLinks } from "@/components/seo/MoneyKwSiloLinks";
 import { captureBanggiaAttribution } from "@/lib/banggia-attribution";
-import {
-  getBanggiaLastTab,
-  getBanggiaProfile,
-  setBanggiaLastTab,
-} from "@/lib/banggia-prefs";
-import { isBanggiaUnlocked } from "@/lib/marketing-popup-gate";
+import { getBanggiaLastTab, setBanggiaLastTab } from "@/lib/banggia-prefs";
 import type { PricingPlatformId } from "@/lib/pricing-catalog";
-import { PricingGateForm } from "./PricingGateForm";
 import { PricingStickyBar } from "./PricingStickyBar";
 import { PricingTabs } from "./PricingTabs";
 
@@ -73,14 +67,10 @@ function getTabDirection(from: PricingPlatformId, to: PricingPlatformId) {
   return TAB_ORDER.indexOf(to) >= TAB_ORDER.indexOf(from) ? 1 : -1;
 }
 
-
 export function BanggiaPageClient() {
   const reduceMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState<PricingPlatformId>("website");
   const [tabDirection, setTabDirection] = useState(1);
-  const [gateReady, setGateReady] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const [welcomeName, setWelcomeName] = useState<string | null>(null);
   const prevTabRef = useRef<PricingPlatformId>("website");
 
   useEffect(() => {
@@ -88,14 +78,6 @@ export function BanggiaPageClient() {
     setActiveTab(lastTab);
     prevTabRef.current = lastTab;
     captureBanggiaAttribution();
-
-    const open = isBanggiaUnlocked();
-    setUnlocked(open);
-    if (open) {
-      const profile = getBanggiaProfile();
-      setWelcomeName(profile?.name?.split(/\s+/).filter(Boolean).pop() ?? null);
-    }
-    setGateReady(true);
   }, []);
 
   const handleTabChange = (tab: PricingPlatformId) => {
@@ -104,30 +86,6 @@ export function BanggiaPageClient() {
     setActiveTab(tab);
     setBanggiaLastTab(tab);
   };
-
-  const handleUnlocked = () => {
-    setUnlocked(true);
-    const profile = getBanggiaProfile();
-    setWelcomeName(profile?.name?.split(/\s+/).filter(Boolean).pop() ?? null);
-  };
-
-  if (!gateReady) {
-    return (
-      <div className="flex min-h-screen items-center justify-center deep-theme">
-        <div className="h-px w-16 bg-white/20" aria-hidden />
-        <span className="sr-only">Đang tải bảng giá…</span>
-      </div>
-    );
-  }
-
-  if (!unlocked) {
-    return (
-      <div className="relative min-h-screen overflow-hidden deep-theme">
-        <BanggiaAtmosphere />
-        <PricingGateForm onUnlocked={handleUnlocked} />
-      </div>
-    );
-  }
 
   return (
     <div className="banggia-deep relative min-h-screen overflow-x-hidden deep-theme text-white">
@@ -152,15 +110,9 @@ export function BanggiaPageClient() {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="mb-4 max-w-2xl sm:mb-5"
         >
-          <h1
-            className="text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]"
-           
-          >
+          <h1 className="text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-[2.05rem]">
             Báo giá dịch vụ
           </h1>
-          {welcomeName ? (
-            <p className="mt-1.5 text-sm text-white/45">Xin chào {welcomeName}.</p>
-          ) : null}
         </motion.header>
 
         <PricingTabs activeId={activeTab} onChange={handleTabChange} direction={tabDirection} />
