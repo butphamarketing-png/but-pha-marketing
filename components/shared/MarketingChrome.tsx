@@ -105,7 +105,7 @@ export function MarketingChrome() {
     return (
       <>
         <HomeFloatingActions />
-        <ChatbotWidget color="#6B21A8" position="right" launcherLabel="Chat với AI" />
+        <ChatbotWidget color="#6B21A8" position="left" launcherLabel="Chat với AI" />
         <SoftUISounds />
         <PushNotificationPrompt />
       </>
@@ -116,7 +116,7 @@ export function MarketingChrome() {
     <>
       <SoftUISounds />
       <FloatingContactButtons />
-      <ChatbotWidget color="#6B21A8" position="right" />
+      <ChatbotWidget color="#6B21A8" position="left" />
       <PushNotificationPrompt />
       <QuickActionBar />
     </>
