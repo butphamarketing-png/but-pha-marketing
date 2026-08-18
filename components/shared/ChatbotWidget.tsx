@@ -149,7 +149,7 @@ export function ChatbotWidget({ color }: { color: string }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-20 right-4 z-[80] flex w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl"
+            className="fixed bottom-20 left-4 z-[80] flex w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl"
             style={{ maxHeight: "520px" }}
           >
             {/* Header */}
@@ -249,7 +249,7 @@ export function ChatbotWidget({ color }: { color: string }) {
         onClick={() => setOpen(o => !o)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-4 right-4 z-[81] flex h-14 w-14 items-center justify-center rounded-full shadow-2xl"
+        className="fixed bottom-4 left-4 z-[81] flex h-14 w-14 items-center justify-center rounded-full shadow-2xl"
         style={{ backgroundColor: color }}
       >
         <AnimatePresence mode="wait">

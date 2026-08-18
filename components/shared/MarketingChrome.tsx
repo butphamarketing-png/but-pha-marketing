@@ -25,6 +25,10 @@ const PushNotificationPrompt = dynamic(
   () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
   { ssr: false },
 );
+const ChatbotWidget = dynamic(
+  () => import("@/components/shared/ChatbotWidget").then((mod) => mod.ChatbotWidget),
+  { ssr: false },
+);
 
 function HomeFloatingActions() {
   const { settings } = useAdmin();
@@ -101,6 +105,7 @@ export function MarketingChrome() {
     return (
       <>
         <HomeFloatingActions />
+        <ChatbotWidget color="#6B21A8" />
         <SoftUISounds />
         <PushNotificationPrompt />
       </>
@@ -111,6 +116,7 @@ export function MarketingChrome() {
     <>
       <SoftUISounds />
       <FloatingContactButtons />
+      <ChatbotWidget color="#6B21A8" />
       <PushNotificationPrompt />
       <QuickActionBar />
     </>
