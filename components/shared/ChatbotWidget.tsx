@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageCircle, Send, Bot, Phone, Square } from "lucide-react";
+import { X, MessageCircle, Send, Bot, Phone, Square, RotateCcw, Sparkles } from "lucide-react";
 import { DEFAULT_HOTLINE, getZaloUrl } from "@/lib/site-contact";
 
 interface Message {
@@ -15,14 +15,15 @@ interface Message {
 const ZALO_NUMBER = DEFAULT_HOTLINE;
 const ZALO_URL = getZaloUrl();
 
+const GREETING =
+  "Xin chào! Mình là Bứt Phá AI — trợ lý tư vấn marketing của Bứt Phá Marketing.\n\nBạn đang kinh doanh ngành gì? Mình sẽ phân tích và gợi ý giải pháp phù hợp nhất cho bạn.";
+
 const QUICK_REPLIES = [
   "Báo giá thiết kế website",
-  "Dịch vụ Facebook Marketing",
-  "Google Maps Marketing",
-  "Quy trình làm việc",
+  "Facebook Marketing",
+  "Google Maps",
+  "Tôi muốn tư vấn theo ngành",
 ];
-
-const GREETING = "Xin chào! Tôi là trợ lý AI của Bứt Phá Marketing.\nTôi có thể tư vấn về dịch vụ, báo giá và hỗ trợ bạn 24/7. Bạn cần hỗ trợ gì?";
 
 let idCounter = 0;
 function nextId() {
@@ -32,7 +33,7 @@ function nextId() {
 async function saveConversation(messages: Message[], phone?: string) {
   try {
     const conversation = messages
-      .map((m) => `[${m.role === "bot" ? "Bot" : "Khách"}]: ${m.text}`)
+      .map((m) => `[${m.role === "bot" ? "AI" : "Khách"}]: ${m.text}`)
       .join("\n");
     await fetch("/api/leads", {
       method: "POST",
@@ -41,7 +42,7 @@ async function saveConversation(messages: Message[], phone?: string) {
         type: "chatbot",
         name: "Khách chat AI",
         phone: phone || "Chưa để lại",
-        service: "Chatbot AI tư vấn",
+        service: "AI Chatbot tư vấn",
         note: conversation.slice(0, 4000),
         platform: "chatbot",
       }),
@@ -62,9 +63,12 @@ export function ChatbotWidget({ color }: { color: string }) {
   const abortRef = useRef<AbortController | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const userMsgCount = useRef(0);
 
   const scrollToBottom = useCallback(() => {
-    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    requestAnimationFrame(() =>
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }),
+    );
   }, []);
 
   useEffect(() => {
@@ -79,13 +83,10 @@ export function ChatbotWidget({ color }: { color: string }) {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  const scheduleSave = useCallback(
-    (msgs: Message[], phone?: string) => {
-      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-      saveTimerRef.current = setTimeout(() => saveConversation(msgs, phone), 30000);
-    },
-    [],
-  );
+  const scheduleSave = useCallback((msgs: Message[], phone?: string) => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => saveConversation(msgs, phone), 25000);
+  }, []);
 
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort();
@@ -101,6 +102,8 @@ export function ChatbotWidget({ color }: { color: string }) {
       const phoneMatch = trimmed.match(/(\d{9,11})/);
       if (phoneMatch) setUserPhone(phoneMatch[1]);
 
+      userMsgCount.current += 1;
+
       const userMsg: Message = { id: nextId(), role: "user", text: trimmed };
       const botId = nextId();
       const botMsg: Message = { id: botId, role: "bot", text: "", streaming: true };
@@ -110,7 +113,7 @@ export function ChatbotWidget({ color }: { color: string }) {
       setStreaming(true);
 
       const history = messages
-        .filter((m) => !m.streaming)
+        .filter((m) => !m.streaming && m.text)
         .map((m) => ({
           role: m.role === "bot" ? ("assistant" as const) : ("user" as const),
           content: m.text,
@@ -128,9 +131,7 @@ export function ChatbotWidget({ color }: { color: string }) {
           signal: controller.signal,
         });
 
-        if (!res.ok || !res.body) {
-          throw new Error("API error");
-        }
+        if (!res.ok || !res.body) throw new Error("API error");
 
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
@@ -147,44 +148,43 @@ export function ChatbotWidget({ color }: { color: string }) {
         }
 
         setMessages((prev) =>
-          prev.map((m) =>
-            m.id === botId ? { ...m, streaming: false } : m,
-          ),
+          prev.map((m) => (m.id === botId ? { ...m, streaming: false } : m)),
         );
       } catch (err: unknown) {
-        if (err instanceof DOMException && err.name === "AbortError") {
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === botId ? { ...m, streaming: false } : m,
-            ),
-          );
-        } else {
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === botId
-                ? {
-                    ...m,
-                    text: "Xin lỗi, đã có lỗi xảy ra. Bạn có thể liên hệ Zalo 0937417982 để được hỗ trợ nhanh nhất.",
-                    streaming: false,
-                  }
-                : m,
-            ),
-          );
-        }
+        const isAbort = err instanceof DOMException && err.name === "AbortError";
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botId
+              ? {
+                  ...m,
+                  text: isAbort
+                    ? m.text
+                    : "Xin lỗi, đã có lỗi xảy ra. Bạn có thể liên hệ Zalo 0937417982 để được hỗ trợ nhanh nhất nhé!",
+                  streaming: false,
+                }
+              : m,
+          ),
+        );
       } finally {
         abortRef.current = null;
         setStreaming(false);
-
         setMessages((prev) => {
           scheduleSave(prev, phoneMatch?.[1] || userPhone);
           return prev;
         });
-
         if (!open) setUnread((u) => u + 1);
       }
     },
     [messages, streaming, open, userPhone, scheduleSave],
   );
+
+  const resetChat = useCallback(() => {
+    stopStreaming();
+    idCounter = 0;
+    userMsgCount.current = 0;
+    setMessages([{ id: nextId(), role: "bot", text: GREETING }]);
+    setUserPhone(undefined);
+  }, [stopStreaming]);
 
   const handleClose = () => {
     setOpen(false);
@@ -192,6 +192,8 @@ export function ChatbotWidget({ color }: { color: string }) {
     if (messages.length > 1) saveConversation(messages, userPhone);
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
   };
+
+  const showQuickReplies = userMsgCount.current < 3;
 
   return (
     <>
@@ -202,27 +204,32 @@ export function ChatbotWidget({ color }: { color: string }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-20 left-4 z-[80] flex w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0c0d12] shadow-2xl sm:w-[380px]"
-            style={{ maxHeight: "min(520px, calc(100dvh - 100px))" }}
+            className="fixed bottom-20 left-4 z-[80] flex w-[340px] flex-col overflow-hidden rounded-2xl border border-white/[0.08] shadow-2xl sm:w-[400px]"
+            style={{
+              maxHeight: "min(560px, calc(100dvh - 100px))",
+              background: "linear-gradient(180deg, #0c0d14 0%, #0a0b10 100%)",
+            }}
           >
             {/* Header */}
             <div
-              className="flex items-center justify-between px-4 py-3"
-              style={{ backgroundColor: color }}
+              className="relative flex items-center justify-between px-4 py-3"
+              style={{
+                background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
+              }}
             >
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                  <Bot size={18} className="text-white" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+                  <Sparkles size={16} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white">Bứt Phá AI</p>
-                  <div className="flex items-center gap-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-green-300 animate-pulse" />
-                    <p className="text-[11px] text-white/75">GPT · Trả lời tức thì</p>
+                  <p className="text-sm font-bold text-white tracking-wide">Bứt Phá AI</p>
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                    <p className="text-[11px] text-white/70">Tư vấn thông minh · 24/7</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <a
                   href={ZALO_URL}
                   target="_blank"
@@ -234,7 +241,7 @@ export function ChatbotWidget({ color }: { color: string }) {
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg"
                     alt="Zalo"
-                    className="h-4 w-4"
+                    className="h-3.5 w-3.5"
                   />
                 </a>
                 <a
@@ -242,19 +249,29 @@ export function ChatbotWidget({ color }: { color: string }) {
                   title="Gọi ngay"
                   className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition hover:bg-white/30"
                 >
-                  <Phone size={13} className="text-white" />
+                  <Phone size={12} className="text-white" />
                 </a>
                 <button
-                  onClick={handleClose}
-                  className="ml-0.5 text-white/60 transition hover:text-white"
+                  onClick={resetChat}
+                  title="Cuộc hội thoại mới"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition hover:bg-white/30"
                 >
-                  <X size={18} />
+                  <RotateCcw size={12} className="text-white" />
+                </button>
+                <button
+                  onClick={handleClose}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition hover:bg-white/30"
+                >
+                  <X size={14} className="text-white" />
                 </button>
               </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 space-y-3 overflow-y-auto p-4" style={{ maxHeight: "340px" }}>
+            <div
+              className="flex-1 space-y-3 overflow-y-auto p-4 scrollbar-thin"
+              style={{ maxHeight: "360px" }}
+            >
               {messages.map((m) => (
                 <div
                   key={m.id}
@@ -263,22 +280,22 @@ export function ChatbotWidget({ color }: { color: string }) {
                   {m.role === "bot" && (
                     <div
                       className="mr-2 mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full"
-                      style={{ backgroundColor: `${color}30` }}
+                      style={{ backgroundColor: `${color}25` }}
                     >
                       <Bot size={12} style={{ color }} />
                     </div>
                   )}
                   <div
-                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-line ${
+                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-[1.65] whitespace-pre-line ${
                       m.role === "user"
-                        ? "text-white"
-                        : "border border-white/[0.08] bg-white/[0.04] text-gray-200"
+                        ? "text-white rounded-br-md"
+                        : "border border-white/[0.06] bg-white/[0.03] text-gray-200 rounded-bl-md"
                     }`}
                     style={m.role === "user" ? { backgroundColor: color } : {}}
                   >
                     {m.text || (m.streaming ? "" : "...")}
                     {m.streaming && (
-                      <span className="ml-0.5 inline-block h-3.5 w-[2px] animate-pulse bg-violet-400" />
+                      <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse rounded-full bg-violet-400/80" />
                     )}
                   </div>
                 </div>
@@ -286,22 +303,24 @@ export function ChatbotWidget({ color }: { color: string }) {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick replies */}
-            <div className="flex flex-wrap gap-1.5 border-t border-white/[0.06] px-3 pt-2.5">
-              {QUICK_REPLIES.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => sendMessage(q)}
-                  disabled={streaming}
-                  className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-gray-400 transition-colors hover:border-white/25 hover:text-white disabled:opacity-40"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
+            {/* Quick replies — auto-hide after 3 user messages */}
+            {showQuickReplies && (
+              <div className="flex flex-wrap gap-1.5 border-t border-white/[0.05] px-3 pt-2.5 pb-1">
+                {QUICK_REPLIES.map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => sendMessage(q)}
+                    disabled={streaming}
+                    className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] text-gray-400 transition hover:border-violet-400/30 hover:text-violet-200 disabled:opacity-40"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Input */}
-            <div className="p-3 pt-2">
+            <div className="border-t border-white/[0.05] p-3 pt-2.5">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -313,30 +332,33 @@ export function ChatbotWidget({ color }: { color: string }) {
                   ref={inputRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Hỏi bất kỳ điều gì..."
+                  placeholder={streaming ? "Đang trả lời..." : "Hỏi bất kỳ điều gì..."}
                   disabled={streaming}
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-[13px] text-white outline-none transition focus:border-white/25 disabled:opacity-50"
+                  className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-2.5 text-[13px] text-white outline-none transition placeholder:text-white/25 focus:border-violet-400/30 disabled:opacity-40"
                 />
                 {streaming ? (
                   <button
                     type="button"
                     onClick={stopStreaming}
-                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/80 text-white transition-transform hover:scale-105"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/70 text-white transition hover:bg-red-500/90"
                     title="Dừng"
                   >
-                    <Square size={13} />
+                    <Square size={13} fill="white" />
                   </button>
                 ) : (
                   <button
                     type="submit"
                     disabled={!input.trim()}
-                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-white transition-transform hover:scale-105 disabled:opacity-40"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-white transition hover:brightness-110 disabled:opacity-30"
                     style={{ backgroundColor: color }}
                   >
                     <Send size={14} />
                   </button>
                 )}
               </form>
+              <p className="mt-1.5 text-center text-[10px] text-white/20">
+                Powered by GPT · Bứt Phá Marketing
+              </p>
             </div>
           </motion.div>
         )}
@@ -345,9 +367,9 @@ export function ChatbotWidget({ color }: { color: string }) {
       {/* FAB button */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-4 left-4 z-[81] flex h-14 w-14 items-center justify-center rounded-full shadow-2xl"
+        className="fixed bottom-4 left-4 z-[81] flex h-14 w-14 items-center justify-center rounded-full shadow-[0_4px_24px_rgba(107,33,168,0.4)]"
         style={{ backgroundColor: color }}
       >
         <AnimatePresence mode="wait">
@@ -372,7 +394,7 @@ export function ChatbotWidget({ color }: { color: string }) {
           )}
         </AnimatePresence>
         {unread > 0 && !open && (
-          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-lg">
             {unread}
           </span>
         )}
