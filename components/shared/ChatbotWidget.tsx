@@ -50,7 +50,15 @@ async function saveConversation(messages: Message[], phone?: string) {
   } catch {}
 }
 
-export function ChatbotWidget({ color }: { color: string }) {
+export function ChatbotWidget({
+  color,
+  position = "left",
+  launcherLabel,
+}: {
+  color: string;
+  position?: "left" | "right";
+  launcherLabel?: string;
+}) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { id: nextId(), role: "bot", text: GREETING },
@@ -195,6 +203,10 @@ export function ChatbotWidget({ color }: { color: string }) {
 
   const showQuickReplies = userMsgCount.current < 3;
 
+  const isRight = position === "right";
+  const panelPositionClass = isRight ? "right-4 sm:right-5" : "left-4";
+  const launcherPositionClass = isRight ? "right-4 sm:right-5" : "left-4";
+
   return (
     <>
       <AnimatePresence>
@@ -204,7 +216,7 @@ export function ChatbotWidget({ color }: { color: string }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-20 left-4 z-[80] flex w-[340px] flex-col overflow-hidden rounded-2xl border border-white/[0.08] shadow-2xl sm:w-[400px]"
+            className={`fixed bottom-24 z-[110] flex w-[340px] flex-col overflow-hidden rounded-2xl border border-white/[0.08] shadow-2xl sm:w-[400px] ${panelPositionClass}`}
             style={{
               maxHeight: "min(560px, calc(100dvh - 100px))",
               background: "linear-gradient(180deg, #0c0d14 0%, #0a0b10 100%)",
@@ -369,7 +381,7 @@ export function ChatbotWidget({ color }: { color: string }) {
         onClick={() => setOpen((o) => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-4 left-4 z-[81] flex h-14 w-14 items-center justify-center rounded-full shadow-[0_4px_24px_rgba(107,33,168,0.4)]"
+        className={`fixed bottom-4 z-[111] flex items-center justify-center rounded-full shadow-[0_4px_24px_rgba(107,33,168,0.4)] ${launcherLabel ? "gap-2 px-4 h-14" : "h-14 w-14"} ${launcherPositionClass}`}
         style={{ backgroundColor: color }}
       >
         <AnimatePresence mode="wait">
@@ -393,6 +405,11 @@ export function ChatbotWidget({ color }: { color: string }) {
             </motion.div>
           )}
         </AnimatePresence>
+        {!open && launcherLabel ? (
+          <span className="text-sm font-semibold text-white whitespace-nowrap">
+            {launcherLabel}
+          </span>
+        ) : null}
         {unread > 0 && !open && (
           <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-lg">
             {unread}
