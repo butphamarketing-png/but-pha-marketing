@@ -65,10 +65,6 @@ function notifyMascot(message: string, durationMs = 6000) {
   window.dispatchEvent(new CustomEvent("mascot-alert", { detail: { message, durationMs } }));
 }
 
-function isValidVNPhone(value: string) {
-  return /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(value.trim());
-}
-
 function parseFeatureItem(raw: string): ParsedFeatureItem {
   const [titlePart, detailsPart] = raw.split("::");
   const title = (titlePart || "").trim();
@@ -96,7 +92,7 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      notifyMascot(`Bạn đang đăng ký gói ${pkg.name}. Nhập đầy đủ thông tin để đội ngũ Bứt Phá Marketing tư vấn chính xác nhất nhé!`);
+      notifyMascot(`Bạn đang đăng ký gói ${pkg.name}. Chỉ cần để lại số điện thoại — đội ngũ Bứt Phá Marketing sẽ liên hệ tư vấn sớm nhất nhé!`);
     }, 450);
     return () => window.clearTimeout(timer);
   }, [pkg.name]);
@@ -106,11 +102,6 @@ export function ConsultationModal({ pkg, platformKey, onClose }: { pkg: Checkout
     if (!phone) {
       setError("Số điện thoại đang bị trống");
       notifyMascot("Số điện thoại đang bị trống");
-      return;
-    }
-    if (!isValidVNPhone(phone)) {
-      setError("Số điện thoại chưa đúng định dạng Việt Nam.");
-      notifyMascot("Số điện thoại chưa đúng rồi. Bạn kiểm tra lại để đội ngũ có thể gọi hoặc nhắn Zalo tư vấn nhé!");
       return;
     }
 
@@ -716,7 +707,7 @@ function ContactForm({ color, deep = false }: { color: string; deep?: boolean })
               <p className="mt-1.5 text-sm text-white/50">Chúng tôi sẽ liên hệ sớm qua điện thoại hoặc Zalo.</p>
             </div>
           ) : (
-            <form onSubmit={handleInlineContactSubmit} className="mt-5 space-y-3 border border-white/10 bg-[#0e1018] p-4 sm:p-5">
+            <form onSubmit={handleInlineContactSubmit} className="mt-5 space-y-3 border border-white/10 bg-[#0e1018] p-4 sm:p-5" noValidate>
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
                   value={name}
@@ -798,7 +789,7 @@ function ContactForm({ color, deep = false }: { color: string; deep?: boolean })
           </div>
         ) : (
           <div className="platform-panel relative overflow-hidden rounded-xl p-5 sm:p-6">
-            <form onSubmit={handleInlineContactSubmit} className="space-y-4">
+            <form onSubmit={handleInlineContactSubmit} className="space-y-4" noValidate>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-500">Họ và tên</label>

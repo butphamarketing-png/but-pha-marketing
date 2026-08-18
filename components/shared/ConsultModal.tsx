@@ -73,7 +73,7 @@ export function ConsultModal({ isOpen, onClose, platformColor = "#6B21A8" }: { i
           
           <h2 className="mb-6 text-center text-2xl font-bold text-indigo-950">Đăng ký tư vấn trực tiếp</h2>
           
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input 
                 type="text" 

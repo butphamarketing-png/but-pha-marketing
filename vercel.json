@@ -9,6 +9,10 @@
   "framework": "nextjs",
   "crons": [
     {
+      "path": "/api/cron/supabase-keepalive",
+      "schedule": "0 */12 * * *"
+    },
+    {
       "path": "/api/cron/customer-renewals",
       "schedule": "0 8 * * *"
     },

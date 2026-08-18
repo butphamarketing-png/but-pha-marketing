@@ -132,7 +132,7 @@ export function SiteConsultPopup() {
           <div>
             <p className="text-lg font-bold text-white">Đặt lịch tư vấn miễn phí</p>
             <p className="mt-1 text-sm leading-snug text-violet-100/75">
-              Chỉ cần để lại số điện thoại — đội ngũ sẽ liên hệ tư vấn sớm nhất.
+              Chỉ cần số điện thoại — thời gian hẹn là tuỳ chọn.
             </p>
           </div>
           <button
@@ -145,7 +145,7 @@ export function SiteConsultPopup() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3" noValidate>
           <input
             value={form.name}
             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
@@ -162,7 +162,7 @@ export function SiteConsultPopup() {
           <div className="space-y-1">
             <label className="flex items-center gap-1.5 text-xs font-medium text-violet-200/65">
               <CalendarDays size={14} />
-              Thời gian tư vấn mong muốn
+              Thời gian tư vấn (tuỳ chọn)
             </label>
             <input
               type="datetime-local"

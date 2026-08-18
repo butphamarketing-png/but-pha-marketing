@@ -1970,6 +1970,9 @@ export default function HomePageClient() {
                 >
                   Đặt lịch hẹn tư vấn
                 </h2>
+                <p className="mt-2 text-[11px] font-light text-white/45 sm:text-[13px]">
+                  Chỉ cần số điện thoại — ngày/giờ và thông tin khác đều tuỳ chọn.
+                </p>
               </div>
 
               {consultDone ? (
@@ -2004,6 +2007,7 @@ export default function HomePageClient() {
                   <form
                     className="mt-4 grid w-full grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] items-start gap-2.5 border-t border-white/[0.08] pt-3.5 sm:mt-6 sm:gap-5 sm:pt-6 lg:gap-10 lg:pt-8"
                     onSubmit={handleConsultSubmit}
+                    noValidate
                   >
                     {/* Trái — từ trái sang, trên xuống */}
                     <div className="flex min-w-0 flex-col gap-3 text-left sm:gap-4">
@@ -2018,7 +2022,7 @@ export default function HomePageClient() {
                           }}
                           className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
                         >
-                          NGÀY
+                          NGÀY · TUỲ CHỌN
                         </motion.p>
                         <div className="flex flex-col gap-0.5 sm:gap-1">
                           {consultDays.map((day, i) => {
@@ -2065,7 +2069,7 @@ export default function HomePageClient() {
                           }}
                           className="mb-1.5 text-[8px] font-medium tracking-[0.16em] text-white/35 sm:text-[10px] sm:tracking-[0.22em]"
                         >
-                          GIỜ
+                          GIỜ · TUỲ CHỌN
                         </motion.p>
                         <div className="flex flex-col gap-0.5 sm:gap-1">
                           {CONSULT_SLOTS.map((slot, i) => {

@@ -72,13 +72,18 @@ export default function ContactPageClient() {
     event.preventDefault();
     if (submitting) return;
 
+    if (!form.phone.trim()) {
+      setState({ type: "error", message: "Số điện thoại đang bị trống." });
+      return;
+    }
+
     setSubmitting(true);
     setState({ type: "idle", message: "" });
 
     const result = await db.leads.add({
       type: "contact",
-      name: form.name,
-      phone: form.phone,
+      name: form.name.trim() || "Khách liên hệ",
+      phone: form.phone.trim(),
       service: form.service || "Tư vấn tổng thể",
       note: [form.email, form.budget, form.note].filter(Boolean).join(" | "),
       platform: "contact_page",
@@ -211,21 +216,19 @@ export default function ContactPageClient() {
                 Điền thông tin, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
               </p>
 
-              <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+              <form className="mt-8 space-y-4" onSubmit={handleSubmit} noValidate>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <input
                     value={form.name}
                     onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-                    placeholder="Họ và tên *"
+                    placeholder="Họ và tên"
                     className={inputClass}
-                    required
                   />
                   <input
                     value={form.phone}
                     onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
                     placeholder="Số điện thoại *"
                     className={inputClass}
-                    required
                   />
                 </div>
 
@@ -242,9 +245,8 @@ export default function ContactPageClient() {
                     value={form.service}
                     onChange={(event) => setForm((prev) => ({ ...prev, service: event.target.value }))}
                     className={`${inputClass} [&>option]:bg-[#0c0d12] [&>option]:text-white`}
-                    required
                   >
-                    <option value="">Dịch vụ quan tâm *</option>
+                    <option value="">Dịch vụ quan tâm</option>
                     {serviceOptions.map((item) => (
                       <option key={item} value={item}>
                         {item}
