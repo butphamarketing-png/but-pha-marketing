@@ -25,6 +25,7 @@ const PushNotificationPrompt = dynamic(
   () => import("@/components/shared/PushNotificationPrompt").then((mod) => mod.PushNotificationPrompt),
   { ssr: false },
 );
+// Chatbot launcher stays on the left to avoid overlap with right-side contact actions.
 const ChatbotWidget = dynamic(
   () => import("@/components/shared/ChatbotWidget").then((mod) => mod.ChatbotWidget),
   { ssr: false },
